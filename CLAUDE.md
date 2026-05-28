@@ -496,6 +496,14 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 | **v7 P3 (mappa-szervezés)** | **Fájl-struktúra átszervezés átláthatóság céljából (2026-05-25).** A meglévő flat-struktúra (mind a 18+ fájl a root-ban) helyett **4 új mappa**: `pages/` (11 HTML kivéve index), `css/` (style.css + auth.css), `js/` (app.js + data.js), `img/` (2 png). **Root-on MARAD** (technikai okok): `index.html` (entry-point), `sw.js` (Service Worker scope a registráció URL-éhez igazodik — ha mappába kerülne, csak az adott mappára érvényesülne), `manifest.webmanifest`, `CLAUDE.md`, `CONTENT_LOAD_GUIDE.md`. **Path-frissítések**: `index.html`-en CSS `css/style.css`, JS `js/app.js`, képek `img/...`, modul-link-ek `pages/...`; `pages/*.html`-en mindegyik `../`-prefix-szel hivatkozik (`../css/style.css`, `../js/app.js`, `../img/...`, `../index.html`); az auth.html-eknél `../css/auth.css`. **Testvér HTML-ek** (`login.html` link, etc.) változatlan — mind `pages/`-ben vannak. **SW regisztráció dinamikussá téve**: az app.js a `document.currentScript.src`-ből számolja a ROOT URL-t (`new URL('../', new URL('./', script.src))`) — mind az index.html-ből (root), mind a `pages/*.html`-ből (alkönyvtár) ugyanaz a sw.js URL és scope keletkezik. **sw.js APP_SHELL** lista frissítve az új path-okra, `CACHE_VERSION` bumpolva (`nihoncore-v2-2026-05-25`) → régi cache automatikusan törlődik. **A funkció változatlan** — csak az átláthatóság javult. |
 | **v7 P3 content batch 1** | **Tartalom-feltöltés első ütem (2026-05-25)** — a user által saját kézzel megírt 3 batch fájl beillesztve a `js/data.js`-be. **Na-melléknév**: 10 → **40** rekord (20 N5 + 12 N4 + 8 N3) — teljes tömb-csere. Új szavak: shizuka/jouzu/heta/taisetsu/daijoubu/hima/rippa/futsuu/tokubetsu/joubu (N5) + jiyuu/anzen/kiken/hitsuyou/fukuzatsu/teinei/muri/raku/tokui/nigate/seikaku/daiji (N4) + taihen/tekitou/meiwaku/tekisetsu/majime/shinchou/kichou/tanki (N3). Ellentétpárok és csapdák jelölve `note` mezőben (上手↔下手, 安全↔危険, 得意↔苦手, 適当↔適切). **Counter-item**: 33 → **70** rekord — teljes tömb-csere. 7 kategória bővítve (tsu 5→12, nin 5→10, mai 5→10, hon 5→10, satsu 5→9, soku 4→8, dai 4→11). **Mondat-Mester**: 24 → **76** mondat (+52, append) — N5 +30 (s_n5_013..042: napi élet/helymeghatározás/mozgás/étel/hobbi/eszköz témakörök), N4 +14 (s_n4_008..021: te-iru progresszív, tai/takunai, potenciális, te-kudasai, ageru/morau), N3 +8 (s_n3_006..013: たことがある, ほうがいい, てしまう, ておく, ために, ながら, ～そうです). Minden új mondat tokenizált, `metadata` mezővel (function/form/tense/register), részleges semantic-time annotációval. CLAUDE.md Section 1 modul-táblázat frissítve. **NEM** módosultam az engine vagy CSS — csak a `js/data.js` 3 tömbje. |
 | **v7 P3 content batch 2** | **Mondat-Mester nagy bővítés (2026-05-26)** — a user által írt `NIHONCORE_SENTENCES_Bovitett.js` fájl (sok syntaktikai hibával: hiányzó vesszők szekciók közt 4 helyen, duplikáció `s_n5_063..092` blokkon, ismeretlen token-típusok `copula`/`modifier`/`'companion (és)'`) **kijavítva + beillesztve** a `js/data.js NIHONCORE_SENTENCES` tömbjébe. **Eredmény**: 76 → **186** mondat (+110 új N5: s_n5_043..s_n5_152). 4 szekció: **Tárgyak mutatása** (これ/それ/あれ + の, s_n5_043..062, 20 db), **Helyszínek** (ここ/そこ/あそこ + どこ, s_n5_063..092, 30 db), **Főnevek mutatása** (この/その/あの + főnév, s_n5_093..122, 30 db), **Összetett helymeghatározás** (〜の中/上/下/前/後ろ + あります/います, s_n5_123..152, 30 db). **Tisztítások beillesztés közben**: `type:'copula'` → `type:'verb'` (engine word/particle/verb-et fogad), `role:'modifier'` → `role:'possession'` (a の-particle az engine-ben "possession"), `role:'companion (és)'` → `role:'companion'`, bare `ね`-particle (s_n5_121) kapott `role:'confirmer'`-t. Duplikációból csak az első előfordulás került be. **Statikus check**: 186 ID (152 N5 + 21 N4 + 13 N3), 0 ismeretlen type/role, 1300/1300 brace + 187/187 bracket egyensúly. CLAUDE.md Section 1 frissítve (Mondat-Mester 76→186). Engine + CSS + HTML ÉRINTETLEN. |
+| **V8 (data-szétbontás)** | **A monolit `js/data.js` (~5125 sor) 8 modul-fájlra bontva (2026-05-26).** `js/data/`: core.js (config + összes engine-szabály/CATEGORIES/TIERS/ERROR_TYPES) + sentences.js + verbs.js + adjectives.js + counters.js + datetime.js + audio.js + grammar.js. **Fontos szabály:** a tartalom-fájlok CSAK tartalom-tömböket tartalmaznak — a CATEGORIES/TIERS/ERROR_TYPES const-ok a **core.js**-ben élnek. Ha a user újratölt egy tartalom-fájlt config-const-tal → `Identifier already declared` SyntaxError → megtörik a betöltés. 9 HTML script-tag átírva (1 helyett 8 data-fájl). `sw.js` APP_SHELL + CACHE_VERSION bump. Régi data.js törölve. Lásd Section 4. |
+| **Zen Polish** | **Teljes vizuális újratervezés „generic SaaS" → autentikus japán zen esztétika.** Washi papír háttér (`--washi #F3EEE3`), sumi tinta szöveg (`--sumi #2A2A2E`), matcha zöld akcent (`--matcha #7A8B4F`) — **NINCS kék-lila gradient, nincs neon-glow**. Fontok: Nunito (UI) + Lora (serif mondatok) + Noto Serif JP (kanji/furigana). Emil-mikro-interakciók (`:active scale(0.97)`, KIZÁRÓLAG ease-out 120/160/220ms). `NihonCoreMotion` IIFE (anime.js CDN): flashCorrect/shakeWrong/staggerIn/celebrate. **Sakura-bloom celebration**, landing staggered entry + ring-rajzolódás. **Dual-téma**: `html.theme-sumi` (sötét) class — flicker-prevention inline `<head>` scripttel. Régi tokenek (`--ink`, `--gold`, `--teal`) alias-olva az új zen-értékekre. |
+| **Flashcard rendszer** | **Univerzális 3D flashcard motor (`NihonCoreFlashcard` IIFE).** Kártya-flip (click) + swipe (drag >90px). Mind a 4 tartalmi modulnál „Szótár" mód (Számláló Phase 1 csere + Ragozó/Melléknév/Datetime). Kategória-szűrő. `nc_fc_state_*` localStorage (tudom/nem tudom per item). `initFlashcardLaunchers` adapterekkel (verbs/adjectives/datetime). |
+| **Barba SPA + PWA toasts** | **Barba.js (CDN) SPA oldalváltás** — fade max 200ms, `data-barba="wrapper"` (body) + `data-barba="container"` (main). `data-barba-prevent` + explicit JS-navigáció a problémás linkekre (pl. profil→statisztika). `afterEnter` újrafuttatja `NihonCoreInitPage`-t. **PWA install + update toast** (`initPWAToasts`). |
+| **V16 — Firebase Auth** | **Valós bejelentkezés (mock csere).** Új `js/auth.js` (`NihonCoreAuth` IIFE) — Firebase compat SDK (gstatic CDN), email/jelszó + Google provider, single-user. firebaseConfig projectId `japangyakorlo` (az apiKey PUBLIKUS by design — a védelmet a Firestore rules adja). `ready/isEnabled/getUser/onChange/getCachedUser/register/login/loginGoogle/logout/humanError`. `auth.css` zen-redesign. Header user-chip (`initAuthHeaderState`) avatarral + menüvel (email/sync/statisztika/logout). file:// alatt csendben kikapcsol. |
+| **V17 — Firestore sync** | **Tanulási adat felhő-szinkron (`js/sync.js`, `NihonCoreSync`).** `users/{uid}` doc → `data:{kulcs→json}` + `updatedAt`. Login után PULL+merge, majd 3s debounce + 30s interval + visibilitychange + beforeunload PUSH. Merge: sessions=append (id-unió), srs=per-item frissebb, profilok/settings=last-write-wins. Eszköz-specifikus kulcsok (theme/helpers/audio_on…) NEM syncelnek. `fsError` magyar hibakódok. Firestore security rules: `match /users/{userId} { allow read, write: if request.auth != null && request.auth.uid == userId; }`. |
+| **Perf — Firebase lazy-load** | **Mobil-gyorsítás.** A Firebase SDK NEM blokkolja a page-rendert — `scheduleIdle` (requestIdleCallback) tölti az app+auth SDK-t render UTÁN; a firestore-compat (~300 KB) CSAK az első bejelentkezéskor (`ensureFirestore`). Flicker-mentes header: `nihoncore_cached_user` localStorage cache → optimista render az SDK betöltése előtt; `onChange` nem hív null-lal kezdetben. |
+| **Bugfix fázis (folyamatban)** | **Modul-onkénti hibajavítás (2026-05-28).** (1) **Arimasu Phase 2**: a base-picker hard-kódolt arimasu/imasu volt → dinamikus, kategória-csoportosított (existence/consumption/movement, `matrixState.filters.base` szerint). (2) **Helpers toggle fix**: a V8 új elemek (`.base-sub` „élettelen/élő", `.nc-fc-romaji/-meaning/-example-*`, `.grm-sentence-romaji`) kimaradtak a `helpers-no-romaji`/`helpers-no-hu` rejtés-listából — pótolva. (3) **Partikula-slot szín-harmónia**: a slot/konténer hideg-szürke (`rgba(42,42,46)`) ill. régi navy (`rgba(20,22,41,0.5)`) háttere meleg washi-homok tónusra cserélve. Új téma-tudatos slot-tokenek (`--slot-bg/-border/-bg-active/-border-active/-bg-filled/-border-filled/-placeholder` + `--surface-warm/-edge`) sumi-felülírással. Üres=homok-mélyedés taupe szaggatott, aktív=matcha jelzés, kitöltve=kiemelt papír+arany, neon-glow eltávolítva. |
 
 **Jelenleg élő modulok:**
 - ✅ **Alap igék (Arimasu/Imasu) — V5 P2** verb engine + kategória-tudatos lobby (1 aktív + 2 stub kategória) · session-log instrumentálva (stats)
@@ -509,6 +517,10 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 - ✅ **Grammar Patterns modul (V5 P1 — új)** — `grammar.html` · 15 sentence-szintű minta (12 N4 + 3 N3) 11 kategóriában · 2 mód (Felismerés + Cloze) · opt-in **SRS ütemezés** (Leitner box 1/3/7/14/30 nap) · contrasts-alapú pedagógiai distraktorok · profile dashboard SRS box-eloszlással
 - ✅ **`NihonCoreSRS` univerzális motor (V5 P1 — új)** — Item-szintű spaced repetition framework. Scope-alapú itemId konvenció (`<modul>:<id>[:<sub>]`); minden jövőbeli NihonCore modul ráköthető. **Nem** vocab — azt a LexiLearn kezeli.
 - ✅ **Production modul (V7 P1 — új)** — `production.html` · HU→JP teljesen szabad input (kana vagy romaji) · fuzzy LCS-diff (token + karakter szinten kombinálva) · **5-szintű verdict** (Tökéletes/Majdnem/Közel jó/Még gyakorold/Nézzük meg együtt) — anti-frustration szövegezés · 54 mondat reuse (30 Grammar + 24 Mondat-Mester) · emil-design-eng skill konzultáció alapján polish · pontozás 16/12/8/4/0 pt
+- ✅ **Firebase Auth (V16)** — `js/auth.js` · email/jelszó + Google · single-user · lazy SDK-load (mobil-perf) · header user-chip + menü · `auth.css` zen
+- ✅ **Firestore sync (V17)** — `js/sync.js` · `users/{uid}` doc · login PULL+merge, debounce/interval/visibility PUSH · sessions=append / srs=per-item / profilok=last-write-wins · csak tanulási adat (eszköz-specifikus kulcsok nem)
+- ✅ **3D Flashcard rendszer** — `NihonCoreFlashcard` univerzális motor · flip+swipe · mind a 4 tartalmi modul „Szótár" módja · `nc_fc_state_*` localStorage
+- ✅ **Zen UI + dual-téma** — washi/sumi/matcha paletta · `html.theme-sumi` sötét mód · anime.js mikro-interakciók · Barba.js SPA oldalváltás · PWA install/update toast
 
 ---
 
@@ -632,23 +644,52 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 
 ---
 
-## 8. Design tokenek (style.css :root)
+## 8. Design tokenek (style.css :root) — ★ ZEN PALETTA
+
+> A „Zen Polish" óta a paletta autentikus japán: washi papír + sumi tinta +
+> matcha. **NINCS kék-lila gradient, nincs neon-glow.** A régi modern tokenek
+> (`--ink`, `--gold`, `--teal`, `--white`) **alias-ok** az új zen-értékekre,
+> hogy a régi kód ne törjön.
 
 ```css
---ink:    #0a0b14   (alap háttér)
---gold:   #c9a84c   (akcent)
---teal:   #2ec4b6   (helyes/correct visszajelzés)
---red:    #c0392b   (hibás/wrong)
---green:  #27ae60   (alternatív zöld)
---amber:  #f39c12   (figyelmeztető)
---font-jp:   'Zen Kaku Gothic New', ...  (japán szöveg)
---font-body: 'Poppins', ...              (latin szöveg)
---radius-sm: 12px, --radius-md: 20px, --radius-lg: 28px, --radius-xl: 40px
+/* Zen alap-paletta */
+--washi:      #F3EEE3   (papír háttér — alap)
+--washi-deep: #ECE5D5   (árnyaltabb papír)    --washi-soft: #F8F4EA  (világosabb)
+--washi-edge: rgba(58,50,38,0.10)  (finom meleg keret — NEM feketés)
+--sumi:       #2A2A2E   (fő szöveg — NEM tiszta fekete)
+--sumi-soft:  #4A4A52   --sumi-faint: #6E6E78
+--matcha:     #7A8B4F   (primary accent / siker)   --matcha-deep: #5F7038
+--indigo:     (másodlagos hideg akcent)   --vermilion: (hiba/wrong, meleg piros)
+--gold-trad:  #B8862F   (hagyományos lakk-arany)    --amber: #C68E3A
+
+/* Drop-slot + meleg felület paletta (partikula-slotok + grammar drop-zónák) */
+--slot-bg / --slot-border           (üres: homok-mélyedés + meleg taupe szaggatott)
+--slot-bg-active / --slot-border-active   (fókusz/drag-over: matcha jelzés)
+--slot-bg-filled / --slot-border-filled   (kitöltve: kiemelt papír + arany)
+--slot-placeholder                  (placeholder glyph — lágy taupe)
+--surface-warm / --surface-warm-edge      (mondat/fordítás-konténer meleg háttér)
+
+/* Régi → zen ALIASOK (ne használd újhoz, de a régi kód miatt élnek) */
+--ink → washi · --gold → gold-trad · --teal → matcha · --white → sumi
+
+/* Tipográfia */
+--font-jp:   'Noto Serif JP', 'Zen Kaku Gothic New', serif   (kanji/furigana)
+--font-body: 'Nunito', system-ui, sans-serif                  (UI)
+--font-serif:'Lora', Georgia, serif                           (HU/EN mondatok, hero)
+
+/* Tranzíció: KIZÁRÓLAG ease-out (Emil-szabály) */
+--t-fast: 120ms · --t-base: 160ms · --t-slow: 220ms ease-out
+--radius-sm: 8px, --radius-md: 14px, --radius-lg: 20px, --radius-xl: 28px
 ```
 
-**Glassmorphism osztályok:** `.glass-panel`, `.glass-panel-heavy`, `.glass-card`, `.glass-pill`
+**Dual-téma:** `html.theme-sumi` (sötét) felülírja a tokeneket — minden komponens
+auto-adaptál a `var()` miatt. **Új színt mindig token-en keresztül adj** (és ha
+hard-kódolsz, használj `var(--surface-warm)`-szerű téma-tudatos tokent — a hideg
+`rgba(42,42,46)` / régi navy `rgba(20,22,41)` háttér NEM adaptál és töri a harmóniát).
 
-**Glow ikon-osztályok:** `.icon-glow-teal`, `.icon-glow-gold`, `.icon-glow-green`, `.icon-glow-red`
+**Árnyékok:** `--shadow-paper-1/2/3` (finom „papír egymáson", nincs neon-glow).
+**Glassmorphism osztályok (legacy):** `.glass-panel`, `.glass-card`, `.glass-pill`
+(zen-redesign után papír-felületek, nem üveg).
 
 ---
 

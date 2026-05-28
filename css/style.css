@@ -67,6 +67,22 @@
   --amber:      #C68E3A;            /* lágyabb borostyán (a túl-cukros narancs helyett) */
   --amber-glow: rgba(198, 142, 58, 0.20);
 
+  /* ── Drop-slot + meleg felület paletta ───────────────
+     A partikula-slotok (Mondat-Mester) és grammar drop-zónák
+     a washi homok-palettát követik — NEM hideg szürke (#666).
+     Üres = halvány homok-mélyedés meleg taupe szaggatott kerettel,
+     Aktív (fókusz/drag-over) = matcha jelzés,
+     Kitöltve = kiemelt papír + lágy arany keret. */
+  --slot-bg:            rgba(58, 50, 38, 0.05);   /* homok-mélyedés */
+  --slot-border:        rgba(58, 50, 38, 0.30);   /* meleg taupe szaggatott */
+  --slot-bg-active:     var(--matcha-soft);        /* drop-jelzés */
+  --slot-border-active: var(--matcha);
+  --slot-bg-filled:     var(--washi-soft);         /* kitöltve — kiemelt papír */
+  --slot-border-filled: var(--gold-trad);
+  --slot-placeholder:   rgba(58, 50, 38, 0.34);    /* placeholder glyph — lágy taupe */
+  --surface-warm:       rgba(58, 50, 38, 0.05);    /* mondat/fordítás-konténer meleg háttér */
+  --surface-warm-edge:  rgba(58, 50, 38, 0.11);
+
   /* ── Tipográfia (zen rendszer) ───────────────────────
      Nunito: lekerekített humanista sans (modern UI, magyar diakritika OK)
      Lora:   olvasható serif (HU/EN mondatok, hero címek — papír-érzet)
@@ -2236,8 +2252,8 @@ a.module-card.module-locked { cursor: pointer; }
 .prc-translation {
   display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;
   padding: 12px 16px;
-  background: rgba(42, 42, 46, 0.11);
-  border: 1px solid rgba(58, 50, 38, 0.08);
+  background: var(--surface-warm);
+  border: 1px solid var(--surface-warm-edge);
   border-radius: var(--radius-md);
   margin-bottom: 22px;
   font-size: 0.92rem;
@@ -2249,8 +2265,8 @@ a.module-card.module-locked { cursor: pointer; }
 .prc-sentence {
   display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;
   padding: 24px 18px;
-  background: rgba(42, 42, 46, 0.13);
-  border: 1px solid rgba(201,168,76,0.18);
+  background: var(--surface-warm);
+  border: 1px solid var(--surface-warm-edge);
   border-radius: var(--radius-lg);
   margin-bottom: 24px;
   min-height: 120px;
@@ -2271,51 +2287,48 @@ a.module-card.module-locked { cursor: pointer; }
   display: inline-flex; align-items: center; justify-content: center;
   min-width: 56px; min-height: 52px;
   padding: 6px 12px;
-  background: rgba(58, 50, 38, 0.055);
-  border: 2px dashed rgba(201,168,76,0.5);
+  background: var(--slot-bg);
+  border: 2px dashed var(--slot-border);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: var(--transition);
   position: relative;
 }
-.prc-slot:hover:not(.checked-correct):not(.checked-wrong) {
-  border-color: var(--gold);
-  background: rgba(201,168,76,0.08);
+.prc-slot:hover:not(.checked-correct):not(.checked-wrong):not(.filled) {
+  border-color: var(--slot-border-active);
+  background: var(--slot-bg-active);
 }
 .prc-slot.drag-over {
-  border-color: var(--teal);
-  background: rgba(46,196,182,0.12);
+  border-color: var(--slot-border-active);
+  background: var(--slot-bg-active);
   border-style: solid;
-  box-shadow: 0 0 20px var(--teal-glow);
 }
 .prc-slot.filled {
   border-style: solid;
-  border-color: var(--gold);
-  background: rgba(201,168,76,0.08);
+  border-color: var(--slot-border-filled);
+  background: var(--slot-bg-filled);
 }
-.prc-slot-content { font-family: var(--font-jp); font-size: 1.6rem; font-weight: 700; color: rgba(201,168,76,0.5); }
+.prc-slot-content { font-family: var(--font-jp); font-size: 1.6rem; font-weight: 700; color: var(--slot-placeholder); }
 .prc-filled-content {
   display: flex; flex-direction: column; align-items: center; gap: 1px;
 }
-.prc-filled-jp     { font-family: var(--font-jp); font-size: 1.6rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); line-height: 1; }
+.prc-filled-jp     { font-family: var(--font-jp); font-size: 1.6rem; font-weight: 700; color: var(--gold-trad); line-height: 1; }
 .prc-filled-romaji { font-size: 0.68rem; color: var(--white-dim); }
 
-/* Slot ellenőrzött állapotok */
+/* Slot ellenőrzött állapotok — lágy tinta-tónus, neon-glow nélkül */
 .prc-slot.checked-correct {
-  border-color: var(--teal);
-  background: rgba(46,196,182,0.15);
-  box-shadow: 0 0 24px var(--teal-glow);
+  border-color: var(--matcha);
+  background: var(--matcha-soft);
   cursor: default;
 }
-.prc-slot.checked-correct .prc-filled-jp { color: var(--teal); text-shadow: 0 0 12px var(--teal-glow); }
+.prc-slot.checked-correct .prc-filled-jp { color: var(--matcha-deep); }
 .prc-slot.checked-wrong {
-  border-color: var(--red-light);
-  background: rgba(231,76,60,0.15);
-  box-shadow: 0 0 24px var(--red-glow);
+  border-color: var(--red);
+  background: var(--vermilion-soft);
   cursor: default;
   animation: errorPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.prc-slot.checked-wrong .prc-filled-jp { color: var(--red-light); text-shadow: 0 0 12px var(--red-glow); }
+.prc-slot.checked-wrong .prc-filled-jp { color: var(--red); }
 @keyframes errorPulse {
   0%   { transform: scale(1.08); }
   100% { transform: scale(1);    }
@@ -2324,8 +2337,8 @@ a.module-card.module-locked { cursor: pointer; }
 /* ── Particle Tray ──────────────────────────────── */
 .prc-tray {
   padding: 16px 18px;
-  background: rgba(20, 22, 41, 0.5);
-  border: 1px solid rgba(58, 50, 38, 0.10);
+  background: var(--washi-soft);
+  border: 1px solid var(--washi-edge);
   border-radius: var(--radius-lg);
 }
 .prc-tray-label {
@@ -2354,15 +2367,15 @@ a.module-card.module-locked { cursor: pointer; }
   transition: var(--transition);
 }
 .prc-particle:not(:disabled):hover {
-  border-color: rgba(201,168,76,0.4);
-  background: rgba(201,168,76,0.08);
+  border-color: var(--slot-border-filled);
+  background: var(--slot-bg-filled);
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(42, 42, 46, 0.12);
+  box-shadow: var(--shadow-paper-2);
 }
 .prc-particle.selected {
-  border-color: var(--teal);
-  background: rgba(46,196,182,0.15);
-  box-shadow: 0 0 20px var(--teal-glow);
+  border-color: var(--matcha);
+  background: var(--matcha-soft);
+  box-shadow: var(--shadow-paper-1);
 }
 .prc-particle.dragging { opacity: 0.4; cursor: grabbing; }
 .prc-particle:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -3143,7 +3156,11 @@ body.helpers-no-romaji .cjbf-roman,
 body.helpers-no-romaji .cjbs-roman,
 /* V5 P1 Grammar Patterns modul romaji-elemei */
 body.helpers-no-romaji .grm-sentence-romaji,
-body.helpers-no-romaji .grm-opt-summary {
+body.helpers-no-romaji .grm-opt-summary,
+/* V8 — 3D flashcard romaji-elemei (Számláló/Ragozó/Melléknév/Datetime) */
+body.helpers-no-romaji .nc-fc-romaji,
+body.helpers-no-romaji .nc-fc-romaji-small,
+body.helpers-no-romaji .nc-fc-example-romaji {
   display: none !important;
 }
 
@@ -3157,7 +3174,12 @@ body.helpers-no-hu .cj-example-hu,
 /* V3 Hallás & Kiejtés modul magyar jelentés-elemei */
 body.helpers-no-hu .lst-opt-meaning,
 /* V5 P1 Grammar Patterns modul magyar fordítás-elemei */
-body.helpers-no-hu .grm-sentence-hu {
+body.helpers-no-hu .grm-sentence-hu,
+/* V5 P2 / V8 — base-picker magyar olvasat (élettelen/élő/eszik…) — Arimasu Phase 1+2 */
+body.helpers-no-hu .base-sub,
+/* V8 — 3D flashcard magyar jelentés-elemei */
+body.helpers-no-hu .nc-fc-meaning,
+body.helpers-no-hu .nc-fc-example-hu {
   display: none !important;
 }
 
@@ -5021,8 +5043,8 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
 .grm-trans-tray {
   min-height: 72px;
   padding: 14px;
-  background: rgba(58, 50, 38, 0.04);
-  border: 2px dashed var(--ink-border);
+  background: var(--slot-bg);
+  border: 2px dashed var(--slot-border);
   border-radius: var(--radius-md);
   display: flex;
   flex-wrap: wrap;
@@ -5031,13 +5053,13 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   transition: var(--transition);
 }
 .grm-trans-answer {
-  border-color: rgba(201,168,76,0.35);
-  background: rgba(201,168,76,0.04);
+  border-color: var(--slot-border-filled);
+  background: var(--slot-bg);
 }
 .grm-trans-answer.drag-over,
 .grm-trans-tray.drag-over {
-  background: rgba(46,196,182,0.10);
-  border-color: var(--teal);
+  background: var(--slot-bg-active);
+  border-color: var(--slot-border-active);
 }
 .grm-trans-empty {
   color: rgba(245,243,238,0.4);
@@ -5964,6 +5986,14 @@ html.theme-sumi {
 
   --gold-trad:   #D8A547;
   --gold-soft:   rgba(216, 165, 71, 0.16);
+
+  /* Drop-slot + meleg felület — sötét papíron világos-tinta tónus
+     (a meleg rgba(58,50,38) nem látszana, ezért fény-oldalra váltunk) */
+  --slot-bg:           rgba(239, 234, 224, 0.05);
+  --slot-border:       rgba(239, 234, 224, 0.24);
+  --slot-placeholder:  rgba(239, 234, 224, 0.30);
+  --surface-warm:      rgba(239, 234, 224, 0.04);
+  --surface-warm-edge: rgba(239, 234, 224, 0.10);
 
   /* Paper-shadow finomabb (sötét háttéren a fény tinta-stílusú) */
   --shadow-paper-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 1px 1px rgba(0, 0, 0, 0.20);

@@ -15,7 +15,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v23-2026-05-27-menu-nav-fix';
+const CACHE_VERSION = 'nihoncore-v25-2026-05-28-slot-palette-helpers';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 

@@ -2431,6 +2431,40 @@ function initModulePage() {
     matrixState.question  = false;
     matrixState.submitted = false;
 
+    // V23 FIX: dinamikus base-picker — az AKTÍV kategóriák összes base-e,
+    // kategória-csoportosítva. (Korábban hard-kódolt arimasu/imasu volt, ezért
+    // a fogyasztás/mozgás taskoknál nem lehetett helyes alanyt választani.)
+    const baseDefs   = cfg.bases;
+    const categories = m.categories || [];
+    let basePickerHtml = '';
+    for (const cat of categories) {
+      const cBases = (cat.baseIds || []).filter(id => baseDefs[id] && matrixState.filters.base[id]);
+      if (cBases.length === 0) continue;
+      basePickerHtml += `<div class="base-cat-group">`;
+      basePickerHtml += `<div class="base-cat-label"><span class="base-cat-emoji">${cat.emoji || ''}</span>${cat.nameHu || ''}</div>`;
+      basePickerHtml += `<div class="base-picker">`;
+      for (const baseId of cBases) {
+        const bd = baseDefs[baseId];
+        basePickerHtml += `
+          <button class="base-btn" data-base="${baseId}">
+            <span class="base-icon">${bd.icon}</span>
+            <span class="base-text">
+              <span class="base-name">${bd.label}</span>
+              <span class="base-sub">${bd.iconLabel || ''}</span>
+            </span>
+          </button>`;
+      }
+      basePickerHtml += `</div></div>`;
+    }
+    // Fallback: ha nincs kategória-meta, mutassuk az összes aktív base-t simán
+    if (!basePickerHtml) {
+      const activeIds = Object.keys(baseDefs).filter(id => matrixState.filters.base[id]);
+      basePickerHtml = '<div class="base-picker">' + activeIds.map(id => {
+        const bd = baseDefs[id];
+        return `<button class="base-btn" data-base="${id}"><span class="base-icon">${bd.icon}</span><span class="base-text"><span class="base-name">${bd.label}</span><span class="base-sub">${bd.iconLabel || ''}</span></span></button>`;
+      }).join('') + '</div>';
+    }
+
     const cells = ['Affirmative', 'Negative'].map(pol =>
       ['Non-past', 'Past'].map(t => {
         const sd = cfg.suffixes[`${t}_${pol}`];
@@ -2460,17 +2494,8 @@ function initModulePage() {
           <p class="task-context">${task.context}</p>
         </div>
         <div class="ms-section">
-          <div class="ms-section-label">1. Az alany típusa</div>
-          <div class="base-picker">
-            <button class="base-btn" data-base="arimasu">
-              <span class="base-icon">${cfg.bases.arimasu.icon}</span>
-              <span class="base-text"><span class="base-name">Arimasu</span><span class="base-sub">élettelen</span></span>
-            </button>
-            <button class="base-btn" data-base="imasu">
-              <span class="base-icon">${cfg.bases.imasu.icon}</span>
-              <span class="base-text"><span class="base-name">Imasu</span><span class="base-sub">élő</span></span>
-            </button>
-          </div>
+          <div class="ms-section-label">1. Melyik ige? (válaszd ki az alanyt)</div>
+          ${basePickerHtml}
         </div>
         <div class="ms-section">
           <div class="ms-section-label">2. Idő × Polaritás (mátrix)</div>
