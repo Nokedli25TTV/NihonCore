@@ -83,6 +83,13 @@
   --surface-warm:       rgba(58, 50, 38, 0.05);    /* mondat/fordítás-konténer meleg háttér */
   --surface-warm-edge:  rgba(58, 50, 38, 0.11);
 
+  /* ── Kontroll-panel felület (helpers-bár, fázis-tabok, Pont/Sorozat chip)
+     Világos krém kártya-felület — lágy árnyékkal kiemelve a papírról,
+     NEM sötét folt. Téma-tudatos (washi-soft / washi-edge auto-adaptál). */
+  --panel-bg:      var(--washi-soft);   /* #F8F4EA világos krém */
+  --panel-border:  var(--washi-edge);
+  --panel-shadow:  var(--shadow-paper-1);
+
   /* ── Tipográfia (zen rendszer) ───────────────────────
      Nunito: lekerekített humanista sans (modern UI, magyar diakritika OK)
      Lora:   olvasható serif (HU/EN mondatok, hero címek — papír-érzet)
@@ -819,19 +826,17 @@ rt {
 .helpers-bar {
   display: flex; align-items: center; gap: 14px;
   padding: 8px 18px;
-  background: rgba(20, 22, 41, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(58, 50, 38, 0.10);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: 100px;
   width: fit-content;
   margin: 0 auto 28px;
-  box-shadow: 0 8px 24px rgba(42, 42, 46, 0.12);
+  box-shadow: var(--shadow-paper-2);
 }
 .hb-label {
-  font-size: 0.7rem; font-weight: 700;
-  letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--white-dim);
+  font-size: 0.66rem; font-weight: 600;
+  letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--sumi-faint);
 }
 .helpers-toggle { display: flex; gap: 6px; }
 .ht-btn {
@@ -856,18 +861,16 @@ rt {
   flex-shrink: 0;
 }
 .ht-btn:hover {
-  color: var(--white);
-  border-color: rgba(201,168,76,0.3);
+  color: var(--sumi);
+  border-color: rgba(184,134,47,0.35);
 }
 .ht-btn.active {
-  background: rgba(201,168,76,0.1);
-  border-color: rgba(201,168,76,0.45);
-  color: var(--gold);
-  text-shadow: 0 0 8px var(--gold-glow);
+  background: var(--gold-glow);
+  border-color: rgba(184,134,47,0.50);
+  color: var(--gold-trad);
 }
 .ht-btn.active .ht-dot {
-  background: var(--gold);
-  box-shadow: 0 0 8px var(--gold);
+  background: var(--gold-trad);
 }
 /* V3 P2 F — 3 gombos helpers-bár (Romaji · Magyar · 🔊 Hang) kis kijelzőn */
 @media (max-width: 480px) {
@@ -1045,11 +1048,10 @@ body.helpers-no-hu .prc-tray-hint {
   gap: 12px;
   margin-bottom: 32px;
   padding: 8px;
-  background: rgba(20, 22, 41, 0.4);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--ink-border);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: var(--radius-lg);
+  box-shadow: var(--panel-shadow);
 }
 .phase-tab {
   display: flex; align-items: center; gap: 12px;
@@ -1057,40 +1059,40 @@ body.helpers-no-hu .prc-tray-hint {
   background: transparent;
   border: 1px solid transparent;
   border-radius: var(--radius-md);
-  color: var(--white-dim);
+  color: var(--sumi-soft);
   font-family: var(--font-body);
   cursor: pointer;
   transition: var(--transition);
   text-align: left;
 }
 .phase-tab:hover {
-  background: rgba(58, 50, 38, 0.055);
-  color: var(--white);
+  background: var(--surface-warm);
+  color: var(--sumi);
 }
 .phase-tab.active {
-  background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
-  border-color: rgba(201,168,76,0.4);
-  color: var(--white);
-  box-shadow: 0 0 24px var(--gold-glow);
+  background: var(--gold-glow);
+  border-color: var(--gold-trad);
+  color: var(--sumi);
+  box-shadow: var(--shadow-paper-1);
 }
 .phase-num {
   width: 36px; height: 36px;
   border-radius: 50%;
-  background: rgba(58, 50, 38, 0.08);
-  border: 1px solid rgba(58, 50, 38, 0.15);
+  background: rgba(58, 50, 38, 0.07);
+  border: 1px solid rgba(58, 50, 38, 0.14);
   display: flex; align-items: center; justify-content: center;
   font-weight: 700; font-size: 0.95rem;
+  color: var(--sumi-soft);
   flex-shrink: 0;
 }
 .phase-tab.active .phase-num {
-  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  background: var(--gold-trad);
   border-color: transparent;
-  color: var(--ink-deep);
-  box-shadow: 0 0 12px var(--gold-glow);
+  color: var(--washi);
 }
 .phase-text { display: flex; flex-direction: column; gap: 2px; }
-.phase-name { font-size: 0.95rem; font-weight: 600; }
-.phase-sub  { font-size: 0.72rem; color: var(--white-dim); letter-spacing: 0.3px; }
+.phase-name { font-size: 0.92rem; font-weight: 700; color: var(--sumi); }
+.phase-sub  { font-size: 0.68rem; font-weight: 400; color: var(--sumi-faint); letter-spacing: 0.2px; }
 
 /* ── Phase Content ──────────────────────────────── */
 .phase-content {
@@ -1887,25 +1889,24 @@ a.module-card.module-locked { cursor: pointer; }
 .sd-stat {
   flex: 1 1 0;
   min-width: 120px;
-  background: rgba(20, 22, 41, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(58, 50, 38, 0.10);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: var(--radius-md);
   padding: 14px 16px;
   text-align: center;
+  box-shadow: var(--panel-shadow);
 }
 .sd-stat-label {
   display: block;
-  font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--white-dim); font-weight: 600;
-  margin-bottom: 4px;
+  font-size: 0.66rem; letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--sumi-faint); font-weight: 600;
+  margin-bottom: 5px;
 }
 .sd-stat-value {
   display: block;
   font-family: var(--font-jp);
   font-size: 1.5rem; font-weight: 800;
-  color: var(--gold);
-  text-shadow: 0 0 12px var(--gold-glow);
+  color: var(--sumi);
 }
 
 .sd-card {
@@ -2212,21 +2213,20 @@ a.module-card.module-locked { cursor: pointer; }
 .pr-stat {
   flex: 1 1 0;
   min-width: 120px;
-  background: rgba(20, 22, 41, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(58, 50, 38, 0.10);
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
   border-radius: var(--radius-md);
   padding: 14px 16px;
   text-align: center;
+  box-shadow: var(--panel-shadow);
 }
 .pr-stat-label {
-  display: block; font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase;
-  color: var(--white-dim); font-weight: 600; margin-bottom: 4px;
+  display: block; font-size: 0.66rem; letter-spacing: 1.8px; text-transform: uppercase;
+  color: var(--sumi-faint); font-weight: 600; margin-bottom: 5px;
 }
 .pr-stat-value {
-  display: block; font-family: var(--font-jp); font-size: 1.4rem; font-weight: 800;
-  color: var(--gold);
-  text-shadow: 0 0 12px var(--gold-glow);
+  display: block; font-family: var(--font-jp); font-size: 1.5rem; font-weight: 800;
+  color: var(--sumi);
 }
 
 /* ── Card (mondat + tálca) ──────────────────────── */
@@ -2594,8 +2594,8 @@ a.module-card.module-locked { cursor: pointer; }
   display: flex; flex-wrap: wrap; gap: 8px;
   padding: 18px 16px;
   min-height: 90px;
-  background: rgba(20, 22, 41, 0.5);
-  border: 1px solid rgba(58, 50, 38, 0.10);
+  background: var(--washi-soft);
+  border: 1px solid var(--washi-edge);
   border-radius: var(--radius-lg);
   margin-bottom: 18px;
   transition: var(--transition);
