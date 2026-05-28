@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0a0b14" />
+  <meta name="theme-color" content="#F3EEE3" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -41,6 +41,7 @@
       </a>
 
       <nav class="nav">
+        <a href="#method" class="nav-link">Módszer</a>
         <a href="#modules" class="nav-link">Modulok</a>
         <a href="pages/stats.html" class="nav-link">📊 Statisztika</a>
       </nav>
@@ -57,6 +58,7 @@
 
     <!-- Mobile nav -->
     <div class="mobile-nav" id="mobileNav">
+      <a href="#method" class="mobile-nav-link">Módszer</a>
       <a href="#modules" class="mobile-nav-link">Modulok</a>
       <a href="pages/stats.html" class="mobile-nav-link">📊 Statisztika</a>
       <hr class="mobile-divider" />
@@ -70,52 +72,53 @@
     <div class="hero-content">
       <div class="hero-tag pulse-border">
         <span class="tag-dot"></span>
-        JLPT N5 • Dekiru 1 alapján
+        JLPT N5 → N3 · 9 interaktív modul
       </div>
       <h1 class="hero-title">
         <span class="hero-jp">日本語を</span>
-        <span class="hero-sub">tanulj játékosan</span>
+        <span class="hero-sub">vidd reflexszintre.</span>
       </h1>
       <p class="hero-desc">
-        Interaktív feladatok, intelligens ismétlés és vizuális tanulás —
-        a japán nyelv kalandja most kezdődik.
+        Igeragozás, partikulák, számlálók, hallás és szabad fordítás egy helyen.
+        Előbb megérted a szabályt, aztán gyakorlod, végül időzített ismétléssel
+        rögzíted. Magyar nyelven, a Dekiru tankönyvek nyomán.
       </p>
       <div class="hero-cta">
-        <a href="pages/register.html" class="btn btn-primary btn-lg glow-effect">Kezdj bele ingyen</a>
-        <a href="#modules" class="btn btn-outline btn-lg">Modulok felfedezése</a>
+        <a href="#modules" class="btn btn-primary btn-lg glow-effect">Kezdj bele ingyen</a>
+        <a href="pages/register.html" class="btn btn-outline btn-lg">Fiók a szinkronhoz</a>
       </div>
       <div class="hero-stats">
         <div class="stat">
-          <span class="stat-num">15</span>
-          <span class="stat-label">Lecke</span>
+          <span class="stat-num">9</span>
+          <span class="stat-label">gyakorló modul</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <span class="stat-num">5</span>
-          <span class="stat-label">Modul típus</span>
+          <span class="stat-num">N5–N3</span>
+          <span class="stat-label">JLPT szint</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <span class="stat-num">N5</span>
-          <span class="stat-label">Szint</span>
+          <span class="stat-num">100%</span>
+          <span class="stat-label">ingyenes</span>
         </div>
       </div>
     </div>
 
-    <!-- Lebegő Üveghatású Kártyák -->
-    <div class="hero-visual">
+    <!-- Washi-papír kártya-stack: élő tankönyv-specimen furiganával -->
+    <div class="hero-visual" aria-hidden="true">
       <div class="hero-card-stack">
-        <div class="floating-card card-back-2 glass-panel">
-          <span class="card-kana">あ</span>
-        </div>
-        <div class="floating-card card-back-1 glass-panel">
-          <span class="card-kana">い</span>
-        </div>
-        <div class="floating-card card-main glass-panel">
-          <div class="card-label">ます形</div>
-          <span class="card-kana-lg">食べます</span>
-          <div class="card-reading">たべます</div>
-          <div class="card-meaning">enni</div>
+        <div class="floating-card card-back-2"><span class="card-kana">あ</span></div>
+        <div class="floating-card card-back-1"><span class="card-kana">本</span></div>
+        <div class="floating-card card-main">
+          <div class="card-label">ます形 · udvarias</div>
+          <div class="card-kana-lg"><ruby>食<rt>た</rt></ruby>べます</div>
+          <div class="card-reading">tabemasu · „eszik"</div>
+          <div class="card-specimen-row">
+            <span class="card-spec-chip">食べない</span>
+            <span class="card-spec-chip">食べた</span>
+            <span class="card-spec-chip">食べて</span>
+          </div>
           <div class="card-progress-bar">
             <div class="card-progress-fill" style="width: 72%"></div>
           </div>
@@ -123,11 +126,44 @@
       </div>
 
       <div class="floating-pills">
-        <div class="pill pill-1 glass-pill">が 📌</div>
-        <div class="pill pill-2 glass-pill">は ✨</div>
-        <div class="pill pill-3 glass-pill">を 🎯</div>
-        <div class="pill pill-4 glass-pill">に 🔑</div>
+        <div class="pill pill-1 glass-pill">が</div>
+        <div class="pill pill-2 glass-pill">は</div>
+        <div class="pill pill-3 glass-pill">を</div>
+        <div class="pill pill-4 glass-pill">に</div>
       </div>
+    </div>
+  </section>
+
+  <!-- TANULÁSI MÓDSZER (új informatív szekció) -->
+  <section class="nc-method" id="method">
+    <div class="section-header">
+      <div class="section-tag">学び方</div>
+      <h2 class="section-title">Három lépésben rögzül</h2>
+      <p class="section-desc">Minden modul ugyanazt a tanulási ívet járja be — a megértéstől a reflexig.</p>
+    </div>
+    <ol class="nc-method-flow">
+      <li class="nc-method-step">
+        <span class="nc-method-num">一</span>
+        <h3 class="nc-method-title">Megértés</h3>
+        <p class="nc-method-desc">Vizuális demók és tiszta magyar magyarázatok. Előbb működés közben látod a szabályt.</p>
+      </li>
+      <li class="nc-method-step">
+        <span class="nc-method-num">二</span>
+        <h3 class="nc-method-title">Alkalmazás</h3>
+        <p class="nc-method-desc">Interaktív feladatok: partikula-húzás, ragozás-építés, mondat-puzzle, hallás után írás.</p>
+      </li>
+      <li class="nc-method-step">
+        <span class="nc-method-num">三</span>
+        <h3 class="nc-method-title">Automatizálás</h3>
+        <p class="nc-method-desc">Időzített ismétlés (SRS) és szabad fordítás, amíg reflexszintre nem ér a tudás.</p>
+      </li>
+    </ol>
+    <div class="nc-facts">
+      <span class="nc-fact">📊 Részletes statisztika</span>
+      <span class="nc-fact">🔁 Spaced repetition</span>
+      <span class="nc-fact">📴 Offline (PWA)</span>
+      <span class="nc-fact">🌗 Világos / sötét téma</span>
+      <span class="nc-fact">🇭🇺 Magyar nyelven</span>
     </div>
   </section>
 
@@ -339,7 +375,7 @@
         <span class="logo-kanji">日</span>
         <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
       </div>
-      <p class="footer-note">Dekiru 1 alapján · JLPT N5 · © 2026 NihonCore</p>
+      <p class="footer-note">Dekiru 1–2 nyomán · JLPT N5–N3 · © 2026 NihonCore</p>
     </div>
   </footer>
   <!-- V16/V19: auth + sync (a Firebase SDK lazy-load, az auth.js tölti) -->

@@ -405,6 +405,21 @@ rt {
   align-items: center; gap: 60px; position: relative; z-index: 1;
 }
 
+/* Hero belépő — egyszeri, finom staggered reveal (CSS, ease-out, no JS-függés).
+   A .hero-stats-ot az IntersectionObserver kezeli, ezt itt nem animáljuk (nincs dupla). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-tag, .hero-title, .hero-desc, .hero-cta { animation: nc-hero-rise 0.6s ease-out backwards; }
+  .hero-tag    { animation-delay: 0.05s; }
+  .hero-title  { animation-delay: 0.13s; }
+  .hero-desc   { animation-delay: 0.22s; }
+  .hero-cta    { animation-delay: 0.31s; }
+  .hero-visual { animation: nc-hero-rise 0.8s ease-out 0.28s backwards; }
+}
+@keyframes nc-hero-rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 .hero-tag {
   display: inline-flex; align-items: center; gap: 10px;
   background: var(--matcha-soft);
@@ -517,6 +532,14 @@ rt {
 .card-meaning { font-family: var(--font-body); font-size: 1.05rem; color: var(--matcha-deep); font-weight: 600; margin-top: 4px; }
 .card-progress-bar  { width: 100%; height: 4px; background: var(--washi-edge); border-radius: 999px; margin-top: 24px; overflow: hidden; }
 .card-progress-fill { height: 100%; background: var(--matcha); border-radius: 999px; }
+/* Hero specimen kártya — furigana + ragozott alak-chipek (tankönyv-érzet) */
+.card-kana-lg ruby rt { font-size: 0.38em; color: var(--sumi-faint); font-weight: 400; }
+.card-specimen-row { display: flex; gap: 6px; margin-top: 14px; flex-wrap: wrap; justify-content: center; }
+.card-spec-chip {
+  font-family: var(--font-jp); font-size: 0.9rem; color: var(--sumi-soft);
+  padding: 3px 10px; border-radius: 999px;
+  background: var(--surface-warm); border: 1px solid var(--washi-edge);
+}
 
 .floating-pills { position: absolute; inset: 0; pointer-events: none; }
 .glass-pill {
@@ -639,6 +662,43 @@ rt {
 .fill-gradient { background: var(--matcha); border-radius: 999px; }  /* gradient eltüntetve */
 
 /* ── CTA & Footer ────────────────────────────────────── */
+/* ── Tanulási módszer (landing — „Három lépésben rögzül") ── */
+.nc-method { padding: 72px 24px 32px; max-width: 1080px; margin: 0 auto; position: relative; z-index: 1; }
+.nc-method-flow {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 4vw, 52px);
+  position: relative;
+}
+/* finom összekötő vonal a sorszámok mögött */
+.nc-method-flow::before {
+  content: ''; position: absolute; top: 26px; left: 14%; right: 14%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--washi-edge) 12%, var(--washi-edge) 88%, transparent);
+  z-index: 0;
+}
+.nc-method-step { position: relative; z-index: 1; }
+.nc-method-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 52px; height: 52px; border-radius: 50%;
+  font-family: var(--font-jp); font-size: 1.5rem; color: var(--matcha-deep);
+  background: var(--washi); border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-1); margin-bottom: 18px;
+}
+.nc-method-title { font-family: var(--font-serif); font-size: 1.22rem; font-weight: 600; color: var(--sumi); margin: 0 0 8px; }
+.nc-method-desc { font-size: 0.96rem; color: var(--sumi-soft); line-height: 1.62; max-width: 30ch; }
+.nc-facts {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 52px;
+}
+.nc-fact {
+  font-size: 0.82rem; font-weight: 600; color: var(--sumi-soft);
+  padding: 7px 15px; border-radius: 999px;
+  background: var(--surface-warm); border: 1px solid var(--washi-edge);
+}
+@media (max-width: 760px) {
+  .nc-method-flow { grid-template-columns: 1fr; gap: 26px; }
+  .nc-method-flow::before { display: none; }
+  .nc-method-desc { max-width: none; }
+}
+
 .cta-section { padding: 100px 24px; max-width: 900px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
 .cta-inner {
   padding: 64px 48px; border-radius: var(--radius-lg);
