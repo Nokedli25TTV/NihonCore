@@ -184,29 +184,54 @@ window.NihonCoreSync = (function () {
     await push(true);
   }
 
+  // V19: a Firestore SDK lazy-betöltése — CSAK az első bejelentkezéskor
+  //   (a ~300 KB firestore-compat nem terheli a bejelentkezés nélküli
+  //    böngészést — ez a fő mobil-perf nyereség).
+  let _firestoreLoading = null;
+  async function ensureFirestore() {
+    if (_enabled && _db) return true;
+    if (window.location.protocol === 'file:') { _emitStatus('offline', 'file'); return false; }
+    if (_firestoreLoading) return _firestoreLoading;
+    _firestoreLoading = (async () => {
+      try {
+        // Ha az auth.js kitette a loader-t, használjuk; egyébként közvetlen
+        if (typeof firebase === 'undefined' || !firebase.firestore) {
+          if (window.NihonCoreLoadFB) {
+            await window.NihonCoreLoadFB('firebase-firestore-compat.js');
+          }
+        }
+        if (typeof firebase === 'undefined' || !firebase.firestore) {
+          console.warn('[Sync] Firestore SDK nem tölthető be.');
+          _emitStatus('offline', 'no-sdk');
+          return false;
+        }
+        _db = firebase.firestore();
+        _enabled = true;
+        console.log('[Sync] Firestore lazy-betöltve (bejelentkezés után).');
+        return true;
+      } catch (e) {
+        console.warn('[Sync] Firestore lazy-load hiba:', e);
+        _emitStatus('error', e.message);
+        return false;
+      }
+    })();
+    return _firestoreLoading;
+  }
+
   // ── Init ──────────────────────────────────────────────
   function init() {
     if (window.location.protocol === 'file:') { _emitStatus('offline', 'file'); return; }
-    if (typeof firebase === 'undefined' || !firebase.firestore) {
-      console.warn('[Sync] Firestore SDK nem elérhető.');
-      _emitStatus('offline', 'no-sdk');
-      return;
-    }
-    try {
-      _db = firebase.firestore();
-      _enabled = true;
-      console.log('[Sync] Firestore inicializálva — várakozás a bejelentkezésre...');
-    } catch (e) {
-      console.warn('[Sync] Firestore init hiba:', e);
-      _emitStatus('error', e.message);
-      return;
-    }
-
-    // Auth-állapot követése
-    if (window.NihonCoreAuth) {
+    // NEM töltünk Firestore SDK-t most — csak az auth-állapotot követjük.
+    // Ha az NihonCoreAuth még nem kész (lazy SDK), megvárjuk a ready()-t.
+    let _attached = false;
+    function attach() {
+      if (_attached || !window.NihonCoreAuth) return;
+      _attached = true;
       window.NihonCoreAuth.onChange(async user => {
         _user = user;
         if (user) {
+          const ok = await ensureFirestore();   // ITT tölt a firestore SDK (lazy)
+          if (!ok) return;
           await pull();        // belépés után letöltés + merge
           await push(true);    // majd a merge-elt állapot vissza
           startAutoPush();
@@ -215,6 +240,14 @@ window.NihonCoreSync = (function () {
           _emitStatus('idle', 'logged-out');
         }
       });
+    }
+    // Ha az auth már elérhető, azonnal; egyébként várjuk meg a ready-t
+    if (window.NihonCoreAuth && window.NihonCoreAuth.ready) {
+      window.NihonCoreAuth.ready().then(attach);
+      // Plusz azonnali attach is, hogy a már-bejelentkezett state ne maradjon le
+      attach();
+    } else {
+      attach();
     }
   }
 

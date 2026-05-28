@@ -80,6 +80,31 @@ window.NihonCoreAuth = (function () {
     return map[code] || (err && err.message) || 'Ismeretlen hiba történt.';
   }
 
+  // ── V19: lazy SDK-betöltés (perf — mobil) ─────────────
+  //   A Firebase SDK NEM blokkolja a page-render-t. A render UTÁN,
+  //   idle-ben töltjük be az app + auth SDK-t. A firestore-t a sync.js
+  //   tölti, CSAK ha a user bejelentkezett.
+  const SDK_BASE = 'https://www.gstatic.com/firebasejs/10.12.2/';
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector('script[data-fb="' + src + '"]')) { resolve(); return; }
+      const s = document.createElement('script');
+      s.src = src; s.async = true;
+      s.setAttribute('data-fb', src);
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('SDK nem tölthető: ' + src));
+      document.head.appendChild(s);
+    });
+  }
+  // Megosztott helper a sync.js-nek (firestore lazy-load)
+  window.NihonCoreLoadFB = (file) => loadScript(SDK_BASE + file);
+
+  function scheduleIdle(fn) {
+    if ('requestIdleCallback' in window) requestIdleCallback(fn, { timeout: 2500 });
+    else setTimeout(fn, 1200);
+  }
+
   // ── Init ──────────────────────────────────────────────
   function init() {
     // file:// alatt nem indul (Firebase Auth http/https-t kíván)
@@ -88,6 +113,21 @@ window.NihonCoreAuth = (function () {
       _readyResolve(false);
       return;
     }
+    // Lazy: a render után, idle-ben töltjük az SDK-t
+    scheduleIdle(async () => {
+      try {
+        await loadScript(SDK_BASE + 'firebase-app-compat.js');
+        await loadScript(SDK_BASE + 'firebase-auth-compat.js');
+        initFirebase();
+      } catch (e) {
+        console.warn('[NihonCoreAuth] SDK lazy-load hiba:', e);
+        _enabled = false;
+        _readyResolve(false);
+      }
+    });
+  }
+
+  function initFirebase() {
     if (typeof firebase === 'undefined' || !firebase.initializeApp) {
       console.warn('[NihonCoreAuth] Firebase SDK nem töltődött be.');
       _readyResolve(false);
