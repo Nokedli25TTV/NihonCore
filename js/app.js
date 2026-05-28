@@ -1161,6 +1161,18 @@ window.NihonCoreFlashcard = (function () {
         menu.hidden = !menu.hidden;
       });
       document.addEventListener('click', () => { menu.hidden = true; });
+
+      // V22 fix: a menü-linkek explicit JS-navigációval — megkerüli a Barba
+      // AJAX-elfogását ÉS a document click-listener interferenciáját.
+      chip.querySelectorAll('.nc-user-menu-link').forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          e.stopPropagation();
+          const href = link.getAttribute('href');
+          if (href) window.location.href = href;
+        });
+      });
+
       chip.querySelector('.nc-user-logout').addEventListener('click', async () => {
         try { await window.NihonCoreAuth.logout(); } catch (e) {}
         // A render az onChange-ben automatikusan visszaáll
