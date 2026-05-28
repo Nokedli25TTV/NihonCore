@@ -5,6 +5,7 @@
   <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0a0b14" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="NihonCore" />
@@ -138,7 +139,9 @@
   <!-- V16 Firebase Auth: compat SDK + auth.js (app.js ELŐTT) -->
   <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
   <script src="../js/auth.js"></script>
+  <script src="../js/sync.js"></script>
   <script src="../js/app.js"></script>
 </body>
 </html>

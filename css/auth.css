@@ -1,63 +1,114 @@
 /* ====================================================
-   NIHONCORE — Auth Pages Stylesheet
-   Theme: Glassmorphism + Squircle + Glow
+   NIHONCORE — Auth Pages Stylesheet (Zen Polish Edition)
+   Theme: Washi paper + Sumi ink + Matcha accent
    ==================================================== */
 
 :root {
-  /* Synced with style.css fusion tokens */
-  --ink:        #0a0b14;
-  --ink-deep:   #05060a;
-  --ink-mid:    #121424;
-  --ink-soft:   rgba(30, 34, 64, 0.6);
-  --ink-border: rgba(255, 255, 255, 0.08);
+  /* Zen szemantikus paletta (lásd style.css) */
+  --washi:        #F3EEE3;
+  --washi-deep:   #ECE5D5;
+  --washi-soft:   #F8F4EA;
+  --washi-edge:   rgba(58, 50, 38, 0.10);
+  --hinoki:       #E8DFCB;
 
-  --gold:       #c9a84c;
-  --gold-light: #e8c96f;
-  --gold-glow:  rgba(201, 168, 76, 0.3);
+  --sumi:         #2A2A2E;
+  --sumi-soft:    #4A4A52;
+  --sumi-faint:   #6E6E78;
+  --sumi-line:    rgba(42, 42, 46, 0.12);
 
-  --red:        #c0392b;
-  --red-light:  #e74c3c;
-  --red-glow:   rgba(231, 76, 60, 0.3);
+  --matcha:       #7A8B4F;
+  --matcha-deep:  #5F7038;
+  --matcha-soft:  rgba(122, 139, 79, 0.14);
 
-  --teal:       #2ec4b6;
-  --teal-glow:  rgba(46, 196, 182, 0.3);
+  --indigo:       #2E4A7B;
+  --vermilion:    #B84A39;
+  --gold-trad:    #B8862F;
 
-  --green:      #27ae60;
-  --green-glow: rgba(39, 174, 96, 0.3);
+  /* Legacy aliasok átfordítva washi/sumi-ra */
+  --ink:        var(--washi);
+  --ink-deep:   var(--washi-deep);
+  --ink-mid:    var(--washi-soft);
+  --ink-soft:   rgba(58, 50, 38, 0.05);
+  --ink-border: var(--washi-edge);
 
-  --white:      #ffffff;
-  --white-dim:  rgba(245, 243, 238, 0.7);
-  --white-faint:rgba(255, 255, 255, 0.04);
+  --gold:       var(--gold-trad);
+  --gold-light: #D4A23F;
+  --gold-glow:  rgba(184, 134, 47, 0.20);
 
-  --glass-bg:     rgba(20, 22, 41, 0.55);
-  --glass-bg-hi:  rgba(30, 34, 64, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-blur:   16px;
+  --red:        var(--vermilion);
+  --red-light:  #D45A47;
+  --red-glow:   rgba(184, 74, 57, 0.20);
 
-  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --teal:       var(--matcha);
+  --teal-glow:  rgba(122, 139, 79, 0.22);
 
-  --font-jp:   'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif;
-  --font-body: 'Poppins', sans-serif;
+  --green:      var(--matcha-deep);
+  --green-glow: rgba(95, 112, 56, 0.22);
 
-  --radius-sm:  12px;
-  --radius-md:  20px;
-  --radius-lg:  28px;
+  --white:      var(--sumi);
+  --white-dim:  var(--sumi-soft);
+  --white-faint: rgba(58, 50, 38, 0.05);
 
-  --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Washi-papír felületek (a régi glass helyett) */
+  --glass-bg:     var(--washi-soft);
+  --glass-bg-hi:  var(--washi);
+  --glass-border: var(--washi-edge);
+  --glass-blur:   0px;
+
+  --shadow-paper-1: 0 1px 2px rgba(58, 50, 38, 0.06), 0 1px 1px rgba(58, 50, 38, 0.04);
+  --shadow-paper-2: 0 2px 4px rgba(58, 50, 38, 0.07), 0 3px 6px rgba(58, 50, 38, 0.05);
+  --shadow-paper-3: 0 4px 8px rgba(58, 50, 38, 0.08), 0 8px 16px rgba(58, 50, 38, 0.06);
+  --shadow-glass:   var(--shadow-paper-2);
+
+  --font-jp:    'Noto Serif JP', 'Zen Kaku Gothic New', 'Noto Sans JP', serif;
+  --font-body:  'Nunito', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Lora', Georgia, serif;
+
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+
+  --transition: all 160ms ease-out;
+}
+
+/* Sumi (sötét) téma — az auth oldalakra is */
+html.theme-sumi {
+  --washi:       #1B1B22;
+  --washi-deep:  #14141A;
+  --washi-soft:  #232330;
+  --washi-edge:  rgba(239, 234, 224, 0.10);
+  --hinoki:      #2A2A35;
+  --sumi:        #EFEAE0;
+  --sumi-soft:   #C5BFB4;
+  --sumi-faint:  #8E887D;
+  --sumi-line:   rgba(239, 234, 224, 0.14);
+  --matcha:      #A8B96E;
+  --matcha-deep: #8FA15A;
+  --matcha-soft: rgba(168, 185, 110, 0.18);
+  --vermilion:   #D86A57;
+  --gold-trad:   #D8A547;
 }
 
 /* ── Reset ───────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 16px; }
 body {
-  background: var(--ink);
-  color: var(--white);
+  background-color: var(--washi);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(232, 223, 203, 0.55) 0%, transparent 38%),
+    radial-gradient(circle at 82% 88%, rgba(232, 223, 203, 0.45) 0%, transparent 42%);
+  color: var(--sumi);
   font-family: var(--font-body);
   font-weight: 400;
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+html.theme-sumi body {
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(42, 42, 53, 0.45) 0%, transparent 38%),
+    radial-gradient(circle at 82% 88%, rgba(42, 42, 53, 0.40) 0%, transparent 42%);
 }
 a { text-decoration: none; color: inherit; }
 
@@ -76,13 +127,13 @@ a { text-decoration: none; color: inherit; }
 }
 .c1 {
   width: 580px; height: 580px;
-  background: radial-gradient(circle, rgba(201,168,76,0.32), transparent 70%);
+  background: radial-gradient(circle, rgba(122, 139, 79,0.32), transparent 70%);
   top: -180px; left: -120px;
   animation: blobDrift 24s ease-in-out infinite;
 }
 .c2 {
   width: 460px; height: 460px;
-  background: radial-gradient(circle, rgba(46,196,182,0.18), transparent 70%);
+  background: radial-gradient(circle, rgba(122, 139, 79,0.18), transparent 70%);
   bottom: -120px; right: -120px;
   animation: blobDrift 28s 3s ease-in-out infinite;
 }
@@ -94,8 +145,8 @@ a { text-decoration: none; color: inherit; }
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+    linear-gradient(rgba(58, 50, 38,0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(58, 50, 38,0.5) 1px, transparent 1px);
   background-size: 60px 60px;
   opacity: 0.06;
 }
@@ -110,8 +161,8 @@ a { text-decoration: none; color: inherit; }
   gap: 6px;
   font-size: 0.85rem;
   color: var(--white-dim);
-  background: rgba(14,16,26,0.8);
-  backdrop-filter: blur(12px);
+  background: rgba(243, 238, 227, 0.85);
+  backdrop-filter: none;
   border: 1px solid var(--ink-border);
   padding: 8px 16px;
   border-radius: 100px;
@@ -120,8 +171,8 @@ a { text-decoration: none; color: inherit; }
 .back-link:hover {
   color: var(--white);
   border-color: var(--gold);
-  background: rgba(201,168,76,0.1);
-  box-shadow: 0 0 24px rgba(201,168,76,0.25);
+  background: rgba(122, 139, 79,0.1);
+  box-shadow: 0 0 24px rgba(122, 139, 79,0.25);
 }
 
 /* ── Layout ──────────────────────────────────────────── */
@@ -136,7 +187,7 @@ a { text-decoration: none; color: inherit; }
 /* ── Left Panel ──────────────────────────────────────── */
 .auth-panel-left {
   background: linear-gradient(160deg, var(--ink-mid) 0%, var(--ink-deep) 100%);
-  border-right: 1px solid rgba(255,255,255,0.06);
+  border-right: 1px solid rgba(58, 50, 38,0.06);
   padding: 60px 48px;
   display: flex;
   flex-direction: column;
@@ -148,7 +199,7 @@ a { text-decoration: none; color: inherit; }
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at top left, rgba(201,168,76,0.05) 0%, transparent 60%);
+  background: radial-gradient(ellipse at top left, rgba(122, 139, 79,0.05) 0%, transparent 60%);
 }
 
 /* Logo */
@@ -161,45 +212,40 @@ a { text-decoration: none; color: inherit; }
 }
 .logo-kanji {
   font-family: var(--font-jp);
-  font-size: 2rem;
-  color: var(--gold);
+  font-size: 1.9rem;
+  font-weight: 500;
+  color: var(--gold-trad);
   line-height: 1;
-  text-shadow:
-    0 0 24px rgba(201,168,76,0.6),
-    0 0 48px rgba(201,168,76,0.3);
+  /* neon-glow eltávolítva — tradicionális lakk-arany pecsét */
 }
 .logo-text {
-  font-family: var(--font-jp);
-  font-size: 1.2rem;
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
   font-weight: 600;
-  color: var(--white);
+  color: var(--sumi);
 }
-.logo-accent { color: var(--gold); }
+.logo-accent { color: var(--gold-trad); font-style: italic; }
 
 /* Quote block */
 .panel-quote {
   position: relative;
   padding: 32px;
   background: var(--glass-bg);
-  border: 1px solid rgba(201,168,76,0.2);
+  border: 1px solid rgba(122, 139, 79,0.2);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border-radius: var(--radius-lg);
   box-shadow:
-    0 12px 40px rgba(0,0,0,0.35),
-    inset 0 1px 0 rgba(255,255,255,0.05);
+    0 12px 40px rgba(42, 42, 46, 0.12),
+    inset 0 1px 0 rgba(58, 50, 38,0.05);
 }
 .quote-kanji {
   font-family: var(--font-jp);
-  font-size: 3.5rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #f4d683, var(--gold-light), var(--gold), #8a6520);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 3.4rem;
+  font-weight: 500;
+  color: var(--gold-trad);   /* szilárd lakk-arany, NEM gradient-szöveg */
   line-height: 1;
   margin-bottom: 4px;
-  filter: drop-shadow(0 0 24px rgba(201,168,76,0.4));
 }
 .quote-reading {
   font-size: 0.8rem;
@@ -254,17 +300,17 @@ a { text-decoration: none; color: inherit; }
   width: 38px; height: 38px;
   border-radius: 12px;
   background: var(--glass-bg-hi);
-  border: 1px solid rgba(201,168,76,0.3);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(122, 139, 79,0.3);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1rem;
   flex-shrink: 0;
   box-shadow:
-    0 0 20px rgba(201,168,76,0.15),
-    inset 0 1px 0 rgba(255,255,255,0.06);
+    0 0 20px rgba(122, 139, 79,0.15),
+    inset 0 1px 0 rgba(58, 50, 38,0.06);
 }
 
 /* ── Right Panel ─────────────────────────────────────── */
@@ -286,9 +332,9 @@ a { text-decoration: none; color: inherit; }
   -webkit-backdrop-filter: blur(var(--glass-blur));
   border-radius: var(--radius-lg);
   box-shadow:
-    0 24px 60px rgba(0,0,0,0.5),
-    0 0 60px rgba(201,168,76,0.08),
-    inset 0 1px 0 rgba(255,255,255,0.06);
+    0 24px 60px rgba(42, 42, 46, 0.16),
+    0 0 60px rgba(122, 139, 79,0.08),
+    inset 0 1px 0 rgba(58, 50, 38,0.06);
   animation: slideIn 0.5s ease both;
 }
 @keyframes slideIn {
@@ -300,12 +346,13 @@ a { text-decoration: none; color: inherit; }
   margin-bottom: 36px;
 }
 .auth-card-header h1 {
-  font-family: var(--font-jp);
-  font-size: 2rem;
-  font-weight: 800;
-  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--sumi);
   margin-bottom: 8px;
   line-height: 1.2;
+  letter-spacing: -0.01em;
 }
 .auth-card-header p {
   color: var(--white-dim);
@@ -359,7 +406,7 @@ a { text-decoration: none; color: inherit; }
 .input-icon {
   position: absolute;
   left: 14px;
-  color: rgba(245,243,238,0.4);
+  color: rgba(58, 50, 38,0.4);
   pointer-events: none;
   transition: var(--transition);
   flex-shrink: 0;
@@ -367,7 +414,7 @@ a { text-decoration: none; color: inherit; }
 .form-input {
   width: 100%;
   padding: 13px 44px;
-  background: rgba(245,243,238,0.04);
+  background: rgba(58, 50, 38,0.04);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
   color: var(--white);
@@ -377,18 +424,18 @@ a { text-decoration: none; color: inherit; }
   outline: none;
   transition: var(--transition);
   -webkit-appearance: none;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 .form-input::placeholder {
-  color: rgba(245,243,238,0.25);
+  color: rgba(58, 50, 38,0.25);
 }
 .form-input:focus {
   border-color: var(--gold);
-  background: rgba(201,168,76,0.06);
+  background: rgba(122, 139, 79,0.06);
   box-shadow:
-    0 0 0 3px rgba(201,168,76,0.15),
-    0 0 24px rgba(201,168,76,0.18);
+    0 0 0 3px rgba(122, 139, 79,0.15),
+    0 0 24px rgba(122, 139, 79,0.18);
 }
 .form-input:focus + .input-icon,
 .input-wrapper:focus-within .input-icon {
@@ -396,7 +443,7 @@ a { text-decoration: none; color: inherit; }
 }
 .form-input.error {
   border-color: var(--red-light);
-  box-shadow: 0 0 0 3px rgba(231,76,60,0.12);
+  box-shadow: 0 0 0 3px rgba(184, 74, 57,0.12);
 }
 
 /* Toggle password button */
@@ -406,7 +453,7 @@ a { text-decoration: none; color: inherit; }
   background: none;
   border: none;
   cursor: pointer;
-  color: rgba(245,243,238,0.5);
+  color: rgba(58, 50, 38,0.5);
   padding: 4px;
   display: flex;
   transition: var(--transition);
@@ -426,7 +473,7 @@ a { text-decoration: none; color: inherit; }
 }
 .pw-bar {
   width: 32px; height: 3px;
-  background: rgba(255,255,255,0.12);
+  background: rgba(58, 50, 38,0.12);
   border-radius: 2px;
   transition: background 0.3s ease;
 }
@@ -490,17 +537,17 @@ a { text-decoration: none; color: inherit; }
   justify-content: center;
   gap: 10px;
   box-shadow:
-    0 6px 24px rgba(201,168,76,0.35),
-    0 0 32px rgba(201,168,76,0.25),
-    inset 0 1px 0 rgba(255,255,255,0.3);
+    0 6px 24px rgba(122, 139, 79,0.35),
+    0 0 32px rgba(122, 139, 79,0.25),
+    inset 0 1px 0 rgba(58, 50, 38,0.3);
   margin-top: 4px;
 }
 .btn-submit:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 12px 36px rgba(201,168,76,0.55),
+    0 12px 36px rgba(122, 139, 79,0.55),
     0 0 50px rgba(232,201,111,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.4);
+    inset 0 1px 0 rgba(58, 50, 38,0.4);
   background: linear-gradient(135deg, #f4d683 0%, var(--gold-light) 50%, var(--gold) 100%);
 }
 .btn-submit:active { transform: translateY(0); }
@@ -519,7 +566,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   align-items: center;
   gap: 14px;
-  color: rgba(245,243,238,0.4);
+  color: rgba(58, 50, 38,0.4);
   font-size: 0.78rem;
 }
 .divider::before,
@@ -527,7 +574,7 @@ a { text-decoration: none; color: inherit; }
   content: '';
   flex: 1;
   height: 1px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(58, 50, 38,0.1);
 }
 .divider span { flex-shrink: 0; }
 
@@ -538,8 +585,8 @@ a { text-decoration: none; color: inherit; }
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-sm);
   background: var(--glass-bg-hi);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   color: var(--white);
   font-family: var(--font-body);
   font-size: 0.9rem;
@@ -595,8 +642,8 @@ a { text-decoration: none; color: inherit; }
 /* ── V16 Firebase Auth — hibadoboz ───────────────────── */
 .auth-error-box {
   display: none;
-  background: rgba(231, 76, 60, 0.12);
-  border: 1px solid rgba(231, 76, 60, 0.35);
+  background: rgba(184, 74, 57, 0.12);
+  border: 1px solid rgba(184, 74, 57, 0.35);
   color: #e74c3c;
   padding: 11px 14px;
   border-radius: 12px;

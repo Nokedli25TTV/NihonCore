@@ -15,7 +15,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v16-2026-05-27-firebase-auth';
+const CACHE_VERSION = 'nihoncore-v19-2026-05-27-auth-zen';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 
@@ -44,6 +44,7 @@ const APP_SHELL = [
   // js/
   './js/app.js',
   './js/auth.js',
+  './js/sync.js',
   // ── V8: data.js szétbontva 8 modul-fájlra ──
   './js/data/core.js',
   './js/data/sentences.js',

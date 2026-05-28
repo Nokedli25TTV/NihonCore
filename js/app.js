@@ -1134,6 +1134,8 @@ window.NihonCoreFlashcard = (function () {
         </button>
         <div class="nc-user-menu" hidden>
           <div class="nc-user-menu-email">${user.email || ''}</div>
+          <div class="nc-sync-status" id="ncSyncStatus">☁️ Felhő-szinkron aktív</div>
+          <button class="nc-sync-now" type="button">☁️ Szinkronizálás most</button>
           <button class="nc-user-logout" type="button">Kijelentkezés</button>
         </div>`;
       // A home-gomb ELÉ szúrjuk (ha van), egyébként a végére
@@ -1152,6 +1154,35 @@ window.NihonCoreFlashcard = (function () {
         try { await window.NihonCoreAuth.logout(); } catch (e) {}
         // A render az onChange-ben automatikusan visszaáll
       });
+
+      // V17: manuális szinkronizálás + státusz
+      const syncBtn = chip.querySelector('.nc-sync-now');
+      const syncStatusEl = chip.querySelector('#ncSyncStatus');
+      if (syncBtn && window.NihonCoreSync) {
+        syncBtn.addEventListener('click', async (e) => {
+          e.stopPropagation();
+          syncBtn.disabled = true;
+          const orig = syncBtn.textContent;
+          syncBtn.textContent = '⏳ Szinkronizálás...';
+          try { await window.NihonCoreSync.syncNow(); } catch (err) {}
+          syncBtn.textContent = '✓ Kész';
+          setTimeout(() => { syncBtn.textContent = orig; syncBtn.disabled = false; }, 1500);
+        });
+      }
+      if (syncStatusEl && window.NihonCoreSync) {
+        window.NihonCoreSync.onStatus((state, detail) => {
+          const el = document.getElementById('ncSyncStatus');
+          if (!el) return;
+          const map = {
+            syncing: '⏳ Szinkronizálás...',
+            synced:  '☁️ Szinkronizálva',
+            error:   '⚠️ Sync hiba',
+            offline: 'ℹ️ Felhő-sync csak online',
+            idle:    '☁️ Felhő-szinkron aktív'
+          };
+          el.textContent = map[state] || el.textContent;
+        });
+      }
     } else {
       // Nincs bejelentkezve — linkek vissza
       if (loginLink) loginLink.style.display = '';
@@ -1590,6 +1621,10 @@ const NihonCoreStats = (function () {
     arr.push(rec);
     if (arr.length > MAX_SESSIONS) arr.splice(0, arr.length - MAX_SESSIONS);
     save(arr);
+    // V17: kör vége → felhő-sync ütemezése (ha be van jelentkezve)
+    if (window.NihonCoreSync && window.NihonCoreSync.schedulePush) {
+      window.NihonCoreSync.schedulePush();
+    }
     return rec;
   }
 
