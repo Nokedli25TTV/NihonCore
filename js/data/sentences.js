@@ -2115,6 +2115,1791 @@ const NIHONCORE_SENTENCES = [
       { type: 'verb',     jp: 'あります',   romaji: 'arimasu',    hu: 'van' }
     ],
     metadata: { function: 'Affirmative', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+// ── N4_DYNAMICS — Cselekvés irányok, adás-kapás (Yari-morai, ni, e) ──
+  {
+    id: 's_n4_dyn_001', level: 'N4', translation: 'Adok egy könyvet a barátomnak.',
+    tokens: [
+      { type: 'word',     jp: '友達',     romaji: 'tomodachi', hu: 'barát' },
+      { type: 'particle', jp: 'に',       romaji: 'ni',        role: 'receiver' },
+      { type: 'word',     jp: '本',       romaji: 'hon',       hu: 'könyv' },
+      { type: 'particle', jp: 'を',       romaji: 'wo',        role: 'object' },
+      { type: 'verb',     jp: 'あげます', romaji: 'agemasu',   hu: 'adok' }
+    ],
+    metadata: { function: 'Giving (Outward)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_002', level: 'N4', translation: 'A barátom adott nekem egy játékot.',
+    tokens: [
+      { type: 'word',     jp: '友達',       romaji: 'tomodachi',   hu: 'barát' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: 'ゲーム',     romaji: 'geemu',       hu: 'játék' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'くれました', romaji: 'kuremashita', hu: 'adott (nekem)' }
+    ],
+    metadata: { function: 'Giving (Inward)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_003', level: 'N4', translation: 'Kaptam egy kamerát az apukámtól.',
+    tokens: [
+      { type: 'word',     jp: '父',           romaji: 'chichi',        hu: 'apa' },
+      { type: 'particle', jp: 'に',           romaji: 'ni',            role: 'giver' },
+      { type: 'word',     jp: 'カメラ',       romaji: 'kamera',        hu: 'kamera' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',            role: 'object' },
+      { type: 'verb',     jp: 'もらいました', romaji: 'moraimashita',  hu: 'kaptam' }
+    ],
+    metadata: { function: 'Receiving', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_004', level: 'N4', translation: 'Megtanítom a húgomnak a japán nyelvet.',
+    tokens: [
+      { type: 'word',     jp: '妹',         romaji: 'imouto',  hu: 'húg' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',      role: 'receiver' },
+      { type: 'word',     jp: '日本語',     romaji: 'nihongo', hu: 'japán nyelv' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',      role: 'object' },
+      { type: 'verb',     jp: '教えて',     romaji: 'oshiete', hu: 'tanítva' },
+      { type: 'verb',     jp: 'あげます',   romaji: 'agemasu', hu: 'adom (teszem érte)' }
+    ],
+    metadata: { function: 'Favor (Giving)', form: 'Te + Ageru', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_005', level: 'N4', translation: 'A tanár elmagyarázta nekem a nyelvtant.',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',       hu: 'tanár' },
+      { type: 'particle', jp: 'が',           romaji: 'ga',           role: 'subject' },
+      { type: 'word',     jp: '文法',         romaji: 'bunpou',       hu: 'nyelvtan' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',           role: 'object' },
+      { type: 'verb',     jp: '説明して',     romaji: 'setsumeishite',hu: 'elmagyarázva' },
+      { type: 'verb',     jp: 'くれました',   romaji: 'kuremashita',  hu: 'adta (nekem)' }
+    ],
+    metadata: { function: 'Favor (Received)', form: 'Te + Kureru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_006', level: 'N4', translation: 'Apukám készített nekem egy asztalt.',
+    tokens: [
+      { type: 'word',     jp: '父',           romaji: 'chichi',      hu: 'apa' },
+      { type: 'particle', jp: 'が',           romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: '机',           romaji: 'tsukue',      hu: 'asztal' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '作って',       romaji: 'tsukutte',    hu: 'elkészítve' },
+      { type: 'verb',     jp: 'くれました',   romaji: 'kuremashita', hu: 'adta (nekem)' }
+    ],
+    metadata: { function: 'Favor (Received)', form: 'Te + Kureru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_007', level: 'N4', translation: 'Megkértem Botit, hogy segítsen a programozásban.',
+    tokens: [
+      { type: 'word',     jp: 'ボティさん',   romaji: 'Boti-san',      hu: 'Boti' },
+      { type: 'particle', jp: 'に',           romaji: 'ni',            role: 'giver' },
+      { type: 'word',     jp: 'プログラミング',romaji: 'puroguramingu', hu: 'programozás' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',            role: 'object' },
+      { type: 'verb',     jp: '手伝って',     romaji: 'tetsudatte',    hu: 'segítve' },
+      { type: 'verb',     jp: 'もらいました', romaji: 'moraimashita',  hu: 'kaptam' }
+    ],
+    metadata: { function: 'Favor (Requesting)', form: 'Te + Morau', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_008', level: 'N4', translation: 'Elküldök egy emailt a cégnek.',
+    tokens: [
+      { type: 'word',     jp: '会社',       romaji: 'kaisha', hu: 'cég' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',     role: 'direction' },
+      { type: 'word',     jp: 'メール',     romaji: 'meeru',  hu: 'email' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',     role: 'object' },
+      { type: 'verb',     jp: '送ります',   romaji: 'okurimasu', hu: 'küldök' }
+    ],
+    metadata: { function: 'Directional Action', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_009', level: 'N4', translation: 'Japán felé indul a repülőgép.',
+    tokens: [
+      { type: 'word',     jp: '飛行機',       romaji: 'hikouki', hu: 'repülőgép' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',      role: 'topic' },
+      { type: 'word',     jp: '日本',       romaji: 'nihon',   hu: 'Japán' },
+      { type: 'particle', jp: 'へ',         romaji: 'e',       role: 'direction' },
+      { type: 'verb',     jp: '出発します', romaji: 'shuppatsushimasu', hu: 'indul' }
+    ],
+    metadata: { function: 'Movement Direction', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_010', level: 'N4', translation: 'Kölcsönadod nekem azt a könyvet?',
+    tokens: [
+      { type: 'word',     jp: 'その',           romaji: 'sono',          hu: 'az a' },
+      { type: 'word',     jp: '本',             romaji: 'hon',           hu: 'könyv' },
+      { type: 'particle', jp: 'を',             romaji: 'wo',            role: 'object' },
+      { type: 'verb',     jp: '貸して',         romaji: 'kashite',       hu: 'kölcsönadva' },
+      { type: 'verb',     jp: 'くれませんか',   romaji: 'kuremasenka',   hu: 'nem adod (nekem)?' }
+    ],
+    metadata: { function: 'Polite Request', form: 'Te + Kuremasenka', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_011', level: 'N4', translation: 'Vettem egy jegyet a barátomnak.',
+    tokens: [
+      { type: 'word',     jp: '友達',         romaji: 'tomodachi',  hu: 'barát' },
+      { type: 'particle', jp: 'に',           romaji: 'ni',         role: 'receiver' },
+      { type: 'word',     jp: 'チケット',     romaji: 'chiketto',   hu: 'jegy' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',         role: 'object' },
+      { type: 'verb',     jp: '買って',       romaji: 'katte',      hu: 'megvéve' },
+      { type: 'verb',     jp: 'あげました',   romaji: 'agemashita', hu: 'adtam' }
+    ],
+    metadata: { function: 'Favor (Giving)', form: 'Te + Ageru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_012', level: 'N4', translation: 'Megjavíttattam a számítógépet a bátyámmal.',
+    tokens: [
+      { type: 'word',     jp: '兄',           romaji: 'ani',          hu: 'báty' },
+      { type: 'particle', jp: 'に',           romaji: 'ni',           role: 'giver' },
+      { type: 'word',     jp: 'パソコン',     romaji: 'pasokon',      hu: 'számítógép' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',           role: 'object' },
+      { type: 'verb',     jp: '直して',       romaji: 'naoshite',     hu: 'megjavítva' },
+      { type: 'verb',     jp: 'もらいました', romaji: 'moraimashita', hu: 'kaptam' }
+    ],
+    metadata: { function: 'Favor (Requesting)', form: 'Te + Morau', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_013', level: 'N4', translation: 'Egy kedves ember megmutatta nekem az utat.',
+    tokens: [
+      { type: 'word',     jp: '親切な',       romaji: 'shinsetsu na',  hu: 'kedves (melléknév)' },
+      { type: 'word',     jp: '人',           romaji: 'hito',          hu: 'ember' },
+      { type: 'particle', jp: 'が',           romaji: 'ga',            role: 'subject' },
+      { type: 'word',     jp: '道',           romaji: 'michi',         hu: 'út' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',            role: 'object' },
+      { type: 'verb',     jp: '教えて',       romaji: 'oshiete',       hu: 'megmutatva/betanítva' },
+      { type: 'verb',     jp: 'くれました',   romaji: 'kuremashita',   hu: 'adta (nekem)' }
+    ],
+    metadata: { function: 'Favor (Received)', form: 'Te + Kureru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_014', level: 'N4', translation: 'Sietve hazamentem.',
+    tokens: [
+      { type: 'verb',     jp: '急いで',       romaji: 'isoide',    hu: 'sietve', semantic: 'határozó' },
+      { type: 'word',     jp: '家',           romaji: 'ie',        hu: 'ház/otthon' },
+      { type: 'particle', jp: 'へ',           romaji: 'e',         role: 'direction' },
+      { type: 'verb',     jp: '帰りました',   romaji: 'kaerimashita', hu: 'hazatértem' }
+    ],
+    metadata: { function: 'Movement Direction', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_015', level: 'N4', translation: 'Megkérem őt, hogy olvassa el a kanjikat.',
+    tokens: [
+      { type: 'word',     jp: '彼',           romaji: 'kare',        hu: 'ő (férfi)' },
+      { type: 'particle', jp: 'に',           romaji: 'ni',          role: 'giver' },
+      { type: 'word',     jp: '漢字',         romaji: 'kanji',       hu: 'kanji' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '読んで',       romaji: 'yonde',       hu: 'elolvasva' },
+      { type: 'verb',     jp: 'もらいます',   romaji: 'moraimasu',   hu: 'kapom' }
+    ],
+    metadata: { function: 'Favor (Requesting)', form: 'Te + Morau', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_016', level: 'N4', translation: 'Kivittem a szemetet anyukám helyett.',
+    tokens: [
+      { type: 'word',     jp: '母',           romaji: 'haha',        hu: 'anya' },
+      { type: 'particle', jp: 'の',           romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: '代わり',       romaji: 'kawari',      hu: 'helyett' },
+      { type: 'particle', jp: 'に',           romaji: 'ni',          role: 'context' },
+      { type: 'word',     jp: 'ゴミ',         romaji: 'gomi',        hu: 'szemét' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '出して',       romaji: 'dashite',     hu: 'kivíve' },
+      { type: 'verb',     jp: 'あげました',   romaji: 'agemashita',  hu: 'adtam' }
+    ],
+    metadata: { function: 'Favor (Giving)', form: 'Te + Ageru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_017', level: 'N4', translation: 'Kaptam egy szuvenírt a kollégámtól.',
+    tokens: [
+      { type: 'word',     jp: '同僚',         romaji: 'douryou',       hu: 'kolléga' },
+      { type: 'particle', jp: 'から',         romaji: 'kara',          role: 'source' },
+      { type: 'word',     jp: 'お土産',       romaji: 'omiyage',       hu: 'szuvenír' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',            role: 'object' },
+      { type: 'verb',     jp: 'もらいました', romaji: 'moraimashita',  hu: 'kaptam' }
+    ],
+    metadata: { function: 'Receiving (Kara)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_018', level: 'N4', translation: 'A barátom csinált nekem egy fotót.',
+    tokens: [
+      { type: 'word',     jp: '友達',         romaji: 'tomodachi',     hu: 'barát' },
+      { type: 'particle', jp: 'が',           romaji: 'ga',            role: 'subject' },
+      { type: 'word',     jp: '写真',         romaji: 'shashin',       hu: 'fotó' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',            role: 'object' },
+      { type: 'verb',     jp: '撮って',       romaji: 'totte',         hu: 'készítve (fotót)' },
+      { type: 'verb',     jp: 'くれました',   romaji: 'kuremashita',   hu: 'adta (nekem)' }
+    ],
+    metadata: { function: 'Favor (Received)', form: 'Te + Kureru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_019', level: 'N4', translation: 'Holnap a könyvtárba megyek tanulni.',
+    tokens: [
+      { type: 'word',     jp: '明日',         romaji: 'ashita',      hu: 'holnap', semantic: 'időhatározó' },
+      { type: 'word',     jp: '図書館',       romaji: 'toshokan',    hu: 'könyvtár' },
+      { type: 'particle', jp: 'へ',           romaji: 'e',           role: 'direction' },
+      { type: 'word',     jp: '勉強',         romaji: 'benkyou',     hu: 'tanulás' },
+      { type: 'particle', jp: 'に',           romaji: 'ni',          role: 'purpose' },
+      { type: 'verb',     jp: '行きます',     romaji: 'ikimasu',     hu: 'megyek' }
+    ],
+    metadata: { function: 'Direction with Purpose', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_dyn_020', level: 'N4', translation: 'Lefordítom ezt a mondatot a barátomnak.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: '文',           romaji: 'bun',         hu: 'mondat' },
+      { type: 'particle', jp: 'を',           romaji: 'wo',          role: 'object' },
+      { type: 'word',     jp: '友達',         romaji: 'tomodachi',   hu: 'barát' },
+      { type: 'particle', jp: 'に',           romaji: 'ni',          role: 'receiver' },
+      { type: 'verb',     jp: '翻訳して',     romaji: 'honnyakushite', hu: 'lefordítva' },
+      { type: 'verb',     jp: 'あげます',     romaji: 'agemasu',     hu: 'adom' }
+    ],
+    metadata: { function: 'Favor (Giving)', form: 'Te + Ageru', tense: 'Non-Past', register: 'Polite' }
+  },
+  // ── N4_CHANGE — Állapotváltozás, képesség (naru, mieru, kikoeru, dekiru) ──
+  {
+    id: 's_n4_chg_001', level: 'N4', translation: 'Júliusban Japán nagyon meleg lesz.',
+    tokens: [
+      { type: 'word',     jp: '七月',       romaji: 'shichigatsu', hu: 'július', semantic: 'időhatározó' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'time' },
+      { type: 'word',     jp: '日本',       romaji: 'nihon',       hu: 'Japán' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: 'とても',     romaji: 'totemo',      hu: 'nagyon' },
+      { type: 'word',     jp: '熱く',       romaji: 'atsuku',      hu: 'melegen (i-adj -> ku)' },
+      { type: 'verb',     jp: 'なります',   romaji: 'narimasu',    hu: 'lesz/válik' }
+    ],
+    metadata: { function: 'State Change (I-adj)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_002', level: 'N4', translation: 'A konditeremben sokkal erősebb lettem.',
+    tokens: [
+      { type: 'word',     jp: 'ジム',       romaji: 'jimu',        hu: 'konditerem' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location' },
+      { type: 'word',     jp: 'ずっと',     romaji: 'zutto',       hu: 'sokkal' },
+      { type: 'word',     jp: '強く',       romaji: 'tsuyoku',     hu: 'erősebben (i-adj -> ku)' },
+      { type: 'verb',     jp: 'なりました', romaji: 'narimashita', hu: 'lettem' }
+    ],
+    metadata: { function: 'State Change (I-adj)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_003', level: 'N4', translation: 'Ügyesebb lettem a zongorázásban.',
+    tokens: [
+      { type: 'word',     jp: 'ピアノ',     romaji: 'piano',       hu: 'zongora' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: '上手に',     romaji: 'jouzu ni',    hu: 'ügyesen (na-adj -> ni)' },
+      { type: 'verb',     jp: 'なりました', romaji: 'narimashita', hu: 'lettem' }
+    ],
+    metadata: { function: 'State Change (Na-adj)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_004', level: 'N4', translation: 'Jövőre egyetemista leszek.',
+    tokens: [
+      { type: 'word',     jp: '来年',       romaji: 'rainen',      hu: 'jövőre', semantic: 'időhatározó' },
+      { type: 'word',     jp: '大学生',     romaji: 'daigakusei',  hu: 'egyetemista' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'result' },
+      { type: 'verb',     jp: 'なります',   romaji: 'narimasu',    hu: 'leszek' }
+    ],
+    metadata: { function: 'State Change (Noun)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_005', level: 'N4', translation: 'A mérnöki diploma megszerzése után mérnök szeretnék lenni.',
+    tokens: [
+      { type: 'word',     jp: '将来',       romaji: 'shourai',     hu: 'a jövőben', semantic: 'időhatározó' },
+      { type: 'word',     jp: 'エンジニア', romaji: 'enjinia',     hu: 'mérnök' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'result' },
+      { type: 'verb',     jp: 'なりたい',   romaji: 'naritai',     hu: 'szeretnék lenni' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van (polite)' }
+    ],
+    metadata: { function: 'Desire (Change)', form: 'Tai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_006', level: 'N4', translation: 'A repülőgépből látszik a Fuji hegy.',
+    tokens: [
+      { type: 'word',     jp: '飛行機',     romaji: 'hikouki',     hu: 'repülőgép' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'source' },
+      { type: 'word',     jp: '富士山',     romaji: 'fujisan',     hu: 'Fuji hegy' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '見えます',   romaji: 'miemasu',     hu: 'látszik' }
+    ],
+    metadata: { function: 'Visibility', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_007', level: 'N4', translation: 'A sötétben is jól látszik a monitor.',
+    tokens: [
+      { type: 'word',     jp: '暗い',       romaji: 'kurai',       hu: 'sötét' },
+      { type: 'word',     jp: '所',         romaji: 'tokoro',      hu: 'hely' },
+      { type: 'particle', jp: 'でも',       romaji: 'demo',        role: 'even_in' },
+      { type: 'word',     jp: 'モニター',   romaji: 'monitaa',     hu: 'monitor' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: 'よく',       romaji: 'yoku',        hu: 'jól', semantic: 'határozó' },
+      { type: 'verb',     jp: '見えます',   romaji: 'miemasu',     hu: 'látszik' }
+    ],
+    metadata: { function: 'Visibility', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_008', level: 'N4', translation: 'Hallatszik a húgom hangja a szomszéd szobából.',
+    tokens: [
+      { type: 'word',     jp: '隣',         romaji: 'tonari',      hu: 'szomszéd' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: '部屋',       romaji: 'heya',        hu: 'szoba' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'source' },
+      { type: 'word',     jp: '妹',         romaji: 'imouto',      hu: 'húg' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: '声',         romaji: 'koe',         hu: 'hang (emberi)' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '聞こえます', romaji: 'kikoemasu',   hu: 'hallatszik' }
+    ],
+    metadata: { function: 'Audibility', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_009', level: 'N4', translation: 'Furcsa hang hallatszott a számítógépből.',
+    tokens: [
+      { type: 'word',     jp: 'パソコン',   romaji: 'pasokon',     hu: 'számítógép' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'source' },
+      { type: 'word',     jp: '変な',       romaji: 'hen na',      hu: 'furcsa' },
+      { type: 'word',     jp: '音',         romaji: 'oto',         hu: 'hang (gép/tárgy)' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '聞こえました',romaji: 'kikoemashita', hu: 'hallatszott' }
+    ],
+    metadata: { function: 'Audibility', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_010', level: 'N4', translation: 'Nem hallatszik jól Boti hangja (a Discordon).',
+    tokens: [
+      { type: 'word',     jp: 'ボティさん', romaji: 'Boti-san',    hu: 'Boti' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: '声',         romaji: 'koe',         hu: 'hang' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: 'よく',       romaji: 'yoku',        hu: 'jól' },
+      { type: 'verb',     jp: '聞こえません',romaji: 'kikoemasen', hu: 'nem hallatszik' }
+    ],
+    metadata: { function: 'Audibility (Negative)', form: 'Masen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_011', level: 'N4', translation: 'Tudok Java-ban kódolni.',
+    tokens: [
+      { type: 'word',     jp: 'ジャバ',     romaji: 'jaba',        hu: 'Java' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'means' },
+      { type: 'word',     jp: 'コード',     romaji: 'koodo',       hu: 'kód' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '書く',       romaji: 'kaku',        hu: 'írni (szótári alak)' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'dolog/tény' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'できます',   romaji: 'dekimasu',    hu: 'tudok/képes vagyok' }
+    ],
+    metadata: { function: 'Ability (Verb+Koto)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_012', level: 'N4', translation: 'Tudok 3D-s játékot készíteni a Godot motorral.',
+    tokens: [
+      { type: 'word',     jp: 'ゴドー',     romaji: 'Godoo',       hu: 'Godot (engine)' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'means' },
+      { type: 'word',     jp: '３Ｄゲーム', romaji: 'suriidii geemu', hu: '3D játék' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '作る',       romaji: 'tsukuru',     hu: 'készíteni' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'dolog' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'できます',   romaji: 'dekimasu',    hu: 'tudok' }
+    ],
+    metadata: { function: 'Ability (Verb+Koto)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_013', level: 'N4', translation: 'Elkészült az új asztal!',
+    tokens: [
+      { type: 'word',     jp: '新しい',     romaji: 'atarashii',   hu: 'új' },
+      { type: 'word',     jp: '机',         romaji: 'tsukue',      hu: 'asztal' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'できました', romaji: 'dekimashita', hu: 'elkészült' }
+    ],
+    metadata: { function: 'Completion', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_014', level: 'N4', translation: 'Már képes vagyok kanjikat olvasni.',
+    tokens: [
+      { type: 'word',     jp: '漢字',       romaji: 'kanji',       hu: 'kanji' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '読める',     romaji: 'yomeru',      hu: 'tud olvasni (potenciális)' },
+      { type: 'word',     jp: 'ように',     romaji: 'you ni',      hu: 'úgy / arra az állapotra' },
+      { type: 'verb',     jp: 'なりました', romaji: 'narimashita', hu: 'lettem' }
+    ],
+    metadata: { function: 'Change in Ability', form: 'You ni naru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_015', level: 'N4', translation: 'A fizika nagyon nehéz lett.',
+    tokens: [
+      { type: 'word',     jp: '物理',       romaji: 'butsuri',     hu: 'fizika' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: 'とても',     romaji: 'totemo',      hu: 'nagyon' },
+      { type: 'word',     jp: '難しく',     romaji: 'muzukashiku', hu: 'nehezen (i-adj -> ku)' },
+      { type: 'verb',     jp: 'なりました', romaji: 'narimashita', hu: 'lett' }
+    ],
+    metadata: { function: 'State Change (I-adj)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_016', level: 'N4', translation: 'Sok barátot szereztem (lett sok barátom).',
+    tokens: [
+      { type: 'word',     jp: '友達',       romaji: 'tomodachi',   hu: 'barát' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: 'たくさん',   romaji: 'takusan',     hu: 'sok' },
+      { type: 'verb',     jp: 'できました', romaji: 'dekimashita', hu: 'lett / "elkészült"' }
+    ],
+    metadata: { function: 'Creation/Acquisition', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_017', level: 'N4', translation: 'A szobám sokkal csendesebb lett az akusztikus panelektől.',
+    tokens: [
+      { type: 'word',     jp: '私の',       romaji: 'watashi no',  hu: 'az én' },
+      { type: 'word',     jp: '部屋',       romaji: 'heya',        hu: 'szobám' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: 'ずっと',     romaji: 'zutto',       hu: 'sokkal' },
+      { type: 'word',     jp: '静かに',     romaji: 'shizuka ni',  hu: 'csendesen (na-adj -> ni)' },
+      { type: 'verb',     jp: 'なりました', romaji: 'narimashita', hu: 'lett' }
+    ],
+    metadata: { function: 'State Change (Na-adj)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_018', level: 'N4', translation: 'Ma este nem tudok játszani veled.',
+    tokens: [
+      { type: 'word',     jp: '今晩',       romaji: 'konban',      hu: 'ma este', semantic: 'időhatározó' },
+      { type: 'word',     jp: 'ゲーム',     romaji: 'geemu',       hu: 'játék' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'する',       romaji: 'suru',        hu: 'csinálni' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'dolog' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'できません', romaji: 'dekimasen',   hu: 'nem tudok' }
+    ],
+    metadata: { function: 'Ability (Negative)', form: 'Masen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_019', level: 'N4', translation: 'Tiszta lett az idő, így már látszik a csillag.',
+    tokens: [
+      { type: 'word',     jp: '天気が',     romaji: 'tenki ga',    hu: 'időjárás' },
+      { type: 'word',     jp: 'よく',       romaji: 'yoku',        hu: 'jól/jó' },
+      { type: 'verb',     jp: 'なって',     romaji: 'natte',       hu: 'lett és (te-forma)' },
+      { type: 'word',     jp: '星',         romaji: 'hoshi',       hu: 'csillag' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '見えます',   romaji: 'miemasu',     hu: 'látszik' }
+    ],
+    metadata: { function: 'Cause & Visibility', form: 'Te + Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_chg_020', level: 'N4', translation: 'Már nem eszem annyi gyorséttermi ételt.',
+    tokens: [
+      { type: 'word',     jp: 'ファストフード', romaji: 'fasutofuudo', hu: 'gyorséttermi étel' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'word',     jp: 'あまり',     romaji: 'amari',       hu: 'annyira (tagadással)' },
+      { type: 'verb',     jp: '食べなく',   romaji: 'tabenaku',    hu: 'nem eszik (nai -> naku)' },
+      { type: 'verb',     jp: 'なりました', romaji: 'narimashita', hu: 'lett (állapot)' }
+    ],
+    metadata: { function: 'Change in Habit', form: 'Naku naru', tense: 'Past', register: 'Polite' }
+  },
+  // ── N4_CONDITION — Feltételek és hipotézisek (tara, ba, nara, to) ──
+  {
+    id: 's_n4_cnd_001', level: 'N4', translation: 'Ha befejeződnek a vizsgák, Japánba megyek.',
+    tokens: [
+      { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '終わったら', romaji: 'owattara',    hu: 'ha befejeződik (~tara)' },
+      { type: 'word',     jp: '日本',       romaji: 'nihon',       hu: 'Japán' },
+      { type: 'particle', jp: 'へ',         romaji: 'e',           role: 'direction' },
+      { type: 'verb',     jp: '行きます',   romaji: 'ikimasu',     hu: 'megyek' }
+    ],
+    metadata: { function: 'Condition (Tara)', form: 'Ta + Ra', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_002', level: 'N4', translation: 'Ha sietsz, eléred a repülőt.',
+    tokens: [
+      { type: 'verb',     jp: '急げば',     romaji: 'isogeba',     hu: 'ha sietsz (~ba)' },
+      { type: 'word',     jp: '飛行機',     romaji: 'hikouki',     hu: 'repülőgép' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target' },
+      { type: 'verb',     jp: '間に合います',romaji: 'maniaimasu',  hu: 'időben odaér / eléri' }
+    ],
+    metadata: { function: 'Condition (Ba)', form: 'Ba-form', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_003', level: 'N4', translation: 'Ha 3D-s játékot fejlesztesz, a Godot a legjobb.',
+    tokens: [
+      { type: 'word',     jp: '３Ｄゲーム', romaji: 'suriidii geemu', hu: '3D játék' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '作る',       romaji: 'tsukuru',     hu: 'készít' },
+      { type: 'particle', jp: 'なら',       romaji: 'nara',        role: 'condition' },
+      { type: 'word',     jp: 'ゴドー',     romaji: 'Godoo',       hu: 'Godot (engine)' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: '一番',       romaji: 'ichiban',     hu: 'legjobban/első' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van (polite)' }
+    ],
+    metadata: { function: 'Condition (Nara)', form: 'Plain + Nara', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_004', level: 'N4', translation: 'Ha megnyomod ezt a gombot, bekapcsol a terminál.',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: 'ボタン',     romaji: 'botan',       hu: 'gomb' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '押す',       romaji: 'osu',         hu: 'megnyom' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'condition (natural)' },
+      { type: 'word',     jp: '端末',       romaji: 'tanmatsu',    hu: 'terminál' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'つきます',   romaji: 'tsukimasu',   hu: 'felkapcsolódik' }
+    ],
+    metadata: { function: 'Natural Consequence (To)', form: 'Dictionary + To', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_005', level: 'N4', translation: 'Ha olcsó lenne a 3D nyomtató, megvenném.',
+    tokens: [
+      { type: 'word',     jp: '３Ｄプリンター',romaji: 'suriidii purintaa', hu: '3D nyomtató' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: '安ければ',   romaji: 'yasukereba',  hu: 'ha olcsó lenne (~ba)' },
+      { type: 'verb',     jp: '買います',   romaji: 'kaimasu',     hu: 'megvenném/megveszem' }
+    ],
+    metadata: { function: 'Condition (Ba, I-adj)', form: 'Kereba', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_006', level: 'N4', translation: 'Ha Boti is jön, akkor én is megyek.',
+    tokens: [
+      { type: 'word',     jp: 'ボティさん', romaji: 'Boti-san',    hu: 'Boti' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'inclusion' },
+      { type: 'verb',     jp: '行く',       romaji: 'iku',         hu: 'megy' },
+      { type: 'particle', jp: 'なら',       romaji: 'nara',        role: 'condition' },
+      { type: 'word',     jp: '私',         romaji: 'watashi',     hu: 'én' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'inclusion' },
+      { type: 'verb',     jp: '行きます',   romaji: 'ikimasu',     hu: 'megyek' }
+    ],
+    metadata: { function: 'Condition (Nara)', form: 'Plain + Nara', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_007', level: 'N4', translation: 'Ha elolvasod ezt a könyvet, megérted a sztoicizmust.',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: '本',         romaji: 'hon',         hu: 'könyv' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '読めば',     romaji: 'yomeba',      hu: 'ha elolvasod (~ba)' },
+      { type: 'word',     jp: 'ストア派',   romaji: 'sutoaha',     hu: 'sztoicizmus (sztoa suli)' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'object_of_potential/understanding' },
+      { type: 'verb',     jp: 'わかります', romaji: 'wakarimasu',  hu: 'megérted' }
+    ],
+    metadata: { function: 'Condition (Ba)', form: 'Ba-form', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_008', level: 'N4', translation: 'Amikor (ha) megérkeztünk Tokióba, együnk sushit!',
+    tokens: [
+      { type: 'word',     jp: '東京',       romaji: 'Toukyou',     hu: 'Tokió' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target' },
+      { type: 'verb',     jp: '着いたら',   romaji: 'tsuitara',    hu: 'amikor/ha megérkezünk (~tara)' },
+      { type: 'word',     jp: '寿司',       romaji: 'sushi',       hu: 'sushi' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '食べましょう',romaji: 'tabemashou',  hu: 'együnk (volitional)' }
+    ],
+    metadata: { function: 'Condition (Tara)', form: 'Ta + Ra', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_009', level: 'N4', translation: 'Ha sokat játszol a Valoranttal, elfárad a szemed.',
+    tokens: [
+      { type: 'word',     jp: 'ヴァロラント',romaji: 'varoranto',   hu: 'Valorant' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'word',     jp: 'たくさん',   romaji: 'takusan',     hu: 'sokat' },
+      { type: 'verb',     jp: 'する',       romaji: 'suru',        hu: 'csinál' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'condition (natural)' },
+      { type: 'word',     jp: '目',         romaji: 'me',          hu: 'szem' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '疲れます',   romaji: 'tsukaremasu', hu: 'elfárad' }
+    ],
+    metadata: { function: 'Natural Consequence (To)', form: 'Dictionary + To', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_010', level: 'N4', translation: 'Ha lenne egy jó egyedi asztalod, apukád biztosan tud segíteni.',
+    tokens: [
+      { type: 'word',     jp: 'カスタムの', romaji: 'kasutamu no', hu: 'egyedi (custom)' },
+      { type: 'word',     jp: '机',         romaji: 'tsukue',      hu: 'asztal' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: '欲しい',     romaji: 'hoshii',      hu: 'kívánt / akarja' },
+      { type: 'particle', jp: 'なら',       romaji: 'nara',        role: 'condition' },
+      { type: 'word',     jp: 'お父さん',   romaji: 'otousan',     hu: 'apukád' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '手伝えます', romaji: 'tetsudaemasu',hu: 'tud segíteni (potenciális)' }
+    ],
+    metadata: { function: 'Condition (Nara)', form: 'Plain + Nara', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_011', level: 'N4', translation: 'Ha nem esik az eső holnap, elmegyünk horgászni.',
+    tokens: [
+      { type: 'word',     jp: '明日',       romaji: 'ashita',      hu: 'holnap', semantic: 'időhatározó' },
+      { type: 'word',     jp: '雨',         romaji: 'ame',         hu: 'eső' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '降らなければ',romaji: 'furanakereba',hu: 'ha nem esik (~ba)' },
+      { type: 'word',     jp: '釣り',       romaji: 'tsuri',       hu: 'horgászat' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'purpose' },
+      { type: 'verb',     jp: '行きます',   romaji: 'ikimasu',     hu: 'megyünk' }
+    ],
+    metadata: { function: 'Condition (Negative Ba)', form: 'Nakereba', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_012', level: 'N4', translation: 'Ha megiszom ezt a kávét, jobban tudok majd fókuszálni.',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: 'コーヒー',   romaji: 'koohii',      hu: 'kávé' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '飲んだら',   romaji: 'nondara',     hu: 'ha megiszom (~tara)' },
+      { type: 'word',     jp: 'もっと',     romaji: 'motto',       hu: 'jobban / még' },
+      { type: 'word',     jp: '集中',       romaji: 'shuuchuu',    hu: 'fókusz / koncentráció' },
+      { type: 'verb',     jp: 'できます',   romaji: 'dekimasu',    hu: 'tudok (csinálni)' }
+    ],
+    metadata: { function: 'Condition (Tara)', form: 'Ta + Ra', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_013', level: 'N4', translation: 'Ha nehéz a matek érettségi, majd többet tanulok.',
+    tokens: [
+      { type: 'word',     jp: '数学',       romaji: 'suugaku',     hu: 'matematika' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: '難しかったら',romaji: 'muzukashikattara', hu: 'ha nehéz lesz (~tara, i-adj)' },
+      { type: 'word',     jp: 'もっと',     romaji: 'motto',       hu: 'többet' },
+      { type: 'verb',     jp: '勉強します', romaji: 'benkyoushimasu', hu: 'tanulok' }
+    ],
+    metadata: { function: 'Condition (Tara, I-adj)', form: 'Kattara', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_014', level: 'N4', translation: 'Ha minden nap gyakorolsz, a taekwondo jobban fog menni.',
+    tokens: [
+      { type: 'word',     jp: '毎日',       romaji: 'mainichi',    hu: 'minden nap', semantic: 'időhatározó' },
+      { type: 'word',     jp: '練習',       romaji: 'renshuu',     hu: 'gyakorlás' },
+      { type: 'verb',     jp: 'すれば',     romaji: 'sureba',      hu: 'ha csinálod (~ba)' },
+      { type: 'word',     jp: 'テコンドー', romaji: 'tekondoo',    hu: 'taekwondo' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: '上手に',     romaji: 'jouzu ni',    hu: 'ügyesebben (na-adj)' },
+      { type: 'verb',     jp: 'なります',   romaji: 'narimasu',    hu: 'fogsz válni' }
+    ],
+    metadata: { function: 'Condition (Ba)', form: 'Ba-form', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_015', level: 'N4', translation: 'Ha nincs időd, nem kell elolvasnod.',
+    tokens: [
+      { type: 'word',     jp: '時間',       romaji: 'jikan',       hu: 'idő' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: 'ない',       romaji: 'nai',         hu: 'nincs' },
+      { type: 'particle', jp: 'なら',       romaji: 'nara',        role: 'condition' },
+      { type: 'verb',     jp: '読まなくても',romaji: 'yomanakutemo',hu: 'ha nem is olvasod' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó (nem kell)' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van (polite)' }
+    ],
+    metadata: { function: 'Condition (Nara)', form: 'Plain + Nara', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_016', level: 'N4', translation: 'Ha megírod a Java kódot, teszteljük a szerveren.',
+    tokens: [
+      { type: 'word',     jp: 'ジャバ',     romaji: 'Jaba',        hu: 'Java' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: 'コード',     romaji: 'koodo',       hu: 'kód' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '書いたら',   romaji: 'kaitara',     hu: 'ha megírod (~tara)' },
+      { type: 'word',     jp: 'サーバー',   romaji: 'saabaa',      hu: 'szerver' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: 'テスト',     romaji: 'tesuto',      hu: 'teszt' },
+      { type: 'verb',     jp: 'しましょう', romaji: 'shimashou',   hu: 'csináljuk (volitional)' }
+    ],
+    metadata: { function: 'Condition (Tara)', form: 'Ta + Ra', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_017', level: 'N4', translation: 'Ha csend van, jobban tudok aludni.',
+    tokens: [
+      { type: 'word',     jp: '静か',       romaji: 'shizuka',     hu: 'csendes' },
+      { type: 'particle', jp: 'なら',       romaji: 'nara',        role: 'condition (na-adj)' },
+      { type: 'word',     jp: 'よく',       romaji: 'yoku',        hu: 'jól' },
+      { type: 'verb',     jp: '眠れます',   romaji: 'nemuremasu',  hu: 'tudok aludni (potenciális)' }
+    ],
+    metadata: { function: 'Condition (Nara, Na-adj)', form: 'Na-adj root + Nara', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_018', level: 'N4', translation: 'Ha nem érted a feladatot, kérdezd meg a barátaidat.',
+    tokens: [
+      { type: 'word',     jp: '問題',       romaji: 'mondai',      hu: 'feladat/probléma' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'object_of_understanding' },
+      { type: 'verb',     jp: 'わからなければ',romaji: 'wakaranakereba', hu: 'ha nem érted (~ba)' },
+      { type: 'word',     jp: '友達',       romaji: 'tomodachi',   hu: 'barát' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target' },
+      { type: 'verb',     jp: '聞いて',     romaji: 'kiite',       hu: 'kérdezve' },
+      { type: 'word',     jp: 'ください',   romaji: 'kudasai',     hu: 'kérlek' }
+    ],
+    metadata: { function: 'Condition (Negative Ba)', form: 'Nakereba', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_019', level: 'N4', translation: 'Tavasszal (Ha eljön a tavasz), kivirágzik a cseresznyefa.',
+    tokens: [
+      { type: 'word',     jp: '春',         romaji: 'haru',        hu: 'tavasz' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'result' },
+      { type: 'verb',     jp: 'なる',       romaji: 'naru',        hu: 'lesz (válik)' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'condition (natural)' },
+      { type: 'word',     jp: '桜',         romaji: 'sakura',      hu: 'cseresznyefa/virág' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '咲きます',   romaji: 'sakimasu',    hu: 'kivirágzik' }
+    ],
+    metadata: { function: 'Natural Consequence (To)', form: 'Dictionary + To', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_cnd_020', level: 'N4', translation: 'Ha sokat eszel, gyorsan fogsz hízni.',
+    tokens: [
+      { type: 'word',     jp: 'たくさん',   romaji: 'takusan',     hu: 'sokat' },
+      { type: 'verb',     jp: '食べたら',   romaji: 'tabetara',    hu: 'ha eszel (~tara)' },
+      { type: 'word',     jp: '早く',       romaji: 'hayaku',      hu: 'gyorsan' },
+      { type: 'word',     jp: '太り',       romaji: 'futori',      hu: 'hízik (masu stem)' },
+      { type: 'verb',     jp: 'ます',       romaji: 'masu',        hu: '-masu végződés' }
+    ],
+    metadata: { function: 'Condition (Tara)', form: 'Ta + Ra', tense: 'Non-Past', register: 'Polite' }
+  },
+  // ── N4_VOLITION — Vágy, szándék, terv (tai, tsumori, yotei, volitional) ──
+  {
+    id: 's_n4_vol_001', level: 'N4', translation: 'A jövőben az egyetemen informatikát szeretnék tanulni.',
+    tokens: [
+      { type: 'word',     jp: '将来',       romaji: 'shourai',     hu: 'a jövőben', semantic: 'időhatározó' },
+      { type: 'word',     jp: '大学',       romaji: 'daigaku',     hu: 'egyetem' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location' },
+      { type: 'word',     jp: 'コンピューター',romaji: 'konpyuutaa', hu: 'számítógép/informatika' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'word',     jp: '勉強',       romaji: 'benkyou',     hu: 'tanulás' },
+      { type: 'verb',     jp: 'したい',     romaji: 'shitai',      hu: 'akarom csinálni (~tai)' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van (polite)' }
+    ],
+    metadata: { function: 'Desire', form: 'Tai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_002', level: 'N4', translation: 'Júliusban Japánba szándékozom utazni.',
+    tokens: [
+      { type: 'word',     jp: '七月',       romaji: 'shichigatsu', hu: 'július', semantic: 'időhatározó' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'time' },
+      { type: 'word',     jp: '日本',       romaji: 'nihon',       hu: 'Japán' },
+      { type: 'particle', jp: 'へ',         romaji: 'e',           role: 'direction' },
+      { type: 'verb',     jp: '行く',       romaji: 'iku',         hu: 'megy (szótári)' },
+      { type: 'word',     jp: 'つもり',     romaji: 'tsumori',     hu: 'szándék' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Intention', form: 'Tsumori', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_003', level: 'N4', translation: 'A tervek szerint a barátaimmal utazom.',
+    tokens: [
+      { type: 'word',     jp: '友達',       romaji: 'tomodachi',   hu: 'barát' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'accompaniment' },
+      { type: 'word',     jp: '一緒に',     romaji: 'issho ni',    hu: 'együtt' },
+      { type: 'word',     jp: '旅行',       romaji: 'ryokou',      hu: 'utazás' },
+      { type: 'verb',     jp: 'する',       romaji: 'suru',        hu: 'csinál' },
+      { type: 'word',     jp: '予定',       romaji: 'yotei',       hu: 'terv / program' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Schedule/Plan', form: 'Yotei', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_004', level: 'N4', translation: 'Arra gondoltam, hogy Botival egy RPG-t készítünk.',
+    tokens: [
+      { type: 'word',     jp: 'ボティさん', romaji: 'Boti-san',    hu: 'Boti' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'accompaniment' },
+      { type: 'word',     jp: 'ＲＰＧ',     romaji: 'aaru-pii-jii',hu: 'RPG' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '作ろう',     romaji: 'tsukurou',    hu: 'készítsünk (volitional)' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'quotation' },
+      { type: 'verb',     jp: '思っています',romaji: 'omotte imasu',hu: 'gondolom' }
+    ],
+    metadata: { function: 'Volition (Thought)', form: 'Volitional + To omou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_005', level: 'N4', translation: 'Java-ban szeretnék kódot írni.',
+    tokens: [
+      { type: 'word',     jp: 'ジャバ',     romaji: 'Jaba',        hu: 'Java' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'means' },
+      { type: 'word',     jp: 'コード',     romaji: 'koodo',       hu: 'kód' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '書きたい',   romaji: 'kakitai',     hu: 'akarok írni (~tai)' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Desire', form: 'Tai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_006', level: 'N4', translation: 'Szándékomban áll sokkal többet enni (hogy hízzak).',
+    tokens: [
+      { type: 'word',     jp: 'もっと',     romaji: 'motto',       hu: 'még jobban / többet' },
+      { type: 'word',     jp: 'たくさん',   romaji: 'takusan',     hu: 'sokat' },
+      { type: 'verb',     jp: '食べる',     romaji: 'taberu',      hu: 'eszik' },
+      { type: 'word',     jp: 'つもり',     romaji: 'tsumori',     hu: 'szándék' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Intention', form: 'Tsumori', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_007', level: 'N4', translation: 'Arra gondoltam, hogy a vizsgák után visszatérek a taekwondóhoz.',
+    tokens: [
+      { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '後で',       romaji: 'ato de',      hu: 'után' },
+      { type: 'word',     jp: 'テコンドー', romaji: 'tekondoo',    hu: 'taekwondo' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target' },
+      { type: 'verb',     jp: '戻ろう',     romaji: 'modorou',     hu: 'térjek vissza (volitional)' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'quotation' },
+      { type: 'verb',     jp: '思っています',romaji: 'omotte imasu',hu: 'gondolom' }
+    ],
+    metadata: { function: 'Volition (Thought)', form: 'Volitional + To omou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_008', level: 'N4', translation: 'Jövőre le akarom tenni az N3-as vizsgát.',
+    tokens: [
+      { type: 'word',     jp: '来年',       romaji: 'rainen',      hu: 'jövőre', semantic: 'időhatározó' },
+      { type: 'word',     jp: 'Ｎ３の',     romaji: 'enu-san no',  hu: 'N3-as (birtokos)' },
+      { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '受けたい',   romaji: 'uketai',      hu: 'akarom letenni/megkapni (~tai)' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Desire', form: 'Tai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_009', level: 'N4', translation: 'Ma nem áll szándékomban videojátékozni.',
+    tokens: [
+      { type: 'word',     jp: '今日',       romaji: 'kyou',        hu: 'ma', semantic: 'időhatározó' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: 'ゲーム',     romaji: 'geemu',       hu: 'játék' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'しない',     romaji: 'shinai',      hu: 'nem csinál (nai)' },
+      { type: 'word',     jp: 'つもり',     romaji: 'tsumori',     hu: 'szándék' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Negative Intention', form: 'Nai + Tsumori', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_010', level: 'N4', translation: 'A beosztás szerint holnap a reptéren fogok dolgozni.',
+    tokens: [
+      { type: 'word',     jp: '明日',       romaji: 'ashita',      hu: 'holnap', semantic: 'időhatározó' },
+      { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'verb',     jp: '働く',       romaji: 'hataraku',    hu: 'dolgozik' },
+      { type: 'word',     jp: '予定',       romaji: 'yotei',       hu: 'terv/beosztás' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Schedule/Plan', form: 'Yotei', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_011', level: 'N4', translation: 'Arra gondoltam, hogy apukámmal csinálunk egy új asztalt.',
+    tokens: [
+      { type: 'word',     jp: '父',         romaji: 'chichi',      hu: 'apa' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'accompaniment' },
+      { type: 'word',     jp: '新しい',     romaji: 'atarashii',   hu: 'új' },
+      { type: 'word',     jp: '机',         romaji: 'tsukue',      hu: 'asztal' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '作ろう',     romaji: 'tsukurou',    hu: 'készítsünk (volitional)' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'quotation' },
+      { type: 'verb',     jp: '思っています',romaji: 'omotte imasu',hu: 'gondolom' }
+    ],
+    metadata: { function: 'Volition (Thought)', form: 'Volitional + To omou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_012', level: 'N4', translation: 'Szeretnék elolvasni egy könyvet a stratégiáról.',
+    tokens: [
+      { type: 'word',     jp: '戦略',       romaji: 'senryaku',    hu: 'stratégia' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'about (ni tsuite)' },
+      { type: 'word',     jp: 'ついての',   romaji: 'tsuite no',   hu: 'valamivel kapcsolatos' },
+      { type: 'word',     jp: '本',         romaji: 'hon',         hu: 'könyv' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '読みたい',   romaji: 'yomitai',     hu: 'akarom olvasni (~tai)' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Desire', form: 'Tai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_013', level: 'N4', translation: 'Minden nap szándékomban áll zongorázni.',
+    tokens: [
+      { type: 'word',     jp: '毎日',       romaji: 'mainichi',    hu: 'minden nap', semantic: 'időhatározó' },
+      { type: 'word',     jp: 'ピアノ',     romaji: 'piano',       hu: 'zongora' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'word',     jp: '練習',       romaji: 'renshuu',     hu: 'gyakorlás' },
+      { type: 'verb',     jp: 'する',       romaji: 'suru',        hu: 'csinál' },
+      { type: 'word',     jp: 'つもり',     romaji: 'tsumori',     hu: 'szándék' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Intention', form: 'Tsumori', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_014', level: 'N4', translation: 'Szeretnék többet tudni a fizikáról és a kémiáról.',
+    tokens: [
+      { type: 'word',     jp: '物理',       romaji: 'butsuri',     hu: 'fizika' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'and' },
+      { type: 'word',     jp: '化学',       romaji: 'kagaku',      hu: 'kémia' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'about (ni tsuite)' },
+      { type: 'word',     jp: 'ついて',     romaji: 'tsuite',      hu: 'valamiről' },
+      { type: 'word',     jp: 'もっと',     romaji: 'motto',       hu: 'még jobban' },
+      { type: 'verb',     jp: '知りたい',   romaji: 'shiritai',    hu: 'akarom tudni (~tai)' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Desire', form: 'Tai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_015', level: 'N4', translation: 'A tervek szerint augusztus 4-én jövünk vissza Japánból.',
+    tokens: [
+      { type: 'word',     jp: '日本',       romaji: 'nihon',       hu: 'Japán' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'source' },
+      { type: 'word',     jp: '八月の',     romaji: 'hachigatsu no',hu: 'augusztus (birtokos)' },
+      { type: 'word',     jp: '四日に',     romaji: 'yokka ni',    hu: 'negyedikén' },
+      { type: 'verb',     jp: '帰る',       romaji: 'kaeru',       hu: 'hazatér' },
+      { type: 'word',     jp: '予定',       romaji: 'yotei',       hu: 'terv/menetrend' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Schedule/Plan', form: 'Yotei', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_016', level: 'N4', translation: 'Arra gondoltam, hogy a jövőben cserediák leszek.',
+    tokens: [
+      { type: 'word',     jp: '将来',       romaji: 'shourai',     hu: 'a jövőben', semantic: 'időhatározó' },
+      { type: 'word',     jp: '留学生',     romaji: 'ryuugakusei', hu: 'cserediák' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'result' },
+      { type: 'verb',     jp: 'なろう',     romaji: 'narou',       hu: 'legyek (volitional)' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'quotation' },
+      { type: 'verb',     jp: '思っています',romaji: 'omotte imasu',hu: 'gondolom' }
+    ],
+    metadata: { function: 'Volition (Thought)', form: 'Volitional + To omou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_017', level: 'N4', translation: 'Szeretném megjavítani a gépeket a repülőtéren.',
+    tokens: [
+      { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '機械',       romaji: 'kikai',       hu: 'gép/berendezés' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '直したい',   romaji: 'naoshitai',   hu: 'meg akarom javítani (~tai)' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Desire', form: 'Tai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_018', level: 'N4', translation: 'Szándékomban áll egy "Maker Corner"-t kialakítani a szobámban.',
+    tokens: [
+      { type: 'word',     jp: '私の',       romaji: 'watashi no',  hu: 'az én' },
+      { type: 'word',     jp: '部屋',       romaji: 'heya',        hu: 'szobám' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'location' },
+      { type: 'word',     jp: 'メーカーコーナー',romaji: 'meekaa-koonaa',hu: 'maker corner' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '作る',       romaji: 'tsukuru',     hu: 'készít' },
+      { type: 'word',     jp: 'つもり',     romaji: 'tsumori',     hu: 'szándék' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Intention', form: 'Tsumori', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_019', level: 'N4', translation: 'Arra gondoltam, hogy ezentúl mély fókusszal fogok tanulni.',
+    tokens: [
+      { type: 'word',     jp: 'これから',   romaji: 'korekara',    hu: 'ezentúl', semantic: 'időhatározó' },
+      { type: 'word',     jp: 'もっと',     romaji: 'motto',       hu: 'még jobban' },
+      { type: 'word',     jp: '集中',       romaji: 'shuuchuu',    hu: 'fókusz/koncentráció' },
+      { type: 'verb',     jp: 'して',       romaji: 'shite',       hu: 'csinálva' },
+      { type: 'word',     jp: '勉強',       romaji: 'benkyou',     hu: 'tanulás' },
+      { type: 'verb',     jp: 'しよう',     romaji: 'shiyou',      hu: 'csináljak (volitional)' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'quotation' },
+      { type: 'verb',     jp: '思っています',romaji: 'omotte imasu',hu: 'gondolom' }
+    ],
+    metadata: { function: 'Volition (Thought)', form: 'Volitional + To omou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_vol_020', level: 'N4', translation: 'A tervek szerint hétvégén elmegyünk horgászni.',
+    tokens: [
+      { type: 'word',     jp: '週末',       romaji: 'shuumatsu',   hu: 'hétvége', semantic: 'időhatározó' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'time' },
+      { type: 'word',     jp: '友達',       romaji: 'tomodachi',   hu: 'barát' },
+      { type: 'particle', jp: 'と',         romaji: 'to',          role: 'accompaniment' },
+      { type: 'word',     jp: '釣り',       romaji: 'tsuri',       hu: 'horgászat' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'purpose' },
+      { type: 'verb',     jp: '行く',       romaji: 'iku',         hu: 'megy' },
+      { type: 'word',     jp: '予定',       romaji: 'yotei',       hu: 'terv/program' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Schedule/Plan', form: 'Yotei', tense: 'Non-Past', register: 'Polite' }
+  },
+  // ── N4_APPEARANCE — Látszat, sejtés, tapasztalat (sou da, you da, ta koto ga aru) ──
+  {
+    id: 's_n4_app_001', level: 'N4', translation: 'A matematika érettségi nagyon nehéznek tűnik.',
+    tokens: [
+      { type: 'word',     jp: '数学',       romaji: 'suugaku',     hu: 'matematika' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga/érettségi' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: 'とても',     romaji: 'totemo',      hu: 'nagyon' },
+      { type: 'word',     jp: '難し',       romaji: 'muzukashi',   hu: 'nehéz (i nélkül)' },
+      { type: 'word',     jp: 'そう',       romaji: 'sou',         hu: 'tűnik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Appearance (Visual/Impression)', form: 'Stem + Sou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_002', level: 'N4', translation: 'Az új asztal nagyon erősnek és stabilnak látszik.',
+    tokens: [
+      { type: 'word',     jp: '新しい',     romaji: 'atarashii',   hu: 'új' },
+      { type: 'word',     jp: '机',         romaji: 'tsukue',      hu: 'asztal' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: 'とても',     romaji: 'totemo',      hu: 'nagyon' },
+      { type: 'word',     jp: '丈夫',       romaji: 'joubu',       hu: 'erős/stabil (na nélkül)' },
+      { type: 'word',     jp: 'そう',       romaji: 'sou',         hu: 'látszik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Appearance (Visual/Impression)', form: 'Stem + Sou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_003', level: 'N4', translation: 'Úgy tűnik, mindjárt elindul a repülőgép.',
+    tokens: [
+      { type: 'word',     jp: '飛行機',     romaji: 'hikouki',     hu: 'repülőgép' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: 'もうすぐ',   romaji: 'mousugu',     hu: 'mindjárt' },
+      { type: 'verb',     jp: '出発し',     romaji: 'shuppatsushi',hu: 'indul (masu nélkül)' },
+      { type: 'word',     jp: 'そう',       romaji: 'sou',         hu: 'tűnik/látszik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Imminent Action', form: 'Masu-stem + Sou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_004', level: 'N4', translation: 'Úgy tűnik, Boti a Valoranttal játszik.',
+    tokens: [
+      { type: 'word',     jp: 'ボティさん', romaji: 'Boti-san',    hu: 'Boti' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: 'ヴァロラント',romaji: 'varoranto',   hu: 'Valorant' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'している',   romaji: 'shite iru',   hu: 'csinálja/játssza (folyamatos)' },
+      { type: 'word',     jp: 'よう',       romaji: 'you',         hu: 'úgy tűnik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Conjecture/Observation', form: 'Plain + You', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_005', level: 'N4', translation: 'Úgy tűnik, a terminál elromlott a repülőtéren.',
+    tokens: [
+      { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '端末',       romaji: 'tanmatsu',    hu: 'terminál' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '壊れている', romaji: 'kowarete iru',hu: 'el van romolva (állapot)' },
+      { type: 'word',     jp: 'みたい',     romaji: 'mitai',       hu: 'úgy fest/tűnik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Conjecture/Observation', form: 'Plain + Mitai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_006', level: 'N4', translation: 'Már készítettem Minecraft modot.',
+    tokens: [
+      { type: 'word',     jp: 'マイクラ',   romaji: 'Maikura',     hu: 'Minecraft' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: 'モッド',     romaji: 'moddo',       hu: 'mod' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '作った',     romaji: 'tsukutta',    hu: 'készített (ta-forma)' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'tapasztalat/dolog' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'あります',   romaji: 'arimasu',     hu: 'van' }
+    ],
+    metadata: { function: 'Experience', form: 'Ta + Koto ga aru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_007', level: 'N4', translation: 'Dolgoztam már raktárban.',
+    tokens: [
+      { type: 'word',     jp: '倉庫',       romaji: 'souko',       hu: 'raktár' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'verb',     jp: '働いた',     romaji: 'hataraita',   hu: 'dolgozott (ta-forma)' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'tapasztalat' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'あります',   romaji: 'arimasu',     hu: 'van' }
+    ],
+    metadata: { function: 'Experience', form: 'Ta + Koto ga aru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_008', level: 'N4', translation: 'Olvastad már Marcus Aurelius könyvét?',
+    tokens: [
+      { type: 'word',     jp: 'マルクス・アウレリウス', romaji: 'Marukusu Aureriusu', hu: 'Marcus Aurelius' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: '本',         romaji: 'hon',         hu: 'könyv' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '読んだ',     romaji: 'yonda',       hu: 'olvasott (ta-forma)' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'tapasztalat' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'ありますか', romaji: 'arimasu ka',  hu: 'van?' }
+    ],
+    metadata: { function: 'Experience (Question)', form: 'Ta + Koto ga aru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_009', level: 'N4', translation: 'Ez a stratégiai könyv érdekesnek tűnik.',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: '戦略',       romaji: 'senryaku',    hu: 'stratégia' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '本',         romaji: 'hon',         hu: 'könyv' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: '面白',       romaji: 'omoshiro',    hu: 'érdekes (i nélkül)' },
+      { type: 'word',     jp: 'そう',       romaji: 'sou',         hu: 'tűnik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Appearance (Visual/Impression)', form: 'Stem + Sou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_010', level: 'N4', translation: 'Még sosem voltam Japánban.',
+    tokens: [
+      { type: 'word',     jp: 'まだ',       romaji: 'mada',        hu: 'még (tagadással: sosem)' },
+      { type: 'word',     jp: '日本',       romaji: 'nihon',       hu: 'Japán' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'direction' },
+      { type: 'verb',     jp: '行った',     romaji: 'itta',        hu: 'ment (ta-forma)' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'tapasztalat' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'ありません', romaji: 'arimasen',    hu: 'nincs' }
+    ],
+    metadata: { function: 'Experience (Negative)', form: 'Ta + Koto ga arimasen', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_011', level: 'N4', translation: 'Úgy tűnik, a húgom is szeretne zongorázni.',
+    tokens: [
+      { type: 'word',     jp: '妹',         romaji: 'imouto',      hu: 'húg' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'inclusion' },
+      { type: 'word',     jp: 'ピアノ',     romaji: 'piano',       hu: 'zongora' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '弾きたい',   romaji: 'hikitai',     hu: 'akar játszani' },
+      { type: 'word',     jp: 'みたい',     romaji: 'mitai',       hu: 'úgy fest' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Conjecture/Observation', form: 'Plain + Mitai', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_012', level: 'N4', translation: 'Mindjárt esni fog az eső, így nem mehetünk horgászni.',
+    tokens: [
+      { type: 'word',     jp: '雨',         romaji: 'ame',         hu: 'eső' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '降りそう',   romaji: 'furisou',     hu: 'esni látszik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'reason' },
+      { type: 'word',     jp: '釣り',       romaji: 'tsuri',       hu: 'horgászat' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'purpose' },
+      { type: 'verb',     jp: '行けません', romaji: 'ikemasen',    hu: 'nem tudunk menni' }
+    ],
+    metadata: { function: 'Imminent Action + Reason', form: 'Masu-stem + Sou + Kara', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_013', level: 'N4', translation: 'Taekwondóztam régebben.',
+    tokens: [
+      { type: 'word',     jp: '昔',         romaji: 'mukashi',     hu: 'régebben/múltban' },
+      { type: 'word',     jp: 'テコンドー', romaji: 'tekondoo',    hu: 'taekwondo' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'した',       romaji: 'shita',       hu: 'csinált (ta-forma)' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'tapasztalat' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'あります',   romaji: 'arimasu',     hu: 'van' }
+    ],
+    metadata: { function: 'Experience', form: 'Ta + Koto ga aru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_014', level: 'N4', translation: 'Úgy tűnik, a Java kód hibás.',
+    tokens: [
+      { type: 'word',     jp: 'ジャバ',     romaji: 'Jaba',        hu: 'Java' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: 'コード',     romaji: 'koodo',       hu: 'kód' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '間違っている',romaji: 'machigatte iru', hu: 'el van rontva/hibás' },
+      { type: 'word',     jp: 'よう',       romaji: 'you',         hu: 'úgy tűnik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Conjecture/Observation', form: 'Plain + You', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_015', level: 'N4', translation: 'Az angol érettségi nem tűnik nehéznek.',
+    tokens: [
+      { type: 'word',     jp: '英語',       romaji: 'eigo',        hu: 'angol nyelv' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: '難しく',     romaji: 'muzukashiku', hu: 'nehezen' },
+      { type: 'word',     jp: 'なさそう',   romaji: 'nasasou',     hu: 'nem tűnik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Appearance (Negative)', form: 'Ku + Nasasou', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_016', level: 'N4', translation: 'Programoztál már Godot motorral?',
+    tokens: [
+      { type: 'word',     jp: 'ゴドー',     romaji: 'Godoo',       hu: 'Godot (engine)' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'means' },
+      { type: 'word',     jp: 'プログラミング',romaji: 'puroguramingu', hu: 'programozás' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'した',       romaji: 'shita',       hu: 'csinált (ta-forma)' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'tapasztalat' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'ありますか', romaji: 'arimasu ka',  hu: 'van?' }
+    ],
+    metadata: { function: 'Experience (Question)', form: 'Ta + Koto ga aru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_017', level: 'N4', translation: 'Úgy tűnik, Szun-ce stratégiája ma is hasznos.',
+    tokens: [
+      { type: 'word',     jp: '孫子',       romaji: 'Sonsi',       hu: 'Szun-ce' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: '戦略',       romaji: 'senryaku',    hu: 'stratégia' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: '今でも',     romaji: 'ima demo',    hu: 'még ma is' },
+      { type: 'verb',     jp: '役に立つ',   romaji: 'yaku ni tatsu', hu: 'hasznos/segít' },
+      { type: 'word',     jp: 'よう',       romaji: 'you',         hu: 'úgy tűnik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Conjecture/Observation', form: 'Plain + You', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_018', level: 'N4', translation: 'Ez a gyorséttermi étel finomnak látszik, de vigyáznom kell.',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: 'ファストフード',romaji: 'fasutofuudo', hu: 'gyorséttermi étel' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: '美味し',     romaji: 'oishi',       hu: 'finom (i nélkül)' },
+      { type: 'word',     jp: 'そう',       romaji: 'sou',         hu: 'látszik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'but' },
+      { type: 'verb',     jp: '気をつけます',romaji: 'ki o tsukemasu', hu: 'vigyázok/figyelek rá' }
+    ],
+    metadata: { function: 'Appearance + Contrast', form: 'Stem + Sou + Ga', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_019', level: 'N4', translation: 'Dolgoztam már sportboltban a nyáron.',
+    tokens: [
+      { type: 'word',     jp: '夏',         romaji: 'natsu',       hu: 'nyár', semantic: 'időhatározó' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'time' },
+      { type: 'word',     jp: 'スポーツ店', romaji: 'supootsuten', hu: 'sportbolt' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'verb',     jp: '働いた',     romaji: 'hataraita',   hu: 'dolgozott (ta-forma)' },
+      { type: 'word',     jp: 'こと',       romaji: 'koto',        hu: 'tapasztalat' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'あります',   romaji: 'arimasu',     hu: 'van' }
+    ],
+    metadata: { function: 'Experience', form: 'Ta + Koto ga aru', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_app_020', level: 'N4', translation: 'Úgy tűnik, a dopamin-detox segít a fókuszálásban.',
+    tokens: [
+      { type: 'word',     jp: 'デトックス', romaji: 'detokkusu',   hu: 'detox' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: '集中',       romaji: 'shuuchuu',    hu: 'fókusz/koncentráció' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target' },
+      { type: 'verb',     jp: '役立つ',     romaji: 'yakudatsu',   hu: 'hasznos/segít' },
+      { type: 'word',     jp: 'みたい',     romaji: 'mitai',       hu: 'úgy fest/tűnik' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Conjecture/Observation', form: 'Plain + Mitai', tense: 'Non-Past', register: 'Polite' }
+  },
+  // ── N4_PERMISSION — Engedélyek és tiltások (te mo ii, te wa ikenai) ──
+  {
+    id: 's_n4_prm_001', level: 'N4', translation: 'Használhatom ezt a gépet?',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: '機械',       romaji: 'kikai',       hu: 'gép/berendezés' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '使って',     romaji: 'tsukatte',    hu: 'használva (te-forma)' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van (polite)' },
+      { type: 'particle', jp: 'か',         romaji: 'ka',          role: 'question' }
+    ],
+    metadata: { function: 'Permission (Asking)', form: 'Te + Mo ii desu ka', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_002', level: 'N4', translation: 'Ezt a terminált nem szabad megérinteni.',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: '端末',       romaji: 'tanmatsu',    hu: 'terminál' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target' },
+      { type: 'verb',     jp: '触って',     romaji: 'sawatte',     hu: 'megérintve (te-forma)' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'nem megy / tilos' }
+    ],
+    metadata: { function: 'Prohibition', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_003', level: 'N4', translation: 'A matek érettségi közben tilos beszélgetni.',
+    tokens: [
+      { type: 'word',     jp: '数学',       romaji: 'suugaku',     hu: 'matematika' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga/érettségi' },
+      { type: 'word',     jp: '中',         romaji: 'chuu',        hu: 'közben', semantic: 'időhatározó' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'time' },
+      { type: 'verb',     jp: '話して',     romaji: 'hanashite',   hu: 'beszélve (te-forma)' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_004', level: 'N4', translation: 'Elolvashatom ezt a stratégiai könyvet?',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: '戦略',       romaji: 'senryaku',    hu: 'stratégia' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '本',         romaji: 'hon',         hu: 'könyv' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '読んで',     romaji: 'yonde',       hu: 'olvasva (te-forma)' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' },
+      { type: 'particle', jp: 'か',         romaji: 'ka',          role: 'question' }
+    ],
+    metadata: { function: 'Permission (Asking)', form: 'Te + Mo ii desu ka', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_005', level: 'N4', translation: 'Nem szabad letörölni a Java kódot.',
+    tokens: [
+      { type: 'word',     jp: 'ジャバ',     romaji: 'jaba',        hu: 'Java' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: 'コード',     romaji: 'koodo',       hu: 'kód' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '消して',     romaji: 'keshite',     hu: 'letörölve (te-forma)' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_006', level: 'N4', translation: 'Japánban nem szabad cipőben bemenni a házba.',
+    tokens: [
+      { type: 'word',     jp: '日本',       romaji: 'nihon',       hu: 'Japán' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location' },
+      { type: 'word',     jp: '靴',         romaji: 'kutsu',       hu: 'cipő' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'means/state' },
+      { type: 'word',     jp: '家',         romaji: 'ie',          hu: 'ház' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'direction/into' },
+      { type: 'verb',     jp: '入って',     romaji: 'haitte',      hu: 'bemenve (te-forma)' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition (Cultural Rule)', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_007', level: 'N4', translation: 'Szabad fotózni a templom belsejében?',
+    tokens: [
+      { type: 'word',     jp: 'お寺',       romaji: 'otera',       hu: 'templom' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: '中',         romaji: 'naka',        hu: 'belseje' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: '写真',       romaji: 'shashin',     hu: 'fotó' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '撮って',     romaji: 'totte',       hu: 'készítve (te-forma)' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' },
+      { type: 'particle', jp: 'か',         romaji: 'ka',          role: 'question' }
+    ],
+    metadata: { function: 'Permission (Asking)', form: 'Te + Mo ii desu ka', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_008', level: 'N4', translation: 'Késő éjszakáig nem szabad a Valoranttal játszani.',
+    tokens: [
+      { type: 'word',     jp: '夜',         romaji: 'yoru',        hu: 'éjszaka' },
+      { type: 'word',     jp: '遅く',       romaji: 'osoku',       hu: 'későn' },
+      { type: 'particle', jp: 'まで',       romaji: 'made',        role: 'until' },
+      { type: 'word',     jp: 'ヴァロラント',romaji: 'varoranto',   hu: 'Valorant' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'して',       romaji: 'shite',       hu: 'csinálva (te-forma)' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_009', level: 'N4', translation: 'Boti, használhatod ezt a 3D modellt az RPG-hez.',
+    tokens: [
+      { type: 'word',     jp: 'ボティさん', romaji: 'Boti-san',    hu: 'Boti' },
+      { type: 'word',     jp: 'ＲＰＧ',     romaji: 'aaru-pii-jii',hu: 'RPG' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target/for' },
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: '３Ｄモデル', romaji: 'suriidii moderu', hu: '3D modell' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '使って',     romaji: 'tsukatte',    hu: 'használva' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' },
+      { type: 'particle', jp: 'よ',         romaji: 'yo',          role: 'assertion' }
+    ],
+    metadata: { function: 'Permission (Granting)', form: 'Te + Mo ii desu yo', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_010', level: 'N4', translation: 'Amikor dopamin-detoxon vagy, nem szabad sokáig nézni a telefont.',
+    tokens: [
+      { type: 'word',     jp: 'デトックス', romaji: 'detokkusu',   hu: 'detox' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '時',         romaji: 'toki',        hu: 'amikor / idő', semantic: 'időhatározó' },
+      { type: 'word',     jp: 'スマホ',     romaji: 'sumaho',      hu: 'okostelefon' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'word',     jp: '長く',       romaji: 'nagaku',      hu: 'sokáig/hosszan' },
+      { type: 'verb',     jp: '見て',       romaji: 'mite',        hu: 'nézve (te-forma)' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition (Conditional Time)', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_011', level: 'N4', translation: 'A húgom játszhat a zongorámon.',
+    tokens: [
+      { type: 'word',     jp: '妹',         romaji: 'imouto',      hu: 'húg' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: '私の',       romaji: 'watashi no',  hu: 'az én' },
+      { type: 'word',     jp: 'ピアノ',     romaji: 'piano',       hu: 'zongora' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '弾いて',     romaji: 'hiite',       hu: 'játszva (te-forma)' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Permission (Granting)', form: 'Te + Mo ii desu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_012', level: 'N4', translation: 'Nem szabad a táskát ide tenni.',
+    tokens: [
+      { type: 'word',     jp: 'カバン',     romaji: 'kaban',       hu: 'táska' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'word',     jp: 'ここ',       romaji: 'koko',        hu: 'ide (hely)' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'location' },
+      { type: 'verb',     jp: '置いて',     romaji: 'oite',        hu: 'rakva/téve (te-forma)' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_013', level: 'N4', translation: 'Szabad nehéz dolgokat tenni az új asztalra.',
+    tokens: [
+      { type: 'word',     jp: '新しい',     romaji: 'atarashii',   hu: 'új' },
+      { type: 'word',     jp: '机',         romaji: 'tsukue',      hu: 'asztal' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target location' },
+      { type: 'word',     jp: '重い',       romaji: 'omoi',        hu: 'nehéz (súly)' },
+      { type: 'word',     jp: '物',         romaji: 'mono',        hu: 'dolog' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '置いて',     romaji: 'oite',        hu: 'letéve (te-forma)' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Permission', form: 'Te + Mo ii desu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_014', level: 'N4', translation: 'A repülőtéren nem szabad elveszíteni az útlevelet.',
+    tokens: [
+      { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: 'パスポート', romaji: 'pasupooto',   hu: 'útlevél' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'なくして',   romaji: 'nakushite',   hu: 'elveszítve (te-forma)' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_015', level: 'N4', translation: 'Szabad itt horgászni?',
+    tokens: [
+      { type: 'word',     jp: 'ここ',       romaji: 'koko',        hu: 'itt' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: '釣り',       romaji: 'tsuri',       hu: 'horgászat' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'して',       romaji: 'shite',       hu: 'csinálva (te-forma)' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' },
+      { type: 'particle', jp: 'か',         romaji: 'ka',          role: 'question' }
+    ],
+    metadata: { function: 'Permission (Asking)', form: 'Te + Mo ii desu ka', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_016', level: 'N4', translation: 'Amikor sérült vagy, nem szabad taekwondózni.',
+    tokens: [
+      { type: 'word',     jp: '怪我',       romaji: 'kega',        hu: 'sérülés' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'している',   romaji: 'shite iru',   hu: 'szenved (állapot)' },
+      { type: 'word',     jp: '時',         romaji: 'toki',        hu: 'amikor' },
+      { type: 'word',     jp: 'テコンドー', romaji: 'tekondoo',    hu: 'taekwondo' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'して',       romaji: 'shite',       hu: 'csinálva' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition (Conditional Time)', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_017', level: 'N4', translation: 'Kikapcsolhatod a mikrofont a Discordon.',
+    tokens: [
+      { type: 'word',     jp: 'ディスコード',romaji: 'disukoodo',   hu: 'Discord' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: 'マイク',     romaji: 'maiku',       hu: 'mikrofon' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '消して',     romaji: 'keshite',     hu: 'kikapcsolva/eltüntetve' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Permission', form: 'Te + Mo ii desu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_018', level: 'N4', translation: 'Az egyetem könyvtárában nem szabad hangosan beszélni.',
+    tokens: [
+      { type: 'word',     jp: '大学',       romaji: 'daigaku',     hu: 'egyetem' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: '図書館',     romaji: 'toshokan',    hu: 'könyvtár' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: '大きい',     romaji: 'ookii',       hu: 'nagy' },
+      { type: 'word',     jp: '声',         romaji: 'koe',         hu: 'hang' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'means' },
+      { type: 'verb',     jp: '話して',     romaji: 'hanashite',   hu: 'beszélve' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic (prohibition)' },
+      { type: 'verb',     jp: 'いけません', romaji: 'ikemasen',    hu: 'tilos' }
+    ],
+    metadata: { function: 'Prohibition', form: 'Te + Wa ikemasen', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_019', level: 'N4', translation: 'Letehetem ide a billentyűzetet?',
+    tokens: [
+      { type: 'word',     jp: 'ここ',       romaji: 'koko',        hu: 'ide' },
+      { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'location' },
+      { type: 'word',     jp: 'キーボード', romaji: 'kiiboodo',    hu: 'billentyűzet' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '置いて',     romaji: 'oite',        hu: 'letéve (te-forma)' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' },
+      { type: 'particle', jp: 'か',         romaji: 'ka',          role: 'question' }
+    ],
+    metadata: { function: 'Permission (Asking)', form: 'Te + Mo ii desu ka', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_prm_020', level: 'N4', translation: 'Ma korán hazamehetsz a repülőtérről.',
+    tokens: [
+      { type: 'word',     jp: '今日',       romaji: 'kyou',        hu: 'ma', semantic: 'időhatározó' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'source' },
+      { type: 'word',     jp: '早く',       romaji: 'hayaku',      hu: 'korán/gyorsan' },
+      { type: 'verb',     jp: '帰って',     romaji: 'kaette',      hu: 'hazatérve (te-forma)' },
+      { type: 'particle', jp: 'も',         romaji: 'mo',          role: 'even/also' },
+      { type: 'word',     jp: 'いい',       romaji: 'ii',          hu: 'jó' },
+      { type: 'word',     jp: 'です',       romaji: 'desu',        hu: 'van' }
+    ],
+    metadata: { function: 'Permission (Granting)', form: 'Te + Mo ii desu', tense: 'Non-Past', register: 'Polite' }
+  },
+  // ── N4_TRANSITIVE — Tárgyas/Tárgyatlan párok (kowasu/kowareru, otosu/ochiru, stb.) ──
+  {
+    id: 's_n4_trn_001', level: 'N4', translation: 'Megjavítom a terminált a repülőtéren.',
+    tokens: [
+      { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '端末',       romaji: 'tanmatsu',    hu: 'terminál' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '直します',   romaji: 'naoshimasu',  hu: 'megjavítom' }
+    ],
+    metadata: { function: 'Transitive Action (Naosu)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_002', level: 'N4', translation: 'Végre megjavult a gép.',
+    tokens: [
+      { type: 'word',     jp: 'やっと',     romaji: 'yatto',       hu: 'végre', semantic: 'határozó' },
+      { type: 'word',     jp: '機械',       romaji: 'kikai',       hu: 'gép' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '直りました', romaji: 'naorimashita',hu: 'megjavult' }
+    ],
+    metadata: { function: 'Intransitive State Change (Naoru)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_003', level: 'N4', translation: 'Véletlenül eltörtem a régi monitort.',
+    tokens: [
+      { type: 'word',     jp: '間違えて',   romaji: 'machigaete',  hu: 'véletlenül/tévedésből' },
+      { type: 'word',     jp: '古い',       romaji: 'furui',       hu: 'régi' },
+      { type: 'word',     jp: 'モニター',   romaji: 'monitaa',     hu: 'monitor' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '壊しました', romaji: 'kowashimashita', hu: 'eltörtem/elrontottam' }
+    ],
+    metadata: { function: 'Transitive Action (Kowasu)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_004', level: 'N4', translation: 'Elromlott a gép a raktárban.',
+    tokens: [
+      { type: 'word',     jp: '倉庫',       romaji: 'souko',       hu: 'raktár' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'location/modifier' },
+      { type: 'word',     jp: '機械',       romaji: 'kikai',       hu: 'gép' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '壊れました', romaji: 'kowaremashita', hu: 'elromlott' }
+    ],
+    metadata: { function: 'Intransitive State Change (Kowareru)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_005', level: 'N4', translation: 'Eleejtettem egy könyvet a könyvtárban.',
+    tokens: [
+      { type: 'word',     jp: '図書館',     romaji: 'toshokan',    hu: 'könyvtár' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: '本',         romaji: 'hon',         hu: 'könyv' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '落としました',romaji: 'otoshimashita', hu: 'elejtettem' }
+    ],
+    metadata: { function: 'Transitive Action (Otosu)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_006', level: 'N4', translation: 'Leesett a táskám az új asztalról.',
+    tokens: [
+      { type: 'word',     jp: '新しい',     romaji: 'atarashii',   hu: 'új' },
+      { type: 'word',     jp: '机',         romaji: 'tsukue',      hu: 'asztal' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'source' },
+      { type: 'word',     jp: 'カバン',     romaji: 'kaban',       hu: 'táska' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '落ちました', romaji: 'ochimashita', hu: 'leesett' }
+    ],
+    metadata: { function: 'Intransitive Action (Ochiru)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_007', level: 'N4', translation: 'Bekapcsolom a számítógépet és elkezdek programozni.',
+    tokens: [
+      { type: 'word',     jp: 'パソコン',   romaji: 'pasokon',     hu: 'számítógép' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: 'つけて',     romaji: 'tsukete',     hu: 'bekapcsolva (te-forma)' },
+      { type: 'word',     jp: 'プログラミング',romaji: 'puroguramingu',hu: 'programozás' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '始めます',   romaji: 'hajimemasu',  hu: 'elkezdem' }
+    ],
+    metadata: { function: 'Transitive Action (Tsukeru & Hajimeru)', form: 'Te + Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_008', level: 'N4', translation: 'A szobámban felkapcsolódott a villany.',
+    tokens: [
+      { type: 'word',     jp: '私の',       romaji: 'watashi no',  hu: 'az én' },
+      { type: 'word',     jp: '部屋',       romaji: 'heya',        hu: 'szobám' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'location marker' },
+      { type: 'word',     jp: '電気',       romaji: 'denki',       hu: 'villany/áram' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: 'つきました', romaji: 'tsukimashita',hu: 'felkapcsolódott' }
+    ],
+    metadata: { function: 'Intransitive State Change (Tsuku)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_009', level: 'N4', translation: 'A fókuszálás érdekében kikapcsolom a telefont.',
+    tokens: [
+      { type: 'word',     jp: '集中',       romaji: 'shuuchuu',    hu: 'fókusz' },
+      { type: 'verb',     jp: 'する',       romaji: 'suru',        hu: 'csinál' },
+      { type: 'word',     jp: 'ために',     romaji: 'tame ni',     hu: 'érdekében / céljából' },
+      { type: 'word',     jp: 'スマホ',     romaji: 'sumaho',      hu: 'okostelefon' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '消します',   romaji: 'keshimasu',   hu: 'kikapcsolom/eltüntetem' }
+    ],
+    metadata: { function: 'Transitive Action (Kesu)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_010', level: 'N4', translation: 'A szerverről eltűntek a fájlok.',
+    tokens: [
+      { type: 'word',     jp: 'サーバー',   romaji: 'saabaa',      hu: 'szerver' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'source' },
+      { type: 'word',     jp: 'ファイル',   romaji: 'fairu',       hu: 'fájl' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '消えました', romaji: 'kiemashita',  hu: 'eltűntek' }
+    ],
+    metadata: { function: 'Intransitive State Change (Kieru)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_011', level: 'N4', translation: 'Nagyon meleg van, ezért kinyitom az ablakot.',
+    tokens: [
+      { type: 'word',     jp: 'とても',     romaji: 'totemo',      hu: 'nagyon' },
+      { type: 'word',     jp: '暑い',       romaji: 'atsui',       hu: 'meleg' },
+      { type: 'particle', jp: 'から',       romaji: 'kara',        role: 'reason' },
+      { type: 'word',     jp: '窓',         romaji: 'mado',        hu: 'ablak' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '開けます',   romaji: 'akemasu',     hu: 'kinyitom' }
+    ],
+    metadata: { function: 'Transitive Action (Akeru)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_012', level: 'N4', translation: 'Kinyílt a repülőtér kapuja.',
+    tokens: [
+      { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: 'ゲート',     romaji: 'geeto',       hu: 'kapu/gate' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '開きました', romaji: 'akimashita',  hu: 'kinyílt' }
+    ],
+    metadata: { function: 'Intransitive State Change (Aku)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_013', level: 'N4', translation: 'Boti bezárta a szoba ajtaját.',
+    tokens: [
+      { type: 'word',     jp: 'ボティさん', romaji: 'Boti-san',    hu: 'Boti' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: '部屋',       romaji: 'heya',        hu: 'szoba' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: 'ドア',       romaji: 'doa',         hu: 'ajtó' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '閉めました', romaji: 'shimemashita',hu: 'bezárta' }
+    ],
+    metadata: { function: 'Transitive Action (Shimeru)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_014', level: 'N4', translation: 'Bezárult a sportbolt ajtaja.',
+    tokens: [
+      { type: 'word',     jp: 'スポーツ店', romaji: 'supootsuten', hu: 'sportbolt' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
+      { type: 'word',     jp: 'ドア',       romaji: 'doa',         hu: 'ajtó' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '閉まりました',romaji: 'shimarimashita', hu: 'bezárult' }
+    ],
+    metadata: { function: 'Intransitive State Change (Shimaru)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_015', level: 'N4', translation: 'Elkezdem a taekwondo edzést.',
+    tokens: [
+      { type: 'word',     jp: 'テコンドー', romaji: 'tekondoo',    hu: 'taekwondo' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '練習',       romaji: 'renshuu',     hu: 'edzés/gyakorlás' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '始めます',   romaji: 'hajimemasu',  hu: 'elkezdem' }
+    ],
+    metadata: { function: 'Transitive Action (Hajimeru)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_016', level: 'N4', translation: 'Nemsokára kezdődik a matek érettségi.',
+    tokens: [
+      { type: 'word',     jp: 'もうすぐ',   romaji: 'mousugu',     hu: 'nemsokára/mindjárt', semantic: 'időhatározó' },
+      { type: 'word',     jp: '数学',       romaji: 'suugaku',     hu: 'matematika' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga/érettségi' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '始まります', romaji: 'hajimarimasu',hu: 'elkezdődik' }
+    ],
+    metadata: { function: 'Intransitive Action (Hajimaru)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_017', level: 'N4', translation: 'Kijavítottam egy hibát a Godot projektben.',
+    tokens: [
+      { type: 'word',     jp: 'ゴドー',     romaji: 'Godoo',       hu: 'Godot (engine)' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'word',     jp: 'プロジェクト',romaji: 'purojekuto',  hu: 'projekt' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: 'バグ',       romaji: 'bagu',        hu: 'bug/hiba' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '直しました', romaji: 'naoshimashita', hu: 'megjavítottam/kijavítottam' }
+    ],
+    metadata: { function: 'Transitive Action (Naosu)', form: 'Masu', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_018', level: 'N4', translation: 'Ez a terminál jelenleg el van romolva (rossz).',
+    tokens: [
+      { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
+      { type: 'word',     jp: '端末',       romaji: 'tanmatsu',    hu: 'terminál' },
+      { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
+      { type: 'word',     jp: '今',         romaji: 'ima',         hu: 'most', semantic: 'időhatározó' },
+      { type: 'verb',     jp: '壊れています',romaji: 'kowarete imasu', hu: 'el van romolva (állapot)' }
+    ],
+    metadata: { function: 'Intransitive Resultant State (Te iru)', form: 'Te + Imasu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_019', level: 'N4', translation: 'A szobában le van kapcsolva a lámpa (sötét van).',
+    tokens: [
+      { type: 'word',     jp: '部屋',       romaji: 'heya',        hu: 'szoba' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'location' },
+      { type: 'word',     jp: '電気',       romaji: 'denki',       hu: 'villany/lámpa' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'verb',     jp: '消えています',romaji: 'kiete imasu', hu: 'le van kapcsolva (állapot)' }
+    ],
+    metadata: { function: 'Intransitive Resultant State (Te iru)', form: 'Te + Imasu', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_n4_trn_020', level: 'N4', translation: 'A repülőtéren valaki elejtette az útlevelét.',
+    tokens: [
+      { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
+      { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
+      { type: 'word',     jp: '誰か',       romaji: 'dareka',      hu: 'valaki' },
+      { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
+      { type: 'word',     jp: 'パスポート', romaji: 'pasupooto',   hu: 'útlevél' },
+      { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
+      { type: 'verb',     jp: '落としました',romaji: 'otoshimashita', hu: 'elejtette' }
+    ],
+    metadata: { function: 'Transitive Action (Otosu)', form: 'Masu', tense: 'Past', register: 'Polite' }
   }
 ];
 
