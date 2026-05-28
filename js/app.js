@@ -1097,6 +1097,74 @@ window.NihonCoreFlashcard = (function () {
 })();
 
 
+// ── Header login-state (V16) ──
+//   A NihonCoreAuth.onChange-re figyel, és a fejléc "Bejelentkezés"
+//   linkjét lecseréli a user nevére + kijelentkezés gombra.
+//   Minden oldalon fut (univerzális). file:// alatt no-op (auth off).
+(function initAuthHeaderState() {
+  if (!window.NihonCoreAuth) return;
+
+  function displayName(user) {
+    if (!user) return '';
+    return user.displayName || (user.email ? user.email.split('@')[0] : 'Felhasználó');
+  }
+
+  function render(user) {
+    const authBtns = document.querySelector('.auth-buttons');
+    if (!authBtns) return;
+
+    // A "Bejelentkezés" + "Regisztráció" linkek
+    const loginLink = authBtns.querySelector('a[href*="login"]');
+    const regLink   = authBtns.querySelector('a[href*="register"]');
+
+    // Régi user-chip eltávolítása (újra-render)
+    authBtns.querySelector('.nc-user-chip')?.remove();
+
+    if (user) {
+      // Bejelentkezve — login/register linkek elrejtése + user-chip
+      if (loginLink) loginLink.style.display = 'none';
+      if (regLink)   regLink.style.display = 'none';
+
+      const chip = document.createElement('div');
+      chip.className = 'nc-user-chip';
+      chip.innerHTML = `
+        <button class="nc-user-btn" type="button" title="Fiók">
+          <span class="nc-user-avatar">${displayName(user).charAt(0).toUpperCase()}</span>
+          <span class="nc-user-name">${displayName(user)}</span>
+        </button>
+        <div class="nc-user-menu" hidden>
+          <div class="nc-user-menu-email">${user.email || ''}</div>
+          <button class="nc-user-logout" type="button">Kijelentkezés</button>
+        </div>`;
+      // A home-gomb ELÉ szúrjuk (ha van), egyébként a végére
+      const home = authBtns.querySelector('.btn-home');
+      if (home) authBtns.insertBefore(chip, home);
+      else      authBtns.appendChild(chip);
+
+      const btn  = chip.querySelector('.nc-user-btn');
+      const menu = chip.querySelector('.nc-user-menu');
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        menu.hidden = !menu.hidden;
+      });
+      document.addEventListener('click', () => { menu.hidden = true; });
+      chip.querySelector('.nc-user-logout').addEventListener('click', async () => {
+        try { await window.NihonCoreAuth.logout(); } catch (e) {}
+        // A render az onChange-ben automatikusan visszaáll
+      });
+    } else {
+      // Nincs bejelentkezve — linkek vissza
+      if (loginLink) loginLink.style.display = '';
+      if (regLink)   regLink.style.display = '';
+    }
+  }
+
+  window.NihonCoreAuth.onChange(render);
+  // Barba afterEnter után újra-render (a header NEM cserélődik, de biztos ami biztos)
+  window.NihonCoreAuthHeaderRender = () => render(window.NihonCoreAuth.getUser());
+})();
+
+
 // ── Univerzális Segítők kapcsoló (Romaji + Magyar) ─
 // localStorage-ban perzisztált. body class-okat kapcsol.
 (function initHelpersToggle() {
@@ -5286,65 +5354,125 @@ function initAuthPages() {
     setTimeout(() => card.classList.remove('shake'), 500);
   }
 
-  // Login button mock
+  // ── V16: Firebase auth integráció ────────────────────
+  const AUTH = window.NihonCoreAuth;
+
+  // Univerzális hiba-megjelenítő az auth-kártyán
+  function showAuthError(msg) {
+    let box = document.getElementById('authErrorBox');
+    if (!box) {
+      box = document.createElement('div');
+      box.id = 'authErrorBox';
+      box.className = 'auth-error-box';
+      const form = document.querySelector('.auth-form');
+      if (form) form.insertBefore(box, form.firstChild);
+    }
+    box.textContent = msg;
+    box.classList.add('visible');
+    shakeForm();
+  }
+  function clearAuthError() {
+    const box = document.getElementById('authErrorBox');
+    if (box) box.classList.remove('visible');
+  }
+  // Sikeres belépés/regisztráció után — vissza az indexre
+  function redirectAfterAuth() {
+    window.location.href = '../index.html';
+  }
+
+  // Login gomb — valós Firebase
   const loginBtn    = document.getElementById('loginBtn');
   const loginLoader = document.getElementById('loginLoader');
   if (loginBtn) {
-    loginBtn.addEventListener('click', () => {
+    loginBtn.addEventListener('click', async () => {
+      clearAuthError();
       const email = document.getElementById('email')?.value?.trim();
       const pw    = document.getElementById('password')?.value;
       if (!email || !pw) { shakeForm(); return; }
+      if (!AUTH || !AUTH.isEnabled()) {
+        showAuthError('Az auth csak HTTP szerver alatt működik (GitHub Pages / localhost).');
+        return;
+      }
       const btnText = loginBtn.querySelector('.btn-text');
+      const orig = btnText ? btnText.textContent : '';
       if (btnText) btnText.textContent = 'Bejelentkezés...';
       if (loginLoader) loginLoader.classList.remove('hidden');
-      loginBtn.disabled = true;
-      loginBtn.style.opacity = '0.8';
-      setTimeout(() => {
-        if (btnText) btnText.textContent = 'Bejelentkezés';
+      loginBtn.disabled = true; loginBtn.style.opacity = '0.8';
+      try {
+        await AUTH.login(email, pw);
+        redirectAfterAuth();
+      } catch (err) {
+        showAuthError(AUTH.humanError(err));
+      } finally {
+        if (btnText) btnText.textContent = orig || 'Bejelentkezés';
         if (loginLoader) loginLoader.classList.add('hidden');
-        loginBtn.disabled = false;
-        loginBtn.style.opacity = '';
-        alert('Firebase integráció még folyamatban — Phase 2!');
-      }, 1800);
+        loginBtn.disabled = false; loginBtn.style.opacity = '';
+      }
     });
   }
 
-  // Register button mock
+  // Register gomb — valós Firebase
   const registerBtn    = document.getElementById('registerBtn');
   const registerLoader = document.getElementById('registerLoader');
   if (registerBtn) {
-    registerBtn.addEventListener('click', () => {
+    registerBtn.addEventListener('click', async () => {
+      clearAuthError();
       const terms = document.getElementById('terms');
       if (terms && !terms.checked) {
         terms.closest('.form-check')?.classList.add('shake');
         setTimeout(() => terms.closest('.form-check')?.classList.remove('shake'), 500);
         return;
       }
+      const email = document.getElementById('email')?.value?.trim();
       const pw  = document.getElementById('password')?.value;
       const pc  = document.getElementById('passwordConfirm')?.value;
+      const fname = document.getElementById('firstname')?.value?.trim() || '';
+      const lname = document.getElementById('lastname')?.value?.trim() || '';
+      if (!email || !pw) { shakeForm(); return; }
       if (pw && pc && pw !== pc) {
         if (pwMatchErr) pwMatchErr.classList.remove('hidden');
         return;
       }
+      if (!AUTH || !AUTH.isEnabled()) {
+        showAuthError('Az auth csak HTTP szerver alatt működik (GitHub Pages / localhost).');
+        return;
+      }
       const btnText = registerBtn.querySelector('.btn-text');
+      const orig = btnText ? btnText.textContent : '';
       if (btnText) btnText.textContent = 'Regisztrálás...';
       if (registerLoader) registerLoader.classList.remove('hidden');
-      registerBtn.disabled = true;
-      registerBtn.style.opacity = '0.8';
-      setTimeout(() => {
-        if (btnText) btnText.textContent = 'Regisztráció';
+      registerBtn.disabled = true; registerBtn.style.opacity = '0.8';
+      try {
+        const displayName = (fname + ' ' + lname).trim() || email.split('@')[0];
+        await AUTH.register(email, pw, displayName);
+        redirectAfterAuth();
+      } catch (err) {
+        showAuthError(AUTH.humanError(err));
+      } finally {
+        if (btnText) btnText.textContent = orig || 'Regisztráció';
         if (registerLoader) registerLoader.classList.add('hidden');
-        registerBtn.disabled = false;
-        registerBtn.style.opacity = '';
-        alert('Firebase integráció még folyamatban — Phase 2!');
-      }, 1800);
+        registerBtn.disabled = false; registerBtn.style.opacity = '';
+      }
     });
   }
 
-  // Google button placeholder
+  // Google gomb — valós Firebase popup
   document.querySelectorAll('#googleBtn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      alert('Google bejelentkezés — Firebase integráció (Phase 2)!');
+    btn.addEventListener('click', async () => {
+      clearAuthError();
+      if (!AUTH || !AUTH.isEnabled()) {
+        showAuthError('Az auth csak HTTP szerver alatt működik (GitHub Pages / localhost).');
+        return;
+      }
+      btn.disabled = true; btn.style.opacity = '0.8';
+      try {
+        await AUTH.loginGoogle();
+        redirectAfterAuth();
+      } catch (err) {
+        showAuthError(AUTH.humanError(err));
+      } finally {
+        btn.disabled = false; btn.style.opacity = '';
+      }
     });
   });
 

@@ -15,7 +15,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v15-2026-05-26-counter-expand';
+const CACHE_VERSION = 'nihoncore-v16-2026-05-27-firebase-auth';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 
@@ -43,6 +43,7 @@ const APP_SHELL = [
   './css/auth.css',
   // js/
   './js/app.js',
+  './js/auth.js',
   // ── V8: data.js szétbontva 8 modul-fájlra ──
   './js/data/core.js',
   './js/data/sentences.js',
@@ -64,9 +65,10 @@ const FONT_HOSTS = [
 ];
 
 // Külső lib CDN-ek (cache-first runtime — zen-polish:
-// anime.js / lottie / barba.js a jsdelivr-ről)
+// anime.js / lottie / barba.js a jsdelivr-ről; Firebase SDK a gstatic-ról)
 const LIB_HOSTS = [
-  'cdn.jsdelivr.net'
+  'cdn.jsdelivr.net',
+  'www.gstatic.com'      // V16: Firebase compat SDK
 ];
 
 // TTS endpoint — NETWORK-only (nem cache-eljük)
