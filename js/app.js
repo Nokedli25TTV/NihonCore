@@ -1108,6 +1108,10 @@ window.NihonCoreFlashcard = (function () {
     if (!user) return '';
     return user.displayName || (user.email ? user.email.split('@')[0] : 'Felhasználó');
   }
+  // Path-detektálás: a stats.html / index.html a pages/ vagy a root felől
+  function inPages() { return window.location.pathname.includes('/pages/'); }
+  function statsHref() { return inPages() ? 'stats.html' : 'pages/stats.html'; }
+  function homeHref()  { return inPages() ? '../index.html' : 'index.html'; }
 
   function render(user) {
     const authBtns = document.querySelector('.auth-buttons');
@@ -1133,7 +1137,10 @@ window.NihonCoreFlashcard = (function () {
           <span class="nc-user-name">${displayName(user)}</span>
         </button>
         <div class="nc-user-menu" hidden>
+          <div class="nc-user-menu-name">${displayName(user)}</div>
           <div class="nc-user-menu-email">${user.email || ''}</div>
+          <a class="nc-user-menu-link" href="${statsHref()}">📊 Statisztika</a>
+          <a class="nc-user-menu-link" href="${homeHref()}">🏠 Kezdőlap</a>
           <div class="nc-sync-status" id="ncSyncStatus">☁️ Felhő-szinkron aktív</div>
           <button class="nc-sync-now" type="button">☁️ Szinkronizálás most</button>
           <button class="nc-user-logout" type="button">Kijelentkezés</button>
@@ -1190,6 +1197,12 @@ window.NihonCoreFlashcard = (function () {
     }
   }
 
+  // V20: optimista render a cache-ből — AZONNAL mutatja a bejelentkezett
+  // állapotot (nincs 1mp "Bejelentkezés" villanás a lazy Firebase SDK miatt).
+  const cached = window.NihonCoreAuth.getCachedUser && window.NihonCoreAuth.getCachedUser();
+  if (cached) render(cached);
+
+  // A valós auth-state (a Firebase SDK betöltése után) felülírja a cache-eltet.
   window.NihonCoreAuth.onChange(render);
   // Barba afterEnter után újra-render (a header NEM cserélődik, de biztos ami biztos)
   window.NihonCoreAuthHeaderRender = () => render(window.NihonCoreAuth.getUser());

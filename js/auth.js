@@ -53,12 +53,32 @@ window.NihonCoreAuth = (function () {
   function onChange(cb) {
     if (typeof cb !== 'function') return;
     _changeCallbacks.push(cb);
-    // Ha már kész, azonnal egy kezdő hívás
+    // V20: ha az SDK MÁR kész, azonnal a valós állapot.
+    // Ha még tölt (lazy), NEM hívunk null-lal — különben felülírná a
+    // header optimista (cache-elt) renderét egy villanással. Az
+    // onAuthStateChanged majd tüzel a valós állapottal az SDK betöltése után.
     if (_enabled && _auth) cb(_auth.currentUser);
-    else cb(null);
   }
   function _notify(user) {
     _changeCallbacks.forEach(cb => { try { cb(user); } catch (e) {} });
+  }
+
+  // V20: flicker-mentes cache — a bejelentkezett user nevét/emailjét
+  // localStorage-ba mentjük, így a header AZONNAL renderelhet (a lazy
+  // Firebase SDK betöltése előtt), nincs 1mp "Bejelentkezés" villanás.
+  function _cacheUser(user) {
+    try {
+      if (user) {
+        localStorage.setItem('nihoncore_cached_user',
+          JSON.stringify({ displayName: user.displayName, email: user.email }));
+      } else {
+        localStorage.removeItem('nihoncore_cached_user');
+      }
+    } catch (e) {}
+  }
+  function getCachedUser() {
+    try { return JSON.parse(localStorage.getItem('nihoncore_cached_user') || 'null'); }
+    catch (e) { return null; }
   }
 
   // ── Hibakód → magyar üzenet ───────────────────────────
@@ -141,7 +161,7 @@ window.NihonCoreAuth = (function () {
       _enabled = true;
       // Session-perzisztencia: LOCAL (page-reload után is bejelentkezve marad)
       try { _auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL); } catch (e) {}
-      _auth.onAuthStateChanged(user => _notify(user));
+      _auth.onAuthStateChanged(user => { _cacheUser(user); _notify(user); });
       _readyResolve(true);
     } catch (e) {
       console.warn('[NihonCoreAuth] init hiba:', e);
@@ -183,7 +203,7 @@ window.NihonCoreAuth = (function () {
   }
 
   return {
-    ready, isEnabled, getUser, onChange,
+    ready, isEnabled, getUser, onChange, getCachedUser,
     register, login, loginGoogle, logout, humanError
   };
 })();

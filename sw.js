@@ -15,7 +15,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v20-2026-05-27-firebase-lazy';
+const CACHE_VERSION = 'nihoncore-v21-2026-05-27-header-profile';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 

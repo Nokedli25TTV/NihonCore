@@ -735,7 +735,15 @@ rt {
 
 @media (max-width: 768px) {
   .nav { display: none; }
-  .auth-buttons { display: none; }
+  /* V20: a szöveges Bejelentkezés/Regisztráció gombok rejtve mobilon
+     (a landingen a hamburger-menüben vannak), DE a user-chip (profil),
+     home-gomb és téma-toggle LÁTSZIK a jobb felső sarokban. */
+  .auth-buttons { display: flex; gap: 8px; }
+  .auth-buttons > .btn-ghost,
+  .auth-buttons > .btn-primary { display: none; }
+  /* Mobilon a chip csak az avatar (a név a menüben látszik) */
+  .nc-user-name { display: none; }
+  .nc-user-btn { padding: 5px; }
   .mobile-menu-btn { display: flex; }
   .header-inner { padding: 0 20px; }
 
@@ -5844,14 +5852,33 @@ button:disabled, .btn:disabled, input:disabled, textarea:disabled,
   animation: nc-fade-in 160ms ease-out;
 }
 @keyframes nc-fade-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+.nc-user-menu-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--sumi);
+  padding: 2px 6px 2px;
+}
 .nc-user-menu-email {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: var(--sumi-faint);
-  padding: 4px 6px 10px;
+  padding: 0 6px 10px;
   border-bottom: 1px solid var(--washi-edge);
   margin-bottom: 8px;
   word-break: break-all;
 }
+.nc-user-menu-link {
+  display: block;
+  padding: 9px 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--sumi);
+  text-decoration: none;
+  margin-bottom: 4px;
+  transition: background-color 160ms ease-out;
+}
+.nc-user-menu-link:hover { background: var(--matcha-soft); color: var(--matcha-deep); }
 .nc-user-logout {
   width: 100%;
   background: var(--vermilion-soft);
