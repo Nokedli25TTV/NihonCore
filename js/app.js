@@ -267,6 +267,10 @@ window.NihonCoreMotion = (function () {
       window.barba.init({
         debug: false,
         timeout: 5000,
+        // V21: a [data-barba-prevent] linkeket a böngésző natívan navigálja
+        // (pl. a user-menü Statisztika/Kezdőlap linkjei — a Barba AJAX-fetch
+        //  elakadt rajtuk a modul-oldalakon).
+        prevent: ({ el }) => el && el.hasAttribute && el.hasAttribute('data-barba-prevent'),
         transitions: [{
           name: 'zen-fade',
           leave({ current }) {
@@ -1139,8 +1143,8 @@ window.NihonCoreFlashcard = (function () {
         <div class="nc-user-menu" hidden>
           <div class="nc-user-menu-name">${displayName(user)}</div>
           <div class="nc-user-menu-email">${user.email || ''}</div>
-          <a class="nc-user-menu-link" href="${statsHref()}">📊 Statisztika</a>
-          <a class="nc-user-menu-link" href="${homeHref()}">🏠 Kezdőlap</a>
+          <a class="nc-user-menu-link" href="${statsHref()}" data-barba-prevent>📊 Statisztika</a>
+          <a class="nc-user-menu-link" href="${homeHref()}" data-barba-prevent>🏠 Kezdőlap</a>
           <div class="nc-sync-status" id="ncSyncStatus">☁️ Felhő-szinkron aktív</div>
           <button class="nc-sync-now" type="button">☁️ Szinkronizálás most</button>
           <button class="nc-user-logout" type="button">Kijelentkezés</button>

@@ -15,7 +15,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v21-2026-05-27-header-profile';
+const CACHE_VERSION = 'nihoncore-v22-2026-05-27-barba-prevent';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 
