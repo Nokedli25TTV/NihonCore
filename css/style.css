@@ -1,0 +1,6236 @@
+/* ====================================================
+   NIHONCORE — Main Stylesheet (Zen Polish Edition)
+   Theme: Washi paper + Sumi ink + Matcha accent
+   ==================================================== */
+
+:root {
+  /* ── Zen paletta (semantikus aliasok) ────────────────
+     washi = törtfehér papír (háttér)
+     sumi  = sötétszürke tinta (fő szöveg, NEM tiszta fekete)
+     matcha = természetes zöld (siker, primary accent)
+     indigo (ai-iro) = tradicionális japán mély-kék (kontextuális, info)
+     vermilion (shu-iro) = visszafogott japán piros (csak hiba)
+     hinoki = halvány bézs/cédrus (másodlagos felület) */
+  --washi:        #F3EEE3;
+  --washi-deep:   #ECE5D5;       /* árnyaltabb papír (alsó réteg) */
+  --washi-soft:   #F8F4EA;       /* világosabb papír (kártya alja) */
+  --washi-edge:   rgba(58, 50, 38, 0.10);  /* finom keret (nem feketés) */
+
+  --sumi:         #2A2A2E;       /* fő szöveg — NEM tiszta fekete */
+  --sumi-soft:    #4A4A52;       /* másodlagos szöveg */
+  --sumi-faint:   #6E6E78;       /* halvány szöveg, eyebrow */
+  --sumi-line:    rgba(42, 42, 46, 0.12); /* finom elválasztó vonal */
+
+  --matcha:       #7A8B4F;       /* primary accent — siker, főbb gomb */
+  --matcha-deep:  #5F7038;       /* hover/active variant */
+  --matcha-soft:  rgba(122, 139, 79, 0.14);  /* halvány töltés (jelzés) */
+
+  --indigo:       #2E4A7B;       /* mély japán kék (info, link, "Pro") */
+  --indigo-soft:  rgba(46, 74, 123, 0.12);
+
+  --vermilion:    #B84A39;       /* visszafogott japán piros (hiba) */
+  --vermilion-soft: rgba(184, 74, 57, 0.12);
+
+  --gold-trad:    #B8862F;       /* tradicionális arany (lakk-érzet, nem fémes) */
+  --gold-soft:    rgba(184, 134, 47, 0.14);
+
+  --hinoki:       #E8DFCB;       /* cédrus/bézs (másodlagos surface) */
+
+  /* ── Legacy aliasok átfordítva (a teljes app fokozatos
+     migrációja közben kompatibilitást biztosít: ahol a régi
+     komponens még var(--ink)-et hivatkozik, ott a washi rendszer
+     megfelelő tone-ja jelenik meg) ──────────────────── */
+  --ink:        var(--washi);      /* régi "háttér" → washi papír */
+  --ink-deep:   var(--washi-deep);
+  --ink-mid:    var(--washi-soft);
+  --ink-soft:   rgba(58, 50, 38, 0.05);   /* régi üveg-háttér → finom papír-réteg */
+  --ink-border: var(--washi-edge);
+
+  --white:      var(--sumi);       /* régi "szöveg" → sumi tinta-szürke */
+  --white-dim:  var(--sumi-soft);
+  --white-faint: rgba(58, 50, 38, 0.04);
+
+  --gold:       var(--gold-trad);  /* régi modern arany → trad. lakk-arany */
+  --gold-light: #D4A23F;
+  --gold-glow:  rgba(184, 134, 47, 0.20);
+
+  --red:        var(--vermilion);  /* régi modern piros → vermilion */
+  --red-light:  #D45A47;
+  --red-glow:   rgba(184, 74, 57, 0.20);
+
+  --teal:       var(--matcha);     /* régi teal "success" → matcha zöld */
+  --teal-glow:  rgba(122, 139, 79, 0.22);
+
+  --green:      var(--matcha-deep);
+  --green-glow: rgba(95, 112, 56, 0.22);
+
+  --amber:      #C68E3A;            /* lágyabb borostyán (a túl-cukros narancs helyett) */
+  --amber-glow: rgba(198, 142, 58, 0.20);
+
+  /* ── Tipográfia (zen rendszer) ───────────────────────
+     Nunito: lekerekített humanista sans (modern UI, magyar diakritika OK)
+     Lora:   olvasható serif (HU/EN mondatok, hero címek — papír-érzet)
+     Noto Serif JP: kalligráfia-érzetű japán serif (kanji + furigana) */
+  --font-jp:    'Noto Serif JP', 'Zen Kaku Gothic New', 'Noto Sans JP', serif;
+  --font-body:  'Nunito', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+
+  /* ── Modular spacing skála (4-bázis) ─────────────────── */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   24px;
+  --space-6:   32px;
+  --space-8:   48px;
+  --space-10:  64px;
+
+  /* ── Sarkok: kicsit visszafogottabb (kevésbé "tabletta") ── */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+
+  /* ── Árnyékok: finomak, "papír egymáson" érzet, nincs neon-glow ── */
+  --shadow-paper-1: 0 1px 2px rgba(58, 50, 38, 0.06), 0 1px 1px rgba(58, 50, 38, 0.04);
+  --shadow-paper-2: 0 2px 4px rgba(58, 50, 38, 0.07), 0 3px 6px rgba(58, 50, 38, 0.05);
+  --shadow-paper-3: 0 4px 8px rgba(58, 50, 38, 0.08), 0 8px 16px rgba(58, 50, 38, 0.06);
+  --shadow-glass:   var(--shadow-paper-2);  /* legacy alias */
+
+  /* ── Tranzíciók: KIZÁRÓLAG ease-out (Emil-szabály) ───
+     Az ease-in-t kerüljük (lomha érzet), az ease-in-out-ot is
+     korlátozzuk (csak átmenetekre, nem mikro-interakcióra). */
+  --t-fast:   120ms ease-out;
+  --t-base:   160ms ease-out;
+  --t-slow:   220ms ease-out;
+  --transition: all var(--t-base);  /* legacy alias */
+
+  --header-h:   80px;
+}
+
+/* ── Reset & Base ────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  /* Washi papír háttér: két nagyon halvány radial-gradient + alap szín.
+     Az árnyalt mező a "kézzel meredt" papír benyomását adja anélkül,
+     hogy az kép-file-t hívnánk. */
+  background-color: var(--washi);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(232, 223, 203, 0.55) 0%, transparent 38%),
+    radial-gradient(circle at 82% 88%, rgba(232, 223, 203, 0.45) 0%, transparent 42%);
+  background-attachment: fixed;
+  color: var(--sumi);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { text-decoration: none; color: inherit; }
+ul { list-style: none; }
+
+/* ── Tipográfia univerzális ─────────────────────────────
+   Egyszerűbb rendszer: minden cím Nunito (konzisztens body-vel),
+   a Lora serif CSAK a hero-jp + hero-sub főcímnél jelenik meg
+   (kalligráfia-érzet, ahol valóban kiemel). A "túl sok serif"
+   problémát ez megoldja. */
+h1, h2, h3, h4 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--sumi);
+}
+h1 { font-size: 2.1rem;  line-height: 1.18; }
+h2 { font-size: 1.55rem; line-height: 1.22; }
+h3 { font-size: 1.2rem;  line-height: 1.30; }
+h4 { font-size: 1.0rem;  line-height: 1.35; font-weight: 600; }
+small, .text-muted { color: var(--sumi-faint); }
+
+/* Japán szöveg — kalligráfia-érzet */
+.jp, [lang="ja"], .pp-tok-word, .pp-tok-verb, .cj-card-jp, .grm-jp,
+.lst-pro-jp, .prod-fb-jp, .conj-card-jp {
+  font-family: var(--font-jp);
+  font-feature-settings: "palt" 1, "vkrn" 1;
+}
+
+/* Furigana <ruby><rt>: olvashatóság az elsődleges
+   — kisebb rt + finom függőleges térköz, hogy ne ütközzön a kanjival */
+ruby { ruby-position: over; ruby-align: center; }
+rt {
+  font-family: var(--font-jp);
+  font-size: 0.56em;
+  font-weight: 400;
+  color: var(--sumi-soft);
+  letter-spacing: 0.02em;
+  line-height: 1;
+  padding-bottom: 2px;
+}
+
+/* ── Background Decoration (Zen washi texture, NEM glow blob) ──
+   A korábbi 3 színes blur-blob (gold/red/teal) tipikus SaaS-jegy
+   volt — eltávolítva. Helyette: subtílis seigaiha-szerű pont-rács,
+   ami a papírlap textúráját idézi, NEM vibrál. */
+.bg-decoration {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+}
+/* A régi 3 .ink-circle elem továbbra is létezik a HTML-ben,
+   de itt láthatatlanra állítjuk (visszafogott migráció). */
+.ink-circle { display: none; }
+
+.seigaiha-pattern {
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(58, 50, 38, 0.07) 1px, transparent 1.4px);
+  background-size: 28px 28px;
+  background-position: 0 0;
+  opacity: 1;
+  mix-blend-mode: multiply;
+}
+
+/* ── UI Elements (Washi paper surfaces — nincs glassmorphism) ──
+   A korábbi backdrop-blur + sötét rgba a SaaS-sablon jegye volt.
+   Cserélve: szilárd washi-papír felületek finom edge-zel és
+   paper-shadow-val. A "kártyák egymáson" érzet ad mélységet,
+   nem a blur. */
+.glass-panel {
+  background: var(--washi-soft);
+  border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-1);
+  /* backdrop-filter explicit "none" — bármely régi browser cache
+     se hagyjon ott blur-t */
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.glass-panel-heavy {
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-3);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* ── Gombok ─────────────────────────────────────────────
+   Emil-szabály: szilárd színek (NEM gradient), kerekítés
+   visszafogottabb (NEM "tabletta" pill), fókusz-ring tiszta.
+   Az :active scale(0.97) Blokk 2-ben kerül rá universal módon. */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 22px; border-radius: var(--radius-md);
+  font-family: var(--font-body); font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; border: 1px solid transparent;
+  transition: background-color var(--t-base), color var(--t-base),
+              border-color var(--t-base), box-shadow var(--t-base),
+              transform var(--t-fast);
+  letter-spacing: 0.01em;
+}
+
+.btn-primary {
+  background: var(--matcha);
+  color: var(--washi);
+  border-color: var(--matcha-deep);
+  box-shadow: var(--shadow-paper-1);
+}
+.btn-primary:hover {
+  background: var(--matcha-deep);
+  box-shadow: var(--shadow-paper-2);
+}
+/* A .glow-effect a régi rendszerből MARAD class-ban,
+   de itt semlegesítjük — nincs glow, csak szelíd hover-lift */
+.btn-primary.glow-effect:hover {
+  background: var(--matcha-deep);
+  box-shadow: var(--shadow-paper-2);
+  transform: translateY(-1px);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--sumi-soft);
+  border-color: transparent;
+}
+.btn-ghost:hover {
+  color: var(--sumi);
+  background: rgba(58, 50, 38, 0.05);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--matcha-deep);
+  border: 1px solid var(--matcha);
+}
+.btn-outline:hover {
+  background: var(--matcha-soft);
+  color: var(--matcha-deep);
+  box-shadow: var(--shadow-paper-1);
+}
+
+/* ── Header (Washi papír sáv — NEM frosted glass) ──────
+   A korábbi sötét backdrop-blur cserélve egy halvány washi
+   sávra, finom alsó vonallal. A scroll-state csak az árnyékot
+   növeli, NEM a háttér-opacitást. */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(243, 238, 227, 0.88);   /* washi 88% — átengedi a hátteret */
+  backdrop-filter: saturate(1.05) blur(8px);   /* enyhe, csak hogy a scroll alatt
+                                                  ne nyersen vibráljon */
+  -webkit-backdrop-filter: saturate(1.05) blur(8px);
+  border-bottom: 1px solid var(--washi-edge);
+  transition: background-color var(--t-base), box-shadow var(--t-base);
+}
+.header.scrolled {
+  background: rgba(243, 238, 227, 0.96);
+  box-shadow: 0 1px 0 var(--washi-edge), var(--shadow-paper-1);
+}
+
+.header-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 24px; height: var(--header-h);
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+/* 1. Bal harmad: Logó */
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  flex: 1; /* Kitölti a bal oldalt */
+}
+/* Logó: nincs neon-glow, helyette tradicionális pecsét-érzet
+   — a kanji egy szín-sűrűbb lakk-arany, finom kontúrral */
+.logo-kanji {
+  font-family: var(--font-jp); font-size: 1.7rem; font-weight: 500;
+  color: var(--gold-trad);
+  line-height: 1;
+}
+.logo-text {
+  font-family: var(--font-serif); font-size: 1.15rem; font-weight: 600;
+  color: var(--sumi); letter-spacing: 0.3px; line-height: 1;
+  display: flex; align-items: center;
+}
+.logo-accent { color: var(--gold-trad); margin-left: 1px; font-style: italic; }
+
+/* 2. Középső harmad: Navigáció */
+.nav {
+  display: flex; gap: 32px; align-items: center; justify-content: center;
+  flex: 1; /* Kitölti a közepét, így garantáltan középen marad */
+}
+.nav-link {
+  font-size: 0.95rem; color: var(--sumi-soft); font-weight: 500;
+  transition: color var(--t-base); position: relative;
+}
+.nav-link:hover { color: var(--sumi); }
+.nav-link::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px;
+  background: var(--matcha); transform: scaleX(0); transform-origin: left center;
+  transition: transform var(--t-base);
+}
+.nav-link:hover::after { transform: scaleX(1); }
+
+/* 3. Jobb harmad: Gombok */
+.auth-buttons {
+  display: flex; gap: 12px; align-items: center; justify-content: flex-end;
+  flex: 1; /* Kitölti a jobb oldalt */
+}
+
+/* Mobil menü gomb (Alapból rejtett) */
+.mobile-menu-btn {
+  display: none; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; padding: 4px;
+}
+.mobile-menu-btn span {
+  display: block; width: 24px; height: 2px; background: var(--sumi); border-radius: 2px; transition: var(--t-base);
+}
+.mobile-menu-btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.mobile-menu-btn.open span:nth-child(2) { opacity: 0; }
+.mobile-menu-btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobil nézet navigáció */
+.mobile-nav {
+  display: none; flex-direction: column; gap: 4px; padding: 16px 24px 24px;
+  border-top: 1px solid var(--washi-edge); background: var(--washi);
+}
+.mobile-nav.open { display: flex; }
+.mobile-nav-link { padding: 12px 0; color: var(--sumi-soft); font-size: 1rem; border-bottom: 1px solid var(--washi-edge); }
+.mobile-divider { border-color: var(--washi-edge); margin: 8px 0; }
+.mobile-auth { width: 100%; justify-content: center; }
+/* ── Hero Section ────────────────────────────────────── */
+.hero {
+  min-height: 100vh; padding-top: calc(var(--header-h) + 60px); padding-bottom: 80px;
+  max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr;
+  align-items: center; gap: 60px; position: relative; z-index: 1;
+}
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: var(--matcha-soft);
+  border: 1px solid rgba(122, 139, 79, 0.30);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px; font-size: 0.78rem; color: var(--matcha-deep); font-weight: 600;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.tag-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--matcha);
+  animation: zen-pulse 2.4s ease-in-out infinite;
+}
+@keyframes zen-pulse {
+  0%, 100% { opacity: 0.55; }
+  50%      { opacity: 1; }
+}
+
+/* Hero JP — kalligráfia-érzet: szilárd sumi/matcha szín, semmi gradient-szöveg.
+   A "fémes" feel a tradicionális japán esztétikával nem fér össze. */
+.hero-jp {
+  font-family: var(--font-jp); font-weight: 500;
+  font-size: clamp(3rem, 6vw, 5rem); line-height: 1.05;
+  color: var(--sumi);
+  letter-spacing: -0.01em;
+}
+.hero-sub {
+  font-family: var(--font-body); font-weight: 600;
+  font-size: clamp(1.55rem, 3vw, 2.4rem); line-height: 1.2;
+  color: var(--sumi-soft);
+  display: block; margin-top: 10px;
+  letter-spacing: -0.01em;
+}
+.hero-desc {
+  font-family: var(--font-body);
+  font-size: 1.08rem; color: var(--sumi-soft); max-width: 480px;
+  margin: 20px 0 40px; line-height: 1.65;
+}
+
+.hero-cta { display: flex; gap: 14px; margin-bottom: 48px; }
+
+.hero-stats {
+  display: flex; gap: 32px;
+  padding-top: 24px; border-top: 1px solid var(--washi-edge);
+}
+.stat-num {
+  font-family: var(--font-body); font-size: 1.8rem; font-weight: 700;
+  color: var(--matcha-deep);
+}
+.stat-label {
+  font-size: 0.74rem; color: var(--sumi-faint);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  margin-top: 2px;
+}
+
+/* Lebegő kártyák — washi-papír stack, "kalligráfia-lap" hangulat.
+   A korábbi sötét/glow most washi-soft + finom edge + paper-shadow. */
+.hero-visual {
+  position: relative; height: 420px;
+  display: flex; justify-content: center; align-items: center;
+}
+.hero-card-stack { position: relative; width: 300px; height: 360px; }
+
+.floating-card {
+  position: absolute; border-radius: var(--radius-lg);
+  display: flex; align-items: center; justify-content: center;
+}
+.card-back-2 {
+  width: 260px; height: 320px; top: 40px; left: -30px;
+  background: var(--hinoki); border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-1);
+  transform: rotate(-7deg); opacity: 0.6;
+  animation: zen-float 7s ease-in-out infinite;
+}
+.card-back-1 {
+  width: 280px; height: 340px; top: 20px; left: -15px;
+  background: var(--washi-soft); border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-2);
+  transform: rotate(-3deg); opacity: 0.85;
+  animation: zen-float 6s ease-in-out infinite;
+}
+.card-main {
+  width: 300px; height: 360px; top: 0; left: 0; flex-direction: column; padding: 32px;
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-3);
+  animation: zen-float 5s ease-in-out infinite;
+}
+/* Lágyabb úszás — kevesebb amplitúdó, hosszabb idő.
+   A korábbi 12px ugrás kicsit zavart, a 6px sokkal kalligráfia-érzetűbb. */
+@keyframes zen-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-6px) rotate(0deg); }
+}
+.card-back-2 { animation-name: zen-float-2; }
+.card-back-1 { animation-name: zen-float-1; }
+@keyframes zen-float-1 {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50%      { transform: translateY(-5px) rotate(-3deg); }
+}
+@keyframes zen-float-2 {
+  0%, 100% { transform: translateY(0) rotate(-7deg); }
+  50%      { transform: translateY(-4px) rotate(-7deg); }
+}
+
+.card-kana    { font-family: var(--font-jp); font-size: 2.6rem; color: var(--sumi-soft); font-weight: 500; }
+.card-label   { font-size: 0.74rem; color: var(--matcha-deep); font-weight: 700; align-self: flex-start; letter-spacing: 0.12em; text-transform: uppercase; }
+.card-kana-lg { font-family: var(--font-jp); font-size: 3.2rem; font-weight: 500; margin: 8px 0; color: var(--sumi); }
+.card-reading { color: var(--sumi-faint); font-size: 0.95rem; }
+.card-meaning { font-family: var(--font-body); font-size: 1.05rem; color: var(--matcha-deep); font-weight: 600; margin-top: 4px; }
+.card-progress-bar  { width: 100%; height: 4px; background: var(--washi-edge); border-radius: 999px; margin-top: 24px; overflow: hidden; }
+.card-progress-fill { height: 100%; background: var(--matcha); border-radius: 999px; }
+
+.floating-pills { position: absolute; inset: 0; pointer-events: none; }
+.glass-pill {
+  position: absolute; background: var(--washi); border: 1px solid var(--washi-edge);
+  border-radius: var(--radius-sm); padding: 6px 14px;
+  font-family: var(--font-jp); font-size: 0.88rem; font-weight: 500;
+  color: var(--sumi); box-shadow: var(--shadow-paper-2);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+.pill-1 { top: 20px; right: -20px; animation: zen-float 5.5s ease-in-out infinite; }
+.pill-2 { bottom: 60px; right: -40px; animation: zen-float 6.5s ease-in-out 1s infinite; }
+
+/* ── Modulok (washi-papír kártyák, NEM glow squircle) ──── */
+.modules-section { padding: 100px 24px; max-width: 1200px; margin: 0 auto; z-index: 1; position: relative; }
+.section-header  { text-align: center; margin-bottom: 60px; }
+.section-tag {
+  font-size: 0.78rem; color: var(--matcha-deep); font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 12px; display: block;
+}
+.section-title {
+  font-family: var(--font-body); font-weight: 700;
+  font-size: clamp(2rem, 3.5vw, 2.6rem); margin-bottom: 14px; color: var(--sumi);
+  letter-spacing: -0.015em;
+}
+
+.modules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+
+.glass-card {
+  background: var(--washi-soft);
+  border: 1px solid var(--washi-edge);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
+  position: relative; overflow: hidden;
+  box-shadow: var(--shadow-paper-1);
+  backdrop-filter: none; -webkit-backdrop-filter: none;
+}
+.module-available:hover {
+  transform: translateY(-2px);
+  border-color: rgba(122, 139, 79, 0.35);
+  box-shadow: var(--shadow-paper-3);
+}
+.module-locked { opacity: 0.55; }
+
+/* Modul ikonok — washi-lap szilárd halvány töltéssel, NEM neon-glow */
+.module-icon {
+  width: 56px; height: 56px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.55rem; margin-bottom: 22px;
+  border: 1px solid var(--washi-edge);
+  /* a régi 0 0 30px X glow eltávolítva */
+}
+.icon-glow-teal  { background: var(--matcha-soft);    color: var(--matcha-deep);   }
+.icon-glow-gold  { background: var(--gold-soft);      color: var(--gold-trad);     }
+.icon-glow-green { background: var(--matcha-soft);    color: var(--matcha-deep);   }
+.icon-glow-red   { background: var(--vermilion-soft); color: var(--vermilion);     }
+.icon-locked     { background: var(--washi-edge);     color: var(--sumi-faint);    }
+/* Új: indigo info ikon — Pro / haladó kontextus */
+.icon-glow-indigo{ background: var(--indigo-soft);    color: var(--indigo);        }
+
+.module-title {
+  font-family: var(--font-body); font-size: 1.22rem; font-weight: 700;
+  margin-bottom: 8px; color: var(--sumi); letter-spacing: -0.01em;
+}
+.module-desc {
+  font-size: 0.94rem; color: var(--sumi-soft);
+  margin-bottom: 22px; line-height: 1.55;
+}
+
+.glass-tag {
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  padding: 3px 10px; border-radius: var(--radius-sm);
+  font-size: 0.76rem; color: var(--sumi-soft); font-weight: 500;
+}
+
+.module-badge {
+  position: absolute; top: 22px; right: 22px;
+  font-size: 0.7rem; font-weight: 700; padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.badge-mvp    { background: var(--matcha-soft); color: var(--matcha-deep); }
+.badge-phase3 { background: var(--gold-soft);   color: var(--gold-trad);   }
+
+.module-footer {
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--washi-edge);
+  padding-top: 18px; margin-top: auto;
+}
+.glow-text {
+  color: var(--matcha-deep); font-weight: 600;
+  /* a korábbi text-shadow neon-glow eltávolítva — tiszta szín */
+}
+
+/* ── Progress Demo (Features) — washi-papír kártyák, NEM glow ── */
+.features-section {
+  padding: 100px 24px; max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
+  z-index: 1; position: relative;
+}
+.feature-item {
+  display: flex; gap: 18px; margin-bottom: 22px;
+  background: var(--washi-soft); padding: 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-1);
+}
+.feature-dot {
+  width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 8px;
+  /* a glow box-shadow eltávolítva — pecsét-szerű szín-pont */
+}
+.glow-dot-gold { background: var(--gold-trad); }
+.glow-dot-teal { background: var(--matcha);    }
+.glow-dot-red  { background: var(--vermilion); }
+
+.progress-demo { padding: 36px; border-radius: var(--radius-lg); }
+.demo-header   { display: flex; justify-content: space-between; margin-bottom: 26px; font-size: 1.05rem; font-weight: 600; color: var(--sumi); }
+.lesson-bar    { width: 100%; height: 6px; background: var(--washi-edge); border-radius: 999px; margin: 10px 0; overflow: hidden; }
+.fill-gradient { background: var(--matcha); border-radius: 999px; }  /* gradient eltüntetve */
+
+/* ── CTA & Footer ────────────────────────────────────── */
+.cta-section { padding: 100px 24px; max-width: 900px; margin: 0 auto; text-align: center; position: relative; z-index: 1; }
+.cta-inner {
+  padding: 64px 48px; border-radius: var(--radius-lg);
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-2);
+  position: relative; overflow: hidden;
+}
+.cta-inner h2 {
+  font-family: var(--font-body); font-weight: 700;
+  font-size: clamp(1.7rem, 3vw, 2.3rem); margin-bottom: 14px;
+  color: var(--sumi); letter-spacing: -0.015em;
+  position: relative;
+}
+.cta-inner p { color: var(--sumi-soft); margin-bottom: 30px; position: relative; line-height: 1.6; }
+.cta-inner .btn { position: relative; }
+
+.glass-footer {
+  background: var(--washi-deep);
+  border-top: 1px solid var(--washi-edge);
+  padding: 36px 24px; text-align: center;
+  backdrop-filter: none;
+}
+
+/* ── Section / shared ───────────────────────────────── */
+.section-desc { color: var(--sumi-soft); font-size: 1.02rem; max-width: 540px; margin: 0 auto; line-height: 1.6; }
+
+/* ── Module card details ────────────────────────────── */
+.module-card { display: flex; flex-direction: column; }
+.icon-inner { display: flex; align-items: center; justify-content: center; line-height: 1; font-family: var(--font-jp); }
+.module-phase {
+  font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--sumi-faint); font-weight: 700; margin-bottom: 8px;
+}
+.module-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+.module-lessons { font-size: 0.78rem; color: var(--sumi-faint); }
+.module-lock-icon { font-size: 1rem; opacity: 0.65; }
+.badge-phase4 {
+  background: var(--vermilion-soft);
+  color: var(--vermilion);
+  border: 1px solid rgba(184, 74, 57, 0.30);
+}
+.module-coming.glow-text {
+  background: var(--matcha-soft);
+  border: 1px solid rgba(122, 139, 79, 0.30);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  color: var(--matcha-deep);
+  font-weight: 600;
+}
+
+/* ── Progress demo internals ────────────────────────── */
+.demo-lessons { display: flex; flex-direction: column; gap: 16px; margin-bottom: 26px; }
+.demo-lesson {
+  display: grid;
+  grid-template-columns: 1fr 100px auto;
+  align-items: center;
+  gap: 12px;
+}
+.lesson-name { font-size: 0.86rem; color: var(--sumi-soft); }
+.lesson-pct  { font-size: 0.8rem;  color: var(--sumi-faint); width: 36px; text-align: right; font-weight: 600; }
+.demo-streak.glow-text {
+  font-size: 0.82rem;
+  color: var(--gold-trad);
+  background: var(--gold-soft);
+  border: 1px solid rgba(184, 134, 47, 0.28);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.demo-weak {
+  padding-top: 22px;
+  border-top: 1px solid var(--washi-edge);
+}
+.demo-weak-title {
+  font-size: 0.82rem;
+  color: var(--vermilion);
+  margin-bottom: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.weak-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.weak-tag {
+  font-size: 0.76rem;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--vermilion-soft);
+  color: var(--vermilion);
+  border: 1px solid rgba(184, 74, 57, 0.22);
+  font-weight: 500;
+}
+
+/* ── Hero stats divider ─────────────────────────────── */
+.stat { text-align: center; }
+.stat-divider { width: 1px; height: 36px; background: var(--washi-edge); }
+
+/* ── CTA decorative kanji ───
+   A korábbi neon-glow eltüntetve — washi pecsét-érzet,
+   óriás kanji halvány opacitásban, mint egy nagy kalligráfia-bélyeg. */
+.cta-kanji {
+  font-family: var(--font-jp);
+  font-size: 5rem;
+  font-weight: 500;
+  color: var(--gold-trad);
+  opacity: 0.18;
+  position: absolute;
+  top: 24px; right: 36px;
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* ── Footer internals ───────────────────────────────── */
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+.footer-logo { display: flex; align-items: center; gap: 10px; }
+.footer-note { font-size: 0.82rem; color: var(--sumi-faint); }
+
+/* ── Hero pills (extra positions) ───────────────────── */
+.pill-3 { bottom: 30px; left: -30px; animation: zen-float 5.5s ease-in-out 0.5s infinite; }
+.pill-4 { top: 70px; left: -50px; animation: float 4.5s 1.5s infinite; }
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .hero { padding-left: 24px; padding-right: 24px; gap: 40px; }
+  .modules-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nav { display: none; }
+  .auth-buttons { display: none; }
+  .mobile-menu-btn { display: flex; }
+  .header-inner { padding: 0 20px; }
+
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 48px;
+    padding-top: calc(var(--header-h) + 32px);
+  }
+  .hero-content { order: 1; }
+  .hero-visual { order: 2; height: 360px; }
+  .hero-cta { justify-content: center; flex-wrap: wrap; }
+  .hero-stats { justify-content: center; }
+  .hero-desc { margin: 20px auto 40px; }
+
+  .modules-grid { grid-template-columns: 1fr; }
+
+  .features-section {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: 80px 24px;
+  }
+
+  .demo-lesson { grid-template-columns: 1fr 80px auto; gap: 8px; }
+
+  .cta-inner { padding: 48px 24px; }
+  .cta-kanji { font-size: 3rem; top: 12px; right: 16px; }
+}
+
+@media (max-width: 480px) {
+  .section-title { font-size: 2rem; }
+  .modules-grid { gap: 20px; }
+  .glass-card { padding: 24px; }
+}
+
+/* ── Scroll Reveal Animation (Emil-szabály: 360ms ease-out) ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+}
+
+/* ── Utility ─────────────────────────────────────── */
+.hidden { display: none !important; }
+
+/* ── Univerzális Segítők-toggle ─────────────────── */
+.helpers-bar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 8px 18px;
+  background: rgba(20, 22, 41, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(58, 50, 38, 0.10);
+  border-radius: 100px;
+  width: fit-content;
+  margin: 0 auto 28px;
+  box-shadow: 0 8px 24px rgba(42, 42, 46, 0.12);
+}
+.hb-label {
+  font-size: 0.7rem; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--white-dim);
+}
+.helpers-toggle { display: flex; gap: 6px; }
+.ht-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 14px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1px solid rgba(58, 50, 38, 0.12);
+  border-radius: 100px;
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  letter-spacing: 0.3px;
+}
+.ht-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(58, 50, 38, 0.30);
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+.ht-btn:hover {
+  color: var(--white);
+  border-color: rgba(201,168,76,0.3);
+}
+.ht-btn.active {
+  background: rgba(201,168,76,0.1);
+  border-color: rgba(201,168,76,0.45);
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+.ht-btn.active .ht-dot {
+  background: var(--gold);
+  box-shadow: 0 0 8px var(--gold);
+}
+/* V3 P2 F — 3 gombos helpers-bár (Romaji · Magyar · 🔊 Hang) kis kijelzőn */
+@media (max-width: 480px) {
+  .helpers-bar { gap: 8px; padding: 7px 12px; max-width: 94vw; }
+  .helpers-toggle { flex-wrap: wrap; justify-content: center; }
+  .ht-btn { padding: 6px 10px; font-size: 0.72rem; }
+}
+
+/* Body class hatások — Romaji elrejtés (univerzális, minden modulban) */
+body.helpers-no-romaji .verb-form-roman,
+body.helpers-no-romaji .cell-suffix-roman,
+body.helpers-no-romaji .ms-pf-roman,
+body.helpers-no-romaji .fb-roman,
+body.helpers-no-romaji .sd-opt-roman,
+/* v1.4 practice.html elemei */
+body.helpers-no-romaji .prc-tok-romaji,
+body.helpers-no-romaji .prc-p-romaji,
+body.helpers-no-romaji .prc-filled-romaji,
+body.helpers-no-romaji .pr-fb-cf-romaji,
+body.helpers-no-romaji .pfe-roman {
+  display: none !important;
+}
+
+/* Body class hatások — Magyar segítő-szövegek elrejtése.
+   FONTOS: a Phase 2 task-prompt magyar szöveg DE az a kérdés maga,
+   nem segítő — ezért NEM rejtjük. A hiba-feedback szövegei
+   sem rejtődnek (pedagógiai funkció, nem helper). */
+body.helpers-no-hu .exp-hu,
+body.helpers-no-hu .exp-divider,
+body.helpers-no-hu .ex-context,
+body.helpers-no-hu .task-context,
+body.helpers-no-hu .q-translation,
+/* v1.4 practice.html elemei */
+body.helpers-no-hu .prc-tok-hu,
+body.helpers-no-hu .prc-translation,
+body.helpers-no-hu .prc-tray-hint {
+  display: none !important;
+}
+
+/* ====================================================
+   ── Module Page (module.html) ───────────────────────
+   ==================================================== */
+
+.module-main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: calc(var(--header-h) + 60px) 24px 80px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Loading + error állapotok */
+.module-loading {
+  text-align: center;
+  padding: 80px 24px;
+  color: var(--white-dim);
+}
+.loading-kanji {
+  font-family: var(--font-jp);
+  font-size: 4rem;
+  color: var(--gold);
+  text-shadow: 0 0 30px var(--gold-glow);
+  margin-bottom: 16px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.module-error {
+  text-align: center;
+  padding: 60px 32px;
+  border-radius: var(--radius-xl);
+}
+.error-icon { font-size: 3rem; margin-bottom: 16px; }
+.module-error h2 {
+  font-family: var(--font-jp);
+  font-size: 2rem;
+  margin-bottom: 12px;
+}
+.module-error p { color: var(--white-dim); margin-bottom: 24px; }
+
+/* ── Module Hero ─────────────────────────────────── */
+.module-hero {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 32px;
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.module-hero-icon {
+  width: 96px; height: 96px;
+  border-radius: 28px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-jp);
+  font-size: 3rem;
+  font-weight: 700;
+  border: 1px solid rgba(58, 50, 38, 0.12);
+  flex-shrink: 0;
+}
+/* A jelek színes változatai már léteznek (.icon-glow-teal stb.) */
+
+.module-meta-row {
+  display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;
+  align-items: center;
+}
+.badge-jlpt {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 5px 12px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--gold) 0%, #a8832a 100%);
+  color: var(--ink-deep);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+.badge-group {
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  background: rgba(58, 50, 38, 0.07);
+  border: 1px solid rgba(58, 50, 38, 0.12);
+  padding: 4px 12px;
+  border-radius: 100px;
+}
+
+.module-page-title {
+  font-family: var(--font-jp);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 800;
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+.module-page-desc {
+  color: var(--white-dim);
+  font-size: 1rem;
+  margin-bottom: 20px;
+  max-width: 560px;
+}
+
+.module-progress { max-width: 400px; }
+.progress-row {
+  display: flex; justify-content: space-between;
+  font-size: 0.8rem; margin-bottom: 8px;
+}
+.progress-label { color: var(--white-dim); }
+.progress-value { color: var(--gold); font-weight: 600; text-shadow: 0 0 8px var(--gold-glow); }
+.progress-bar {
+  width: 100%; height: 6px;
+  background: rgba(58, 50, 38, 0.10);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Locked banner */
+.module-locked-banner {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 24px;
+  border-radius: var(--radius-lg);
+  border-left: 3px solid var(--gold);
+  margin-bottom: 24px;
+}
+.locked-icon { font-size: 1.6rem; flex-shrink: 0; }
+.module-locked-banner p { font-size: 0.92rem; color: var(--white-dim); line-height: 1.5; }
+
+/* ── Phase Tabs ──────────────────────────────────── */
+.phase-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 32px;
+  padding: 8px;
+  background: rgba(20, 22, 41, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-lg);
+}
+.phase-tab {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 18px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+.phase-tab:hover {
+  background: rgba(58, 50, 38, 0.055);
+  color: var(--white);
+}
+.phase-tab.active {
+  background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+  border-color: rgba(201,168,76,0.4);
+  color: var(--white);
+  box-shadow: 0 0 24px var(--gold-glow);
+}
+.phase-num {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(58, 50, 38, 0.08);
+  border: 1px solid rgba(58, 50, 38, 0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.95rem;
+  flex-shrink: 0;
+}
+.phase-tab.active .phase-num {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border-color: transparent;
+  color: var(--ink-deep);
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+.phase-text { display: flex; flex-direction: column; gap: 2px; }
+.phase-name { font-size: 0.95rem; font-weight: 600; }
+.phase-sub  { font-size: 0.72rem; color: var(--white-dim); letter-spacing: 0.3px; }
+
+/* ── Phase Content ──────────────────────────────── */
+.phase-content {
+  display: flex; flex-direction: column; gap: 20px;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Phase placeholder ("Hamarosan") */
+.phase-placeholder {
+  text-align: center;
+  padding: 64px 32px;
+  border-radius: var(--radius-xl);
+}
+.placeholder-glow-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 0 20px var(--gold-glow));
+}
+.phase-placeholder h3 {
+  font-family: var(--font-jp);
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+.phase-placeholder p {
+  color: var(--white-dim);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── Explanation block (Phase 1) ────────────────── */
+.explanation {
+  padding: 32px;
+  border-radius: var(--radius-lg);
+}
+.exp-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+.exp-jp {
+  font-family: var(--font-jp);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.7;
+  margin-bottom: 16px;
+  color: var(--white);
+}
+.exp-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.3), transparent);
+  margin: 16px 0;
+}
+.exp-hu {
+  font-size: 1rem;
+  color: var(--white-dim);
+  line-height: 1.7;
+}
+.exp-hu strong {
+  color: var(--gold);
+  font-weight: 600;
+}
+
+/* ── Questions block ────────────────────────────── */
+.questions-block { display: flex; flex-direction: column; gap: 16px; }
+.questions-heading {
+  font-family: var(--font-jp);
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 16px 0 4px;
+}
+.q-count-label {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--white-dim);
+}
+
+.question-card {
+  padding: 28px;
+  border-radius: var(--radius-lg);
+}
+.q-header {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  margin-bottom: 16px;
+}
+.q-number {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--teal);
+  background: rgba(46,196,182,0.1);
+  border: 1px solid rgba(46,196,182,0.3);
+  padding: 4px 10px;
+  border-radius: 100px;
+}
+.q-context { font-size: 0.85rem; color: var(--white-dim); }
+
+.q-prompt {
+  font-family: var(--font-jp);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+.q-translation {
+  font-size: 0.85rem;
+  color: var(--white-dim);
+  font-style: italic;
+  margin-bottom: 20px;
+}
+
+/* Choice buttons */
+.mc-choices {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+.mc-choice {
+  padding: 14px 18px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-jp);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.mc-choice:hover:not(:disabled) {
+  background: rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(42, 42, 46, 0.12);
+}
+.mc-choice:disabled { cursor: default; }
+
+.mc-choice.correct {
+  background: rgba(46,196,182,0.15);
+  border-color: var(--teal);
+  color: var(--teal);
+  box-shadow: 0 0 30px var(--teal-glow);
+  text-shadow: 0 0 8px var(--teal-glow);
+}
+.mc-choice.wrong {
+  background: rgba(231,76,60,0.15);
+  border-color: var(--red-light);
+  color: var(--red-light);
+  box-shadow: 0 0 30px var(--red-glow);
+  text-shadow: 0 0 8px var(--red-glow);
+}
+.mc-choice.reveal-correct {
+  border-color: var(--teal);
+  border-style: dashed;
+  color: var(--teal);
+}
+
+/* Feedback */
+.mc-feedback {
+  display: flex; gap: 12px;
+  padding: 14px 18px;
+  margin-top: 16px;
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.mc-feedback.fb-correct {
+  background: rgba(46,196,182,0.08);
+  border-left: 3px solid var(--teal);
+  color: var(--white);
+}
+.mc-feedback.fb-wrong {
+  background: rgba(231,76,60,0.08);
+  border-left: 3px solid var(--red-light);
+  color: var(--white);
+}
+.fb-mark {
+  font-size: 1.25rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+.fb-correct .fb-mark { color: var(--teal); text-shadow: 0 0 10px var(--teal-glow); }
+.fb-wrong   .fb-mark { color: var(--red-light); text-shadow: 0 0 10px var(--red-glow); }
+
+/* Phase summary */
+.phase-summary {
+  text-align: center;
+  padding: 32px;
+  border-radius: var(--radius-lg);
+}
+.summary-icon { font-size: 2.5rem; margin-bottom: 12px; filter: drop-shadow(0 0 16px var(--gold-glow)); }
+.phase-summary h3 {
+  font-family: var(--font-jp);
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+}
+.phase-summary p { color: var(--white-dim); }
+
+/* Module-page nav variáns (kisebb) */
+.module-page-nav .nav-link { font-size: 0.9rem; }
+
+/* Hover állapot a modul-kártyákon (most már <a> tag-ek) */
+a.module-card { display: block; cursor: pointer; }
+a.module-card.module-locked { cursor: pointer; }
+
+/* ====================================================
+   ── v1.3 — Verb Engine UI komponensek ────────────
+   ==================================================== */
+
+/* ── Közös: kapcsoló (switch) ───────────────────── */
+.ni-switch {
+  position: relative;
+  display: inline-block;
+  width: 56px; height: 30px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.ni-switch input {
+  opacity: 0; width: 0; height: 0;
+}
+.ni-slider {
+  position: absolute; inset: 0;
+  background: rgba(58, 50, 38, 0.12);
+  border: 1px solid rgba(58, 50, 38, 0.18);
+  border-radius: 100px;
+  transition: var(--transition);
+}
+.ni-slider::before {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 22px; height: 22px;
+  background: var(--white-dim);
+  border-radius: 50%;
+  transition: var(--transition);
+}
+.ni-switch input:checked + .ni-slider {
+  background: linear-gradient(135deg, var(--gold), #a8832a);
+  border-color: var(--gold);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+.ni-switch input:checked + .ni-slider::before {
+  left: 27px;
+  background: var(--ink-deep);
+}
+
+/* ── Toggle group (két opciós) ────────────────── */
+.toggle-group {
+  display: inline-flex;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1px solid rgba(58, 50, 38, 0.10);
+  border-radius: 100px;
+  padding: 4px;
+  gap: 4px;
+}
+.tg-btn {
+  padding: 8px 18px;
+  background: transparent;
+  border: none;
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.tg-btn:hover { color: var(--white); }
+.tg-btn.active {
+  background: linear-gradient(135deg, var(--gold), #a8832a);
+  color: var(--ink-deep);
+  font-weight: 600;
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+/* ── Base picker (V8: kategória-csoportosítva) ──── */
+.base-cat-group {
+  margin-bottom: 18px;
+}
+.base-cat-group:last-child { margin-bottom: 0; }
+.base-cat-label {
+  font-size: 0.78rem;
+  color: var(--matcha-deep);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.base-cat-emoji { font-size: 0.95rem; }
+.base-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+.base-btn {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 18px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+.base-btn:hover {
+  background: rgba(201,168,76,0.06);
+  border-color: rgba(201,168,76,0.4);
+  transform: translateY(-2px);
+}
+.base-btn.active, .base-btn.selected {
+  background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.05));
+  border-color: var(--gold);
+  box-shadow: 0 0 30px var(--gold-glow);
+}
+.base-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 12px rgba(201,168,76,0.3));
+}
+.base-text { display: flex; flex-direction: column; gap: 2px; }
+.base-name { font-size: 1rem; font-weight: 700; font-family: var(--font-jp); }
+.base-sub  { font-size: 0.72rem; color: var(--white-dim); letter-spacing: 0.5px; }
+
+/* ── Control row + group (interactive demo) ─── */
+.ctl-group {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 18px;
+}
+.ctl-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--white-dim);
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.ctl-row {
+  display: flex; flex-wrap: wrap; gap: 24px;
+  margin-bottom: 18px;
+  align-items: flex-start;
+}
+
+/* ── Interactive demo container ──────────────── */
+.interactive-demo {
+  padding: 32px;
+  border-radius: var(--radius-lg);
+}
+.id-header { margin-bottom: 24px; }
+.id-eyebrow {
+  font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--teal); font-weight: 700;
+  text-shadow: 0 0 10px var(--teal-glow);
+  margin-bottom: 8px;
+}
+.id-title {
+  font-family: var(--font-jp); font-size: 1.4rem; font-weight: 700;
+  margin-bottom: 6px;
+}
+.id-sub { color: var(--white-dim); font-size: 0.9rem; }
+
+/* ── Verb form display (live) ─────────────────── */
+.verb-display {
+  margin-top: 24px;
+  padding: 32px 24px;
+  background: rgba(42, 42, 46, 0.13);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+.vd-eyebrow {
+  font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); font-weight: 700;
+  margin-bottom: 14px;
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+.verb-form-jp {
+  font-family: var(--font-jp);
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+.verb-form-roman {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--white-dim);
+  letter-spacing: 1.5px;
+  font-weight: 400;
+}
+
+/* Stem / Suffix / Question highlight */
+.vf-stem,   .vfr-stem    { color: var(--white); }
+.vf-suffix, .vfr-suffix  {
+  color: var(--gold);
+  text-shadow: 0 0 16px var(--gold-glow);
+}
+.vf-question, .vfr-question {
+  color: var(--teal);
+  margin-left: 2px;
+  text-shadow: 0 0 12px var(--teal-glow);
+}
+
+/* Pulse animáció a suffix-on (váltás után) */
+.vf-suffix.pulse, .vfr-suffix.pulse {
+  animation: vfPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes vfPulse {
+  0%   { transform: scale(1.15); filter: brightness(1.4); }
+  100% { transform: scale(1);    filter: brightness(1);   }
+}
+
+/* ── Example sentence (live) ──────────────────── */
+.example-sentence {
+  margin-top: 20px;
+  padding: 22px 24px;
+  background: rgba(58, 50, 38, 0.04);
+  border: 1px solid rgba(58, 50, 38, 0.10);
+  border-radius: var(--radius-md);
+}
+.ex-eyebrow {
+  font-size: 0.72rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--white-dim); font-weight: 600;
+  margin-bottom: 10px;
+}
+.ex-text {
+  font-family: var(--font-jp); font-size: 1.5rem; font-weight: 600;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+.ex-verb-jp {
+  color: var(--gold);
+  text-shadow: 0 0 14px var(--gold-glow);
+}
+.ex-context {
+  font-size: 0.85rem;
+  color: var(--white-dim);
+  font-style: italic;
+}
+
+/* ====================================================
+   ── PHASE 2 — Matrix Selector ────────────────────
+   ==================================================== */
+
+/* ── Phase 2 — LOBBY ───────────────────────────── */
+.ms-lobby {
+  padding: 36px 32px;
+  border-radius: var(--radius-xl);
+  display: flex; flex-direction: column; gap: 28px;
+}
+.lobby-header { text-align: left; }
+.lobby-eyebrow {
+  font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); font-weight: 700;
+  text-shadow: 0 0 10px var(--gold-glow);
+  margin-bottom: 8px;
+}
+.lobby-title {
+  font-family: var(--font-jp);
+  font-size: 1.6rem; font-weight: 800;
+  margin-bottom: 6px;
+}
+.lobby-sub {
+  color: var(--white-dim);
+  font-size: 0.92rem; line-height: 1.55;
+  max-width: 560px;
+}
+
+.lobby-section {
+  display: flex; flex-direction: column; gap: 14px;
+  padding: 22px 22px;
+  background: rgba(42, 42, 46, 0.10);
+  border: 1px solid rgba(58, 50, 38, 0.08);
+  border-radius: var(--radius-lg);
+}
+.lobby-section-label {
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;
+  color: var(--white-dim);
+}
+
+/* Count selector — stílusát az új [class$="-count-..."] univerzális
+   rendszer adja a stylesheet végén. Itt csak a webkit spinner-kapcsoló marad. */
+/* (régi #msCustomCount + .ml-count-* szabályok eltávolítva — az univerzális
+    [class$="-count-..."] rendszer kezeli őket a stylesheet végén.) */
+
+/* Filter rows */
+.ml-filter-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 16px;
+  align-items: center;
+}
+.ml-filter-label {
+  font-size: 0.85rem; font-weight: 600; color: var(--white-dim);
+  letter-spacing: 0.4px;
+}
+.ml-filter-buttons {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.ml-fb {
+  padding: 9px 16px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: 100px;
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  font-size: 0.88rem; font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.ml-fb:hover { color: var(--white); border-color: rgba(58, 50, 38, 0.24); }
+.ml-fb.active {
+  background: linear-gradient(135deg, rgba(46,196,182,0.18), rgba(46,196,182,0.05));
+  border-color: var(--teal);
+  color: var(--teal);
+  box-shadow: 0 0 18px var(--teal-glow);
+  text-shadow: 0 0 8px var(--teal-glow);
+}
+.ml-fb.shake {
+  animation: lobbyShake 0.4s ease;
+}
+@keyframes lobbyShake {
+  0%,100% { transform: translateX(0); }
+  20%,60% { transform: translateX(-5px); }
+  40%,80% { transform: translateX(5px); }
+}
+
+/* Stats */
+.lobby-stats {
+  display: flex; align-items: center; justify-content: center;
+  padding: 12px;
+  font-size: 0.92rem;
+  color: var(--white-dim);
+}
+.lobby-combos strong {
+  color: var(--gold);
+  font-size: 1.05rem;
+  text-shadow: 0 0 10px var(--gold-glow);
+  margin: 0 2px;
+}
+
+/* Start button */
+.ml-start {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.05rem;
+  border-radius: var(--radius-md);
+  justify-content: center;
+}
+.ml-start:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+/* ── Phase 2 — RUNNING (kör futás közben) ─────── */
+.ms-progress {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 16px;
+}
+.ms-counter {
+  font-size: 0.78rem; font-weight: 700;
+  color: var(--gold); letter-spacing: 1px;
+}
+.ms-progressbar {
+  flex: 1;
+  height: 4px;
+  background: rgba(58, 50, 38, 0.10);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.ms-progressfill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  box-shadow: 0 0 12px var(--gold-glow);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.matrix-task {
+  padding: 32px;
+  border-radius: var(--radius-lg);
+}
+.task-header { margin-bottom: 28px; }
+.task-prompt {
+  font-family: var(--font-jp);
+  font-size: 1.4rem; font-weight: 700;
+  margin-bottom: 6px;
+}
+.task-context { color: var(--white-dim); font-size: 0.9rem; }
+
+.ms-section { margin-bottom: 24px; }
+.ms-section-row { display: flex; align-items: center; gap: 16px; }
+.ms-section-row .ms-section-label { margin-bottom: 0; }
+.ms-section-label {
+  font-size: 0.8rem; font-weight: 600; color: var(--white-dim);
+  letter-spacing: 0.5px; text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* 2×2 matrix */
+.vf-matrix {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap: 8px;
+  align-items: stretch;
+}
+.m-corner { }
+.m-col-label, .m-row-label {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+  color: var(--white-dim);
+  padding: 8px;
+}
+.m-row-label {
+  justify-content: flex-start;
+}
+.matrix-cell {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  padding: 18px 12px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: var(--font-jp);
+  min-height: 70px;
+}
+.matrix-cell:hover {
+  background: rgba(201,168,76,0.06);
+  border-color: rgba(201,168,76,0.4);
+  transform: translateY(-2px);
+}
+.matrix-cell.selected {
+  background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.05));
+  border-color: var(--gold);
+  box-shadow: 0 0 30px var(--gold-glow);
+}
+.cell-suffix-jp {
+  font-size: 1.05rem; font-weight: 700;
+  color: var(--gold);
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+.cell-suffix-roman {
+  font-family: var(--font-body);
+  font-size: 0.7rem; color: var(--white-dim); letter-spacing: 0.5px;
+}
+
+/* Live preview */
+.ms-preview {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  background: rgba(42, 42, 46, 0.12);
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: var(--radius-md);
+  margin-bottom: 16px;
+}
+.ms-preview-label { font-size: 0.78rem; color: var(--white-dim); text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; }
+.ms-preview-form {
+  font-family: var(--font-jp); font-size: 1.4rem; font-weight: 700;
+}
+.ms-pf-jp    { color: var(--gold); text-shadow: 0 0 12px var(--gold-glow); margin-right: 12px; }
+.ms-pf-roman { font-family: var(--font-body); font-size: 0.85rem; color: var(--white-dim); }
+
+.ms-submit {
+  width: 100%;
+  padding: 16px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+}
+.ms-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+/* Matrix feedback */
+.ms-feedback {
+  margin-top: 18px;
+  padding: 22px;
+  border-radius: var(--radius-md);
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.ms-fb-correct {
+  background: rgba(46,196,182,0.08);
+  border: 1px solid rgba(46,196,182,0.4);
+  border-left-width: 3px;
+  border-left-color: var(--teal);
+}
+.ms-fb-wrong {
+  background: rgba(231,76,60,0.06);
+  border: 1px solid rgba(231,76,60,0.35);
+  border-left-width: 3px;
+  border-left-color: var(--red-light);
+}
+.ms-fb-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.ms-fb-mark {
+  font-size: 1.5rem;
+}
+.ms-fb-title {
+  font-size: 1.05rem; font-weight: 700;
+}
+.ms-fb-fields {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: 16px;
+}
+.fb-field {
+  display: grid;
+  grid-template-columns: auto 90px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+}
+.fb-field.fb-ok  { background: rgba(46,196,182,0.06); }
+.fb-field.fb-bad { background: rgba(231,76,60,0.06); }
+.fb-field .fb-mark {
+  font-size: 1.05rem; font-weight: 700;
+  width: 22px; text-align: center;
+}
+.fb-field.fb-ok  .fb-mark { color: var(--teal); }
+.fb-field.fb-bad .fb-mark { color: var(--red-light); }
+.fb-field-label { color: var(--white-dim); font-weight: 500; }
+.fb-field-detail { color: var(--white); }
+.fb-field-detail em { font-style: normal; color: var(--red-light); }
+.fb-field-detail strong { color: var(--teal); font-weight: 700; }
+.ms-fb-correct-form {
+  margin-bottom: 16px;
+  padding: 14px 18px;
+  background: rgba(42, 42, 46, 0.13);
+  border-radius: var(--radius-sm);
+  font-size: 0.92rem;
+  color: var(--white-dim);
+}
+.ms-fb-correct-form strong {
+  font-family: var(--font-jp);
+  font-size: 1.3rem;
+  color: var(--gold);
+  text-shadow: 0 0 10px var(--gold-glow);
+}
+.ms-fb-correct-form .fb-roman {
+  font-size: 0.78rem;
+  color: var(--white-dim);
+}
+.ms-next { width: 100%; }
+
+/* Matrix summary */
+.ms-summary {
+  text-align: center;
+  padding: 48px 32px;
+  border-radius: var(--radius-xl);
+}
+.summary-score {
+  font-family: var(--font-jp);
+  font-size: 2.4rem; font-weight: 800;
+  color: var(--gold);
+  text-shadow: 0 0 24px var(--gold-glow);
+  margin: 12px 0 8px;
+}
+.summary-pct {
+  font-size: 1.2rem; color: var(--white-dim); font-weight: 400;
+}
+.summary-blurb {
+  color: var(--white-dim);
+  margin: 12px auto 24px;
+  max-width: 480px;
+}
+
+/* ====================================================
+   ── PHASE 3 — Speed Drill ────────────────────────
+   ==================================================== */
+
+.speed-drill { display: flex; flex-direction: column; gap: 20px; }
+
+.sd-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.sd-stat {
+  flex: 1 1 0;
+  min-width: 120px;
+  background: rgba(20, 22, 41, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(58, 50, 38, 0.10);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  text-align: center;
+}
+.sd-stat-label {
+  display: block;
+  font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--white-dim); font-weight: 600;
+  margin-bottom: 4px;
+}
+.sd-stat-value {
+  display: block;
+  font-family: var(--font-jp);
+  font-size: 1.5rem; font-weight: 800;
+  color: var(--gold);
+  text-shadow: 0 0 12px var(--gold-glow);
+}
+
+.sd-card {
+  padding: 36px 28px;
+  text-align: center;
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+}
+.sd-icon {
+  font-size: 4rem;
+  line-height: 1;
+  margin-bottom: 8px;
+  filter: drop-shadow(0 0 20px rgba(201,168,76,0.3));
+}
+.sd-icon-label {
+  font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--white-dim); font-weight: 600;
+  margin-bottom: 16px;
+}
+.sd-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 1.1rem; font-weight: 700;
+  padding: 10px 24px;
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold);
+  border-radius: 100px;
+  text-shadow: 0 0 10px var(--gold-glow);
+  margin-bottom: 24px;
+}
+
+.sd-timer-bar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: rgba(58, 50, 38, 0.08);
+}
+.sd-timer-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--gold), var(--red-light));
+  box-shadow: 0 0 12px var(--gold-glow);
+}
+
+.sd-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.sd-option {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  padding: 18px 14px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+  min-height: 64px;
+}
+.sd-option:hover:not(:disabled) {
+  background: rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.45);
+  transform: translateY(-2px);
+}
+.sd-option:disabled { cursor: default; }
+.sd-opt-jp {
+  font-family: var(--font-jp);
+  font-size: 1.1rem; font-weight: 700;
+}
+.sd-opt-roman {
+  font-size: 0.72rem; color: var(--white-dim); letter-spacing: 0.5px;
+}
+
+.sd-option.correct {
+  background: rgba(46,196,182,0.18);
+  border-color: var(--teal);
+  box-shadow: 0 0 30px var(--teal-glow);
+}
+.sd-option.correct .sd-opt-jp { color: var(--teal); text-shadow: 0 0 10px var(--teal-glow); }
+
+.sd-option.wrong {
+  background: rgba(231,76,60,0.18);
+  border-color: var(--red-light);
+  box-shadow: 0 0 30px var(--red-glow);
+}
+.sd-option.wrong .sd-opt-jp { color: var(--red-light); text-shadow: 0 0 10px var(--red-glow); }
+
+.sd-option.reveal-correct {
+  border-color: var(--teal);
+  border-style: dashed;
+}
+.sd-option.reveal-correct .sd-opt-jp { color: var(--teal); }
+
+/* Advance area — "Következő" gomb a válasz után */
+.sd-advance {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: stretch;
+  animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.sd-advance-msg {
+  text-align: center;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  letter-spacing: 0.3px;
+}
+.sd-msg-correct {
+  background: rgba(46,196,182,0.1);
+  border: 1px solid rgba(46,196,182,0.35);
+  color: var(--teal);
+  text-shadow: 0 0 10px var(--teal-glow);
+}
+.sd-msg-wrong {
+  background: rgba(231,76,60,0.1);
+  border: 1px solid rgba(231,76,60,0.35);
+  color: var(--red-light);
+  text-shadow: 0 0 10px var(--red-glow);
+}
+.sd-msg-timeout {
+  background: rgba(243,156,18,0.1);
+  border: 1px solid rgba(243,156,18,0.35);
+  color: var(--amber, #f39c12);
+  text-shadow: 0 0 10px rgba(243,156,18,0.3);
+}
+.sd-next-btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  justify-content: center;
+}
+
+/* Speed drill summary */
+.sd-summary {
+  text-align: center;
+  padding: 48px 32px;
+  border-radius: var(--radius-xl);
+}
+.sd-final-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 400px;
+  margin: 24px auto;
+}
+.sd-final-stat {
+  background: rgba(58, 50, 38, 0.055);
+  border: 1px solid rgba(58, 50, 38, 0.10);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: left;
+}
+.sf-label {
+  display: block;
+  font-size: 0.7rem; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--white-dim); font-weight: 600;
+  margin-bottom: 6px;
+}
+.sf-value {
+  display: block;
+  font-family: var(--font-jp);
+  font-size: 1.3rem; font-weight: 800;
+  color: var(--gold);
+}
+.sf-value small { font-size: 0.7rem; color: var(--white-dim); font-weight: 400; }
+
+/* ====================================================
+   ── v1.4 — Practice (Mondat-Mester) page ─────────
+   ==================================================== */
+
+.practice-main {
+  max-width: 1000px;
+}
+
+/* ── Lobby ──────────────────────────────────────── */
+.practice-lobby {
+  padding: 36px 32px;
+  border-radius: var(--radius-xl);
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+/* JLPT level row */
+.pl-level-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+}
+.pl-level-btn {
+  padding: 16px 10px;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.pl-level-btn:not(:disabled):hover {
+  border-color: rgba(201,168,76,0.4);
+  background: rgba(201,168,76,0.06);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+.pl-level-btn.active {
+  background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.05));
+  border-color: var(--gold);
+  color: var(--white);
+  box-shadow: 0 0 24px var(--gold-glow);
+}
+.pl-level-btn.active .pl-l-tag { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
+.pl-level-btn.pl-l-locked { opacity: 0.45; cursor: not-allowed; }
+.pl-l-tag { font-family: var(--font-jp); font-size: 1.3rem; font-weight: 800; }
+.pl-l-sub { font-size: 0.7rem; letter-spacing: 0.5px; }
+
+/* Mode buttons */
+.pl-mode-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.pl-mode-btn {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 18px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-lg);
+  color: var(--white);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+.pl-mode-btn:not(:disabled):hover {
+  border-color: rgba(201,168,76,0.4);
+  background: rgba(201,168,76,0.06);
+  transform: translateY(-2px);
+}
+.pl-mode-btn.active {
+  background: linear-gradient(135deg, rgba(46,196,182,0.18), rgba(46,196,182,0.05));
+  border-color: var(--teal);
+  box-shadow: 0 0 30px var(--teal-glow);
+}
+.pl-mode-btn.pl-m-locked { opacity: 0.5; cursor: not-allowed; }
+.pl-m-icon {
+  font-size: 2rem; flex-shrink: 0;
+  filter: drop-shadow(0 0 14px rgba(46,196,182,0.3));
+}
+.pl-m-text { display: flex; flex-direction: column; gap: 4px; }
+.pl-m-name { font-size: 1rem; font-weight: 700; }
+.pl-m-sub  { font-size: 0.78rem; color: var(--white-dim); line-height: 1.4; }
+
+/* Filter rows */
+.pl-filter-row {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.pl-f-label {
+  font-size: 0.82rem; font-weight: 600; color: var(--white-dim);
+}
+.pl-f-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+.pl-f-btn {
+  padding: 8px 14px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: 100px;
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  font-size: 0.82rem; font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.pl-f-btn:not(:disabled):hover { color: var(--white); border-color: rgba(58, 50, 38, 0.24); }
+.pl-f-btn.active {
+  background: rgba(46,196,182,0.15);
+  border-color: var(--teal);
+  color: var(--teal);
+  box-shadow: 0 0 14px var(--teal-glow);
+  text-shadow: 0 0 8px var(--teal-glow);
+}
+.pl-f-btn.pl-f-locked { opacity: 0.4; cursor: not-allowed; }
+.pl-f-btn.shake { animation: lobbyShake 0.4s ease; }
+
+/* ── Practice runtime ───────────────────────────── */
+.practice-runtime {
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+.pr-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.pr-stat {
+  flex: 1 1 0;
+  min-width: 120px;
+  background: rgba(20, 22, 41, 0.4);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(58, 50, 38, 0.10);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  text-align: center;
+}
+.pr-stat-label {
+  display: block; font-size: 0.7rem; letter-spacing: 1.5px; text-transform: uppercase;
+  color: var(--white-dim); font-weight: 600; margin-bottom: 4px;
+}
+.pr-stat-value {
+  display: block; font-family: var(--font-jp); font-size: 1.4rem; font-weight: 800;
+  color: var(--gold);
+  text-shadow: 0 0 12px var(--gold-glow);
+}
+
+/* ── Card (mondat + tálca) ──────────────────────── */
+.pr-card {
+  padding: 32px 28px;
+  border-radius: var(--radius-xl);
+}
+
+.prc-eyebrow {
+  display: flex; gap: 8px; align-items: center;
+  font-size: 0.72rem; letter-spacing: 1.2px; text-transform: uppercase;
+  color: var(--white-dim); font-weight: 700;
+  margin-bottom: 12px;
+}
+.prc-eyebrow span:first-child {
+  background: linear-gradient(135deg, var(--gold), #a8832a);
+  color: var(--ink-deep);
+  padding: 3px 10px;
+  border-radius: 100px;
+  box-shadow: 0 0 14px var(--gold-glow);
+}
+
+.prc-translation {
+  display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap;
+  padding: 12px 16px;
+  background: rgba(42, 42, 46, 0.11);
+  border: 1px solid rgba(58, 50, 38, 0.08);
+  border-radius: var(--radius-md);
+  margin-bottom: 22px;
+  font-size: 0.92rem;
+}
+.prc-tr-label { color: var(--white-dim); font-size: 0.78rem; font-weight: 600; }
+.prc-tr-text  { color: var(--white); font-weight: 500; }
+
+/* Mondat tokenek */
+.prc-sentence {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end;
+  padding: 24px 18px;
+  background: rgba(42, 42, 46, 0.13);
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+  min-height: 120px;
+}
+
+/* Word / Verb token */
+.prc-word, .prc-verb {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 6px 10px;
+}
+.prc-tok-jp     { font-family: var(--font-jp); font-size: 1.6rem; font-weight: 700; color: var(--white); line-height: 1.1; }
+.prc-tok-romaji { font-size: 0.7rem; color: var(--white-dim); letter-spacing: 0.3px; }
+.prc-tok-hu     { font-size: 0.68rem; color: rgba(201,168,76,0.7); font-style: italic; }
+.prc-verb .prc-tok-jp { color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); }
+
+/* Slot (üres particle hely) */
+.prc-slot {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 56px; min-height: 52px;
+  padding: 6px 12px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 2px dashed rgba(201,168,76,0.5);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative;
+}
+.prc-slot:hover:not(.checked-correct):not(.checked-wrong) {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.08);
+}
+.prc-slot.drag-over {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.12);
+  border-style: solid;
+  box-shadow: 0 0 20px var(--teal-glow);
+}
+.prc-slot.filled {
+  border-style: solid;
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.08);
+}
+.prc-slot-content { font-family: var(--font-jp); font-size: 1.6rem; font-weight: 700; color: rgba(201,168,76,0.5); }
+.prc-filled-content {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+}
+.prc-filled-jp     { font-family: var(--font-jp); font-size: 1.6rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 10px var(--gold-glow); line-height: 1; }
+.prc-filled-romaji { font-size: 0.68rem; color: var(--white-dim); }
+
+/* Slot ellenőrzött állapotok */
+.prc-slot.checked-correct {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.15);
+  box-shadow: 0 0 24px var(--teal-glow);
+  cursor: default;
+}
+.prc-slot.checked-correct .prc-filled-jp { color: var(--teal); text-shadow: 0 0 12px var(--teal-glow); }
+.prc-slot.checked-wrong {
+  border-color: var(--red-light);
+  background: rgba(231,76,60,0.15);
+  box-shadow: 0 0 24px var(--red-glow);
+  cursor: default;
+  animation: errorPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.prc-slot.checked-wrong .prc-filled-jp { color: var(--red-light); text-shadow: 0 0 12px var(--red-glow); }
+@keyframes errorPulse {
+  0%   { transform: scale(1.08); }
+  100% { transform: scale(1);    }
+}
+
+/* ── Particle Tray ──────────────────────────────── */
+.prc-tray {
+  padding: 16px 18px;
+  background: rgba(20, 22, 41, 0.5);
+  border: 1px solid rgba(58, 50, 38, 0.10);
+  border-radius: var(--radius-lg);
+}
+.prc-tray-label {
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.6px; text-transform: uppercase;
+  color: var(--white-dim);
+  margin-bottom: 10px;
+}
+.prc-tray-hint {
+  font-size: 0.7rem; font-weight: 400; text-transform: none; letter-spacing: 0;
+  color: rgba(245,243,238,0.4);
+}
+.prc-tray-particles {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.prc-particle {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  min-width: 56px;
+  padding: 8px 14px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-body);
+  cursor: grab;
+  transition: var(--transition);
+}
+.prc-particle:not(:disabled):hover {
+  border-color: rgba(201,168,76,0.4);
+  background: rgba(201,168,76,0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(42, 42, 46, 0.12);
+}
+.prc-particle.selected {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.15);
+  box-shadow: 0 0 20px var(--teal-glow);
+}
+.prc-particle.dragging { opacity: 0.4; cursor: grabbing; }
+.prc-particle:disabled { opacity: 0.4; cursor: not-allowed; }
+.prc-p-jp     { font-family: var(--font-jp); font-size: 1.4rem; font-weight: 700; color: var(--gold); }
+.prc-p-romaji { font-size: 0.68rem; color: var(--white-dim); }
+
+/* ── Action button ──────────────────────────────── */
+.pr-actions {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.prc-check, .prc-next {
+  width: 100%;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  justify-content: center;
+}
+.prc-check:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+/* ── Feedback ───────────────────────────────────── */
+.pr-feedback {
+  padding: 22px;
+  border-radius: var(--radius-lg);
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pr-fb-correct {
+  background: rgba(46,196,182,0.08);
+  border: 1px solid rgba(46,196,182,0.4);
+  border-left: 3px solid var(--teal);
+}
+.pr-fb-wrong {
+  background: rgba(231,76,60,0.08);
+  border: 1px solid rgba(231,76,60,0.4);
+  border-left: 3px solid var(--red-light);
+}
+/* V3 P2 — „Nem tudom" feedback-panel (semleges amber, nem hibajelzés) */
+.pr-fb-dontknow {
+  background: rgba(243,156,18,0.08);
+  border: 1px solid rgba(243,156,18,0.4);
+  border-left: 3px solid var(--amber);
+}
+
+/* V3 P2 — „Nem tudom" gomb a feleletválasztós kártyákon */
+.dont-know-btn {
+  display: block;
+  margin: 16px auto 0;
+  padding: 9px 24px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px dashed var(--ink-border);
+  border-radius: 999px;
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.dont-know-btn:hover {
+  border-color: rgba(243,156,18,0.5);
+  color: #f3c97a;
+  background: rgba(243,156,18,0.06);
+}
+.dont-know-btn:disabled { display: none; }
+.pr-fb-header {
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 16px;
+}
+.pr-fb-mark { font-size: 1.6rem; }
+.pr-fb-title { font-size: 1.05rem; font-weight: 700; }
+
+.pr-fb-slot {
+  padding: 16px 18px;
+  background: rgba(42, 42, 46, 0.12);
+  border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+.pr-fb-slot-head {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px;
+  font-size: 0.95rem;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(58, 50, 38, 0.08);
+}
+.pr-fb-slot-mark { color: var(--red-light); font-weight: 700; font-size: 1.1rem; }
+.pr-fb-slot-pos em { color: var(--red-light); font-style: normal; font-weight: 600; font-family: var(--font-jp); }
+.pr-fb-slot-pos strong { color: var(--teal); font-weight: 700; font-family: var(--font-jp); }
+
+/* 3-rétegű explain blokk */
+.pr-fb-explain {
+  display: flex; flex-direction: column; gap: 10px;
+}
+.pfe-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.pfe-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  padding-top: 2px;
+}
+.pfe-text {
+  color: var(--white);
+}
+.pfe-text em {
+  font-style: normal;
+  color: var(--gold);
+  font-weight: 600;
+  font-family: var(--font-jp);
+}
+.pfe-text strong {
+  font-family: var(--font-jp);
+  font-weight: 700;
+}
+.pfe-roman {
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+/* Per-réteg színes oldalsáv */
+.pfe-wrong {
+  background: rgba(231,76,60,0.07);
+  border-left: 3px solid var(--red-light);
+}
+.pfe-wrong .pfe-jp-wrong {
+  color: var(--red-light);
+  text-shadow: 0 0 8px var(--red-glow);
+}
+
+.pfe-correct {
+  background: rgba(46,196,182,0.07);
+  border-left: 3px solid var(--teal);
+}
+.pfe-correct .pfe-jp-ok {
+  color: var(--teal);
+  text-shadow: 0 0 10px var(--teal-glow);
+}
+
+.pfe-context {
+  background: rgba(201,168,76,0.06);
+  border-left: 3px solid var(--gold);
+}
+.pfe-context strong {
+  color: var(--gold);
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+
+.pfe-rule {
+  background: rgba(58, 50, 38, 0.04);
+  border-left: 3px solid rgba(58, 50, 38, 0.22);
+  font-size: 0.85rem;
+}
+.pfe-rule strong { color: var(--gold); }
+
+.pr-fb-correct-form {
+  margin-top: 14px; padding: 14px 16px;
+  background: rgba(42, 42, 46, 0.13);
+  border-radius: var(--radius-sm);
+}
+.pr-fb-cf-label  { font-size: 0.72rem; color: var(--white-dim); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+.pr-fb-cf-jp     { font-family: var(--font-jp); font-size: 1.5rem; font-weight: 700; color: var(--gold); text-shadow: 0 0 12px var(--gold-glow); margin-bottom: 4px; }
+.pr-fb-cf-romaji { font-size: 0.85rem; color: var(--white-dim); letter-spacing: 0.5px; }
+.prc-correct-particle { color: var(--teal); font-weight: 700; }
+
+/* ── Summary ─────────────────────────────────────── */
+.pr-summary {
+  text-align: center;
+  padding: 48px 32px;
+  border-radius: var(--radius-xl);
+}
+
+/* ====================================================
+   ── v1.5 — Mondat-Puzzle UI ─────────────────────
+   ==================================================== */
+
+.pp-section-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  margin: 8px 0 8px;
+}
+
+/* Válasz-terület (drop zone) */
+.pp-answer-area {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 22px 18px;
+  min-height: 110px;
+  background: rgba(42, 42, 46, 0.14);
+  border: 2px dashed rgba(46,196,182,0.35);
+  border-radius: var(--radius-lg);
+  margin-bottom: 18px;
+  transition: var(--transition);
+  align-items: flex-end;
+}
+.pp-answer-area.drag-over {
+  border-color: var(--teal);
+  border-style: solid;
+  background: rgba(46,196,182,0.06);
+  box-shadow: 0 0 32px var(--teal-glow);
+}
+
+/* Tray (kevert tokenek) */
+.pp-tray-area {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 18px 16px;
+  min-height: 90px;
+  background: rgba(20, 22, 41, 0.5);
+  border: 1px solid rgba(58, 50, 38, 0.10);
+  border-radius: var(--radius-lg);
+  margin-bottom: 18px;
+  transition: var(--transition);
+  align-items: flex-end;
+}
+.pp-tray-area.drag-over {
+  border-color: rgba(201,168,76,0.5);
+  background: rgba(201,168,76,0.06);
+}
+
+.pp-empty-msg {
+  width: 100%;
+  text-align: center;
+  font-size: 0.85rem;
+  color: rgba(245,243,238,0.35);
+  padding: 18px 0;
+  font-style: italic;
+}
+
+/* Token */
+.pp-token {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 14px;
+  background: rgba(58, 50, 38, 0.07);
+  border: 1.5px solid rgba(58, 50, 38, 0.15);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-body);
+  cursor: grab;
+  transition: var(--transition);
+  min-width: 60px;
+}
+.pp-token:not(:disabled):hover {
+  border-color: rgba(201,168,76,0.45);
+  background: rgba(201,168,76,0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(42, 42, 46, 0.14);
+}
+.pp-token.dragging { opacity: 0.4; cursor: grabbing; }
+
+/* Token tipus szerinti színkód */
+.pp-token.pp-tok-word {}
+.pp-token.pp-tok-particle {
+  background: rgba(201,168,76,0.06);
+  border-color: rgba(201,168,76,0.3);
+}
+.pp-token.pp-tok-particle .pp-tok-jp { color: var(--gold); text-shadow: 0 0 8px var(--gold-glow); }
+.pp-token.pp-tok-verb {
+  background: rgba(46,196,182,0.06);
+  border-color: rgba(46,196,182,0.35);
+}
+.pp-token.pp-tok-verb .pp-tok-jp { color: var(--teal); text-shadow: 0 0 8px var(--teal-glow); }
+
+.pp-tok-jp     { font-family: var(--font-jp); font-size: 1.4rem; font-weight: 700; line-height: 1.1; }
+.pp-tok-romaji { font-size: 0.68rem; color: var(--white-dim); letter-spacing: 0.3px; }
+.pp-tok-hu     { font-size: 0.65rem; color: rgba(201,168,76,0.65); font-style: italic; }
+
+/* Ellenőrzés utáni állapotok */
+.pp-token.pp-correct {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.16);
+  box-shadow: 0 0 24px var(--teal-glow);
+  cursor: default;
+}
+.pp-token.pp-correct .pp-tok-jp { color: var(--teal); text-shadow: 0 0 10px var(--teal-glow); }
+.pp-token.pp-wrong {
+  border-color: var(--red-light);
+  background: rgba(231,76,60,0.16);
+  box-shadow: 0 0 24px var(--red-glow);
+  cursor: default;
+}
+.pp-token.pp-wrong .pp-tok-jp { color: var(--red-light); text-shadow: 0 0 10px var(--red-glow); }
+
+/* JP betoldó style a feedback szövegekben */
+.pp-fb-jp {
+  font-family: var(--font-jp);
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* ====================================================
+   ── v1.6 — Számláló (Counter) modul ──────────────
+   ==================================================== */
+
+/* ── Lobby — kategória döntési fa ──────────────── */
+.cnt-lobby {
+  padding: 36px 32px;
+  border-radius: var(--radius-xl);
+  display: flex; flex-direction: column; gap: 24px;
+}
+
+.cnt-cat-tree {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.cnt-cat-row {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 18px 18px;
+  background: rgba(42, 42, 46, 0.10);
+  border: 1px solid rgba(58, 50, 38, 0.08);
+  border-radius: var(--radius-lg);
+}
+
+.cnt-cat-btn {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+}
+.cnt-cat-btn:hover {
+  background: rgba(46,196,182,0.06);
+  border-color: rgba(46,196,182,0.4);
+  transform: translateY(-2px);
+}
+.cnt-cat-btn.active {
+  background: linear-gradient(135deg, rgba(46,196,182,0.18), rgba(46,196,182,0.05));
+  border-color: var(--teal);
+  box-shadow: 0 0 24px var(--teal-glow);
+}
+.ccb-emoji {
+  font-size: 1.8rem; line-height: 1; flex-shrink: 0;
+  filter: drop-shadow(0 0 12px rgba(46,196,182,0.3));
+}
+.ccb-text { display: flex; flex-direction: column; gap: 2px; }
+.ccb-name { font-size: 1rem; font-weight: 700; }
+.ccb-sub  { font-size: 0.72rem; color: var(--white-dim); letter-spacing: 0.3px; }
+
+.cnt-cat-children {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding-left: 12px;
+  border-left: 2px dashed rgba(46,196,182,0.25);
+  margin-left: 24px;
+}
+
+.cnt-counter-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 14px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.12);
+  border-radius: var(--radius-md);
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: var(--transition);
+  min-width: 78px;
+}
+.cnt-counter-chip:hover:not(:disabled) {
+  border-color: rgba(201,168,76,0.45);
+  background: rgba(201,168,76,0.08);
+  transform: translateY(-2px);
+  color: var(--white);
+}
+.cnt-counter-chip.active {
+  background: rgba(201,168,76,0.12);
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 18px var(--gold-glow);
+  text-shadow: 0 0 8px var(--gold-glow);
+}
+.cnt-counter-chip:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.ccc-jp     { font-family: var(--font-jp); font-size: 1.2rem; font-weight: 700; line-height: 1; }
+.ccc-romaji { font-size: 0.7rem; color: var(--white-dim); letter-spacing: 0.3px; }
+.ccc-hu     { font-size: 0.65rem; color: rgba(245,243,238,0.5); font-style: italic; }
+
+/* ── Card — Recognition phase ──────────────────── */
+.cnt-progress {
+  display: flex; align-items: center; gap: 16px;
+  padding: 12px 0;
+  margin-bottom: 16px;
+}
+.cnt-counter-label {
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.5px; color: var(--white-dim);
+  flex-shrink: 0;
+}
+.cnt-progress-bar {
+  flex: 1;
+  height: 4px;
+  background: rgba(58, 50, 38, 0.10);
+  border-radius: 100px;
+  overflow: hidden;
+}
+.cnt-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  box-shadow: 0 0 10px var(--gold-glow);
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cnt-score {
+  font-size: 0.85rem;
+  color: var(--white-dim);
+  flex-shrink: 0;
+}
+.cnt-score strong { color: var(--gold); text-shadow: 0 0 8px var(--gold-glow); }
+
+.cnt-card {
+  padding: 36px 32px;
+  border-radius: var(--radius-xl);
+  text-align: center;
+}
+
+.cnt-card-eyebrow {
+  margin-bottom: 18px;
+}
+.cnt-tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.85rem; font-weight: 600;
+  padding: 6px 14px;
+  background: rgba(46,196,182,0.12);
+  border: 1px solid rgba(46,196,182,0.4);
+  color: var(--teal);
+  border-radius: 100px;
+  text-shadow: 0 0 10px var(--teal-glow);
+}
+
+.cnt-visual {
+  padding: 28px 16px;
+  background: rgba(42, 42, 46, 0.12);
+  border: 1px solid rgba(201,168,76,0.18);
+  border-radius: var(--radius-lg);
+  margin-bottom: 22px;
+}
+.cnt-visual-emojis {
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: 6px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 18px rgba(201,168,76,0.25));
+}
+.cnt-prompt-num {
+  font-family: var(--font-jp);
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--gold);
+  line-height: 1;
+  text-shadow: 0 0 24px var(--gold-glow);
+  margin-bottom: 8px;
+}
+.cnt-prompt-name {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.cnt-name-hu { font-size: 1.1rem; font-weight: 600; color: var(--white); }
+.cnt-name-jp { font-family: var(--font-jp); font-size: 1.15rem; color: var(--white-dim); letter-spacing: 1px; }
+
+.cnt-question {
+  font-size: 1rem;
+  color: var(--white-dim);
+  margin-bottom: 18px;
+  letter-spacing: 0.3px;
+}
+
+.cnt-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cnt-option {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 18px 14px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.15);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+  min-height: 70px;
+}
+.cnt-option:hover:not(:disabled) {
+  background: rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.45);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(42, 42, 46, 0.12);
+}
+.cnt-option:disabled { cursor: default; }
+
+.cnt-opt-jp     { font-family: var(--font-jp); font-size: 1.4rem; font-weight: 700; line-height: 1.1; }
+.cnt-opt-romaji { font-size: 0.75rem; color: var(--white-dim); letter-spacing: 0.5px; }
+
+.cnt-option.correct {
+  background: rgba(46,196,182,0.18);
+  border-color: var(--teal);
+  box-shadow: 0 0 30px var(--teal-glow);
+}
+.cnt-option.correct .cnt-opt-jp { color: var(--teal); text-shadow: 0 0 12px var(--teal-glow); }
+
+.cnt-option.wrong {
+  background: rgba(231,76,60,0.18);
+  border-color: var(--red-light);
+  box-shadow: 0 0 30px var(--red-glow);
+}
+.cnt-option.wrong .cnt-opt-jp { color: var(--red-light); text-shadow: 0 0 12px var(--red-glow); }
+
+.cnt-option.reveal-correct {
+  border-color: var(--teal);
+  border-style: dashed;
+}
+.cnt-option.reveal-correct .cnt-opt-jp { color: var(--teal); }
+
+.cnt-feedback {
+  margin-top: 18px;
+  padding: 22px;
+  border-radius: var(--radius-lg);
+  text-align: left;
+  animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cnt-next {
+  width: 100%;
+  margin-top: 14px;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  justify-content: center;
+}
+
+/* ── HYBRID mode (Phase 2) ──────────────────────── */
+
+.cnh-step {
+  display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 18px;
+}
+.cnh-step-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--white-dim);
+  letter-spacing: 0.3px;
+  text-align: left;
+}
+
+.cnh-counter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 8px;
+}
+
+.cnh-counter-pill {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 12px 14px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid rgba(58, 50, 38, 0.15);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.cnh-counter-pill:hover:not(:disabled) {
+  background: rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.45);
+  transform: translateY(-2px);
+}
+.cnh-counter-pill.selected {
+  background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.05));
+  border-color: var(--gold);
+  box-shadow: 0 0 24px var(--gold-glow);
+}
+.cnh-counter-pill:disabled { cursor: default; }
+.cnh-counter-pill.correct {
+  background: rgba(46,196,182,0.18);
+  border-color: var(--teal);
+  box-shadow: 0 0 24px var(--teal-glow);
+}
+.cnh-counter-pill.correct .cnh-pill-jp { color: var(--teal); text-shadow: 0 0 10px var(--teal-glow); }
+.cnh-counter-pill.wrong {
+  background: rgba(231,76,60,0.18);
+  border-color: var(--red-light);
+  box-shadow: 0 0 24px var(--red-glow);
+}
+.cnh-counter-pill.wrong .cnh-pill-jp { color: var(--red-light); text-shadow: 0 0 10px var(--red-glow); }
+.cnh-counter-pill.reveal-correct {
+  border-color: var(--teal);
+  border-style: dashed;
+}
+
+.cnh-pill-jp     { font-family: var(--font-jp); font-size: 1.4rem; font-weight: 700; line-height: 1; }
+.cnh-pill-romaji { font-size: 0.7rem; color: var(--white-dim); letter-spacing: 0.3px; }
+.cnh-pill-hu     { font-size: 0.65rem; color: rgba(245,243,238,0.5); font-style: italic; }
+
+.cnh-input, .cnm-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(42, 42, 46, 0.12);
+  border: 1.5px solid rgba(58, 50, 38, 0.15);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-jp);
+  font-size: 1.2rem;
+  font-weight: 600;
+  outline: none;
+  transition: var(--transition);
+  letter-spacing: 1px;
+}
+.cnh-input::placeholder,
+.cnm-input::placeholder {
+  color: rgba(245,243,238,0.25);
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.cnh-input:focus,
+.cnm-input:focus {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.04);
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.15), 0 0 24px rgba(201,168,76,0.18);
+}
+.cnh-input:disabled,
+.cnm-input:disabled { opacity: 0.85; cursor: default; }
+
+.cnh-input-correct {
+  border-color: var(--teal) !important;
+  background: rgba(46,196,182,0.08) !important;
+  box-shadow: 0 0 24px var(--teal-glow) !important;
+}
+.cnh-input-wrong {
+  border-color: var(--red-light) !important;
+  background: rgba(231,76,60,0.08) !important;
+  box-shadow: 0 0 24px var(--red-glow) !important;
+}
+
+.cnh-submit, .cnm-submit {
+  width: 100%;
+  padding: 14px;
+  margin-top: 16px;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  justify-content: center;
+}
+.cnh-submit:disabled,
+.cnm-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ── MASTERY mode (Phase 3) ─────────────────────── */
+
+.cnm-eyebrow {
+  font-size: 0.72rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--red-light);
+  font-weight: 700;
+  text-shadow: 0 0 10px var(--red-glow);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.cnm-instruction {
+  font-size: 0.92rem;
+  color: var(--white-dim);
+  text-align: center;
+  margin-bottom: 18px;
+  line-height: 1.55;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── DIFF ENGINE — karakter-szintű highlighting ── */
+
+.diff-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 18px;
+  background: rgba(42, 42, 46, 0.12);
+  border-radius: var(--radius-sm);
+  margin: 6px 0;
+}
+
+.diff-line {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  font-family: var(--font-jp);
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+.diff-label {
+  flex-shrink: 0;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--white-dim);
+  min-width: 70px;
+}
+
+.diff-content {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  align-items: baseline;
+}
+
+/* Diff token-ek */
+.diff-eq {
+  color: var(--teal);
+  text-shadow: 0 0 8px rgba(46,196,182,0.4);
+  padding: 0 1px;
+}
+.diff-del {
+  color: var(--red-light);
+  text-decoration: line-through;
+  text-decoration-thickness: 2px;
+  background: rgba(231,76,60,0.12);
+  padding: 0 3px;
+  border-radius: 4px;
+}
+.diff-ins {
+  color: #f1c40f;  /* yellow — missing char hint */
+  background: rgba(241,196,15,0.14);
+  border: 1px dashed rgba(241,196,15,0.55);
+  padding: 0 3px;
+  border-radius: 4px;
+  text-shadow: 0 0 6px rgba(241,196,15,0.35);
+}
+
+.diff-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(58, 50, 38, 0.08);
+  font-size: 0.72rem;
+  font-family: var(--font-body);
+  color: var(--white-dim);
+}
+.diff-eq-sample {
+  color: var(--teal);
+}
+.diff-del-sample {
+  color: var(--red-light);
+  text-decoration: line-through;
+}
+.diff-ins-sample {
+  color: #f1c40f;
+}
+
+/* Romaji elrejtés a counter UI-ból (Romaji OFF módban) */
+body.helpers-no-romaji .ccc-romaji,
+body.helpers-no-romaji .cnh-pill-romaji,
+body.helpers-no-romaji .cnt-opt-romaji,
+/* V2.0 Conjugation + V2.1 Adjectives modulok romaji-elemei */
+body.helpers-no-romaji .cj-pl-romaji,
+body.helpers-no-romaji .cj-opt-romaji,
+body.helpers-no-romaji .cjbf-roman,
+body.helpers-no-romaji .cjbs-roman,
+/* V5 P1 Grammar Patterns modul romaji-elemei */
+body.helpers-no-romaji .grm-sentence-romaji,
+body.helpers-no-romaji .grm-opt-summary {
+  display: none !important;
+}
+
+/* Magyar-elrejtés a counter UI-ból (Magyar OFF módban) */
+body.helpers-no-hu .ccc-hu,
+body.helpers-no-hu .cnh-pill-hu,
+body.helpers-no-hu .cnt-name-hu,
+/* V2.0 Conjugation + V2.1 Adjectives modulok magyar fordítás-elemei */
+body.helpers-no-hu .cj-prompt-meaning,
+body.helpers-no-hu .cj-example-hu,
+/* V3 Hallás & Kiejtés modul magyar jelentés-elemei */
+body.helpers-no-hu .lst-opt-meaning,
+/* V5 P1 Grammar Patterns modul magyar fordítás-elemei */
+body.helpers-no-hu .grm-sentence-hu {
+  display: none !important;
+}
+
+/* Mobil — counter UI ────────────────────────────── */
+@media (max-width: 768px) {
+  .cnt-lobby { padding: 24px 18px; gap: 18px; }
+  .cnt-cat-row { padding: 14px 12px; }
+  .cnt-cat-children { margin-left: 12px; padding-left: 8px; }
+  .cnt-counter-chip { min-width: 64px; padding: 8px 10px; }
+  .ccc-jp { font-size: 1rem; }
+
+  .cnt-card { padding: 24px 18px; }
+  .cnt-visual { padding: 20px 12px; }
+  .cnt-visual-emojis { font-size: 2.4rem; letter-spacing: 4px; }
+  .cnt-prompt-num { font-size: 3rem; }
+  .cnt-options { grid-template-columns: 1fr; gap: 8px; }
+  .cnt-option { min-height: 56px; padding: 14px; }
+  .cnt-opt-jp { font-size: 1.25rem; }
+
+  /* Hybrid + Mastery mobil */
+  .cnh-counter-grid { grid-template-columns: repeat(2, 1fr); gap: 6px; }
+  .cnh-counter-pill { padding: 10px 8px; }
+  .cnh-pill-jp { font-size: 1.2rem; }
+  .cnh-input, .cnm-input { font-size: 1.05rem; padding: 12px 14px; }
+  .diff-line { font-size: 1rem; gap: 8px; }
+  .diff-label { min-width: 58px; font-size: 0.65rem; }
+}
+
+/* Inkább rejtsd a romaji + hu sorokat a body class-ok szerint */
+body.helpers-no-romaji .pp-tok-romaji { display: none !important; }
+body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
+
+/* ── Module page responsive ─────────────────────── */
+@media (max-width: 768px) {
+  .module-main { padding-top: calc(var(--header-h) + 32px); }
+  .module-hero {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  .module-hero-icon { margin: 0 auto; }
+  .module-meta-row { justify-content: center; }
+  .module-progress { margin: 0 auto; }
+
+  .phase-tabs { grid-template-columns: 1fr; gap: 8px; }
+  .phase-tab { padding: 12px 14px; }
+
+  .mc-choices { grid-template-columns: 1fr; }
+  .q-prompt { font-size: 1.25rem; }
+  .question-card, .explanation { padding: 22px; }
+
+  /* v1.3 mobil */
+  .ctl-row { gap: 16px; }
+  .interactive-demo, .matrix-task { padding: 22px; }
+  .base-picker { grid-template-columns: 1fr; }
+  .base-btn { padding: 14px 16px; }
+  .vf-matrix { grid-template-columns: 1fr; gap: 6px; }
+  .m-corner, .m-col-label { display: none; }
+  .m-row-label {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+    padding: 12px 4px 4px;
+    font-size: 0.8rem;
+    color: var(--gold);
+  }
+  .matrix-cell { min-height: 56px; padding: 12px; flex-direction: row; gap: 12px; justify-content: flex-start; }
+  .ms-preview { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .sd-options { grid-template-columns: 1fr; }
+  .sd-final-grid { grid-template-columns: 1fr; }
+  .sd-icon { font-size: 3rem; }
+  .sd-tag { font-size: 1rem; padding: 8px 18px; }
+
+  /* Practice (v1.4) mobil */
+  .practice-lobby { padding: 24px 20px; gap: 20px; }
+  .pl-level-row { grid-template-columns: repeat(3, 1fr); }
+  .pl-mode-row { grid-template-columns: 1fr; }
+  .pl-filter-row { grid-template-columns: 1fr; gap: 6px; }
+  .pl-f-label { font-size: 0.78rem; }
+  .prc-sentence { padding: 18px 12px; gap: 6px; }
+  .prc-tok-jp { font-size: 1.35rem; }
+  .prc-slot { min-width: 48px; min-height: 46px; }
+  .prc-slot-content { font-size: 1.4rem; }
+  .prc-filled-jp { font-size: 1.4rem; }
+  .prc-particle { min-width: 48px; padding: 6px 10px; }
+  .prc-p-jp { font-size: 1.2rem; }
+  /* Feedback explain mobil — stack a label felül */
+  .pfe-row { grid-template-columns: 1fr; gap: 4px; padding: 10px 12px; }
+  .pfe-label { font-size: 0.65rem; }
+
+  /* Mondat-Puzzle mobil */
+  .pp-answer-area, .pp-tray-area { padding: 14px 10px; gap: 6px; }
+  .pp-token { min-width: 50px; padding: 8px 10px; }
+  .pp-tok-jp { font-size: 1.2rem; }
+
+  /* Phase 2 lobby mobil */
+  .ms-lobby { padding: 24px 20px; gap: 22px; }
+  .lobby-section { padding: 18px 16px; }
+  .ml-count-row { flex-direction: column; align-items: stretch; gap: 14px; }
+  .ml-count-custom { min-width: 0; }
+  .ml-filter-row { grid-template-columns: 1fr; gap: 8px; }
+  .ml-filter-label { font-size: 0.78rem; }
+}
+
+
+/* ====================================================
+   ── CONJUGATION MODULE (V2.0 P1) ──────────────────
+   Külön szekció, hogy könnyű legyen megtalálni.
+   ==================================================== */
+
+.conjugation-main { padding-top: calc(var(--header-h) + 40px); }
+.conj-hero { margin: 0 auto 28px; max-width: 1100px; }
+
+.conj-stats-bar {
+  display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap;
+}
+.conj-stat-chip {
+  background: rgba(58, 50, 38, 0.055);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  display: flex; flex-direction: column; gap: 2px;
+  min-width: 110px;
+}
+.csc-num { font-size: 1.4rem; font-weight: 700; color: var(--gold); font-family: var(--font-body); }
+.csc-label { font-size: 0.72rem; color: var(--white-dim); text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ── Lobby ─────────────────────────────────────── */
+.conj-lobby {
+  max-width: 1100px; margin: 0 auto 36px;
+  padding: 36px 32px;
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column; gap: 26px;
+}
+
+.cj-group-row {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+.cj-group-btn {
+  background: rgba(58, 50, 38, 0.04);
+  border: 1.5px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 6px;
+  cursor: pointer; transition: var(--transition);
+  text-align: left;
+  color: var(--white-dim);
+  font-family: var(--font-body);
+}
+.cj-group-btn:hover { border-color: rgba(201,168,76,0.4); background: rgba(58, 50, 38, 0.07); }
+.cj-group-btn.active {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.08);
+  color: var(--white);
+  box-shadow: 0 0 20px var(--gold-glow);
+}
+.cj-g-name { font-weight: 600; font-size: 1rem; }
+.cj-g-hint { font-size: 0.82rem; color: var(--white-dim); font-family: var(--font-jp); }
+
+.cj-form-row {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px 16px;
+  background: rgba(58, 50, 38, 0.025);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 10px;
+}
+.cj-form-row-label {
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--white-dim);
+}
+.cj-form-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.cj-form-chip {
+  background: rgba(58, 50, 38, 0.04);
+  border: 1.5px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  cursor: pointer; transition: var(--transition);
+  display: flex; flex-direction: column; gap: 2px;
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  min-width: 140px;
+  text-align: left;
+}
+.cj-form-chip:hover { border-color: rgba(46,196,182,0.5); }
+.cj-form-chip.active {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.08);
+  color: var(--white);
+  box-shadow: 0 0 14px var(--teal-glow);
+}
+.cjfc-name { font-weight: 600; font-size: 0.9rem; }
+.cjfc-sub { font-size: 0.72rem; color: var(--white-dim); }
+
+.cj-mode-row {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+}
+.cj-mode-btn {
+  background: rgba(58, 50, 38, 0.04);
+  border: 1.5px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  cursor: pointer; transition: var(--transition);
+  display: flex; flex-direction: column; gap: 4px;
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  text-align: left;
+}
+.cj-mode-btn:hover { border-color: rgba(201,168,76,0.4); }
+.cj-mode-btn.active {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.08);
+  color: var(--white);
+  box-shadow: 0 0 18px var(--gold-glow);
+}
+.cj-m-name { font-weight: 600; font-size: 1rem; }
+.cj-m-sub { font-size: 0.78rem; color: var(--white-dim); }
+
+/* ── Runtime / Card ─────────────────────────────── */
+.conj-runtime { max-width: 1100px; margin: 0 auto; }
+
+.conj-card {
+  padding: 32px 28px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 22px;
+  display: flex; flex-direction: column; gap: 22px;
+}
+
+.cj-prompt { display: flex; flex-direction: column; gap: 10px; align-items: center; text-align: center; }
+.cj-prompt-eyebrow {
+  display: flex; gap: 8px; align-items: center;
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--white-dim);
+}
+.cj-pe-group { color: var(--gold); font-weight: 600; }
+.cj-pe-dot { opacity: 0.5; }
+.cj-prompt-lemma {
+  display: flex; flex-direction: column; gap: 4px; align-items: center;
+  margin-top: 4px;
+}
+.cj-pl-kanji { font-family: var(--font-jp); font-size: 3rem; font-weight: 700; color: var(--white); line-height: 1; }
+.cj-pl-kana { font-family: var(--font-jp); font-size: 1.2rem; color: var(--white-dim); }
+.cj-pl-romaji { font-size: 0.88rem; color: var(--white-dim); font-style: italic; }
+.cj-prompt-meaning { font-size: 1rem; color: var(--white); }
+.cj-target {
+  display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
+  margin-top: 12px;
+  padding: 12px 20px;
+  background: rgba(46,196,182,0.08);
+  border: 1px solid rgba(46,196,182,0.25);
+  border-radius: var(--radius-md);
+}
+.cj-target-label { font-size: 0.78rem; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em; }
+.cj-target-name { font-weight: 600; color: var(--white); }
+.cj-target-sub { font-size: 0.82rem; color: var(--white-dim); }
+
+/* Recognition options */
+.cj-options {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+}
+.cj-option {
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  cursor: pointer; transition: var(--transition);
+  display: flex; flex-direction: column; gap: 4px; align-items: center;
+  font-family: var(--font-body);
+}
+.cj-option:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.06);
+  transform: translateY(-2px);
+}
+.cj-option:disabled { cursor: default; }
+.cj-option.correct {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.15);
+  box-shadow: 0 0 18px var(--teal-glow);
+}
+.cj-option.wrong {
+  border-color: var(--red);
+  background: rgba(231,76,60,0.12);
+}
+.cj-option.reveal-correct {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.12);
+  box-shadow: 0 0 16px var(--teal-glow);
+}
+.cj-opt-jp { font-family: var(--font-jp); font-size: 1.4rem; color: var(--white); }
+.cj-opt-romaji { font-size: 0.85rem; color: var(--white-dim); font-style: italic; }
+
+/* Mastery input */
+.cj-input-area { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.cj-input {
+  width: 100%;
+  max-width: 480px;
+  padding: 16px 18px;
+  background: rgba(58, 50, 38, 0.07);
+  border: 2px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-jp);
+  font-size: 1.3rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.cj-input:focus { border-color: var(--gold); }
+
+.cj-timer-bar {
+  width: 100%; max-width: 480px; height: 6px;
+  background: rgba(58, 50, 38, 0.08);
+  border-radius: 999px; overflow: hidden;
+}
+.cj-timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  width: 100%;
+}
+
+.conj-actions { display: flex; justify-content: center; margin-bottom: 22px; }
+.cj-submit { min-width: 220px; }
+
+/* Feedback */
+.conj-feedback {
+  max-width: 1100px; margin: 0 auto 22px;
+  padding: 22px 24px;
+  border-radius: var(--radius-lg);
+  background: rgba(58, 50, 38, 0.04);
+  border: 1px solid var(--ink-border);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.conj-feedback.pr-fb-correct  { border-color: rgba(46,196,182,0.4); background: rgba(46,196,182,0.06); }
+.conj-feedback.pr-fb-wrong    { border-color: rgba(231,76,60,0.4);  background: rgba(231,76,60,0.06); }
+.conj-feedback.pr-fb-dontknow { border-color: rgba(243,156,18,0.4); background: rgba(243,156,18,0.06); }
+
+/* Summary */
+.conj-summary {
+  max-width: 1100px; margin: 0 auto;
+  padding: 36px 30px;
+  border-radius: var(--radius-lg);
+  text-align: center;
+  display: flex; flex-direction: column; gap: 18px; align-items: center;
+}
+.cj-breakdown {
+  width: 100%; max-width: 600px;
+  display: flex; flex-direction: column; gap: 8px;
+  text-align: left;
+  margin: 10px auto;
+}
+.cj-bd-title {
+  font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--white-dim); margin-bottom: 4px;
+}
+.cj-bd-row {
+  display: grid;
+  grid-template-columns: 140px 1fr 100px;
+  align-items: center; gap: 12px;
+  padding: 8px 12px;
+  background: rgba(58, 50, 38, 0.04);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
+.cj-bd-row.fb-ok   { border-color: rgba(46,196,182,0.3); }
+.cj-bd-row.fb-warn { border-color: rgba(243,156,18,0.3); }
+.cj-bd-row.fb-bad  { border-color: rgba(231,76,60,0.3); }
+.cj-bd-form { font-weight: 500; color: var(--white); }
+.cj-bd-bar { width: 100%; height: 6px; background: rgba(58, 50, 38, 0.08); border-radius: 999px; overflow: hidden; }
+.cj-bd-fill { height: 100%; background: linear-gradient(90deg, var(--teal), var(--gold)); }
+.cj-bd-pct { font-size: 0.78rem; color: var(--white-dim); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* Input feedback színek — újrahasznosítva a v1.6 osztályneveket */
+.cj-input.cnh-input-correct { border-color: var(--teal); box-shadow: 0 0 14px var(--teal-glow); }
+.cj-input.cnh-input-wrong   { border-color: var(--red);  box-shadow: 0 0 14px var(--red-glow); }
+
+/* ── V2.0 P2: Morféma-szintű diff vizualizáció ────── */
+.morph-block {
+  display: flex; flex-direction: column; gap: 8px;
+  padding: 12px 14px;
+  background: rgba(58, 50, 38, 0.04);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-sm);
+}
+.morph-line { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.morph-content {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-jp); font-size: 1.15rem;
+}
+.morph {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  font-weight: 600;
+}
+.morph-ok {
+  background: rgba(46,196,182,0.12);
+  border-color: rgba(46,196,182,0.4);
+  color: var(--white);
+}
+.morph-bad {
+  background: rgba(231,76,60,0.12);
+  border-color: rgba(231,76,60,0.5);
+  color: #ffb8b3;
+  text-decoration: line-through wavy rgba(231,76,60,0.6);
+  text-decoration-thickness: 1px;
+}
+.morph-target {
+  background: rgba(201,168,76,0.10);
+  border-color: rgba(201,168,76,0.35);
+  color: var(--white);
+}
+.morph-sep {
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  opacity: 0.6;
+}
+.morph-legend {
+  display: flex; gap: 12px; font-size: 0.72rem; color: var(--white-dim);
+  border-top: 1px dashed rgba(58, 50, 38, 0.10); padding-top: 6px; margin-top: 2px;
+}
+.morph-ok-sample {
+  padding: 2px 6px; border-radius: 4px;
+  background: rgba(46,196,182,0.12);
+  border: 1px solid rgba(46,196,182,0.3);
+}
+.morph-bad-sample {
+  padding: 2px 6px; border-radius: 4px;
+  background: rgba(231,76,60,0.12);
+  border: 1px solid rgba(231,76,60,0.4);
+}
+
+/* Diff label és helyes inline */
+.diff-label { font-size: 0.72rem; color: var(--white-dim); text-transform: uppercase; letter-spacing: 0.06em; min-width: 96px; }
+
+/* ── V2.0 P2/2: Mode row (3 oszlopos) ─────────────── */
+.cj-mode-row { grid-template-columns: repeat(3, 1fr); }
+
+/* ── V2.0 P2/2: Adaptive switch ───────────────────── */
+.cj-adaptive-section {
+  background: rgba(46,196,182,0.04);
+  border: 1px solid rgba(46,196,182,0.18);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+}
+.cj-adapt-switch {
+  display: flex; gap: 12px; align-items: flex-start;
+  cursor: pointer; user-select: none;
+}
+.cj-adapt-switch input[type="checkbox"] {
+  width: 20px; height: 20px;
+  margin-top: 2px;
+  accent-color: var(--teal);
+  cursor: pointer;
+}
+.cj-adapt-text { display: flex; flex-direction: column; gap: 2px; }
+.cj-adapt-text strong { color: var(--white); font-size: 0.95rem; font-weight: 600; }
+.cj-adapt-text em { color: var(--white-dim); font-size: 0.78rem; font-style: normal; }
+
+/* ── V2.0 P2/2: Build mód buttons ─────────────────── */
+.cj-build-step {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px 16px;
+  background: rgba(58, 50, 38, 0.025);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-md);
+}
+.cj-build-step-label {
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--white-dim);
+}
+
+/* Godan mátrix (5 oszlop) — vízszintes scroll mobilon */
+.cj-build-stems-godan {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+}
+.cj-build-stems-single { display: flex; gap: 10px; }
+
+.cj-build-stem {
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  padding: 12px 8px;
+  cursor: pointer; transition: var(--transition);
+  display: flex; flex-direction: column; gap: 2px; align-items: center;
+  font-family: var(--font-body);
+  min-height: 84px;
+}
+.cj-build-stem:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.08);
+  transform: translateY(-2px);
+}
+.cj-build-stem.selected {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.15);
+  box-shadow: 0 0 14px var(--gold-glow);
+}
+.cj-build-stem.correct { border-color: var(--teal); background: rgba(46,196,182,0.15); }
+.cj-build-stem.wrong   { border-color: var(--red);  background: rgba(231,76,60,0.12); }
+.cj-build-stem.reveal-correct {
+  border-color: var(--teal); background: rgba(46,196,182,0.10);
+  box-shadow: 0 0 12px var(--teal-glow);
+}
+.cjbs-col {
+  font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--gold); font-weight: 600;
+}
+.cjbs-jp { font-family: var(--font-jp); font-size: 1.4rem; color: var(--white); font-weight: 700; }
+.cjbs-roman { font-size: 0.78rem; color: var(--white-dim); font-style: italic; }
+
+/* Suffix bank */
+.cj-build-suffixes {
+  display: flex; flex-wrap: wrap; gap: 8px;
+}
+.cj-build-suf {
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  cursor: pointer; transition: var(--transition);
+  display: flex; flex-direction: column; gap: 2px; align-items: center;
+  font-family: var(--font-body);
+  min-width: 90px;
+}
+.cj-build-suf:hover:not(:disabled) {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.06);
+  transform: translateY(-2px);
+}
+.cj-build-suf.selected {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.15);
+  box-shadow: 0 0 14px var(--teal-glow);
+}
+.cj-build-suf.correct { border-color: var(--teal); background: rgba(46,196,182,0.18); }
+.cj-build-suf.wrong   { border-color: var(--red);  background: rgba(231,76,60,0.12); }
+.cj-build-suf.reveal-correct {
+  border-color: var(--teal); background: rgba(46,196,182,0.10);
+  box-shadow: 0 0 12px var(--teal-glow);
+}
+.cjbf-jp { font-family: var(--font-jp); font-size: 1.25rem; color: var(--white); font-weight: 600; }
+.cjbf-roman { font-size: 0.75rem; color: var(--white-dim); font-style: italic; }
+
+/* Live preview */
+.cj-build-preview {
+  display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+  padding: 14px 18px;
+  background: rgba(201,168,76,0.05);
+  border: 1px dashed rgba(201,168,76,0.3);
+  border-radius: var(--radius-md);
+  margin-top: 6px;
+}
+.cjbp-label {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--gold); font-weight: 600;
+}
+.cjbp-content {
+  display: inline-flex; gap: 6px; align-items: center;
+  font-family: var(--font-jp); font-size: 1.4rem;
+}
+.morph.morph-empty { color: var(--white-dim); opacity: 0.6; border-style: dashed; }
+
+/* ── V2.0 P2/2: Hint bar ──────────────────────────── */
+.cj-hint-bar {
+  display: flex; flex-direction: column; gap: 8px;
+  margin-bottom: -6px;
+}
+.cj-hint-btn {
+  align-self: flex-end;
+  display: inline-flex; gap: 6px; align-items: center;
+  padding: 6px 12px;
+  background: rgba(243,156,18,0.10);
+  border: 1px solid rgba(243,156,18,0.35);
+  border-radius: 999px;
+  cursor: pointer; transition: var(--transition);
+  color: #f3c97a;
+  font-family: var(--font-body); font-size: 0.78rem;
+}
+.cj-hint-btn:hover:not(:disabled) {
+  background: rgba(243,156,18,0.18);
+  transform: translateY(-1px);
+}
+.cj-hint-btn:disabled { opacity: 0.5; cursor: default; }
+.cj-hint-btn.exhausted { background: rgba(58, 50, 38, 0.055); border-color: var(--ink-border); color: var(--white-dim); }
+.cjh-icon { font-size: 0.95rem; }
+.cjh-pts { opacity: 0.7; }
+.cj-hint-display {
+  display: flex; flex-direction: column; gap: 4px;
+  align-self: flex-end;
+  max-width: 100%;
+}
+.cj-hint-line {
+  background: rgba(243,156,18,0.05);
+  border: 1px solid rgba(243,156,18,0.2);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-family: var(--font-jp);
+  color: var(--white);
+}
+.cj-hint-line em { color: #f3c97a; font-style: normal; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 6px; }
+
+/* ── V2.0 P2/2: Profile dashboard ─────────────────── */
+.conj-stat-toggle {
+  margin-left: auto;
+  padding: 8px 14px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 999px;
+  cursor: pointer; transition: var(--transition);
+  color: var(--gold);
+  font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 500;
+}
+.conj-stat-toggle:hover { background: rgba(201,168,76,0.15); }
+.conj-stat-toggle.active {
+  background: var(--gold); color: var(--ink-deep);
+  box-shadow: 0 0 14px var(--gold-glow);
+}
+.conj-stats-panel {
+  flex-basis: 100%;
+  margin-top: 12px;
+  padding: 18px;
+  background: rgba(58, 50, 38, 0.025);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  display: flex; flex-direction: column; gap: 18px;
+}
+.cj-pd-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+}
+.cj-pd-block { display: flex; flex-direction: column; gap: 8px; }
+.cj-pd-section-label {
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--white-dim);
+  border-bottom: 1px dashed rgba(58, 50, 38, 0.10);
+  padding-bottom: 4px;
+}
+.cj-pd-empty { font-size: 0.85rem; color: var(--white-dim); }
+.cj-pd-weakest {
+  background: rgba(231,76,60,0.04);
+  border: 1px solid rgba(231,76,60,0.2);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cj-pd-weakest-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.cj-pd-weak-chip {
+  background: rgba(231,76,60,0.12);
+  border: 1px solid rgba(231,76,60,0.35);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+.cj-pd-weak-chip em { color: #ffb8b3; font-style: normal; font-weight: 700; margin-left: 4px; }
+.cj-pd-tip { font-size: 0.82rem; color: var(--white-dim); }
+.cj-pd-actions { display: flex; justify-content: flex-end; }
+.cj-pd-reset {
+  font-size: 0.78rem;
+  color: rgba(231,76,60,0.8);
+  background: transparent;
+  border: 1px solid rgba(231,76,60,0.3);
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.cj-pd-reset:hover { background: rgba(231,76,60,0.08); color: var(--red); }
+
+/* ── V2.0 P2/2: Build note (lobby) ────────────────── */
+.lobby-build-note {
+  display: block;
+  margin-top: 6px;
+  font-size: 0.78rem;
+  color: #f3c97a;
+}
+.cj-build-note-icon { margin-right: 4px; }
+
+/* Mobil */
+@media (max-width: 720px) {
+  .conj-lobby { padding: 24px 18px; }
+  .cj-group-row { grid-template-columns: 1fr; }
+  .cj-mode-row { grid-template-columns: 1fr; }
+  .cj-options { grid-template-columns: 1fr; }
+  .cj-pl-kanji { font-size: 2.4rem; }
+  .conj-card { padding: 22px 18px; }
+  .cj-bd-row { grid-template-columns: 90px 1fr 90px; font-size: 0.78rem; }
+  /* P2/2 mobil */
+  .cj-mode-row { grid-template-columns: 1fr; }
+  .cj-build-stems-godan { grid-template-columns: repeat(3, 1fr); }
+  .cj-pd-grid { grid-template-columns: 1fr; gap: 12px; }
+  .conj-stat-toggle { margin-left: 0; }
+}
+
+
+/* ====================================================
+   ── ADJECTIVES MODULE (V2.1) ──────────────────────
+   A legtöbb UI a Conjugation-szekciót újrahasznosítja
+   (lobby, card, options, feedback, summary).
+   Itt csak az adjective-specifikus extra-stylek.
+   ==================================================== */
+
+.adjectives-main { padding-top: calc(var(--header-h) + 40px); }
+.adj-hero { margin: 0 auto 28px; max-width: 1100px; }
+
+/* Mode row 3-oszlopos (Recognition + Build + Mastery) — V2.1 P2 */
+.adj-mode-row { grid-template-columns: repeat(3, 1fr); }
+
+/* Build mode — type-colored stem buttons */
+.adj-build-stem.type-i-adj.selected {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.15);
+  box-shadow: 0 0 14px var(--teal-glow);
+}
+.adj-build-stem.type-na-adj.selected {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.15);
+  box-shadow: 0 0 14px var(--gold-glow);
+}
+.adj-build-stem.type-i-adj:hover:not(:disabled):not(.selected) {
+  border-color: rgba(46,196,182,0.5);
+  background: rgba(46,196,182,0.06);
+}
+.adj-build-stem.type-na-adj:hover:not(:disabled):not(.selected) {
+  border-color: rgba(201,168,76,0.5);
+  background: rgba(201,168,76,0.06);
+}
+.cjbs-sub {
+  font-size: 0.7rem;
+  color: var(--white-dim);
+  margin-top: 2px;
+}
+
+/* Type-row (i-adj / na-adj) — 2 oszlop */
+.adj-types-row { grid-template-columns: repeat(2, 1fr); }
+
+/* Type-chip színkódolás: i-adj = teal, na-adj = gold */
+.adj-type-btn.type-i-adj.active {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.10);
+  box-shadow: 0 0 16px var(--teal-glow);
+}
+.adj-type-btn.type-na-adj.active {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.10);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+/* Card-level type-tag (kis chip a meaning alatt) */
+.adj-type-tag {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.adj-tag-i {
+  background: rgba(46,196,182,0.12);
+  color: var(--teal);
+  border: 1px solid rgba(46,196,182,0.35);
+}
+.adj-tag-na {
+  background: rgba(201,168,76,0.12);
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.35);
+}
+.adj-level {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--white-dim);
+  font-weight: 600;
+}
+
+/* Type-question opcionális választó (2 nagy gomb) */
+.adj-type-choice {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 8px;
+}
+.adj-type-opt-sub {
+  font-size: 0.85rem;
+  color: var(--white-dim);
+  font-style: italic;
+  margin-top: 4px;
+}
+.adj-type-opt.type-i-adj {
+  border-color: rgba(46,196,182,0.3);
+}
+.adj-type-opt.type-i-adj:hover:not(:disabled) {
+  border-color: var(--teal);
+  background: rgba(46,196,182,0.10);
+  box-shadow: 0 0 16px var(--teal-glow);
+}
+.adj-type-opt.type-na-adj {
+  border-color: rgba(201,168,76,0.3);
+}
+.adj-type-opt.type-na-adj:hover:not(:disabled) {
+  border-color: var(--gold);
+  background: rgba(201,168,76,0.10);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+/* Adjective module mobil */
+@media (max-width: 720px) {
+  .adj-types-row { grid-template-columns: 1fr; }
+  .adj-mode-row  { grid-template-columns: 1fr; }
+  .adj-type-choice { grid-template-columns: 1fr; }
+}
+
+
+/* ====================================================
+   ── HEADER HOME ICON + ROUND PROGRESS + ROUND EXIT ──
+   Univerzális kompenensek minden modul-page-en
+   ==================================================== */
+
+/* Home ikon a header jobb-szélén */
+.btn-home {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  color: var(--white-dim);
+  background: rgba(58, 50, 38, 0.025);
+  border: 1px solid var(--ink-border);
+  transition: var(--transition);
+}
+.btn-home:hover {
+  color: var(--gold);
+  background: rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(201,168,76,0.15);
+}
+.btn-home svg { display: block; }
+
+/* Runtime stats és kártya közti gap */
+.pr-stats {
+  margin-bottom: 14px;
+  align-items: center;
+}
+
+/* Progress strip — minden modul körének előrehaladása */
+.round-progress {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 auto 28px;       /* 28px hézag a kártya előtt — szép space */
+  padding: 10px 16px;
+  background: rgba(58, 50, 38, 0.04);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-md);
+}
+.round-progress-text {
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+  min-width: 100px;
+  white-space: nowrap;
+}
+.round-progress-bar {
+  flex: 1;
+  height: 8px;
+  background: rgba(58, 50, 38, 0.08);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.round-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  border-radius: 999px;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Kilépés gomb a stats-sor jobb szélén */
+.round-exit {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-left: auto;
+  padding: 8px 14px;
+  background: rgba(231,76,60,0.06);
+  border: 1px solid rgba(231,76,60,0.25);
+  border-radius: 999px;
+  cursor: pointer; transition: var(--transition);
+  color: rgba(231,76,60,0.9);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+.round-exit:hover {
+  background: rgba(231,76,60,0.14);
+  border-color: rgba(231,76,60,0.5);
+  color: #ffd4cf;
+  transform: translateY(-1px);
+}
+.round-exit svg { display: block; }
+
+/* Speed Drill specifikus: az sd-stats grid-jébe is illeszkedik */
+.sd-stats { align-items: center; }
+.sd-exit-btn { margin-left: auto; }
+
+/* Counter cnt-progress: az exit a sor jobb szélén */
+.cnt-progress { align-items: center; flex-wrap: wrap; }
+.cnt-exit-btn { margin-left: auto; }
+
+/* Matrix ms-progress: szintén jobb szélén */
+.ms-progress { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ms-exit-btn { margin-left: auto; }
+
+/* Mobil */
+@media (max-width: 720px) {
+  .round-progress { flex-wrap: wrap; gap: 8px; }
+  .round-progress-text { width: 100%; }
+  .round-exit span { display: none; }   /* mobilon csak az X ikon */
+  .round-exit { padding: 8px 10px; }
+}
+
+
+/* ====================================================
+   ── DATE & TIME MODULE (V2.3) ─────────────────────
+   A cj-* osztályokat újrahasznosítja (lobby, card,
+   option, feedback, summary). Itt csak a dt-specifikus.
+   ==================================================== */
+
+.datetime-main { padding-top: calc(var(--header-h) + 40px); }
+.dt-hero { margin: 0 auto 28px; max-width: 1100px; }
+
+/* Kategória-sor a lobby-ban — 4 oszlop (8 kategória → 2 sor) */
+.dt-cat-row { grid-template-columns: repeat(4, 1fr); }
+/* Mode-sor — 3 oszlop (Recognition + Build + Mastery) */
+.dt-mode-row { grid-template-columns: repeat(3, 1fr); }
+
+/* Kategória-toggle aktív szín (green accent) */
+.dt-cat-btn.active {
+  border-color: var(--green);
+  background: rgba(39,174,96,0.10);
+  box-shadow: 0 0 16px var(--green-glow);
+}
+
+/* Kártya kategória-címke */
+.dt-cat-tag {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--green);
+  font-weight: 600;
+}
+/* Rendhagyó-jelölő chip a kártyán */
+.dt-irr-tag {
+  margin-left: 8px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(243,156,18,0.14);
+  color: var(--amber);
+  border: 1px solid rgba(243,156,18,0.4);
+}
+
+/* Date & Time module mobil */
+@media (max-width: 720px) {
+  .dt-cat-row  { grid-template-columns: repeat(2, 1fr); }
+  .dt-mode-row { grid-template-columns: 1fr; }
+}
+
+
+/* ====================================================
+   ── HALLÁS & KIEJTÉS MODULE (V3) ───────────────────
+   A cj-* osztályokat újrahasznosítja (lobby, card,
+   option, feedback, summary). dt-/lst- specifikus extra.
+   ==================================================== */
+
+.listening-main { padding-top: calc(var(--header-h) + 40px); }
+.lst-hero { margin: 0 auto 28px; max-width: 1100px; }
+
+/* Lobby: nehézségi szintek + mód */
+.lst-tier-row { grid-template-columns: repeat(3, 1fr); }
+.lst-mode-row { grid-template-columns: repeat(2, 1fr); }
+.lst-tier-btn.active {
+  border-color: var(--red);
+  background: rgba(231,76,60,0.08);
+  box-shadow: 0 0 16px var(--red-glow);
+}
+.cj-mode-btn.lst-mode-locked {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.cj-mode-btn.lst-mode-locked:hover { transform: none; border-color: var(--ink-border); }
+
+/* ── Audio-zóna a kártyán ─────────────────────────── */
+.lst-audio-zone {
+  display: flex; gap: 14px; align-items: center; justify-content: center;
+  flex-wrap: wrap;
+  padding: 18px 0 6px;
+}
+.lst-play-btn {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 20px 40px;
+  background: linear-gradient(135deg, var(--red-light), var(--red));
+  border: none;
+  border-radius: 999px;
+  cursor: pointer; transition: var(--transition);
+  color: #fff;
+  font-family: var(--font-body); font-size: 1.1rem; font-weight: 600;
+  box-shadow: 0 8px 24px rgba(231,76,60,0.3);
+}
+.lst-play-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(231,76,60,0.45);
+}
+.lst-play-btn:active { transform: translateY(0) scale(0.99); }
+.lst-play-btn.pulse { animation: lstPulse 1.8s ease-in-out infinite; }
+@keyframes lstPulse {
+  0%, 100% { box-shadow: 0 8px 24px rgba(231,76,60,0.3); }
+  50%      { box-shadow: 0 8px 36px rgba(231,76,60,0.6); }
+}
+.lst-play-icon { font-size: 1.2rem; }
+
+.lst-slow-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 14px 22px;
+  background: rgba(58, 50, 38, 0.07);
+  border: 1.5px solid var(--ink-border);
+  border-radius: 999px;
+  cursor: pointer; transition: var(--transition);
+  color: var(--white-dim);
+  font-family: var(--font-body); font-size: 0.9rem; font-weight: 500;
+}
+.lst-slow-btn:hover {
+  border-color: rgba(231,76,60,0.4);
+  color: var(--white);
+  background: rgba(231,76,60,0.06);
+}
+
+.lst-replay-info {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  min-height: 18px;
+}
+.lst-audio-fallback {
+  margin: 8px auto;
+  max-width: 480px;
+  padding: 10px 16px;
+  background: rgba(243,156,18,0.08);
+  border: 1px solid rgba(243,156,18,0.3);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  color: #f3c97a;
+  text-align: center;
+}
+.lst-prompt {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--white-dim);
+  margin: 14px 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Opció-kártyák — kana + jelentés */
+.lst-option { min-height: 76px; }
+.lst-opt-meaning {
+  font-size: 0.82rem;
+  color: var(--white-dim);
+  margin-top: 4px;
+}
+
+/* Feedback replay sor */
+.lst-fb-replay { display: flex; justify-content: center; margin: 6px 0 2px; }
+
+/* ── Diktálás mód (V3 P2) ─────────────────────────── */
+.lst-dict-zone {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  margin-top: 6px;
+}
+.lst-dict-cat {
+  display: inline-block;
+  padding: 4px 14px;
+  background: rgba(231,76,60,0.1);
+  border: 1px solid rgba(231,76,60,0.3);
+  border-radius: 999px;
+  font-size: 0.78rem; font-weight: 600;
+  color: #f0a99f;
+  letter-spacing: 0.02em;
+}
+.lst-dict-input {
+  font-family: var(--font-body) !important;
+  font-size: 1.15rem !important;
+  letter-spacing: 0.05em;
+}
+.lst-dict-input::placeholder { color: var(--white-dim); opacity: 0.55; }
+.lst-dict-preview {
+  min-height: 32px;
+  font-family: var(--font-jp);
+  font-size: 1.4rem;
+  color: var(--gold);
+  letter-spacing: 0.04em;
+}
+.lst-dict-submit { margin: 4px auto 0; min-width: 220px; }
+
+/* ── Mora-diff vizualizáció ───────────────────────── */
+.lst-mora-diff {
+  margin: 6px 0;
+  padding: 14px 16px;
+  background: rgba(58, 50, 38, 0.04);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.lst-mora-row { display: flex; align-items: center; gap: 12px; }
+.lst-mora-label {
+  flex: 0 0 64px;
+  font-size: 0.72rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--white-dim);
+}
+.lst-mora-cells { display: flex; flex-wrap: wrap; gap: 6px; }
+.lst-mora-cell {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 40px; padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-jp); font-size: 1.15rem;
+  border: 1.5px solid transparent;
+}
+.lst-mora-cell.is-eq   { background: rgba(58, 50, 38, 0.07); color: var(--white); }
+.lst-mora-cell.is-ok   { background: rgba(46,196,182,0.12); border-color: var(--teal); color: var(--teal); }
+.lst-mora-cell.is-miss { background: rgba(243,156,18,0.14); border-color: var(--amber); color: #f3c97a; }
+.lst-mora-cell.is-sub,
+.lst-mora-cell.is-ins  {
+  background: rgba(192,57,43,0.14); border-color: var(--red);
+  color: #e58a80; text-decoration: line-through;
+}
+.lst-mora-cell.is-gap  {
+  background: transparent; border-color: var(--ink-border);
+  border-style: dashed; color: var(--white-dim);
+}
+
+/* Listening module mobil */
+@media (max-width: 720px) {
+  .lst-tier-row { grid-template-columns: 1fr; }
+  .lst-mode-row { grid-template-columns: 1fr; }
+  .lst-play-btn { padding: 16px 30px; font-size: 1rem; }
+  .lst-mora-label { flex-basis: 52px; }
+  .lst-dict-submit { width: 100%; }
+}
+
+
+/* ====================================================
+   ── STATISZTIKA OLDAL (V4) ─────────────────────────
+   stats.html — fül-sáv + Practice History (V4 P1).
+   ==================================================== */
+.stats-main { padding-top: calc(var(--header-h) + 40px); }
+.stats-hero { margin: 0 auto 24px; max-width: 1100px; }
+
+/* Fül-sáv */
+.stats-tabs {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  max-width: 1100px; margin: 0 auto 22px;
+}
+.stats-tab {
+  flex: 1 1 auto;
+  padding: 11px 16px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1.5px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  color: var(--white-dim);
+  font-family: var(--font-body); font-size: 0.86rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition);
+  white-space: nowrap;
+}
+.stats-tab:hover:not(:disabled) { color: var(--white); border-color: rgba(201,168,76,0.35); }
+.stats-tab.active {
+  background: rgba(201,168,76,0.1);
+  border-color: var(--gold);
+  color: var(--gold);
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+.stats-tab-locked { opacity: 0.45; cursor: not-allowed; }
+
+.stats-content { max-width: 1100px; margin: 0 auto; }
+
+/* Üres / hamarosan állapot */
+.stats-empty {
+  text-align: center;
+  padding: 48px 28px;
+  border-radius: var(--radius-lg);
+}
+.stats-empty-icon { font-size: 2.6rem; margin-bottom: 12px; }
+.stats-empty p { color: var(--white); margin: 6px 0; }
+.stats-empty-sub { color: var(--white-dim); font-size: 0.88rem; }
+.stats-empty .btn { margin-top: 16px; }
+
+/* History — összegző sáv */
+.sh-summary {
+  display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+  padding: 16px 22px; margin-bottom: 16px;
+  border-radius: var(--radius-md);
+}
+.sh-sum-stat { display: flex; flex-direction: column; }
+.sh-sum-num { font-size: 1.5rem; font-weight: 700; color: var(--gold); }
+.sh-sum-label {
+  font-size: 0.72rem; color: var(--white-dim);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.sh-clear {
+  margin-left: auto;
+  padding: 8px 16px;
+  background: rgba(192,57,43,0.08);
+  border: 1px solid rgba(192,57,43,0.35);
+  border-radius: 999px;
+  color: #e58a80;
+  font-family: var(--font-body); font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition);
+}
+.sh-clear:hover { background: rgba(192,57,43,0.16); }
+
+/* History — kör-lista */
+.sh-list { display: flex; flex-direction: column; gap: 8px; }
+.sh-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  flex-wrap: wrap;
+  padding: 13px 18px;
+  background: rgba(58, 50, 38, 0.04);
+  border: 1px solid var(--ink-border);
+  border-left: 3px solid var(--white-dim);
+  border-radius: var(--radius-sm);
+}
+.sh-row.sh-ok   { border-left-color: var(--teal); }
+.sh-row.sh-warn { border-left-color: var(--amber); }
+.sh-row.sh-bad  { border-left-color: var(--red-light); }
+.sh-main { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.sh-module { font-size: 0.98rem; font-weight: 700; color: var(--white); }
+.sh-mode {
+  font-size: 0.74rem; font-weight: 600;
+  padding: 2px 10px; border-radius: 999px;
+  background: rgba(58, 50, 38, 0.08); color: var(--white-dim);
+}
+.sh-date { font-size: 0.8rem; color: var(--white-dim); }
+.sh-stats { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.sh-score { font-size: 0.92rem; font-weight: 700; color: var(--white); }
+.sh-pct { font-size: 0.92rem; font-weight: 700; color: var(--gold); }
+.sh-dur { font-size: 0.8rem; color: var(--white-dim); }
+.sh-err {
+  font-size: 0.74rem; color: #f3c97a;
+  padding: 2px 10px; border-radius: 999px;
+  background: rgba(243,156,18,0.1);
+}
+
+@media (max-width: 720px) {
+  .stats-tab { flex-basis: calc(50% - 4px); font-size: 0.8rem; }
+  .sh-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .sh-summary { gap: 16px; }
+  .sh-clear { margin-left: 0; }
+}
+
+/* ── V4 P2 — Dashboard Overview (A) ─────────────── */
+.ov-top {
+  display: grid; grid-template-columns: 280px 1fr; gap: 14px;
+  margin-bottom: 14px;
+}
+.ov-ring-wrap {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; padding: 24px; border-radius: var(--radius-lg);
+}
+.ov-ring { position: relative; width: 200px; height: 200px; }
+.readiness-ring { width: 200px; height: 200px; display: block; }
+.ring-track { fill: none; stroke: rgba(58, 50, 38, 0.10); stroke-width: 14; }
+.ring-fill {
+  fill: none; stroke-width: 14; stroke-linecap: round;
+  transition: stroke-dashoffset 0.9s cubic-bezier(0.4,0,0.2,1);
+}
+.ring-hi  .ring-fill { stroke: var(--teal); }
+.ring-mid .ring-fill { stroke: var(--amber); }
+.ring-lo  .ring-fill { stroke: var(--red-light); }
+.ov-ring-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.ov-ring-num { font-size: 3.4rem; font-weight: 800; line-height: 1; color: var(--white); }
+.ov-ring-unit { font-size: 0.82rem; color: var(--white-dim); margin-top: 2px; }
+.ov-ring-caption { text-align: center; }
+.ov-ring-caption strong { display: block; font-size: 1rem; color: var(--white); }
+.ov-ring-caption span { font-size: 0.82rem; color: var(--gold); }
+
+.ov-comps { padding: 20px 22px; border-radius: var(--radius-lg); }
+.ov-comps-title {
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--white-dim); margin-bottom: 14px;
+}
+.ov-comp { margin-bottom: 14px; }
+.ov-comp:last-child { margin-bottom: 0; }
+.ov-comp-top { display: flex; justify-content: space-between; align-items: baseline; }
+.ov-comp-label { font-size: 0.9rem; font-weight: 600; color: var(--white); }
+.ov-comp-val { font-size: 0.9rem; font-weight: 700; color: var(--gold); }
+.ov-comp-bar {
+  height: 8px; margin: 6px 0 3px;
+  background: rgba(58, 50, 38, 0.08); border-radius: 999px; overflow: hidden;
+}
+.ov-comp-fill {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  transition: width 0.8s ease;
+}
+.ov-comp-hint { font-size: 0.74rem; color: var(--white-dim); }
+
+.ov-vitals {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  margin-bottom: 14px;
+}
+.ov-vital {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 18px 12px; border-radius: var(--radius-md); text-align: center;
+}
+.ov-vital-icon { font-size: 1.5rem; }
+.ov-vital-num { font-size: 1.5rem; font-weight: 800; color: var(--gold); }
+.ov-vital-label {
+  font-size: 0.72rem; color: var(--white-dim);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.ov-status {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 22px; border-radius: var(--radius-md);
+}
+.ov-status-icon { font-size: 1.6rem; flex-shrink: 0; }
+.ov-status-text { font-size: 0.95rem; color: var(--white); margin: 0; }
+
+/* ── V4 P2 — Activity Engine (B) ────────────────── */
+.act-streak {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 14px;
+  padding: 18px 24px; margin-bottom: 14px; border-radius: var(--radius-md);
+}
+.act-streak-main { display: flex; align-items: center; gap: 14px; }
+.act-streak-flame { font-size: 2.4rem; }
+.act-streak-box { display: flex; flex-direction: column; }
+.act-streak-num { font-size: 2rem; font-weight: 800; color: var(--gold); line-height: 1; }
+.act-streak-label { font-size: 0.78rem; color: var(--white-dim); }
+.act-streak-best { font-size: 0.88rem; color: var(--white-dim); }
+.act-streak-best strong { color: var(--white); }
+
+.act-card { padding: 20px 22px; margin-bottom: 14px; border-radius: var(--radius-md); }
+.act-card-title {
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--white-dim); margin-bottom: 14px;
+}
+
+/* Heatmap */
+.heatmap { display: flex; flex-direction: column; gap: 4px; overflow-x: auto; }
+.hm-row { display: flex; gap: 4px; align-items: center; }
+.hm-dow { flex: 0 0 24px; font-size: 0.66rem; color: var(--white-dim); text-align: center; }
+.hm-cell {
+  width: 15px; height: 15px; border-radius: 3px; flex-shrink: 0;
+  background: rgba(58, 50, 38, 0.07);
+}
+.hm-l0 { background: rgba(58, 50, 38, 0.07); }
+.hm-l1 { background: rgba(46,196,182,0.28); }
+.hm-l2 { background: rgba(46,196,182,0.5); }
+.hm-l3 { background: rgba(46,196,182,0.72); }
+.hm-l4 { background: var(--teal); }
+.hm-future { opacity: 0.25; }
+.hm-legend {
+  display: flex; align-items: center; gap: 4px;
+  margin-top: 12px; justify-content: flex-end;
+}
+.hm-leg-txt { font-size: 0.7rem; color: var(--white-dim); }
+
+/* Napszak bar chart */
+.tod-chart { display: flex; align-items: flex-end; gap: 10px; height: 170px; }
+.tod-col { flex: 1; display: flex; flex-direction: column; align-items: center; height: 100%; }
+.tod-bar-wrap {
+  flex: 1; width: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+}
+.tod-bar-val { font-size: 0.78rem; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.tod-bar {
+  width: 58%; min-height: 4px;
+  background: linear-gradient(180deg, var(--gold), rgba(201,168,76,0.32));
+  border-radius: 6px 6px 0 0;
+  transition: height 0.7s ease;
+}
+.tod-label { font-size: 0.78rem; color: var(--white); margin-top: 8px; }
+.tod-acc { font-size: 0.72rem; color: var(--white-dim); }
+.act-best {
+  margin-top: 14px; padding: 12px 16px;
+  background: rgba(243,156,18,0.08); border: 1px solid rgba(243,156,18,0.3);
+  border-radius: var(--radius-sm);
+  font-size: 0.86rem; color: #f3c97a;
+}
+
+@media (max-width: 720px) {
+  .ov-top { grid-template-columns: 1fr; }
+  .ov-vitals { grid-template-columns: repeat(2, 1fr); }
+  .hm-cell { width: 12px; height: 12px; }
+}
+
+/* ── V4 P3 — Module Radar (C) ───────────────────── */
+.radar-wrap { display: flex; justify-content: center; }
+.radar-svg { width: 100%; max-width: 380px; height: auto; }
+.radar-grid { fill: none; stroke: rgba(58, 50, 38, 0.10); stroke-width: 1; }
+.radar-axis { stroke: rgba(58, 50, 38, 0.10); stroke-width: 1; }
+.radar-data {
+  fill: rgba(201,168,76,0.18); stroke: var(--gold);
+  stroke-width: 2; stroke-linejoin: round;
+}
+.radar-dot { fill: var(--gold); }
+.radar-label { fill: var(--white); font-size: 12px; font-weight: 600; font-family: var(--font-body); }
+.radar-label-val { fill: var(--gold); font-size: 11px; font-weight: 700; font-family: var(--font-body); }
+
+.radar-row {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 11px 14px; margin-bottom: 8px;
+  background: rgba(58, 50, 38, 0.04);
+  border: 1px solid var(--ink-border); border-radius: var(--radius-sm);
+  cursor: pointer; transition: var(--transition); font-family: var(--font-body);
+}
+.radar-row:last-child { margin-bottom: 0; }
+.radar-row:hover { border-color: rgba(201,168,76,0.4); background: rgba(201,168,76,0.05); }
+.radar-row-name { flex: 0 0 130px; font-size: 0.9rem; font-weight: 600; color: var(--white); text-align: left; }
+.radar-row-bar { flex: 1; height: 8px; background: rgba(58, 50, 38, 0.08); border-radius: 999px; overflow: hidden; }
+.radar-row-fill { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--teal), var(--gold)); }
+.radar-row-val { flex: 0 0 32px; text-align: right; font-weight: 700; color: var(--gold); font-size: 0.9rem; }
+.radar-row-arrow { flex: 0 0 16px; color: var(--white-dim); }
+
+/* Modul drill-down */
+.md-back {
+  display: inline-block; margin-bottom: 12px;
+  padding: 7px 16px; background: rgba(58, 50, 38, 0.055);
+  border: 1px solid var(--ink-border); border-radius: 999px;
+  color: var(--white-dim); font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 600; cursor: pointer; transition: var(--transition);
+}
+.md-back:hover { color: var(--white); border-color: rgba(201,168,76,0.4); }
+.md-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  padding: 16px 22px; margin-bottom: 14px; border-radius: var(--radius-md);
+}
+.md-title { margin: 0; font-size: 1.2rem; color: var(--white); }
+.md-head-stats { display: flex; gap: 18px; flex-wrap: wrap; }
+.md-head-stats span { font-size: 0.85rem; color: var(--white-dim); }
+.md-head-stats strong { color: var(--gold); font-size: 1rem; }
+
+.md-mode-row, .md-sub-row { display: flex; align-items: center; gap: 12px; margin-bottom: 9px; }
+.md-mode-row:last-child, .md-sub-row:last-child { margin-bottom: 0; }
+.md-mode-name, .md-sub-label {
+  flex: 0 0 120px; font-size: 0.86rem; color: var(--white); font-weight: 600;
+}
+.md-mode-bar, .md-sub-bar {
+  flex: 1; height: 8px; background: rgba(58, 50, 38, 0.08);
+  border-radius: 999px; overflow: hidden;
+}
+.md-mode-fill { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--teal), var(--gold)); }
+.md-sub-fill { display: block; height: 100%; border-radius: 999px; }
+.md-sub-fill.sb-ok   { background: var(--teal); }
+.md-sub-fill.sb-warn { background: var(--amber); }
+.md-sub-fill.sb-bad  { background: var(--red-light); }
+.md-mode-val, .md-sub-val {
+  flex: 0 0 118px; text-align: right; font-size: 0.82rem;
+  color: var(--white-dim); font-weight: 600;
+}
+.md-sub-val small { color: var(--white-dim); font-weight: 400; }
+.md-sub-count { margin-left: auto; font-size: 0.84rem; color: #f3c97a; font-weight: 600; }
+.md-sub { margin-bottom: 18px; }
+.md-sub:last-child { margin-bottom: 0; }
+.md-sub-title { font-size: 0.8rem; font-weight: 700; color: var(--gold); margin-bottom: 10px; }
+.md-empty { color: var(--white-dim); font-size: 0.88rem; margin: 4px 0; }
+
+/* ── V4 P3 — Analytics (F) ──────────────────────── */
+.an-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  margin-bottom: 14px;
+}
+.an-stat {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 16px 10px; border-radius: var(--radius-md); text-align: center;
+}
+.an-stat-num { font-size: 1.35rem; font-weight: 800; color: var(--gold); }
+.an-stat-label {
+  font-size: 0.7rem; color: var(--white-dim);
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.line-svg { width: 100%; height: auto; display: block; }
+.ln-grid { stroke: rgba(58, 50, 38, 0.10); stroke-width: 1; }
+.ln-axis { fill: var(--white-dim); font-size: 11px; font-family: var(--font-body); }
+.ln-area { fill: rgba(46,196,182,0.12); stroke: none; }
+.ln-line { fill: none; stroke: var(--teal); stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
+.ln-dot { fill: var(--gold); }
+
+@media (max-width: 720px) {
+  .an-stats { grid-template-columns: repeat(2, 1fr); }
+  .radar-row-name { flex-basis: 96px; }
+  .md-mode-name, .md-sub-label { flex-basis: 88px; }
+}
+
+/* ── V4 P4 — Blind Spot Detector (D) ────────────── */
+.bs-primary {
+  padding: 20px 24px; margin-bottom: 14px; border-radius: var(--radius-md);
+  border-left: 3px solid var(--gold);
+}
+.bs-primary-label {
+  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--gold); margin-bottom: 8px;
+}
+.bs-primary-text { font-size: 0.96rem; color: var(--white); margin-bottom: 14px; }
+.bs-primary-btn { width: auto; }
+
+.bs-list { padding: 20px 22px; border-radius: var(--radius-md); }
+.bs-card {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 0; border-bottom: 1px solid var(--ink-border);
+}
+.bs-card:last-child { border-bottom: none; padding-bottom: 0; }
+.bs-icon { font-size: 1.5rem; flex-shrink: 0; line-height: 1.3; }
+.bs-body { flex: 1; min-width: 0; }
+.bs-title { font-size: 0.94rem; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+.bs-text { font-size: 0.85rem; color: var(--white-dim); line-height: 1.5; }
+.bs-go {
+  flex-shrink: 0; align-self: center;
+  padding: 8px 14px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: 999px;
+  color: var(--gold); font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 600;
+  cursor: pointer; transition: var(--transition); white-space: nowrap;
+}
+.bs-go:hover { background: rgba(201,168,76,0.2); }
+
+/* Célzott gyakorlás banner (modul-oldalakon) */
+.focus-banner {
+  display: flex; align-items: center; gap: 12px;
+  max-width: 1100px; margin: 0 auto 18px;
+  padding: 12px 20px;
+  background: rgba(201,168,76,0.1);
+  border: 1px solid rgba(201,168,76,0.4);
+  border-radius: var(--radius-md);
+  box-shadow: 0 0 18px var(--gold-glow);
+}
+.focus-banner-icon { font-size: 1.3rem; flex-shrink: 0; }
+.focus-banner-text { flex: 1; font-size: 0.9rem; color: var(--white); }
+.focus-banner-text strong { color: var(--gold); }
+.focus-banner-x {
+  flex-shrink: 0; width: 26px; height: 26px;
+  background: rgba(58, 50, 38, 0.08);
+  border: 1px solid var(--ink-border); border-radius: 50%;
+  color: var(--white-dim); cursor: pointer;
+  font-size: 0.8rem; transition: var(--transition);
+}
+.focus-banner-x:hover { color: var(--white); border-color: rgba(58, 50, 38, 0.32); }
+
+
+/* ====================================================
+   GRAMMAR PATTERNS modul (V5 P1) ──────────────────
+   Túlnyomórészt a cj-* / pr-* / dt-* tokeneket
+   használja. Itt csak a sentence + cloze + SRS-bar
+   specifikus stílusok.
+   ==================================================== */
+
+.grm-hero { /* a dt-hero mintát követi, nincs override */ }
+
+/* Lobby — JLPT csoport kis chip-stílus */
+.grm-jlpt-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.grm-jlpt-btn { min-width: 92px; }
+.grm-jlpt-btn.is-empty { opacity: 0.4; cursor: not-allowed; }
+.grm-jlpt-tag {
+  background: rgba(46,196,182,0.10);
+  border: 1px solid rgba(46,196,182,0.4);
+  color: var(--teal);
+}
+.grm-pattern-tag {
+  background: rgba(201,168,76,0.10);
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold);
+  font-family: var(--font-jp);
+}
+
+/* Mondat-megjelenítés (ruby-val) */
+.grm-prompt { gap: 14px; }
+.grm-sentence {
+  font-family: var(--font-jp);
+  font-size: 1.7rem;
+  line-height: 2.2;
+  color: var(--white);
+  text-align: center;
+  padding: 8px 14px;
+  letter-spacing: 0.5px;
+}
+.grm-sentence ruby { ruby-position: over; }
+.grm-sentence rt {
+  font-family: var(--font-jp);
+  font-size: 0.55em;
+  color: var(--white-dim);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+.grm-sentence-romaji {
+  font-size: 0.85rem;
+  color: var(--white-dim);
+  font-style: italic;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+.grm-sentence-hu {
+  font-size: 1rem;
+  color: var(--white-dim);
+  text-align: center;
+}
+
+/* Cloze blank slot */
+.grm-cloze-sentence .grm-blank,
+.grm-blank {
+  display: inline-block;
+  min-width: 60px;
+  padding: 0 8px;
+  margin: 0 4px;
+  background: rgba(201,168,76,0.10);
+  border-bottom: 2px dashed var(--gold);
+  border-radius: 4px;
+  color: var(--gold);
+  font-family: var(--font-jp);
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Recognition opciók: pattern label nagyobb + summary lent */
+.grm-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.grm-opt {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 6px; text-align: left;
+}
+.grm-opt-label {
+  font-family: var(--font-jp);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--white);
+}
+.grm-opt-summary {
+  font-style: normal;
+  font-size: 0.82rem;
+  color: var(--white-dim);
+  line-height: 1.4;
+}
+.grm-opt.correct .grm-opt-label,
+.grm-opt.reveal-correct .grm-opt-label { color: var(--teal); text-shadow: 0 0 8px var(--teal-glow); }
+.grm-opt.wrong .grm-opt-label { color: var(--red-light); text-shadow: 0 0 8px var(--red-glow); }
+
+/* SRS box-bar a profile dashboardban */
+.grm-srs-row {
+  display: grid;
+  grid-template-columns: 110px 1fr 40px;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+.grm-srs-label { color: var(--white-dim); }
+.grm-srs-label em { color: rgba(245,243,238,0.45); font-style: italic; font-size: 0.85em; }
+.grm-srs-bar {
+  height: 8px;
+  background: rgba(58, 50, 38, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.grm-srs-fill {
+  display: block; height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  border-radius: 4px;
+}
+.grm-srs-n { color: var(--white); font-weight: 600; text-align: right; }
+
+@media (max-width: 768px) {
+  .grm-sentence { font-size: 1.35rem; line-height: 2; }
+  .grm-options { grid-template-columns: 1fr; }
+  .grm-srs-row { grid-template-columns: 90px 1fr 36px; font-size: 0.78rem; }
+}
+
+@media (max-width: 720px) {
+  .bs-card { flex-wrap: wrap; }
+  .bs-go { align-self: flex-start; }
+}
+
+
+/* ====================================================
+   V5 P2 — Verb-engine modul kategória-chip ──────────
+   (module.html?id=arimasu-imasu lobby — Phase 2)
+   ==================================================== */
+
+.ml-cat-row .ml-filter-buttons { gap: 10px; flex-wrap: wrap; }
+
+.ml-cat-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(58, 50, 38, 0.055);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  color: var(--white-dim);
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.ml-cat-btn:hover:not(:disabled) {
+  border-color: rgba(46,196,182,0.5);
+  background: rgba(46,196,182,0.06);
+  color: var(--white);
+}
+.ml-cat-btn.active {
+  background: rgba(46,196,182,0.12);
+  border-color: var(--teal);
+  color: var(--teal);
+  box-shadow: 0 0 14px var(--teal-glow);
+}
+.ml-cat-btn-locked,
+.ml-cat-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: rgba(58, 50, 38, 0.025);
+}
+.ml-cat-btn .ml-fb-emoji { font-size: 1.1rem; }
+.ml-cat-btn .ml-fb-lock { font-size: 0.85em; opacity: 0.7; margin-left: 4px; }
+.ml-cat-note {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(243,156,18,0.06);
+  border-left: 3px solid var(--amber);
+  border-radius: 4px;
+  font-size: 0.82rem;
+  color: var(--white-dim);
+}
+.ml-cat-note strong { color: var(--amber); }
+
+
+/* ====================================================
+   V5 P3b — SRS box-chart (stats.html Analytics fül) ─
+   ==================================================== */
+
+.act-card-sub {
+  font-size: 0.82rem;
+  color: var(--white-dim);
+  margin-top: -4px;
+  margin-bottom: 16px;
+}
+.act-card-sub strong { color: var(--white); font-weight: 600; }
+
+.srs-chart {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+  align-items: end;
+  min-height: 180px;
+  padding: 10px 4px 0;
+}
+.srs-box-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: help;
+}
+.srs-box-bar-wrap {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  border-bottom: 1px solid var(--ink-border);
+}
+.srs-box-bar {
+  display: block;
+  width: 60%;
+  min-height: 4px;
+  border-radius: 6px 6px 0 0;
+  transition: var(--transition);
+}
+.srs-box-bar:hover { filter: brightness(1.2); }
+.srs-box-tone-fresh { background: linear-gradient(180deg, rgba(243,156,18,0.85), rgba(243,156,18,0.4)); box-shadow: 0 0 12px rgba(243,156,18,0.35); }
+.srs-box-tone-short { background: linear-gradient(180deg, rgba(46,196,182,0.85), rgba(46,196,182,0.4)); box-shadow: 0 0 12px var(--teal-glow); }
+.srs-box-tone-mid   { background: linear-gradient(180deg, rgba(201,168,76,0.85), rgba(201,168,76,0.4)); box-shadow: 0 0 12px var(--gold-glow); }
+.srs-box-tone-long  { background: linear-gradient(180deg, rgba(39,174,96,0.85), rgba(39,174,96,0.4)); box-shadow: 0 0 12px rgba(39,174,96,0.35); }
+.srs-box-n {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+}
+.srs-box-label {
+  font-size: 0.7rem;
+  color: var(--white-dim);
+  text-align: center;
+  line-height: 1.3;
+}
+.srs-box-label em { color: rgba(245,243,238,0.45); font-style: italic; font-size: 0.95em; }
+
+@media (max-width: 720px) {
+  .srs-chart { gap: 8px; min-height: 140px; }
+  .srs-box-bar-wrap { height: 90px; }
+  .srs-box-bar { width: 80%; }
+  .srs-box-label { font-size: 0.62rem; }
+  .srs-box-n { font-size: 0.9rem; }
+}
+
+
+/* ====================================================
+   V5 P4 — Grammar Translate mód (frázis-tálca) ──────
+   ==================================================== */
+
+.grm-trans-hu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 18px;
+  background: rgba(46,196,182,0.06);
+  border: 1px solid rgba(46,196,182,0.2);
+  border-radius: var(--radius-md);
+}
+.grm-trans-hu-label {
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.grm-trans-hu-text {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--white);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.grm-trans-section-label {
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  margin: 18px 0 10px;
+}
+.grm-trans-section-label small {
+  text-transform: none;
+  letter-spacing: 0.3px;
+  font-weight: 400;
+  color: rgba(245,243,238,0.45);
+  font-style: italic;
+}
+
+.grm-trans-answer,
+.grm-trans-tray {
+  min-height: 72px;
+  padding: 14px;
+  background: rgba(58, 50, 38, 0.04);
+  border: 2px dashed var(--ink-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  transition: var(--transition);
+}
+.grm-trans-answer {
+  border-color: rgba(201,168,76,0.35);
+  background: rgba(201,168,76,0.04);
+}
+.grm-trans-answer.drag-over,
+.grm-trans-tray.drag-over {
+  background: rgba(46,196,182,0.10);
+  border-color: var(--teal);
+}
+.grm-trans-empty {
+  color: rgba(245,243,238,0.4);
+  font-style: italic;
+  font-size: 0.88rem;
+  padding: 4px 8px;
+}
+
+.grm-trans-tok {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(58, 50, 38, 0.08);
+  border: 1px solid var(--ink-border);
+  border-radius: var(--radius-md);
+  color: var(--white);
+  font-family: var(--font-jp);
+  font-size: 1.15rem;
+  font-weight: 500;
+  cursor: grab;
+  transition: var(--transition);
+  user-select: none;
+}
+.grm-trans-tok:hover:not(:disabled) {
+  background: rgba(46,196,182,0.10);
+  border-color: var(--teal);
+  transform: translateY(-1px);
+}
+.grm-trans-tok:active { cursor: grabbing; }
+.grm-trans-tok.dragging { opacity: 0.4; }
+.grm-trans-tok.correct {
+  background: rgba(46,196,182,0.15);
+  border-color: var(--teal);
+  color: var(--teal);
+  box-shadow: 0 0 12px var(--teal-glow);
+}
+.grm-trans-tok.wrong {
+  background: rgba(192,57,43,0.15);
+  border-color: var(--red);
+  color: var(--red-light);
+}
+.grm-trans-tok:disabled { cursor: default; }
+.grm-trans-tok-jp { font-family: var(--font-jp); }
+
+@media (max-width: 720px) {
+  .grm-trans-hu-text { font-size: 1.1rem; }
+  .grm-trans-tok { padding: 8px 12px; font-size: 1rem; }
+  .grm-trans-answer, .grm-trans-tray { min-height: 60px; padding: 10px; }
+}
+
+
+/* ====================================================
+   V6 — Hallás Pro mód (mondat-szintű listening) ─────
+   ==================================================== */
+
+.lst-pro-eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.lst-pro-tag {
+  /* gold akcent — a Pro mód kiemelése a meglévő palettán belül */
+  background: rgba(201,168,76,0.10);
+  border: 1px solid rgba(201,168,76,0.4);
+  color: var(--gold);
+}
+
+.lst-pro-hu {
+  /* a .grm-trans-hu mintát követi, csak a margin különbözik */
+  margin-bottom: 18px;
+}
+.lst-pro-hu .grm-trans-hu-label {
+  color: rgba(46,196,182,0.85);
+}
+
+.lst-pro-input {
+  /* hosszabb input mondat-méretre */
+  font-size: 1.05rem;
+}
+
+@media (max-width: 720px) {
+  .lst-pro-eyebrow { gap: 6px; }
+  .lst-pro-input { font-size: 0.95rem; }
+}
+
+
+/* ====================================================
+   V7 P1 — Production modul (HU→JP free input) ───────
+   emil-design-eng konzultáció szerint:
+   - 5-szintű feedback tone (perfect/close/near/far/wrong)
+   - Token-szintű háttér + karakter-szintű inline diff
+   - Anti-frustration vizuális kódolás
+   ==================================================== */
+
+.prod-hero { /* .dt-hero mintát követi, nincs override */ }
+
+.prod-eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.prod-tag {
+  /* Production = "advanced mode" jelölése — red soft akcent (legnehezebb mód) */
+  background: rgba(192,57,43,0.10);
+  border: 1px solid rgba(192,57,43,0.35);
+  color: var(--red-light, #e57266);
+}
+
+.prod-hu {
+  margin-bottom: 18px;
+}
+
+.prod-input-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.prod-input {
+  font-family: var(--font-jp);
+  font-size: 1.15rem;
+  line-height: 1.6;
+  min-height: 88px;
+  resize: vertical;
+  padding: 14px 16px;
+}
+.prod-preview {
+  min-height: 1.4em;
+  padding: 4px 16px;
+  font-family: var(--font-jp);
+  font-size: 0.92rem;
+  color: rgba(46,196,182,0.7);
+  font-style: italic;
+  letter-spacing: 0.3px;
+}
+.prod-preview:empty { display: none; }
+
+/* ── Feedback 5-szintű tone (a meglévő pr-fb-correct/wrong-ot is rátartja) ── */
+.pr-fb-perfect {
+  border-color: rgba(46,196,182,0.5) !important;
+  background: linear-gradient(135deg, rgba(46,196,182,0.10), rgba(46,196,182,0.04));
+}
+.pr-fb-close {
+  border-color: rgba(46,196,182,0.4) !important;
+  background: linear-gradient(135deg, rgba(46,196,182,0.06), rgba(243,156,18,0.04));
+}
+.pr-fb-near {
+  border-color: rgba(243,156,18,0.4) !important;
+  background: rgba(243,156,18,0.06);
+}
+.pr-fb-far {
+  border-color: rgba(243,156,18,0.35) !important;
+  background: linear-gradient(135deg, rgba(243,156,18,0.04), rgba(192,57,43,0.04));
+}
+/* pr-fb-wrong változatlan (a meglévő piros) */
+
+.prod-fb-points {
+  margin-left: auto;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gold);
+  padding: 2px 10px;
+  background: rgba(201,168,76,0.10);
+  border: 1px solid rgba(201,168,76,0.3);
+  border-radius: 999px;
+}
+
+/* ── Token-szintű diff ── */
+.prod-diff-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px 0;
+}
+.prod-diff-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.prod-diff-label {
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  padding-top: 8px;
+  min-width: 50px;
+}
+.prod-diff-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 1;
+}
+
+.prod-tok {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-jp);
+  font-size: 1.05rem;
+  border: 1px solid transparent;
+  transition: var(--transition);
+}
+.prod-tok-jp { font-family: var(--font-jp); }
+
+.prod-tok-correct {
+  background: rgba(46,196,182,0.10);
+  border-color: rgba(46,196,182,0.35);
+  color: var(--teal);
+}
+.prod-tok-misplaced {
+  background: rgba(243,156,18,0.10);
+  border-color: rgba(243,156,18,0.4);
+  border-style: dashed;
+  color: var(--amber, #f39c12);
+}
+.prod-tok-typo {
+  background: rgba(243,156,18,0.08);
+  border-color: rgba(243,156,18,0.35);
+  color: var(--white);
+}
+.prod-tok-wrong {
+  background: rgba(192,57,43,0.10);
+  border-color: rgba(192,57,43,0.3);
+  color: var(--red-light, #e57266);
+}
+.prod-tok-missing {
+  background: rgba(58, 50, 38, 0.055);
+  border-color: rgba(58, 50, 38, 0.18);
+  border-style: dashed;
+  color: var(--white-dim);
+  opacity: 0.75;
+}
+
+.prod-tok-charfix {
+  font-family: 'SF Mono', 'Cascadia Mono', 'Consolas', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.2px;
+  color: var(--white-dim);
+}
+.prod-tok-charfix strong { color: var(--teal); font-weight: 600; }
+
+.prod-tok-missing-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 6px;
+  border-top: 1px dashed rgba(58, 50, 38, 0.10);
+}
+.prod-tok-missing-label {
+  font-size: 0.78rem;
+  color: var(--white-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.prod-fb-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.prod-fb-listen {
+  flex-shrink: 0;
+}
+
+@media (max-width: 720px) {
+  .prod-input { font-size: 1.02rem; min-height: 72px; }
+  .prod-tok { font-size: 0.95rem; padding: 4px 10px; }
+  .prod-diff-tokens { gap: 4px; }
+  .prod-fb-points { font-size: 0.78rem; }
+}
+
+/* ════════════════════════════════════════════════════════
+   ZEN POLISH — BLOKK 2 · Univerzális mikro-interakciók
+   (Emil Kowalski design philosophy)
+
+   Szabályok:
+   1. KIZÁRÓLAG ease-out görbék — az ease-in lomhává teszi az appot
+   2. Gyors tranzíciók (120–200ms), NEM 400ms+ "lágy" animációk
+   3. Minden interaktív elem :active scale(0.97) — "kézzelfogható" feed
+   4. Hover lift visszafogott (-2px max), NEM -8px ugrás
+   5. Focus-ring tiszta sumi vonal, NEM blur-shadow
+   ════════════════════════════════════════════════════════ */
+
+/* ── Univerzális interaktív elem tranzíció override ───────
+   A korábbi 0.4s cubic-bezier sok komponensen 400ms-ig tartott —
+   ez UI-érzetnek lomha. Itt felülírjuk minden gombnál és kártyánál
+   160ms ease-out-ra. A modul-specifikus selectorok már kapnak
+   gyorsabb átmeneteket. */
+.btn,
+.btn-home,
+.btn-primary, .btn-ghost, .btn-outline,
+.module-card,
+.glass-card,
+.glass-panel,
+.dont-know-btn,
+.round-exit,
+.helpers-btn,
+.nav-link,
+.mobile-menu-btn,
+.mobile-nav-link,
+input[type="text"], input[type="email"], input[type="password"], textarea,
+select,
+[role="button"],
+[data-clickable] {
+  transition:
+    background-color 160ms ease-out,
+    color            160ms ease-out,
+    border-color     160ms ease-out,
+    box-shadow       160ms ease-out,
+    transform        100ms ease-out,
+    opacity          160ms ease-out !important;
+}
+
+/* ── Univerzális :active "press" feedback ─────────────────
+   Emil-szabály: a felhasználó érezze a kattintást — a kis scale
+   az UI "kézzelfogható" érzetét adja. 100ms ease-out gyors, de
+   nem riasztó. A drag-elemekre külön szabályok (lentebb). */
+button:not(:disabled):active,
+.btn:not(:disabled):active,
+.btn-home:not(:disabled):active,
+.dont-know-btn:not(:disabled):active,
+.round-exit:not(:disabled):active,
+.helpers-btn:not(:disabled):active,
+.module-card:not(.module-locked):active,
+.glass-card.module-available:active,
+[role="button"]:not([aria-disabled="true"]):active {
+  transform: scale(0.97);
+  transition-duration: 80ms;
+}
+
+/* Linkek és nav-elemek aktív állapot — csak színváltás, scale nélkül
+   (a link nem kattintható "tárgy", inkább szöveg-pointer) */
+a:active, .nav-link:active, .mobile-nav-link:active {
+  color: var(--matcha-deep);
+}
+
+/* ── Focus-ring polish ──────────────────────────────────
+   A böngésző default outline csúnya kék — cseréljük matcha-ringre,
+   ami minden felületen jól látszik. Csak keyboard-fókusznál (mouse-
+   nál NEM) a :focus-visible pseudo-class miatt. */
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--matcha);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+  transition: outline-color 100ms ease-out;
+}
+/* Input + textarea fókusz: matcha border + subtílis matcha-soft glow */
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: none;
+  border-color: var(--matcha) !important;
+  box-shadow: 0 0 0 3px var(--matcha-soft) !important;
+}
+
+/* ── Drag & drop kurzor + scale ─────────────────────────
+   Mondat-Puzzle / Partikula-kitöltő / Translate frázis-tokenek:
+   a felhasználó tudja, hogy ezek "megfoghatóak". */
+.pp-tok-particle[draggable="true"],
+.pp-tok-word[draggable="true"],
+.grm-trans-tok[draggable="true"],
+[draggable="true"] {
+  cursor: grab;
+  transition: transform 100ms ease-out, box-shadow 100ms ease-out;
+}
+.pp-tok-particle[draggable="true"]:active,
+.pp-tok-word[draggable="true"]:active,
+.grm-trans-tok[draggable="true"]:active,
+[draggable="true"]:active {
+  cursor: grabbing;
+  transform: scale(1.04);
+  box-shadow: var(--shadow-paper-2);
+}
+
+/* ── Hover lift szabály (max -2px, NEM -8px) ─────────────
+   A landing module-card hover-jét már a Blokk 1.B-ben -2px-re
+   redukáltuk. Itt a többi kártya-osztályt is finomítjuk:
+   subtle lift, nem ugrik. */
+.cj-card:hover, .grm-card:hover, .dt-card:hover,
+.lst-card:hover, .pp-card:hover, .prod-card:hover {
+  transform: translateY(-1px);
+  transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+}
+
+/* ── Disabled state érzet — visszafogott opacitás, NEM tiltó piros ── */
+button:disabled, .btn:disabled, input:disabled, textarea:disabled,
+[aria-disabled="true"], .dont-know-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: saturate(0.7);
+}
+
+/* ── Universal reduced motion respect ────────────────────
+   Aki a rendszer-beállításban kérte: animációk csökkentve.
+   Itt minden saját animáció lerövidül 1ms-re (gyakorlatilag eltűnik). */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════════
+   V8 — 3D FLASHCARD RENDSZER
+   Univerzális "szótár/megértés" mód: kártya-flip + swipe
+   (Számláló/Ragozó/Melléknév/Datetime modulokban)
+   ════════════════════════════════════════════════════════ */
+
+.nc-fc-container {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding: 8px 0;
+}
+
+/* ── Szűrő-sáv felül (kategória chip-ek) ─────────────── */
+.nc-fc-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+.nc-fc-filter-label {
+  font-size: 0.74rem;
+  color: var(--sumi-faint);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-right: 8px;
+}
+.nc-fc-chip {
+  background: var(--washi-soft);
+  border: 1px solid var(--washi-edge);
+  color: var(--sumi-soft);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 160ms ease-out, color 160ms ease-out, border-color 160ms ease-out, transform 80ms ease-out;
+}
+.nc-fc-chip:hover {
+  border-color: var(--matcha);
+  color: var(--sumi);
+}
+.nc-fc-chip.active {
+  background: var(--matcha);
+  color: var(--washi);
+  border-color: var(--matcha-deep);
+}
+.nc-fc-chip:active { transform: scale(0.96); }
+
+/* ── Deck-info (deck-pozíció) ────────────────────────── */
+.nc-fc-info {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--sumi-soft);
+  font-weight: 500;
+}
+.nc-fc-info strong { color: var(--matcha-deep); font-weight: 700; }
+
+/* ── Deck (a kártya-tartó) ──────────────────────────── */
+.nc-fc-deck {
+  position: relative;
+  width: 100%;
+  height: 380px;
+  perspective: 1400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* a swipe gesture-hez */
+  touch-action: pan-y;
+  user-select: none;
+}
+
+/* ── Kártya — 3D flip wrapper ───────────────────────── */
+.nc-fc-card {
+  position: relative;
+  width: min(100%, 460px);
+  height: 340px;
+  cursor: grab;
+  transform-style: preserve-3d;
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.nc-fc-card.flipped {
+  transform: rotateY(180deg);
+}
+.nc-fc-card:active { cursor: grabbing; }
+
+/* ── Front + Back lapok ──────────────────────────────── */
+.nc-fc-face {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  box-shadow: var(--shadow-paper-3);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.nc-fc-back {
+  transform: rotateY(180deg);
+  background: var(--washi-soft);
+}
+
+/* ── Card-content (front) ───────────────────────────── */
+.nc-fc-eyebrow {
+  font-size: 0.7rem;
+  color: var(--sumi-faint);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.nc-fc-jp {
+  font-family: var(--font-jp);
+  font-size: clamp(2.5rem, 6vw, 3.6rem);
+  font-weight: 500;
+  color: var(--sumi);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.nc-fc-sub {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: var(--sumi-soft);
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.nc-fc-romaji {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--sumi-faint);
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+.nc-fc-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  color: var(--sumi-faint);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+/* ── Emoji-front layout (Számláló stílus): nagy emoji + kis JP + kis romaji ── */
+.nc-fc-emoji {
+  font-size: clamp(5rem, 14vw, 7.5rem);
+  line-height: 1;
+  margin: 8px 0 22px;
+  user-select: none;
+  /* a font-family emoji-rendszerre vált — biztosabb cross-platform */
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla",sans-serif;
+}
+.nc-fc-jp-small {
+  font-family: var(--font-jp);
+  font-size: 1.4rem;
+  font-weight: 500;
+  color: var(--sumi);
+  margin-bottom: 6px;
+  letter-spacing: 0.01em;
+}
+.nc-fc-romaji-small {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--sumi-faint);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+@media (max-width: 720px) {
+  .nc-fc-emoji { font-size: 4.6rem; margin: 4px 0 16px; }
+  .nc-fc-jp-small { font-size: 1.2rem; }
+}
+
+/* ── Card-content (back) ────────────────────────────── */
+.nc-fc-back-eyebrow {
+  font-size: 0.7rem;
+  color: var(--matcha-deep);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.nc-fc-meaning {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 500;
+  color: var(--sumi);
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+.nc-fc-example-jp {
+  font-family: var(--font-jp);
+  font-size: 1.1rem;
+  color: var(--sumi-soft);
+  margin-bottom: 4px;
+}
+.nc-fc-example-romaji {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--sumi-faint);
+  font-style: italic;
+  margin-bottom: 4px;
+}
+.nc-fc-example-hu {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--sumi-soft);
+}
+.nc-fc-meta {
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.nc-fc-meta-chip {
+  background: var(--matcha-soft);
+  color: var(--matcha-deep);
+  border: 1px solid rgba(122, 139, 79, 0.30);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* ── Swipe-feedback: a kártya színe a húzás során ───── */
+.nc-fc-card.swipe-right { box-shadow: 0 0 0 3px var(--matcha), var(--shadow-paper-3); }
+.nc-fc-card.swipe-left  { box-shadow: 0 0 0 3px var(--vermilion), var(--shadow-paper-3); }
+
+/* ── Actions (előző + nem tudom + tudom) ────────────── */
+.nc-fc-actions {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr;
+  gap: 10px;
+  align-items: center;
+}
+.nc-fc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 160ms ease-out, color 160ms ease-out, border-color 160ms ease-out, transform 80ms ease-out;
+}
+.nc-fc-btn:active { transform: scale(0.97); }
+.nc-fc-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.nc-fc-btn-prev {
+  background: var(--washi-soft);
+  color: var(--sumi-soft);
+  border-color: var(--washi-edge);
+  padding: 14px 16px;
+}
+.nc-fc-btn-prev:hover:not(:disabled) {
+  background: var(--washi);
+  color: var(--sumi);
+}
+.nc-fc-btn-no {
+  background: var(--vermilion-soft);
+  color: var(--vermilion);
+  border-color: rgba(184, 74, 57, 0.30);
+}
+.nc-fc-btn-no:hover:not(:disabled) {
+  background: rgba(184, 74, 57, 0.20);
+}
+.nc-fc-btn-yes {
+  background: var(--matcha);
+  color: var(--washi);
+  border-color: var(--matcha-deep);
+}
+.nc-fc-btn-yes:hover:not(:disabled) {
+  background: var(--matcha-deep);
+}
+
+/* ── Deck-end summary ───────────────────────────────── */
+.nc-fc-summary {
+  text-align: center;
+  padding: 40px 24px;
+  background: var(--washi-soft);
+  border: 1px solid var(--washi-edge);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-paper-2);
+}
+.nc-fc-summary-title {
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--sumi);
+  margin-bottom: 8px;
+}
+.nc-fc-summary-stats {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin: 18px 0;
+}
+.nc-fc-summary-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nc-fc-summary-stat-num {
+  font-family: var(--font-body);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--matcha-deep);
+  line-height: 1;
+}
+.nc-fc-summary-stat-label {
+  font-size: 0.75rem;
+  color: var(--sumi-faint);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.nc-fc-summary-stat-num.danger { color: var(--vermilion); }
+
+/* ── Mobile responsive ──────────────────────────────── */
+@media (max-width: 720px) {
+  .nc-fc-deck { height: 320px; }
+  .nc-fc-card { height: 290px; }
+  .nc-fc-jp  { font-size: 2.2rem; }
+  .nc-fc-actions { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .nc-fc-btn-prev { grid-column: 1 / -1; }
+}
+
+/* ── Barba.js SPA wrapper + container ──────────────────
+   A wrapper a body (data-barba="wrapper"), a container a <main>
+   (data-barba="container"). A Barba a containert cseréli AJAX-szal,
+   minden más (header/footer/bg-decoration) MARAD a viewportban. */
+[data-barba="container"] {
+  will-change: opacity, transform;
+}
+
+/* ════════════════════════════════════════════════════════
+   V8 — SUMI TÉMA (sötét mód)
+   ----------------------------------------------------
+   A washi (világos) paletta a default. A `theme-sumi` osztály
+   a <html>-re kerülve felülírja a tokeneket — minden komponens
+   automatikusan adaptál, mert var()-okat használ.
+
+   Sumi háttér: mély-szürke (#1B1B22) — NEM tiszta fekete
+   Washi szöveg: tört-tan (#EFEAE0) — NEM tiszta fehér
+   Matcha accent: világosabb (#A8B96E) — sötét háttéren élénkebb
+   ════════════════════════════════════════════════════════ */
+html.theme-sumi {
+  --washi:       #1B1B22;
+  --washi-deep:  #14141A;
+  --washi-soft:  #232330;
+  --washi-edge:  rgba(239, 234, 224, 0.10);
+  --hinoki:      #2A2A35;
+
+  --sumi:        #EFEAE0;
+  --sumi-soft:   #C5BFB4;
+  --sumi-faint:  #8E887D;
+  --sumi-line:   rgba(239, 234, 224, 0.14);
+
+  --matcha:      #A8B96E;
+  --matcha-deep: #8FA15A;
+  --matcha-soft: rgba(168, 185, 110, 0.18);
+
+  --indigo:      #6F87C2;
+  --indigo-soft: rgba(111, 135, 194, 0.15);
+
+  --vermilion:      #D86A57;
+  --vermilion-soft: rgba(216, 106, 87, 0.16);
+
+  --gold-trad:   #D8A547;
+  --gold-soft:   rgba(216, 165, 71, 0.16);
+
+  /* Paper-shadow finomabb (sötét háttéren a fény tinta-stílusú) */
+  --shadow-paper-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 1px 1px rgba(0, 0, 0, 0.20);
+  --shadow-paper-2: 0 2px 4px rgba(0, 0, 0, 0.35), 0 3px 6px rgba(0, 0, 0, 0.25);
+  --shadow-paper-3: 0 4px 8px rgba(0, 0, 0, 0.40), 0 8px 16px rgba(0, 0, 0, 0.30);
+}
+
+/* Sumi-háttér body: körkörös gradient is sötétebb tone */
+html.theme-sumi body {
+  background-color: var(--washi);
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(42, 42, 53, 0.45) 0%, transparent 38%),
+    radial-gradient(circle at 82% 88%, rgba(42, 42, 53, 0.40) 0%, transparent 42%);
+}
+
+/* Sumi-háttér seigaiha-pattern (világosabb pontok, hogy lássuk) */
+html.theme-sumi .seigaiha-pattern {
+  background-image:
+    radial-gradient(circle, rgba(239, 234, 224, 0.05) 1px, transparent 1.4px);
+  mix-blend-mode: screen;
+}
+
+/* Sumi-mode header: sötétebb átengedés */
+html.theme-sumi .header {
+  background: rgba(27, 27, 34, 0.88);
+}
+html.theme-sumi .header.scrolled {
+  background: rgba(27, 27, 34, 0.96);
+}
+
+/* Sumi-mode mobile-nav háttér */
+html.theme-sumi .mobile-nav {
+  background: var(--washi);
+}
+
+/* Sumi-mode footer */
+html.theme-sumi .glass-footer {
+  background: var(--washi-deep);
+}
+
+/* ── Téma-toggle gomb (auto-injektált a helpers-bar-ba) ── */
+.ht-btn.ht-theme-btn {
+  /* ugyanaz mint a többi helper-btn, csak egyedi ikon */
+}
+.ht-theme-btn .ht-theme-icon {
+  display: inline-block;
+  font-size: 1.05rem;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+/* Smooth theme-transition: az alap CSS-tokenek 200ms alatt átolvadnak */
+html.theme-transition,
+html.theme-transition body,
+html.theme-transition * {
+  transition:
+    background-color 220ms ease-out,
+    color 220ms ease-out,
+    border-color 220ms ease-out !important;
+}
+
+/* ════════════════════════════════════════════════════════
+   V8 — PWA install + Service Worker update bannerek (toast)
+   ════════════════════════════════════════════════════════ */
+
+/* Univerzális toast/banner — bottom-right, finom slide-up */
+.nc-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translate(-50%, 100px);
+  z-index: 9500;
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  border-radius: var(--radius-md);
+  box-shadow: 0 10px 30px rgba(42, 42, 46, 0.25);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: min(440px, calc(100vw - 32px));
+  opacity: 0;
+  transition: opacity 220ms ease-out, transform 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nc-toast.visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.nc-toast-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+.nc-toast-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.nc-toast-title {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--sumi);
+  letter-spacing: -0.005em;
+}
+.nc-toast-sub {
+  font-size: 0.78rem;
+  color: var(--sumi-soft);
+  line-height: 1.4;
+}
+.nc-toast-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+.nc-toast-btn {
+  background: var(--matcha);
+  color: var(--washi);
+  border: 1px solid var(--matcha-deep);
+  padding: 7px 14px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background-color 160ms ease-out, transform 80ms ease-out;
+}
+.nc-toast-btn:hover  { background: var(--matcha-deep); }
+.nc-toast-btn:active { transform: scale(0.96); }
+.nc-toast-close {
+  background: transparent;
+  border: none;
+  color: var(--sumi-faint);
+  font-size: 1.1rem;
+  cursor: pointer;
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  display: flex; align-items: center; justify-content: center;
+  transition: background-color 160ms ease-out, color 160ms ease-out;
+}
+.nc-toast-close:hover { background: var(--washi-edge); color: var(--sumi); }
+
+/* Mobile responsive */
+@media (max-width: 540px) {
+  .nc-toast {
+    left: 16px; right: 16px;
+    max-width: calc(100vw - 32px);
+    transform: translate(0, 100px);
+  }
+  .nc-toast.visible { transform: translate(0, 0); }
+}
+
+/* ── Modal overlay (Ragozó/Melléknév/Datetime "Szótár" mód) ── */
+.nc-fc-overlay {
+  position: fixed; inset: 0; z-index: 10000;
+  background: rgba(42, 42, 46, 0.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  animation: nc-fc-fade-in 200ms ease-out;
+}
+@keyframes nc-fc-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+body.nc-fc-overlay-open { overflow: hidden; }
+
+.nc-fc-overlay-card {
+  position: relative;
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 24px 60px rgba(42, 42, 46, 0.30);
+  width: min(820px, 100%);
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 28px 24px 24px;
+  animation: nc-fc-slide-up 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes nc-fc-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.nc-fc-overlay-close {
+  position: absolute;
+  top: 14px; right: 14px;
+  background: var(--washi-soft);
+  border: 1px solid var(--washi-edge);
+  border-radius: 999px;
+  width: 36px; height: 36px;
+  font-size: 1rem;
+  color: var(--sumi-soft);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background-color 160ms ease-out, color 160ms ease-out, transform 80ms ease-out;
+}
+.nc-fc-overlay-close:hover { background: var(--vermilion-soft); color: var(--vermilion); }
+.nc-fc-overlay-close:active { transform: scale(0.92); }
+
+.nc-fc-overlay-title {
+  font-family: var(--font-body);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--sumi);
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.nc-fc-overlay-root {
+  margin: 0 auto;
+}
+
+/* ── Modul-hero "Szótár-böngészés" launcher gomb ────── */
+.module-extra-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.module-extra-actions .btn {
+  font-size: 0.88rem;
+  padding: 8px 16px;
+}
+
+
+/* ════════════════════════════════════════════════════════
+   V8 ZEN — "Kártyák száma" lobby-vezérlők univerzális polish
+   Minden modul (Arimasu Matrix · Számláló · Ragozó · Melléknév ·
+   Datetime · Hallás · Grammar) ugyanazt a class-családot
+   használja: *-count-row / *-count-presets / *-count-btn /
+   *-count-custom. Az [class*="..."] attribute-selectorokkal
+   egyszerre stilizáljuk mindet — HTML-edit nélkül.
+   ════════════════════════════════════════════════════════ */
+
+/* ── Sor + presets layout (kompakt) ───────────────────── */
+[class$="-count-row"] {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+}
+[class$="-count-presets"] {
+  display: flex; gap: 6px; flex-wrap: wrap;
+}
+
+/* ── Preset gomb-pill — visszafogott méret ────────────── */
+[class$="-count-btn"],
+.ml-count-btn {
+  min-width: 38px !important;
+  padding: 6px 12px !important;
+  background: var(--washi-soft) !important;
+  border: 1px solid var(--washi-edge) !important;
+  border-radius: 999px !important;
+  color: var(--sumi) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  cursor: pointer !important;
+  letter-spacing: 0.01em !important;
+  box-shadow: none !important;
+  text-align: center !important;
+  transition:
+    background-color 160ms ease-out,
+    color 160ms ease-out,
+    border-color 160ms ease-out,
+    box-shadow 160ms ease-out,
+    transform 80ms ease-out !important;
+}
+[class$="-count-btn"]:hover {
+  background: var(--washi);
+  border-color: var(--matcha);
+  color: var(--sumi);
+}
+[class$="-count-btn"].active,
+.ml-count-btn.active {
+  background: var(--matcha) !important;
+  border-color: var(--matcha-deep) !important;
+  color: var(--washi) !important;
+  box-shadow: var(--shadow-paper-1) !important;
+}
+[class$="-count-btn"]:active {
+  transform: scale(0.96);
+}
+[class$="-count-btn"].active:hover {
+  background: var(--matcha-deep);
+  color: var(--washi);
+}
+
+/* ── "vagy saját szám" mező — KOMPAKT (NEM nyúl szét) ── */
+[class$="-count-custom"] {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  /* a flex:1 + min-width:220px eltávolítva — most pont annyi széles, mint a tartalom */
+}
+[class$="-count-custom-label"] {
+  font-size: 0.78rem;
+  color: var(--sumi-faint);
+  white-space: nowrap;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* ── Custom input — kötött méret, kompakt ─────────────── */
+input[type="number"][id$="CustomCount"] {
+  width: 70px;
+  padding: 6px 10px;
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  border-radius: var(--radius-sm);
+  color: var(--sumi);
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: center;
+  outline: none;
+  -moz-appearance: textfield;
+  transition: border-color 160ms ease-out, box-shadow 160ms ease-out, background-color 160ms ease-out;
+}
+input[type="number"][id$="CustomCount"]::-webkit-outer-spin-button,
+input[type="number"][id$="CustomCount"]::-webkit-inner-spin-button {
+  -webkit-appearance: none; margin: 0;
+}
+input[type="number"][id$="CustomCount"]::placeholder {
+  color: var(--sumi-faint);
+  font-weight: 500;
+  opacity: 0.55;
+}
+input[type="number"][id$="CustomCount"]:hover {
+  border-color: var(--sumi-line);
+}
+input[type="number"][id$="CustomCount"]:focus {
+  border-color: var(--matcha) !important;
+  box-shadow: 0 0 0 2px var(--matcha-soft) !important;
+  background: var(--washi-soft);
+}
+
+/* ── Mobile responsive ──────────────────────────────── */
+@media (max-width: 720px) {
+  [class$="-count-row"]    { gap: 10px; }
+  [class$="-count-custom"] { width: 100%; justify-content: flex-start; }
+}
+
+/* ════════════════════════════════════════════════════════
+   ZEN POLISH — Sakura-bloom celebration overlay
+   (NihonCoreMotion.celebrate())
+   ════════════════════════════════════════════════════════ */
+.ncm-celebrate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ncm-celebrate-card {
+  background: var(--washi);
+  border: 1px solid var(--washi-edge);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 18px 50px rgba(42, 42, 46, 0.25);
+  padding: 22px 36px;
+  text-align: center;
+  opacity: 0;
+}
+.ncm-celebrate-title {
+  font-family: var(--font-body);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--matcha-deep);
+  letter-spacing: -0.005em;
+}
+.ncm-celebrate-sub {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--sumi-soft);
+  margin-top: 6px;
+}
+.ncm-celebrate-particles {
+  position: absolute;
+  inset: 50% 0 0 50%;
+  width: 0; height: 0;
+  pointer-events: none;
+}
+.ncm-celebrate-particle {
+  position: absolute;
+  top: 0; left: 0;
+  display: inline-block;
+  font-size: 2rem;
+  line-height: 1;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  user-select: none;
+  font-family: "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji","Twemoji Mozilla",sans-serif;
+}

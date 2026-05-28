@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0b14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NihonCore" />
+  <title>Modul — NihonCore</title>
+  <link rel="icon" type="image/png" href="../img/fav_icon_nihoncore.png" />
+  <link rel="apple-touch-icon" href="../img/app_icon.png" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@barba/core@2.10.3/dist/barba.umd.min.js"></script>
+</head>
+<body data-barba="wrapper">
+
+  <!-- Background decoration (egyezik a landinggel) -->
+  <div class="bg-decoration">
+    <div class="ink-circle circle-1"></div>
+    <div class="ink-circle circle-2"></div>
+    <div class="ink-circle circle-3"></div>
+    <div class="seigaiha-pattern"></div>
+  </div>
+
+  <!-- Header -->
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-kanji">日</span>
+        <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
+      </a>
+      <nav class="nav module-page-nav"></nav>
+      <div class="auth-buttons">
+        <a href="login.html" class="btn btn-ghost">Bejelentkezés</a>
+        <a href="../index.html" class="btn-home" title="Kezdőlap" aria-label="Kezdőlap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Modul tartalom — JS tölti be ?id= alapján -->
+  <main class="module-main" id="moduleMain" data-barba="container" data-barba-namespace="moduleMain">
+
+    <!-- Univerzális Segítők kapcsoló (Romaji + Magyar) -->
+    <div class="helpers-bar" id="helpersBar">
+      <span class="hb-label">Segítők</span>
+      <div class="helpers-toggle">
+        <button class="ht-btn active" data-helper="romaji" type="button">
+          <span class="ht-dot"></span>Romaji
+        </button>
+        <button class="ht-btn active" data-helper="hu" type="button">
+          <span class="ht-dot"></span>Magyar
+        </button>
+        <button class="ht-btn" data-helper="audio" type="button">
+          <span class="ht-dot"></span>🔊 Hang
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading állapot (eltűnik amikor JS betölt) -->
+    <div class="module-loading" id="moduleLoading">
+      <div class="loading-kanji">読</div>
+      <p>Modul betöltése...</p>
+    </div>
+
+    <!-- Hibaállapot (ha nincs ilyen modul ID) -->
+    <div class="module-error glass-panel-heavy hidden" id="moduleError">
+      <div class="error-icon">⚠️</div>
+      <h2>Ismeretlen modul</h2>
+      <p>A keresett modul nem található. Talán elgépeltük a linket?</p>
+      <a href="../index.html#modules" class="btn btn-primary glow-effect">Vissza a modulokhoz</a>
+    </div>
+
+    <!-- Tényleges tartalom (kezdetben rejtve, JS revealelni fogja) -->
+    <div class="module-content hidden" id="moduleContent">
+
+      <!-- Modul Hero -->
+      <section class="module-hero glass-panel-heavy">
+        <div class="module-hero-icon" id="moduleHeroIcon">
+          <span id="moduleIconChar">あ</span>
+        </div>
+        <div class="module-hero-meta">
+          <div class="module-meta-row">
+            <span class="badge-jlpt" id="moduleJlpt">N5</span>
+            <span class="badge-group" id="moduleGroup">Igeragozás alap</span>
+          </div>
+          <h1 class="module-page-title" id="moduleTitle">Arimasu / Imasu</h1>
+          <p class="module-page-desc" id="moduleDesc">Leírás...</p>
+          <div class="module-progress">
+            <div class="progress-row">
+              <span class="progress-label">Haladásod ezen a modulon</span>
+              <span class="progress-value" id="moduleProgressValue">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill fill-gradient" id="moduleProgressFill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Locked banner (csak locked moduloknál) -->
+      <div class="module-locked-banner glass-panel hidden" id="moduleLockedBanner">
+        <span class="locked-icon">🔒</span>
+        <p id="moduleLockedNote"></p>
+      </div>
+
+      <!-- Fázis tabs -->
+      <nav class="phase-tabs" id="phaseTabs">
+        <button class="phase-tab active" data-phase="1">
+          <span class="phase-num">1</span>
+          <span class="phase-text">
+            <span class="phase-name">Megértés</span>
+            <span class="phase-sub">Magyarázat + felismerés</span>
+          </span>
+        </button>
+        <button class="phase-tab" data-phase="2">
+          <span class="phase-num">2</span>
+          <span class="phase-text">
+            <span class="phase-name">Alkalmazás</span>
+            <span class="phase-sub">Mondat-puzzle + ragozás</span>
+          </span>
+        </button>
+        <button class="phase-tab" data-phase="3">
+          <span class="phase-num">3</span>
+          <span class="phase-text">
+            <span class="phase-name">Automatizálás</span>
+            <span class="phase-sub">Sebesség + audio</span>
+          </span>
+        </button>
+      </nav>
+
+      <!-- Fázis tartalom — JS tölti be -->
+      <section class="phase-content" id="phaseContent">
+        <!-- Itt jelenik meg a kiválasztott fázis tartalma -->
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer glass-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-kanji">日</span>
+        <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
+      </div>
+      <p class="footer-note">Dekiru 1 alapján · JLPT N5 · © 2026 NihonCore</p>
+    </div>
+  </footer>
+
+  <script src="../js/data/core.js"></script>
+  <script src="../js/data/sentences.js"></script>
+  <script src="../js/data/verbs.js"></script>
+  <script src="../js/data/adjectives.js"></script>
+  <script src="../js/data/counters.js"></script>
+  <script src="../js/data/datetime.js"></script>
+  <script src="../js/data/audio.js"></script>
+  <script src="../js/data/grammar.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

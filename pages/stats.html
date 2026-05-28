@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0b14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NihonCore" />
+  <title>Statisztika — NihonCore</title>
+  <link rel="icon" type="image/png" href="../img/fav_icon_nihoncore.png" />
+  <link rel="apple-touch-icon" href="../img/app_icon.png" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@barba/core@2.10.3/dist/barba.umd.min.js"></script>
+</head>
+<body data-barba="wrapper">
+
+  <div class="bg-decoration">
+    <div class="ink-circle circle-1"></div>
+    <div class="ink-circle circle-2"></div>
+    <div class="ink-circle circle-3"></div>
+    <div class="seigaiha-pattern"></div>
+  </div>
+
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-kanji">日</span>
+        <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
+      </a>
+      <nav class="nav module-page-nav"></nav>
+      <div class="auth-buttons">
+        <a href="login.html" class="btn btn-ghost">Bejelentkezés</a>
+        <a href="../index.html" class="btn-home" title="Kezdőlap" aria-label="Kezdőlap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="module-main stats-main" id="statsMain" data-barba="container" data-barba-namespace="statsMain">
+
+    <section class="module-hero glass-panel-heavy stats-hero">
+      <div class="module-hero-icon icon-glow-gold">
+        <span>統</span>
+      </div>
+      <div class="module-hero-meta">
+        <div class="module-meta-row">
+          <span class="badge-group">Statisztika &amp; Haladás · V4</span>
+        </div>
+        <h1 class="module-page-title">Statisztika</h1>
+        <p class="module-page-desc">
+          Gyakorlási előzmények, aktivitás és modul-teljesítmény egy helyen.
+          Minden befejezett kör automatikusan ide mentődik.
+        </p>
+      </div>
+    </section>
+
+    <nav class="stats-tabs" id="statsTabs"><!-- JS tölti --></nav>
+
+    <section class="stats-content" id="statsContent"><!-- JS tölti --></section>
+
+  </main>
+
+  <footer class="footer glass-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-kanji">日</span>
+        <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
+      </div>
+      <p class="footer-note">Dekiru 1+2 alapján · JLPT N5 · © 2026 NihonCore</p>
+    </div>
+  </footer>
+
+  <script src="../js/data/core.js"></script>
+  <script src="../js/data/sentences.js"></script>
+  <script src="../js/data/verbs.js"></script>
+  <script src="../js/data/adjectives.js"></script>
+  <script src="../js/data/counters.js"></script>
+  <script src="../js/data/datetime.js"></script>
+  <script src="../js/data/audio.js"></script>
+  <script src="../js/data/grammar.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

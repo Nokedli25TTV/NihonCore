@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0b14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NihonCore" />
+  <title>Ragozó modul — NihonCore</title>
+  <link rel="icon" type="image/png" href="../img/fav_icon_nihoncore.png" />
+  <link rel="apple-touch-icon" href="../img/app_icon.png" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@barba/core@2.10.3/dist/barba.umd.min.js"></script>
+</head>
+<body data-barba="wrapper">
+
+  <div class="bg-decoration">
+    <div class="ink-circle circle-1"></div>
+    <div class="ink-circle circle-2"></div>
+    <div class="ink-circle circle-3"></div>
+    <div class="seigaiha-pattern"></div>
+  </div>
+
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-kanji">日</span>
+        <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
+      </a>
+      <nav class="nav module-page-nav"></nav>
+      <div class="auth-buttons">
+        <a href="login.html" class="btn btn-ghost">Bejelentkezés</a>
+        <a href="../index.html" class="btn-home" title="Kezdőlap" aria-label="Kezdőlap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="module-main conjugation-main" id="conjugationMain" data-barba="container" data-barba-namespace="conjugationMain">
+
+    <!-- Univerzális Segítők kapcsoló -->
+    <div class="helpers-bar" id="helpersBar">
+      <span class="hb-label">Segítők</span>
+      <div class="helpers-toggle">
+        <button class="ht-btn active" data-helper="romaji" type="button">
+          <span class="ht-dot"></span>Romaji
+        </button>
+        <button class="ht-btn active" data-helper="hu" type="button">
+          <span class="ht-dot"></span>Magyar
+        </button>
+        <button class="ht-btn" data-helper="audio" type="button">
+          <span class="ht-dot"></span>🔊 Hang
+        </button>
+      </div>
+    </div>
+
+    <!-- Hero (statikus — nincs ID-szelektor mert ez a saját page) -->
+    <section class="module-hero glass-panel-heavy conj-hero">
+      <div class="module-hero-icon icon-glow-gold">
+        <span>活</span>
+      </div>
+      <div class="module-hero-meta">
+        <div class="module-meta-row">
+          <span class="badge-jlpt">JLPT N5–N4</span>
+          <span class="badge-group">Ragozó-motor · V2.0</span>
+        </div>
+        <h1 class="module-page-title">Ragozó modul</h1>
+        <p class="module-page-desc">
+          A japán „szorzótábla": ne csak megtanuld a ragozási alakokat — vidd <em>reflexszintre</em>.
+          Az alapformák (masu / nai / te / ta) felismerésén át a szabad inputos Mester módig.
+        </p>
+        <div class="conj-stats-bar" id="conjStatsBar">
+          <!-- localStorage profil-statisztika ide kerül -->
+        </div>
+        <div class="module-extra-actions">
+          <button class="btn btn-outline" type="button" data-flashcard-launcher="verbs">📖 Szótár-böngészés</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lobby: drill-paraméterek -->
+    <section class="conj-lobby glass-panel-heavy" id="conjLobby">
+      <!-- JS tölti -->
+    </section>
+
+    <!-- Runtime: a kör futása -->
+    <section class="conj-runtime hidden" id="conjRuntime">
+      <!-- Top stats + exit -->
+      <div class="pr-stats" id="conjStats">
+        <div class="pr-stat">
+          <span class="pr-stat-label">Pont</span>
+          <span class="pr-stat-value" id="conjScore">0</span>
+        </div>
+        <div class="pr-stat">
+          <span class="pr-stat-label">Sorozat</span>
+          <span class="pr-stat-value" id="conjStreak">0 🔥</span>
+        </div>
+        <button class="round-exit" id="conjExit" type="button" title="Kilépés a körből">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Kilépés</span>
+        </button>
+      </div>
+
+      <!-- Progress strip -->
+      <div class="round-progress">
+        <span class="round-progress-text" id="conjCardCount">Kártya 1 / —</span>
+        <div class="round-progress-bar"><div class="round-progress-fill" id="conjProgressFill" style="width: 0%"></div></div>
+      </div>
+
+      <!-- Card -->
+      <div class="conj-card glass-panel-heavy" id="conjCard"></div>
+
+      <!-- Actions -->
+      <div class="conj-actions" id="conjActions"></div>
+
+      <!-- Feedback -->
+      <div class="conj-feedback hidden" id="conjFeedback"></div>
+
+      <!-- Summary -->
+      <div class="conj-summary hidden" id="conjSummary"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer glass-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-kanji">日</span>
+        <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
+      </div>
+      <p class="footer-note">Dekiru 1+2 alapján · JLPT N5–N3 · © 2026 NihonCore</p>
+    </div>
+  </footer>
+
+  <script src="../js/data/core.js"></script>
+  <script src="../js/data/sentences.js"></script>
+  <script src="../js/data/verbs.js"></script>
+  <script src="../js/data/adjectives.js"></script>
+  <script src="../js/data/counters.js"></script>
+  <script src="../js/data/datetime.js"></script>
+  <script src="../js/data/audio.js"></script>
+  <script src="../js/data/grammar.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>

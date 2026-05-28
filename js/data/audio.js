@@ -1,0 +1,216 @@
+// ============================================================
+//  NihonCore — Hallás & Kiejtés modul (5c) — audio adatok
+//  Forrás: data.js → NIHONCORE_AUDIO_* konstansok (V3)
+//  Utoljára bővítve: 2026-05
+// ============================================================
+
+// ── 1) LECKÉK ────────────────────────────────────────────────
+const NIHONCORE_AUDIO_LESSONS = [
+
+  // ── Dátumok ──────────────────────────────────────────────
+  { id: 'au_d1',  text: 'ついたち',     romaji: 'tsuitachi',    meaningHu: 'elseje (1.)',      category: 'date', difficulty: 'beginner',     traps: [] },
+  { id: 'au_d2',  text: 'ふつか',       romaji: 'futsuka',      meaningHu: 'másodika (2.)',    category: 'date', difficulty: 'beginner',     traps: [] },
+  { id: 'au_d3',  text: 'みっか',       romaji: 'mikka',        meaningHu: 'harmadika (3.)',   category: 'date', difficulty: 'beginner',     traps: ['sokuon'] },
+  { id: 'au_d4',  text: 'よっか',       romaji: 'yokka',        meaningHu: 'negyedike (4.)',   category: 'date', difficulty: 'beginner',     traps: ['sokuon'] },
+  { id: 'au_d5',  text: 'いつか',       romaji: 'itsuka',       meaningHu: '5. (nap)',         category: 'date', difficulty: 'beginner',     traps: [] },
+  { id: 'au_d6',  text: 'むいか',       romaji: 'muika',        meaningHu: 'hatodika (6.)',    category: 'date', difficulty: 'beginner',     traps: [] },
+  { id: 'au_d7',  text: 'なのか',       romaji: 'nanoka',       meaningHu: '7. (nap)',         category: 'date', difficulty: 'beginner',     traps: [] },
+  { id: 'au_d8',  text: 'ようか',       romaji: 'youka',        meaningHu: 'nyolcadika (8.)', category: 'date', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_d9',  text: 'ここのか',     romaji: 'kokonoka',     meaningHu: '9. (nap)',         category: 'date', difficulty: 'beginner',     traps: ['mora'] },
+  { id: 'au_d10', text: 'とおか',       romaji: 'tooka',        meaningHu: 'tizedike (10.)',   category: 'date', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_d11', text: 'じゅういちにち', romaji: 'juuichinichi', meaningHu: '11. (nap)',      category: 'date', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_d12', text: 'じゅうににち',   romaji: 'juuninichi',   meaningHu: '12. (nap)',      category: 'date', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_d13', text: 'じゅうさんにち', romaji: 'juusannichi',  meaningHu: '13. (nap)',      category: 'date', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_d14', text: 'じゅうよっか',   romaji: 'juuyokka',     meaningHu: '14. (nap)',      category: 'date', difficulty: 'intermediate', traps: ['long_vowel', 'sokuon'] },
+  { id: 'au_d15', text: 'じゅうごにち',   romaji: 'juugonichi',   meaningHu: '15. (nap)',      category: 'date', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_d20', text: 'はつか',         romaji: 'hatsuka',      meaningHu: 'huszadika (20.)', category: 'date', difficulty: 'intermediate', traps: [] },
+  { id: 'au_d24', text: 'にじゅうよっか', romaji: 'nijuuyokka',   meaningHu: '24. (nap)',      category: 'date', difficulty: 'intermediate', traps: ['long_vowel', 'sokuon'] },
+
+  // ── Időpontok ────────────────────────────────────────────
+  { id: 'au_t1',   text: 'いちじ',        romaji: 'ichiji',       meaningHu: '1 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t2',   text: 'にじ',          romaji: 'niji',         meaningHu: '2 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t3',   text: 'さんじ',        romaji: 'sanji',        meaningHu: '3 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t4',   text: 'よじ',          romaji: 'yoji',         meaningHu: '4 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t5',   text: 'ごじ',          romaji: 'goji',         meaningHu: '5 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t6',   text: 'ろくじ',        romaji: 'rokuji',       meaningHu: '6 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t7',   text: 'しちじ',        romaji: 'shichiji',     meaningHu: '7 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t8',   text: 'はちじ',        romaji: 'hachiji',      meaningHu: '8 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t9',   text: 'くじ',          romaji: 'kuji',         meaningHu: '9 óra',    category: 'time', difficulty: 'beginner',     traps: [] },
+  { id: 'au_t10',  text: 'じゅうじ',      romaji: 'juuji',        meaningHu: '10 óra',   category: 'time', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_t11',  text: 'じゅういちじ',  romaji: 'juuichiji',    meaningHu: '11 óra',   category: 'time', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_t12',  text: 'じゅうにじ',    romaji: 'juuniji',      meaningHu: '12 óra',   category: 'time', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_t3h',  text: 'さんじはん',    romaji: 'sanji han',    meaningHu: '3:30',     category: 'time', difficulty: 'intermediate', traps: [] },
+  { id: 'au_t5h',  text: 'ごじはん',      romaji: 'goji han',     meaningHu: '5:30',     category: 'time', difficulty: 'intermediate', traps: [] },
+  { id: 'au_t7h',  text: 'しちじはん',    romaji: 'shichiji han', meaningHu: '7:30',     category: 'time', difficulty: 'intermediate', traps: [] },
+  { id: 'au_t9h',  text: 'くじはん',      romaji: 'kuji han',     meaningHu: '9:30',     category: 'time', difficulty: 'intermediate', traps: [] },
+  { id: 'au_t10h', text: 'じゅうじはん',  romaji: 'juuji han',    meaningHu: '10:30',    category: 'time', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_t12h', text: 'じゅうにじはん',romaji: 'juuniji han',  meaningHu: '12:30',    category: 'time', difficulty: 'intermediate', traps: ['long_vowel'] },
+
+  // ── Igék (szótári alak) ──────────────────────────────────
+  { id: 'au_v_nomu',        text: 'のむ',         romaji: 'nomu',         meaningHu: 'inni',                  category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_taberu',      text: 'たべる',       romaji: 'taberu',       meaningHu: 'enni',                  category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_iku',         text: 'いく',         romaji: 'iku',          meaningHu: 'menni',                 category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_miru',        text: 'みる',         romaji: 'miru',         meaningHu: 'nézni',                 category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_kaku',        text: 'かく',         romaji: 'kaku',         meaningHu: 'írni',                  category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_hanasu',      text: 'はなす',       romaji: 'hanasu',       meaningHu: 'beszélni',              category: 'verb', difficulty: 'intermediate', traps: [] },
+  { id: 'au_v_kuru',        text: 'くる',         romaji: 'kuru',         meaningHu: 'jönni',                 category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_suru',        text: 'する',         romaji: 'suru',         meaningHu: 'csinálni',              category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_kau',         text: 'かう',         romaji: 'kau',          meaningHu: 'venni / vásárolni',     category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_matsu',       text: 'まつ',         romaji: 'matsu',        meaningHu: 'várni',                 category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_asobu',       text: 'あそぶ',       romaji: 'asobu',        meaningHu: 'játszani',              category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_kaeru',       text: 'かえる',       romaji: 'kaeru',        meaningHu: 'hazamenni',             category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_hashiru',     text: 'はしる',       romaji: 'hashiru',      meaningHu: 'futni',                 category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_okiru',       text: 'おきる',       romaji: 'okiru',        meaningHu: 'felkelni',              category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_neru',        text: 'ねる',         romaji: 'neru',         meaningHu: 'aludni / lefeküdni',    category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_yomu',        text: 'よむ',         romaji: 'yomu',         meaningHu: 'olvasni',               category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_kiku',        text: 'きく',         romaji: 'kiku',         meaningHu: 'hallgatni / kérdezni',  category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_oyogu',       text: 'およぐ',       romaji: 'oyogu',        meaningHu: 'úszni',                 category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_tsukuru',     text: 'つくる',       romaji: 'tsukuru',      meaningHu: 'csinálni / készíteni',  category: 'verb', difficulty: 'intermediate', traps: ['sokuon'] },
+  { id: 'au_v_oshieru',     text: 'おしえる',     romaji: 'oshieru',      meaningHu: 'tanítani / elmondani',  category: 'verb', difficulty: 'intermediate', traps: [] },
+  { id: 'au_v_wakaru',      text: 'わかる',       romaji: 'wakaru',       meaningHu: 'érteni / tudni',        category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_shiru',       text: 'しる',         romaji: 'shiru',        meaningHu: 'tudni (vmit ismer)',    category: 'verb', difficulty: 'beginner',     traps: [] },
+  { id: 'au_v_benkyousuru', text: 'べんきょうする', romaji: 'benkyou suru', meaningHu: 'tanulni',             category: 'verb', difficulty: 'intermediate', traps: ['long_vowel'] },
+
+  // ── Melléknevek ──────────────────────────────────────────
+  { id: 'au_a_ookii',      text: 'おおきい',   romaji: 'ookii',      meaningHu: 'nagy',               category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_a_chiisai',    text: 'ちいさい',   romaji: 'chiisai',    meaningHu: 'kicsi',              category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_a_atarashii',  text: 'あたらしい', romaji: 'atarashii',  meaningHu: 'új',                 category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_a_furui',      text: 'ふるい',     romaji: 'furui',      meaningHu: 'régi',               category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_atsui',      text: 'あつい',     romaji: 'atsui',      meaningHu: 'meleg',              category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_samui',      text: 'さむい',     romaji: 'samui',      meaningHu: 'hideg',              category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_takai',      text: 'たかい',     romaji: 'takai',      meaningHu: 'magas / drága',      category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_yasui',      text: 'やすい',     romaji: 'yasui',      meaningHu: 'olcsó',              category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_hayai',      text: 'はやい',     romaji: 'hayai',      meaningHu: 'gyors / korai',      category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_osoi',       text: 'おそい',     romaji: 'osoi',       meaningHu: 'lassú / késő',       category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_nagai',      text: 'ながい',     romaji: 'nagai',      meaningHu: 'hosszú',             category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_mijikai',    text: 'みじかい',   romaji: 'mijikai',    meaningHu: 'rövid',              category: 'adj', difficulty: 'beginner',     traps: [] },
+  { id: 'au_a_muzukashii', text: 'むずかしい', romaji: 'muzukashii', meaningHu: 'nehéz',              category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_a_yasashii',   text: 'やさしい',   romaji: 'yasashii',   meaningHu: 'könnyű / kedves',    category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_a_tanoshii',   text: 'たのしい',   romaji: 'tanoshii',   meaningHu: 'szórakoztató',       category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_a_oishii',     text: 'おいしい',   romaji: 'oishii',     meaningHu: 'finom',              category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_a_omoshiroi',  text: 'おもしろい', romaji: 'omoshiroi',  meaningHu: 'érdekes',            category: 'adj', difficulty: 'intermediate', traps: [] },
+  { id: 'au_a_tsumaranai', text: 'つまらない', romaji: 'tsumaranai', meaningHu: 'unalmas',            category: 'adj', difficulty: 'advanced',     traps: [] },
+  { id: 'au_a_ureshii',    text: 'うれしい',   romaji: 'ureshii',    meaningHu: 'boldog / örömteli',  category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_a_kanashii',   text: 'かなしい',   romaji: 'kanashii',   meaningHu: 'szomorú',            category: 'adj', difficulty: 'intermediate', traps: ['long_vowel'] },
+
+  // ── Minimal pairs ────────────────────────────────────────
+  //    long_vowel párok
+  { id: 'au_p_obasan',  text: 'おばさん',   romaji: 'obasan',  meaningHu: 'néni',                         category: 'pair', difficulty: 'intermediate', traps: ['long_vowel'], pairWith: 'au_p_obaasan' },
+  { id: 'au_p_obaasan', text: 'おばあさん', romaji: 'obaasan', meaningHu: 'nagymama',                     category: 'pair', difficulty: 'intermediate', traps: ['long_vowel'], pairWith: 'au_p_obasan' },
+  { id: 'au_p_biru',    text: 'ビル',       romaji: 'biru',    meaningHu: 'épület',                       category: 'pair', difficulty: 'intermediate', traps: ['long_vowel'], pairWith: 'au_p_biiru' },
+  { id: 'au_p_biiru',   text: 'ビール',     romaji: 'biiru',   meaningHu: 'sör',                          category: 'pair', difficulty: 'intermediate', traps: ['long_vowel'], pairWith: 'au_p_biru' },
+  { id: 'au_p_ojisan',  text: 'おじさん',   romaji: 'ojisan',  meaningHu: 'bácsi / középkorú férfi',      category: 'pair', difficulty: 'intermediate', traps: ['long_vowel'], pairWith: 'au_p_ojiisan' },
+  { id: 'au_p_ojiisan', text: 'おじいさん', romaji: 'ojiisan', meaningHu: 'nagyapa / idős férfi',         category: 'pair', difficulty: 'intermediate', traps: ['long_vowel'], pairWith: 'au_p_ojisan' },
+  { id: 'au_p_yuki',    text: 'ゆき',       romaji: 'yuki',    meaningHu: 'hó',                           category: 'pair', difficulty: 'intermediate', traps: ['long_vowel'], pairWith: 'au_p_yuuki' },
+  { id: 'au_p_yuuki',   text: 'ゆうき',     romaji: 'yuuki',   meaningHu: 'bátorság',                     category: 'pair', difficulty: 'intermediate', traps: ['long_vowel'], pairWith: 'au_p_yuki' },
+  { id: 'au_p_tori',    text: 'とり',       romaji: 'tori',    meaningHu: 'madár',                        category: 'pair', difficulty: 'advanced',     traps: ['long_vowel'], pairWith: 'au_p_toori' },
+  { id: 'au_p_toori',   text: 'とおり',     romaji: 'toori',   meaningHu: 'utca / sor (ahogy)',           category: 'pair', difficulty: 'advanced',     traps: ['long_vowel'], pairWith: 'au_p_tori' },
+  { id: 'au_p_ie',      text: 'いえ',       romaji: 'ie',      meaningHu: 'ház',                          category: 'pair', difficulty: 'advanced',     traps: ['long_vowel'], pairWith: 'au_p_iie' },
+  { id: 'au_p_iie',     text: 'いいえ',     romaji: 'iie',     meaningHu: 'nem (tagadó)',                 category: 'pair', difficulty: 'advanced',     traps: ['long_vowel'], pairWith: 'au_p_ie' },
+  //    sokuon párok
+  { id: 'au_p_kite',    text: 'きて',       romaji: 'kite',    meaningHu: 'gyere (te-alak)',              category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_kitte' },
+  { id: 'au_p_kitte',   text: 'きって',     romaji: 'kitte',   meaningHu: 'bélyeg',                      category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_kite' },
+  { id: 'au_p_oto',     text: 'おと',       romaji: 'oto',     meaningHu: 'hang',                         category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_otto' },
+  { id: 'au_p_otto',    text: 'おっと',     romaji: 'otto',    meaningHu: 'férj',                         category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_oto' },
+  { id: 'au_p_ite',     text: 'いて',       romaji: 'ite',     meaningHu: 'ott lévén (いる te-alak)',     category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_itte' },
+  { id: 'au_p_itte',    text: 'いって',     romaji: 'itte',    meaningHu: 'elmenve (行く te-alak)',       category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_ite' },
+  { id: 'au_p_mata',    text: 'また',       romaji: 'mata',    meaningHu: 'megint / viszontlátásra',      category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_matta' },
+  { id: 'au_p_matta',   text: 'まった',     romaji: 'matta',   meaningHu: 'teljesen / (sakk:) matt',     category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_mata' },
+  { id: 'au_p_nite',    text: 'にて',       romaji: 'nite',    meaningHu: 'hoz hasonlóan / …-ban (irod.)', category: 'pair', difficulty: 'advanced',   traps: ['sokuon'], pairWith: 'au_p_nitte' },
+  { id: 'au_p_nitte',   text: 'にって',     romaji: 'nitte',   meaningHu: '(ní-tte — halláscsapda)',     category: 'pair', difficulty: 'advanced',     traps: ['sokuon'], pairWith: 'au_p_nite' },
+  //    mora-kontrast párok
+  { id: 'au_p_hana',    text: 'はな',       romaji: 'hana',    meaningHu: 'virág / orr (2 mora)',        category: 'pair', difficulty: 'intermediate', traps: ['mora'], pairWith: 'au_p_hanashi' },
+  { id: 'au_p_hanashi', text: 'はなし',     romaji: 'hanashi', meaningHu: 'történet / beszéd (3 mora)',  category: 'pair', difficulty: 'intermediate', traps: ['mora'], pairWith: 'au_p_hana' },
+  { id: 'au_p_asa',     text: 'あさ',       romaji: 'asa',     meaningHu: 'reggel (2 mora)',             category: 'pair', difficulty: 'intermediate', traps: ['mora'], pairWith: 'au_p_asahi' },
+  { id: 'au_p_asahi',   text: 'あさひ',     romaji: 'asahi',   meaningHu: 'felkelő nap (3 mora)',        category: 'pair', difficulty: 'intermediate', traps: ['mora'], pairWith: 'au_p_asa' },
+
+  // ── Számok ───────────────────────────────────────────────
+  { id: 'au_n_ichi',   text: 'いち',   romaji: 'ichi',   meaningHu: '1',                               category: 'number', difficulty: 'beginner',     traps: [] },
+  { id: 'au_n_ni',     text: 'に',     romaji: 'ni',     meaningHu: '2',                               category: 'number', difficulty: 'beginner',     traps: [] },
+  { id: 'au_n_san',    text: 'さん',   romaji: 'san',    meaningHu: '3',                               category: 'number', difficulty: 'beginner',     traps: [] },
+  { id: 'au_n_yon',    text: 'よん',   romaji: 'yon',    meaningHu: '4 (yon-olvasat)',                 category: 'number', difficulty: 'beginner',     traps: [] },
+  { id: 'au_n_go',     text: 'ご',     romaji: 'go',     meaningHu: '5',                               category: 'number', difficulty: 'beginner',     traps: [] },
+  { id: 'au_n_roku',   text: 'ろく',   romaji: 'roku',   meaningHu: '6',                               category: 'number', difficulty: 'beginner',     traps: [] },
+  { id: 'au_n_nana',   text: 'なな',   romaji: 'nana',   meaningHu: '7 (nana-olvasat)',                category: 'number', difficulty: 'beginner',     traps: [] },
+  { id: 'au_n_hachi',  text: 'はち',   romaji: 'hachi',  meaningHu: '8',                               category: 'number', difficulty: 'beginner',     traps: [] },
+  { id: 'au_n_kyuu',   text: 'きゅう', romaji: 'kyuu',   meaningHu: '9 (kyuu-olvasat)',                category: 'number', difficulty: 'beginner',     traps: ['long_vowel'] },
+  { id: 'au_n_juu',    text: 'じゅう', romaji: 'juu',    meaningHu: '10',                              category: 'number', difficulty: 'beginner',     traps: ['long_vowel'] },
+  { id: 'au_n_shi',    text: 'し',     romaji: 'shi',    meaningHu: '4 (shi-olvasat — évszakok előtt)', category: 'number', difficulty: 'intermediate', traps: [] },
+  { id: 'au_n_shichi', text: 'しち',   romaji: 'shichi', meaningHu: '7 (shichi-olvasat)',              category: 'number', difficulty: 'intermediate', traps: [] },
+  { id: 'au_n_ku',     text: 'く',     romaji: 'ku',     meaningHu: '9 (ku-olvasat — óra, stb.)',      category: 'number', difficulty: 'intermediate', traps: [] },
+
+  // ── Hét napjai ───────────────────────────────────────────
+  { id: 'au_w_mon', text: 'げつようび', romaji: 'getsuyoubi', meaningHu: 'hétfő',     category: 'weekday', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_w_tue', text: 'かようび',   romaji: 'kayoubi',    meaningHu: 'kedd',      category: 'weekday', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_w_wed', text: 'すいようび', romaji: 'suiyoubi',   meaningHu: 'szerda',    category: 'weekday', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_w_thu', text: 'もくようび', romaji: 'mokuyoubi',  meaningHu: 'csütörtök', category: 'weekday', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_w_fri', text: 'きんようび', romaji: 'kinyoubi',   meaningHu: 'péntek',    category: 'weekday', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_w_sat', text: 'どようび',   romaji: 'doyoubi',    meaningHu: 'szombat',   category: 'weekday', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_w_sun', text: 'にちようび', romaji: 'nichiyoubi', meaningHu: 'vasárnap',  category: 'weekday', difficulty: 'intermediate', traps: ['long_vowel'] },
+
+  // ── Mindennapi kifejezések ───────────────────────────────
+  { id: 'au_ph_ohayou',        text: 'おはようございます',  romaji: 'ohayou gozaimasu',  meaningHu: 'jó reggelt (udvarias)',        category: 'phrase', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_ph_konnichiwa',    text: 'こんにちは',          romaji: 'konnichiwa',        meaningHu: 'jó napot',                    category: 'phrase', difficulty: 'beginner',     traps: [] },
+  { id: 'au_ph_konbanwa',      text: 'こんばんは',          romaji: 'konbanwa',          meaningHu: 'jó estét',                    category: 'phrase', difficulty: 'beginner',     traps: [] },
+  { id: 'au_ph_arigatou',      text: 'ありがとうございます', romaji: 'arigatou gozaimasu', meaningHu: 'köszönöm (udvarias)',        category: 'phrase', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_ph_sumimasen',     text: 'すみません',          romaji: 'sumimasen',         meaningHu: 'elnézést / bocsánat',         category: 'phrase', difficulty: 'beginner',     traps: [] },
+  { id: 'au_ph_wakarimasen',   text: 'わかりません',        romaji: 'wakarimasen',       meaningHu: 'nem értem',                   category: 'phrase', difficulty: 'intermediate', traps: [] },
+  { id: 'au_ph_onegaishimasu', text: 'おねがいします',      romaji: 'onegaishimasu',     meaningHu: 'kérem / légy szíves',         category: 'phrase', difficulty: 'intermediate', traps: [] },
+  { id: 'au_ph_sayounara',     text: 'さようなら',          romaji: 'sayounara',         meaningHu: 'viszontlátásra',              category: 'phrase', difficulty: 'beginner',     traps: ['long_vowel'] },
+  { id: 'au_ph_daijoubu',      text: 'だいじょうぶです',    romaji: 'daijoubu desu',     meaningHu: 'rendben van / semmi baj',     category: 'phrase', difficulty: 'intermediate', traps: ['long_vowel'] },
+  { id: 'au_ph_nihongo',       text: 'にほんごがすきです',  romaji: 'nihongo ga suki desu', meaningHu: 'szeretem a japán nyelvet', category: 'phrase', difficulty: 'intermediate', traps: [] },
+
+];
+
+
+// ── 2) KATEGÓRIÁK ────────────────────────────────────────────
+const NIHONCORE_AUDIO_CATEGORIES = {
+  date:    'Dátum',
+  time:    'Időpont',
+  verb:    'Ige',
+  adj:     'Melléknév',
+  pair:    'Minimal pair',
+  number:  'Szám',
+  weekday: 'Hét napja',
+  phrase:  'Kifejezés',
+};
+
+
+// ── 3) NEHÉZSÉGI SZINTEK & PLAYBACK-SEBESSÉG ─────────────────
+const NIHONCORE_AUDIO_TIERS = [
+  { id: 'beginner',     nameHu: 'Kezdő',  sub: 'lassú audio (0.75×)',            speed: 0.75 },
+  { id: 'intermediate', nameHu: 'Haladó', sub: 'közel természetes (0.9×)',       speed: 0.90 },
+  { id: 'advanced',     nameHu: 'Profi',  sub: 'természetes tempó (1.0×)',       speed: 1.00 },
+];
+
+
+// ── 4) AUDIO-HIBAKÓDOK ───────────────────────────────────────
+const NIHONCORE_AUDIO_ERROR_TYPES = {
+  long_vowel: {
+    type:     'audio',
+    title:    'Hosszú magánhangzó',
+    template: 'Nem hallottad meg a <strong>hosszú magánhangzót</strong>. '
+            + 'A japánban a hanghossz <em>jelentéskülönbséget</em> okoz: '
+            + '<strong class="pfe-jp-ok">{correct}</strong> ≠ {chosen}.',
+  },
+  sokuon: {
+    type:     'audio',
+    title:    'Kis っ (促音)',
+    template: 'Lemaradt a <strong>kis っ</strong> (sokuon). '
+            + 'Figyelj a rövid szünetre a hang előtt: '
+            + '<strong class="pfe-jp-ok">{correct}</strong> ≠ {chosen}.',
+  },
+  mora: {
+    type:     'audio',
+    title:    'Mora-hiba',
+    template: 'Egy mora elcsúszott. A japán ritmus mora-alapú — '
+            + 'minden mora azonos hosszú: '
+            + '<strong class="pfe-jp-ok">{correct}</strong>.',
+  },
+  wrong_choice: {
+    type:     'audio',
+    title:    'Hibás felismerés',
+    template: 'Nem ezt hallottad. A helyes: '
+            + '<strong class="pfe-jp-ok">{correct}</strong> ({romaji}) — {meaning}.',
+  },
+};

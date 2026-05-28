@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0b14" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="NihonCore" />
+  <title>Mondat-Mester — NihonCore</title>
+  <link rel="icon" type="image/png" href="../img/fav_icon_nihoncore.png" />
+  <link rel="apple-touch-icon" href="../img/app_icon.png" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Noto+Serif+JP:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@barba/core@2.10.3/dist/barba.umd.min.js"></script>
+</head>
+<body data-barba="wrapper">
+
+  <div class="bg-decoration">
+    <div class="ink-circle circle-1"></div>
+    <div class="ink-circle circle-2"></div>
+    <div class="ink-circle circle-3"></div>
+    <div class="seigaiha-pattern"></div>
+  </div>
+
+  <header class="header" id="header">
+    <div class="header-inner">
+      <a href="../index.html" class="logo">
+        <span class="logo-kanji">日</span>
+        <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
+      </a>
+      <nav class="nav module-page-nav"></nav>
+      <div class="auth-buttons">
+        <a href="login.html" class="btn btn-ghost">Bejelentkezés</a>
+        <a href="../index.html" class="btn-home" title="Kezdőlap" aria-label="Kezdőlap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="module-main practice-main" id="practiceMain" data-barba="container" data-barba-namespace="practiceMain">
+
+    <!-- Univerzális Segítők kapcsoló -->
+    <div class="helpers-bar" id="helpersBar">
+      <span class="hb-label">Segítők</span>
+      <div class="helpers-toggle">
+        <button class="ht-btn active" data-helper="romaji" type="button">
+          <span class="ht-dot"></span>Romaji
+        </button>
+        <button class="ht-btn active" data-helper="hu" type="button">
+          <span class="ht-dot"></span>Magyar
+        </button>
+        <button class="ht-btn" data-helper="audio" type="button">
+          <span class="ht-dot"></span>🔊 Hang
+        </button>
+      </div>
+    </div>
+
+    <!-- ── 0. Lépés: Selection Screen (Lobby) ── -->
+    <section class="practice-lobby glass-panel-heavy" id="practiceLobby">
+      <div class="lobby-header">
+        <div class="lobby-eyebrow">Mondat-Mester · v1.4</div>
+        <h1 class="lobby-title">Állítsd be a kört</h1>
+        <p class="lobby-sub">Válaszd ki a JLPT szintet, a módot és a fókuszokat — aztán kezdd el a gyakorlást.</p>
+      </div>
+
+      <!-- 1. JLPT Szint -->
+      <div class="lobby-section">
+        <div class="lobby-section-label">1 · JLPT szint</div>
+        <div class="pl-level-row" id="plLevelRow">
+          <button class="pl-level-btn active" data-level="N5">
+            <span class="pl-l-tag">N5</span>
+            <span class="pl-l-sub">Alapok</span>
+          </button>
+          <button class="pl-level-btn" data-level="N4">
+            <span class="pl-l-tag">N4</span>
+            <span class="pl-l-sub">Középhaladó</span>
+          </button>
+          <button class="pl-level-btn" data-level="N3">
+            <span class="pl-l-tag">N3</span>
+            <span class="pl-l-sub">Komplex</span>
+          </button>
+          <button class="pl-level-btn pl-l-locked" data-level="N2" disabled>
+            <span class="pl-l-tag">N2</span>
+            <span class="pl-l-sub">🔒 Hamarosan</span>
+          </button>
+          <button class="pl-level-btn pl-l-locked" data-level="N1" disabled>
+            <span class="pl-l-tag">N1</span>
+            <span class="pl-l-sub">🔒 Hamarosan</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 2. Mód választó -->
+      <div class="lobby-section">
+        <div class="lobby-section-label">2 · Mód</div>
+        <div class="pl-mode-row">
+          <button class="pl-mode-btn active" data-mode="particles">
+            <span class="pl-m-icon">🔗</span>
+            <div class="pl-m-text">
+              <span class="pl-m-name">Partikula-kitöltő</span>
+              <span class="pl-m-sub">Kész mondat, hiányzó partikulák — beillesztés (drag&drop / kattintás)</span>
+            </div>
+          </button>
+          <button class="pl-mode-btn" data-mode="puzzle">
+            <span class="pl-m-icon">🧩</span>
+            <div class="pl-m-text">
+              <span class="pl-m-name">Mondat-Puzzle</span>
+              <span class="pl-m-sub">Kevert tokenek — drag&drop sorrendbe · rugalmas validátor</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- 3. Fókusz szűrők -->
+      <div class="lobby-section">
+        <div class="lobby-section-label">3 · Fókusz (több is választható)</div>
+        <div class="pl-filter-row">
+          <span class="pl-f-label">Funkció</span>
+          <div class="pl-f-buttons">
+            <button class="pl-f-btn active" data-dim="function" data-val="Affirmative">Állító</button>
+            <button class="pl-f-btn active" data-dim="function" data-val="Negative">Tagadó</button>
+            <button class="pl-f-btn active" data-dim="function" data-val="Question">Kérdő</button>
+          </div>
+        </div>
+        <div class="pl-filter-row">
+          <span class="pl-f-label">Idő</span>
+          <div class="pl-f-buttons">
+            <button class="pl-f-btn active" data-dim="tense" data-val="Non-Past">Jelen / Jövő</button>
+            <button class="pl-f-btn active" data-dim="tense" data-val="Past">Múlt</button>
+            <button class="pl-f-btn active" data-dim="tense" data-val="Progressive">Folyamatos</button>
+          </div>
+        </div>
+        <div class="pl-filter-row">
+          <span class="pl-f-label">Stílus</span>
+          <div class="pl-f-buttons">
+            <button class="pl-f-btn active" data-dim="register" data-val="Polite">Udvarias</button>
+            <button class="pl-f-btn active" data-dim="register" data-val="Casual">Bizalmas</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Kártyák száma -->
+      <div class="lobby-section">
+        <div class="lobby-section-label">4 · Kártyák száma</div>
+        <div class="ml-count-row">
+          <div class="ml-count-presets">
+            <button class="ml-count-btn" data-count="3">3</button>
+            <button class="ml-count-btn active" data-count="5">5</button>
+            <button class="ml-count-btn" data-count="10">10</button>
+          </div>
+          <div class="ml-count-custom">
+            <label class="ml-count-custom-label" for="plCustomCount">vagy saját:</label>
+            <input type="number" id="plCustomCount" min="1" max="50" placeholder="—" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats + Start -->
+      <div class="lobby-stats">
+        <span class="lobby-combos">Megfelelő mondatok a poolban: <strong id="lobbyMatchCount">—</strong></span>
+      </div>
+      <button class="btn btn-primary glow-effect ml-start" id="plStart">Indítás — 5 kártya</button>
+    </section>
+
+    <!-- ── Practice Runtime ── -->
+    <section class="practice-runtime hidden" id="practiceRuntime">
+
+      <!-- Top stats + exit -->
+      <div class="pr-stats" id="prStats">
+        <div class="pr-stat">
+          <span class="pr-stat-label">Pont</span>
+          <span class="pr-stat-value" id="prScore">0</span>
+        </div>
+        <div class="pr-stat">
+          <span class="pr-stat-label">Sorozat</span>
+          <span class="pr-stat-value" id="prStreak">0 🔥</span>
+        </div>
+        <button class="round-exit" id="prExit" type="button" title="Kilépés a körből">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          <span>Kilépés</span>
+        </button>
+      </div>
+
+      <!-- Progress strip -->
+      <div class="round-progress">
+        <span class="round-progress-text" id="prCardCount">Kártya 1 / 5</span>
+        <div class="round-progress-bar"><div class="round-progress-fill" id="prProgressFill" style="width: 0%"></div></div>
+      </div>
+
+      <!-- Sentence display + Particle tray (Partikula-kitöltő mód) -->
+      <div class="pr-card glass-panel-heavy" id="prCard">
+        <!-- Töltődik runtime -->
+      </div>
+
+      <!-- Action buttons -->
+      <div class="pr-actions" id="prActions"></div>
+
+      <!-- Feedback -->
+      <div class="pr-feedback hidden" id="prFeedback"></div>
+
+      <!-- Summary (a kör végén) -->
+      <div class="pr-summary hidden" id="prSummary"></div>
+
+    </section>
+
+  </main>
+
+  <footer class="footer glass-footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <span class="logo-kanji">日</span>
+        <span class="logo-text">Nihon<span class="logo-accent">Core</span></span>
+      </div>
+      <p class="footer-note">Dekiru 1 alapján · JLPT N5 · © 2026 NihonCore</p>
+    </div>
+  </footer>
+
+  <script src="../js/data/core.js"></script>
+  <script src="../js/data/sentences.js"></script>
+  <script src="../js/data/verbs.js"></script>
+  <script src="../js/data/adjectives.js"></script>
+  <script src="../js/data/counters.js"></script>
+  <script src="../js/data/datetime.js"></script>
+  <script src="../js/data/audio.js"></script>
+  <script src="../js/data/grammar.js"></script>
+  <script src="../js/app.js"></script>
+</body>
+</html>
