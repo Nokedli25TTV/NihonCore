@@ -391,6 +391,7 @@ window.NihonCoreRound = (function () {
       if (info && info.results && info.results.length > 0 &&
           window.NihonCoreStats && NihonCoreStats.recordSession) {
         _recorded = true;
+        info.partial = true;                  // félbehagyott kör jelölése a statisztikában
         NihonCoreStats.recordSession(info);   // markComplete a recordSession-ben fut le
       }
     } catch (e) {}
@@ -1751,7 +1752,8 @@ const NihonCoreStats = (function () {
       wrongCount: results.length - correct,
       durationMs: info.startTs ? Math.max(0, now - info.startTs) : 0,
       score: info.score || 0,
-      errorCodes: errorCodes
+      errorCodes: errorCodes,
+      partial: !!info.partial          // V18: félbehagyott (kör közben kilépett) kör?
     };
     const arr = load();
     arr.push(rec);
@@ -14622,11 +14624,14 @@ function initStatsPage() {
       const pct = s.questionCount > 0 ? Math.round((s.correctCount / s.questionCount) * 100) : 0;
       const cls = pct >= 80 ? 'sh-ok' : pct >= 50 ? 'sh-warn' : 'sh-bad';
       const te = topError(s.errorCodes);
+      const statusCls = s.partial ? 'sh-status-partial' : 'sh-status-done';
+      const statusTxt = s.partial ? '⏸ Félbehagyott' : '✓ Befejezett';
       return `
-        <div class="sh-row ${cls}">
+        <div class="sh-row ${cls}${s.partial ? ' sh-row-partial' : ''}">
           <div class="sh-main">
             <span class="sh-module">${MODULE_LABELS[s.module] || s.module}</span>
             <span class="sh-mode">${MODE_LABELS[s.mode] || s.mode}</span>
+            <span class="sh-status ${statusCls}">${statusTxt}</span>
             <span class="sh-date">${fmtDate(s.ts)}</span>
           </div>
           <div class="sh-stats">
@@ -14638,9 +14643,13 @@ function initStatsPage() {
         </div>`;
     }).join('');
 
+    const doneCount    = sessions.filter(s => !s.partial).length;
+    const partialCount = sessions.length - doneCount;
+
     el.innerHTML = `
       <div class="sh-summary glass-panel">
-        <div class="sh-sum-stat"><span class="sh-sum-num">${sessions.length}</span><span class="sh-sum-label">befejezett kör</span></div>
+        <div class="sh-sum-stat"><span class="sh-sum-num">${doneCount}</span><span class="sh-sum-label">befejezett kör</span></div>
+        <div class="sh-sum-stat"><span class="sh-sum-num">${partialCount}</span><span class="sh-sum-label">félbehagyott kör</span></div>
         <div class="sh-sum-stat"><span class="sh-sum-num">${totalQ}</span><span class="sh-sum-label">összes kérdés</span></div>
         <div class="sh-sum-stat"><span class="sh-sum-num">${acc}%</span><span class="sh-sum-label">össz-pontosság</span></div>
         <button class="sh-clear" id="shClear" type="button">Előzmények törlése</button>

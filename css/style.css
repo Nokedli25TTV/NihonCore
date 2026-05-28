@@ -4448,6 +4448,19 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   background: rgba(58, 50, 38, 0.08); color: var(--white-dim);
 }
 .sh-date { font-size: 0.8rem; color: var(--white-dim); }
+/* V18 — Befejezett / Félbehagyott állapot-jelző */
+.sh-status {
+  font-size: 0.72rem; font-weight: 700;
+  padding: 2px 10px; border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+.sh-status-done {
+  background: var(--matcha-soft); color: var(--matcha-deep);
+}
+.sh-status-partial {
+  background: var(--gold-glow); color: var(--gold-trad);
+}
+.sh-row-partial { opacity: 0.92; }
 .sh-stats { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .sh-score { font-size: 0.92rem; font-weight: 700; color: var(--white); }
 .sh-pct { font-size: 0.92rem; font-weight: 700; color: var(--gold); }
