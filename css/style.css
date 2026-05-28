@@ -352,6 +352,26 @@ rt {
 }
 .nav-link:hover::after { transform: scaleX(1); }
 
+/* V18 — Modul-név badge a fejléc közepén (mindig látszik: lobby + kör közben) */
+.module-name-badge {
+  font-family: var(--font-serif);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--sumi-soft);
+  letter-spacing: 0.02em;
+  padding: 5px 16px;
+  border-radius: 999px;
+  background: var(--surface-warm);
+  border: 1px solid var(--washi-edge);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 46vw;
+}
+@media (max-width: 600px) {
+  .module-name-badge { font-size: 0.8rem; padding: 4px 11px; max-width: 40vw; }
+}
+
 /* 3. Jobb harmad: Gombok */
 .auth-buttons {
   display: flex; gap: 12px; align-items: center; justify-content: flex-end;

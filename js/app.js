@@ -353,6 +353,113 @@ window.NihonCoreMotion = (function () {
 })();
 
 
+// ── NihonCoreRound ── Univerzális kör-őr + modul-név (V18) ────────────
+//   Req 1: aktív kör közben BÁRMILYEN kilépés (logo / 🏠 / böngésző-vissza /
+//          user-menü link) megerősítést kér — nem csak a „Kilépés" gomb.
+//   Req 2: a modul neve MINDIG látszik a fejlécben (lobby ÉS kör közben),
+//          a .module-page-title-ből a .module-page-nav-ba tükrözve.
+//   Req 3: ha kör közben kilépsz (bárhogy), az eddigi válaszaid (helyes/
+//          hibás) elmentődnek a statisztikába — nem csak a befejezett körök.
+//
+//   Egy kör életciklusa:
+//     begin(snapshotFn)  — a modul a kör indításakor regisztrál egy
+//        pillanatkép-fn-t, ami { module, mode, results, score, startTs }-t ad.
+//     recordSession (kör vége) → markComplete() → a kör inaktív lesz.
+//     Kilépés kör közben → flush() → ha van eredmény, recordSession(pillanatkép).
+//   A flush-t a hero újra-megjelenése (kör → lobby), a navigációs-őr és a
+//   pagehide is meghívja; a markComplete + _recorded gátolja a dupla mentést.
+window.NihonCoreRound = (function () {
+  var _active = false;
+  var _recorded = false;
+  var _snapshot = null;
+  var _heroObserver = null;
+  var EXIT_MSG = 'Biztosan kilépsz a körből?\n\n' +
+    'A megkezdett kört nem fejezed be, de az eddigi válaszaid (helyes/hibás) ' +
+    'elmentődnek a statisztikába.';
+
+  function begin(snapshotFn) {
+    _active = true; _recorded = false;
+    _snapshot = (typeof snapshotFn === 'function') ? snapshotFn : null;
+  }
+  function isActive() { return _active; }
+  function markComplete() { _recorded = true; _active = false; }
+
+  function flush() {
+    if (!_active || _recorded || !_snapshot) { _active = false; return; }
+    try {
+      var info = _snapshot();
+      if (info && info.results && info.results.length > 0 &&
+          window.NihonCoreStats && NihonCoreStats.recordSession) {
+        _recorded = true;
+        NihonCoreStats.recordSession(info);   // markComplete a recordSession-ben fut le
+      }
+    } catch (e) {}
+    _active = false;
+  }
+
+  // ── Req 2 — modul-név a fejlécben ───────────────────
+  function refreshBadge() {
+    try {
+      var nav = document.querySelector('.nav.module-page-nav');
+      if (!nav) return;
+      var titleEl = document.querySelector('.module-page-title');
+      var name = titleEl ? (titleEl.textContent || '').trim() : '';
+      if (!name) {   // pl. practice.html — nincs .module-page-title → a <title>-ből
+        name = (document.title || '').replace(/\s*[—–-]\s*NihonCore.*$/, '').trim();
+      }
+      nav.innerHTML = name ? '<span class="module-name-badge">' + name + '</span>' : '';
+    } catch (e) {}
+  }
+
+  // ── Req 3 — hero újra-megjelenés (kör → lobby) → részeredmény mentés ──
+  function attachHeroObserver() {
+    if (!window.MutationObserver) return;
+    if (_heroObserver) { _heroObserver.disconnect(); _heroObserver = null; }
+    var hero = document.querySelector('.module-hero');
+    if (!hero) return;
+    _heroObserver = new MutationObserver(function () {
+      if (_active && !hero.classList.contains('hidden')) flush();
+    });
+    _heroObserver.observe(hero, { attributes: true, attributeFilter: ['class'] });
+  }
+
+  // initCurrentPage (kezdeti + Barba afterEnter) hívja
+  function refresh() { refreshBadge(); attachHeroObserver(); }
+
+  // ── Req 1 — navigációs őr (capture — a Barba elé fut) ──
+  function onClick(e) {
+    if (!_active) return;
+    var a = (e.target && e.target.closest) ? e.target.closest('a[href]') : null;
+    if (!a) return;
+    if (a.closest('.round-exit')) return;            // saját confirm-je van
+    if (a.hasAttribute('data-no-guard')) return;
+    var href = a.getAttribute('href') || '';
+    if (!href || href.charAt(0) === '#' || href.indexOf('javascript:') === 0) return;
+    if (confirm(EXIT_MSG)) {
+      flush();                                        // megerősítve → mentsük a részeredményt
+    } else {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    }
+  }
+
+  function init() {
+    document.addEventListener('click', onClick, true);
+    window.addEventListener('beforeunload', function (e) {
+      if (_active) { e.preventDefault(); e.returnValue = ''; return ''; }
+    });
+    window.addEventListener('pagehide', function () { if (_active) flush(); });
+    refresh();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+
+  return { begin: begin, isActive: isActive, markComplete: markComplete, flush: flush, refresh: refresh };
+})();
+
+
 // ── NihonCoreFlashcard ── Univerzális 3D flashcard motor (V8) ──
 //   Egy újrahasznosítható komponens minden modulhoz:
 //   Számláló · Ragozó · Melléknév · Datetime.
@@ -1654,6 +1761,8 @@ const NihonCoreStats = (function () {
     if (window.NihonCoreSync && window.NihonCoreSync.schedulePush) {
       window.NihonCoreSync.schedulePush();
     }
+    // V18: a kör-őrnek jelezzük, hogy ez a kör elmentődött (nincs dupla részmentés)
+    if (window.NihonCoreRound && NihonCoreRound.markComplete) NihonCoreRound.markComplete();
     return rec;
   }
 
@@ -2549,7 +2658,10 @@ function initModulePage() {
       customInput.addEventListener('input', () => {
         const n = parseInt(customInput.value, 10);
         if (!isNaN(n) && n > 0) {
-          matrixState.selectedTaskCount = n;
+          const _max = countFilteredCombos();
+          const _v = (_max > 0 && n > _max) ? _max : n;
+          if (_v !== n) customInput.value = String(_v);
+          matrixState.selectedTaskCount = _v;
           document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
         }
         updateLobbyStats();
@@ -2723,6 +2835,7 @@ function initModulePage() {
     matrixState.taskIdx = 0;
     matrixState.results = [];
     matrixState.roundStartTs = Date.now();    // V5 P2 — stats
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'arimasu-imasu', mode:'matrix-selector', results: matrixState.results, score: matrixState.results.filter(function(r){return r.allCorrect;}).length*10, startTs: matrixState.roundStartTs }; });
     matrixState.taskQueue = generateMatrixTasks(matrixState.filters, matrixState.selectedTaskCount, m);
     if (matrixState.taskQueue.length === 0) return;
 
@@ -2740,9 +2853,8 @@ function initModulePage() {
     if (exit) {
       exit.addEventListener('click', () => {
         if (matrixState.inLobby) return;
-        if (!confirm('Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-          'a teljes kör végéig nem mentődik az eredményed. ' +
-          '(Folyamatban lévő statisztika-mentés a V3-ban várható.)')) return;
+        if (!confirm('Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+          'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.')) return;
         document.querySelector('.module-hero')?.classList.remove('hidden');
         const container = document.getElementById('phaseContent');
         container.innerHTML = renderMatrixSelector(m, phase);
@@ -2922,6 +3034,7 @@ function initModulePage() {
     drillState.bestStreak = 0;
     drillState.results = [];
     drillState.roundStartTs = Date.now();   // V5 P2 — stats
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'arimasu-imasu', mode:'speed-drill', results: drillState.results, score: drillState.score, startTs: drillState.roundStartTs }; });
 
     // Speed Drill auto-indul a phase-tab kattintásra → hero rejtése
     document.querySelector('.module-hero')?.classList.add('hidden');
@@ -2954,9 +3067,8 @@ function initModulePage() {
     const exit = document.getElementById('sdExit');
     if (exit) {
       exit.addEventListener('click', () => {
-        if (!confirm('Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-          'a teljes kör végéig nem mentődik az eredményed. ' +
-          '(Folyamatban lévő statisztika-mentés a V3-ban várható.)')) return;
+        if (!confirm('Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+          'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.')) return;
         if (window._sdActiveTimer) { clearTimeout(window._sdActiveTimer); window._sdActiveTimer = null; }
         document.querySelector('.module-hero')?.classList.remove('hidden');
         // Vissza Phase 1-re (Megértés tab) — natural reset point
@@ -3263,9 +3375,9 @@ function initModulePage() {
     if (!exit) return;
     exit.addEventListener('click', () => {
       if (counterSettings.inLobby) return;
-      if (!confirm('Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-        'a teljes kör végéig nem mentődik az eredményed. ' +
-        '(Folyamatban lévő statisztika-mentés a V3-ban várható.)')) return;
+      if (!confirm('Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+        'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.' +
+        '')) return;
       counterSettings.inLobby = true;
       document.querySelector('.module-hero')?.classList.remove('hidden');
       const container = document.getElementById('phaseContent');
@@ -3417,7 +3529,10 @@ function initModulePage() {
       custom.addEventListener('input', () => {
         const n = parseInt(custom.value, 10);
         if (!isNaN(n) && n > 0) {
-          counterSettings.cardCount = n;
+          const _max = countCounterPool();
+          const _v = (_max > 0 && n > _max) ? _max : n;
+          if (_v !== n) custom.value = String(_v);
+          counterSettings.cardCount = _v;
           document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
         }
         updateCounterPoolCount();
@@ -3483,6 +3598,7 @@ function initModulePage() {
     counterRunState.bestStreak = 0;
     counterRunState.results = [];
     counterRunState.roundStartTs = Date.now();
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'counter', mode: phase.type, results: counterRunState.results, score: counterRunState.score, startTs: counterRunState.roundStartTs }; });
     counterRunState.submitted = false;
     counterRunState.chosenIdx = null;
 
@@ -4531,7 +4647,10 @@ function initPracticePage() {
     customInput.addEventListener('input', () => {
       const n = parseInt(customInput.value, 10);
       if (!isNaN(n) && n > 0) {
-        lobbyState.cardCount = n;
+        const _max = filterSentences().length;
+        const _v = (_max > 0 && n > _max) ? _max : n;
+        if (_v !== n) customInput.value = String(_v);
+        lobbyState.cardCount = _v;
         document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
       }
       updateLobbyMatchCount();
@@ -4574,6 +4693,7 @@ function initPracticePage() {
     runtimeState.bestStreak = 0;
     runtimeState.results = [];
     runtimeState.roundStartTs = Date.now();
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'practice', mode: lobbyState.mode, results: runtimeState.results, score: runtimeState.score, startTs: runtimeState.roundStartTs }; });
 
     document.getElementById('practiceLobby').classList.add('hidden');
     document.getElementById('practiceRuntime').classList.remove('hidden');
@@ -5328,9 +5448,10 @@ function initPracticePage() {
   }
 
   function exitPracticeRound() {
-    if (!confirm('Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-      'a teljes kör végéig nem mentődik az eredményed. ' +
-      '(Folyamatban lévő statisztika-mentés a V3-ban várható.)')) return;
+    if (!confirm('Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+      'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.' +
+      '')) return;
+    if (window.NihonCoreRound) NihonCoreRound.flush();   // practice-nek nincs .module-hero observer
     backToLobby();
   }
 
@@ -6839,7 +6960,10 @@ function initConjugationPage() {
       customInput.addEventListener('input', () => {
         const n = parseInt(customInput.value, 10);
         if (!isNaN(n) && n > 0) {
-          drillSettings.cardCount = n;
+          const _max = countComboPool();
+          const _v = (_max > 0 && n > _max) ? _max : n;
+          if (_v !== n) customInput.value = String(_v);
+          drillSettings.cardCount = _v;
           document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
           saveSettings();
           updateStartBtn();
@@ -6878,6 +7002,7 @@ function initConjugationPage() {
     drillRunState.bestStreak = 0;
     drillRunState.results = [];
     drillRunState.roundStartTs = Date.now();
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'conjugation', mode: drillSettings.mode, results: drillRunState.results, score: drillRunState.score, startTs: drillRunState.roundStartTs }; });
     drillRunState.inLobby = false;
 
     document.querySelector('.module-hero')?.classList.add('hidden');
@@ -7509,9 +7634,9 @@ function initConjugationPage() {
   if (exitBtn) {
     exitBtn.addEventListener('click', () => {
       if (!drillRunState.inLobby && confirm(
-        'Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-        'a teljes kör végéig nem mentődik az eredményed. ' +
-        '(Folyamatban lévő statisztika-mentés a V3-ban várható.)')) {
+        'Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+        'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.' +
+        '')) {
         backToLobby();
       }
     });
@@ -8366,7 +8491,10 @@ function initAdjectivesPage() {
       customInput.addEventListener('input', () => {
         const n = parseInt(customInput.value, 10);
         if (!isNaN(n) && n > 0) {
-          drillSettings.cardCount = n;
+          const _max = countAdjPool();
+          const _v = (_max > 0 && n > _max) ? _max : n;
+          if (_v !== n) customInput.value = String(_v);
+          drillSettings.cardCount = _v;
           document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
           saveAdjSettings();
           updateAdjStartBtn();
@@ -8398,6 +8526,7 @@ function initAdjectivesPage() {
     drillRunState.bestStreak = 0;
     drillRunState.results = [];
     drillRunState.roundStartTs = Date.now();
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'adjectives', mode: drillSettings.mode, results: drillRunState.results, score: drillRunState.score, startTs: drillRunState.roundStartTs }; });
     drillRunState.inLobby = false;
 
     document.querySelector('.module-hero')?.classList.add('hidden');
@@ -9086,9 +9215,9 @@ function initAdjectivesPage() {
   if (exitBtn) {
     exitBtn.addEventListener('click', () => {
       if (!drillRunState.inLobby && confirm(
-        'Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-        'a teljes kör végéig nem mentődik az eredményed. ' +
-        '(Folyamatban lévő statisztika-mentés a V3-ban várható.)')) {
+        'Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+        'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.' +
+        '')) {
         drillRunState.inLobby = true;
         drillRunState.cards = [];
         if (drillRunState.timerHandle) { clearTimeout(drillRunState.timerHandle); drillRunState.timerHandle = null; }
@@ -9718,7 +9847,10 @@ function initDateTimePage() {
       customInput.addEventListener('input', () => {
         const n = parseInt(customInput.value, 10);
         if (!isNaN(n) && n > 0) {
-          drillSettings.cardCount = n;
+          const _max = countDtPool();
+          const _v = (_max > 0 && n > _max) ? _max : n;
+          if (_v !== n) customInput.value = String(_v);
+          drillSettings.cardCount = _v;
           document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
           saveDtSettings();
           updateDtStartBtn();
@@ -9751,6 +9883,7 @@ function initDateTimePage() {
     drillRunState.bestStreak = 0;
     drillRunState.results = [];
     drillRunState.roundStartTs = Date.now();
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'datetime', mode: drillSettings.mode, results: drillRunState.results, score: drillRunState.score, startTs: drillRunState.roundStartTs }; });
     drillRunState.inLobby = false;
 
     document.querySelector('.module-hero')?.classList.add('hidden');
@@ -10280,9 +10413,9 @@ function initDateTimePage() {
   if (exitBtn) {
     exitBtn.addEventListener('click', () => {
       if (!drillRunState.inLobby && confirm(
-        'Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-        'a teljes kör végéig nem mentődik az eredményed. ' +
-        '(Folyamatban lévő statisztika-mentés a V3-ban várható.)')) {
+        'Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+        'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.' +
+        '')) {
         backToDtLobby();
       }
     });
@@ -10914,7 +11047,10 @@ function initListeningPage() {
       customInput.addEventListener('input', () => {
         const n = parseInt(customInput.value, 10);
         if (!isNaN(n) && n > 0) {
-          drillSettings.cardCount = n;
+          const _max = (drillSettings.mode === 'pro') ? countProPool() : countLstPool();
+          const _v = (_max > 0 && n > _max) ? _max : n;
+          if (_v !== n) customInput.value = String(_v);
+          drillSettings.cardCount = _v;
           document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
           saveLstSettings();
           updateLstStartBtn();
@@ -10965,6 +11101,7 @@ function initListeningPage() {
     drillRunState.results = [];
     drillRunState.speedPenalty = 0;
     drillRunState.roundStartTs = Date.now();
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'listening', mode: drillSettings.mode, results: drillRunState.results, score: drillRunState.score, startTs: drillRunState.roundStartTs }; });
     drillRunState.inLobby = false;
 
     document.querySelector('.module-hero')?.classList.add('hidden');
@@ -11500,9 +11637,9 @@ function initListeningPage() {
   if (exitBtn) {
     exitBtn.addEventListener('click', () => {
       if (!drillRunState.inLobby && confirm(
-        'Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-        'a teljes kör végéig nem mentődik az eredményed. ' +
-        '(Folyamatban lévő statisztika-mentés a V3-ban várható.)')) {
+        'Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+        'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.' +
+        '')) {
         backToLstLobby();
       }
     });
@@ -12346,7 +12483,10 @@ function initGrammarPage() {
       customInput.addEventListener('input', () => {
         const n = parseInt(customInput.value, 10);
         if (!isNaN(n) && n > 0) {
-          drillSettings.cardCount = n;
+          const _max = countGrmPool();
+          const _v = (_max > 0 && n > _max) ? _max : n;
+          if (_v !== n) customInput.value = String(_v);
+          drillSettings.cardCount = _v;
           document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
           saveGrmSettings();
           updateGrmStartBtn();
@@ -12378,6 +12518,7 @@ function initGrammarPage() {
     drillRunState.bestStreak = 0;
     drillRunState.results = [];
     drillRunState.roundStartTs = Date.now();
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'grammar', mode: drillSettings.mode, results: drillRunState.results, score: drillRunState.score, startTs: drillRunState.roundStartTs }; });
     drillRunState.inLobby = false;
 
     document.querySelector('.module-hero')?.classList.add('hidden');
@@ -13078,8 +13219,8 @@ function initGrammarPage() {
   if (exitBtn) {
     exitBtn.addEventListener('click', () => {
       if (!drillRunState.inLobby && confirm(
-        'Biztosan kilépsz a körből?\n\nA jelenleg játszott kör adatai elvesznek, ' +
-        'a teljes kör végéig nem mentődik az eredményed.')) {
+        'Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+        'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.')) {
         backToGrmLobby();
       }
     });
@@ -13603,7 +13744,10 @@ function initProductionPage() {
       cust.addEventListener('input', () => {
         const n = parseInt(cust.value, 10);
         if (!isNaN(n) && n > 0) {
-          drillSettings.cardCount = n;
+          const _max = countProdPool();
+          const _v = (_max > 0 && n > _max) ? _max : n;
+          if (_v !== n) cust.value = String(_v);
+          drillSettings.cardCount = _v;
           document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
           saveProdSettings();
           updateProdStartBtn();
@@ -13634,6 +13778,7 @@ function initProductionPage() {
     drillRunState.bestStreak = 0;
     drillRunState.results = [];
     drillRunState.roundStartTs = Date.now();
+    if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'production', mode:'free', results: drillRunState.results, score: drillRunState.score, startTs: drillRunState.roundStartTs }; });
     drillRunState.inLobby = false;
 
     document.querySelector('.module-hero')?.classList.add('hidden');
@@ -13965,7 +14110,8 @@ function initProductionPage() {
   if (exitBtn) {
     exitBtn.addEventListener('click', () => {
       if (!drillRunState.inLobby && confirm(
-        'Biztosan kilépsz a körből?\n\nA jelenlegi kör adatai elvesznek.')) {
+        'Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+        'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.')) {
         backToProdLobby();
       }
     });
@@ -15045,6 +15191,8 @@ function initCurrentPage() {
   } else if (document.querySelector('.modules-grid')) {
     initLanding();
   }
+  // V18: modul-név fejléc-badge + hero-observer (kör-őr) frissítése
+  if (window.NihonCoreRound && NihonCoreRound.refresh) NihonCoreRound.refresh();
 }
 
 // Kezdeti init
