@@ -1372,7 +1372,7 @@ const NIHONCORE_SENTENCES = [
   {
     id: 's_n5_092', level: 'N5', translation: 'Hol van az ATM?',
     tokens: [
-      { type: 'word',     jp: 'ATM',        romaji: 'etiiemu',  hu: 'ATM' },
+      { type: 'word',     jp: 'ATM',        romaji: 'eetiiemu',  hu: 'ATM' },
       { type: 'particle', jp: 'は',         romaji: 'wa',       role: 'topic' },
       { type: 'word',     jp: 'どこ',       romaji: 'doko',     hu: 'hol' },
       { type: 'verb',     jp: 'ですか',     romaji: 'desu ka',  hu: 'van?' }
@@ -1789,7 +1789,7 @@ const NIHONCORE_SENTENCES = [
   {
     id: 's_n5_128', level: 'N5', translation: 'Az ATM a bankon belül van?',
     tokens: [
-      { type: 'word',     jp: 'ATM',        romaji: 'etiiemu',    hu: 'ATM' },
+      { type: 'word',     jp: 'ATM',        romaji: 'eetiiemu',    hu: 'ATM' },
       { type: 'particle', jp: 'は',         romaji: 'wa',         role: 'topic' },
       { type: 'word',     jp: '銀行',       romaji: 'ginkou',     hu: 'bank' },
       { type: 'particle', jp: 'の',         romaji: 'no',         role: 'possession' },
@@ -2361,7 +2361,7 @@ const NIHONCORE_SENTENCES = [
       { type: 'word',     jp: '日本',       romaji: 'nihon',       hu: 'Japán' },
       { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
       { type: 'word',     jp: 'とても',     romaji: 'totemo',      hu: 'nagyon' },
-      { type: 'word',     jp: '熱く',       romaji: 'atsuku',      hu: 'melegen (i-adj -> ku)' },
+      { type: 'word',     jp: '暑く',       romaji: 'atsuku',      hu: 'melegen (i-adj -> ku)' },
       { type: 'verb',     jp: 'なります',   romaji: 'narimasu',    hu: 'lesz/válik' }
     ],
     metadata: { function: 'State Change (I-adj)', form: 'Masu', tense: 'Non-Past', register: 'Polite' }
@@ -2747,7 +2747,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_cnd_013', level: 'N4', translation: 'Ha nehéz a matek érettségi, majd többet tanulok.',
     tokens: [
       { type: 'word',     jp: '数学',       romaji: 'suugaku',     hu: 'matematika' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga' },
       { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
       { type: 'word',     jp: '難しかったら',romaji: 'muzukashikattara', hu: 'ha nehéz lesz (~tara, i-adj)' },
@@ -2786,7 +2786,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_cnd_016', level: 'N4', translation: 'Ha megírod a Java kódot, teszteljük a szerveren.',
     tokens: [
       { type: 'word',     jp: 'ジャバ',     romaji: 'Jaba',        hu: 'Java' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: 'コード',     romaji: 'koodo',       hu: 'kód' },
       { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
       { type: 'verb',     jp: '書いたら',   romaji: 'kaitara',     hu: 'ha megírod (~tara)' },
@@ -2925,7 +2925,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_vol_007', level: 'N4', translation: 'Arra gondoltam, hogy a vizsgák után visszatérek a taekwondóhoz.',
     tokens: [
       { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '後で',       romaji: 'ato de',      hu: 'után' },
       { type: 'word',     jp: 'テコンドー', romaji: 'tekondoo',    hu: 'taekwondo' },
       { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'target' },
@@ -3055,7 +3055,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_vol_017', level: 'N4', translation: 'Szeretném megjavítani a gépeket a repülőtéren.',
     tokens: [
       { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '機械',       romaji: 'kikai',       hu: 'gép/berendezés' },
       { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
       { type: 'verb',     jp: '直したい',   romaji: 'naoshitai',   hu: 'meg akarom javítani (~tai)' },
@@ -3111,7 +3111,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_app_001', level: 'N4', translation: 'A matematika érettségi nagyon nehéznek tűnik.',
     tokens: [
       { type: 'word',     jp: '数学',       romaji: 'suugaku',     hu: 'matematika' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga/érettségi' },
       { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
       { type: 'word',     jp: 'とても',     romaji: 'totemo',      hu: 'nagyon' },
@@ -3163,7 +3163,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_app_005', level: 'N4', translation: 'Úgy tűnik, a terminál elromlott a repülőtéren.',
     tokens: [
       { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '端末',       romaji: 'tanmatsu',    hu: 'terminál' },
       { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
       { type: 'verb',     jp: '壊れている', romaji: 'kowarete iru',hu: 'el van romolva (állapot)' },
@@ -3176,7 +3176,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_app_006', level: 'N4', translation: 'Már készítettem Minecraft modot.',
     tokens: [
       { type: 'word',     jp: 'マイクラ',   romaji: 'Maikura',     hu: 'Minecraft' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: 'モッド',     romaji: 'moddo',       hu: 'mod' },
       { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
       { type: 'verb',     jp: '作った',     romaji: 'tsukutta',    hu: 'készített (ta-forma)' },
@@ -3217,7 +3217,7 @@ const NIHONCORE_SENTENCES = [
     tokens: [
       { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
       { type: 'word',     jp: '戦略',       romaji: 'senryaku',    hu: 'stratégia' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '本',         romaji: 'hon',         hu: 'könyv' },
       { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
       { type: 'word',     jp: '面白',       romaji: 'omoshiro',    hu: 'érdekes (i nélkül)' },
@@ -3283,7 +3283,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_app_014', level: 'N4', translation: 'Úgy tűnik, a Java kód hibás.',
     tokens: [
       { type: 'word',     jp: 'ジャバ',     romaji: 'Jaba',        hu: 'Java' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: 'コード',     romaji: 'koodo',       hu: 'kód' },
       { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
       { type: 'verb',     jp: '間違っている',romaji: 'machigatte iru', hu: 'el van rontva/hibás' },
@@ -3296,7 +3296,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_app_015', level: 'N4', translation: 'Az angol érettségi nem tűnik nehéznek.',
     tokens: [
       { type: 'word',     jp: '英語',       romaji: 'eigo',        hu: 'angol nyelv' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga' },
       { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
       { type: 'word',     jp: '難しく',     romaji: 'muzukashiku', hu: 'nehezen' },
@@ -3322,7 +3322,7 @@ const NIHONCORE_SENTENCES = [
   {
     id: 's_n4_app_017', level: 'N4', translation: 'Úgy tűnik, Szun-ce stratégiája ma is hasznos.',
     tokens: [
-      { type: 'word',     jp: '孫子',       romaji: 'Sonsi',       hu: 'Szun-ce' },
+      { type: 'word',     jp: '孫子',       romaji: 'Sonshi',      hu: 'Szun-ce' },
       { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '戦略',       romaji: 'senryaku',    hu: 'stratégia' },
       { type: 'particle', jp: 'は',         romaji: 'wa',          role: 'topic' },
@@ -3405,7 +3405,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_prm_003', level: 'N4', translation: 'A matek érettségi közben tilos beszélgetni.',
     tokens: [
       { type: 'word',     jp: '数学',       romaji: 'suugaku',     hu: 'matematika' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga/érettségi' },
       { type: 'word',     jp: '中',         romaji: 'chuu',        hu: 'közben', semantic: 'időhatározó' },
       { type: 'particle', jp: 'に',         romaji: 'ni',          role: 'time' },
@@ -3420,7 +3420,7 @@ const NIHONCORE_SENTENCES = [
     tokens: [
       { type: 'word',     jp: 'この',       romaji: 'kono',        hu: 'ez a' },
       { type: 'word',     jp: '戦略',       romaji: 'senryaku',    hu: 'stratégia' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '本',         romaji: 'hon',         hu: 'könyv' },
       { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
       { type: 'verb',     jp: '読んで',     romaji: 'yonde',       hu: 'olvasva (te-forma)' },
@@ -3435,7 +3435,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_prm_005', level: 'N4', translation: 'Nem szabad letörölni a Java kódot.',
     tokens: [
       { type: 'word',     jp: 'ジャバ',     romaji: 'jaba',        hu: 'Java' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: 'コード',     romaji: 'koodo',       hu: 'kód' },
       { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
       { type: 'verb',     jp: '消して',     romaji: 'keshite',     hu: 'letörölve (te-forma)' },
@@ -3511,7 +3511,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_prm_010', level: 'N4', translation: 'Amikor dopamin-detoxon vagy, nem szabad sokáig nézni a telefont.',
     tokens: [
       { type: 'word',     jp: 'デトックス', romaji: 'detokkusu',   hu: 'detox' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '時',         romaji: 'toki',        hu: 'amikor / idő', semantic: 'időhatározó' },
       { type: 'word',     jp: 'スマホ',     romaji: 'sumaho',      hu: 'okostelefon' },
       { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
@@ -3674,7 +3674,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_trn_001', level: 'N4', translation: 'Megjavítom a terminált a repülőtéren.',
     tokens: [
       { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '端末',       romaji: 'tanmatsu',    hu: 'terminál' },
       { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
       { type: 'verb',     jp: '直します',   romaji: 'naoshimasu',  hu: 'megjavítom' }
@@ -3706,7 +3706,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_trn_004', level: 'N4', translation: 'Elromlott a gép a raktárban.',
     tokens: [
       { type: 'word',     jp: '倉庫',       romaji: 'souko',       hu: 'raktár' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'location/modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '機械',       romaji: 'kikai',       hu: 'gép' },
       { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
       { type: 'verb',     jp: '壊れました', romaji: 'kowaremashita', hu: 'elromlott' }
@@ -3753,7 +3753,7 @@ const NIHONCORE_SENTENCES = [
     tokens: [
       { type: 'word',     jp: '私の',       romaji: 'watashi no',  hu: 'az én' },
       { type: 'word',     jp: '部屋',       romaji: 'heya',        hu: 'szobám' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'location marker' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '電気',       romaji: 'denki',       hu: 'villany/áram' },
       { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
       { type: 'verb',     jp: 'つきました', romaji: 'tsukimashita',hu: 'felkapcsolódott' }
@@ -3799,7 +3799,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_trn_012', level: 'N4', translation: 'Kinyílt a repülőtér kapuja.',
     tokens: [
       { type: 'word',     jp: '空港',       romaji: 'kuukou',      hu: 'repülőtér' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: 'ゲート',     romaji: 'geeto',       hu: 'kapu/gate' },
       { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
       { type: 'verb',     jp: '開きました', romaji: 'akimashita',  hu: 'kinyílt' }
@@ -3834,7 +3834,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_trn_015', level: 'N4', translation: 'Elkezdem a taekwondo edzést.',
     tokens: [
       { type: 'word',     jp: 'テコンドー', romaji: 'tekondoo',    hu: 'taekwondo' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '練習',       romaji: 'renshuu',     hu: 'edzés/gyakorlás' },
       { type: 'particle', jp: 'を',         romaji: 'wo',          role: 'object' },
       { type: 'verb',     jp: '始めます',   romaji: 'hajimemasu',  hu: 'elkezdem' }
@@ -3846,7 +3846,7 @@ const NIHONCORE_SENTENCES = [
     tokens: [
       { type: 'word',     jp: 'もうすぐ',   romaji: 'mousugu',     hu: 'nemsokára/mindjárt', semantic: 'időhatározó' },
       { type: 'word',     jp: '数学',       romaji: 'suugaku',     hu: 'matematika' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '試験',       romaji: 'shiken',      hu: 'vizsga/érettségi' },
       { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
       { type: 'verb',     jp: '始まります', romaji: 'hajimarimasu',hu: 'elkezdődik' }
@@ -3857,7 +3857,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_trn_017', level: 'N4', translation: 'Kijavítottam egy hibát a Godot projektben.',
     tokens: [
       { type: 'word',     jp: 'ゴドー',     romaji: 'Godoo',       hu: 'Godot (engine)' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'modifier' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: 'プロジェクト',romaji: 'purojekuto',  hu: 'projekt' },
       { type: 'particle', jp: 'で',         romaji: 'de',          role: 'location of action' },
       { type: 'word',     jp: 'バグ',       romaji: 'bagu',        hu: 'bug/hiba' },
@@ -3881,7 +3881,7 @@ const NIHONCORE_SENTENCES = [
     id: 's_n4_trn_019', level: 'N4', translation: 'A szobában le van kapcsolva a lámpa (sötét van).',
     tokens: [
       { type: 'word',     jp: '部屋',       romaji: 'heya',        hu: 'szoba' },
-      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'location' },
+      { type: 'particle', jp: 'の',         romaji: 'no',          role: 'possession' },
       { type: 'word',     jp: '電気',       romaji: 'denki',       hu: 'villany/lámpa' },
       { type: 'particle', jp: 'が',         romaji: 'ga',          role: 'subject' },
       { type: 'verb',     jp: '消えています',romaji: 'kiete imasu', hu: 'le van kapcsolva (állapot)' }
