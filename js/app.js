@@ -1951,7 +1951,7 @@ function initLanding() {
   }, { threshold: 0.12 });
 
   document.querySelectorAll(
-    '.section-header, .module-card, .feature-item, .demo-lesson, .hero-stats .stat, .cta-inner, .nc-method-step, .nc-fact'
+    '.section-header, .module-card, .feature-item, .demo-lesson, .hero-stats .stat, .cta-inner'
   ).forEach(el => {
     el.classList.add('reveal');
     revealObserver.observe(el);

@@ -2,8 +2,9 @@
    NihonCoreV2 — Service Worker (V7-Nap3 PWA)
    ----------------------------------------------------
    Cache-stratégia:
-   - APP-SHELL (HTML/CSS/JS/manifest/icons) → cache-first
-     (a teljes app offline elérhető)
+   - APP-SHELL (HTML/CSS/JS/manifest/icons) → NETWORK-FIRST
+     (mindig friss online; offline → cache. Így nincs „elavult verzió"
+      vagy HTML↔CSS verzió-ütközés. A precache adja az offline-tartalékot.)
    - Google Fonts (CSS + woff2) → cache-first runtime
      (első betöltés után offline tényleg működik)
    - Google Translate TTS endpoint → NETWORK-only (NEM cache,
@@ -15,7 +16,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v29-2026-05-28-landing-redesign';
+const CACHE_VERSION = 'nihoncore-v31-2026-05-28-network-first';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 
@@ -119,9 +120,11 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // 3) Saját origin (app-shell) → cache-first, fallback network
+  // 3) Saját origin (app-shell) → NETWORK-FIRST (mindig friss, ha online;
+  //    offline → cache). Ez szünteti meg az „elavult verzió megjelenik" és a
+  //    „friss HTML + régi CSS" verzió-ütközés gondot fejlesztés közben.
   if (url.origin === self.location.origin) {
-    event.respondWith(cacheFirstAppShell(req));
+    event.respondWith(networkFirstAppShell(req));
     return;
   }
 
@@ -129,22 +132,22 @@ self.addEventListener('fetch', event => {
   event.respondWith(fetch(req).catch(() => caches.match(req)));
 });
 
-/* Cache-first az app-shell-re. Ha a cache-ben nincs, hálózat;
-   ha az is offline, a precache-ből próbál a path alapján. */
-async function cacheFirstAppShell(req) {
-  const cached = await caches.match(req);
-  if (cached) return cached;
+/* Network-first az app-shell-re (saját HTML/CSS/JS). Mindig a friss verziót
+   hozza, ha van net — így soha nem ragad be elavult oldal, és nem fordulhat elő
+   HTML↔CSS verzió-ütközés. A cache CSAK offline fallback. */
+async function networkFirstAppShell(req) {
   try {
     const fresh = await fetch(req);
-    // Ha sikeresen 200-as választ kaptunk, frissítsük a cache-t
+    // Friss 200-as válasz → frissítsük a cache-t (offline-tartalék)
     if (fresh && fresh.status === 200 && fresh.type === 'basic') {
       const cache = await caches.open(APP_SHELL_CACHE);
       cache.put(req, fresh.clone());
     }
     return fresh;
   } catch (e) {
-    // Offline és cache miss — fallback az index.html-re (SPA-szerű)
-    return caches.match('./index.html');
+    // Offline — a cache-ből szolgálunk; ha ott sincs, az index.html (SPA-szerű)
+    const cached = await caches.match(req);
+    return cached || caches.match('./index.html');
   }
 }
 
