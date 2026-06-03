@@ -536,6 +536,14 @@ const NIHONCORE_VERB_EXCEPTIONS = {
   irregularTe: {
     // verb-id → rendhagyó te/ta forma
     'iku': { te: { kana:'いって', romaji:'itte' }, ta: { kana:'いった', romaji:'itta' } }
+  },
+  // -aru tiszteletteljes igék (honorific 5-ös: kudasaru, ossharu, nasaru, irassharu, gozaru)
+  // a masu-stem ('i' oszlop) NEM くださり (rendszeres godan-ru), hanem ください — utána
+  // jön az ます/ません/ました/ませんでした. Engine: composeStemSuffix override-eli, ha a
+  // rule.stemColumn === 'i' és a verb id szerepel ebben a táblában.
+  // Jelenleg csak kudasaru-t használja a dataset; a többi 4 honorific verb felvehetô lesz.
+  irregularMasuStem: {
+    'kudasaru': { kana: 'ください', romaji: 'kudasai' }
   }
 };
 

@@ -785,62 +785,19 @@ const NIHONCORE_I_ADJECTIVES = [
     example: { jp: '虫に刺されて、とても痒いです。', romaji: 'mushi ni sasarete, totemo kayui desu.', hu: 'Megcsípett egy bogár és nagyon viszket.' }
   },
 // ════════════════════════════════════════════════════
-  //  N2/N1 — Kifinomult, Irodalmi és Specifikus állapotok (25 db)
-  //  (I-melléknév adatbázis teljes lezárása)
+  //  N2/N1 — Kifinomult, Irodalmi és Specifikus állapotok (7 db)
+  //  (Cleanup 2026-06-03 — csak valódi, duplikáció-mentes, helyes
+  //  típusú i-melléknevek. A motor nem szűr szintre, ezért ezek is
+  //  bekerülhetnek a gyakorlósor pool-jába.)
   // ════════════════════════════════════════════════════
 
-  // ── 1. Érzékelés és Fizikai árnyalatok (N2) ────────
-  {
-    id: 'kayui', kanji: '痒い', kana: 'かゆい', romaji: 'kayui',
-    type: 'i-adj', level: 'N2', // N3/N2 határ
-    meaningHu: 'viszkető',
-    stemKana: 'かゆ', stemRomaji: 'kayu',
-    example: { jp: '蚊に刺されて痒いです。', romaji: 'ka ni sasarete kayui desu.', hu: 'Megcsípett egy szúnyog és viszket.' }
-  },
-  {
-    id: 'kuyashii', kanji: '悔しい', kana: 'くやしい', romaji: 'kuyashii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'bosszantó, frusztráló',
-    stemKana: 'くやし', stemRomaji: 'kuyashi',
-    example: { jp: 'あと少しで負けて悔しい。', romaji: 'ato sukoshi de makete kuyashii.', hu: 'Majdnem sikerült, de vesztettünk, ez nagyon bosszantó.' }
-  },
+  // ── N2 ─────────────────────────────────────────────
   {
     id: 'nikui', kanji: '憎い', kana: 'にくい', romaji: 'nikui',
     type: 'i-adj', level: 'N2',
     meaningHu: 'gyűlöletes, utálatos',
     stemKana: 'にく', stemRomaji: 'niku',
     example: { jp: '憎い相手です。', romaji: 'nikui aite desu.', hu: 'Gyűlöletes ellenfél.' }
-  },
-  {
-    id: 'kurushii', kanji: '苦しい', kana: 'くるしい', romaji: 'kurushii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'szenvedő, gyötrelmes, szoros (helyzet)',
-    stemKana: 'くるし', stemRomaji: 'kurushi',
-    example: { jp: '苦しい生活です。', romaji: 'kurushii seikatsu desu.', hu: 'Szenvedéssel teli élet.' }
-  },
-
-  // ── 2. Absztrakt, Irodalmi (N2/N1) ─────────────────
-  {
-    id: 'hakanai', kanji: '儚い', kana: 'はかない', romaji: 'hakanai',
-    type: 'i-adj', level: 'N1',
-    meaningHu: 'tiszavirág életű, múlandó, törékeny',
-    stemKana: 'はかな', stemRomaji: 'hakana',
-    note: 'Nagyon költői, az élet mulandóságára használják.',
-    example: { jp: '命は儚いものです。', romaji: 'inochi wa hakanai mono desu.', hu: 'Az élet mulandó dolog.' }
-  },
-  {
-    id: 'urayamashii', kanji: '羨ましい', kana: 'うらやましい', romaji: 'urayamashii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'irigy, irigylésre méltó',
-    stemKana: 'うらやまし', stemRomaji: 'urayamashi',
-    example: { jp: '成功している彼が羨ましい。', romaji: 'seikou shite iru kare ga urayamashii.', hu: 'Irigylem őt, mert sikeres.' }
-  },
-  {
-    id: 'itawashii', kanji: '痛わしい', kana: 'いたわしい', romaji: 'itawashii',
-    type: 'i-adj', level: 'N1',
-    meaningHu: 'szánalmas, szívszorító',
-    stemKana: 'いたわし', stemRomaji: 'itawashi',
-    example: { jp: '痛わしい事故でした。', romaji: 'itawashii jiko deshita.', hu: 'Szívszorító baleset volt.' }
   },
   {
     id: 'kudaranai', kanji: 'くだらない', kana: 'くだらない', romaji: 'kudaranai',
@@ -850,6 +807,24 @@ const NIHONCORE_I_ADJECTIVES = [
     example: { jp: 'くだらない話はやめてください。', romaji: 'kudaranai hanashi wa yamete kudasai.', hu: 'Hagyd abba ezt az értéktelen fecsegést.' }
   },
   {
+    id: 'yurusenai', kanji: '許せない', kana: 'ゆるせない', romaji: 'yurusenai',
+    type: 'i-adj', level: 'N2',
+    meaningHu: 'megbocsáthatatlan',
+    stemKana: 'ゆるせな', stemRomaji: 'yurusena',
+    note: 'A 許す (yurusu = megbocsát) potenciális tagadásából képzett, melléknévként ragozódik (yurusenakatta).',
+    example: { jp: 'それは許せない行為です。', romaji: 'sore wa yurusenai koui desu.', hu: 'Az egy megbocsáthatatlan cselekedet.' }
+  },
+
+  // ── N1 ─────────────────────────────────────────────
+  {
+    id: 'hakanai', kanji: '儚い', kana: 'はかない', romaji: 'hakanai',
+    type: 'i-adj', level: 'N1',
+    meaningHu: 'tiszavirág életű, múlandó, törékeny',
+    stemKana: 'はかな', stemRomaji: 'hakana',
+    note: 'Költői/irodalmi — az élet mulandóságára használják.',
+    example: { jp: '命は儚いものです。', romaji: 'inochi wa hakanai mono desu.', hu: 'Az élet mulandó dolog.' }
+  },
+  {
     id: 'namagusai', kanji: '生臭い', kana: 'なまぐさい', romaji: 'namagusai',
     type: 'i-adj', level: 'N1',
     meaningHu: 'halszagú, véres/nyers szagú',
@@ -857,116 +832,19 @@ const NIHONCORE_I_ADJECTIVES = [
     example: { jp: '生臭い匂いがします。', romaji: 'namagusai nioi ga shimasu.', hu: 'Nyers/halszaga van.' }
   },
   {
-    id: 'shabui', kanji: 'しゃぶい', kana: 'しゃぶい', romaji: 'shabui',
+    id: 'itawashii', kanji: '痛わしい', kana: 'いたわしい', romaji: 'itawashii',
     type: 'i-adj', level: 'N1',
-    meaningHu: 'fagyos, dermesztően hideg (szleng/dialektus)',
-    stemKana: 'しゃぶ', stemRomaji: 'shabu',
-    example: { jp: '今日の朝はしゃぶいな。', romaji: 'kyou no asa wa shabui na.', hu: 'Mai reggel nagyon fagyos.' }
+    meaningHu: 'szánalmas, szívszorító',
+    stemKana: 'いたわし', stemRomaji: 'itawashi',
+    note: 'Irodalmi/régies — a modern szövegekben a 痛ましい (itamashii) gyakoribb.',
+    example: { jp: '痛わしい事故でした。', romaji: 'itawashii jiko deshita.', hu: 'Szívszorító baleset volt.' }
   },
   {
-    id: 'kuyashii', kanji: '悔しい', kana: 'くやしい', romaji: 'kuyashii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'megbánást érez, bosszús',
-    stemKana: 'くやし', stemRomaji: 'kuyashi',
-    example: { jp: '悔しい気持ちです。', romaji: 'kuyashii kimochi desu.', hu: 'Megbánást érzek.' }
-  },
-  {
-    id: 'yurusenai', kanji: '許せない', kana: 'ゆるせない', romaji: 'yurusenai',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'megbocsáthatatlan',
-    stemKana: 'ゆるせな', stemRomaji: 'yurusena',
-    example: { jp: 'それは許せない行為です。', romaji: 'sore wa yurusenai koui desu.', hu: 'Az egy megbocsáthatatlan cselekedet.' }
-  },
-  {
-    id: 'natsuashii', kanji: '懐かしい', kana: 'なつかしい', romaji: 'natsukashii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'nosztalgikus',
-    stemKana: 'なつかし', stemRomaji: 'natsukashi',
-    example: { jp: '懐かしい場所です。', romaji: 'natsukashii basho desu.', hu: 'Nosztalgikus hely.' }
-  },
-  {
-    id: 'mabushii', kanji: '眩しい', kana: 'まぶしい', romaji: 'mabushii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'vakító',
-    stemKana: 'まぶし', stemRomaji: 'mabushi',
-    example: { jp: '眩しい光です。', romaji: 'mabushii hikari desu.', hu: 'Vakító fény.' }
-  },
-  {
-    id: 'okashii', kanji: 'おかしい', kana: 'おかしい', romaji: 'okashii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'furcsa, kétséges',
-    stemKana: 'おかし', stemRomaji: 'okashi',
-    example: { jp: '何かがおかしい。', romaji: 'nanika ga okashii.', hu: 'Valami furcsa.' }
-  },
-  {
-    id: 'umashii', kanji: '美味しい', kana: 'うましい', romaji: 'umashii',
-    type: 'i-adj', level: 'N1',
-    meaningHu: 'finom (nagyon régi/irodalmi írásmódja az oishii-nak)',
-    stemKana: 'うまし', stemRomaji: 'umashi',
-    example: { jp: 'この酒は美味しい。', romaji: 'kono sake wa umashii.', hu: 'Ez a bor finom.' }
-  },
-  {
-    id: 'kuzushii', kanji: '崩しい', kana: 'くずしい', romaji: 'kuzushii',
-    type: 'i-adj', level: 'N1',
-    meaningHu: 'törékeny, könnyen összeomló',
-    stemKana: 'くずし', stemRomaji: 'kuzushi',
-    example: { jp: 'くずしい砂の城。', romaji: 'kuzushii suna no shiro.', hu: 'Összeomlásra hajlamos homokvár.' }
-  },
-  {
-    id: 'tadorashii', kanji: '辿々しい', kana: 'たどたどしい', romaji: 'tadotadoshii',
+    id: 'tadotadoshii', kanji: '辿々しい', kana: 'たどたどしい', romaji: 'tadotadoshii',
     type: 'i-adj', level: 'N1',
     meaningHu: 'ügyetlen, bizonytalan (pl. nyelvhasználat)',
     stemKana: 'たどたどし', stemRomaji: 'tadotadoshi',
-    example: { jp: 'たどたどしい日本語。', romaji: 'tadotadoshii nihongo.', hu: 'Bizonytalan (törve beszélt) japán nyelv.' }
-  },
-  {
-    id: 'uwamukii', kanji: '上向き', kana: 'うわむき', romaji: 'uwamukii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'felfelé irányuló, javuló (tendencia)',
-    stemKana: 'うわむき', stemRomaji: 'uwamuki',
-    example: { jp: '景気は上向きだ。', romaji: 'keiki wa uwamuki da.', hu: 'A gazdaság felfelé ívelő.' }
-  },
-  {
-    id: 'tsukizukashii', kanji: '月々しい', kana: 'つきづきしい', romaji: 'tsukizukashii',
-    type: 'i-adj', level: 'N1',
-    meaningHu: 'illő, megfelelő, alkalomhoz illő',
-    stemKana: 'つきづきし', stemRomaji: 'tsukizukashi',
-    example: { jp: 'この場に付き付きしい服装です。', romaji: 'kono ba ni tsukizukashii fukusou desu.', hu: 'Ez a ruházat illik ehhez az alkalomhoz.' }
-  },
-  {
-    id: 'midarashii', kanji: '乱しい', kana: 'みだらしい', romaji: 'midarashii',
-    type: 'i-adj', level: 'N1',
-    meaningHu: 'erkölcstelen, kicsapongó',
-    stemKana: 'みだらし', stemRomaji: 'midarashi',
-    example: { jp: 'みだらしい生活。', romaji: 'midarashii seikatsu.', hu: 'Kicsapongó életmód.' }
-  },
-  {
-    id: 'kowamote', kanji: '強面', kana: 'こわもて', romaji: 'kowamote', // (technikai: na-adj, de i-adjektívként is használják néha szlengben)
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'szigorú/félelmetes arcú',
-    stemKana: 'こわもて', stemRomaji: 'kowamote',
-    example: { jp: '強面だけど、優しいです。', romaji: 'kowamote dakedo, yasashii desu.', hu: 'Félelmetes az arca, de kedves.' }
-  },
-  {
-    id: 'urusai_pestering', kanji: '五月蝿い', kana: 'うるさい', romaji: 'urusai',
-    type: 'i-adj', level: 'N2', // N3/N2 árnyalat
-    meaningHu: 'túl kritikus, szőrszálhasogató',
-    stemKana: 'うるさ', stemRomaji: 'urusa',
-    example: { jp: '上司が五月蝿い。', romaji: 'joushi ga urusai.', hu: 'A főnököm szőrszálhasogató (túl kritikus).' }
-  },
-  {
-    id: 'kuyashii_bitter', kanji: '悔しい', kana: 'くやしい', romaji: 'kuyashii',
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'keserédes, fájdalmas',
-    stemKana: 'くやし', stemRomaji: 'kuyashi',
-    example: { jp: '苦しいけれども悔しい思い出。', romaji: 'kurushii keredomo kuyashii omoide.', hu: 'Fájdalmas, de keserédes emlék.' }
-  },
-  {
-    id: 'fushiawase', kanji: '不幸せ', kana: 'ふしあわせ', romaji: 'fushiawase', // (na-adj, de i-adjektívként is használják)
-    type: 'i-adj', level: 'N2',
-    meaningHu: 'boldogtalan',
-    stemKana: 'ふしあわせ', stemRomaji: 'fushiawase',
-    example: { jp: '不幸せな人はいません。', romaji: 'fushiawase na hito wa imasen.', hu: 'Nincs boldogtalan ember.' }
+    example: { jp: 'たどたどしい日本語を話します。', romaji: 'tadotadoshii nihongo wo hanashimasu.', hu: 'Bizonytalan (törve beszélt) japán nyelvet beszél.' }
   }
 ];
 

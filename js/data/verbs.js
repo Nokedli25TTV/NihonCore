@@ -876,7 +876,7 @@ const NIHONCORE_VERBS = [
     group: 'ichidan',
     stemKana: 'みえ', stemRomaji: 'mie',
     level: 'N4', theme: 'state', meaningHu: 'látszik / látható',
-    note: 'Intranzitív! Azt fejezi ki, hogy valami spontán a látóteredbe kerül (ellentétben a 見られる - mirareu formával, ami a szándékos képességet jelenti). Vonzat: が.',
+    note: 'Intranzitív! Azt fejezi ki, hogy valami spontán a látóteredbe kerül (ellentétben a 見られる - mirareru formával, ami a szándékos képességet jelenti). Vonzat: が.',
     example: { jp: 'ここから海が見えます。', romaji: 'koko kara umi ga miemasu.', hu: 'Innen látszik a tenger.' }
   },
   {

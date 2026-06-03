@@ -261,9 +261,9 @@ ko: {
 };
 
 const NIHONCORE_COUNTER_CATEGORIES = [
-  { id: 'living',  nameHu: 'Élőlények', emoji: '🐾', counters: ['nin'] },
+  { id: 'living',  nameHu: 'Élőlények', emoji: '🐾', counters: ['nin', 'hiki'] },
   { id: 'objects', nameHu: 'Tárgyak',   emoji: '📦', counters: ['mai', 'hon', 'satsu', 'soku', 'dai'] },
-  { id: 'general', nameHu: 'Általános', emoji: '🌐', counters: ['tsu'] },
+  { id: 'general', nameHu: 'Általános', emoji: '🌐', counters: ['tsu', 'ko'] },
   { id: 'drinks',   nameHu: 'Italok & adagok', emoji: '🥤', counters: ['hai'] },
   { id: 'places_events', nameHu: 'Helyek & Események', emoji: '🏢', counters: ['kai_floor', 'kai_times'] }
 ];
@@ -330,7 +330,7 @@ const NIHONCORE_COUNTER_ITEMS = [
   { id: 'manga',      nameHu: 'manga',           nameJp: '漫画',         emoji: '📗', minLevel: 'N4', primary: 'satsu' },
   { id: 'techo',      nameHu: 'határidőnapló',   nameJp: '手帳',         emoji: '📔', minLevel: 'N4', primary: 'satsu' },
   { id: 'arubamu',    nameHu: 'album',           nameJp: 'アルバム',     emoji: '🗂️', minLevel: 'N4', primary: 'satsu' },
-  { id: 'pamphretto', nameHu: 'szórólap',        nameJp: 'パンフレット', emoji: '📃', minLevel: 'N4', primary: 'satsu' },
+  { id: 'panfuretto', nameHu: 'szórólap',        nameJp: 'パンフレット', emoji: '📃', minLevel: 'N4', primary: 'satsu' },
 
   // ── soku (lábbelik) — 8 db ──
   { id: 'kutsu',      nameHu: 'cipő',            nameJp: '靴',           emoji: '👟', minLevel: 'N5', primary: 'soku' },
@@ -357,13 +357,10 @@ const NIHONCORE_COUNTER_ITEMS = [
 
 //tsu (つ) — új általános tárgyak
   
-{ id: 'okashi',    nameHu: 'sütemény',  nameJp: 'おかし',      emoji: '🍪', minLevel: 'N5', primary: 'tsu' },
 { id: 'momo',      nameHu: 'őszibarack', nameJp: 'もも',       emoji: '🍑', minLevel: 'N5', primary: 'tsu' },
 { id: 'nashi',     nameHu: 'körte',     nameJp: 'なし',        emoji: '🍐', minLevel: 'N5', primary: 'tsu' },
 { id: 'ichigo',    nameHu: 'eper',      nameJp: 'いちご',      emoji: '🍓', minLevel: 'N5', primary: 'tsu' },
 { id: 'shitsumon', nameHu: 'kérdés',   nameJp: 'しつもん',    emoji: '❓', minLevel: 'N5', primary: 'tsu' },
-{ id: 'isu',       nameHu: 'szék',     nameJp: 'いす',        emoji: '🪑', minLevel: 'N5', primary: 'tsu' },
-{ id: 'kaban',     nameHu: 'táska',    nameJp: 'かばん',      emoji: '👜', minLevel: 'N5', primary: 'tsu' },
 
 
 
@@ -372,7 +369,7 @@ const NIHONCORE_COUNTER_ITEMS = [
 { id: 'inu',       nameHu: 'kutya',     nameJp: 'いぬ',      emoji: '🐶', minLevel: 'N5', primary: 'hiki' },
 { id: 'sakana',    nameHu: 'hal',       nameJp: 'さかな',    emoji: '🐟', minLevel: 'N5', primary: 'hiki' },
 { id: 'usagi',     nameHu: 'nyúl',      nameJp: 'うさぎ',   emoji: '🐰', minLevel: 'N5', primary: 'hiki' },
-{ id: 'hamster',   nameHu: 'hörcsög',  nameJp: 'ハムスター', emoji: '🐹', minLevel: 'N4', primary: 'hiki' },
+{ id: 'hamusutaa', nameHu: 'hörcsög',  nameJp: 'ハムスター', emoji: '🐹', minLevel: 'N4', primary: 'hiki' },
 { id: 'hebi',      nameHu: 'kígyó',    nameJp: 'へび',      emoji: '🐍', minLevel: 'N4', primary: 'hiki' },
 { id: 'kame',      nameHu: 'teknős',   nameJp: 'かめ',      emoji: '🐢', minLevel: 'N4', primary: 'hiki' },
 //hai (杯) — italok, poharak
@@ -380,7 +377,7 @@ const NIHONCORE_COUNTER_ITEMS = [
 { id: 'ocha',     nameHu: 'tea',       nameJp: 'おちゃ',    emoji: '🍵', minLevel: 'N5', primary: 'hai' },
 { id: 'koohii',   nameHu: 'kávé',      nameJp: 'コーヒー', emoji: '☕', minLevel: 'N5', primary: 'hai' },
 { id: 'juusu',    nameHu: 'gyümölcslé', nameJp: 'ジュース', emoji: '🧃', minLevel: 'N5', primary: 'hai' },
-{ id: 'biiru',    nameHu: 'sör',       nameJp: 'ビール',    emoji: '🍺', minLevel: 'N4', primary: 'hai' },
+{ id: 'biiru_drink', nameHu: 'sör (pohár)', nameJp: 'ビール', emoji: '🍺', minLevel: 'N4', primary: 'hai' },
 { id: 'suupu',    nameHu: 'leves',     nameJp: 'スープ',    emoji: '🍲', minLevel: 'N5', primary: 'hai' },
 { id: 'wain',     nameHu: 'bor',       nameJp: 'ワイン',    emoji: '🍷', minLevel: 'N4', primary: 'hai' },
 //kai_floor (階) — emeletek
@@ -395,9 +392,9 @@ const NIHONCORE_COUNTER_ITEMS = [
 { id: 'shiai',    nameHu: 'meccs',     nameJp: 'しあい',    emoji: '⚽', minLevel: 'N4', primary: 'kai_times' },
 { id: 'ressun',   nameHu: 'lecke (óra)', nameJp: 'レッスン', emoji: '📚', minLevel: 'N4', primary: 'kai_times' },
 //ko (個) — kis darabok (formális) 
-{ id: 'tamago',   nameHu: 'tojás',     nameJp: 'たまご',   emoji: '🥚', minLevel: 'N5', primary: 'ko', alternatives: ['tsu'] },
+{ id: 'tamago_ko', nameHu: 'tojás (formális)', nameJp: 'たまご', emoji: '🥚', minLevel: 'N5', primary: 'ko', alternatives: ['tsu'] },
 { id: 'ishi',     nameHu: 'kő',        nameJp: 'いし',     emoji: '🪨', minLevel: 'N5', primary: 'ko', alternatives: ['tsu'] },
 { id: 'botan',    nameHu: 'gomb (ruha)', nameJp: 'ボタン', emoji: '🔘', minLevel: 'N4', primary: 'ko' },
 { id: 'ame_candy',nameHu: 'cukorka',   nameJp: 'アメ',     emoji: '🍬', minLevel: 'N5', primary: 'ko', alternatives: ['tsu'] },
-{ id: 'jiishaku', nameHu: 'mágnes',    nameJp: 'じしゃく', emoji: '🧲', minLevel: 'N4', primary: 'ko' },
+{ id: 'jishaku',  nameHu: 'mágnes',    nameJp: 'じしゃく', emoji: '🧲', minLevel: 'N4', primary: 'ko' },
 ];

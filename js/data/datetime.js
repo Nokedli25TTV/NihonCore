@@ -234,7 +234,7 @@ const NIHONCORE_DT_MINUTES = [
 const NIHONCORE_DT_YEARS = [
   // ── Kerek nyugati évek ──
   { id: 'y1900', kanji: '1900年', kana: 'せんきゅうひゃくねん',               romaji: 'sen kyuuhyaku nen',               meaningHu: '1900' },
-  { id: 'y1945', kanji: '1945年', kana: 'せんきゅうひゃくよんじゅうごねん',   romaji: 'sen kyuuhyaku yonjuugo nen',      meaningHu: '1945', irregular: true },
+  { id: 'y1945', kanji: '1945年', kana: 'せんきゅうひゃくよんじゅうごねん',   romaji: 'sen kyuuhyaku yonjuugo nen',      meaningHu: '1945' },
   { id: 'y1950', kanji: '1950年', kana: 'せんきゅうひゃくごじゅうねん',       romaji: 'sen kyuuhyaku gojuu nen',         meaningHu: '1950' },
   { id: 'y1960', kanji: '1960年', kana: 'せんきゅうひゃくろくじゅうねん',     romaji: 'sen kyuuhyaku rokujuu nen',       meaningHu: '1960' },
   { id: 'y1970', kanji: '1970年', kana: 'せんきゅうひゃくななじゅうねん',     romaji: 'sen kyuuhyaku nanajuu nen',       meaningHu: '1970' },
@@ -273,7 +273,7 @@ const NIHONCORE_DT_YEARS = [
   // ── 昭和 (Showa, 1926-1989) ──
   { id: 'y_showa20',  kanji: '昭和20年',  kana: 'しょうわにじゅうねん',       romaji: 'shouwa nijuu nen',     meaningHu: 'Showa 20 (1945)', imperial: true },
   { id: 'y_showa30',  kanji: '昭和30年',  kana: 'しょうわさんじゅうねん',     romaji: 'shouwa sanjuu nen',    meaningHu: 'Showa 30 (1955)', imperial: true },
-  { id: 'y_showa40',  kanji: '昭和40年',  kana: 'しょうわよんじゅうねん',     romaji: 'shouwa yonjuu nen',    meaningHu: 'Showa 40 (1965)', imperial: true, irregular: true },
+  { id: 'y_showa40',  kanji: '昭和40年',  kana: 'しょうわよんじゅうねん',     romaji: 'shouwa yonjuu nen',    meaningHu: 'Showa 40 (1965)', imperial: true },
   { id: 'y_showa50',  kanji: '昭和50年',  kana: 'しょうわごじゅうねん',       romaji: 'shouwa gojuu nen',     meaningHu: 'Showa 50 (1975)', imperial: true },
   { id: 'y_showa64',  kanji: '昭和64年',  kana: 'しょうわろくじゅうよねん',   romaji: 'shouwa rokujuu yo nen', meaningHu: 'Showa 64 (1989)', imperial: true, irregular: true }
 ];
@@ -344,7 +344,7 @@ const NIHONCORE_DT_RELATIVE = [
 
   // ── 〜過ぎ (valamivel múlt) kibővítve — ÚJ ──
   { id: 'rel45', kanji: '十二時過ぎ',     kana: 'じゅうにじすぎ',       romaji: 'juuniji sugi',         meaningHu: '12 óra után (kicsivel)' },
-  { id: 'rel46', kanji: '午後過ぎ',       kana: 'ごごすぎ',             romaji: 'gogo sugi',            meaningHu: 'délután elmúlt (általánosan)' },
+  { id: 'rel46', kanji: '夕方過ぎ',       kana: 'ゆうがたすぎ',         romaji: 'yuugata sugi',         meaningHu: 'alkonyat után / kora este' },
   { id: 'rel47', kanji: '昼過ぎ',         kana: 'ひるすぎ',             romaji: 'hiru sugi',            meaningHu: 'dél után' },
 
   // ── 〜くらい / ほど (kb., nagyjából) kibővítve — ÚJ ──

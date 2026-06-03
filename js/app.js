@@ -1517,13 +1517,19 @@ const NihonCoreAudio = (function () {
   // V3 P2 F — globális "helyes válasz felolvasása". Opt-in (helpers-bár
   // 🔊 Hang toggle, localStorage 'nihoncore_audio_on'). Debounce: ugyanaz
   // a szöveg 1.5 mp-en belül nem szólal meg újra (dupla-render védelem).
+  //
+  // 2026-06-03 fix: kibővített CJK-tartomány (`一-鿿` = U+4E00..U+9FFF a
+  // korábbi U+4E00..U+9FAF helyett — a modern ritka kanjik nem esnek ki).
+  // A kanji+furigana duplázás (pl. ruby-tartalmú strong → "水みず...") elleni
+  // védelem a `findAnswer`-ben van (initGlobalAnswerAudio), itt csak a már
+  // tiszta szöveg jön.
   let lastSpoke = { text: '', at: 0 };
   function speakAnswer(text) {
     if (!text) return;
     if (localStorage.getItem('nihoncore_audio_on') !== '1') return;
     // Csak a japán karakterek maradnak — a romaji / zárójel / ✓ / szóköz
     // kiesik (a feedback .pfe-jp-ok néha romaji-t is tartalmaz mellette).
-    const jp = String(text).replace(/[^぀-ヿ一-龯]/g, '');
+    const jp = String(text).replace(/[^぀-ヿ一-鿿]/g, '');
     if (!jp) return;
     const now = Date.now();
     if (jp === lastSpoke.text && now - lastSpoke.at < 1500) return;
@@ -1545,7 +1551,24 @@ const NihonCoreAudio = (function () {
    Opt-in + debounce a NihonCoreAudio.speakAnswer-ben.
    ==================================================== */
 (function initGlobalAnswerAudio() {
-  const JP = /[぀-ヿ一-龯]/;   // van-e japán karakter
+  const JP = /[぀-ヿ一-鿿]/;   // van-e japán karakter (bővített CJK-tartomány)
+
+  // 2026-06-03 KRITIKUS FIX: a Grammar Patterns / Production / egyéb feedback
+  // pfe-jp-ok strong belsejében `<ruby>kanji<rt>furigana</rt></ruby>` kerülhet.
+  // A naív `textContent` az ÖSSZES leaf-szöveget összefűzi → "水" + "みず" =
+  // "水みず" → a TTS kétszer ejti a kanjit. A fix: a kanji-t cseréljük a
+  // furigana (pure kana) olvasatra, mert AZ a tananyaggal egyező kiejtés.
+  function extractKanaPreferringText(el) {
+    const clone = el.cloneNode(true);
+    clone.querySelectorAll('ruby').forEach(r => {
+      const rt = r.querySelector('rt');
+      const kana = rt ? rt.textContent : '';
+      const span = document.createElement('span');
+      span.textContent = kana;       // csak a kana olvasat marad
+      r.replaceWith(span);
+    });
+    return (clone.textContent || '').trim();
+  }
 
   function findAnswer(node) {
     const hits = [];
@@ -1554,7 +1577,7 @@ const NihonCoreAudio = (function () {
       node.querySelectorAll('.pfe-jp-ok').forEach(e => hits.push(e));
     }
     for (const el of hits) {
-      const t = (el.textContent || '').trim();
+      const t = extractKanaPreferringText(el);
       if (t && JP.test(t)) return t;
     }
     return null;
@@ -5832,17 +5855,27 @@ function initConjugationPage() {
 
     const stems = StemEngine.getStems(verb);
     if (!stems) return null;
-    const stem = stems[rule.stemColumn];
+    let stem = stems[rule.stemColumn];
+    // -aru honorific igék: a masu-stem ('i' oszlop) override (pl. kudasaru → ください,
+    // a sima くださり helyett) — NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem.
+    let irregularStem = false;
+    if (rule.stemColumn === 'i'
+        && NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem
+        && NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem[verb.id]) {
+      stem = NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem[verb.id];
+      irregularStem = true;
+    }
     const suf  = (verb.group === 'ichidan' && rule.ichidanSuffix) ? rule.ichidanSuffix : rule.suffix;
 
     return {
       kana:   stem.kana   + suf.kana,
       romaji: stem.romaji + suf.romaji,
-      irregular: false,
+      irregular: irregularStem,
       morphemes: {
         stem: stem,
         suffix: suf,
-        column: rule.stemColumn
+        column: rule.stemColumn,
+        ...(irregularStem ? { irregularStem: true } : {})
       }
     };
   }
@@ -9506,6 +9539,7 @@ function initDateTimePage() {
                card.catId === 'hours24') errorCode = 'irregular_hour';
       else if (card.catId === 'months')  errorCode = 'irregular_month';
       else if (card.catId === 'minutes') errorCode = 'irregular_minute';
+      else if (card.catId === 'years')   errorCode = 'irregular_year';
     }
 
     return { match: false, errorCode, diff, distance,
@@ -9519,6 +9553,7 @@ function initDateTimePage() {
     if (card.catId === 'times' || card.catId === 'hours24')     return 'irregular_hour';
     if (card.catId === 'months')                                return 'irregular_month';
     if (card.catId === 'minutes')                               return 'irregular_minute';
+    if (card.catId === 'years')                                 return 'irregular_year';
     return 'wrong_reading';
   }
 
@@ -10507,10 +10542,17 @@ function initListeningPage() {
   }
   function countProPool() { return getProSentences().length; }
 
-  // Playback-sebesség a kiválasztott tempó-szintből (nem a lecke difficulty-jéből)
-  function lessonSpeed() {
+  // Playback-sebesség a kiválasztott tempó-szintből (nem a lecke difficulty-jéből).
+  // 2026-06-03 fix: a Pro-mód MINDIG natural 1.0× alap (kártya-szintű override),
+  // mert a Pro-listening mondatainál a tier-szerinti lassítás a prozódiát
+  // tönkretenné — a spec szerint Pro = natural, slow = 0.75× (NEM 0.6×).
+  function tierSpeed() {
     const tier = NIHONCORE_AUDIO_TIERS.find(t => t.id === drillSettings.tier);
     return tier ? tier.speed : 1.0;
+  }
+  function lessonSpeed() { return tierSpeed(); }   // legacy alias (nem-Pro hívókhoz)
+  function computeLessonSpeed(card) {
+    return (card && card.isPro) ? 1.0 : tierSpeed();
   }
 
   // V3 P2 D — adaptív lecke-súly: a user gyenge hang-csapdáit hordozó
@@ -10962,7 +11004,7 @@ function initListeningPage() {
       <div class="lobby-header">
         <div class="lobby-eyebrow">Hallás & Kiejtés · V3</div>
         <h2 class="lobby-title">Drill-paraméterek</h2>
-        <p class="lobby-sub">Válaszd ki a lejátszási tempót — a teljes 38-leckés készleten gyakorolsz.</p>
+        <p class="lobby-sub">Válaszd ki a lejátszási tempót — a teljes ${countLstPool()}-leckés készleten gyakorolsz.</p>
       </div>
 
       <div class="lobby-section">
@@ -11180,12 +11222,13 @@ function initListeningPage() {
   }
 
   function playCardAudio(card, slow) {
-    // V6 — Pro mód: natural tempó alap, mérsékelt slow (mondatnál a 0.6× túl lassú)
+    // V6 — Pro mód: natural tempó alap, mérsékelt slow (mondatnál a 0.6× túl lassú).
+    // 2026-06-03 fix: `computeLessonSpeed(card)` Pro-aware; nem-Pro = tier-speed.
     let speed;
     if (card.isPro) {
       speed = slow ? 0.75 : 1.0;
     } else {
-      speed = slow ? 0.6 : lessonSpeed(card.lesson);
+      speed = slow ? 0.6 : computeLessonSpeed(card);
     }
     // V3 P2 E — adaptív lassítás: ha a user küzd, a normál tempó csökken
     if (!slow && drillSettings.adaptive && drillRunState.speedPenalty > 0) {
@@ -11214,6 +11257,12 @@ function initListeningPage() {
       fb.innerHTML = `🔇 A hang most nem elérhető (Google TTS). Szöveg-fallback: ` +
                      `<strong class="pfe-jp-ok">${card.lesson.text}</strong>`;
     }
+    // 2026-06-03 fix B4: spec-elvárás szerint az onError letiltja a hanggombokat,
+    // megakadályozza a spam-elhető hibafutást. (Visszaáll a következő kártyára
+    // renderelésnél, mivel a renderListeningCard új gombokat hoz létre.)
+    document.querySelectorAll('#lstPlayBtn, #lstSlowBtn, #lstFbReplay').forEach(b => {
+      if (b) { b.disabled = true; b.classList.add('lst-audio-disabled'); }
+    });
   }
 
   // V3 P2 E — adaptív utómunka egy válasz után: smart replay (a hibázott
@@ -11227,9 +11276,11 @@ function initListeningPage() {
     drillRunState.speedPenalty = Math.min(0.3, drillRunState.speedPenalty + 0.1);
     if (!card._replayed) {
       card._replayed = true;
+      // 2026-06-03 fix B2: a clone megőrzi az `isPro` flaget, különben a
+      // replay-elt Pro-kártya tier-speed-en menne le 1.0× helyett.
       const clone = card.options
-        ? { lesson: card.lesson, options: card.options, _replayed: true }
-        : { lesson: card.lesson, _replayed: true };
+        ? { lesson: card.lesson, options: card.options, isPro: !!card.isPro, _replayed: true }
+        : { lesson: card.lesson, isPro: !!card.isPro, _replayed: true };
       const insertAt = Math.min(drillRunState.cardIdx + 3, drillRunState.cards.length);
       drillRunState.cards.splice(insertAt, 0, clone);
     }
@@ -11286,9 +11337,10 @@ function initListeningPage() {
       lessonId: card.lesson.id,
       category: card.lesson.category,
       correct: false,
-      errorCode: 'dont_know',
+      errorCode: 'wrong_choice',     // 2026-06-03 fix B8: konzisztens a feedback-kel
       replayCount: drillRunState.replayCount,
-      slowUsed: drillRunState.slowUsed
+      slowUsed: drillRunState.slowUsed,
+      dontKnow: true                 // külön flag, ha a stats-rétegnek később kell
     });
     document.getElementById('lstScore').textContent  = drillRunState.score;
     document.getElementById('lstStreak').textContent = `${drillRunState.streak} 🔥`;
@@ -11348,7 +11400,12 @@ function initListeningPage() {
       </button>
     `;
     document.getElementById('lstFbReplay').addEventListener('click', () => {
-      NihonCoreAudio.play(c.text, { speed: lessonSpeed(c), onError: () => {} });
+      // 2026-06-03 fix B5: a silent onError helyett a meglévő szöveg-fallback
+      // mutatása és a gomb letiltása (spec: defenzív hálózat).
+      NihonCoreAudio.play(c.text, {
+        speed: computeLessonSpeed(card),
+        onError: () => handleLstAudioError(card)
+      });
     });
     document.getElementById('lstNext').addEventListener('click', advanceLstCard);
   }
@@ -11547,7 +11604,11 @@ function initListeningPage() {
       </button>
     `;
     document.getElementById('lstFbReplay').addEventListener('click', () => {
-      NihonCoreAudio.play(c.text, { speed: lessonSpeed(c), onError: () => {} });
+      // 2026-06-03 fix B5: a silent onError helyett szöveg-fallback + disable.
+      NihonCoreAudio.play(c.text, {
+        speed: computeLessonSpeed(card),
+        onError: () => handleLstAudioError(card)
+      });
     });
     document.getElementById('lstNext').addEventListener('click', advanceLstCard);
   }
@@ -11899,11 +11960,16 @@ function initGrammarPage() {
 
   // Particle-alapú heurisztikus tokenizáció a kana-mondatokon. A particle
   // a megelőző frázishoz tapad (mert grammatikailag oda tartozik). A
-  // punktuáció (、。) saját token-ként szerepel. Védelem: a particle CSAK
-  // akkor érvényes, ha a `cur` nem üres (vagyis volt előtte szó-anyag) —
-  // különben pl. „にほん" elejéről a „に"-t hibásan particle-ként vágná le.
+  // punktuáció (、。) saját token-ként szerepel.
+  //
+  // 2026-06-03 bugfix: csak a 'を' biztonságos single particle (a többi
+  // — は/が/に/で/と/も/の/へ/や/か — gyakran szó-belsejében is előfordul:
+  // えいが, さかな, にほん, です, とき, もの, へや stb. — ami nonszensz
+  // fragmentekre tördelte a mondatokat). A grammar.js-ben minden példa
+  // explicit `tokens[]` mezőt kapott — ez a fallback csak tényleges
+  // hiány esetén fut.
   const TRANS_MULTI_PARTICLES = ['まで', 'から', 'でも', 'など', 'より', 'こそ', 'のに', 'ても', 'なら', 'ながら'];
-  const TRANS_SINGLE_PARTICLES = ['は', 'が', 'を', 'に', 'で', 'と', 'も', 'の', 'へ', 'や', 'か'];
+  const TRANS_SINGLE_PARTICLES = ['を'];
   const TRANS_PUNCT = '、。・？！';
 
   function tokenizePhrases(kana) {
@@ -11949,14 +12015,23 @@ function initGrammarPage() {
   // Translate kártya-adat: helyes tokenek + 1-2 distraktor a contrasts-ból
   // (vagy egy random aktív pattern-ből). A distraktorok NEM punktuáció és
   // NEM egyeznek a helyes tokenekkel.
+  //
+  // 2026-06-03 bugfix: a tokenizálás prioritása `example.tokens` (a
+  // grammar.js-ben explicit megadva minden példára), és csak ennek
+  // hiányában esik vissza a heurisztikus `tokenizePhrases`-ra.
+  function exampleTokens(ex) {
+    return (ex && Array.isArray(ex.tokens) && ex.tokens.length > 0)
+      ? ex.tokens.slice()
+      : tokenizePhrases(ex.kana);
+  }
   function buildTranslateCardData(pattern, example) {
-    const correct = tokenizePhrases(example.kana);
+    const correct = exampleTokens(example);
     const distractors = [];
     const seen = new Set(correct);
 
     const tryAddFrom = (pat) => {
       if (!pat || distractors.length >= 2) return;
-      const ctokens = tokenizePhrases(pat.examples[0].kana);
+      const ctokens = exampleTokens(pat.examples[0]);
       const candidates = ctokens.filter(t =>
         !TRANS_PUNCT.includes(t) && !seen.has(t) && t.length >= 2
       );
@@ -12226,8 +12301,8 @@ function initGrammarPage() {
       `;
     }).join('');
 
-    // SRS box-eloszlás
-    const boxLabels = ['Új (1 nap)', '1 nap', '3 nap', '7 nap', '14 nap', '30 nap'];
+    // SRS box-eloszlás (box 0 = INTERVALS_DAYS[0] = 0 nap, azaz azonnal esedékes)
+    const boxLabels = ['Új / azonnal', '1 nap', '3 nap', '7 nap', '14 nap', '30 nap'];
     const boxRows = boxes.map((n, i) => `
       <div class="grm-srs-row">
         <span class="grm-srs-label">Box ${i} <em>(${boxLabels[i]})</em></span>
@@ -12713,7 +12788,7 @@ function initGrammarPage() {
       ${renderGrmHintBar(card)}
       <div class="cj-input-area">
         <input type="text" class="cj-input" id="grmInput"
-               placeholder="pl. ${escapeGrmHtml(card.example.clozeAnswer.slice(0,1))}…"
+               placeholder="hiraganával írd be a hiányzó részt"
                autocomplete="off" autocapitalize="off" spellcheck="false" />
         <div class="cj-timer-bar"><div class="cj-timer-fill" id="grmTimerFill"></div></div>
       </div>
@@ -13285,6 +13360,14 @@ function initProductionPage() {
   /* ── B) POOL — runtime aggregátor ──────────────── */
   // Grammar Patterns examples + Mondat-Mester sentences egységesítve.
   // NEM content-bővítés — a meglévő adatból merít.
+  //
+  // Sémában minden card-nál:
+  //   kana — PURE KANA (összehasonlításra)
+  //   jp   — KANJI-MIX (megjelenésre / alternatív perfect-match-re)
+  //
+  // Mondat-Mester `tokens[]` `jp` mezője kanji-mix; ezért a kana változatot
+  // tokenenként építjük: ha a token jp már pure kana (partikulák, hiragana-
+  // szavak), úgy maradnak; egyébként a token romaji-ját parseoljuk kanába.
   function getProdSentences() {
     const out = [];
     if (drillSettings.sources.grammar && typeof NIHONCORE_GRAMMAR_PATTERNS !== 'undefined') {
@@ -13314,13 +13397,17 @@ function initProductionPage() {
         // mert a level mező más formátum. Csak akkor adunk hozzá, ha
         // valamelyik JLPT engedélyezett.
         if (!drillSettings.jlpt.N4 && !drillSettings.jlpt.N3) return;
-        const kana = s.tokens.map(t => t.jp).join('');
+        const jp = s.tokens.map(t => t.jp).join('');
+        const kana = s.tokens.map(t => {
+          // Partikulák jp-je mindig pure kana; szavak/igék jp-je kanji-mix lehet
+          return isPureKanaJp(t.jp) ? t.jp : romajiToKanaProd(t.romaji);
+        }).join('');
         const romaji = s.tokens.map(t => t.romaji).join(' ');
         out.push({
           id: 'prod_sm_' + s.id,
           kana, romaji,
           hu: s.translation || '',
-          jp: kana,
+          jp,
           source: 'sentences',
           jlpt: level,
           patternLabel: null,
@@ -13353,6 +13440,11 @@ function initProductionPage() {
 
   /* ── C) FUZZY DIFF MOTOR ──────────────────────── */
 
+  // Egységes pontozás-tábla — verdict → pont (perfect: 16 ... wrong: 0).
+  // 2026-06-03: refaktor, korábban duplikálva volt finalizeProdCard +
+  // renderProdFeedback függvényekben.
+  const PROD_PTS = { perfect: 16, close: 12, near: 8, far: 4, wrong: 0 };
+
   // Normalizálás: katakana→hiragana, ー hosszújel feloldása, whitespace strip.
   // A romajiToKana-t a Listening modul exportálta — globálisan használjuk,
   // de itt nem érjük el (closure). Egyszerű reuse: a window._lst._romaji,
@@ -13366,6 +13458,28 @@ function initProductionPage() {
     return kataToHiraProd(String(s || '').trim())
       .replace(/\s+/g, '')
       .replace(/[、。・！？]/g, '');   // punktuáció ignorálva
+  }
+
+  // Ruby HTML strip: a Grammar Patterns ex.jp `<ruby>水<rt>みず</rt></ruby>...`
+  // formátumából eltávolítja a furigana-tageket → tiszta kanji+okurigana szöveg.
+  function stripRubyHtml(s) {
+    return String(s || '')
+      .replace(/<rt>[^<]*<\/rt>/g, '')
+      .replace(/<\/?ruby>/g, '');
+  }
+
+  // Pure-kana ellenőrző: minden karakter hiragana/katakana/punktuáció?
+  // (A Mondat-Mester token.jp mezőjének felismeréséhez — particle vs kanji-szó.)
+  function isPureKanaJp(s) {
+    if (!s) return false;
+    for (const ch of String(s)) {
+      const code = ch.charCodeAt(0);
+      const isHira = (code >= 0x3040 && code <= 0x309F);
+      const isKata = (code >= 0x30A0 && code <= 0x30FF);
+      const isPunct = '、。・！？「」（）'.includes(ch);
+      if (!isHira && !isKata && !isPunct) return false;
+    }
+    return true;
   }
 
   // Egyszerű romaji→kana parser (a Listening modul reuse-a lehet, de itt
@@ -13553,26 +13667,38 @@ function initProductionPage() {
     // 1) Ha tisztán romaji, konvertálni
     const userKana = isKanaDominant(raw) ? raw : romajiToKanaProd(raw);
     const userNorm = normJpProd(userKana);
-    const targetNorm = normJpProd(card.kana);
+    const targetNormKana = normJpProd(card.kana);
+    // Alternatív target: kanji-mix (Mondat-Mester) vagy ruby-stripped (Grammar).
+    // Lehetővé teszi, hogy a user kanjival is beírhassa a választ.
+    const jpStripped = card.jp ? stripRubyHtml(card.jp) : null;
+    const targetNormJp = jpStripped ? normJpProd(jpStripped) : null;
 
-    // 2) Exact match (normalized)
-    if (userNorm === targetNorm) {
-      return { verdict: 'perfect', userKana, userNorm, targetNorm,
+    // 2) Exact match (normalized) — bármelyik target elfogadható
+    if (userNorm === targetNormKana || (targetNormJp && userNorm === targetNormJp)) {
+      return { verdict: 'perfect', userKana, userNorm,
+               targetNorm: targetNormKana,
                tokensCorrect: 1, tokensTotal: 1, charLevDist: 0 };
     }
 
-    // 3) Token-szintű alignment
+    // 3) A diff-hez a közelebbi targetet választjuk (kana vagy jp).
+    //    Ez kanji-író usernek értelmes diff-et ad, kana-író usernek pedig
+    //    a pure-kana targetet használja.
+    const charDistKana = levDist(userNorm, targetNormKana);
+    const charDistJp   = targetNormJp ? levDist(userNorm, targetNormJp) : Infinity;
+    const useKanaTarget = charDistKana <= charDistJp;
+    const targetForTokens = useKanaTarget ? card.kana : (jpStripped || card.kana);
+    const targetNormForRate = useKanaTarget ? targetNormKana : targetNormJp;
+    const charDist = useKanaTarget ? charDistKana : charDistJp;
+
+    // 4) Token-szintű alignment
     const userToks = tokenizeProdPhrases(userKana.replace(/[、。・！？\s]/g, ''));
-    const targetToks = tokenizeProdPhrases(card.kana.replace(/[、。・！？\s]/g, ''));
+    const targetToks = tokenizeProdPhrases(targetForTokens.replace(/[、。・！？\s]/g, ''));
     const align = alignTokens(userToks, targetToks);
 
     const tokensCorrect = align.tokenDiff.filter(d => d.state === 'correct').length;
     const tokensTotal = Math.max(userToks.length, targetToks.length);
     const tokenRate = tokensTotal > 0 ? tokensCorrect / tokensTotal : 0;
-
-    // 4) Karakter-szintű LCS-távolság
-    const charDist = levDist(userNorm, targetNorm);
-    const charRate = targetNorm.length > 0 ? charDist / targetNorm.length : 1;
+    const charRate = targetNormForRate.length > 0 ? charDist / targetNormForRate.length : 1;
 
     // 5) Verdict az emil-design tervezés szerinti küszöbök
     let verdict;
@@ -13582,7 +13708,8 @@ function initProductionPage() {
     else verdict = 'wrong';                                            // "Próbáld újra"
 
     return {
-      verdict, userKana, userNorm, targetNorm,
+      verdict, userKana, userNorm,
+      targetNorm: targetNormForRate,
       tokensCorrect, tokensTotal, charLevDist: charDist, charRate, tokenRate,
       tokenDiff: align.tokenDiff,
       missingTokens: align.missingTokens,
@@ -13651,7 +13778,7 @@ function initProductionPage() {
 
     const srcRow = [
       { id: 'grammar', name: 'Grammar Patterns példák', hint: '30 mondat (12 N4 + 3 N3)' },
-      { id: 'sentences', name: 'Mondat-Mester mondatok', hint: '24 mondat (N5-N3 vegyes)' }
+      { id: 'sentences', name: 'Mondat-Mester mondatok', hint: '326 mondat (N5-N3 vegyes)' }
     ].map(s => `
       <button class="cj-group-btn prod-src-btn ${drillSettings.sources[s.id] ? 'active' : ''}" data-prod-src="${s.id}">
         <span class="cj-g-name">${s.name}</span>
@@ -13899,9 +14026,8 @@ function initProductionPage() {
   }
 
   function finalizeProdCard(card, diag) {
-    // Pontozás az 5-szintű verdict alapján
-    const PTS = { perfect: 16, close: 12, near: 8, far: 4, wrong: 0 };
-    const pts = PTS[diag.verdict] || 0;
+    // Pontozás az 5-szintű verdict alapján (PROD_PTS konstans)
+    const pts = PROD_PTS[diag.verdict] ?? 0;
     drillRunState.score += pts;
     if (diag.verdict === 'perfect' || diag.verdict === 'close') {
       drillRunState.streak++;
@@ -13980,7 +14106,7 @@ function initProductionPage() {
 
     const isLast = drillRunState.cardIdx + 1 >= drillRunState.cards.length;
     const tokenDiffHtml = renderProdTokenDiff(diag);
-    const scorePts = { perfect: 16, close: 12, near: 8, far: 4, wrong: 0 }[diag.verdict] || 0;
+    const scorePts = PROD_PTS[diag.verdict] ?? 0;
 
     fbEl.innerHTML = `
       <div class="pr-fb-header">
