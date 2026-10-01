@@ -15667,7 +15667,7 @@ function initStatsPage() {
     const el = document.getElementById('statsContent');
     if (NihonCoreStats.getSessions().length === 0) {
       el.innerHTML = emptyState('🎯', 'Még nincs adat az áttekintéshez.',
-        'Játssz le néhány kört — a felkészültség és a napi vitals automatikusan feltöltődik.');
+        'Játssz le néhány kört, és itt megjelenik a felkészültséged és a mai számaid.');
       return;
     }
 
@@ -15679,7 +15679,7 @@ function initStatsPage() {
                      : 'Most kezdődik';
 
     const comps = [
-      { label: 'Modul-mastery', val: rd.mastery,   hint: 'pontosság × lefedettség, 6 modul átlaga' },
+      { label: 'Tudás', val: rd.mastery,   hint: 'pontosság és lefedettség, a modulok átlaga' },
       { label: 'Frissesség',    val: rd.freshness, hint: 'mennyire friss a gyakorlásod' },
       { label: 'Aktivitás',     val: rd.activity,  hint: 'aktív napok az elmúlt héten' }
     ].map(c => `

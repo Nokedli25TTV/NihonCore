@@ -638,6 +638,63 @@ A: A `meaningHu` magyar leírást **természetes magyar nyelven** írd, akár ve
 
 ---
 
+## 8b. A 2026-10-es redesign új adattípusai
+
+### Mini-leckék — `NIHONCORE_LESSONS` (js/data/core.js)
+
+A lobbi fölötti „Tanuld meg" panel szövege. **Jelenleg modulonként egy minta-lecke van** (7 db);
+a többi a végső feltöltés része. Kulcs: a modul statisztika-kulcsa
+(`practice`, `conjugation`, `adjectives`, `datetime`, `listening`, `grammar`, `production`).
+
+```js
+conjugation: {
+  title: 'A három igecsoport',                 // a panel címe
+  points: [                                    // 3–4 rövid pont, sorszámozva jelenik meg
+    { h: 'Ichidan (II.): a る lemarad',         // alcím (egy állítás)
+      t: 'Magyarázat. A japán szöveget <span lang="ja">…</span>-be, a kiemelt partikulát <strong lang="ja">…</strong>-be tedd.' }
+  ],
+  examples: [                                  // 0–2 példamondat
+    { jp: '毎日日本語を勉強します。', ro: 'mainichi nihongo o benkyou shimasu.', hu: 'Minden nap japánt tanulok.' }
+  ]
+}
+```
+
+Szabályok: egy lecke egy képernyőnyi legyen telefonon (3–4 pont); az alcím állítás, ne kérdés;
+gondolatjel helyett kettőspont vagy vessző. Egy modulhoz most egy lecke tartozhat — ha több kell
+(pl. igealakonként), a séma tömbbé bővítendő, szólj előtte.
+
+### Tanulási út — `NIHONCORE_PATH` (js/data/core.js)
+
+A kezdőlap lépései, sorrendben. Új lépés = új objektum a tömbben:
+
+```js
+{ id: 'verb-forms',                 // egyedi; a haladás ezzel mentődik (ne nevezd át utólag!)
+  glyph: '活',                      // a lépés jele
+  title: 'Te-, nai- és ta-alak',
+  desc: 'A három igecsoport és a bizalmas alakok.',
+  module: 'conjugation',            // melyik modul befejezett köre teljesíti
+  href: 'pages/conjugation.html',   // a gyökérhez képest
+  level: 'zero',                    // CSAK a kana-lépéseknél: aki olvas kanát, annál „átugorva"
+  preset: {                         // a lépés előre beállított köre (elhagyható)
+    only: { forms: ['nai', 'te', 'ta'], themes: ['daily', 'movement'] },   // térkép-kulcsok: ezek BE, a többi KI
+    set:  { mode: 'recognition' }                                            // skalár beállítások
+  } }
+```
+
+- A `preset.only` kulcsai a modul `drillSettings` térképei (pl. Ragozó: `groups`, `themes`, `forms`;
+  Dátum: `categories`). A Mondat-Mesternél: `level`, `mode`, `particlesOnly` (csak ezek a partikulák
+  szerepelhetnek) és `particlesAny` (legalább egy szerepeljen).
+- **Ellenőrizd, hogy a szűrt készlet nem üres**: nyisd meg a lépést, és nézd meg a Testreszabás alján a darabszámot.
+- A lépés akkor „kész", ha az innen indított kör legalább 60%-os (`NihonCorePath.PASS`).
+
+### Kana — `NIHONCORE_KANA_ROWS` (js/data/kana.js)
+
+Zárt, teljes készlet (46 alapjel + 25 zöngés + 33 összetett, hiragana és katakana) — **nem kell bővíteni**.
+Ha mégis (pl. ヴ, ファ-sor): új sor-objektum a megfelelő `group`-pal; a `cols` a tábla oszlopszáma,
+az `items` cellái `[hiragana, katakana, romaji, [további elfogadott átírások]]`, hézagnál `null`.
+
+---
+
 ## 9. A „nagy load" forgatókönyv
 
 Amikor készen állsz, a következő sorrendet javaslom:

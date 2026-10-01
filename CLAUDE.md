@@ -538,7 +538,9 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 - **Célközönség:** nulláról induló ÉS kanát már olvasó kezdő, első indításkor szintválasztóval.
 - **Vizuális irány:** a zen paletta és a betűk maradnak, a felületek **üvegesek** (glass panelek + lebegő navbar), és az app **nagyon telefon- és tabletbarát** (user explicit kérése — felülírta a Zen Polish „nincs glassmorphism" elvét).
 - **Szerkezet:** vezetett tanulási út a kezdőlapon „Folytatás" gombbal + a modulok „Szabad gyakorlás"-ként.
-- **Nyitva maradt:** a „Grammar Patterns" és a „Production modul" **neve** (user-döntés) · natív `confirm()` ablakok saját párbeszédre cserélése · a statisztika-oldal részletes újratervezése.
+- **Utólagos kiegészítések (2026-10-01):** szó–jelentés **Párosító** az igékhez, melléknevekhez és dátumokhoz (`[data-match-launcher]`, a szókártya-adapterekből) · **kilépés-megerősítő lap** a natív `confirm()` helyett (`NihonCoreRound.confirmExit`; a modulok kezelői változatlanok) · **`window.NihonCoreStats` / `NihonCoreAudio` / `NihonCoreSRS`**: top-level `const`-ként nem voltak a `window`-n, ezért a V18 részmentés (`NihonCoreRound.flush`) **soha nem futott le** — most tényleg mentődnek a félbehagyott körök · **Számlálók 2–3. fázis**: a „Következő" a felismerő-kártyát rajzolta, a kör az első kártya után elakadt (javítva).
+- **Nyitva maradt:** a „Grammar Patterns" és a „Production modul" **neve** (user-döntés) · a profil-törlések még natív `confirm()`-ot használnak · a statisztika hibakódjai még nyersen jelennek meg („fő hiba: wrong form").
+- **Ellenőrzés szerver nélkül:** a redesign alatt a vizuális és funkcionális ellenőrzés fej nélküli Edge-dzsel történt a helyi fájlokon (`file://`), preview-szerver és localhost nélkül.
 - **Ág:** a redesign a `redesign-2026-10` ágon van; élesítéshez `main`-be kell olvasztani és pusholni.
 
 **Jelenleg élő modulok:**

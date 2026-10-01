@@ -6817,6 +6817,26 @@ body.round-active .phase-tabs { display: none; }
 .sd-intro-text { color: var(--sumi-soft); font-size: var(--fs-base); line-height: 1.55; max-width: 52ch; }
 .csc-label { text-transform: none; letter-spacing: 0; font-weight: 600; }
 
+/* ── Statisztika: fül-sáv ────────────────────────────────
+   Telefonon egy sorban görgethető üveg-sáv, nem kétoszlopos gombfal. */
+.stats-tabs {
+  display: flex; flex-wrap: nowrap; gap: 4px;
+  max-width: 720px; margin: 0 auto 16px; padding: 5px;
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  background: var(--glass-bg); border: 1px solid var(--glass-border);
+  border-radius: 999px; box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+}
+.stats-tabs::-webkit-scrollbar { display: none; }
+.stats-tab {
+  flex: 1 0 auto; min-height: 40px; padding: 0 16px;
+  background: transparent; border: 1px solid transparent; border-radius: 999px;
+  color: var(--sumi-soft); font-size: var(--fs-sm); font-weight: 700;
+}
+.stats-tab:hover:not(:disabled) { color: var(--sumi); background: rgb(var(--tint-rgb) / 0.05); border-color: transparent; }
+.stats-tab.active { background: var(--matcha-soft); border-color: rgb(var(--matcha-rgb) / 0.4); color: var(--matcha-deep); }
+.stats-content { max-width: 720px; }
+
 
 
 /* ════════════════════════════════════════════════════════
