@@ -1669,7 +1669,7 @@ window.NihonCoreFlashcard = (function () {
     else              root.classList.remove('theme-sumi');
     // Frissítsd a meta theme-color-t is (PWA telefonon)
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', t === 'sumi' ? '#0F1220' : '#F3F5FB');
+    if (meta) meta.setAttribute('content', t === 'sumi' ? '#141829' : '#E9EDF6');
     // Frissítsd minden injektált toggle-gomb ikonját
     document.querySelectorAll('.ht-theme-btn').forEach(btn => paintButton(btn, t));
     // Eltávolítjuk a transition class-t a tranzíció után — különben minden mozgás 220ms lenne
@@ -1707,7 +1707,7 @@ window.NihonCoreFlashcard = (function () {
     injectThemeButton();
     // a mentett téma szerint a böngésző-keret színe is (PWA telefonon)
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', getTheme() === 'sumi' ? '#0F1220' : '#F3F5FB');
+    if (meta) meta.setAttribute('content', getTheme() === 'sumi' ? '#141829' : '#E9EDF6');
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setup);

@@ -16,7 +16,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v51-2026-10-02-indigo-map-stats';
+const CACHE_VERSION = 'nihoncore-v52-2026-10-02-tune-logo';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 
@@ -60,6 +60,7 @@ const APP_SHELL = [
   './js/data/kana.js',
   // img/
   './img/app_icon.png',
+  './img/logo.png',
   './img/fav_icon_nihoncore.png'
 ];
 
