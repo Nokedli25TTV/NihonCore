@@ -23,11 +23,7 @@
 </head>
 <body>
 
-  <!-- Background decorations (Enhanced Glow) -->
   <div class="bg-decoration">
-    <div class="ink-circle circle-1"></div>
-    <div class="ink-circle circle-2"></div>
-    <div class="ink-circle circle-3"></div>
     <div class="seigaiha-pattern"></div>
   </div>
 
@@ -40,6 +36,7 @@
       </a>
 
       <nav class="nav" aria-label="Fő navigáció">
+        <a href="#path" class="nav-link">Tanulási út</a>
         <a href="#modules" class="nav-link">Modulok</a>
         <a href="pages/stats.html" class="nav-link">Statisztika</a>
       </nav>
@@ -51,82 +48,51 @@
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero-content">
-      <div class="hero-tag pulse-border">
-        <span class="tag-dot"></span>
-        JLPT N5 → N3 · 9 interaktív modul
-      </div>
-      <h1 class="hero-title">
-        <span class="hero-jp">日本語を</span>
-        <span class="hero-sub">vidd reflexszintre.</span>
-      </h1>
-      <p class="hero-desc">
-        Igeragozás, partikulák, számlálók, hallás és szabad fordítás egy helyen.
-        Előbb megérted a szabályt, aztán gyakorlod, végül időzített ismétléssel
-        rögzíted. Magyar nyelven, a Dekiru tankönyvek nyomán.
-      </p>
-      <div class="hero-cta">
-        <a href="#modules" class="btn btn-primary btn-lg glow-effect">Kezdj bele ingyen</a>
-        <a href="pages/register.html" class="btn btn-outline btn-lg">Fiók a szinkronhoz</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-num">9</span>
-          <span class="stat-label">gyakorló modul</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">N5–N3</span>
-          <span class="stat-label">JLPT szint</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="stat">
-          <span class="stat-num">100%</span>
-          <span class="stat-label">ingyenes</span>
-        </div>
-      </div>
-    </div>
+  <main class="home" id="homeMain">
 
-    <!-- Washi-papír kártya-stack: élő tankönyv-specimen furiganával -->
-    <div class="hero-visual" aria-hidden="true">
-      <div class="hero-card-stack">
-        <div class="floating-card card-back-2"><span class="card-kana">あ</span></div>
-        <div class="floating-card card-back-1"><span class="card-kana">本</span></div>
-        <div class="floating-card card-main">
-          <div class="card-label">ます形 · udvarias</div>
-          <div class="card-kana-lg"><ruby>食<rt>た</rt></ruby>べます</div>
-          <div class="card-reading">tabemasu · „eszik"</div>
-          <div class="card-specimen-row">
-            <span class="card-spec-chip">食べない</span>
-            <span class="card-spec-chip">食べた</span>
-            <span class="card-spec-chip">食べて</span>
-          </div>
-          <div class="card-progress-bar">
-            <div class="card-progress-fill" style="width: 72%"></div>
-          </div>
-        </div>
-      </div>
+  <!-- Felső blokk: első alkalommal szintválasztó, utána „Folytatás" kártya.
+       JS tölti (app.js: initLanding → renderHomeTop). -->
+  <section class="home-top" id="homeTop" aria-live="polite"></section>
 
-      <div class="floating-pills">
-        <div class="pill pill-1 glass-pill">が</div>
-        <div class="pill pill-2 glass-pill">は</div>
-        <div class="pill pill-3 glass-pill">を</div>
-        <div class="pill pill-4 glass-pill">に</div>
-      </div>
+  <!-- TANULÁSI ÚT — a lépések a js/data/core.js NIHONCORE_PATH-ból jönnek -->
+  <section class="path-section" id="path" aria-labelledby="pathTitle">
+    <div class="section-header">
+      <span class="section-tag" lang="ja">道</span>
+      <h2 class="section-title" id="pathTitle">Tanulási út</h2>
+      <p class="section-desc">Lépésről lépésre az alapoktól a szabad fordításig. A sorrend ajánlás: bármelyik lépést megnyithatod.</p>
     </div>
+    <ol class="path-list" id="pathList"></ol>
+    <p class="path-level" id="pathLevel"></p>
   </section>
 
-  <!-- MODULES SECTION -->
-  <section class="modules-section" id="modules">
+  <!-- SZABAD GYAKORLÁS — minden modul, saját beállításokkal -->
+  <section class="modules-section" id="modules" aria-labelledby="modulesTitle">
     <div class="section-header">
-      <div class="section-tag">モジュール</div>
-      <h2 class="section-title">Gyakorló Modulok</h2>
-      <p class="section-desc">Minden modul egy konkrét nyelvtani területre fókuszál — játékos, interaktív formában.</p>
+      <span class="section-tag" lang="ja">練習</span>
+      <h2 class="section-title" id="modulesTitle">Szabad gyakorlás</h2>
+      <p class="section-desc">Minden modul külön is megnyitható: te választod a módot, a szűrőket és a kártyaszámot.</p>
     </div>
 
     <div class="modules-grid">
+      <!-- Kana: hiragana + katakana -->
+      <a class="module-card module-available glass-card" href="pages/kana.html">
+        <div class="module-icon icon-glow-teal">
+          <div class="icon-inner" lang="ja">あ</div>
+        </div>
+        <div class="module-phase">Alapok</div>
+        <h3 class="module-title">Kana</h3>
+        <p class="module-desc">Hiragana és katakana: tábla hanggal, felismerés, beírás és párosító. A gyengébb jelek gyakrabban jönnek.</p>
+        <div class="module-tags">
+          <span class="tag glass-tag">ひらがな</span>
+          <span class="tag glass-tag">カタカナ</span>
+          <span class="tag glass-tag">párosító</span>
+        </div>
+        <div class="module-footer">
+          <span class="module-lessons">Kezdő</span>
+          <div class="module-coming glow-text">Megnyitható</div>
+        </div>
+      </a>
+
       <!-- Module 1 — alap igék masu-alakban -->
       <a class="module-card module-available glass-card" href="pages/module.html?id=arimasu-imasu">
         <div class="module-icon icon-glow-teal">
@@ -300,15 +266,19 @@
     </div>
   </section>
 
-  <!-- CTA SECTION -->
-  <section class="cta-section">
-    <div class="cta-inner glass-panel-heavy">
-      <div class="cta-kanji">始めよう</div>
-      <h2>Készen állsz a japán kalandra?</h2>
-      <p>Regisztrálj ingyen és kezdd el az első leckét még ma.</p>
-      <a href="pages/register.html" class="btn btn-primary btn-lg glow-effect">Regisztráció — teljesen ingyenes</a>
+  <!-- Fiók: csak kijelentkezve látszik (app.js rejti el, ha van bejelentkezett felhasználó) -->
+  <section class="cta-section" id="homeAccount">
+    <div class="cta-inner glass-panel">
+      <h2>A haladásod most ezen az eszközön van</h2>
+      <p>Fiókkal a tanulási út, a statisztika és az ismétlések minden eszközödön ott folytatódnak, ahol abbahagytad.</p>
+      <div class="cta-actions">
+        <a href="pages/register.html" class="btn btn-primary">Fiók létrehozása</a>
+        <a href="pages/login.html" class="btn btn-outline">Bejelentkezés</a>
+      </div>
     </div>
   </section>
+
+  </main>
 
   <!-- FOOTER -->
   <footer class="footer glass-footer">
@@ -321,6 +291,7 @@
     </div>
   </footer>
   <!-- V16/V19: auth + sync (a Firebase SDK lazy-load, az auth.js tölti) -->
+  <script src="js/data/core.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/sync.js"></script>
   <script src="js/app.js"></script>

@@ -16,7 +16,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v44-2026-10-01-redesign-p3';
+const CACHE_VERSION = 'nihoncore-v45-2026-10-01-redesign-p4';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 
@@ -36,6 +36,7 @@ const APP_SHELL = [
   './pages/listening.html',
   './pages/grammar.html',
   './pages/production.html',
+  './pages/kana.html',
   './pages/stats.html',
   './pages/login.html',
   './pages/register.html',
@@ -55,6 +56,7 @@ const APP_SHELL = [
   './js/data/datetime.js',
   './js/data/audio.js',
   './js/data/grammar.js',
+  './js/data/kana.js',
   // img/
   './img/app_icon.png',
   './img/fav_icon_nihoncore.png'

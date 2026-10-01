@@ -33,7 +33,9 @@ window.NihonCoreSync = (function () {
     'nihoncore_dt_profile_v1',      'nihoncore_dt_settings_v1',
     'nihoncore_listening_profile_v1','nihoncore_listening_settings_v1',
     'nihoncore_grm_profile_v1',     'nihoncore_grm_settings_v1',
-    'nihoncore_prod_profile_v1',    'nihoncore_prod_settings_v1'
+    'nihoncore_prod_profile_v1',    'nihoncore_prod_settings_v1',
+    'nihoncore_path_v1',            // tanulási út: szint + lépések haladása
+    'nihoncore_kana_profile_v1'
   ];
   const PREFIX_KEYS = ['nc_fc_state_'];   // flashcard "tudom/nem tudom" minden modul
 

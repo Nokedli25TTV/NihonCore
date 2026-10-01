@@ -1185,3 +1185,74 @@ const NIHONCORE_GRAMMAR_ERROR_TYPES = {
   }
 };
 
+/* ====================================================
+   TANULÁSI ÚT — a kezdőlap vezetett sorrendje
+   ----------------------------------------------------
+   Minden lépés egy meglévő modult nyit meg, előre beállított körrel.
+   Mezők:
+     id       egyedi kulcs (a haladás ezzel mentődik)
+     glyph    a lépés jele a listában
+     title / desc
+     module   a NihonCoreStats modul-kulcsa (ehhez a modulhoz tartozó
+              befejezett kör teljesíti a lépést)
+     href     a megnyitandó oldal (a gyökérhez képest)
+     level    'zero' = csak a nulláról indulónak kötelező (kana);
+              aki már olvas kanát, annál „átugorva" jelenik meg
+     preset   a modul beállításaira ültetett kör:
+                only: { térkép-kulcs: [bekapcsolt elemek] }  — a többi ki
+                set:  { skalár kulcs: érték }
+              (a Mondat-Mesternél: level, mode, particlesOnly / particlesAny)
+   A lépés akkor „kész", ha az innen indított kör legalább 60%-os.
+   ==================================================== */
+const NIHONCORE_PATH = [
+  { id: 'kana-hira', glyph: 'あ', title: 'Hiragana',
+    desc: 'A 46 alapjel: ezzel olvasol el mindent, ami ezután jön.',
+    module: 'kana', href: 'pages/kana.html', level: 'zero',
+    preset: { set: { script: 'hiragana' } } },
+  { id: 'kana-kata', glyph: 'ア', title: 'Katakana',
+    desc: 'A jövevényszavak írása: パソコン, レストラン.',
+    module: 'kana', href: 'pages/kana.html', level: 'zero',
+    preset: { set: { script: 'katakana' } } },
+  { id: 'first-sentences', glyph: '文', title: 'Első mondatok',
+    desc: 'です, は, の, か: ki ez, mi ez, kié ez?',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N5', mode: 'particles', particlesOnly: ['は', 'の', 'か', 'も'] } },
+  { id: 'basic-verbs', glyph: '動', title: 'Alap igék masu-alakban',
+    desc: 'Van, eszik, megy: jelen és múlt, állítás és tagadás.',
+    module: 'arimasu-imasu', href: 'pages/module.html?id=arimasu-imasu' },
+  { id: 'particles', glyph: '助', title: 'Partikulák',
+    desc: 'を, に, で, へ, と, が: mit, hol, hová, kivel.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N5', mode: 'particles', particlesAny: ['を', 'に', 'で', 'へ', 'と', 'が'] } },
+  { id: 'word-order', glyph: '順', title: 'Szórend',
+    desc: 'Rakd össze a mondatot az összekevert szavakból.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N5', mode: 'puzzle' } },
+  { id: 'datetime', glyph: '時', title: 'Dátum és idő',
+    desc: 'Hónapok, napok, a hét napjai, órák: a rendhagyó olvasatokkal.',
+    module: 'datetime', href: 'pages/datetime.html',
+    preset: { only: { categories: ['months', 'days', 'weekdays', 'times'] }, set: { mode: 'recognition' } } },
+  { id: 'counters', glyph: '数', title: 'Számlálók',
+    desc: '本, 枚, 人: mit mivel számolunk.',
+    module: 'counter', href: 'pages/module.html?id=szamlalok' },
+  { id: 'adjectives', glyph: '形', title: 'Melléknevek',
+    desc: 'I- és na-melléknevek: jelen, múlt, tagadás.',
+    module: 'adjectives', href: 'pages/adjectives.html',
+    preset: { set: { mode: 'recognition' } } },
+  { id: 'verb-forms', glyph: '活', title: 'Te-, nai- és ta-alak',
+    desc: 'A három igecsoport és a bizalmas alakok.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['nai', 'te', 'ta'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+  { id: 'listening', glyph: '聴', title: 'Hallás',
+    desc: 'Hosszú és rövid hangok, kis っ: halld meg a különbséget.',
+    module: 'listening', href: 'pages/listening.html',
+    preset: { set: { mode: 'recognition' } } },
+  { id: 'patterns', glyph: '型', title: 'Nyelvtani minták',
+    desc: '〜たい, 〜たら, 〜てもいい: mondatszintű szerkezetek.',
+    module: 'grammar', href: 'pages/grammar.html',
+    preset: { set: { mode: 'recognition' } } },
+  { id: 'production', glyph: '作', title: 'Szabad fordítás',
+    desc: 'Magyar mondatból japánt írsz, segítség nélkül.',
+    module: 'production', href: 'pages/production.html' }
+];

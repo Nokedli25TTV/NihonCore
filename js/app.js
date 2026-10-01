@@ -393,6 +393,136 @@ window.NihonCoreRound = (function () {
 })();
 
 
+// ── NihonCorePath ── tanulási út (kezdőlap) ──
+//   A lépések a NIHONCORE_PATH-ban vannak (js/data/core.js). Itt:
+//     · a haladás tárolása (localStorage 'nihoncore_path_v1', szinkronizálva):
+//         { level: 'zero' | 'kana' | null, steps: { id: { best, done, ts } } }
+//     · az aktív lépés: a modul-oldal ?step=<id> paramétere (nem tárolódik —
+//       szabad gyakorlásnál nincs aktív lépés, így a kör nem számít az útba)
+//     · apply(module, settings): a lépés előre beállított köre a modulra
+//     · onSession(rec): befejezett kör → a lépés eredménye
+window.NihonCorePath = (function () {
+  const KEY = 'nihoncore_path_v1';
+  const PASS = 0.6;                        // ennyitől „kész" a lépés
+  const STEPS = (typeof NIHONCORE_PATH !== 'undefined') ? NIHONCORE_PATH : [];
+
+  function load() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (s && typeof s === 'object') { s.steps = s.steps || {}; return s; }
+    } catch (e) {}
+    return { level: null, steps: {} };
+  }
+  function save(state) {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    if (window.NihonCoreSync && NihonCoreSync.schedulePush) NihonCoreSync.schedulePush();
+  }
+
+  function getStep(id) { return STEPS.find(s => s.id === id) || null; }
+  const activeId = (function () {
+    try { return new URLSearchParams(window.location.search).get('step'); } catch (e) { return null; }
+  })();
+  function activeStep() { return activeId ? getStep(activeId) : null; }
+
+  function setLevel(level) { const st = load(); st.level = level; save(st); }
+
+  // A lépések a tanuló szintje szerint: aki olvas kanát, annál a kana-lépések „átugorva"
+  function view() {
+    const st = load();
+    const rows = STEPS.map((s, i) => {
+      const r = st.steps[s.id] || {};
+      const skipped = s.level === 'zero' && st.level === 'kana' && !r.done;
+      return { step: s, index: i, done: !!r.done, best: typeof r.best === 'number' ? r.best : null, skipped: skipped };
+    });
+    const next = rows.find(r => !r.done && !r.skipped) || null;
+    const total = rows.filter(r => !r.skipped).length;
+    const doneCount = rows.filter(r => r.done && !r.skipped).length;
+    return { level: st.level, rows: rows, next: next, total: total, doneCount: doneCount };
+  }
+
+  // A lépés előre beállított köre a modul beállításaira
+  function apply(moduleKey, settings) {
+    const step = activeStep();
+    if (!step || step.module !== moduleKey || !step.preset || !settings) return false;
+    const p = step.preset;
+    if (p.only) {
+      Object.keys(p.only).forEach(k => {
+        const map = settings[k];
+        if (!map || typeof map !== 'object') return;
+        Object.keys(map).forEach(x => { map[x] = false; });
+        p.only[k].forEach(x => { map[x] = true; });
+      });
+    }
+    if (p.set) Object.keys(p.set).forEach(k => { settings[k] = p.set[k]; });
+    return true;
+  }
+
+  // Befejezett kör → a lépés eredménye (NihonCoreStats.recordSession hívja)
+  function onSession(rec) {
+    const step = activeStep();
+    if (!step || !rec || rec.partial || rec.module !== step.module || !rec.questionCount) return;
+    const pct = rec.correctCount / rec.questionCount;
+    const st = load();
+    const prev = st.steps[step.id] || {};
+    const wasDone = !!prev.done;
+    st.steps[step.id] = {
+      best: Math.max(typeof prev.best === 'number' ? prev.best : 0, pct),
+      done: wasDone || pct >= PASS,
+      ts: Date.now()
+    };
+    save(st);
+    showResult(step, pct, pct >= PASS, wasDone);
+  }
+
+  const homeHref = () => (window.location.pathname.includes('/pages/') ? '../' : '') + 'index.html#path';
+
+  function showResult(step, pct, passed, wasDone) {
+    const old = document.querySelector('.path-result');
+    if (old) old.remove();
+    const el = document.createElement('div');
+    el.className = 'path-result ' + (passed ? 'path-result-ok' : 'path-result-retry');
+    el.setAttribute('role', 'status');
+    const p = Math.round(pct * 100);
+    el.innerHTML =
+      '<div class="path-result-text">' +
+        '<strong>' + (passed ? (wasDone ? 'Újra megvan: ' : 'Lépés kész: ') + step.title
+                             : step.title + ': most ' + p + '%') + '</strong>' +
+        '<span>' + (passed ? p + '%-os kör. Mehet a következő lépés.'
+                           : 'A lépéshez ' + Math.round(PASS * 100) + '% kell. Egy újabb körrel meglesz.') + '</span>' +
+      '</div>' +
+      '<a class="btn btn-primary" href="' + homeHref() + '">' + (passed ? 'Tovább az úton' : 'Vissza az útra') + '</a>' +
+      '<button class="path-result-x" type="button" aria-label="Bezárás">✕</button>';
+    document.body.appendChild(el);
+    el.querySelector('.path-result-x').addEventListener('click', () => el.remove());
+  }
+
+  // Modul-oldalon: jelzés, hogy a kör a tanulási út lépéséhez van beállítva
+  function banner() {
+    const step = activeStep();
+    const main = document.querySelector('.module-main');
+    if (!step || !main || main.querySelector('.path-banner')) return;
+    const b = document.createElement('a');
+    b.className = 'path-banner';
+    b.href = homeHref();
+    b.innerHTML = '<span class="path-banner-glyph">' + step.glyph + '</span>' +
+      '<span class="path-banner-text"><span class="path-banner-kicker">Tanulási út</span>' +
+      '<strong>' + step.title + '</strong></span>';
+    main.insertBefore(b, main.firstChild);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', banner);
+  else banner();
+
+  return {
+    steps: STEPS, view: view, setLevel: setLevel, apply: apply,
+    activeStep: activeStep, onSession: onSession, PASS: PASS,
+    stepHref: function (step, fromRoot) {
+      const sep = step.href.indexOf('?') >= 0 ? '&' : '?';
+      return (fromRoot === false ? '../' : '') + step.href + sep + 'step=' + step.id;
+    }
+  };
+})();
+
+
 // ── NihonCorePrefs ── eszköz-szintű gyakorlási beállítások ──
 //   timerOn(): kell-e időlimit a beírós (Mester / Kiegészítés) módokban.
 //   Alapból KI: a kezdő nyugodtan gondolkodhat; aki reflexet edz, bekapcsolja
@@ -441,7 +571,7 @@ window.NihonCorePrefs = (function () {
     const sections = Array.prototype.filter.call(lobby.children, c => c.classList.contains('lobby-section'));
     if (!sections.length || lobby.querySelector(':scope > .lobby-custom')) return;
 
-    const isMode = s => !!s.querySelector('[class*="mode-row"]');
+    const isMode = s => s.hasAttribute('data-lobby-keep') || !!s.querySelector('[class*="mode-row"]');
     const modeSections = sections.filter(isMode);
     const rest = sections.filter(s => !isMode(s));
     const start = Array.prototype.find.call(lobby.children, c => c.classList.contains('ml-start'));
@@ -1952,6 +2082,8 @@ const NihonCoreStats = (function () {
     }
     // V18: a kör-őrnek jelezzük, hogy ez a kör elmentődött (nincs dupla részmentés)
     if (window.NihonCoreRound && NihonCoreRound.markComplete) NihonCoreRound.markComplete();
+    // Tanulási út: ha a kör egy út-lépésből indult, itt dől el a lépés eredménye
+    if (window.NihonCorePath) NihonCorePath.onSession(rec);
     return rec;
   }
 
@@ -2111,87 +2243,169 @@ const NihonCoreSRS = (function () {
    ==================================================== */
 
 function initLanding() {
-  // Mobile menu toggle
-  const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-  const mobileNav     = document.getElementById('mobileNav');
+  const Path = window.NihonCorePath;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const pctText = v => Math.round(v * 100) + '%';
+  const CHECK = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>';
+  const ARROW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
 
-  mobileMenuBtn?.addEventListener('click', () => {
-    const isOpen = mobileNav.classList.toggle('open');
-    mobileMenuBtn.classList.toggle('open', isOpen);
-    mobileMenuBtn.setAttribute('aria-expanded', isOpen);
-  });
-  document.querySelectorAll('.mobile-nav-link').forEach(link => {
-    link.addEventListener('click', () => {
-      mobileNav?.classList.remove('open');
-      mobileMenuBtn?.classList.remove('open');
-    });
-  });
+  // ── Felső blokk: szintválasztó (első alkalom) vagy „Folytatás" ──
+  function renderHomeTop() {
+    const top = document.getElementById('homeTop');
+    if (!top || !Path) return;
+    const v = Path.view();
 
-  // Scroll reveal animáció (Emil-szabály: 50ms stagger gyors, koherens érzet)
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => entry.target.classList.add('visible'), i * 50);
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12 });
+    if (!v.level) {
+      top.innerHTML = `
+        <div class="home-hero">
+          <h1 class="hero-title">
+            <span class="hero-jp" lang="ja">日本語を</span>
+            <span class="hero-sub">vidd reflexszintre.</span>
+          </h1>
+          <p class="hero-desc">Japán nyelvtan magyarul, lépésről lépésre: előbb megérted a szabályt,
+            aztán gyakorlod, végül ismétléssel rögzíted.</p>
+        </div>
+        <div class="onboard glass-panel-heavy">
+          <h2 class="onboard-title">Honnan indulsz?</h2>
+          <p class="onboard-sub">Ehhez igazítjuk az első lépéseket. Később bármikor átállíthatod.</p>
+          <div class="onboard-options">
+            <button class="onboard-opt" type="button" data-level="zero">
+              <span class="path-glyph" lang="ja">あ</span>
+              <span class="onboard-opt-text"><strong>Nulláról kezdem</strong>
+                <span>Még nem olvasom a hiraganát és a katakanát.</span></span>
+            </button>
+            <button class="onboard-opt" type="button" data-level="kana">
+              <span class="path-glyph" lang="ja">文</span>
+              <span class="onboard-opt-text"><strong>A kanát már olvasom</strong>
+                <span>Jöhet a nyelvtan: mondatok, igék, partikulák.</span></span>
+            </button>
+          </div>
+        </div>`;
+      top.querySelectorAll('.onboard-opt').forEach(btn => btn.addEventListener('click', () => {
+        Path.setLevel(btn.dataset.level);
+        renderAll();
+        const card = document.querySelector('.continue');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }));
+      return;
+    }
 
-  document.querySelectorAll(
-    '.section-header, .module-card, .feature-item, .demo-lesson, .hero-stats .stat, .cta-inner'
-  ).forEach(el => {
-    el.classList.add('reveal');
-    revealObserver.observe(el);
-  });
+    if (!v.next) {
+      top.innerHTML = `
+        <div class="continue glass-panel-heavy">
+          <div class="continue-kicker">Tanulási út · ${v.doneCount} / ${v.total} lépés kész</div>
+          <div class="continue-main">
+            <span class="path-glyph path-glyph-lg" lang="ja">祝</span>
+            <div class="continue-text">
+              <h1 class="continue-title">Végigértél az úton</h1>
+              <p class="continue-desc">Innen a szabad gyakorlás és a statisztika vakfoltjai visznek tovább.</p>
+            </div>
+          </div>
+          <a class="btn btn-primary btn-lg" href="#modules">Szabad gyakorlás</a>
+        </div>`;
+      return;
+    }
 
-  // Smooth anchor scroll (in-page anchorok)
+    const s = v.next.step;
+    const stepNo = v.rows.filter(r => !r.skipped).findIndex(r => r.step.id === s.id) + 1;
+    const started = v.doneCount > 0 || v.next.best !== null;
+    top.innerHTML = `
+      <div class="continue glass-panel-heavy">
+        <div class="continue-kicker">${started ? 'Következő lépés' : 'Első lépés'} · ${stepNo} / ${v.total}</div>
+        <div class="continue-main">
+          <span class="path-glyph path-glyph-lg" lang="ja">${esc(s.glyph)}</span>
+          <div class="continue-text">
+            <h1 class="continue-title">${esc(s.title)}</h1>
+            <p class="continue-desc">${esc(s.desc)}</p>
+          </div>
+        </div>
+        <a class="btn btn-primary btn-lg continue-btn" href="${Path.stepHref(s)}">${started ? 'Folytatás' : 'Kezdés'}</a>
+        <div class="continue-progress" role="img" aria-label="${v.doneCount} / ${v.total} lépés kész">
+          <div class="continue-bar"><div class="continue-fill" style="width: ${v.total ? (v.doneCount / v.total) * 100 : 0}%"></div></div>
+          <span class="continue-count">${v.doneCount} / ${v.total} lépés kész</span>
+        </div>
+      </div>`;
+  }
+
+  // ── A tanulási út lépései ──
+  function renderPath() {
+    const list = document.getElementById('pathList');
+    const levelEl = document.getElementById('pathLevel');
+    if (!list || !Path) return;
+    const v = Path.view();
+    list.innerHTML = v.rows.map(r => {
+      const s = r.step;
+      const isNext = v.next && v.next.step.id === s.id && !!v.level;
+      const cls = r.done ? 'is-done' : r.skipped ? 'is-skipped' : isNext ? 'is-next' : '';
+      let state = ARROW;
+      if (r.done)         state = '<span class="path-state path-state-done">' + CHECK + (r.best !== null ? pctText(r.best) : 'Kész') + '</span>';
+      else if (r.skipped) state = '<span class="path-state">Átugorva</span>';
+      else if (isNext)    state = '<span class="path-state path-state-next">Következő</span>';
+      else if (r.best !== null) state = '<span class="path-state">' + pctText(r.best) + '</span>';
+      return `
+        <li class="path-step ${cls}">
+          <a class="path-step-link" href="${Path.stepHref(s)}">
+            <span class="path-glyph" lang="ja">${esc(s.glyph)}</span>
+            <span class="path-step-body">
+              <span class="path-step-title">${esc(s.title)}</span>
+              <span class="path-step-desc">${esc(s.desc)}</span>
+            </span>
+            <span class="path-step-end">${state}</span>
+          </a>
+        </li>`;
+    }).join('');
+
+    if (levelEl) {
+      levelEl.innerHTML = !v.level ? '' :
+        (v.level === 'zero' ? 'Nulláról indulsz: az út a kanával kezdődik.' : 'A kanát már olvasod: az út a nyelvtannal kezdődik.') +
+        ' <button class="path-level-btn" type="button">Módosítás</button>';
+      const b = levelEl.querySelector('.path-level-btn');
+      if (b) b.addEventListener('click', () => { Path.setLevel(v.level === 'zero' ? 'kana' : 'zero'); renderAll(); });
+    }
+  }
+
+  function renderAll() { renderHomeTop(); renderPath(); }
+  renderAll();
+
+  // Fiók-blokk: bejelentkezve nincs rá szükség
+  const account = document.getElementById('homeAccount');
+  const hideAccount = user => { if (account) account.classList.toggle('hidden', !!user); };
+  if (window.NihonCoreAuth) {
+    try { hideAccount(NihonCoreAuth.getCachedUser && NihonCoreAuth.getCachedUser()); } catch (e) {}
+    try { NihonCoreAuth.onChange && NihonCoreAuth.onChange(hideAccount); } catch (e) {}
+  }
+
+  // Oldalon belüli horgonyok: finom görgetés a lebegő fejléc alá
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', e => {
       const target = document.querySelector(anchor.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        const offset = target.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: offset, behavior: 'smooth' });
-      }
+      if (!target) return;
+      e.preventDefault();
+      const header = document.getElementById('header');
+      const top = target.getBoundingClientRect().top + window.scrollY - (header ? header.offsetHeight : 0) - 24;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+      try { history.replaceState(null, '', anchor.getAttribute('href')); } catch (err) {}
     });
   });
-
-  // Progress sávok animációja láthatóságkor
-  const progressObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.querySelectorAll('.lesson-fill, .card-progress-fill').forEach(bar => {
-          const targetWidth = bar.style.width;
-          bar.style.width = '0%';
-          requestAnimationFrame(() => {
-            setTimeout(() => { bar.style.width = targetWidth; }, 100);
-          });
-        });
-        progressObserver.unobserve(entry.target);
-      }
+  // érkezés #path / #modules horgonnyal (pl. a modul-oldal „Tovább az úton" gombjáról)
+  if (window.location.hash) {
+    const target = document.querySelector(window.location.hash);
+    if (target) requestAnimationFrame(() => {
+      const header = document.getElementById('header');
+      window.scrollTo({ top: Math.max(0, target.getBoundingClientRect().top + window.scrollY - (header ? header.offsetHeight : 0) - 24) });
     });
-  }, { threshold: 0.3 });
+  }
 
-  document.querySelectorAll('.progress-demo, .card-main').forEach(el => {
-    progressObserver.observe(el);
-  });
-
-  // Aktív nav-link a görgetéssel
-  const sections  = document.querySelectorAll('section[id]');
-  const navLinks  = document.querySelectorAll('.nav-link');
-
-  const navObserver = new IntersectionObserver((entries) => {
+  // Aktív fejléc-link a görgetéssel
+  const navLinks = document.querySelectorAll('.nav-link');
+  const navObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        navLinks.forEach(link => {
-          link.classList.toggle('active', link.getAttribute('href') === `#${id}`);
-        });
-      }
+      if (!entry.isIntersecting) return;
+      const id = entry.target.getAttribute('id');
+      navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + id));
     });
   }, { rootMargin: '-40% 0px -55% 0px' });
-
-  sections.forEach(s => navObserver.observe(s));
+  document.querySelectorAll('section[id]').forEach(s => navObserver.observe(s));
 }
 
 
@@ -4908,9 +5122,20 @@ function initPracticePage() {
   };
   const metaLabel = v => META_LABELS[v] || v;
 
+  // Tanulási út: a lépés megszabhatja, mely partikulák szerepeljenek a körben
+  function matchesParticleFocus(s) {
+    const only = lobbyState.particlesOnly, any = lobbyState.particlesAny;
+    if (!only && !any) return true;
+    const ps = s.tokens.filter(t => t.type === 'particle').map(t => t.jp);
+    if (only && !(ps.length > 0 && ps.every(p => only.indexOf(p) >= 0))) return false;
+    if (any && !ps.some(p => any.indexOf(p) >= 0)) return false;
+    return true;
+  }
+
   function filterSentences() {
     return NIHONCORE_SENTENCES.filter(s => {
       if (s.level !== lobbyState.level) return false;
+      if (!matchesParticleFocus(s)) return false;
       if (!lobbyState.filters.function[sentenceFunction(s)]) return false;
       if (!lobbyState.filters.tense[s.metadata.tense])       return false;
       if (!lobbyState.filters.register[s.metadata.register]) return false;
@@ -4922,10 +5147,22 @@ function initPracticePage() {
     const pool = filterSentences();
     if (pool.length === 0) return;
 
+    // Keverés (Fisher–Yates), majd annyi mondat, amennyi a kör; ha a kör
+    // hosszabb a készletnél, újrakevert körrel folytatjuk — mondat csak akkor
+    // ismétlődik, ha elfogyott a készlet.
+    const shuffled = () => {
+      const a = pool.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
     runtimeState.cards = [];
-    for (let i = 0; i < lobbyState.cardCount; i++) {
-      runtimeState.cards.push(pool[Math.floor(Math.random() * pool.length)]);
+    while (runtimeState.cards.length < lobbyState.cardCount) {
+      runtimeState.cards = runtimeState.cards.concat(shuffled());
     }
+    runtimeState.cards.length = lobbyState.cardCount;
     runtimeState.inLobby = false;
     runtimeState.cardIdx = 0;
     runtimeState.score = 0;
@@ -5699,6 +5936,18 @@ function initPracticePage() {
   attachLobbyHandlers();
   updateLobbyMatchCount();
 
+  // Tanulási út: a lépés köre (szint, mód, partikula-fókusz) a lobbira
+  (function applyPathPreset() {
+    const step = window.NihonCorePath && NihonCorePath.activeStep();
+    const p = step && step.module === 'practice' && step.preset;
+    if (!p) return;
+    if (p.particlesOnly) lobbyState.particlesOnly = p.particlesOnly;
+    if (p.particlesAny)  lobbyState.particlesAny  = p.particlesAny;
+    if (p.level) document.querySelector('.pl-level-btn[data-level="' + p.level + '"]')?.click();
+    if (p.mode)  document.querySelector('.pl-mode-btn[data-mode="' + p.mode + '"]')?.click();
+    updateLobbyMatchCount();
+  })();
+
   // Kilépés gomb a statikus HTML-ben
   const exitBtn = document.getElementById('prExit');
   if (exitBtn) {
@@ -5980,6 +6229,7 @@ function initConjugationPage() {
     cardCount: 8,
     timeLimit: 8000            // mastery módban / kártya
   });
+  NihonCorePath.apply('conjugation', drillSettings);
 
   // Új forma-kulcsok megjelenésekor merge-eljük az alapot,
   // hogy a régi localStorage-bejegyzés ne hagyjon hiányzó kulcsokat
@@ -7936,6 +8186,7 @@ function initAdjectivesPage() {
     cardCount: 8,
     timeLimit: 10000         // mastery 10 mp / kártya
   });
+  NihonCorePath.apply('adjectives', drillSettings);
 
   const drillRunState = {
     inLobby: true,
@@ -9522,6 +9773,7 @@ function initDateTimePage() {
     cardCount: 8,
     timeLimit: 10000
   });
+  NihonCorePath.apply('datetime', drillSettings);
 
   const drillRunState = {
     inLobby: true,
@@ -10711,6 +10963,7 @@ function initListeningPage() {
     cardCount: 8,
     adaptive: false          // V3 P2 D/E — opt-in trap-súlyozás + smart replay
   });
+  NihonCorePath.apply('listening', drillSettings);
 
   const drillRunState = {
     inLobby: true,
@@ -11976,6 +12229,7 @@ function initGrammarPage() {
     cardCount: 8,
     timeLimit: 18000
   });
+  NihonCorePath.apply('grammar', drillSettings);
 
   const drillRunState = {
     inLobby: true,
@@ -14497,13 +14751,15 @@ function initStatsPage() {
     listening: 'Hallás', counter: 'Számláló', practice: 'Mondat-Mester',
     grammar: 'Mintázatok',
     'arimasu-imasu': 'Alap igék',  // V5 P2 — verb-engine instrumented
-    production: 'Produkció'        // V7 P1
+    production: 'Produkció',       // V7 P1
+    kana: 'Kana'
   };
   const MODE_LABELS = {
     recognition: 'Felismerés', build: 'Építkezés', mastery: 'Mester',
     dictation: 'Diktálás', particles: 'Partikula', puzzle: 'Puzzle',
     cloze: 'Kiegészítés', translate: 'Fordítás', pro: 'Pro hallás',
     free: 'Szabad fordítás',
+    reverse: 'Fordítva', typing: 'Beírás', match: 'Párosító',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
@@ -15526,6 +15782,682 @@ function initStatsPage() {
 
 
 /* ====================================================
+   9c. KANA PAGE — kana-tréner (kana.html)
+   ----------------------------------------------------
+   Hiragana + katakana a nulláról indulónak. A készlet a
+   js/data/kana.js-ben van (NIHONCORE_KANA_ROWS).
+
+   Módok:
+     recognition  jel → olvasat (4 válasz)
+     reverse      olvasat → jel (4 válasz)
+     typing       jel → beírod az olvasatot (romaji)
+     match        párosító: 5 jel ↔ 5 olvasat egy táblán
+   Jó válasznál a kör magától lép tovább; hibánál megáll, és megmutatja,
+   mit választottál és mi lett volna a helyes.
+
+   Profil ('nihoncore_kana_profile_v1'): jelenként { n, ok } — ebből jön a
+   tábla színezése (új / tanulod / megy) és a sor súlyozása (a gyengébb
+   jelek gyakrabban jönnek).
+   ==================================================== */
+function initKanaPage() {
+  const PROFILE_KEY  = 'nihoncore_kana_profile_v1';
+  const SETTINGS_KEY = 'nihoncore_kana_settings_v1';
+  const ROWS   = NIHONCORE_KANA_ROWS;
+  const GROUPS = NIHONCORE_KANA_GROUPS;
+  const SCRIPT_LABEL = { hiragana: 'Hiragana', katakana: 'Katakana', both: 'Mindkettő' };
+  const MATCH_SIZE = 5;
+  const AUTO_ADVANCE_MS = 650;
+
+  /* ── A) Beállítások + profil ───────────────────── */
+  function defaultRows() {
+    const o = {};
+    ROWS.forEach(r => { o[r.id] = r.group === 'basic'; });
+    return o;
+  }
+  function loadJson(key) {
+    try { return JSON.parse(localStorage.getItem(key) || 'null'); } catch (e) { return null; }
+  }
+  const saved = loadJson(SETTINGS_KEY) || {};
+  const drillSettings = {
+    script: saved.script || 'hiragana',          // 'hiragana' | 'katakana' | 'both'
+    rows: Object.assign(defaultRows(), saved.rows || {}),
+    mode: saved.mode || 'recognition',
+    cardCount: saved.cardCount || 10
+  };
+  NihonCorePath.apply('kana', drillSettings);
+  function saveSettings() {
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(drillSettings)); } catch (e) {}
+  }
+
+  function loadProfile() {
+    const p = loadJson(PROFILE_KEY);
+    return (p && p.items) ? p : { items: {}, totalAttempts: 0, totalCorrect: 0, bestStreak: 0 };
+  }
+  function saveProfile(p) {
+    try { localStorage.setItem(PROFILE_KEY, JSON.stringify(p)); } catch (e) {}
+    if (window.NihonCoreSync && NihonCoreSync.schedulePush) NihonCoreSync.schedulePush();
+  }
+  // 'new' = még nem láttad · 'known' = legalább 3-ból 80% · 'learning' = a kettő között
+  function mastery(profile, id) {
+    const it = profile.items[id];
+    if (!it || !it.n) return 'new';
+    return (it.n >= 3 && it.ok / it.n >= 0.8) ? 'known' : 'learning';
+  }
+
+  const run = {
+    inLobby: true, cards: [], cardIdx: 0,
+    score: 0, streak: 0, bestStreak: 0, results: [],
+    submitted: false, roundStartTs: 0, advanceTimer: null,
+    match: null       // párosító tábla állapota
+  };
+
+  /* ── B) Készlet ────────────────────────────────── */
+  // item: { id, script, kana, romaji, alt[], rowId, col, group }
+  const ALL = { hiragana: [], katakana: [] };
+  ROWS.forEach(row => row.items.forEach((cell, col) => {
+    if (!cell) return;
+    const base = { romaji: cell[2], alt: cell[3] || [], rowId: row.id, col: col, group: row.group };
+    ALL.hiragana.push(Object.assign({ id: 'h:' + cell[0], script: 'hiragana', kana: cell[0] }, base));
+    ALL.katakana.push(Object.assign({ id: 'k:' + cell[1], script: 'katakana', kana: cell[1] }, base));
+  }));
+
+  function activeScripts() {
+    return drillSettings.script === 'both' ? ['hiragana', 'katakana'] : [drillSettings.script];
+  }
+  function activePool() {
+    let pool = [];
+    activeScripts().forEach(sc => { pool = pool.concat(ALL[sc].filter(it => drillSettings.rows[it.rowId])); });
+    return pool;
+  }
+  // „Fordítva" módban a ぢ/づ kétértelmű (ugyanaz az olvasat, mint じ/ず) → kimarad
+  function questionPool() {
+    const pool = activePool();
+    if (drillSettings.mode !== 'reverse') return pool;
+    return pool.filter(it => !(it.rowId === 'da' && (it.col === 1 || it.col === 2)));
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  // Súlyozott sor visszatevés nélkül: az új és a gyengébb jelek előrébb kerülnek
+  function buildQueue(count) {
+    const profile = loadProfile();
+    const pool = questionPool();
+    const keyed = pool.map(it => {
+      const m = mastery(profile, it.id);
+      const w = m === 'known' ? 1 : m === 'new' ? 2 : 3;
+      return { it: it, key: Math.pow(Math.random(), 1 / w) };
+    });
+    keyed.sort((a, b) => b.key - a.key);
+    let queue = keyed.map(k => k.it);
+    while (queue.length && queue.length < count) queue = queue.concat(shuffle(pool));
+    return queue.slice(0, count);
+  }
+
+  // Elterelő válaszok: előbb az összetéveszthető jelek, aztán ugyanaz a sor / oszlop
+  function distractors(item, n) {
+    const all = ALL[item.script];
+    const out = [];
+    const used = new Set([item.romaji]);
+    const add = cand => {
+      if (!cand || out.length >= n || used.has(cand.romaji)) return;
+      used.add(cand.romaji); out.push(cand);
+    };
+    const groups = NIHONCORE_KANA_CONFUSABLE[item.script] || [];
+    groups.filter(g => g.indexOf(item.kana) >= 0).forEach(g =>
+      shuffle(g).forEach(k => add(all.find(x => x.kana === k))));
+    shuffle(all.filter(x => x.rowId === item.rowId)).forEach(add);
+    shuffle(all.filter(x => x.group === item.group && x.col === item.col)).forEach(add);
+    shuffle(all.filter(x => x.group === item.group)).forEach(add);
+    shuffle(all).forEach(add);
+    return out;
+  }
+
+  const norm = s => String(s || '').trim().toLowerCase().replace(/[\s\-']/g, '');
+  function romajiMatches(item, input) {
+    const v = norm(input);
+    return v === item.romaji || item.alt.indexOf(v) >= 0;
+  }
+  function kanaForRomaji(script, input) {
+    const v = norm(input);
+    return ALL[script].find(x => x.romaji === v || x.alt.indexOf(v) >= 0) || null;
+  }
+  const rowLabel = item => (ROWS.find(r => r.id === item.rowId) || {}).label || '';
+
+  /* ── C) Fejléc-statisztika + tábla ─────────────── */
+  function renderStatsBar() {
+    const el = document.getElementById('kanaStatsBar');
+    if (!el) return;
+    const p = loadProfile();
+    const pool = activePool();     // a kiválasztott írás és sorok
+    const known = pool.filter(it => mastery(p, it.id) === 'known').length;
+    const acc = p.totalAttempts ? Math.round((p.totalCorrect / p.totalAttempts) * 100) : 0;
+    el.innerHTML = `
+      <div class="conj-stat-chip"><span class="csc-num">${known} / ${pool.length}</span><span class="csc-label">megy</span></div>
+      <div class="conj-stat-chip"><span class="csc-num">${acc}%</span><span class="csc-label">pontosság</span></div>
+      <div class="conj-stat-chip"><span class="csc-num">${p.bestStreak || 0} 🔥</span><span class="csc-label">legjobb sorozat</span></div>`;
+  }
+
+  function renderChart() {
+    const el = document.getElementById('kanaChart');
+    if (!el) return;
+    const p = loadProfile();
+    const both = drillSettings.script === 'both';
+    const main = drillSettings.script === 'katakana' ? 1 : 0;       // a cella nagy jele
+    const mainScript = main === 1 ? 'katakana' : 'hiragana';
+
+    const groupsHtml = GROUPS.map(g => {
+      const rowsHtml = ROWS.filter(r => r.group === g.id).map(row => {
+        const cells = row.items.map(cell => {
+          if (!cell) return '<span class="kana-cell kana-cell-empty" aria-hidden="true"></span>';
+          const id = (main === 1 ? 'k:' : 'h:') + cell[main];
+          const m = mastery(p, id);
+          return `<button class="kana-cell kana-${m}" type="button" data-say="${cell[0]}"
+                    aria-label="${cell[main]}, ${cell[2]}">
+                    <span class="kana-cell-jp" lang="ja">${cell[main]}</span>
+                    ${both ? `<span class="kana-cell-alt" lang="ja">${cell[1]}</span>` : ''}
+                    <span class="kana-cell-ro">${cell[2]}</span>
+                  </button>`;
+        }).join('');
+        return `<div class="kana-row kana-cols-${row.cols}">${cells}</div>`;
+      }).join('');
+      return `<div class="kana-chart-group">
+                <h3 class="kana-chart-title">${g.name}</h3>
+                ${rowsHtml}
+              </div>`;
+    }).join('');
+
+    el.innerHTML = `
+      <div class="kana-chart-head">
+        <h2 class="kana-chart-h">${SCRIPT_LABEL[mainScript]}-tábla${both ? ' <span class="kana-chart-note">(alatta a katakana)</span>' : ''}</h2>
+        <p class="kana-chart-sub">Koppints egy jelre, és meghallgathatod.</p>
+        <div class="kana-legend" aria-hidden="true">
+          <span class="kana-legend-item"><span class="kana-dot kana-new"></span>új</span>
+          <span class="kana-legend-item"><span class="kana-dot kana-learning"></span>tanulod</span>
+          <span class="kana-legend-item"><span class="kana-dot kana-known"></span>megy</span>
+        </div>
+      </div>
+      ${groupsHtml}`;
+    el.querySelectorAll('.kana-cell[data-say]').forEach(btn => btn.addEventListener('click', () => {
+      if (window.NihonCoreAudio) NihonCoreAudio.play(btn.dataset.say, { rate: 0.85 });
+    }));
+  }
+
+  /* ── D) Lobbi ──────────────────────────────────── */
+  function poolCount() { return questionPool().length; }
+
+  function renderLobby() {
+    const el = document.getElementById('kanaLobby');
+    const scripts = [
+      { id: 'hiragana', glyph: 'あ', name: 'Hiragana' },
+      { id: 'katakana', glyph: 'ア', name: 'Katakana' },
+      { id: 'both',     glyph: 'あア', name: 'Mindkettő' }
+    ].map(s => `
+      <button class="cj-mode-btn kana-script-btn ${drillSettings.script === s.id ? 'active' : ''}" data-script="${s.id}" type="button">
+        <span class="kana-script-glyph" lang="ja">${s.glyph}</span>
+        <span class="cj-m-name">${s.name}</span>
+      </button>`).join('');
+
+    const modes = [
+      { id: 'recognition', name: 'Felismerés', sub: 'jel → olvasat' },
+      { id: 'reverse',     name: 'Fordítva',   sub: 'olvasat → jel' },
+      { id: 'typing',      name: 'Beírás',     sub: 'te írod be az olvasatot' },
+      { id: 'match',       name: 'Párosító',   sub: 'öt jel, öt olvasat' }
+    ].map(m => `
+      <button class="cj-mode-btn ${drillSettings.mode === m.id ? 'active' : ''}" data-mode="${m.id}" type="button">
+        <span class="cj-m-name">${m.name}</span>
+        <span class="cj-m-sub">${m.sub}</span>
+      </button>`).join('');
+
+    const rowGroups = GROUPS.map(g => {
+      const chips = ROWS.filter(r => r.group === g.id).map(r => `
+        <button class="cj-form-chip kana-row-chip ${drillSettings.rows[r.id] ? 'active' : ''}" data-row="${r.id}" type="button">
+          <span class="cjfc-name" lang="ja">${r.label}</span>
+        </button>`).join('');
+      return `
+        <div class="cj-form-row">
+          <span class="cj-form-row-label">${g.name} <span class="kana-group-hint">${g.hint}</span>
+            <button class="kana-group-all" data-group="${g.id}" type="button">mind</button></span>
+          <div class="cj-form-chips">${chips}</div>
+        </div>`;
+    }).join('');
+
+    const presets = [10, 20, 40].map(n => `
+      <button class="ml-count-btn ${drillSettings.cardCount === n ? 'active' : ''}" data-count="${n}" type="button">${n}</button>`).join('');
+
+    el.innerHTML = `
+      <div class="lobby-header">
+        <div class="lobby-eyebrow">Kana</div>
+        <h2 class="lobby-title">Mit gyakorolnál?</h2>
+      </div>
+
+      <div class="lobby-section" data-lobby-keep>
+        <div class="lobby-section-label">Írás</div>
+        <div class="cj-mode-row kana-script-row">${scripts}</div>
+      </div>
+
+      <div class="lobby-section">
+        <div class="lobby-section-label">Mód</div>
+        <div class="cj-mode-row kana-mode-row">${modes}</div>
+      </div>
+
+      <div class="lobby-section">
+        <div class="lobby-section-label">Sorok</div>
+        ${rowGroups}
+      </div>
+
+      <div class="lobby-section">
+        <div class="lobby-section-label">Kártyák száma</div>
+        <div class="ml-count-row">
+          <div class="ml-count-presets">${presets}</div>
+          <div class="ml-count-custom">
+            <label class="ml-count-custom-label" for="kanaCustomCount">vagy saját:</label>
+            <input type="number" id="kanaCustomCount" min="1" max="200" placeholder="—" />
+          </div>
+        </div>
+      </div>
+
+      <div class="lobby-stats">
+        <span class="lobby-combos">Kiválasztott jelek: <strong id="kanaPoolCount">${poolCount()}</strong></span>
+      </div>
+
+      <button class="btn btn-primary ml-start" id="kanaStart" type="button">Indítás</button>
+    `;
+    attachLobbyHandlers(el);
+    updateStartBtn();
+  }
+
+  function updateStartBtn() {
+    const n = poolCount();
+    const cnt = document.getElementById('kanaPoolCount');
+    if (cnt) cnt.textContent = n;
+    const btn = document.getElementById('kanaStart');
+    if (!btn) return;
+    btn.disabled = n < 4;       // négy válaszhoz legalább négy jel kell
+    btn.textContent = n < 4 ? 'Válassz ki legalább egy sort' : `Indítás — ${drillSettings.cardCount} kártya`;
+  }
+
+  function attachLobbyHandlers(el) {
+    const pick = (sel, key, attr, after) => el.querySelectorAll(sel).forEach(btn => btn.addEventListener('click', () => {
+      drillSettings[key] = btn.dataset[attr];
+      el.querySelectorAll(sel).forEach(b => b.classList.toggle('active', b === btn));
+      saveSettings(); updateStartBtn();
+      if (after) after();
+    }));
+    pick('.kana-script-btn', 'script', 'script', () => { renderChart(); renderStatsBar(); });
+    pick('.kana-mode-row .cj-mode-btn', 'mode', 'mode');
+
+    el.querySelectorAll('.kana-row-chip').forEach(chip => chip.addEventListener('click', () => {
+      const id = chip.dataset.row;
+      drillSettings.rows[id] = !drillSettings.rows[id];
+      chip.classList.toggle('active', drillSettings.rows[id]);
+      saveSettings(); updateStartBtn(); renderStatsBar();
+    }));
+    // „mind": a csoport összes sora be; ha már mind be volt, ki
+    el.querySelectorAll('.kana-group-all').forEach(btn => btn.addEventListener('click', () => {
+      const ids = ROWS.filter(r => r.group === btn.dataset.group).map(r => r.id);
+      const allOn = ids.every(id => drillSettings.rows[id]);
+      ids.forEach(id => { drillSettings.rows[id] = !allOn; });
+      el.querySelectorAll('.kana-row-chip').forEach(c => c.classList.toggle('active', !!drillSettings.rows[c.dataset.row]));
+      saveSettings(); updateStartBtn(); renderStatsBar();
+    }));
+
+    el.querySelectorAll('.ml-count-btn').forEach(btn => btn.addEventListener('click', () => {
+      drillSettings.cardCount = parseInt(btn.dataset.count, 10);
+      el.querySelectorAll('.ml-count-btn').forEach(b => b.classList.toggle('active', b === btn));
+      const custom = document.getElementById('kanaCustomCount');
+      if (custom) custom.value = '';
+      saveSettings(); updateStartBtn();
+    }));
+    const custom = document.getElementById('kanaCustomCount');
+    custom.addEventListener('input', () => {
+      const n = parseInt(custom.value, 10);
+      if (isNaN(n) || n < 1) return;
+      drillSettings.cardCount = Math.min(n, 200);
+      el.querySelectorAll('.ml-count-btn').forEach(b => b.classList.remove('active'));
+      saveSettings(); updateStartBtn();
+    });
+
+    document.getElementById('kanaStart').addEventListener('click', startRound);
+  }
+
+  /* ── E) Kör ────────────────────────────────────── */
+  function startRound() {
+    const queue = buildQueue(drillSettings.cardCount);
+    if (queue.length < 1) return;
+    // Párosító: a sor 5-ös táblákra bomlik (egy „kártya" = egy tábla)
+    if (drillSettings.mode === 'match') {
+      const uniq = [];
+      queue.forEach(it => { if (!uniq.some(u => u.romaji === it.romaji)) uniq.push(it); });
+      run.cards = [];
+      for (let i = 0; i + 1 < uniq.length; i += MATCH_SIZE) run.cards.push({ board: uniq.slice(i, i + MATCH_SIZE) });
+      if (!run.cards.length) return;
+    } else {
+      run.cards = queue.map(it => ({ item: it }));
+    }
+    run.cardIdx = 0; run.score = 0; run.streak = 0; run.bestStreak = 0; run.results = [];
+    run.roundStartTs = Date.now();
+    run.inLobby = false;
+    NihonCoreRound.begin(function () {
+      return { module: 'kana', mode: drillSettings.mode, results: run.results, score: run.score, startTs: run.roundStartTs };
+    });
+
+    document.querySelector('.module-hero')?.classList.add('hidden');
+    document.getElementById('kanaLobby').classList.add('hidden');
+    document.getElementById('kanaChart').classList.add('hidden');
+    document.getElementById('kanaRuntime').classList.remove('hidden');
+    const sEl = document.getElementById('kanaSummary');
+    sEl.classList.add('hidden'); sEl.innerHTML = '';
+    renderCard();
+  }
+
+  function updateHeader() {
+    const total = run.cards.length;
+    const word = drillSettings.mode === 'match' ? 'Tábla' : 'Kártya';
+    document.getElementById('kanaScore').textContent  = run.score;
+    document.getElementById('kanaStreak').textContent = `${run.streak} 🔥`;
+    document.getElementById('kanaCardCount').textContent = `${word} ${Math.min(run.cardIdx + 1, total)} / ${total}`;
+    document.getElementById('kanaProgressFill').style.width = `${total ? (run.cardIdx / total) * 100 : 0}%`;
+  }
+
+  function renderCard() {
+    run.submitted = false;
+    updateHeader();
+    const fb = document.getElementById('kanaFeedback');
+    fb.classList.add('hidden'); fb.innerHTML = '';
+    document.getElementById('kanaActions').innerHTML = '';
+    const card = run.cards[run.cardIdx];
+    if (drillSettings.mode === 'match')        renderMatch(card);
+    else if (drillSettings.mode === 'typing')  renderTyping(card);
+    else                                       renderChoice(card);
+  }
+
+  function eyebrow(item) {
+    return `<div class="cj-prompt-eyebrow">
+              <span class="cj-pe-group">${SCRIPT_LABEL[item.script]}</span>
+              <span class="cj-pe-dot">·</span><span lang="ja">${rowLabel(item)}</span>-sor
+            </div>`;
+  }
+
+  // Felismerés (jel → olvasat) és Fordítva (olvasat → jel)
+  function renderChoice(card) {
+    const item = card.item;
+    const reverse = drillSettings.mode === 'reverse';
+    card.options = shuffle([item].concat(distractors(item, 3)));
+    document.getElementById('kanaCard').innerHTML = `
+      <div class="cj-prompt">
+        ${eyebrow(item)}
+        ${reverse
+          ? `<div class="kana-prompt-ro">${item.romaji}</div>`
+          : `<div class="kana-glyph" lang="ja">${item.kana}</div>`}
+        <div class="kana-task">${reverse ? 'Melyik jel ez?' : 'Hogyan olvasod?'}</div>
+      </div>
+      <div class="cj-options kana-options ${reverse ? 'kana-options-jp' : ''}">
+        ${card.options.map((o, i) => `
+          <button class="cj-option" type="button" data-idx="${i}">
+            ${reverse ? `<span class="cj-opt-jp kana-opt-jp" lang="ja">${o.kana}</span>`
+                      : `<span class="kana-opt-ro">${o.romaji}</span>`}
+          </button>`).join('')}
+      </div>
+      <button class="dont-know-btn" type="button">Nem tudom</button>`;
+
+    const buttons = document.querySelectorAll('#kanaCard .cj-option');
+    const lock = () => document.querySelectorAll('#kanaCard .cj-option, #kanaCard .dont-know-btn').forEach(b => { b.disabled = true; });
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      if (run.submitted) return;
+      const chosen = card.options[parseInt(btn.dataset.idx, 10)];
+      const ok = chosen.id === item.id;
+      lock();
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) buttons[card.options.indexOf(item)].classList.add('reveal-correct');
+      finalize(item, ok, { chosen: chosen });
+    }));
+    document.querySelector('#kanaCard .dont-know-btn').addEventListener('click', () => {
+      if (run.submitted) return;
+      lock();
+      buttons[card.options.indexOf(item)].classList.add('reveal-correct');
+      finalize(item, false, { dontKnow: true });
+    });
+  }
+
+  // Beírás (jel → romaji)
+  function renderTyping(card) {
+    const item = card.item;
+    document.getElementById('kanaCard').innerHTML = `
+      <div class="cj-prompt">
+        ${eyebrow(item)}
+        <div class="kana-glyph" lang="ja">${item.kana}</div>
+        <div class="kana-task">Írd be az olvasatát latin betűkkel.</div>
+      </div>
+      <div class="cj-input-area">
+        <input class="cj-input kana-input" id="kanaInput" type="text" inputmode="latin" autocomplete="off"
+               autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="pl. ka" aria-label="Olvasat" />
+      </div>
+      <button class="dont-know-btn" type="button">Nem tudom</button>`;
+    document.getElementById('kanaActions').innerHTML =
+      '<button class="btn btn-primary cj-submit" id="kanaSubmit" type="button" disabled>Ellenőrzés</button>';
+
+    const input = document.getElementById('kanaInput');
+    const submitBtn = document.getElementById('kanaSubmit');
+    const lock = () => { input.disabled = true; submitBtn.disabled = true;
+      const dk = document.querySelector('#kanaCard .dont-know-btn'); if (dk) dk.disabled = true; };
+    const submit = () => {
+      if (run.submitted || !norm(input.value)) return;
+      const ok = romajiMatches(item, input.value);
+      lock();
+      input.classList.add(ok ? 'cnh-input-correct' : 'cnh-input-wrong');
+      finalize(item, ok, { typed: input.value });
+    };
+    input.addEventListener('input', () => { submitBtn.disabled = !norm(input.value); });
+    input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submit(); } });
+    submitBtn.addEventListener('click', submit);
+    document.querySelector('#kanaCard .dont-know-btn').addEventListener('click', () => {
+      if (run.submitted) return;
+      lock();
+      finalize(item, false, { dontKnow: true });
+    });
+    setTimeout(() => { try { input.focus({ preventScroll: true }); } catch (e) {} }, 60);
+  }
+
+  // Válasz lezárása: pont, sorozat, eredmény; jó válasznál magától lép tovább
+  function finalize(item, ok, info) {
+    run.submitted = true;
+    if (ok) { run.score += 10; run.streak++; run.bestStreak = Math.max(run.bestStreak, run.streak); }
+    else    { run.streak = 0; }
+    run.results.push({ kanaId: item.id, script: item.script, rowId: item.rowId, correct: ok,
+                       errorCode: ok ? null : (info.dontKnow ? 'dont_know' : 'wrong_reading') });
+    document.getElementById('kanaScore').textContent  = run.score;
+    document.getElementById('kanaStreak').textContent = `${run.streak} 🔥`;
+
+    if (ok) {
+      if (window.NihonCoreAudio && NihonCoreAudio.speakAnswer) NihonCoreAudio.speakAnswer(item.kana);
+      run.advanceTimer = setTimeout(advance, AUTO_ADVANCE_MS);
+      return;
+    }
+    renderFeedback(item, info);
+  }
+
+  function renderFeedback(item, info) {
+    const fb = document.getElementById('kanaFeedback');
+    const isLast = run.cardIdx + 1 >= run.cards.length;
+    let mistake = '';
+    if (info.chosen) {
+      // megmutatjuk, MI az, amit választott — ebből tanul a legtöbbet
+      mistake = `<strong lang="ja">${info.chosen.kana}</strong> olvasata <strong>${info.chosen.romaji}</strong>, nem ${item.romaji}.`;
+    } else if (info.typed) {
+      const other = kanaForRomaji(item.script, info.typed);
+      mistake = other
+        ? `Amit beírtál (<strong>${norm(info.typed)}</strong>), az a <strong lang="ja">${other.kana}</strong> jel olvasata.`
+        : `Ilyen olvasat nincs a táblában: <strong>${norm(info.typed)}</strong>.`;
+    }
+    fb.className = 'conj-feedback ' + (info.dontKnow ? 'pr-fb-dontknow' : 'pr-fb-wrong');
+    fb.innerHTML = `
+      <div class="pr-fb-header">
+        <span class="pr-fb-mark">${info.dontKnow ? '💡' : '🤔'}</span>
+        <span class="pr-fb-title">${info.dontKnow ? 'Így olvasod' : 'Nézzük meg együtt'}</span>
+      </div>
+      <div class="pr-fb-explain">
+        <div class="pfe-row pfe-correct">
+          <span class="pfe-label">Helyes</span>
+          <span class="pfe-text"><strong class="pfe-jp-ok kana-fb-jp" lang="ja">${item.kana}</strong> = <strong>${item.romaji}</strong></span>
+        </div>
+        ${mistake ? `<div class="pfe-row pfe-wrong"><span class="pfe-label">A te válaszod</span><span class="pfe-text">${mistake}</span></div>` : ''}
+      </div>
+      <button class="btn btn-primary cj-next" id="kanaNext" type="button">${isLast ? 'Eredmények' : 'Következő'}</button>`;
+    document.getElementById('kanaNext').addEventListener('click', advance);
+  }
+
+  function advance() {
+    if (run.advanceTimer) { clearTimeout(run.advanceTimer); run.advanceTimer = null; }
+    run.cardIdx++;
+    if (run.cardIdx >= run.cards.length) showSummary();
+    else renderCard();
+    NihonCoreRound.scrollToRound();
+  }
+
+  /* ── F) Párosító ───────────────────────────────── */
+  function renderMatch(card) {
+    const left = shuffle(card.board), right = shuffle(card.board);
+    run.match = { missed: new Set(), done: new Set(), pick: null };
+    document.getElementById('kanaCard').innerHTML = `
+      <div class="cj-prompt">
+        <div class="kana-task">Párosítsd a jeleket az olvasatukkal.</div>
+      </div>
+      <div class="kana-match">
+        <div class="kana-match-col">
+          ${left.map(it => `<button class="kana-match-btn kana-match-jp" type="button" data-side="k" data-id="${it.id}" lang="ja">${it.kana}</button>`).join('')}
+        </div>
+        <div class="kana-match-col">
+          ${right.map(it => `<button class="kana-match-btn" type="button" data-side="r" data-id="${it.id}">${it.romaji}</button>`).join('')}
+        </div>
+      </div>`;
+
+    const btns = document.querySelectorAll('#kanaCard .kana-match-btn');
+    btns.forEach(btn => btn.addEventListener('click', () => {
+      const m = run.match;
+      if (btn.disabled) return;
+      if (!m.pick || m.pick.dataset.side === btn.dataset.side) {
+        // első kiválasztás, vagy ugyanazon az oldalon másikra váltás
+        if (m.pick) m.pick.classList.remove('selected');
+        m.pick = (m.pick === btn) ? null : btn;
+        if (m.pick) btn.classList.add('selected');
+        return;
+      }
+      const a = m.pick, b = btn;
+      a.classList.remove('selected'); m.pick = null;
+      if (a.dataset.id === b.dataset.id) {
+        [a, b].forEach(x => { x.classList.add('matched'); x.disabled = true; });
+        m.done.add(a.dataset.id);
+        if (m.done.size === card.board.length) finishMatch(card);
+      } else {
+        // a hibás párosítás a JEL oldalán számít (azt a jelet kell még tanulni)
+        const kanaSide = a.dataset.side === 'k' ? a : b;
+        m.missed.add(kanaSide.dataset.id);
+        [a, b].forEach(x => { x.classList.add('mismatch'); setTimeout(() => x.classList.remove('mismatch'), 420); });
+      }
+    }));
+  }
+
+  function finishMatch(card) {
+    const m = run.match;
+    card.board.forEach(it => {
+      const ok = !m.missed.has(it.id);
+      if (ok) { run.score += 10; run.streak++; run.bestStreak = Math.max(run.bestStreak, run.streak); }
+      else    { run.streak = 0; }
+      run.results.push({ kanaId: it.id, script: it.script, rowId: it.rowId, correct: ok, errorCode: ok ? null : 'wrong_reading' });
+    });
+    document.getElementById('kanaScore').textContent  = run.score;
+    document.getElementById('kanaStreak').textContent = `${run.streak} 🔥`;
+    run.submitted = true;
+    run.advanceTimer = setTimeout(advance, AUTO_ADVANCE_MS + 150);
+  }
+
+  /* ── G) Összesítő ──────────────────────────────── */
+  function showSummary() {
+    NihonCoreStats.recordSession({
+      module: 'kana', mode: drillSettings.mode,
+      results: run.results, score: run.score, startTs: run.roundStartTs
+    });
+    const p = loadProfile();
+    run.results.forEach(r => {
+      const it = p.items[r.kanaId] = p.items[r.kanaId] || { n: 0, ok: 0 };
+      it.n++; if (r.correct) it.ok++;
+      p.totalAttempts++; if (r.correct) p.totalCorrect++;
+    });
+    p.bestStreak = Math.max(p.bestStreak || 0, run.bestStreak);
+    saveProfile(p);
+
+    const total = run.results.length;
+    const correct = run.results.filter(r => r.correct).length;
+    const pct = total ? Math.round((correct / total) * 100) : 0;
+    const missedIds = Array.from(new Set(run.results.filter(r => !r.correct).map(r => r.kanaId)));
+    const lookup = id => ALL.hiragana.concat(ALL.katakana).find(x => x.id === id);
+    const missedHtml = missedIds.length ? `
+      <div class="kana-missed">
+        <div class="cj-bd-title">Ezeket nézd át</div>
+        <div class="kana-missed-list">
+          ${missedIds.map(id => { const it = lookup(id); return it
+            ? `<span class="kana-missed-chip"><span lang="ja">${it.kana}</span> ${it.romaji}</span>` : ''; }).join('')}
+        </div>
+      </div>` : '';
+
+    document.getElementById('kanaCard').innerHTML = '';
+    document.getElementById('kanaActions').innerHTML = '';
+    const fb = document.getElementById('kanaFeedback');
+    fb.classList.add('hidden'); fb.innerHTML = '';
+    document.getElementById('kanaProgressFill').style.width = '100%';
+
+    const sEl = document.getElementById('kanaSummary');
+    sEl.classList.remove('hidden');
+    sEl.innerHTML = `
+      <div class="summary-icon">${pct === 100 ? '🏆' : pct >= 75 ? '⚡' : pct >= 50 ? '🎯' : '🌱'}</div>
+      <h3>Kör vége: ${pct}%</h3>
+      <div class="summary-score">${correct} / ${total}</div>
+      ${missedHtml}
+      <div class="kana-summary-actions">
+        <button class="btn btn-primary" id="kanaAgain" type="button">Még egy kör</button>
+        <button class="btn btn-outline" id="kanaBack" type="button">Vissza a táblához</button>
+      </div>`;
+    document.getElementById('kanaAgain').addEventListener('click', startRound);
+    document.getElementById('kanaBack').addEventListener('click', backToLobby);
+    if (pct === 100 && window.NihonCoreMotion && NihonCoreMotion.celebrate) {
+      try { NihonCoreMotion.celebrate({ title: 'Hibátlan kör!', sub: `${total} / ${total}` }); } catch (e) {}
+    }
+  }
+
+  function backToLobby() {
+    if (run.advanceTimer) { clearTimeout(run.advanceTimer); run.advanceTimer = null; }
+    run.inLobby = true; run.cards = [];
+    document.querySelector('.module-hero')?.classList.remove('hidden');   // → a kör-őr elmenti a részeredményt
+    document.getElementById('kanaRuntime').classList.add('hidden');
+    document.getElementById('kanaLobby').classList.remove('hidden');
+    document.getElementById('kanaChart').classList.remove('hidden');
+    renderStatsBar(); renderChart(); updateStartBtn();
+  }
+
+  /* ── H) Init ───────────────────────────────────── */
+  document.getElementById('kanaExit').addEventListener('click', () => {
+    if (run.inLobby) return;
+    if (!confirm('Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+      'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.')) return;
+    backToLobby();
+  });
+
+  renderStatsBar();
+  renderLobby();
+  renderChart();
+
+  window._kana = { ALL, buildQueue, distractors, romajiMatches, kanaForRomaji, mastery, drillSettings };
+}
+
+
+/* ====================================================
    10. PAGE DETECTOR — egy oldal-init futtatása ─────
    ----------------------------------------------------
    A switch egy függvénybe csomagolva (window.NihonCoreInitPage).
@@ -15534,6 +16466,8 @@ function initStatsPage() {
 function initCurrentPage() {
   if (document.getElementById('statsMain')) {
     initStatsPage();
+  } else if (document.getElementById('kanaMain')) {
+    initKanaPage();
   } else if (document.getElementById('prodMain')) {
     initProductionPage();
   } else if (document.getElementById('grmMain')) {
