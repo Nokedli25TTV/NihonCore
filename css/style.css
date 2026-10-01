@@ -858,8 +858,6 @@ body.helpers-no-romaji .pfe-roman {
    FONTOS: a Phase 2 task-prompt magyar szöveg DE az a kérdés maga,
    nem segítő — ezért NEM rejtjük. A hiba-feedback szövegei
    sem rejtődnek (pedagógiai funkció, nem helper). */
-body.helpers-no-hu .exp-hu,
-body.helpers-no-hu .exp-divider,
 body.helpers-no-hu .ex-context,
 body.helpers-no-hu .task-context,
 body.helpers-no-hu .q-translation,
@@ -6568,6 +6566,55 @@ body.round-active .phase-tabs { display: none; }
 
 /* Kör végén a kiürített kártya ne maradjon üres üveg-csíkként a képen */
 .conj-card:empty, .pr-card:empty, .sd-card:empty, .sd-options:empty { display: none; }
+
+/* ── Nyelvtani minták: Felismerés ────────────────────────
+   Az opció a JELENTÉS; a minta neve csak válasz után jelenik meg rajta. */
+.grm-sentence { font-family: var(--font-jp); font-size: clamp(1.4rem, 6.5vw, 2rem); line-height: 1.9; text-align: center; }
+.grm-sentence-romaji { font-size: var(--fs-sm); color: var(--sumi-faint); font-style: italic; text-align: center; }
+.grm-opt { align-items: flex-start; text-align: left; padding: 12px 14px; gap: 4px; }
+.grm-opt-summary { font-size: var(--fs-sm); font-weight: 600; color: var(--sumi); line-height: 1.4; font-style: normal; }
+.grm-opt-label { display: none; font-size: var(--fs-md); color: var(--matcha-deep); }
+.grm-opt:disabled .grm-opt-label { display: block; }
+.grm-opt.wrong .grm-opt-label { color: var(--vermilion); }
+
+/* ── Szabad fordítás: visszajelzés ───────────────────── */
+.prod-fb-sub { font-size: var(--fs-sm); color: var(--sumi-soft); line-height: 1.5; margin: -4px 0 0; }
+.prod-fb-points {
+  margin-left: auto; padding: 2px 10px; border-radius: 999px;
+  background: var(--gold-soft); border: 1px solid rgb(var(--gold-rgb) / 0.35);
+  color: var(--gold-ink); font-size: var(--fs-xs); font-weight: 800; white-space: nowrap;
+}
+.prod-fb-secondary { display: flex; flex-wrap: wrap; gap: 8px; }
+.lst-slow-btn, .prod-fb-listen, .prod-fb-accept {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: var(--touch); padding: 0 16px;
+  background: rgb(var(--glass-rgb) / 0.7); border: 1.5px solid rgb(var(--tint-rgb) / 0.16);
+  border-radius: 999px;
+  color: var(--sumi); font-family: var(--font-body); font-size: var(--fs-sm); font-weight: 700;
+  cursor: pointer;
+}
+.lst-slow-btn:hover, .prod-fb-accept:hover { border-color: var(--matcha); }
+.prod-fb-accept { color: var(--matcha-deep); border-color: rgb(var(--matcha-rgb) / 0.5); }
+.grm-trans-hu { padding: 0; background: none; border: 0; align-items: center; gap: 4px; }
+.grm-trans-hu-label { font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.06em; color: var(--sumi-faint); text-align: center; }
+.grm-trans-hu-text { font-family: var(--font-serif); font-size: var(--fs-lg); font-weight: 500; color: var(--sumi); line-height: 1.4; }
+.prod-input { width: 100%; min-height: 88px; padding: 12px 14px; font-family: var(--font-jp); text-align: left; line-height: 1.6; resize: vertical; }
+.prod-preview { color: var(--matcha-deep); }
+
+/* Szabad fordítás: a szavankénti eltérés tördelése */
+.prod-diff-row, .prod-tok-missing-row { flex-wrap: wrap; align-items: center; }
+.prod-diff-tokens { flex: 1 1 200px; }
+.prod-tok { flex-direction: column; white-space: nowrap; }
+.prod-diff-label, .prod-tok-missing-label {
+  padding: 0; min-width: 0;
+  font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.04em; text-transform: none; color: var(--sumi-faint);
+}
+
+/* Magyarázat: a magyar szöveg a fő, a japán mondat alatta, kisebben */
+.explanation { padding: 18px 16px; border-radius: var(--radius-lg); }
+.exp-hu { font-size: var(--fs-base); line-height: 1.65; color: var(--sumi); }
+.exp-divider { height: 1px; background: var(--washi-edge); margin: 12px 0; }
+.exp-jp { font-family: var(--font-jp); font-size: var(--fs-sm); line-height: 1.8; color: var(--sumi-faint); font-weight: 400; }
 
 
 

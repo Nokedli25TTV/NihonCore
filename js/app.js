@@ -1770,11 +1770,35 @@ const NihonCoreAudio = (function () {
     return audio;
   }
 
+  let speechOnly = false;          // a TTS-végpont hibázott → innentől a böngésző felolvasója
+  function canSpeak() {
+    return typeof window.speechSynthesis !== 'undefined' &&
+           typeof window.SpeechSynthesisUtterance !== 'undefined';
+  }
+  // Felolvasás a böngésző japán hangjával. false, ha nincs rá mód.
+  function speak(text, options) {
+    if (!canSpeak()) return false;
+    try {
+      const voices = window.speechSynthesis.getVoices() || [];
+      const ja = voices.find(v => /^ja/i.test(v.lang));
+      if (voices.length && !ja) return false;          // van hanglista, de nincs benne japán
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'ja-JP';
+      if (ja) u.voice = ja;
+      u.rate = Math.max(0.5, Math.min(1.2, options.speed || 1.0));
+      u.onerror = function () { if (typeof options.onError === 'function') options.onError(); };
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+      return true;
+    } catch (e) { return false; }
+  }
+
   function stop() {
     if (current) {
       try { current.pause(); current.currentTime = 0; } catch (e) {}
       current = null;
     }
+    if (canSpeak()) { try { window.speechSynthesis.cancel(); } catch (e) {} }
   }
 
   // Lejátszás. Promise-t ad vissza; hiba esetén onError() hívódik
@@ -1782,6 +1806,10 @@ const NihonCoreAudio = (function () {
   function play(text, options) {
     options = options || {};
     stop();
+    if (speechOnly) {
+      if (!speak(text, options) && typeof options.onError === 'function') options.onError();
+      return Promise.resolve();
+    }
     const audio = getAudio(text);
     audio.playbackRate = options.speed || 1.0;
     try { audio.currentTime = 0; } catch (e) {}
@@ -1791,6 +1819,8 @@ const NihonCoreAudio = (function () {
     const onErr = () => {
       if (errored) return;
       errored = true;
+      // tartalék: a böngésző felolvasója; csak ha az sincs, szólunk a hívónak
+      if (speak(text, options)) { speechOnly = true; return; }
       if (typeof options.onError === 'function') options.onError();
     };
     audio.addEventListener('error', onErr, { once: true });
@@ -1928,6 +1958,9 @@ const NihonCoreAudio = (function () {
       for (const p of POSITIVE) { if (cls.contains(p)) { kind = 'correct'; break; } }
     }
     if (!kind) return;
+    // A rögzített visszajelzés-lap saját becsúszó animációt kap; a háttér
+    // villantása ott átlátszóvá tenné a lapot a tartalom fölött.
+    if (getComputedStyle(el).position === 'fixed') return;
     const now = Date.now();
     const last = lastTrigger.get(el);
     if (last && (now - last.ts) < DEBOUNCE_MS && last.kind === kind) return;
@@ -2708,9 +2741,9 @@ function initModulePage() {
     return `
       <div class="explanation glass-panel">
         <div class="exp-label">📖 Magyarázat</div>
-        <p class="exp-jp">${exp.jp}</p>
-        <div class="exp-divider"></div>
         <p class="exp-hu">${exp.hu}</p>
+        <div class="exp-divider"></div>
+        <p class="exp-jp" lang="ja">${exp.jp}</p>
       </div>
 
       <div class="interactive-demo glass-panel-heavy">
@@ -3381,7 +3414,7 @@ function initModulePage() {
         Helyes alak: <strong>${expectedOut.jp}</strong> <span class="fb-roman">(${expectedOut.roman})</span>
       </div>
       <button class="btn btn-primary glow-effect ms-next" id="msNext">
-        ${matrixState.taskIdx + 1 < matrixState.taskQueue.length ? 'Következő feladat →' : 'Eredmények megtekintése →'}
+        ${matrixState.taskIdx + 1 < matrixState.taskQueue.length ? 'Következő feladat →' : 'Eredmények'}
       </button>
     `;
 
@@ -3426,7 +3459,7 @@ function initModulePage() {
             : pct >= 60 ? 'Szép munka. Nézd át a hibás feladatokat és próbálj újra!'
                         : 'Még gyakorlás kell — térj vissza a Megértés fázisra átismételni.'}
         </p>
-        <button class="btn btn-primary glow-effect" id="msReset">Új kör beállításokkal →</button>
+        <button class="btn btn-primary glow-effect" id="msReset">Új kör</button>
       </div>
     `;
     document.getElementById('msReset').addEventListener('click', () => {
@@ -3618,7 +3651,7 @@ function initModulePage() {
     advEl.innerHTML = `
       ${msg}
       <button class="btn btn-primary glow-effect sd-next-btn" id="sdNextBtn">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     advEl.classList.remove('hidden');
@@ -3717,9 +3750,9 @@ function initModulePage() {
     return `
       <div class="explanation glass-panel">
         <div class="exp-label">📖 Magyarázat</div>
-        <p class="exp-jp">${exp.jp}</p>
-        <div class="exp-divider"></div>
         <p class="exp-hu">${exp.hu}</p>
+        <div class="exp-divider"></div>
+        <p class="exp-jp" lang="ja">${exp.jp}</p>
       </div>
       <div class="questions-block">
         <h3 class="questions-heading">Próbáld ki magad <span class="q-count-label">— ${questions.length} kérdés</span></h3>
@@ -4349,7 +4382,7 @@ function initModulePage() {
         ${explainHtml}
       </div>
       <button class="btn btn-primary glow-effect cnt-next" id="cntNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('cntNext').addEventListener('click', () => advanceCounterRound(m, phase));
@@ -4608,7 +4641,7 @@ function initModulePage() {
         ${altNote}
       </div>
       <button class="btn btn-primary glow-effect cnt-next" id="cntNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('cntNext').addEventListener('click', () => advanceCounterRound(m, phase));
@@ -4746,7 +4779,7 @@ function initModulePage() {
         ${explainRow}
       </div>
       <button class="btn btn-primary glow-effect cnt-next" id="cntNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('cntNext').addEventListener('click', () => advanceCounterRound(m, phase));
@@ -4951,7 +4984,7 @@ function initModulePage() {
           <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${counterRunState.score}</span></div>
           <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${counterRunState.bestStreak} 🔥</span></div>
         </div>
-        <button class="btn btn-primary glow-effect" id="cntReset">Új kör beállításokkal →</button>
+        <button class="btn btn-primary glow-effect" id="cntReset">Új kör</button>
       </div>
     `;
     document.getElementById('cntReset').addEventListener('click', () => {
@@ -5403,7 +5436,7 @@ function initPracticePage() {
     const isLast = runtimeState.cardIdx + 1 >= runtimeState.cards.length;
     document.getElementById('prActions').innerHTML = `
       <button class="btn btn-primary glow-effect prc-next" id="prcNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('prcNext').addEventListener('click', advanceRound);
@@ -5536,7 +5569,7 @@ function initPracticePage() {
         <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${runtimeState.bestStreak} 🔥</span></div>
         <div class="sd-final-stat"><span class="sf-label">Mód</span><span class="sf-value">${lobbyState.mode === 'particles' ? 'Partikula' : 'Puzzle'}</span></div>
       </div>
-      <button class="btn btn-primary glow-effect" id="prRestart">Új kör beállításokkal →</button>
+      <button class="btn btn-primary glow-effect" id="prRestart">Új kör</button>
     `;
     document.getElementById('prRestart').addEventListener('click', backToLobby);
   }
@@ -5895,7 +5928,7 @@ function initPracticePage() {
     const isLast = runtimeState.cardIdx + 1 >= runtimeState.cards.length;
     document.getElementById('prActions').innerHTML = `
       <button class="btn btn-primary glow-effect prc-next" id="prcNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('prcNext').addEventListener('click', advanceRound);
@@ -6607,7 +6640,7 @@ function initConjugationPage() {
       if (distractors.length >= 1) break;
       const out = conjugate(verb, f);
       if (out && !seen.has(out.kana)) {
-        distractors.push({ ...out, isCorrect: false, wrongReason: 'wrong-form' });
+        distractors.push({ ...out, isCorrect: false, wrongReason: 'wrong-form', formCode: f });
         seen.add(out.kana);
       }
     }
@@ -6646,7 +6679,7 @@ function initConjugationPage() {
       const f = otherForms[Math.floor(Math.random() * otherForms.length)];
       const out = conjugate(verb, f);
       if (out && !seen.has(out.kana)) {
-        distractors.push({ ...out, isCorrect: false, wrongReason: 'wrong-form' });
+        distractors.push({ ...out, isCorrect: false, wrongReason: 'wrong-form', formCode: f });
         seen.add(out.kana);
       } else {
         break;
@@ -7611,7 +7644,51 @@ function initConjugationPage() {
     }
     document.querySelectorAll('.cj-option, .dont-know-btn').forEach(b => b.disabled = true);
 
-    finalizeCard(isCorrect, /* diag */ null);
+    // Hibánál a választott opciót is továbbadjuk: abból derül ki, MIT tévesztett
+    const card = drillRunState.cards[drillRunState.cardIdx];
+    finalizeCard(isCorrect, isCorrect ? null : { errorCode: 'wrong_form', chosen: card.options[idx] });
+  }
+
+  // Rövid szabály-emlékeztető: hogyan épül fel a kért alak ennél az igénél
+  function howItsBuilt(card) {
+    const v = card.verb, m = card.expected.morphemes;
+    if (v.group === 'irregular') {
+      return `A <strong>${v.kanji}</strong> rendhagyó ige: az alakjait külön kell megjegyezni.`;
+    }
+    if (m && m.stem && m.suffix && m.stem.kana && m.suffix.kana) {
+      const built = `<strong>${m.stem.kana}</strong> + <strong>${m.suffix.kana}</strong>`;
+      if (v.group === 'ichidan') return `Ichidan ige: a végső る lemarad, a toldalék a tőhöz jön: ${built}.`;
+      // masu/nai-féle alakok: a tő egy magánhangzó-sorra vált; te/ta: hangváltozás
+      if (/^[aiueo]$/.test(String(m.column || ''))) {
+        return `Godan ige: az utolsó szótag a(z) ${String(m.column).toUpperCase()}-sorra vált: ${built}.`;
+      }
+      return `Godan ige: a te- és ta-alak az utolsó szótagtól függ (う・つ・る → って, む・ぶ・ぬ → んで, く → いて, ぐ → いで, す → して). Itt: ${built}.`;
+    }
+    return v.group === 'ichidan'
+      ? 'Ichidan ige: a végső る helyére て / た kerül.'
+      : 'Godan ige: a te- és ta-alak az utolsó szótagtól függ (う・つ・る → って, む・ぶ・ぬ → んで, く → いて, ぐ → いで, す → して).';
+  }
+
+  // Feleletválasztós hiba magyarázata a választott opció alapján
+  function recognitionExplanation(card, chosen) {
+    const rule = NIHONCORE_FORM_RULES[card.formCode];
+    const want = rule ? rule.nameHu : card.formCode;
+    const picked = `<em>${chosen.kana}</em>`;
+    const other = chosen.formCode && NIHONCORE_FORM_RULES[chosen.formCode];
+    if (chosen.wrongReason === 'wrong-form' && other) {
+      return { title: 'Másik alak',
+        html: `A ${picked} az ige egy másik alakja: <strong>${other.nameHu}</strong>. A feladat: <strong>${want}</strong>. ${howItsBuilt(card)}` };
+    }
+    if (chosen.wrongReason === 'wrong-group') {
+      const guessed = card.verb.group === 'ichidan' ? 'godan' : 'ichidan';
+      return { title: 'Igecsoport',
+        html: `A ${picked} úgy ragoz, mintha ${guessed} ige lenne. ${howItsBuilt(card)}` };
+    }
+    if (chosen.wrongReason === 'wrong-column') {
+      return { title: 'Rossz tő',
+        html: `A ${picked} toldaléka jó, de a tő rossz sorban áll. ${howItsBuilt(card)}` };
+    }
+    return { title: 'Más alak', html: `Nem ez a kért alak. ${howItsBuilt(card)}` };
   }
 
   // „Nem tudom" — felfedi a helyes választ + magyarázat, nem helyesként számít
@@ -7974,7 +8051,8 @@ function initConjugationPage() {
         </div>
       `;
     } else {
-      const exHtml = buildExplanation(card, diag);
+      const exHtml = (diag && diag.chosen) ? recognitionExplanation(card, diag.chosen)
+                                           : buildExplanation(card, diag);
 
       // Mastery: char-diff blokk
       const diffHtml = (diag && diag.diff && diag.userNorm)
@@ -7986,26 +8064,28 @@ function initConjugationPage() {
         ? renderMorphemeDiff(diag.split, exp)
         : '';
 
-      explainHtml = `
+      // Időtúllépésnél nincs „mit rontott el" — csak az idő és a helyes alak
+      const firstRow = (diag && diag.timeout) ? `
+        <div class="pfe-row pfe-context">
+          <span class="pfe-label">Idő</span>
+          <span class="pfe-text">Lejárt az idő.</span>
+        </div>` : `
         <div class="pfe-row pfe-wrong">
           <span class="pfe-label">${(exHtml && exHtml.title) || 'Hiba'}</span>
-          <span class="pfe-text">${(exHtml && exHtml.html) || 'Nem ez a kért alak.'}</span>
-        </div>
-        ${diag && diag.timeout ? `
-          <div class="pfe-row pfe-context">
-            <span class="pfe-label">Idő</span>
-            <span class="pfe-text">Lejárt az időlimit — a helyes alak: <strong class="pfe-jp-ok">${exp.kana}</strong> (${exp.romaji}).</span>
-          </div>
-        ` : ''}
+          <span class="pfe-text">${(exHtml && exHtml.html) || howItsBuilt(card)}</span>
+        </div>`;
+
+      explainHtml = `
+        ${firstRow}
         ${morphHtml ? `
           <div class="pfe-row pfe-context">
-            <span class="pfe-label">Morféma-bontás</span>
+            <span class="pfe-label">Tő + toldalék</span>
             <span class="pfe-text">${morphHtml}</span>
           </div>
         ` : ''}
         ${(diag && diag.diff && !diag.timeout) ? `
           <div class="pfe-row pfe-context">
-            <span class="pfe-label">Karakter-diff</span>
+            <span class="pfe-label">Eltérés</span>
             <span class="pfe-text">${diffHtml}</span>
           </div>
         ` : `
@@ -8019,7 +8099,7 @@ function initConjugationPage() {
 
     const exampleHtml = v.example ? `
       <div class="pfe-row pfe-rule">
-        <span class="pfe-label">Példa</span>
+        <span class="pfe-label">Mondatban</span>
         <span class="pfe-text"><strong>${v.example.jp}</strong> <span class="pfe-roman">(${v.example.romaji})</span> <span class="cj-example-hu">— ${v.example.hu}</span></span>
       </div>
     ` : '';
@@ -8034,7 +8114,7 @@ function initConjugationPage() {
         ${exampleHtml}
       </div>
       <button class="btn btn-primary glow-effect cj-next" id="cjNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('cjNext').addEventListener('click', advanceCard);
@@ -8103,14 +8183,14 @@ function initConjugationPage() {
           : 'Térj vissza a felismerés módra, és nézd át a hibákat.'}
       </p>
       <div class="cj-breakdown">
-        <div class="cj-bd-title">Per-forma bontás</div>
+        <div class="cj-bd-title">Alakonként</div>
         ${formRows}
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
         <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
-      <button class="btn btn-primary glow-effect" id="cjReset">Új kör beállításokkal →</button>
+      <button class="btn btn-primary glow-effect" id="cjReset">Új kör</button>
     `;
     document.getElementById('cjReset').addEventListener('click', backToLobby);
   }
@@ -8759,7 +8839,7 @@ function initAdjectivesPage() {
       return `<p class="cj-pd-empty">Még nincs adat. Játssz egy kört és térj vissza ide.</p>`;
     }
 
-    // Per-típus bontás
+    // Típusonként
     const typeRows = Object.keys(p.typeStats).map(t => {
       const s = p.typeStats[t];
       const pct = s.attempts > 0 ? Math.round((s.correct / s.attempts) * 100) : 0;
@@ -8774,7 +8854,7 @@ function initAdjectivesPage() {
       `;
     }).join('');
 
-    // Per-forma bontás — leggyengébb felül
+    // Alakonként — leggyengébb felül
     const formEntries = Object.keys(p.formStats).map(f => {
       const s = p.formStats[f];
       const pct = s.attempts > 0 ? Math.round((s.correct / s.attempts) * 100) : 0;
@@ -9561,7 +9641,7 @@ function initAdjectivesPage() {
         </div>
         ${buildSplitHtml ? `
           <div class="pfe-row pfe-context">
-            <span class="pfe-label">Morféma-bontás</span>
+            <span class="pfe-label">Tő + toldalék</span>
             <span class="pfe-text">${buildSplitHtml}</span>
           </div>
         ` : ''}
@@ -9572,7 +9652,7 @@ function initAdjectivesPage() {
           </div>
         ` : ''}
         ${diag && diag.diff && !diag.timeout ? `
-          <div class="pfe-row pfe-context"><span class="pfe-label">Karakter-diff</span><span class="pfe-text">${diffHtml}</span></div>
+          <div class="pfe-row pfe-context"><span class="pfe-label">Eltérés</span><span class="pfe-text">${diffHtml}</span></div>
         ` : (!buildSplitHtml ? `
           <div class="pfe-row pfe-correct"><span class="pfe-label">Helyes</span><span class="pfe-text"><strong class="pfe-jp-ok">${card.expected.kana}</strong> <span class="pfe-roman">(${card.expected.romaji})</span></span></div>
         ` : '')}
@@ -9596,7 +9676,7 @@ function initAdjectivesPage() {
         ${exampleHtml}
       </div>
       <button class="btn btn-primary glow-effect cj-next" id="adjNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('adjNext').addEventListener('click', advanceAdjCard);
@@ -9692,14 +9772,14 @@ function initAdjectivesPage() {
       <h3>Kör vége — ${pct}%</h3>
       <div class="summary-score">${correct} / ${total}</div>
       <div class="cj-breakdown">
-        <div class="cj-bd-title">Per-forma bontás</div>
+        <div class="cj-bd-title">Alakonként</div>
         ${formRows}
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
         <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
-      <button class="btn btn-primary glow-effect" id="adjReset">Új kör beállításokkal →</button>
+      <button class="btn btn-primary glow-effect" id="adjReset">Új kör</button>
     `;
     document.getElementById('adjReset').addEventListener('click', () => {
       drillRunState.inLobby = true;
@@ -10175,7 +10255,7 @@ function initDateTimePage() {
     if (p.totalAttempts === 0) {
       return `<p class="cj-pd-empty">Még nincs adat. Játssz egy kört és térj vissza ide.</p>`;
     }
-    // Per-kategória bontás — leggyengébb felül
+    // Kategóriánként — leggyengébb felül
     const entries = Object.keys(p.catStats).map(cid => {
       const s = p.catStats[cid];
       const pct = s.attempts > 0 ? Math.round((s.correct / s.attempts) * 100) : 0;
@@ -10813,7 +10893,7 @@ function initDateTimePage() {
           <span class="pfe-text">${ex.html}</span>
         </div>
         ${buildSplitHtml ? `
-          <div class="pfe-row pfe-context"><span class="pfe-label">Morféma-bontás</span><span class="pfe-text">${buildSplitHtml}</span></div>
+          <div class="pfe-row pfe-context"><span class="pfe-label">Tő + toldalék</span><span class="pfe-text">${buildSplitHtml}</span></div>
         ` : ''}
         ${diag && diag.timeout ? `
           <div class="pfe-row pfe-context">
@@ -10822,7 +10902,7 @@ function initDateTimePage() {
           </div>
         ` : ''}
         ${diag && diag.diff && !diag.timeout ? `
-          <div class="pfe-row pfe-context"><span class="pfe-label">Karakter-diff</span><span class="pfe-text">${diffHtml}</span></div>
+          <div class="pfe-row pfe-context"><span class="pfe-label">Eltérés</span><span class="pfe-text">${diffHtml}</span></div>
         ` : `
           <div class="pfe-row pfe-correct"><span class="pfe-label">Helyes</span><span class="pfe-text"><strong class="pfe-jp-ok">${e.kana}</strong> <span class="pfe-roman">(${e.romaji})</span> <span class="cj-example-hu">— ${e.meaningHu}</span></span></div>
         `}
@@ -10836,7 +10916,7 @@ function initDateTimePage() {
       </div>
       <div class="pr-fb-explain">${explainHtml}</div>
       <button class="btn btn-primary glow-effect cj-next" id="dtNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('dtNext').addEventListener('click', advanceDtCard);
@@ -10859,7 +10939,7 @@ function initDateTimePage() {
     const correct = drillRunState.results.filter(r => r.correct).length;
     const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
 
-    // Per-kategória bontás
+    // Kategóriánként
     const breakdown = {};
     drillRunState.results.forEach(r => {
       const b = breakdown[r.catId] = breakdown[r.catId] || { total: 0, correct: 0 };
@@ -10894,14 +10974,14 @@ function initDateTimePage() {
       <h3>Kör vége — ${pct}%</h3>
       <div class="summary-score">${correct} / ${total}</div>
       <div class="cj-breakdown">
-        <div class="cj-bd-title">Per-kategória bontás</div>
+        <div class="cj-bd-title">Kategóriánként</div>
         ${catRows}
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
         <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
-      <button class="btn btn-primary glow-effect" id="dtReset">Új kör beállításokkal →</button>
+      <button class="btn btn-primary glow-effect" id="dtReset">Új kör</button>
     `;
     document.getElementById('dtReset').addEventListener('click', backToDtLobby);
   }
@@ -11874,7 +11954,7 @@ function initListeningPage() {
         <button class="lst-slow-btn" id="lstFbReplay" type="button">🔊 Hallgasd újra</button>
       </div>
       <button class="btn btn-primary glow-effect cj-next" id="lstNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('lstFbReplay').addEventListener('click', () => {
@@ -12078,7 +12158,7 @@ function initListeningPage() {
         <button class="lst-slow-btn" id="lstFbReplay" type="button">🔊 Hallgasd újra</button>
       </div>
       <button class="btn btn-primary glow-effect cj-next" id="lstNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('lstFbReplay').addEventListener('click', () => {
@@ -12110,7 +12190,7 @@ function initListeningPage() {
     const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
     const totalReplays = drillRunState.results.reduce((s, r) => s + (r.replayCount || 0), 0);
 
-    // Per-kategória bontás
+    // Kategóriánként
     const breakdown = {};
     drillRunState.results.forEach(r => {
       const b = breakdown[r.category] = breakdown[r.category] || { total: 0, correct: 0 };
@@ -12145,7 +12225,7 @@ function initListeningPage() {
       <h3>Kör vége — ${pct}%</h3>
       <div class="summary-score">${correct} / ${total}</div>
       <div class="cj-breakdown">
-        <div class="cj-bd-title">Per-kategória bontás</div>
+        <div class="cj-bd-title">Kategóriánként</div>
         ${catRows}
       </div>
       <div class="sd-final-grid">
@@ -12153,7 +12233,7 @@ function initListeningPage() {
         <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
         <div class="sd-final-stat"><span class="sf-label">Összes lejátszás</span><span class="sf-value">${totalReplays}×</span></div>
       </div>
-      <button class="btn btn-primary glow-effect" id="lstReset">Új kör beállításokkal →</button>
+      <button class="btn btn-primary glow-effect" id="lstReset">Új kör</button>
     `;
     document.getElementById('lstReset').addEventListener('click', backToLstLobby);
   }
@@ -13163,24 +13243,19 @@ function initGrammarPage() {
     const ex = card.example;
     const optionsHtml = card.options.map((opt, i) => `
       <button class="cj-option grm-opt" data-idx="${i}" data-correct="${opt.isCorrect ? '1' : '0'}">
-        <span class="cj-opt-jp grm-opt-label">${opt.pattern.label}</span>
-        <span class="cj-opt-romaji grm-opt-summary">${escapeGrmHtml(opt.pattern.summary)}</span>
+        <span class="grm-opt-summary">${escapeGrmHtml(opt.pattern.summary)}</span>
+        <span class="cj-opt-jp grm-opt-label" lang="ja">${opt.pattern.label}</span>
       </button>
     `).join('');
 
     document.getElementById('grmCard').innerHTML = `
       <div class="cj-prompt grm-prompt">
         <div class="cj-prompt-eyebrow">
-          <span class="dt-cat-tag">${categoryLabel(card.pattern.category)}</span>
           <span class="dt-cat-tag grm-jlpt-tag">JLPT ${card.pattern.jlpt}</span>
         </div>
         <div class="grm-sentence">${ex.jp}</div>
         <div class="grm-sentence-romaji">${escapeGrmHtml(ex.romaji)}</div>
-        <div class="cj-prompt-meaning grm-sentence-hu">${escapeGrmHtml(ex.hu)}</div>
-        <div class="cj-target">
-          <span class="cj-target-label">Feladat:</span>
-          <span class="cj-target-name">Melyik grammatikai mintázat van ebben a mondatban?</span>
-        </div>
+        <div class="kana-task">Mit fejez ki ez a mondat?</div>
       </div>
       ${renderGrmHintBar(card)}
       <div class="cj-options grm-options">${optionsHtml}</div>
@@ -13666,7 +13741,7 @@ function initGrammarPage() {
           </span>
         </div>
         ${diag && diag.diff && !diag.timeout ? `
-          <div class="pfe-row pfe-context"><span class="pfe-label">Karakter-diff</span><span class="pfe-text">${diffHtml}</span></div>
+          <div class="pfe-row pfe-context"><span class="pfe-label">Eltérés</span><span class="pfe-text">${diffHtml}</span></div>
         ` : ''}
         ${diag && diag.timeout ? `
           <div class="pfe-row pfe-context">
@@ -13684,7 +13759,7 @@ function initGrammarPage() {
       </div>
       <div class="pr-fb-explain">${explainHtml}</div>
       <button class="btn btn-primary glow-effect cj-next" id="grmNext">
-        ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
+        ${isLast ? 'Eredmények' : 'Következő'}
       </button>
     `;
     document.getElementById('grmNext').addEventListener('click', advanceGrmCard);
@@ -13746,14 +13821,14 @@ function initGrammarPage() {
       <h3>Kör vége — ${pct}%</h3>
       <div class="summary-score">${correct} / ${total}</div>
       <div class="cj-breakdown">
-        <div class="cj-bd-title">Per-mintázat bontás</div>
+        <div class="cj-bd-title">Mintánként</div>
         ${patRows}
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
         <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
-      <button class="btn btn-primary glow-effect" id="grmReset">Új kör beállításokkal →</button>
+      <button class="btn btn-primary glow-effect" id="grmReset">Új kör</button>
     `;
     document.getElementById('grmReset').addEventListener('click', backToGrmLobby);
   }
@@ -13818,7 +13893,7 @@ function initProductionPage() {
   const SETTINGS_KEY = 'nihoncore_prod_settings_v1';
 
   const drillSettings = mergeProdDefaults(loadProdSettings(), {
-    jlpt: { N4: true, N3: true },
+    jlpt: { N5: true, N4: false, N3: false },     // kezdő alap: N5; a többi a lobbiban kapcsolható
     sources: { grammar: true, sentences: true },
     cardCount: 6,                 // alacsonyabb default — nehezebb mód
   });
@@ -13876,10 +13951,7 @@ function initProductionPage() {
       NIHONCORE_SENTENCES.forEach(s => {
         if (!s.tokens) return;
         const level = s.level || 'N5';
-        // A Mondat-Mester levelekre nem szűrünk JLPT-vel (N5-N3 vegyes),
-        // mert a level mező más formátum. Csak akkor adunk hozzá, ha
-        // valamelyik JLPT engedélyezett.
-        if (!drillSettings.jlpt.N4 && !drillSettings.jlpt.N3) return;
+        if (!drillSettings.jlpt[level]) return;      // a mondat saját szintje szerint
         const jp = s.tokens.map(t => t.jp).join('');
         const kana = s.tokens.map(t => {
           // Partikulák jp-je mindig pure kana; szavak/igék jp-je kanji-mix lehet
@@ -14252,16 +14324,17 @@ function initProductionPage() {
   /* ── E) LOBBY ───────────────────────────────────── */
 
   function renderProdLobby() {
-    const jlptRow = ['N4', 'N3'].map(level => `
+    const LEVEL_HINT = { N5: 'alapmondatok', N4: 'nyelvtani minták', N3: 'haladó' };
+    const jlptRow = ['N5', 'N4', 'N3'].map(level => `
       <button class="cj-group-btn prod-jlpt-btn ${drillSettings.jlpt[level] ? 'active' : ''}" data-prod-jlpt="${level}">
         <span class="cj-g-name">${level}</span>
-        <span class="cj-g-hint">${level === 'N4' ? 'alap minták' : 'haladó'}</span>
+        <span class="cj-g-hint">${LEVEL_HINT[level]}</span>
       </button>
     `).join('');
 
     const srcRow = [
-      { id: 'grammar', name: 'Grammar Patterns példák', hint: '30 mondat (12 N4 + 3 N3)' },
-      { id: 'sentences', name: 'Mondat-Mester mondatok', hint: '326 mondat (N5-N3 vegyes)' }
+      { id: 'grammar', name: 'Nyelvtani minták', hint: 'a minták példamondatai (N4–N3)' },
+      { id: 'sentences', name: 'Mondat-Mester', hint: 'hétköznapi mondatok (N5–N3)' }
     ].map(s => `
       <button class="cj-group-btn prod-src-btn ${drillSettings.sources[s.id] ? 'active' : ''}" data-prod-src="${s.id}">
         <span class="cj-g-name">${s.name}</span>
@@ -14280,8 +14353,8 @@ function initProductionPage() {
         <p class="lobby-sub">A legnehezebb mód: a magyar mondatot teljes japán mondatra fordítod. Írhatsz kanával vagy romajival — a visszajelzés azt is megmutatja, mennyire jártál közel.</p>
       </div>
 
-      <div class="lobby-section">
-        <div class="lobby-section-label">1 · JLPT szint</div>
+      <div class="lobby-section" data-lobby-keep>
+        <div class="lobby-section-label">Szint (több is választható)</div>
         <div class="cj-group-row prod-jlpt-row">${jlptRow}</div>
       </div>
 
@@ -14320,7 +14393,7 @@ function initProductionPage() {
       btn.addEventListener('click', () => {
         const lv = btn.dataset.prodJlpt;
         const isOn = drillSettings.jlpt[lv];
-        const otherOn = ['N4','N3'].filter(l => l !== lv && drillSettings.jlpt[l]).length;
+        const otherOn = ['N5','N4','N3'].filter(l => l !== lv && drillSettings.jlpt[l]).length;
         if (isOn && otherOn === 0) { prodShake(btn); return; }
         drillSettings.jlpt[lv] = !isOn;
         btn.classList.toggle('active', drillSettings.jlpt[lv]);
@@ -14423,13 +14496,12 @@ function initProductionPage() {
     document.getElementById('prodFeedback').innerHTML = '';
 
     const card = drillRunState.cards[drillRunState.cardIdx];
-    const srcTag = card.source === 'grammar'
-      ? `<span class="dt-cat-tag grm-pattern-tag">${escProdHtml(card.patternLabel || 'pattern')}</span>`
-      : `<span class="dt-cat-tag">🧩 Mondat-Mester</span>`;
+    // A minta neve (pl. 〜たら) a nyelvtani példáknál segítség: azt kell használni
+    const srcTag = (card.source === 'grammar' && card.patternLabel)
+      ? `<span class="dt-cat-tag grm-pattern-tag" lang="ja">${escProdHtml(card.patternLabel)}</span>` : '';
 
     document.getElementById('prodCard').innerHTML = `
       <div class="cj-prompt-eyebrow prod-eyebrow">
-        <span class="dt-cat-tag prod-tag">✍ Production</span>
         <span class="dt-cat-tag grm-jlpt-tag">JLPT ${card.jlpt}</span>
         ${srcTag}
       </div>
@@ -14536,8 +14608,8 @@ function initProductionPage() {
     perfect: { icon: '🎉', title: 'Tökéletes!',         tone: 'pr-fb-perfect', sub: 'Pontos volt.' },
     close:   { icon: '✨', title: 'Majdnem!',           tone: 'pr-fb-close',   sub: 'Egy-két karakter csúszott. Nézd meg.' },
     near:    { icon: '🎯', title: 'Közel jó',           tone: 'pr-fb-near',    sub: 'A szerkezet jó, részletek elcsúsztak.' },
-    far:     { icon: '🌱', title: 'Még gyakorold',      tone: 'pr-fb-far',     sub: 'Próbáld újra — a struktúra eltér.' },
-    wrong:   { icon: '🤔', title: 'Nézzük meg együtt',  tone: 'pr-fb-wrong',   sub: 'A helyes mondat lent — gyakorold be.' }
+    far:     { icon: '🌱', title: 'Még gyakorold',      tone: 'pr-fb-far',     sub: 'A mondat szerkezete eltér a mintától.' },
+    wrong:   { icon: '🤔', title: 'Nézzük meg együtt',  tone: 'pr-fb-wrong',   sub: 'Lent látod a mintamondatot. Ha a tiéd is jó, jelöld helyesnek.' }
   };
 
   function renderProdTokenDiff(diag) {
@@ -14563,14 +14635,14 @@ function initProductionPage() {
 
     const missingHtml = (diag.missingTokens && diag.missingTokens.length > 0)
       ? `<div class="prod-tok-missing-row">
-           <span class="prod-tok-missing-label">Hiányzó:</span>
+           <span class="prod-tok-missing-label">Hiányzik</span>
            ${diag.missingTokens.map(t => `<span class="prod-tok prod-tok-missing"><span class="prod-tok-jp">${escProdHtml(t)}</span></span>`).join('')}
          </div>` : '';
 
     return `
       <div class="prod-diff-block">
         <div class="prod-diff-row">
-          <span class="prod-diff-label">Te:</span>
+          <span class="prod-diff-label">A tiéd</span>
           <div class="prod-diff-tokens">${userRow}</div>
         </div>
         ${missingHtml}
@@ -14591,20 +14663,19 @@ function initProductionPage() {
     const tokenDiffHtml = renderProdTokenDiff(diag);
     const scorePts = PROD_PTS[diag.verdict] ?? 0;
 
+    const canAccept = !diag.empty && diag.verdict !== 'perfect' && diag.verdict !== 'close';
+
     fbEl.innerHTML = `
       <div class="pr-fb-header">
         <span class="pr-fb-mark">${meta.icon}</span>
         <span class="pr-fb-title">${meta.title}</span>
-        <span class="prod-fb-points">+${scorePts} pt</span>
+        <span class="prod-fb-points" id="prodFbPoints">+${scorePts} pont</span>
       </div>
+      <p class="prod-fb-sub">${meta.sub}</p>
       <div class="pr-fb-explain">
-        <div class="pfe-row pfe-${diag.verdict === 'perfect' || diag.verdict === 'close' ? 'correct' : 'wrong'}">
-          <span class="pfe-label">${meta.sub.split('.')[0]}</span>
-          <span class="pfe-text">${meta.sub}</span>
-        </div>
         ${tokenDiffHtml ? `
           <div class="pfe-row pfe-context">
-            <span class="pfe-label">Token-bontás</span>
+            <span class="pfe-label">Szavanként</span>
             <span class="pfe-text">${tokenDiffHtml}</span>
           </div>
         ` : ''}
@@ -14623,13 +14694,31 @@ function initProductionPage() {
           </div>
         ` : ''}
       </div>
-      <div class="prod-fb-actions">
+      <div class="prod-fb-secondary">
         <button class="lst-slow-btn prod-fb-listen" id="prodFbListen" type="button">🔊 Hallgasd meg</button>
-        <button class="btn btn-primary glow-effect cj-next" id="prodNext">
-          ${isLast ? 'Eredmények megtekintése →' : 'Következő →'}
-        </button>
+        ${canAccept ? '<button class="lst-slow-btn prod-fb-accept" id="prodAccept" type="button">Az én válaszom is helyes</button>' : ''}
       </div>
+      <button class="btn btn-primary cj-next" id="prodNext" type="button">${isLast ? 'Eredmények' : 'Következő'}</button>
     `;
+
+    const acceptBtn = document.getElementById('prodAccept');
+    if (acceptBtn) acceptBtn.addEventListener('click', () => {
+      const last = drillRunState.results[drillRunState.results.length - 1];
+      if (!last || last.selfAccepted) return;
+      const gain = Math.max(0, PROD_PTS.near - (last.points || 0));     // „közel jó" pontszámig egészítjük ki
+      last.correct = true; last.selfAccepted = true; last.points = (last.points || 0) + gain;
+      drillRunState.score += gain;
+      drillRunState.streak++;
+      drillRunState.bestStreak = Math.max(drillRunState.bestStreak, drillRunState.streak);
+      document.getElementById('prodScore').textContent = drillRunState.score;
+      document.getElementById('prodStreak').textContent = `${drillRunState.streak} 🔥`;
+      document.getElementById('prodFbPoints').textContent = `+${last.points} pont`;
+      fbEl.classList.remove('pr-fb-near', 'pr-fb-far', 'pr-fb-wrong');
+      fbEl.classList.add('pr-fb-close', 'pr-fb-correct');
+      fbEl.querySelector('.pr-fb-title').textContent = 'Elfogadva';
+      fbEl.querySelector('.prod-fb-sub').textContent = 'Helyesnek jelölted. Vesd össze a mintamondattal, hátha tanulsz belőle egy másik megoldást.';
+      acceptBtn.remove();
+    });
 
     document.getElementById('prodFbListen').addEventListener('click', () => {
       if (typeof NihonCoreAudio !== 'undefined') {
@@ -14690,14 +14779,14 @@ function initProductionPage() {
       <h3>Kör vége — ${pct}% helyes</h3>
       <div class="summary-score">${correct} / ${total} <small>(Tökéletes + Majdnem)</small></div>
       <div class="cj-breakdown">
-        <div class="cj-bd-title">Verdict-bontás</div>
+        <div class="cj-bd-title">Eredmények</div>
         ${verdictRows}
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
         <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
-      <button class="btn btn-primary glow-effect" id="prodReset">Új kör beállításokkal →</button>
+      <button class="btn btn-primary glow-effect" id="prodReset">Új kör</button>
     `;
     document.getElementById('prodReset').addEventListener('click', backToProdLobby);
   }
@@ -15985,7 +16074,7 @@ function initKanaPage() {
       </div>
       ${groupsHtml}`;
     el.querySelectorAll('.kana-cell[data-say]').forEach(btn => btn.addEventListener('click', () => {
-      if (window.NihonCoreAudio) NihonCoreAudio.play(btn.dataset.say, { rate: 0.85 });
+      if (window.NihonCoreAudio) NihonCoreAudio.play(btn.dataset.say, { speed: 0.85 });
     }));
   }
 
