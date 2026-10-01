@@ -47,7 +47,7 @@ const NIHONCORE_MODULES = {
     icon: '動',
     iconClass: 'icon-glow-teal',
     title: 'Alap igék (Masu forma)',
-    description: 'Létezés, étkezés, vásárlás és mozgás kifejezése japánul. Állapotvezérelt ragozó-motor 4 toldalékkal. V5 P2: A modul teljesen feltöltve a legfontosabb mindennapi igékkel.',
+    description: 'Létezés, étkezés, vásárlás és mozgás kifejezése japánul, udvarias masu-alakban: jelen és múlt, állítás és tagadás, kérdés. 8 mindennapi igével.',
     status: 'available',
 
     explanation: {
@@ -166,7 +166,7 @@ const NIHONCORE_MODULES = {
       1: {
         type: 'interactive-demo',
         name: 'Megértés',
-        subtitle: 'Magyarázat + interaktív demo',
+        subtitle: 'Magyarázat + interaktív bemutató',
         unlocked: true,
         sentenceContexts: {
           arimasu: {
@@ -215,7 +215,7 @@ const NIHONCORE_MODULES = {
       2: {
         type: 'matrix-selector',
         name: 'Alkalmazás',
-        subtitle: 'Ragozó-Selector — 10 feladat',
+        subtitle: 'Rakd össze az alakot kapcsolókkal',
         unlocked: true,
         tasks: [
           {
@@ -274,7 +274,7 @@ const NIHONCORE_MODULES = {
       3: {
         type: 'speed-drill',
         name: 'Automatizálás',
-        subtitle: 'Speed Drill — 5 mp / kártya',
+        subtitle: 'Gyorskör — 5 mp / kártya',
         unlocked: true,
         timeLimit: 5000,
         cards: [
@@ -313,19 +313,19 @@ const NIHONCORE_MODULES = {
       1: {
         type: 'flashcard',
         name: 'Megértés',
-        subtitle: 'Szótár-böngészés flashcard-okon',
+        subtitle: 'Szókártyák böngészése',
         unlocked: true
       },
       2: {
         type: 'counter-hybrid',
         name: 'Alkalmazás',
-        subtitle: 'Hibrid: counter pill + kana input',
+        subtitle: 'Számláló kiválasztása + olvasat beírása',
         unlocked: true
       },
       3: {
         type: 'counter-mastery',
         name: 'Automatizálás',
-        subtitle: 'Mester: szabad input + diff engine',
+        subtitle: 'Szabad beírás, részletes hibajelzéssel',
         unlocked: true
       }
     }

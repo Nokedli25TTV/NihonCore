@@ -380,8 +380,29 @@ window.NihonCoreRound = (function () {
   function begin(snapshotFn) {
     _active = true; _recorded = false;
     _snapshot = (typeof snapshotFn === 'function') ? snapshotFn : null;
+    scrollToRound();
   }
   function isActive() { return _active; }
+
+  // A futó kör tetejére görget: a Pont/Sorozat sor a fix fejléc alá kerül.
+  // A lobby alján lévő „Indítás" gomb és a feedback alján lévő „Következő"
+  // után a kártya teteje különben a képernyő fölött marad.
+  // rAF: a hívó a begin() UTÁN váltja láthatóra a runtime-ot. A module.html
+  // fázisainak nincs .pr-stats sora → ott no-op (saját scrollIntoView-juk van).
+  function scrollToRound() {
+    requestAnimationFrame(function () {
+      var rows = document.querySelectorAll('.pr-stats');
+      for (var i = 0; i < rows.length; i++) {
+        if (rows[i].offsetParent === null) continue;
+        var header = document.getElementById('header');
+        var top = rows[i].getBoundingClientRect().top + window.pageYOffset
+                - (header ? header.offsetHeight : 0) - 16;
+        var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: Math.max(0, top), behavior: calm ? 'auto' : 'smooth' });
+        return;
+      }
+    });
+  }
   function markComplete() { _recorded = true; _active = false; }
 
   function flush() {
@@ -457,7 +478,7 @@ window.NihonCoreRound = (function () {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  return { begin: begin, isActive: isActive, markComplete: markComplete, flush: flush, refresh: refresh };
+  return { begin: begin, isActive: isActive, markComplete: markComplete, flush: flush, refresh: refresh, scrollToRound: scrollToRound };
 })();
 
 
@@ -646,7 +667,7 @@ window.NihonCoreFlashcard = (function () {
             </div>
           </div>
           <p style="color: var(--sumi-soft); font-size: 0.95rem; margin-bottom: 18px;">
-            ${state.sessionStats.no > 0 ? 'A "Még nem"-mel jelzett kártyákat a szűrő segítségével később újra átnézheted.' : 'Mind ismerős! Próbáld ki a Recognition vagy Build módot.'}
+            ${state.sessionStats.no > 0 ? 'A "Még nem"-mel jelzett kártyákat a szűrő segítségével később újra átnézheted.' : 'Mind ismerős! Próbáld ki a Felismerés vagy az Építkezés módot.'}
           </p>
           <button class="btn btn-primary" id="ncFcRestart" type="button">Újra</button>
         </div>`;
@@ -2149,6 +2170,12 @@ function initModulePage() {
   function setupPhaseTabs(m) {
     const tabs = document.querySelectorAll('.phase-tab');
     tabs.forEach(tab => {
+      // A fül felirata a modul saját fázis-adataiból jön (a HTML-ben csak alapérték van)
+      const def = m.phases && m.phases[tab.dataset.phase];
+      if (def) {
+        if (def.name)     tab.querySelector('.phase-name').textContent = def.name;
+        if (def.subtitle) tab.querySelector('.phase-sub').textContent  = def.subtitle;
+      }
       tab.addEventListener('click', () => {
         const phase = parseInt(tab.dataset.phase, 10);
         tabs.forEach(t => t.classList.remove('active'));
@@ -2502,7 +2529,7 @@ function initModulePage() {
     return `
       <div class="ms-lobby glass-panel-heavy">
         <div class="lobby-header">
-          <div class="lobby-eyebrow">Phase 2 · Beállítások</div>
+          <div class="lobby-eyebrow">${phase.name} · Beállítások</div>
           <h3 class="lobby-title">Állítsd be a kört</h3>
           <p class="lobby-sub">Válaszd ki hány kártyát gyakorolsz, és mely típusokat. A kör elindítása után minden taskon végig kell menned a megszokott módon.</p>
         </div>
@@ -3034,12 +3061,12 @@ function initModulePage() {
     container.innerHTML = `
       <div class="ms-summary glass-panel-heavy">
         <div class="summary-icon">${pct === 100 ? '🏆' : pct >= 60 ? '🎯' : '🌱'}</div>
-        <h3>Phase 2 — Kész</h3>
+        <h3>${phase.name} — kész</h3>
         <div class="summary-score">${correct} / ${total} <span class="summary-pct">(${pct}%)</span></div>
         <p class="summary-blurb">
-          ${pct === 100 ? 'Minden helyes! Kész vagy a Speed Drillre. 💪'
+          ${pct === 100 ? 'Minden helyes! Jöhet a Gyorskör. 💪'
             : pct >= 60 ? 'Szép munka. Nézd át a hibás feladatokat és próbálj újra!'
-                        : 'Még gyakorlás kell — térj vissza Phase 1-re átismételni.'}
+                        : 'Még gyakorlás kell — térj vissza a Megértés fázisra átismételni.'}
         </p>
         <button class="btn btn-primary glow-effect" id="msReset">Új kör beállításokkal →</button>
       </div>
@@ -3255,7 +3282,7 @@ function initModulePage() {
     summaryEl.classList.add('glass-panel-heavy');
     summaryEl.innerHTML = `
       <div class="summary-icon">${pct === 100 ? '🏆' : pct >= 75 ? '⚡' : pct >= 50 ? '🎯' : '🌱'}</div>
-      <h3>Speed Drill — Kész</h3>
+      <h3>Gyorskör — kész</h3>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pontszám</span><span class="sf-value">${drillState.score}</span></div>
         <div class="sd-final-stat"><span class="sf-label">Helyes</span><span class="sf-value">${correct}/${total} <small>(${pct}%)</small></span></div>
@@ -4693,10 +4720,30 @@ function initPracticePage() {
     startBtn.disabled    = pool.length === 0 || lobbyState.cardCount < 1;
   }
 
+  // A lobby Funkció-szűrője 3 értéket ismer (Állító/Tagadó/Kérdő), de az N4
+  // batchek metadata.function mezője ~70-féle részletes címke
+  // ('Desire', 'Condition (Tara)', 'Permission (Asking)' …). Ezeket a 3 alap-
+  // kategóriára képezzük le — különben a szűrő mindet kidobná.
+  function sentenceFunction(s) {
+    const f = s.metadata.function || '';
+    if (f === 'Affirmative' || f === 'Negative' || f === 'Question') return f;
+    if (/Negative/.test(f))         return 'Negative';
+    if (/Question|Asking/.test(f))  return 'Question';
+    return 'Affirmative';
+  }
+
+  // A mondat-metaadat angol kulcsai → magyar címke a kártya fejlécében
+  const META_LABELS = {
+    Affirmative: 'Állító', Negative: 'Tagadó', Question: 'Kérdő',
+    'Non-Past': 'Jelen / jövő', Past: 'Múlt', Progressive: 'Folyamatos',
+    Polite: 'Udvarias', Casual: 'Bizalmas'
+  };
+  const metaLabel = v => META_LABELS[v] || v;
+
   function filterSentences() {
     return NIHONCORE_SENTENCES.filter(s => {
       if (s.level !== lobbyState.level) return false;
-      if (!lobbyState.filters.function[s.metadata.function]) return false;
+      if (!lobbyState.filters.function[sentenceFunction(s)]) return false;
       if (!lobbyState.filters.tense[s.metadata.tense])       return false;
       if (!lobbyState.filters.register[s.metadata.register]) return false;
       return true;
@@ -4749,8 +4796,8 @@ function initPracticePage() {
     cardEl.innerHTML = `
       <div class="prc-eyebrow">
         <span>${sentence.level}</span><span>·</span>
-        <span>${sentence.metadata.function}</span><span>·</span>
-        <span>${sentence.metadata.tense}</span>
+        <span>${metaLabel(sentenceFunction(sentence))}</span><span>·</span>
+        <span>${metaLabel(sentence.metadata.tense)}</span>
       </div>
       <div class="prc-translation">
         <span class="prc-tr-label">Magyar jelentés:</span>
@@ -5054,7 +5101,7 @@ function initPracticePage() {
     } else {
       renderCurrentCard();
       document.getElementById('prFeedback').classList.add('hidden');
-      document.getElementById('practiceRuntime').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      NihonCoreRound.scrollToRound();
     }
   }
 
@@ -5122,9 +5169,9 @@ function initPracticePage() {
     cardEl.innerHTML = `
       <div class="prc-eyebrow">
         <span>${sentence.level}</span><span>·</span>
-        <span>${sentence.metadata.function}</span><span>·</span>
-        <span>${sentence.metadata.tense}</span><span>·</span>
-        <span>${sentence.metadata.register}</span>
+        <span>${metaLabel(sentenceFunction(sentence))}</span><span>·</span>
+        <span>${metaLabel(sentence.metadata.tense)}</span><span>·</span>
+        <span>${metaLabel(sentence.metadata.register)}</span>
       </div>
       <div class="prc-translation">
         <span class="prc-tr-label">Magyar jelentés:</span>
@@ -6831,8 +6878,8 @@ function initConjugationPage() {
 
     lobbyEl.innerHTML = `
       <div class="lobby-header">
-        <div class="lobby-eyebrow">Ragozó modul · V2.0 P1</div>
-        <h2 class="lobby-title">Drill-paraméterek</h2>
+        <div class="lobby-eyebrow">Ragozó modul</div>
+        <h2 class="lobby-title">Állítsd be a kört</h2>
         <p class="lobby-sub">Válaszd ki melyik csoportokat és melyik célformákat akarod gyakorolni, aztán indítsd a kört.</p>
       </div>
 
@@ -6872,7 +6919,7 @@ function initConjugationPage() {
           <input type="checkbox" id="cjAdaptive" ${drillSettings.adaptive ? 'checked' : ''} />
           <span class="cj-adapt-text">
             <strong>🎯 Adaptív gyakorlás</strong>
-            <em>A hibás formákat és csoportokat ~3× gyakrabban húzza ki a profilodból. (Min. 10 attempt szükséges.)</em>
+            <em>A hibás formákat és csoportokat ~3× gyakrabban húzza ki a profilodból. (Legalább 10 megválaszolt kártya után kapcsol be.)</em>
           </span>
         </label>
       </div>
@@ -6904,7 +6951,7 @@ function initConjugationPage() {
     if (drillSettings.forms.causative_passive) unsupported.push('Caus-Pass');
     if (drillSettings.groups.irregular)        unsupported.push('Rendhagyó');
     if (unsupported.length) {
-      el.innerHTML = `<span class="cj-build-note-icon">ℹ️</span> Build mód: <strong>${unsupported.join(', ')}</strong> kihagyva (csak Felismerés/Mester).`;
+      el.innerHTML = `<span class="cj-build-note-icon">ℹ️</span> Építkezés mód: <strong>${unsupported.join(', ')}</strong> kihagyva (csak Felismerés/Mester).`;
     } else {
       el.textContent = '';
     }
@@ -7576,6 +7623,7 @@ function initConjugationPage() {
     drillRunState.cardIdx++;
     if (drillRunState.cardIdx >= drillRunState.cards.length) showRoundSummary();
     else                                                     renderCurrentCard();
+    NihonCoreRound.scrollToRound();
   }
 
   /* ─────────────────────────────────────────────────
@@ -8407,8 +8455,8 @@ function initAdjectivesPage() {
     const lobbyEl = document.getElementById('adjLobby');
     lobbyEl.innerHTML = `
       <div class="lobby-header">
-        <div class="lobby-eyebrow">Melléknév modul · V2.1</div>
-        <h2 class="lobby-title">Drill-paraméterek</h2>
+        <div class="lobby-eyebrow">Melléknév modul</div>
+        <h2 class="lobby-title">Állítsd be a kört</h2>
         <p class="lobby-sub">Melyik típusú és melyik formájú mellékneveket szeretnéd gyakorolni?</p>
       </div>
 
@@ -8443,7 +8491,7 @@ function initAdjectivesPage() {
           <input type="checkbox" id="adjAdaptive" ${drillSettings.adaptive ? 'checked' : ''} />
           <span class="cj-adapt-text">
             <strong>🎯 Adaptív gyakorlás</strong>
-            <em>A hibás formákat és típusokat ~3× gyakrabban húzza ki a profilodból. (Min. 10 attempt szükséges.)</em>
+            <em>A hibás formákat és típusokat ~3× gyakrabban húzza ki a profilodból. (Legalább 10 megválaszolt kártya után kapcsol be.)</em>
           </span>
         </label>
       </div>
@@ -9134,6 +9182,7 @@ function initAdjectivesPage() {
     drillRunState.cardIdx++;
     if (drillRunState.cardIdx >= drillRunState.cards.length) showAdjSummary();
     else                                                     renderAdjCurrentCard();
+    NihonCoreRound.scrollToRound();
   }
 
   /* ── H) Hint provider (újrahasznosított minta) ───── */
@@ -9769,8 +9818,8 @@ function initDateTimePage() {
 
     document.getElementById('dtLobby').innerHTML = `
       <div class="lobby-header">
-        <div class="lobby-eyebrow">Dátum & Idő modul · V2.3</div>
-        <h2 class="lobby-title">Drill-paraméterek</h2>
+        <div class="lobby-eyebrow">Dátum & Idő modul</div>
+        <h2 class="lobby-title">Állítsd be a kört</h2>
         <p class="lobby-sub">Válaszd ki, mely kategóriákat gyakorolod, majd indítsd a kört.</p>
       </div>
 
@@ -9800,7 +9849,7 @@ function initDateTimePage() {
           <input type="checkbox" id="dtAdaptive" ${drillSettings.adaptive ? 'checked' : ''} />
           <span class="cj-adapt-text">
             <strong>🎯 Adaptív gyakorlás</strong>
-            <em>A gyengébb kategóriákat ~3× gyakrabban húzza ki a profilodból. (Min. 10 attempt szükséges.)</em>
+            <em>A gyengébb kategóriákat ~3× gyakrabban húzza ki a profilodból. (Legalább 10 megválaszolt kártya után kapcsol be.)</em>
           </span>
         </label>
       </div>
@@ -9828,7 +9877,7 @@ function initDateTimePage() {
     const buildable = getBuildablePool().length;
     const all = countDtPool();
     if (buildable < all) {
-      el.innerHTML = `<span class="cj-build-note-icon">ℹ️</span> Build mód: <strong>${all - buildable}</strong> nem építhető elem kimarad (évek, relatív idő, rendhagyó natív napok, 〜半).`;
+      el.innerHTML = `<span class="cj-build-note-icon">ℹ️</span> Építkezés mód: <strong>${all - buildable}</strong> nem építhető elem kimarad (évek, relatív idő, rendhagyó natív napok, 〜半).`;
     } else {
       el.textContent = '';
     }
@@ -10370,6 +10419,7 @@ function initDateTimePage() {
     drillRunState.cardIdx++;
     if (drillRunState.cardIdx >= drillRunState.cards.length) showDtSummary();
     else                                                     renderDtCurrentCard();
+    NihonCoreRound.scrollToRound();
   }
 
   function showDtSummary() {
@@ -11002,8 +11052,8 @@ function initListeningPage() {
 
     document.getElementById('lstLobby').innerHTML = `
       <div class="lobby-header">
-        <div class="lobby-eyebrow">Hallás & Kiejtés · V3</div>
-        <h2 class="lobby-title">Drill-paraméterek</h2>
+        <div class="lobby-eyebrow">Hallás & Kiejtés</div>
+        <h2 class="lobby-title">Állítsd be a kört</h2>
         <p class="lobby-sub">Válaszd ki a lejátszási tempót — a teljes ${countLstPool()}-leckés készleten gyakorolsz.</p>
       </div>
 
@@ -11033,7 +11083,7 @@ function initListeningPage() {
           <input type="checkbox" id="lstAdaptive" ${drillSettings.adaptive ? 'checked' : ''} />
           <span class="cj-adapt-text">
             <strong>🎯 Adaptív gyakorlás</strong>
-            <em>A gyenge hang-csapdáidat gyakrabban húzza, a hibázott kártyát visszahozza, és lassítja a tempót, ha nehéz. (Min. 10 attempt szükséges.)</em>
+            <em>A gyenge hang-csapdáidat gyakrabban húzza, a hibázott kártyát visszahozza, és lassítja a tempót, ha nehéz. (Legalább 10 megválaszolt kártya után kapcsol be.)</em>
           </span>
         </label>
       </div>
@@ -11469,7 +11519,7 @@ function initListeningPage() {
 
     document.getElementById('lstCard').innerHTML = `
       <div class="cj-prompt-eyebrow lst-pro-eyebrow">
-        <span class="dt-cat-tag lst-pro-tag">🎧 Pro listening</span>
+        <span class="dt-cat-tag lst-pro-tag">🎧 Pro hallás</span>
         ${jlptTag}
         ${patternTag}
       </div>
@@ -11618,6 +11668,7 @@ function initListeningPage() {
     drillRunState.cardIdx++;
     if (drillRunState.cardIdx >= drillRunState.cards.length) showLstSummary();
     else                                                     renderLstCurrentCard();
+    NihonCoreRound.scrollToRound();
   }
 
   function showLstSummary() {
@@ -12370,7 +12421,7 @@ function initGrammarPage() {
 
     const modes = [
       { id: 'recognition', name: 'Felismerés', sub: 'melyik mintát látod?' },
-      { id: 'cloze',       name: 'Cloze',     sub: 'írd be a hiányzó morfémát' },
+      { id: 'cloze',       name: 'Kiegészítés', sub: 'írd be a hiányzó részt' },
       { id: 'translate',   name: 'Fordítás',  sub: 'HU → JP frázis-tálca' }
     ].map(m => `
       <button class="cj-mode-btn ${drillSettings.mode === m.id ? 'active' : ''}" data-grm-mode="${m.id}">
@@ -12385,8 +12436,8 @@ function initGrammarPage() {
 
     document.getElementById('grmLobby').innerHTML = `
       <div class="lobby-header">
-        <div class="lobby-eyebrow">Grammar Patterns modul · V5 P1</div>
-        <h2 class="lobby-title">Drill-paraméterek</h2>
+        <div class="lobby-eyebrow">Grammar Patterns modul</div>
+        <h2 class="lobby-title">Állítsd be a kört</h2>
         <p class="lobby-sub">Válaszd ki a szintet és kategóriákat, majd indítsd a kört. Ha bekapcsolod az SRS-t, a sor az esedékes mintázatokból válogat.</p>
       </div>
 
@@ -12421,14 +12472,14 @@ function initGrammarPage() {
           <input type="checkbox" id="grmSrs" ${drillSettings.srs ? 'checked' : ''} />
           <span class="cj-adapt-text">
             <strong>📅 SRS ütemezés</strong>
-            <em>Az esedékes mintázatok előre kerülnek a sorba. Új mintáknál először tanulsz, helyes válasz után a következő ismétlés napokkal később esedékes (Leitner box: 1 → 3 → 7 → 14 → 30 nap).</em>
+            <em>Az esedékes mintázatok előre kerülnek a sorba. Új mintáknál először tanulsz, helyes válasz után a következő ismétlés napokkal később esedékes (ismétlési lépcsők: 1 → 3 → 7 → 14 → 30 nap).</em>
           </span>
         </label>
         <label class="cj-adapt-switch">
           <input type="checkbox" id="grmAdaptive" ${drillSettings.adaptive ? 'checked' : ''} />
           <span class="cj-adapt-text">
             <strong>🎯 Adaptív gyakorlás</strong>
-            <em>A gyengébb mintázatokat ~3× gyakrabban húzza ki a profilodból. (Min. 10 attempt szükséges; SRS bekapcsolva felülírja.)</em>
+            <em>A gyengébb mintázatokat ~3× gyakrabban húzza ki a profilodból. (Legalább 10 megválaszolt kártya után kapcsol be; az SRS ütemezés felülírja.)</em>
           </span>
         </label>
       </div>
@@ -12475,7 +12526,7 @@ function initGrammarPage() {
     const profile = loadGrmProfile();
     const need = Math.max(0, 10 - (profile.totalAttempts || 0));
     if (need > 0) {
-      el.innerHTML = `<span class="cj-build-note-icon">🎯</span> Adaptív: még <strong>${need}</strong> attempt kell, hogy a profil aktiválja a súlyozást.`;
+      el.innerHTML = `<span class="cj-build-note-icon">🎯</span> Adaptív: még <strong>${need}</strong> megválaszolt kártya kell, hogy a súlyozás bekapcsoljon.`;
     } else {
       // Hány pattern van „gyenge" (≥2 attempt + <70%) sávban?
       const weak = Object.keys(profile.patternStats || {}).filter(pid => {
@@ -13212,6 +13263,7 @@ function initGrammarPage() {
     drillRunState.cardIdx++;
     if (drillRunState.cardIdx >= drillRunState.cards.length) showGrmSummary();
     else                                                     renderGrmCurrentCard();
+    NihonCoreRound.scrollToRound();
   }
 
   /* ── G) SUMMARY + lobby vissza ─────────────────── */
@@ -13792,9 +13844,9 @@ function initProductionPage() {
 
     document.getElementById('prodLobby').innerHTML = `
       <div class="lobby-header">
-        <div class="lobby-eyebrow">Production modul · V7 P1</div>
-        <h2 class="lobby-title">Drill-paraméterek</h2>
-        <p class="lobby-sub">A legnehezebb mód: a magyar mondatot teljes japán mondatra fordítod. Írhatsz kana-val vagy romaji-val — a rendszer fuzzy diff-fel értékel.</p>
+        <div class="lobby-eyebrow">Production modul</div>
+        <h2 class="lobby-title">Állítsd be a kört</h2>
+        <p class="lobby-sub">A legnehezebb mód: a magyar mondatot teljes japán mondatra fordítod. Írhatsz kanával vagy romajival — a visszajelzés azt is megmutatja, mennyire jártál közel.</p>
       </div>
 
       <div class="lobby-section">
@@ -14160,6 +14212,7 @@ function initProductionPage() {
     drillRunState.cardIdx++;
     if (drillRunState.cardIdx >= drillRunState.cards.length) showProdSummary();
     else                                                     renderProdCurrentCard();
+    NihonCoreRound.scrollToRound();
   }
 
   /* ── H) SUMMARY ─────────────────────────────────── */
@@ -14272,12 +14325,12 @@ function initStatsPage() {
   const MODE_LABELS = {
     recognition: 'Felismerés', build: 'Építkezés', mastery: 'Mester',
     dictation: 'Diktálás', particles: 'Partikula', puzzle: 'Puzzle',
-    cloze: 'Cloze', translate: 'Fordítás', pro: 'Pro listening',
+    cloze: 'Kiegészítés', translate: 'Fordítás', pro: 'Pro hallás',
     free: 'Szabad fordítás',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
-    'matrix-selector': 'Matrix', 'speed-drill': 'Speed Drill',
-    'interactive-demo': 'Demo'
+    'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
+    'interactive-demo': 'Bemutató'
   };
   const TABS = [
     { id: 'overview',  name: 'Áttekintés', enabled: true  },
@@ -15076,7 +15129,7 @@ function initStatsPage() {
       return `
         <div class="act-card glass-panel">
           <div class="act-card-title">${sc.label} — SRS box-eloszlás</div>
-          <div class="act-card-sub">Összesen <strong>${total}</strong> item ütemezve · Leitner box 0..5 → 0/1/3/7/14/30 nap</div>
+          <div class="act-card-sub">Összesen <strong>${total}</strong> elem ütemezve · 6 ismétlési lépcső: 0 / 1 / 3 / 7 / 14 / 30 nap</div>
           ${srsBoxChart(boxes)}
         </div>
       `;
