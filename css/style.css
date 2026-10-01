@@ -6910,6 +6910,32 @@ button.kana-cell:hover { border-color: var(--matcha); border-style: solid; }
 .summary-icon { font-size: var(--fs-4xl); line-height: 1; }
 .summary-score { font-family: var(--font-serif); font-size: var(--fs-3xl); font-weight: 600; color: var(--gold-ink); }
 
+/* ── Párosító (szó ↔ jelentés) a szókártya-ablakban ──── */
+.nc-match-root { display: flex; flex-direction: column; gap: 14px; }
+.nc-match-intro { color: var(--sumi-soft); font-size: var(--fs-sm); line-height: 1.5; text-align: center; }
+.nc-match-count { color: var(--sumi-faint); font-size: var(--fs-xs); font-weight: 700; text-align: center; }
+.nc-match-progress { display: flex; align-items: center; gap: 12px; font-size: var(--fs-2xs); font-weight: 800; color: var(--sumi-faint); white-space: nowrap; }
+.nc-match-progress .round-progress-bar { flex: 1; }
+.nc-match-board .kana-match-btn { min-height: 64px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0; }
+.nc-match-word { font-family: var(--font-jp); font-size: var(--fs-lg); font-weight: 500; line-height: 1.25; }
+.nc-match-sub  { font-family: var(--font-jp); font-size: var(--fs-2xs); color: var(--sumi-faint); line-height: 1.2; }
+.nc-match-hu { font-size: var(--fs-sm); font-weight: 700; line-height: 1.3; text-align: center; }
+.nc-match-summary { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+.nc-match-summary .kana-missed-list { justify-content: center; }
+
+/* A szókártya-ablak üveg-lapként; telefonon alulról */
+.nc-fc-overlay { background: rgb(var(--shade-rgb) / 0.45); padding: 16px; }
+.nc-fc-overlay-card {
+  background: rgb(var(--glass-rgb) / 0.96);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--glass-shadow-lg);
+  width: min(720px, 100%); max-height: 92dvh; padding: 20px 16px;
+}
+.nc-fc-overlay-close { width: 40px; height: 40px; top: 12px; right: 12px; }
+.nc-fc-overlay-title { font-family: var(--font-serif); font-size: var(--fs-lg); font-weight: 600; margin-bottom: 14px; padding: 0 44px; }
+@media (min-width: 600px) { .nc-fc-overlay-card { padding: 28px; } }
+
 
 
 /* ════════════════════════════════════════════════════════

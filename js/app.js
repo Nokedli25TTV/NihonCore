@@ -1243,7 +1243,7 @@ window.NihonCoreFlashcard = (function () {
     overlay.innerHTML = `
       <div class="nc-fc-overlay-card">
         <button class="nc-fc-overlay-close" type="button" aria-label="Bezárás">✕</button>
-        <div class="nc-fc-overlay-title">📖 Szótár-böngészés</div>
+        <div class="nc-fc-overlay-title">Szókártyák</div>
         <div class="nc-fc-overlay-root"></div>
       </div>`;
     document.body.appendChild(overlay);
@@ -1273,6 +1273,171 @@ window.NihonCoreFlashcard = (function () {
     e.preventDefault();
     const type = btn.getAttribute('data-flashcard-launcher');
     openOverlay(type);
+  });
+
+  /* ── Párosító ──────────────────────────────────────────
+     Szó ↔ jelentés párosítás a modul szókészletéből (ugyanazok az adapterek,
+     mint a szókártyáknál). Egy tábla 5 pár; egy kör 4 tábla (20 szó).
+     Kezdőbarát bemelegítés: nincs időlimit, a hibás pár csak megrázkódik,
+     a végén megmutatja, mit érdemes átnézni. */
+  const MATCH_MODULE = { verbs: 'conjugation', adjectives: 'adjectives', datetime: 'datetime' };
+  const MATCH_BOARD = 5, MATCH_BOARDS = 4;
+
+  function shuffled(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  const escHtml = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  function openMatch(type) {
+    const adapter = ADAPTERS[type];
+    if (!adapter) return;
+    const data = adapter();
+    const state = { cat: 'all', boards: [], boardIdx: 0, results: [], startTs: 0, pick: null, missed: null, done: null };
+
+    const overlay = document.createElement('div');
+    overlay.className = 'nc-fc-overlay';
+    overlay.innerHTML =
+      '<div class="nc-fc-overlay-card nc-match" role="dialog" aria-modal="true" aria-label="Párosító">' +
+        '<button class="nc-fc-overlay-close" type="button" aria-label="Bezárás">✕</button>' +
+        '<div class="nc-fc-overlay-title">Párosító</div>' +
+        '<div class="nc-match-root"></div>' +
+      '</div>';
+    document.body.appendChild(overlay);
+    document.body.classList.add('nc-fc-overlay-open');
+    const root = overlay.querySelector('.nc-match-root');
+
+    function pool() {
+      return data.cards.filter(c => c.back && c.back.meaning && (state.cat === 'all' || c.category === state.cat));
+    }
+    // Egy táblán belül ne legyen két azonos jelentés vagy azonos szó
+    function buildBoards() {
+      const boards = [];
+      // Könnyebb szavak előre: szintenként keverünk (N5 → N1), így a kezdő
+      // előbb az alapszókincset kapja. Ahol nincs szint (pl. dátumok), sima keverés.
+      const rank = c => { const m = /^N([1-5])$/.exec(String((c.back.meta || [])[0] || '')); return m ? 5 - parseInt(m[1], 10) : 0; };
+      let rest = [];
+      [0, 1, 2, 3, 4].forEach(r => { rest = rest.concat(shuffled(pool().filter(c => rank(c) === r))); });
+      while (boards.length < MATCH_BOARDS && rest.length >= 2) {
+        const board = [], usedMeaning = new Set(), usedJp = new Set(), skipped = [];
+        rest.forEach(c => {
+          if (board.length < MATCH_BOARD && !usedMeaning.has(c.back.meaning) && !usedJp.has(c.front.jp)) {
+            board.push(c); usedMeaning.add(c.back.meaning); usedJp.add(c.front.jp);
+          } else skipped.push(c);
+        });
+        if (board.length < 2) break;
+        boards.push(board);
+        rest = skipped;
+      }
+      return boards;
+    }
+
+    function renderStart() {
+      const chips = [{ id: 'all', label: 'Mind' }].concat(data.categories || []).map(c =>
+        '<button class="nc-fc-chip' + (state.cat === c.id ? ' active' : '') + '" type="button" data-cat="' + c.id + '">' + escHtml(c.label) + '</button>').join('');
+      root.innerHTML =
+        '<p class="nc-match-intro">Párosítsd a japán szót a magyar jelentésével. Koppints egy szóra, aztán a párjára.</p>' +
+        '<div class="nc-fc-filter">' + chips + '</div>' +
+        '<p class="nc-match-count">' + pool().length + ' szó ebben a csoportban</p>' +
+        '<button class="btn btn-primary ml-start nc-match-start" type="button"' + (pool().length < 2 ? ' disabled' : '') + '>Indítás</button>';
+      root.querySelectorAll('.nc-fc-chip').forEach(ch => ch.addEventListener('click', () => { state.cat = ch.dataset.cat; renderStart(); }));
+      root.querySelector('.nc-match-start').addEventListener('click', () => {
+        state.boards = buildBoards(); state.boardIdx = 0; state.results = []; state.startTs = Date.now();
+        if (state.boards.length) renderBoard();
+      });
+    }
+
+    function renderBoard() {
+      const board = state.boards[state.boardIdx];
+      state.pick = null; state.missed = new Set(); state.done = new Set();
+      const left = shuffled(board), right = shuffled(board);
+      root.innerHTML =
+        '<div class="nc-match-progress"><span>Tábla ' + (state.boardIdx + 1) + ' / ' + state.boards.length + '</span>' +
+          '<div class="round-progress-bar"><div class="round-progress-fill" style="width:' + (state.boardIdx / state.boards.length) * 100 + '%"></div></div></div>' +
+        '<div class="kana-match nc-match-board">' +
+          '<div class="kana-match-col">' + left.map(c =>
+            '<button class="kana-match-btn nc-match-jp" type="button" data-side="k" data-id="' + c.id + '">' +
+              '<span class="nc-match-word" lang="ja">' + escHtml(c.front.jp) + '</span>' +
+              (c.front.sub && c.front.sub !== c.front.jp ? '<span class="nc-match-sub" lang="ja">' + escHtml(c.front.sub) + '</span>' : '') +
+            '</button>').join('') + '</div>' +
+          '<div class="kana-match-col">' + right.map(c =>
+            '<button class="kana-match-btn nc-match-hu" type="button" data-side="r" data-id="' + c.id + '">' + escHtml(c.back.meaning) + '</button>').join('') + '</div>' +
+        '</div>';
+
+      root.querySelectorAll('.kana-match-btn').forEach(btn => btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        if (!state.pick || state.pick.dataset.side === btn.dataset.side) {
+          if (state.pick) state.pick.classList.remove('selected');
+          state.pick = (state.pick === btn) ? null : btn;
+          if (state.pick) btn.classList.add('selected');
+          return;
+        }
+        const a = state.pick, b = btn;
+        a.classList.remove('selected'); state.pick = null;
+        if (a.dataset.id === b.dataset.id) {
+          [a, b].forEach(x => { x.classList.add('matched'); x.disabled = true; });
+          state.done.add(a.dataset.id);
+          if (state.done.size === board.length) setTimeout(finishBoard, 500);
+        } else {
+          state.missed.add((a.dataset.side === 'k' ? a : b).dataset.id);
+          [a, b].forEach(x => { x.classList.add('mismatch'); setTimeout(() => x.classList.remove('mismatch'), 420); });
+        }
+      }));
+    }
+
+    function finishBoard() {
+      state.boards[state.boardIdx].forEach(c => state.results.push({ cardId: c.id, correct: !state.missed.has(c.id), card: c }));
+      state.boardIdx++;
+      if (state.boardIdx < state.boards.length) renderBoard(); else renderSummary();
+    }
+
+    function renderSummary() {
+      const total = state.results.length;
+      const ok = state.results.filter(r => r.correct).length;
+      if (window.NihonCoreStats && MATCH_MODULE[type]) {
+        NihonCoreStats.recordSession({
+          module: MATCH_MODULE[type], mode: 'match', skipPath: true,
+          results: state.results.map(r => ({ correct: r.correct, errorCode: r.correct ? null : 'wrong_pair' })),
+          score: ok * 10, startTs: state.startTs
+        });
+      }
+      const missed = state.results.filter(r => !r.correct);
+      root.innerHTML =
+        '<div class="nc-match-summary">' +
+          '<div class="summary-score">' + ok + ' / ' + total + '</div>' +
+          '<p class="nc-match-intro">' + (missed.length ? 'elsőre eltalálva. Ezeket érdemes átnézni:' : 'Mind elsőre megvolt.') + '</p>' +
+          (missed.length ? '<div class="kana-missed-list">' + missed.map(r =>
+            '<span class="kana-missed-chip"><span lang="ja">' + escHtml(r.card.front.jp) + '</span> ' + escHtml(r.card.back.meaning) + '</span>').join('') + '</div>' : '') +
+          '<div class="kana-summary-actions">' +
+            '<button class="btn btn-primary nc-match-again" type="button">Még egy kör</button>' +
+            '<button class="btn btn-outline nc-match-close" type="button">Bezárás</button>' +
+          '</div>' +
+        '</div>';
+      root.querySelector('.nc-match-again').addEventListener('click', renderStart);
+      root.querySelector('.nc-match-close').addEventListener('click', close);
+    }
+
+    function close() {
+      document.body.classList.remove('nc-fc-overlay-open');
+      overlay.remove();
+      document.removeEventListener('keydown', onKey);
+    }
+    function onKey(e) { if (e.key === 'Escape') close(); }
+    overlay.querySelector('.nc-fc-overlay-close').addEventListener('click', close);
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', onKey);
+    renderStart();
+  }
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('[data-match-launcher]');
+    if (!btn) return;
+    e.preventDefault();
+    openMatch(btn.getAttribute('data-match-launcher'));
   });
 })();
 
@@ -2173,7 +2338,7 @@ const NihonCoreStats = (function () {
     // V18: a kör-őrnek jelezzük, hogy ez a kör elmentődött (nincs dupla részmentés)
     if (window.NihonCoreRound && NihonCoreRound.markComplete) NihonCoreRound.markComplete();
     // Tanulási út: ha a kör egy út-lépésből indult, itt dől el a lépés eredménye
-    if (window.NihonCorePath) NihonCorePath.onSession(rec);
+    if (window.NihonCorePath && !info.skipPath) NihonCorePath.onSession(rec);
     return rec;
   }
 
@@ -2326,6 +2491,15 @@ const NihonCoreSRS = (function () {
     INTERVALS_DAYS, MAX_BOX
   };
 })();
+
+// A három adat-/hang-modul a window-n is elérhető. Top-level `const`-ként
+// nem kerülnének oda, pedig a fájl elején álló univerzális IIFE-k (kör-őr,
+// párosító, kana-tábla) `window.NihonCoreStats` / `window.NihonCoreAudio`
+// formában hivatkoznak rájuk — e nélkül a félbehagyott körök részmentése
+// (NihonCoreRound.flush) soha nem futott le.
+window.NihonCoreAudio = NihonCoreAudio;
+window.NihonCoreStats = NihonCoreStats;
+window.NihonCoreSRS   = NihonCoreSRS;
 
 
 /* ====================================================
