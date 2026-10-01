@@ -18,13 +18,15 @@ Siker: a kezdő tudja, hol kezdje és mi a következő lépés; egy kör elindí
 
 ## Brand Personality
 
-Nyugodt, pontos, biztató. Japán zen hangulat: washi papír, sumi tinta, matcha zöld; kalligrafikus japán írás, olvasható magyar szöveg. A hang szövetséges, nem vizsgáztató: a hibánál „nézzük meg együtt", nem „HIBÁS".
+Nyugodt, pontos, biztató, és érezhetően igényes. Japán színvilág: indigó (藍) a fő szín gyöngyfehér alapon, arany kiemeléssel; a helyes válasz zöld, a hiba cinóbervörös. Kalligrafikus japán írás, tiszta, olvasható magyar szöveg. A hang szövetséges, nem vizsgáztató: a hibánál „nézzük meg együtt", nem „HIBÁS".
 
-A felületek üvegesek: áttetsző, lebegő panelek és lebegő navigáció a papír-háttér fölött (a felhasználó kifejezett kérése, 2026-10).
+A felületek üvegesek: áttetsző, lebegő panelek és lebegő navigáció a sima, lágy színmezős háttér fölött. A gombok „lakkozottak": felül fény, alul színes árnyék; a másodlagos gomb üveg. Képernyőnként egyetlen telített (indigó) felület viszi a fő üzenetet: a kezdőlapon a „Folytatás" kártya, a statisztikában a sorozat. A felhasználó kifejezett kérései (2026-10): üveg, élénk és prémium színek, app-szintű tanulási út, animációk.
+
+Az app-érzet része a mozgás: lenyomható (peremes) csomópontok és válasz-gombok, belépő animációk, a kész lépés „kivirágzása". A mozgás mindig állapotot jelez, és soha nem megy a görgetés simaságának rovására.
 
 ## Anti-references
 
-- Általános SaaS-sablon: kék-lila színátmenet, neon ragyogás, színátmenetes szöveg.
+- Általános SaaS-sablon: neon ragyogás, színátmenetes szöveg, lila-kék „AI-gradient" minden felületen. (Az indigó itt japán kék: aranyhoz és cinóberhez társul, nem lilához.)
 - Fejlesztői felület a tanuló előtt: verziószámok, motor-nevek, angol szakzsargon, beállítópanel tanítás helyett.
 - Játékosítás-túltengés: villogó jutalmak, bűntudatkeltő sorozat-figyelmeztetések.
 - Zsúfolt, asztali gépre méretezett elrendezés, ami telefonon görgetni és nagyítani kényszerít.
@@ -39,4 +41,4 @@ A felületek üvegesek: áttetsző, lebegő panelek és lebegő navigáció a pa
 
 ## Accessibility & Inclusion
 
-Cél a WCAG 2.1 AA: szövegkontraszt legalább 4,5:1 (az üveges felületeken is), 12 px-nél kisebb szöveg nincs, az érintési célpontok legalább 44 px-esek. Teljes billentyűzetes kezelés a kör alatt, látható fókusz. A `prefers-reduced-motion` tiszteletben tartása. A helyes/hibás jelzés soha nem csak szín: ikon és szöveg is kíséri. Világos (washi) és sötét (sumi) téma.
+Cél a WCAG 2.1 AA: szövegkontraszt legalább 4,5:1 (az üveges felületeken is), 12 px-nél kisebb szöveg nincs, az érintési célpontok legalább 44 px-esek. Teljes billentyűzetes kezelés a kör alatt, látható fókusz. A `prefers-reduced-motion` tiszteletben tartása. A helyes/hibás jelzés soha nem csak szín: ikon és szöveg is kíséri. Világos és sötét téma.

@@ -536,11 +536,14 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 | **Redesign 5. fázis — feladat-javítások** | **(2026-10-01)** **Nyelvtani minták, Felismerés**: a kártya nem árulja el a választ (nincs kategória és fordítás; a kérdés „Mit fejez ki ez a mondat?"; az opció a jelentés, a minta neve válasz után jelenik meg). **Ragozó, Felismerés**: hibánál `recognitionExplanation` megmondja, mit választottál (másik alak / másik igecsoport / rossz tő), `howItsBuilt` pedig hogyan épül a helyes alak. **Szabad fordítás**: N5 szint + valódi szint-szűrés, **„Az én válaszom is helyes"** gomb (önértékelés), fejlesztői címkék ki. **Hang**: ha a Google TTS-végpont hibázik, a `NihonCoreAudio` a böngésző beépített japán felolvasójára (Web Speech API) vált. A magyarázatok magyarul indulnak. |
 | **Redesign 6. fázis — új feladatok** | **(2026-10-01)** **Kana-tréner** (új modul: `pages/kana.html`, `js/data/kana.js`, `initKanaPage`): hiragana + katakana (46 alapjel + zöngés + összetett), **tábla hanggal** és jelenkénti haladás-színezéssel, 4 mód: felismerés · fordítva · beírás · **párosító**; jó válasznál magától lép tovább, hibánál megmutatja, mit választottál; a gyengébb jelek gyakrabban jönnek (`nihoncore_kana_profile_v1`). **Mini-leckék** (`NIHONCORE_LESSONS` a core.js-ben + `initLessons`): „Tanuld meg" panel a lobbi fölött, első alkalommal nyitva. **Minta-készlet: modulonként EGY lecke** — a bővítés a végső tartalom-feltöltés része. |
 | **Görgetés-teljesítmény + Modulok oldal** | **(2026-10-01)** **(1) Akadó görgetés javítva.** Az ok: a tartalommal együtt görgő üveg-elemek (`.glass-panel`, `.glass-panel-heavy`, `.glass-card`, `.path-step-link`, `.helpers-bar`, `.phase-tabs`, `.stats-tabs`, összesítő, belépő-kártya) mind saját `backdrop-filter` elmosást kaptak — a kezdőlapon **27 elmosott réteg** volt, amit a böngésző görgetéskor képkockánként újraszámolt a rögzített háttér fölött. Most **elmosás csak rögzített rétegen** van (fejléc + fül-sáv = 2 réteg, kisebb sugárral: `blur(16px) saturate(1.4)`); a görgő panelek „matt üveget" kapnak (`--glass-bg` 0,56 → 0,70 átlátszatlanság — mögöttük úgyis csak a lágy háttér-mezők vannak, ott az elmosás nem látszott). További: a `.bg-decoration` saját, stabil méretű réteg (`translateZ(0)` + `100lvh` + `contain: strict` — telefonon a címsor mozgása nem rajzolja újra), kisebb árnyék-sugarak, a kártya-hover keret-színt vált (nem árnyékot animál), a visszajelzés-lap és a `.path-result` tömör (0,97) elmosás nélkül, a globális `scroll-behavior: smooth` és a `text-rendering: optimizeLegibility` törölve (sima görgetést a JS kér, ahol kell), `prefers-reduced-transparency` támogatás. **(2) Modulok külön oldalon:** új `pages/modules.html` (`#modulesMain`, statikus — nincs saját init) a 10 modul-kártyával; a kezdőlapról a rács kikerült, a helyén egy „Szabad gyakorlás" sor visz az új oldalra. A fejléc „Modulok" linkje és a fül-sáv „Modulok" füle oda mutat; a régi `index.html#modules` horgony átirányít. Az oldal-felismerő a kezdőlapot `#homeMain` alapján ismeri fel. **Közben javítva:** egy régi `a.module-card { display: block }` szabály felülírta a kártyák rács/flex elrendezését (telefonon nem volt meg a tömör sor, tableten a lábléc nem nyúlt ki); a statisztika üres állapotának „Irány a modulok" linkje nem létező oldalra mutatott. `CACHE_VERSION` → v49. |
+| **Apróságok (v50)** | **(2026-10-01)** „Grammar Patterns" → **Nyelvtani minták**, „Production modul" → **Szabad fordítás** (oldalcím, kártya, lobbi, statisztika). A profil-, ismétlés- és előzmény-törlés a saját megerősítő lapot használja (`NihonCoreRound.confirmDelete(title, text, onYes)`). A statisztika hibakódjai magyar felirattal jelennek meg (`errorLabel`: a hiba-katalógusok `title` mezője + általános kódok). A statisztika-oldal fejlécében megvan a fő menü. |
+| **Második redesign — indigó, térkép, műszerfal** | **(2026-10-02, impeccable skill, product register.)** A user a matcha-paletta helyett **indigót** választott („élénkebb, prémiumabb", simább háttér, szebb/üveges gombok), a tanulási útra **kanyargó térképet** kért, a statisztikára **GitHub-szerű heatmapet**, plusz animációkat. **(1) Színrendszer:** a `--matcha*` tokenek átnevezve **`--brand*`**-re (szerep-név), külön **`--ok*`** zöld a helyes válasznak (56 „correct/ok/success" szabály szkripttel átállítva — indigó fő színnél a jó válasz különben kék lett volna). Új értékek világos és sötét témára; a háttér négy nagy, hosszan kifutó színmező (a pöttyös rács megszűnt). **(2) Gombok:** lakkozott `.btn-primary`, üveg `.btn-outline`. **(3) Betű:** Nunito → **Figtree**; a címek is Figtree 800 (a Lora csak a logóban és a magyar példamondatokban maradt). **(4) Tanulási út — térkép** (`initLanding.renderPath` + a stíluslap „TANULÁSI ÚT — térkép" blokkja): fejezetek (`NIHONCORE_PATH_UNITS` a core.js-ben: `{id, title, sub, steps[]}`), bennük kanyargó ösvény kerek, peremes csomópontokkal; állapotok: kész (kitöltött + zöld pipa), következő (lüktető gyűrű + „Folytatás" címke), átugorva (szaggatott). Koppintásra **buborék** (`.path-pop`): leírás, legjobb kör, indítás. A geometria rögzített (`mapGeom()` az app.js-ben = `--row` / `--disc` a CSS-ben), az összekötő SVG mérés nélkül számolt. A frissen kész lépés animálva jelenik meg (`nihoncore_path_seen_v1` — eszköz-helyi, nem szinkronizált). A „Folytatás" kártya telített indigó, a lépés jele vízjelként. **A fejezetek most témák; a Dekiru-leckékre váltás csak a `NIHONCORE_PATH_UNITS` + `NIHONCORE_PATH` cseréje** (user-döntés: az út a könyv leckéit kövesse — a PDF-re vár). **(5) Statisztika — műszerfal:** 6 fül helyett 4 (Áttekintés · Modulok · Elemzés · Előzmények). Az Áttekintés: telített sorozat-kártya a mai számokkal, **éves aktivitás-naptár** (`heatmapData` 53 hét, hétfő-kezdő; `heatmapHtml`: hónap-feliratok, H/Sze/P sorcímkék, jelmagyarázat, koppintásra a nap részletei; telefonon vízszintesen görög, a legfrissebb hétnél indul), felkészültség-gyűrű, „Mit gyakorolj most?" (a vakfolt-elemzés tételei). A napszak-diagram az Elemzés fülre került; a külön Aktivitás és Vakfoltok fül megszűnt. Karcsú `.page-head` a nagy hero helyett. **(6) Mozgás** („MOZGÁS ÉS FELÜLET-FINOMÍTÁS" blokk): peremes válasz-gombok, kártya-belépés, jó válasz „pattanás" / rossz rázás, modul-kártyák és panelek belépése, számláló-felpörgés (`countUp`). Csak transform/opacity/clip-path, `prefers-reduced-motion` kikapcsolja. `CACHE_VERSION` → v51. |
 
 ### 🔴 Redesign 2026-10 — user-döntések (ezekhez mérj minden további UI-munkát)
 
 - **Célközönség:** nulláról induló ÉS kanát már olvasó kezdő, első indításkor szintválasztóval.
-- **Vizuális irány:** a zen paletta és a betűk maradnak, a felületek **üvegesek** (glass panelek + lebegő navbar), és az app **nagyon telefon- és tabletbarát** (user explicit kérése — felülírta a Zen Polish „nincs glassmorphism" elvét).
+- **Vizuális irány:** **indigó paletta** (user-választás 2026-10-02: a matcha/zen színek nem tetszettek; „élénkebb, prémiumabb", simább háttér, szebb és üveges gombok), a felületek **üvegesek** (glass panelek + lebegő navbar), az app **nagyon telefon- és tabletbarát**, **app-szintű** érzettel (térképes tanulási út, animációk).
+- **Tartalom iránya:** a tanulási út a **Dekiru-leckéket** kövesse, leckénként magyarázattal. A user odaadja a könyv PDF-jét (`C:\Projekts\Word_App_Project\dekiru\` — a repón KÍVÜL). **A könyv szövegét nem másoljuk:** saját szavas magyarázat és saját példamondatok készülnek a leckék témái alapján, a PDF nem kerül a nyilvános repóba.
 - **Szerkezet:** vezetett tanulási út a kezdőlapon „Folytatás" gombbal + a modulok „Szabad gyakorlás"-ként — **a modul-kártyák külön oldalon** vannak (`pages/modules.html`), nem a kezdőlapon (user-kérés, 2026-10-01).
 - **Görgetés:** a simaság elsőbbséget élvez a látvánnyal szemben — **elmosás (`backdrop-filter`) csak rögzített rétegen** lehet (user-panasz: „szétlaggolja magát görgetésnél").
 - **Utólagos kiegészítések (2026-10-01):** szó–jelentés **Párosító** az igékhez, melléknevekhez és dátumokhoz (`[data-match-launcher]`, a szókártya-adapterekből) · **kilépés-megerősítő lap** a natív `confirm()` helyett (`NihonCoreRound.confirmExit`; a modulok kezelői változatlanok) · **`window.NihonCoreStats` / `NihonCoreAudio` / `NihonCoreSRS`**: top-level `const`-ként nem voltak a `window`-n, ezért a V18 részmentés (`NihonCoreRound.flush`) **soha nem futott le** — most tényleg mentődnek a félbehagyott körök · **Számlálók 2–3. fázis**: a „Következő" a felismerő-kártyát rajzolta, a kör az első kártya után elakadt (javítva).
@@ -563,9 +566,9 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 - ✅ **Firebase Auth (V16)** — `js/auth.js` · email/jelszó + Google · single-user · lazy SDK-load (mobil-perf) · header user-chip + menü · `auth.css` zen
 - ✅ **Firestore sync (V17)** — `js/sync.js` · `users/{uid}` doc · login PULL+merge, debounce/interval/visibility PUSH · sessions=append / srs=per-item / profilok=last-write-wins · csak tanulási adat (eszköz-specifikus kulcsok nem)
 - ✅ **3D Flashcard rendszer** — `NihonCoreFlashcard` univerzális motor · flip+swipe · mind a 4 tartalmi modul „Szótár" módja · `nc_fc_state_*` localStorage
-- ✅ **Zen UI + dual-téma** — washi/sumi/matcha paletta üveges felületeken · `html.theme-sumi` sötét mód · anime.js mikro-interakciók · natív view-transition oldalváltás · PWA install/update toast
+- ✅ **Indigó UI + dual-téma** — indigó/arany paletta üveges felületeken · `html.theme-sumi` sötét mód · anime.js mikro-interakciók · natív view-transition oldalváltás · PWA install/update toast
 - ✅ **Kana-tréner (Redesign 6.)** — `kana.html` · hiragana + katakana · tábla hanggal · felismerés / fordítva / beírás / párosító
-- ✅ **Tanulási út (Redesign 4.)** — `NIHONCORE_PATH` + `NihonCorePath` · 13 lépés · szintválasztó · „Folytatás"
+- ✅ **Tanulási út (Redesign 4. + térkép)** — `NIHONCORE_PATH` + `NIHONCORE_PATH_UNITS` + `NihonCorePath` · 13 lépés 6 fejezetben · kanyargó térkép · szintválasztó · „Folytatás"
 - ✅ **Mini-leckék (Redesign 6.)** — `NIHONCORE_LESSONS` + `initLessons` · modulonként egy minta-lecke
 
 ---
@@ -661,25 +664,28 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 
 ---
 
-## 8. Design tokenek (style.css :root) — ★ ZEN PALETTA, ÜVEGES FELÜLETEK
+## 8. Design tokenek (style.css :root) — ★ INDIGÓ PALETTA, ÜVEGES FELÜLETEK
 
-> A paletta japán zen (washi papír · sumi tinta · matcha), a felületek üvegesek:
-> áttetsző, lebegő panelek a papír-háttér fölött. **Nincs kék-lila gradient, nincs
-> neon-ragyogás, nincs színátmenetes szöveg, nincs oldalsávos (side-stripe) keret.**
+> A paletta japán indigó (藍) gyöngyfehér alapon, arany kiemeléssel (user-választás, 2026-10-02);
+> a felületek üvegesek: áttetsző, lebegő panelek a sima színmezős háttér fölött.
+> **A token neve a SZEREPÉT mondja, nem a színét** — új paletta = csak a `:root` értékei változnak.
+> **Nincs neon-ragyogás, nincs színátmenetes szöveg, nincs oldalsávos (side-stripe) keret.**
 > A design-kontextus (kinek, milyen hangon) a `PRODUCT.md`-ben van.
 
 ```css
 /* Szín-csatornák — MINDEN áttetsző szín ezekből: rgb(var(--x-rgb) / alfa) */
 --tint-rgb   (meleg tinta: halvány töltés, keret)     --shade-rgb  (árnyék, fátyol)
---glass-rgb  (az üveg anyaga)                          --matcha-rgb / --gold-rgb / --verm-rgb / --amber-rgb / --indigo-rgb
+--glass-rgb  (az üveg anyaga)                          --brand-rgb / --ok-rgb / --gold-rgb / --verm-rgb / --amber-rgb / --indigo-rgb
 
-/* Paletta */
---washi #F3EEE3 · --washi-deep · --washi-soft · --washi-edge
---sumi #2A2A2E · --sumi-soft · --sumi-faint (4,9:1 — a legkisebb szövegnek is elég)
---matcha (felület, keret) · --matcha-deep (SZÖVEG és gomb)
---gold-trad (felület, keret) · --gold-ink (arany SZÖVEG) · --amber / --amber-ink
---vermilion (hiba) · --indigo (info)
+/* Paletta — szerepek */
+--washi #F3F5FB (háttér) · --washi-deep · --washi-soft · --washi-edge
+--sumi #171C2E (szöveg) · --sumi-soft · --sumi-faint (5:1 — a legkisebb szövegnek is elég)
+--brand (FŐ SZÍN, indigó: felület, keret, kijelölés) · --brand-deep (SZÖVEG) · --brand-soft
+--ok (HELYES válasz, zöld) · --ok-deep (SZÖVEG) · --ok-soft      ← nem a fő szín!
+--gold-trad (arany kiemelés) · --gold-ink (arany SZÖVEG) · --amber / --amber-ink (figyelmeztetés)
+--vermilion (hiba) · --indigo (info — türkiz; a név régi, a szerep „info")
 --accent / --accent-hover / --on-accent   (elsődleges gomb)
+--teal / --green   régi aliasok a --brand-re (ne használd új kódban)
 
 /* Üveg */
 --glass-bg         görgő panel (kártya, lobbi): matt üveg, ELMOSÁS NÉLKÜL
@@ -690,7 +696,7 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 
 /* Tipográfia: fix skála, 12 px alatt nincs szöveg */
 --fs-2xs 12 · --fs-xs 13 · --fs-sm 14 · --fs-base 16 · --fs-md 18 · --fs-lg 20 · --fs-xl 24 · --fs-2xl 32 · --fs-3xl 40 · --fs-4xl 48
---font-body Nunito (UI) · --font-serif Lora (logó, modul-címek) · --font-jp Noto Serif JP
+--font-body Figtree (UI és címek; --font-display = ugyanez) · --font-serif Lora (csak logó + magyar példamondat) · --font-jp Noto Serif JP
 
 /* App-váz */
 --nav-h · --nav-gap · --header-h (a tetején lefoglalt hely) · --tabbar-h · --tabbar-space · --page-pad · --touch (44 px)
@@ -700,7 +706,10 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 
 **Szabályok**
 - **Új színt csak tokenből.** Áttetsző szín: `rgb(var(--tint-rgb) / 0.08)` — soha ne beégetett `rgba(…)`, mert az nem követi a sötét témát.
-- **Szövegszín kontrasztja:** arany szöveg `--gold-ink`, zöld szöveg `--matcha-deep`, borostyán `--amber-ink` (az alapszínek washi-n nem érik el a 4,5:1-et).
+- **Fő szín ≠ helyes válasz.** Gomb, kijelölés, haladás: `--brand*`. Jó válasz, siker, „kész": `--ok*`. Ha egy új szabály `correct` / `ok` / `success` állapotot színez, az `--ok*` tokent használja.
+- **Egy telített felület képernyőnként** (indigó színátmenet, fehér szöveg): a kezdőlapon a `.continue`, a statisztikában a `.st-hero`. Több ne legyen: ettől marad kiemelés.
+- **Gombok:** `.btn-primary` = lakkozott indigó (felül fény, alul színes árnyék) · `.btn-outline` = üveg-gomb · `.btn-ghost` = csak szöveg. Lenyomható elem (térkép-csomópont, válasz-gomb): alsó „perem" (`box-shadow: 0 Npx 0`), lenyomva `translateY`.
+- **Szövegszín kontrasztja:** fő szín szövegként `--brand-deep`, zöld szöveg `--ok-deep`, arany szöveg `--gold-ink`, borostyán `--amber-ink` (az alapszínek washi-n nem érik el a 4,5:1-et).
 - **Üveg csak lebegő rétegre** (`.glass-panel`, `.glass-panel-heavy`, `.glass-card`, fejléc, fül-sáv, lapok). **Üvegen belül ne legyen újabb üveg** — beágyazott blokk: `--glass-fill`.
 - 🔴 **Elmosás (`backdrop-filter`) CSAK rögzített rétegen** (`.header`, `.nc-tabbar`). A tartalommal együtt görgő elemre **tilos** tenni: a böngésző görgetéskor minden képkockán újraszámolja, és akad az oldal (ez volt a 2026-10-01-es görgetés-hiba oka: 27 elmosott réteg a kezdőlapon). Görgő panel = `--glass-bg` áttetsző töltés, elmosás nélkül. Kerüld a `box-shadow` animálását nagy kártyán (hover: keret-szín vagy `transform`), és a `will-change`-et állandó szabályban. `backdrop-filter`-es szülőn belül a `position: fixed` gyerek a szülőhöz rögzül!
 - **Betűméret csak a skáláról** (`var(--fs-*)`); a japán dísz-glyph-ek `clamp()`-ben maradhatnak.
@@ -708,7 +717,7 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 - **Töréspontok:** telefon ≤ 599 · tablet 600–1023 · asztali ≥ 1024; a navigáció 768-nál vált (alatta alsó fül-sáv). Telefon az első: az alap-szabály a telefonos, a `min-width` média-lekérdezés bővít.
 - **Dual-téma:** `html.theme-sumi` csak a csatornákat és a paletta-tokeneket cseréli.
 
-**A stíluslap rétegei:** alap (tokenek, váz) → modulok régebbi szabályai → a fájl VÉGÉN a közös rétegek: **KÖR-KERET**, **LOBBI**, **KANA**, **MINI-LECKE**. A végső blokkok felülírják a modulok korábbi futásidejű szabályait — közös viselkedést oda írj, ne a modul-szekcióba.
+**A stíluslap rétegei:** alap (tokenek, váz) → modulok régebbi szabályai → a fájl VÉGÉN a közös rétegek, ebben a sorrendben: **KÖR-KERET**, **LOBBI**, **KANA**, **MINI-LECKE**, **TANULÁSI ÚT — térkép**, **STATISZTIKA — műszerfal**, **MOZGÁS ÉS FELÜLET-FINOMÍTÁS**. A végső blokkok felülírják a modulok korábbi futásidejű szabályait — közös viselkedést oda írj, ne a modul-szekcióba.
 
 ---
 

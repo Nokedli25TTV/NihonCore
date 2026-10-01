@@ -32,6 +32,24 @@
      · NIHONCORE_GRAMMAR_CATEGORIES       (grammar kategória-meta)
      · NIHONCORE_GRAMMAR_ERROR_TYPES      (grammar hibakódok)
    ==================================================== */
+
+// ── A tanulási út fejezetei ──
+// A kezdőlap térképe fejezetenként rajzolja ki a lépéseket (app.js: initLanding).
+//   id     a fejezet kulcsa
+//   title  a fejezet címe · sub: egy sor arról, mi van benne
+//   steps  a NIHONCORE_PATH lépés-azonosítói, sorrendben
+// Most témák szerinti fejezetek vannak. A végső tartalom-feltöltéskor ezek helyére
+// a Dekiru-leckék kerülnek: akkor elég ezt a tömböt (és a lépéseket) cserélni,
+// a térkép és a haladás-tárolás változatlan marad.
+const NIHONCORE_PATH_UNITS = [
+  { id: 'u-kana',     title: 'Az írás',            sub: 'Hiragana és katakana',                 steps: ['kana-hira', 'kana-kata'] },
+  { id: 'u-first',    title: 'Első mondatok',      sub: 'Ki ez, mi ez, mi van hol',             steps: ['first-sentences', 'basic-verbs'] },
+  { id: 'u-build',    title: 'Mondatépítés',       sub: 'Partikulák és szórend',                steps: ['particles', 'word-order'] },
+  { id: 'u-daily',    title: 'Mindennapok',        sub: 'Idő, mennyiség, tulajdonság',          steps: ['datetime', 'counters', 'adjectives'] },
+  { id: 'u-verbs',    title: 'Igék és hallás',     sub: 'Bizalmas igealakok, hosszú és rövid hangok', steps: ['verb-forms', 'listening'] },
+  { id: 'u-free',     title: 'Szabadon',           sub: 'Mondatszintű minták és saját fordítás', steps: ['patterns', 'production'] }
+];
+
 /* ---- 1) NIHONCORE_MODULES (verb-engine + counter-engine config) (sorok 24..339) ---- */
 /* ====================================================
    ── 1) MODULE adatok (module.html-hez) ──────────────

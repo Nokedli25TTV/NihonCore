@@ -1669,7 +1669,7 @@ window.NihonCoreFlashcard = (function () {
     else              root.classList.remove('theme-sumi');
     // Frissítsd a meta theme-color-t is (PWA telefonon)
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', t === 'sumi' ? '#1B1B22' : '#F3EEE3');
+    if (meta) meta.setAttribute('content', t === 'sumi' ? '#0F1220' : '#F3F5FB');
     // Frissítsd minden injektált toggle-gomb ikonját
     document.querySelectorAll('.ht-theme-btn').forEach(btn => paintButton(btn, t));
     // Eltávolítjuk a transition class-t a tranzíció után — különben minden mozgás 220ms lenne
@@ -1707,7 +1707,7 @@ window.NihonCoreFlashcard = (function () {
     injectThemeButton();
     // a mentett téma szerint a böngésző-keret színe is (PWA telefonon)
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', getTheme() === 'sumi' ? '#1B1B22' : '#F3EEE3');
+    if (meta) meta.setAttribute('content', getTheme() === 'sumi' ? '#0F1220' : '#F3F5FB');
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setup);
@@ -2622,7 +2622,7 @@ function initLanding() {
 
     if (!v.next) {
       top.innerHTML = `
-        <div class="continue glass-panel-heavy">
+        <div class="continue glass-panel-heavy" data-glyph="祝">
           <div class="continue-kicker">Tanulási út · ${v.doneCount} / ${v.total} lépés kész</div>
           <div class="continue-main">
             <span class="path-glyph path-glyph-lg" lang="ja">祝</span>
@@ -2640,7 +2640,7 @@ function initLanding() {
     const stepNo = v.rows.filter(r => !r.skipped).findIndex(r => r.step.id === s.id) + 1;
     const started = v.doneCount > 0 || v.next.best !== null;
     top.innerHTML = `
-      <div class="continue glass-panel-heavy">
+      <div class="continue glass-panel-heavy" data-glyph="${esc(s.glyph)}">
         <div class="continue-kicker">${started ? 'Következő lépés' : 'Első lépés'} · ${stepNo} / ${v.total}</div>
         <div class="continue-main">
           <span class="path-glyph path-glyph-lg" lang="ja">${esc(s.glyph)}</span>
@@ -2657,33 +2657,151 @@ function initLanding() {
       </div>`;
   }
 
-  // ── A tanulási út lépései ──
+  // ── A tanulási út térképe ──
+  //   Fejezetek (NIHONCORE_PATH_UNITS), bennük kanyargó ösvény. A geometria rögzített
+  //   (a style.css „TANULÁSI ÚT — térkép" blokkjával egyezik), így az összekötő vonal
+  //   mérés nélkül számolható.
+  const UNITS = (typeof NIHONCORE_PATH_UNITS !== 'undefined') ? NIHONCORE_PATH_UNITS : null;
+  const WAVE = [0, 52, 78, 52, 0, -52, -78, -52];          // vízszintes eltolás csomópontonként (px)
+  const wide = window.matchMedia('(min-width: 600px)');
+  const mapGeom = () => wide.matches ? { row: 150, disc: 80, top: 22 } : { row: 140, disc: 72, top: 22 };
+  const SEEN_KEY = 'nihoncore_path_seen_v1';               // a „most lett kész" effekthez: mit láttunk már késznek
+  let openPop = null;
+
+  function closePop() {
+    if (!openPop) return;
+    const { pop, btn, section } = openPop;
+    openPop = null;
+    pop.remove();
+    btn.setAttribute('aria-expanded', 'false');
+    if (section) section.classList.remove('has-pop');
+  }
+
+  function openNode(btn, row, v) {
+    const same = openPop && openPop.btn === btn;
+    closePop();
+    if (same) return;
+    const s = row.step;
+    const isNext = v.next && v.next.step.id === s.id && !!v.level;
+    const chips = [];
+    if (row.done) chips.push('<span class="path-pop-chip is-ok">Kész</span>');
+    else if (row.skipped) chips.push('<span class="path-pop-chip">Átugorva: már olvasod a kanát</span>');
+    else if (isNext) chips.push('<span class="path-pop-chip">Ez a következő lépés</span>');
+    if (row.best !== null) chips.push('<span class="path-pop-chip' + (row.done ? ' is-ok' : '') + '">Legjobb köröd: ' + pctText(row.best) + '</span>');
+    else if (!row.skipped) chips.push('<span class="path-pop-chip">A lépéshez ' + Math.round(Path.PASS * 100) + '% kell</span>');
+    const cta = row.done ? 'Gyakorlás újra' : row.skipped ? 'Mégis megnézem' : (row.best !== null ? 'Folytatás' : 'Kezdés');
+
+    const pop = document.createElement('div');
+    pop.className = 'path-pop';
+    pop.id = 'pathPop';
+    pop.innerHTML =
+      '<h4 class="path-pop-title">' + esc(s.title) + '</h4>' +
+      '<p class="path-pop-desc">' + esc(s.desc) + '</p>' +
+      (chips.length ? '<div class="path-pop-meta">' + chips.join('') + '</div>' : '') +
+      '<a class="btn btn-primary" href="' + Path.stepHref(s) + '">' + cta + '</a>';
+    const li = btn.closest('.path-node');
+    li.appendChild(pop);
+    btn.setAttribute('aria-expanded', 'true');
+    btn.setAttribute('aria-controls', 'pathPop');
+    const section = li.closest('.path-section');
+    if (section) section.classList.add('has-pop');
+    openPop = { pop: pop, btn: btn, section: section };
+    // a buborék a lebegő fejléc és az alsó fül-sáv között legyen
+    const r = pop.getBoundingClientRect();
+    const header = document.getElementById('header');
+    const tabbar = document.querySelector('.nc-tabbar');
+    const topLimit = (header ? header.getBoundingClientRect().bottom : 0) + 12;
+    const tb = tabbar ? tabbar.getBoundingClientRect() : null;
+    const bottomLimit = (tb && tb.width > 0 ? tb.top : window.innerHeight) - 16;
+    let dy = 0;
+    if (r.bottom > bottomLimit) dy = r.bottom - bottomLimit;
+    if (r.top - dy < topLimit) dy = r.top - topLimit;
+    if (Math.abs(dy) > 2) window.scrollBy({ top: dy, behavior: 'smooth' });
+  }
+
   function renderPath() {
     const list = document.getElementById('pathList');
     const levelEl = document.getElementById('pathLevel');
     if (!list || !Path) return;
+    closePop();
     const v = Path.view();
-    list.innerHTML = v.rows.map(r => {
-      const s = r.step;
-      const isNext = v.next && v.next.step.id === s.id && !!v.level;
-      const cls = r.done ? 'is-done' : r.skipped ? 'is-skipped' : isNext ? 'is-next' : '';
-      let state = ARROW;
-      if (r.done)         state = '<span class="path-state path-state-done">' + CHECK + (r.best !== null ? pctText(r.best) : 'Kész') + '</span>';
-      else if (r.skipped) state = '<span class="path-state">Átugorva</span>';
-      else if (isNext)    state = '<span class="path-state path-state-next">Következő</span>';
-      else if (r.best !== null) state = '<span class="path-state">' + pctText(r.best) + '</span>';
+    const byId = {};
+    v.rows.forEach(r => { byId[r.step.id] = r; });
+
+    // fejezetek; ami egyik fejezetben sincs, a végére kerül
+    let units = UNITS
+      ? UNITS.map(u => ({ unit: u, rows: u.steps.map(id => byId[id]).filter(Boolean) })).filter(u => u.rows.length)
+      : [];
+    const placed = {};
+    units.forEach(u => u.rows.forEach(r => { placed[r.step.id] = true; }));
+    const rest = v.rows.filter(r => !placed[r.step.id]);
+    if (rest.length) units.push({ unit: { id: 'u-rest', title: UNITS ? 'További lépések' : 'Lépések', sub: '' }, rows: rest });
+
+    // mit láttunk már késznek (az első alkalommal minden kész lépés „látott")
+    let seen = null;
+    try { seen = JSON.parse(localStorage.getItem(SEEN_KEY) || 'null'); } catch (e) {}
+    const doneIds = v.rows.filter(r => r.done).map(r => r.step.id);
+    const fresh = Array.isArray(seen) ? doneIds.filter(id => seen.indexOf(id) < 0) : [];
+    try { localStorage.setItem(SEEN_KEY, JSON.stringify(doneIds)); } catch (e) {}
+
+    const g = mapGeom();
+    const cy = i => i * g.row + g.top + g.disc / 2;
+    let gi = 0;                                           // csomópont-sorszám az egész úton (a kanyar folytonos)
+    list.innerHTML = units.map((u, ui) => {
+      const live = u.rows.filter(r => !r.skipped);
+      const done = live.filter(r => r.done).length;
+      const complete = live.length > 0 && done === live.length;
+      const xs = u.rows.map((r, i) => WAVE[(gi + i) % WAVE.length]);
+      const segs = u.rows.slice(0, -1).map((r, i) => {
+        const bothDone = r.done && u.rows[i + 1].done;
+        const isFresh = bothDone && (fresh.indexOf(r.step.id) >= 0 || fresh.indexOf(u.rows[i + 1].step.id) >= 0);
+        const y0 = cy(i), y1 = cy(i + 1), k = g.row * 0.5;
+        return '<path class="path-seg' + (bothDone ? ' is-done' : '') + (isFresh ? ' just-done' : '') + '"' +
+          (isFresh ? ' pathLength="1"' : '') +
+          ' d="M ' + xs[i] + ' ' + y0 + ' C ' + xs[i] + ' ' + (y0 + k) + ', ' + xs[i + 1] + ' ' + (y1 - k) + ', ' + xs[i + 1] + ' ' + y1 + '"/>';
+      }).join('');
+      const h = u.rows.length * g.row;
+      const nodes = u.rows.map((r, i) => {
+        const s = r.step;
+        const isNext = v.next && v.next.step.id === s.id && !!v.level;
+        const cls = (r.done ? ' is-done' : r.skipped ? ' is-skipped' : isNext ? ' is-next' : '') +
+                    (fresh.indexOf(s.id) >= 0 ? ' just-done' : '');
+        const state = r.done ? 'kész' : r.skipped ? 'átugorva' : isNext ? 'következő lépés' : 'még nem kezdted el';
+        const n = gi + i;
+        return `
+          <li class="path-node${cls}" style="--x: ${xs[i]}px">
+            <button class="path-node-btn" type="button" data-step="${esc(s.id)}" style="--i: ${Math.min(n, 9)}"
+                    aria-expanded="false" aria-label="${esc(s.title)}, ${state}">
+              <span class="path-node-disc">
+                <span lang="ja" aria-hidden="true">${esc(s.glyph)}</span>
+                ${r.done ? '<span class="path-node-check">' + CHECK + '</span>' : ''}
+                ${isNext ? '<span class="path-node-tag">' + (r.best !== null || v.doneCount > 0 ? 'Folytatás' : 'Kezdés') + '</span>' : ''}
+              </span>
+              <span class="path-node-label">${esc(s.title)}</span>
+            </button>
+          </li>`;
+      }).join('');
+      gi += u.rows.length;
       return `
-        <li class="path-step ${cls}">
-          <a class="path-step-link" href="${Path.stepHref(s)}">
-            <span class="path-glyph" lang="ja">${esc(s.glyph)}</span>
-            <span class="path-step-body">
-              <span class="path-step-title">${esc(s.title)}</span>
-              <span class="path-step-desc">${esc(s.desc)}</span>
-            </span>
-            <span class="path-step-end">${state}</span>
-          </a>
+        <li class="path-unit${complete ? ' is-complete' : ''}">
+          <div class="path-unit-head">
+            <span class="path-unit-no">${ui + 1}. fejezet</span>
+            <h3 class="path-unit-title">${esc(u.unit.title)}</h3>
+            ${u.unit.sub ? '<span class="path-unit-sub">' + esc(u.unit.sub) + '</span>' : ''}
+            <span class="path-unit-count" aria-label="${done} / ${live.length} lépés kész">${live.length ? done + ' / ' + live.length : '–'}</span>
+          </div>
+          <ol class="path-map">
+            <svg class="path-map-line" viewBox="-180 0 360 ${h}" width="360" height="${h}" aria-hidden="true" focusable="false">${segs}</svg>
+            ${nodes}
+          </ol>
         </li>`;
     }).join('');
+
+    list.querySelectorAll('.path-node-btn').forEach(btn => btn.addEventListener('click', e => {
+      e.stopPropagation();
+      const row = byId[btn.dataset.step];
+      if (row) openNode(btn, row, Path.view());
+    }));
 
     if (levelEl) {
       levelEl.innerHTML = !v.level ? '' :
@@ -2693,6 +2811,13 @@ function initLanding() {
       if (b) b.addEventListener('click', () => { Path.setLevel(v.level === 'zero' ? 'kana' : 'zero'); renderAll(); });
     }
   }
+  // a buborék bezárása: kattintás máshová, Esc
+  document.addEventListener('click', e => { if (openPop && !openPop.pop.contains(e.target)) closePop(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && openPop) { const b = openPop.btn; closePop(); try { b.focus(); } catch (err) {} }
+  });
+  // a töréspont átlépésekor a térkép geometriája változik
+  if (wide.addEventListener) wide.addEventListener('change', () => renderPath());
 
   function renderAll() { renderHomeTop(); renderPath(); }
   renderAll();
@@ -15153,13 +15278,12 @@ function initStatsPage() {
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
     'interactive-demo': 'Bemutató'
   };
+  // Az Áttekintés műszerfal: benne az aktivitás (heatmap, sorozat) és a „mit gyakorolj" is.
   const TABS = [
     { id: 'overview',  name: 'Áttekintés', enabled: true  },
-    { id: 'activity',  name: 'Aktivitás',  enabled: true  },
     { id: 'radar',     name: 'Modulok',    enabled: true  },
-    { id: 'blindspot', name: 'Vakfoltok',  enabled: true  },
-    { id: 'history',   name: 'Előzmények', enabled: true  },
-    { id: 'analytics', name: 'Elemzés',    enabled: true  }
+    { id: 'analytics', name: 'Elemzés',    enabled: true  },
+    { id: 'history',   name: 'Előzmények', enabled: true  }
   ];
   let activeTab = 'overview';
   let radarModule = null;     // V4 P3 — modul drill-down állapot
@@ -15347,7 +15471,9 @@ function initStatsPage() {
     };
   }
 
-  // Heatmap — 13 hét × 7 nap, hétfő-kezdő rács
+  // Heatmap — az elmúlt egy év (53 hét × 7 nap), hétfő-kezdő hetek, GitHub-szerű elrendezés.
+  //   level 0–4: a napi kérdésszám a legaktívabb naphoz mérve.
+  const HM_MONTHS = ['jan.', 'febr.', 'márc.', 'ápr.', 'máj.', 'jún.', 'júl.', 'aug.', 'szept.', 'okt.', 'nov.', 'dec.'];
   function heatmapData() {
     const map = {};
     let maxQ = 1;
@@ -15356,18 +15482,29 @@ function initStatsPage() {
     });
     const today = startOfDay(Date.now());
     const todayDow = (new Date(today).getDay() + 6) % 7;   // hétfő = 0
-    const WEEKS = 13;
-    const start = today - todayDow * DAY_MS - (WEEKS - 1) * 7 * DAY_MS;
-    const cells = [];
+    const WEEKS = 53;
+    const start = new Date(today);
+    start.setDate(start.getDate() - todayDow - (WEEKS - 1) * 7);
+    const cells = [], months = [];
+    let totalQ = 0, activeDays = 0, lastMonth = -1;
     for (let i = 0; i < WEEKS * 7; i++) {
-      const ts = start + i * DAY_MS;
+      const dt = new Date(start); dt.setDate(start.getDate() + i);   // naptári lépés (óraátállítás-biztos)
+      const ts = dt.getTime();
       const d = map[dayKey(ts)];
       const q = d ? d.questions : 0;
       let level = 0;
       if (q > 0) level = q >= maxQ * 0.75 ? 4 : q >= maxQ * 0.5 ? 3 : q >= maxQ * 0.25 ? 2 : 1;
-      cells.push({ ts: ts, q: q, level: level, future: ts > today });
+      const future = ts > today;
+      if (!future && q > 0) { totalQ += q; activeDays++; }
+      cells.push({ ts: ts, q: q, sessions: d ? d.sessions : 0, accuracy: d ? d.accuracy : 0,
+                   level: level, future: future, today: ts === today });
+      // hónap-felirat: annak a hétnek az oszlopa fölé, amelyikben a hónap első hétfője van
+      if (i % 7 === 0 && dt.getMonth() !== lastMonth) {
+        lastMonth = dt.getMonth();
+        months.push({ week: i / 7, label: HM_MONTHS[lastMonth] });
+      }
     }
-    return { cells: cells, weeks: WEEKS };
+    return { cells: cells, weeks: WEEKS, months: months, totalQ: totalQ, activeDays: activeDays };
   }
 
   function timeOfDayData() {
@@ -15439,7 +15576,7 @@ function initStatsPage() {
   const RADAR_LABELS = {
     counter: 'Számlálók', conjugation: 'Igék', adjectives: 'Melléknevek',
     datetime: 'Idő', practice: 'Partikulák', listening: 'Hallás',
-    grammar: 'Mintázatok'
+    grammar: 'Minták'
   };
   // Profil-alapú al-bontás (a modulok saját localStorage profiljaiból)
   const PROFILE_CONFIG = {
@@ -15607,9 +15744,7 @@ function initStatsPage() {
 
   function renderContent() {
     if      (activeTab === 'overview')  renderOverview();
-    else if (activeTab === 'activity')  renderActivity();
     else if (activeTab === 'radar')     renderRadar();
-    else if (activeTab === 'blindspot') renderBlindSpot();
     else if (activeTab === 'analytics') renderAnalytics();
     else if (activeTab === 'history')   renderHistory();
     else renderComingSoon();
@@ -15691,38 +15826,79 @@ function initStatsPage() {
     });
   }
 
-  /* ── A) Dashboard Overview ─────────────────────── */
+  /* ── A) Áttekintés — műszerfal ─────────────────── */
+  const ICON = {
+    flame:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-1.6.6-2.7 1.4-3.6.3 1.4 1 2.2 1.9 2.4C10 9 10.6 6 12 3z"/></svg>',
+    rounds: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="13" height="15" rx="3"/><path d="M8 5V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-2"/></svg>',
+    target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>',
+    clock:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>'
+  };
+
   function todayBlurb(today, streak) {
     if (today.rounds === 0) {
       return streak.current > 0
-        ? `<strong>${streak.current} napos sorozatban</strong> vagy — egy gyors kör ma életben tartja!`
-        : 'Ma még nem gyakoroltál. Egy rövid kör is sokat számít — válassz egy modult!';
+        ? 'Ma még nem gyakoroltál. Egy gyors kör életben tartja a sorozatot.'
+        : 'Ma még nem gyakoroltál. Egy rövid kör is számít.';
     }
-    const msg = `Ma <strong>${today.rounds}</strong> kört játszottál, <strong>${today.accuracy}%</strong> pontossággal`;
-    if (today.accuracy >= 85) return msg + ' — kiváló forma! 💪';
-    if (today.accuracy >= 60) return msg + ' — szép munka, így tovább.';
-    return msg + ' — a kitartás a lényeg, ne add fel.';
+    if (today.accuracy >= 85) return 'Kiváló forma ma: ' + today.accuracy + '% pontosság.';
+    if (today.accuracy >= 60) return 'Szép munka ma, így tovább.';
+    return 'A kitartás a lényeg: a mai körök is építenek.';
+  }
+
+  function fmtShort(ms) {
+    const s = Math.round((ms || 0) / 1000);
+    return s < 60 ? s + ' mp' : Math.round(s / 60) + ' perc';
+  }
+  function fmtDay(ts) {
+    const d = new Date(ts);
+    return d.getFullYear() + '. ' + HM_MONTHS[d.getMonth()] + ' ' + d.getDate() + '.';
+  }
+
+  // Éves heatmap (GitHub-szerű): hetek oszlopban, napok sorban, hónap-feliratok felül.
+  function heatmapHtml(hm) {
+    const cells = hm.cells.map(c => {
+      const tip = c.future ? '' : fmtDay(c.ts) + ': ' + (c.q > 0 ? c.q + ' kérdés, ' + c.sessions + ' kör, ' + c.accuracy + '%' : 'nem gyakoroltál');
+      return '<i class="hm-c hm-l' + c.level + (c.future ? ' hm-future' : '') + (c.today ? ' hm-today' : '') + '"' +
+        (tip ? ' data-tip="' + tip + '" title="' + tip + '"' : '') + '></i>';
+    }).join('');
+    const months = hm.months.map((m, i) => {
+      const next = hm.months[i + 1];
+      // túl szoros felirat (2 hétnél rövidebb hely) kimarad
+      if (next && next.week - m.week < 3) return '';
+      return '<span style="grid-column: ' + (m.week + 1) + ' / span ' + Math.min(3, hm.weeks - m.week) + '">' + m.label + '</span>';
+    }).join('');
+    return `
+      <div class="hm">
+        <div class="hm-dows" aria-hidden="true"><span>H</span><span></span><span>Sze</span><span></span><span>P</span><span></span><span></span></div>
+        <div class="hm-scroll" id="hmScroll" tabindex="0" role="img"
+             aria-label="Aktivitás az elmúlt egy évben: ${hm.totalQ} kérdés ${hm.activeDays} aktív napon">
+          <div class="hm-months" style="grid-template-columns: repeat(${hm.weeks}, var(--hm-cell))">${months}</div>
+          <div class="hm-grid">${cells}</div>
+        </div>
+      </div>
+      <div class="hm-foot">
+        <span class="hm-caption" id="hmCaption">${hm.totalQ} kérdés az elmúlt egy évben, ${hm.activeDays} aktív napon</span>
+        <span class="hm-legend" aria-hidden="true">
+          kevesebb
+          <i class="hm-c hm-l0"></i><i class="hm-c hm-l1"></i><i class="hm-c hm-l2"></i><i class="hm-c hm-l3"></i><i class="hm-c hm-l4"></i>
+          több
+        </span>
+      </div>`;
   }
 
   function renderOverview() {
     const el = document.getElementById('statsContent');
-    if (NihonCoreStats.getSessions().length === 0) {
-      el.innerHTML = emptyState('🎯', 'Még nincs adat az áttekintéshez.',
-        'Játssz le néhány kört, és itt megjelenik a felkészültséged és a mai számaid.');
-      return;
-    }
-
+    const hasData = NihonCoreStats.getSessions().length > 0;
     const rd = computeReadiness();
     const today = todayStats();
     const streak = computeStreak();
-    const readyLabel = rd.score >= 70 ? 'Jó úton haladsz'
-                     : rd.score >= 40 ? 'Halad a tanulás'
-                     : 'Most kezdődik';
+    const hm = heatmapData();
+    const readyLabel = rd.score >= 70 ? 'Jó úton haladsz' : rd.score >= 40 ? 'Halad a tanulás' : 'Most kezdődik';
 
     const comps = [
-      { label: 'Tudás', val: rd.mastery,   hint: 'pontosság és lefedettség, a modulok átlaga' },
-      { label: 'Frissesség',    val: rd.freshness, hint: 'mennyire friss a gyakorlásod' },
-      { label: 'Aktivitás',     val: rd.activity,  hint: 'aktív napok az elmúlt héten' }
+      { label: 'Tudás',      val: rd.mastery,   hint: 'pontosság és lefedettség, a modulok átlaga' },
+      { label: 'Frissesség', val: rd.freshness, hint: 'mennyire friss a gyakorlásod' },
+      { label: 'Aktivitás',  val: rd.activity,  hint: 'aktív napok az elmúlt héten' }
     ].map(c => `
       <div class="ov-comp">
         <div class="ov-comp-top">
@@ -15735,25 +15911,56 @@ function initStatsPage() {
     `).join('');
 
     const vitals = [
-      { icon: '🎮', num: today.rounds,                  label: 'mai kör' },
-      { icon: '🎯', num: today.accuracy + '%',          label: 'mai pontosság' },
-      { icon: '⏱',  num: fmtDuration(today.durationMs), label: 'mai aktív idő' },
-      { icon: '🔥', num: streak.current,                label: 'napos sorozat' }
+      { icon: ICON.rounds, num: today.rounds,                  label: 'mai kör' },
+      { icon: ICON.target, num: today.rounds ? today.accuracy + '%' : '–', label: 'mai pontosság' },
+      { icon: ICON.clock,  num: today.rounds ? fmtShort(today.durationMs) : '–', label: 'mai idő' }
     ].map(v => `
-      <div class="ov-vital glass-panel">
-        <span class="ov-vital-icon">${v.icon}</span>
-        <span class="ov-vital-num">${v.num}</span>
-        <span class="ov-vital-label">${v.label}</span>
+      <div class="st-vital">
+        <span class="st-vital-icon">${v.icon}</span>
+        <span class="st-vital-num">${v.num}</span>
+        <span class="st-vital-label">${v.label}</span>
+      </div>
+    `).join('');
+
+    // „Mit gyakorolj most?" — a vakfolt-elemzés legfontosabb tételei
+    const spots = hasData ? detectBlindSpots() : [];
+    const spotCards = spots.slice(0, 4).map(s => `
+      <div class="bs-card">
+        <span class="bs-icon">${s.icon}</span>
+        <div class="bs-body">
+          <div class="bs-title">${s.title}</div>
+          <div class="bs-text">${s.text}</div>
+        </div>
+        ${s.module ? `<button class="btn btn-outline bs-go" type="button" data-mod="${s.module}" data-note="${s.note || ''}">Gyakorlás</button>` : ''}
       </div>
     `).join('');
 
     el.innerHTML = `
-      <div class="ov-top">
-        <div class="ov-ring-wrap glass-panel">
+      <section class="st-hero" aria-label="Sorozat és a mai nap">
+        <div class="st-streak">
+          <span class="st-streak-flame${streak.current > 0 ? ' is-lit' : ''}">${ICON.flame}</span>
+          <div class="st-streak-text">
+            <span class="st-streak-num" data-count="${streak.current}">${streak.current}</span>
+            <span class="st-streak-label">napos sorozat</span>
+          </div>
+          <span class="st-streak-best">leghosszabb: ${streak.longest} nap</span>
+        </div>
+        <div class="st-vitals">${vitals}</div>
+        <p class="st-blurb">${todayBlurb(today, streak)}</p>
+      </section>
+
+      <section class="st-card glass-panel">
+        <h2 class="st-card-title">Aktivitás</h2>
+        ${heatmapHtml(hm)}
+      </section>
+
+      ${hasData ? `
+      <section class="st-card glass-panel st-ready">
+        <div class="ov-ring-wrap">
           <div class="ov-ring">
             ${ringSvg(rd.score)}
             <div class="ov-ring-center">
-              <span class="ov-ring-num">${rd.score}</span>
+              <span class="ov-ring-num" data-count="${rd.score}">${rd.score}</span>
               <span class="ov-ring-unit">/ 100</span>
             </div>
           </div>
@@ -15762,49 +15969,67 @@ function initStatsPage() {
             <span>${readyLabel}</span>
           </div>
         </div>
-        <div class="ov-comps glass-panel">
-          <div class="ov-comps-title">Miből áll össze</div>
+        <div class="ov-comps">
+          <h2 class="st-card-title">Miből áll össze</h2>
           ${comps}
         </div>
-      </div>
+      </section>
 
-      <div class="ov-vitals">${vitals}</div>
-
-      <div class="ov-status glass-panel">
-        <span class="ov-status-icon">${today.rounds > 0 ? '✅' : '💡'}</span>
-        <p class="ov-status-text">${todayBlurb(today, streak)}</p>
-      </div>
+      <section class="st-card glass-panel">
+        <h2 class="st-card-title">Mit gyakorolj most?</h2>
+        ${spots.length
+          ? spotCards
+          : '<p class="st-note">Nincs kiugró gyenge pont: kiegyensúlyozott a gyakorlásod. Ha egy terület lemarad, itt jelezzük.</p>'}
+      </section>` : `
+      <section class="st-card glass-panel st-empty">
+        <h2 class="st-card-title">Itt fog megjelenni a haladásod</h2>
+        <p class="st-note">Minden kör után színesedik a naptár, nő a sorozat, és megmutatjuk, mit érdemes gyakorolnod.</p>
+        <a href="modules.html" class="btn btn-primary">Az első kör indítása</a>
+      </section>`}
     `;
-    // V8 polish: readiness ring rajzolódási animáció (kezdő offset → target)
-    animateReadinessRings(document.getElementById('statsContent'));
+
+    animateReadinessRings(el);
+    countUp(el);
+    el.querySelectorAll('.bs-go').forEach(b => {
+      b.addEventListener('click', () => goPractice(b.dataset.mod, b.dataset.note));
+    });
+
+    // heatmap: a legfrissebb hét látszódjon; koppintásra a nap részletei a lábléc-sorba kerülnek
+    const sc = document.getElementById('hmScroll');
+    const cap = document.getElementById('hmCaption');
+    if (sc) {
+      sc.scrollLeft = sc.scrollWidth;
+      const base = cap ? cap.textContent : '';
+      sc.addEventListener('click', e => {
+        const c = e.target.closest ? e.target.closest('.hm-c[data-tip]') : null;
+        sc.querySelectorAll('.hm-c.is-picked').forEach(x => x.classList.remove('is-picked'));
+        if (!cap) return;
+        if (c) { c.classList.add('is-picked'); cap.textContent = c.dataset.tip; }
+        else cap.textContent = base;
+      });
+    }
   }
 
-  /* ── B) Activity Engine ────────────────────────── */
-  function renderActivity() {
-    const el = document.getElementById('statsContent');
-    if (NihonCoreStats.getSessions().length === 0) {
-      el.innerHTML = emptyState('🔥', 'Még nincs aktivitási adat.',
-        'Néhány kör után megjelenik a heatmap, a sorozat és a napszak-bontás.');
-      return;
-    }
+  // Számok felpörgetése 0-ról (sorozat, felkészültség) — csak ha a mozgás engedélyezett
+  function countUp(root) {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    root.querySelectorAll('[data-count]').forEach(n => {
+      const to = +n.dataset.count;
+      if (!(to > 0)) return;
+      const t0 = performance.now(), D = 700;
+      (function tick() {
+        const p = Math.min(1, Math.max(0, (performance.now() - t0) / D));
+        n.textContent = Math.round(to * (1 - Math.pow(1 - p, 4)));
+        if (p < 1) requestAnimationFrame(tick);
+      })();
+      setTimeout(() => { n.textContent = to; }, D + 120);
+    });
+  }
 
-    const streak = computeStreak();
-    const hm = heatmapData();
+  // Napszak szerinti eloszlás (az Elemzés fülön)
+  function timeOfDayCard() {
     const tod = timeOfDayData();
     const best = bestStudyTime(tod);
-    const dow = ['H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V'];
-
-    let hmRows = '';
-    for (let row = 0; row < 7; row++) {
-      let cellsHtml = '';
-      for (let w = 0; w < hm.weeks; w++) {
-        const c = hm.cells[w * 7 + row];
-        const title = c.future ? dayKey(c.ts) : dayKey(c.ts) + ' — ' + c.q + ' kérdés';
-        cellsHtml += `<span class="hm-cell hm-l${c.level}${c.future ? ' hm-future' : ''}" title="${title}"></span>`;
-      }
-      hmRows += `<div class="hm-row"><span class="hm-dow">${dow[row]}</span>${cellsHtml}</div>`;
-    }
-
     const maxTod = Math.max(1, tod[0].sessions, tod[1].sessions, tod[2].sessions, tod[3].sessions);
     const todBars = tod.map(t => `
       <div class="tod-col">
@@ -15812,45 +16037,20 @@ function initStatsPage() {
           <span class="tod-bar-val">${t.sessions}</span>
           <div class="tod-bar" style="height:${Math.round(t.sessions / maxTod * 100)}%"></div>
         </div>
-        <div class="tod-label">${t.emoji} ${t.label}</div>
-        <div class="tod-acc">${t.sessions > 0 ? t.accuracy + '% pont.' : '—'}</div>
+        <div class="tod-label">${t.label}</div>
+        <div class="tod-acc">${t.sessions > 0 ? t.accuracy + '%' : '–'}</div>
       </div>
     `).join('');
-
-    el.innerHTML = `
-      <div class="act-streak glass-panel">
-        <div class="act-streak-main">
-          <span class="act-streak-flame">🔥</span>
-          <div class="act-streak-box">
-            <span class="act-streak-num">${streak.current}</span>
-            <span class="act-streak-label">napos aktuális sorozat</span>
-          </div>
-        </div>
-        <div class="act-streak-best">Leghosszabb: <strong>${streak.longest} nap</strong></div>
-      </div>
-
+    return `
       <div class="act-card glass-panel">
-        <div class="act-card-title">Aktivitás — utolsó 13 hét</div>
-        <div class="heatmap">${hmRows}</div>
-        <div class="hm-legend">
-          <span class="hm-leg-txt">kevesebb</span>
-          <span class="hm-cell hm-l0"></span><span class="hm-cell hm-l1"></span>
-          <span class="hm-cell hm-l2"></span><span class="hm-cell hm-l3"></span>
-          <span class="hm-cell hm-l4"></span>
-          <span class="hm-leg-txt">több</span>
-        </div>
-      </div>
-
-      <div class="act-card glass-panel">
-        <div class="act-card-title">Napszak szerinti eloszlás</div>
+        <div class="act-card-title">Mikor gyakorolsz?</div>
         <div class="tod-chart">${todBars}</div>
         <div class="act-best">
           ${best
-            ? `💡 <strong>Legjobb tanulási időd:</strong> ${best.emoji} ${best.label} — ${best.accuracy}% pontosság (${best.hint}).`
-            : '💡 Gyakorolj több körben különböző napszakokban, és megmutatjuk, mikor teljesítesz a legjobban.'}
+            ? `<strong>A legjobb időd:</strong> ${best.label.toLowerCase()} (${best.hint}), ${best.accuracy}% pontossággal.`
+            : 'Gyakorolj több körben, különböző napszakokban, és megmutatjuk, mikor megy a legjobban.'}
         </div>
-      </div>
-    `;
+      </div>`;
   }
 
   /* ── C) Module Radar + drill-down ──────────────── */
@@ -16000,6 +16200,7 @@ function initStatsPage() {
           ? lineSvg(qPoints, { max: qMax, unit: ' kérdés' })
           : '<p class="md-empty">Legalább 2 nap adata kell ehhez a grafikonhoz.</p>'}
       </div>
+      ${timeOfDayCard()}
       ${srsPanels}
     `;
   }
@@ -16135,53 +16336,6 @@ function initStatsPage() {
         JSON.stringify({ module: moduleKey, note: note || '', ts: Date.now() }));
     } catch (e) {}
     if (MODULE_URL[moduleKey]) location.href = MODULE_URL[moduleKey];
-  }
-
-  function renderBlindSpot() {
-    const el = document.getElementById('statsContent');
-    if (NihonCoreStats.getSessions().length === 0) {
-      el.innerHTML = emptyState('🔍', 'Még nincs elég adat a vakfolt-elemzéshez.',
-        'Néhány kör után a rendszer megmutatja, hol vannak a gyenge pontjaid.');
-      return;
-    }
-    const spots = detectBlindSpots();
-    if (spots.length === 0) {
-      el.innerHTML = `
-        <div class="stats-empty glass-panel">
-          <div class="stats-empty-icon">✨</div>
-          <p>Nincs kiugró vakfolt — kiegyensúlyozott a gyakorlásod!</p>
-          <p class="stats-empty-sub">Így tovább. Ha egy terület később lemarad, itt jelezni fogjuk.</p>
-        </div>`;
-      return;
-    }
-    const primary = spots.find(s => s.module);
-    const cards = spots.map(s => `
-      <div class="bs-card">
-        <span class="bs-icon">${s.icon}</span>
-        <div class="bs-body">
-          <div class="bs-title">${s.title}</div>
-          <div class="bs-text">${s.text}</div>
-        </div>
-        ${s.module ? `<button class="bs-go" data-mod="${s.module}" data-note="${s.note || ''}">Gyakorlás →</button>` : ''}
-      </div>
-    `).join('');
-    el.innerHTML = `
-      ${primary ? `
-        <div class="bs-primary glass-panel">
-          <div class="bs-primary-label">🎯 Célzott gyakorlás</div>
-          <div class="bs-primary-text">A statisztikád szerint most ezzel nyered a legtöbbet:
-            <strong>${MODULE_LABELS[primary.module]}</strong>${primary.note ? ' — ' + primary.note : ''}.</div>
-          <button class="btn btn-primary glow-effect bs-primary-btn"
-                  data-mod="${primary.module}" data-note="${primary.note || ''}">Célzott gyakorlás indítása →</button>
-        </div>` : ''}
-      <div class="bs-list glass-panel">
-        <div class="act-card-title">Észlelt vakfoltok (${spots.length}) — fontossági sorrendben</div>
-        ${cards}
-      </div>
-    `;
-    document.querySelectorAll('.bs-go, .bs-primary-btn').forEach(b => {
-      b.addEventListener('click', () => goPractice(b.dataset.mod, b.dataset.note));
-    });
   }
 
   /* ── INIT ──────────────────────────────────────── */
