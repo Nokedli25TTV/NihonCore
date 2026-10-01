@@ -695,6 +695,35 @@ az `items` cellái `[hiragana, katakana, romaji, [további elfogadott átíráso
 
 ---
 
+## 8c. Leckék (a tanulási út magyarázó oldalai)
+
+A tanulási út a Dekiru 1 leckéit követi. Egy új lecke három helyen jelenik meg, kód nélkül:
+
+1. **`js/data/course.js` → `NIHONCORE_COURSE`**: a lecke szövege.
+   ```js
+   { id: 'l9', no: 9, book: 'Dekiru 1',
+     title: 'A lecke címe',
+     lead: 'Egy mondat arról, mire leszel képes.',
+     cando: ['…', '…', '…'],
+     points: [
+       { title: '〜て', sub: 'mit jelent röviden', pattern: 'a minta képlete',
+         body: 'Magyarázat, rövid HTML-lel (<b>, <i>).',
+         examples: [{ jp: '{毎日|まいにち}{行|い}きます。', romaji: 'Mainichi ikimasu.', hu: 'Minden nap megyek.' }],
+         tip: 'Nem kötelező: tipikus buktató.' }
+     ],
+     quiz: [{ q: 'A kérdés magyarul', jp: 'hiányos mondat ＿ jellel (nem kötelező)',
+              a: 'a helyes válasz', wrong: ['rossz 1', 'rossz 2', 'rossz 3'], why: 'Egy mondat: miért.' }] }
+   ```
+   - Kanji csak `{漢字|かな}` jelöléssel: ebből lesz a furigana és a felolvasott kana.
+   - A `wrong` pontosan három, egymástól és a helyestől különböző válasz; a kérdésnek egyetlen jó megoldása legyen (ha a hiány több partikulával is értelmes, add meg a magyar jelentést a kérdésben).
+   - **Saját megfogalmazás és saját példamondat** kell: a tankönyv szövege, párbeszédei és feladatai nem másolhatók.
+2. **`js/data/core.js` → `NIHONCORE_PATH`**: a lecke lépései. Az első mindig a magyarázat (`module: 'lesson', href: 'pages/lesson.html?id=l9'`), utána a gyakorló lépések meglévő modulokból, `preset`-tel.
+3. **`js/data/core.js` → `NIHONCORE_PATH_UNITS`**: a fejezet (`kicker: 'Dekiru 1 · 9. lecke'`, `title`, `sub`, `steps`).
+
+Ellenőrzés: minden `steps` azonosító létezzen a `NIHONCORE_PATH`-ban, és minden lépés szerepeljen pontosan egy fejezetben.
+
+---
+
 ## 9. A „nagy load" forgatókönyv
 
 Amikor készen állsz, a következő sorrendet javaslom:

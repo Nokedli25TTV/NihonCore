@@ -7608,3 +7608,133 @@ html.theme-sumi .path-pop { background: #1B2038; }
   60% { transform: translateX(-3px); } 80% { transform: translateX(3px); }
 }
 @keyframes score-in { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+
+
+/* ════════════════════════════════════════════════════════
+   LECKE-OLDAL (pages/lesson.html)
+   ----------------------------------------------------
+   A tanulási út magyarázó oldala: fejléc, nyelvtani pontok
+   (minta, magyarázat, meghallgatható példák), ellenőrző kör.
+   Rajzolja: app.js → initLessonPage; a szöveg: js/data/course.js.
+   ════════════════════════════════════════════════════════ */
+.lesson-main { max-width: 760px; }
+/* Magyar szövegbe ágyazott japán: a latin betű a UI-betű, a kana tiszta gótikus */
+.lp-body, .lp-tip, .lp-pattern, .lp-point-title, .lp-toc-link, .lq-question, .lp-point-sub {
+  font-family: 'Figtree', 'Zen Kaku Gothic New', system-ui, sans-serif;
+}
+
+/* Fejléc: a lecke száma az ikon helyén */
+.lesson-hero .module-hero-icon { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-2xl); letter-spacing: -0.03em; }
+.lp-cando { list-style: none; display: grid; gap: 6px; margin-top: 12px; }
+.lp-cando li {
+  position: relative; padding-left: 26px;
+  font-size: var(--fs-sm); line-height: 1.45; color: var(--sumi-soft);
+}
+.lp-cando li::before {
+  content: ''; position: absolute; left: 2px; top: 0.42em;
+  width: 12px; height: 7px;
+  border-left: 2.5px solid var(--ok); border-bottom: 2.5px solid var(--ok);
+  transform: rotate(-45deg);
+}
+
+/* Ugrás a pontokhoz: vízszintesen húzható sor */
+.lp-toc {
+  display: flex; gap: 8px;
+  margin: 0 calc(var(--page-pad) * -1) 6px; padding: 4px var(--page-pad) 10px;
+  overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+}
+.lp-toc::-webkit-scrollbar { display: none; }
+.lp-toc-link {
+  flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px;
+  min-height: 44px; padding: 0 14px 0 8px; border-radius: 999px;
+  background: var(--glass-bg); border: 1px solid var(--glass-border); box-shadow: var(--glass-shadow);
+  font-size: var(--fs-sm); font-weight: 700; color: var(--sumi-soft); white-space: nowrap;
+  transition: border-color var(--t-base), color var(--t-base);
+}
+.lp-toc-link:hover { color: var(--sumi); border-color: rgb(var(--brand-rgb) / 0.5); }
+.lp-toc-no {
+  width: 26px; height: 26px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--fs-xs); font-weight: 800;
+  color: var(--brand-deep); background: var(--brand-soft);
+}
+
+/* Nyelvtani pont */
+.lp-point {
+  padding: 20px 16px; margin-bottom: 14px; border-radius: var(--radius-lg);
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+.lp-point-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 12px; }
+.lp-point-no {
+  flex: 0 0 auto; width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--fs-sm); font-weight: 800;
+  color: var(--on-accent); background: linear-gradient(180deg, var(--brand-fill-top), var(--accent));
+}
+.lp-point-title { font-family: var(--font-display); font-size: var(--fs-lg); font-weight: 800; letter-spacing: -0.01em; line-height: 1.3; }
+.lp-point-sub { font-size: var(--fs-sm); font-weight: 600; color: var(--sumi-soft); }
+.lp-pattern {
+  display: inline-block; margin-bottom: 12px; padding: 8px 14px; border-radius: 12px;
+  font-size: var(--fs-base); font-weight: 700; line-height: 1.5;
+  color: var(--brand-deep); background: var(--brand-soft);
+  border: 1px dashed rgb(var(--brand-rgb) / 0.38);
+}
+.lp-body { max-width: 64ch; font-size: var(--fs-base); line-height: 1.7; color: var(--sumi); }
+.lp-body b { font-weight: 800; }
+.lp-body i { color: var(--sumi-soft); }
+
+/* Példamondatok */
+.lp-examples { list-style: none; display: grid; gap: 8px; margin-top: 14px; }
+.lp-ex {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 10px; align-items: start;
+  padding: 10px 12px 10px 8px; border-radius: var(--radius-md);
+  background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+}
+.lp-ex-play {
+  width: 44px; height: 44px; border-radius: 50%; border: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--brand-deep); background: rgb(var(--brand-rgb) / 0.12);
+  transition: transform 110ms ease-out, background-color var(--t-base), color var(--t-base);
+}
+.lp-ex-play:hover { background: rgb(var(--brand-rgb) / 0.20); }
+.lp-ex-play:active { transform: scale(0.92); }
+.lp-ex-play.is-playing { color: var(--on-accent); background: var(--accent); }
+.lp-ex-jp { font-family: var(--font-jp); font-size: var(--fs-md); line-height: 1.9; color: var(--sumi); }
+.lp-ex-romaji { font-size: var(--fs-sm); font-style: italic; color: var(--sumi-faint); line-height: 1.4; }
+.lp-ex-hu { margin-top: 2px; font-size: var(--fs-base); color: var(--sumi-soft); line-height: 1.45; }
+body.helpers-no-romaji .lp-ex-romaji { display: none; }
+body.helpers-no-hu .lp-ex-hu { display: none; }
+
+.lp-tip {
+  margin-top: 12px; padding: 10px 14px; border-radius: var(--radius-md);
+  font-size: var(--fs-sm); line-height: 1.6; color: var(--sumi);
+  background: rgb(var(--amber-rgb) / 0.12);
+}
+.lp-tip strong { color: var(--amber-ink); }
+
+/* Ellenőrzés indítása */
+.lp-check { margin-top: 6px; padding: 24px 16px; border-radius: var(--radius-xl); text-align: center; }
+.lp-check-title { font-size: var(--fs-xl); font-weight: 800; letter-spacing: -0.02em; }
+.lp-check-sub { max-width: 44ch; margin: 6px auto 16px; font-size: var(--fs-sm); line-height: 1.55; color: var(--sumi-soft); }
+.lp-check .btn { width: 100%; max-width: 340px; }
+
+/* Ellenőrző kör kártyája */
+.lq-question { font-size: var(--fs-md); font-weight: 700; line-height: 1.45; text-align: center; text-wrap: balance; }
+.lq-jp { margin-top: 10px; font-family: var(--font-jp); font-size: clamp(1.35rem, 5.6vw, 1.8rem); line-height: 2; text-align: center; color: var(--sumi); }
+.lq-options-long { grid-template-columns: 1fr !important; }
+.lq-opt { font-size: var(--fs-md); font-weight: 700; line-height: 1.7; }
+.lq-opt[lang="ja"] { font-family: var(--font-jp); font-weight: 500; }
+.lq-summary-note { max-width: 40ch; margin: 8px auto 0; font-size: var(--fs-sm); color: var(--sumi-soft); line-height: 1.5; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .lp-point, .lp-check, .lp-toc { animation: nc-hero-rise 380ms cubic-bezier(0.22, 1, 0.36, 1) backwards; }
+  .lp-point:nth-of-type(1) { animation-delay: 60ms; }
+  .lp-point:nth-of-type(2) { animation-delay: 110ms; }
+  .lp-point:nth-of-type(n+3) { animation-delay: 150ms; }
+}
+@media (min-width: 600px) {
+  .lp-point { padding: 26px 28px; }
+  .lp-ex-jp { font-size: var(--fs-lg); }
+  .lp-toc { margin-left: 0; margin-right: 0; padding-left: 2px; padding-right: 2px; flex-wrap: wrap; overflow: visible; }
+  .lp-check { padding: 32px 28px; }
+}

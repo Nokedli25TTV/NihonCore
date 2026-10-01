@@ -16,7 +16,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v52-2026-10-02-tune-logo';
+const CACHE_VERSION = 'nihoncore-v53-2026-10-02-lessons-1-8';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 
@@ -37,6 +37,7 @@ const APP_SHELL = [
   './pages/grammar.html',
   './pages/production.html',
   './pages/kana.html',
+  './pages/lesson.html',
   './pages/modules.html',
   './pages/stats.html',
   './pages/login.html',
@@ -58,6 +59,7 @@ const APP_SHELL = [
   './js/data/audio.js',
   './js/data/grammar.js',
   './js/data/kana.js',
+  './js/data/course.js',
   // img/
   './img/app_icon.png',
   './img/logo.png',

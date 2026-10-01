@@ -84,6 +84,7 @@ NihonCoreV2/
 │   ├── production.html     ← V7 P1 Production modul
 │   ├── kana.html           ← ★ Redesign 6.: Kana-tréner
 │   ├── modules.html        ← ★ Modulok oldal: a modul-kártyák (Szabad gyakorlás) — statikus
+│   ├── lesson.html         ← ★ Lecke-oldal: a tanulási út magyarázó lépése (?id=l1…l8)
 │   ├── login.html          ← Auth (mock)
 │   └── register.html       ← Auth (mock)
 ├── css/                    ← ★ V7 P3
@@ -100,7 +101,8 @@ NihonCoreV2/
 │       ├── datetime.js     ← NIHONCORE_DT_* (8 kategória) (~150 sor)
 │       ├── audio.js        ← NIHONCORE_AUDIO_LESSONS (~55 sor)
 │       ├── grammar.js      ← NIHONCORE_GRAMMAR_PATTERNS (~300 sor)
-│       └── kana.js         ← ★ NIHONCORE_KANA_ROWS / _GROUPS / _CONFUSABLE
+│       ├── kana.js         ← ★ NIHONCORE_KANA_ROWS / _GROUPS / _CONFUSABLE
+│       └── course.js       ← ★ NIHONCORE_COURSE: a leckék magyarázatai, példamondatai, ellenőrző kérdései
 └── img/                    ← ★ V7 P3
     ├── fav_icon_nihoncore.png
     └── app_icon.png
@@ -438,6 +440,7 @@ használt, most **8 defer-elt** script tag-et tölt be a `js/data/` mappából.
 |---|---|---|---|
 | `index.html` | csak `core.js` (tanulási út) | ✓ | root |
 | `pages/kana.html` | `core.js` + `kana.js` | ✓ | pages/ |
+| `pages/lesson.html` | `core.js` + `course.js` | ✓ | pages/ |
 | `pages/modules.html` | — | ✓ (csak az univerzális részek: fejléc, fül-sáv, téma) | pages/ |
 | `pages/module.html` | ✓ | ✓ | pages/ |
 | `pages/practice.html` | ✓ | ✓ | pages/ |
@@ -538,6 +541,7 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 | **Görgetés-teljesítmény + Modulok oldal** | **(2026-10-01)** **(1) Akadó görgetés javítva.** Az ok: a tartalommal együtt görgő üveg-elemek (`.glass-panel`, `.glass-panel-heavy`, `.glass-card`, `.path-step-link`, `.helpers-bar`, `.phase-tabs`, `.stats-tabs`, összesítő, belépő-kártya) mind saját `backdrop-filter` elmosást kaptak — a kezdőlapon **27 elmosott réteg** volt, amit a böngésző görgetéskor képkockánként újraszámolt a rögzített háttér fölött. Most **elmosás csak rögzített rétegen** van (fejléc + fül-sáv = 2 réteg, kisebb sugárral: `blur(16px) saturate(1.4)`); a görgő panelek „matt üveget" kapnak (`--glass-bg` 0,56 → 0,70 átlátszatlanság — mögöttük úgyis csak a lágy háttér-mezők vannak, ott az elmosás nem látszott). További: a `.bg-decoration` saját, stabil méretű réteg (`translateZ(0)` + `100lvh` + `contain: strict` — telefonon a címsor mozgása nem rajzolja újra), kisebb árnyék-sugarak, a kártya-hover keret-színt vált (nem árnyékot animál), a visszajelzés-lap és a `.path-result` tömör (0,97) elmosás nélkül, a globális `scroll-behavior: smooth` és a `text-rendering: optimizeLegibility` törölve (sima görgetést a JS kér, ahol kell), `prefers-reduced-transparency` támogatás. **(2) Modulok külön oldalon:** új `pages/modules.html` (`#modulesMain`, statikus — nincs saját init) a 10 modul-kártyával; a kezdőlapról a rács kikerült, a helyén egy „Szabad gyakorlás" sor visz az új oldalra. A fejléc „Modulok" linkje és a fül-sáv „Modulok" füle oda mutat; a régi `index.html#modules` horgony átirányít. Az oldal-felismerő a kezdőlapot `#homeMain` alapján ismeri fel. **Közben javítva:** egy régi `a.module-card { display: block }` szabály felülírta a kártyák rács/flex elrendezését (telefonon nem volt meg a tömör sor, tableten a lábléc nem nyúlt ki); a statisztika üres állapotának „Irány a modulok" linkje nem létező oldalra mutatott. `CACHE_VERSION` → v49. |
 | **Apróságok (v50)** | **(2026-10-01)** „Grammar Patterns" → **Nyelvtani minták**, „Production modul" → **Szabad fordítás** (oldalcím, kártya, lobbi, statisztika). A profil-, ismétlés- és előzmény-törlés a saját megerősítő lapot használja (`NihonCoreRound.confirmDelete(title, text, onYes)`). A statisztika hibakódjai magyar felirattal jelennek meg (`errorLabel`: a hiba-katalógusok `title` mezője + általános kódok). A statisztika-oldal fejlécében megvan a fő menü. |
 | **Második redesign — indigó, térkép, műszerfal** | **(2026-10-02, impeccable skill, product register.)** A user a matcha-paletta helyett **indigót** választott („élénkebb, prémiumabb", simább háttér, szebb/üveges gombok), a tanulási útra **kanyargó térképet** kért, a statisztikára **GitHub-szerű heatmapet**, plusz animációkat. **(1) Színrendszer:** a `--matcha*` tokenek átnevezve **`--brand*`**-re (szerep-név), külön **`--ok*`** zöld a helyes válasznak (56 „correct/ok/success" szabály szkripttel átállítva — indigó fő színnél a jó válasz különben kék lett volna). Új értékek világos és sötét témára; a háttér négy nagy, hosszan kifutó színmező (a pöttyös rács megszűnt). **(2) Gombok:** lakkozott `.btn-primary`, üveg `.btn-outline`. **(3) Betű:** Nunito → **Figtree**; a címek is Figtree 800 (a Lora csak a logóban és a magyar példamondatokban maradt). **(4) Tanulási út — térkép** (`initLanding.renderPath` + a stíluslap „TANULÁSI ÚT — térkép" blokkja): fejezetek (`NIHONCORE_PATH_UNITS` a core.js-ben: `{id, title, sub, steps[]}`), bennük kanyargó ösvény kerek, peremes csomópontokkal; állapotok: kész (kitöltött + zöld pipa), következő (lüktető gyűrű + „Folytatás" címke), átugorva (szaggatott). Koppintásra **buborék** (`.path-pop`): leírás, legjobb kör, indítás. A geometria rögzített (`mapGeom()` az app.js-ben = `--row` / `--disc` a CSS-ben), az összekötő SVG mérés nélkül számolt. A frissen kész lépés animálva jelenik meg (`nihoncore_path_seen_v1` — eszköz-helyi, nem szinkronizált). A „Folytatás" kártya telített indigó, a lépés jele vízjelként. **A fejezetek most témák; a Dekiru-leckékre váltás csak a `NIHONCORE_PATH_UNITS` + `NIHONCORE_PATH` cseréje** (user-döntés: az út a könyv leckéit kövesse — a PDF-re vár). **(5) Statisztika — műszerfal:** 6 fül helyett 4 (Áttekintés · Modulok · Elemzés · Előzmények). Az Áttekintés: telített sorozat-kártya a mai számokkal, **éves aktivitás-naptár** (`heatmapData` 53 hét, hétfő-kezdő; `heatmapHtml`: hónap-feliratok, H/Sze/P sorcímkék, jelmagyarázat, koppintásra a nap részletei; telefonon vízszintesen görög, a legfrissebb hétnél indul), felkészültség-gyűrű, „Mit gyakorolj most?" (a vakfolt-elemzés tételei). A napszak-diagram az Elemzés fülre került; a külön Aktivitás és Vakfoltok fül megszűnt. Karcsú `.page-head` a nagy hero helyett. **(6) Mozgás** („MOZGÁS ÉS FELÜLET-FINOMÍTÁS" blokk): peremes válasz-gombok, kártya-belépés, jó válasz „pattanás" / rossz rázás, modul-kártyák és panelek belépése, számláló-felpörgés (`countUp`). Csak transform/opacity/clip-path, `prefers-reduced-motion` kikapcsolja. `CACHE_VERSION` → v51. |
+| **Leckék 1–8 (v53)** | **(2026-10-02) A tanulási út a Dekiru 1 leckéit követi; az 1–8. lecke kész.** User-döntés: az út a könyv leckéire épüljön, leckénként magyarázattal; a forrás a `Japan_anyagok/` (gitignore-olt) PDF-ek. **A könyv szövege nem kerül át** (az impresszum tiltja): a magyarázatok és a példamondatok saját megfogalmazások, csak a leckék témája, sorrendje és nyelvtani pontjai követik a könyvet. **Új oldal:** `pages/lesson.html?id=l1…l8` + `initLessonPage` + `js/data/course.js` (`NIHONCORE_COURSE`: leckénként `title/lead/cando/points[]/quiz[]`; pont = `title, sub, pattern, body, examples[{jp,romaji,hu}], tip`). Japán szöveg: 1–4. lecke kana szóközökkel; 5-től kanji `{漢字|かな}` jelöléssel → a képernyőn furigana, a felolvasáshoz kana. Minden példa meghallgatható (`NihonCoreAudio.play`). **„Ellenőrizd magad"**: leckénként 5 feleletválasztós kérdés a közös kör-keretben; válasz után mindig „Miért?" magyarázat. A kör `lesson` / `check` néven megy a statisztikába, és ≥60%-nál teljesíti a lecke lépését. **Út-adatok** (`core.js`): egy fejezet = egy lecke (`kicker`: „Dekiru 1 · N. lecke"), minden lecke egy `lesson` lépéssel indul, utána a leckéhez illő gyakorló lépések a meglévő modulokból. **Új út-beállítások:** Mondat-Mester `idRanges` (az `s_n5_NNN` mondatok tartománya — a 2–3. lecke a meglévő mutató- és hely-mondatokat kapja), Számlálók `counters` (4. lecke: つ・本・枚・冊), Alap igék `category` (3.: létezés · 5.: mozgás · 6.: fogyasztás); a `module.html` út-lépésnél rögtön a 2. (gyakorló) fázist nyitja. A 9. leckétől a régi tematikus lépések az utolsó fejezetben állnak. **Nyitva:** 9–24. lecke; a 7. leckéhez (〜が好き, から, gyakoriság) nincs célzott mondatkészlet, csak a が-os mondatok. `CACHE_VERSION` → v53. |
 | **Finomhangolás (v52)** | **(2026-10-02, user-visszajelzés.)** **Világos téma:** a fehér visszafogottabb (`--washi` #F3F5FB → #E9EDF6, az üveg anyaga 246 248 253). **Sötét téma:** kevésbé fekete alap, jobban elváló panelek, a telített felületek mély indigóból indulnak (új `--brand-fill-top` / `--brand-fill-deep` tokenek — korábban a világos szöveg-indigóból, ezért pasztellnek hatottak); a naptár-szintek sötétben a világos felé erősödnek. **Logó:** a „日" kanji helyett PNG-ikon (`img/logo.png`), a felirat Sora betűvel. **Görgetősáv:** egységes, témát követő sáv minden oldalon; az éves aktivitás-naptár asztali gépen görgetés nélkül kifér (a cella mérete a kártya szélességéből számol: `container-type` + `cqw`), telefonon sáv nélkül húzható. |
 
 ### 🔴 Redesign 2026-10 — user-döntések (ezekhez mérj minden további UI-munkát)
@@ -569,7 +573,8 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 - ✅ **3D Flashcard rendszer** — `NihonCoreFlashcard` univerzális motor · flip+swipe · mind a 4 tartalmi modul „Szótár" módja · `nc_fc_state_*` localStorage
 - ✅ **Indigó UI + dual-téma** — indigó/arany paletta üveges felületeken · `html.theme-sumi` sötét mód · anime.js mikro-interakciók · natív view-transition oldalváltás · PWA install/update toast
 - ✅ **Kana-tréner (Redesign 6.)** — `kana.html` · hiragana + katakana · tábla hanggal · felismerés / fordítva / beírás / párosító
-- ✅ **Tanulási út (Redesign 4. + térkép)** — `NIHONCORE_PATH` + `NIHONCORE_PATH_UNITS` + `NihonCorePath` · 13 lépés 6 fejezetben · kanyargó térkép · szintválasztó · „Folytatás"
+- ✅ **Tanulási út — Dekiru-leckék szerint** — `NIHONCORE_PATH` + `NIHONCORE_PATH_UNITS` + `NihonCorePath` · 29 lépés 10 fejezetben (előkészítő + 1–8. lecke + „a 9. leckétől") · kanyargó térkép · szintválasztó · „Folytatás"
+- ✅ **Lecke-oldal** — `lesson.html` + `js/data/course.js` + `initLessonPage` · 8 lecke, 45 nyelvtani pont, 134 saját példamondat hanggal, leckénként 5 ellenőrző kérdés
 - ✅ **Mini-leckék (Redesign 6.)** — `NIHONCORE_LESSONS` + `initLessons` · modulonként egy minta-lecke
 
 ---
@@ -764,6 +769,15 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 ---
 
 ## 11. Nyitott backlog (jövő iterációk)
+
+### 🔴 Leckék — a jelenlegi fő munka (user-döntés, 2026-10-02)
+
+A tanulási út a Dekiru 1 leckéit követi. **Kész: 1–8. lecke.** Következik:
+- [ ] **9–16. lecke**: múlt idejű melléknevek, て-alak, összehasonlítás, た/ない-alak, közvetlen stílus, 〜ています, adás-kapás, 〜と思います, 〜たり, 〜たことがある. A meglévő modulok nagy részét lefedik (Ragozó te/nai/ta, Melléknév múlt, Nyelvtani minták).
+- [ ] **17–24. lecke**, majd a Dekiru 2.
+- [ ] Leckénként célzott mondatkészlet a Mondat-Mesterhez (most csak a 2–3. leckének van saját tartománya).
+- Új lecke felvétele: `js/data/course.js` (szöveg) + `js/data/core.js` `NIHONCORE_PATH` (lépések) és `NIHONCORE_PATH_UNITS` (fejezet). Kódot nem kell írni hozzá.
+- A leckék nyelvtani pontjainak listája a munkamenet-memóriában van (`dekiru-lesson-map`); a PDF-ek szkenneltek, oldalanként képként olvashatók.
 
 ### V5 — LexiLearn-aware roadmap (user-jóváhagyott, 2026-05-23)
 

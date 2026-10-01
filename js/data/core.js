@@ -33,23 +33,6 @@
      · NIHONCORE_GRAMMAR_ERROR_TYPES      (grammar hibakódok)
    ==================================================== */
 
-// ── A tanulási út fejezetei ──
-// A kezdőlap térképe fejezetenként rajzolja ki a lépéseket (app.js: initLanding).
-//   id     a fejezet kulcsa
-//   title  a fejezet címe · sub: egy sor arról, mi van benne
-//   steps  a NIHONCORE_PATH lépés-azonosítói, sorrendben
-// Most témák szerinti fejezetek vannak. A végső tartalom-feltöltéskor ezek helyére
-// a Dekiru-leckék kerülnek: akkor elég ezt a tömböt (és a lépéseket) cserélni,
-// a térkép és a haladás-tárolás változatlan marad.
-const NIHONCORE_PATH_UNITS = [
-  { id: 'u-kana',     title: 'Az írás',            sub: 'Hiragana és katakana',                 steps: ['kana-hira', 'kana-kata'] },
-  { id: 'u-first',    title: 'Első mondatok',      sub: 'Ki ez, mi ez, mi van hol',             steps: ['first-sentences', 'basic-verbs'] },
-  { id: 'u-build',    title: 'Mondatépítés',       sub: 'Partikulák és szórend',                steps: ['particles', 'word-order'] },
-  { id: 'u-daily',    title: 'Mindennapok',        sub: 'Idő, mennyiség, tulajdonság',          steps: ['datetime', 'counters', 'adjectives'] },
-  { id: 'u-verbs',    title: 'Igék és hallás',     sub: 'Bizalmas igealakok, hosszú és rövid hangok', steps: ['verb-forms', 'listening'] },
-  { id: 'u-free',     title: 'Szabadon',           sub: 'Mondatszintű minták és saját fordítás', steps: ['patterns', 'production'] }
-];
-
 /* ---- 1) NIHONCORE_MODULES (verb-engine + counter-engine config) (sorok 24..339) ---- */
 /* ====================================================
    ── 1) MODULE adatok (module.html-hez) ──────────────
@@ -1204,25 +1187,38 @@ const NIHONCORE_GRAMMAR_ERROR_TYPES = {
 };
 
 /* ====================================================
-   TANULÁSI ÚT — a kezdőlap vezetett sorrendje
+   TANULÁSI ÚT — a kezdőlap térképe
    ----------------------------------------------------
-   Minden lépés egy meglévő modult nyit meg, előre beállított körrel.
-   Mezők:
+   Az út a Dekiru 1 tankönyv leckéit követi: egy fejezet = egy lecke.
+   Minden lecke egy magyarázó lépéssel indul (pages/lesson.html, a szövege a
+   js/data/course.js-ben), utána a leckéhez illő gyakorló lépések jönnek a
+   meglévő modulokból, előre beállított körrel.
+   Kész: 1–8. lecke. A 9. leckétől a régi, témák szerinti lépések állnak
+   az utolsó fejezetben, amíg azok a leckék is elkészülnek.
+
+   NIHONCORE_PATH — lépések:
      id       egyedi kulcs (a haladás ezzel mentődik)
-     glyph    a lépés jele a listában
+     glyph    a lépés jele a térképen
      title / desc
      module   a NihonCoreStats modul-kulcsa (ehhez a modulhoz tartozó
-              befejezett kör teljesíti a lépést)
+              befejezett kör teljesíti a lépést; a magyarázó lépésnél 'lesson')
      href     a megnyitandó oldal (a gyökérhez képest)
      level    'zero' = csak a nulláról indulónak kötelező (kana);
               aki már olvas kanát, annál „átugorva" jelenik meg
      preset   a modul beállításaira ültetett kör:
                 only: { térkép-kulcs: [bekapcsolt elemek] }  — a többi ki
                 set:  { skalár kulcs: érték }
-              (a Mondat-Mesternél: level, mode, particlesOnly / particlesAny)
+              Mondat-Mester: level, mode, particlesOnly / particlesAny,
+                             idRanges: [[tól, ig], …] az s_n5_NNN mondatokra
+              Számlálók:     counters: [számláló-azonosítók]
+              Alap igék:     category: 'existence' | 'consumption' | 'movement'
    A lépés akkor „kész", ha az innen indított kör legalább 60%-os.
+
+   NIHONCORE_PATH_UNITS — fejezetek (a térkép ezek szerint tagol):
+     id · kicker (a fejléc kis címkéje) · title · sub · steps: [lépés-azonosítók]
    ==================================================== */
 const NIHONCORE_PATH = [
+  // ── Előkészítő: az írás ──
   { id: 'kana-hira', glyph: 'あ', title: 'Hiragana',
     desc: 'A 46 alapjel: ezzel olvasol el mindent, ami ezután jön.',
     module: 'kana', href: 'pages/kana.html', level: 'zero',
@@ -1231,13 +1227,81 @@ const NIHONCORE_PATH = [
     desc: 'A jövevényszavak írása: パソコン, レストラン.',
     module: 'kana', href: 'pages/kana.html', level: 'zero',
     preset: { set: { script: 'katakana' } } },
+
+  // ── 1. lecke ──
+  { id: 'l1-lesson', glyph: '読', title: 'Magyarázat: です, は, の',
+    desc: 'Elolvasod, hogyan épül fel az első mondat, aztán öt kérdéssel ellenőrzöd.',
+    module: 'lesson', href: 'pages/lesson.html?id=l1' },
   { id: 'first-sentences', glyph: '文', title: 'Első mondatok',
-    desc: 'です, は, の, か: ki ez, mi ez, kié ez?',
+    desc: 'は, の, か, も: töltsd ki a hiányzó partikulát.',
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N5', mode: 'particles', particlesOnly: ['は', 'の', 'か', 'も'] } },
-  { id: 'basic-verbs', glyph: '動', title: 'Alap igék masu-alakban',
-    desc: 'Van, eszik, megy: jelen és múlt, állítás és tagadás.',
-    module: 'arimasu-imasu', href: 'pages/module.html?id=arimasu-imasu' },
+
+  // ── 2. lecke ──
+  { id: 'l2-lesson', glyph: '読', title: 'Magyarázat: これ, この, ここ',
+    desc: 'Ez, az, amaz; itt, ott; kié; és a tagadás.',
+    module: 'lesson', href: 'pages/lesson.html?id=l2' },
+  { id: 'l2-things', glyph: '此', title: 'Ez és az: これ, この',
+    desc: 'Tárgyak megnevezése és a birtokos の.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N5', mode: 'particles', idRanges: [[43, 62], [93, 122]] } },
+  { id: 'l2-places', glyph: '所', title: 'Hol van? ここ, そこ, あそこ',
+    desc: 'Helyek megmutatása és a どこ kérdés.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N5', mode: 'particles', idRanges: [[63, 92]] } },
+
+  // ── 3. lecke ──
+  { id: 'l3-lesson', glyph: '読', title: 'Magyarázat: あります, います',
+    desc: 'Mi hol van, ki van otthon, hányan vagytok.',
+    module: 'lesson', href: 'pages/lesson.html?id=l3' },
+  { id: 'basic-verbs', glyph: '在', title: 'Van és nincs',
+    desc: 'あります és います: jelen és múlt, állítás és tagadás.',
+    module: 'arimasu-imasu', href: 'pages/module.html?id=arimasu-imasu',
+    preset: { category: 'existence' } },
+  { id: 'l3-where', glyph: '上', title: 'Rajta, alatta, benne',
+    desc: '〜の うえ / した / なか に: helymeghatározás mondatban.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N5', mode: 'particles', idRanges: [[123, 152]] } },
+
+  // ── 4. lecke ──
+  { id: 'l4-lesson', glyph: '読', title: 'Magyarázat: 〜をください, óra, napok',
+    desc: 'Kérés a boltban, számlálók, idő, mettől meddig.',
+    module: 'lesson', href: 'pages/lesson.html?id=l4' },
+  { id: 'counters', glyph: '数', title: 'Számlálók',
+    desc: 'つ, 本, 枚, 冊: mit mivel számolunk.',
+    module: 'counter', href: 'pages/module.html?id=szamlalok',
+    preset: { counters: ['tsu', 'hon', 'mai', 'satsu'] } },
+  { id: 'datetime', glyph: '時', title: 'Óra és a hét napjai',
+    desc: 'なんじ, なんようび: a rendhagyó olvasatokkal.',
+    module: 'datetime', href: 'pages/datetime.html',
+    preset: { only: { categories: ['weekdays', 'times'] }, set: { mode: 'recognition' } } },
+
+  // ── 5. lecke ──
+  { id: 'l5-lesson', glyph: '読', title: 'Magyarázat: 〜ます, へ, で, と',
+    desc: 'Az ige négy udvarias alakja; hová, mivel, kivel, mikor.',
+    module: 'lesson', href: 'pages/lesson.html?id=l5' },
+  { id: 'l5-masu', glyph: '動', title: 'A ます-alak négy formája',
+    desc: '〜ます, 〜ません, 〜ました, 〜ませんでした.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['masu', 'masen', 'mashita', 'masen_deshita'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+  { id: 'l5-move', glyph: '行', title: 'Megyek, jövök, hazamegyek',
+    desc: '行きます, 来ます, 帰ります: mind a négy alakban.',
+    module: 'arimasu-imasu', href: 'pages/module.html?id=arimasu-imasu',
+    preset: { category: 'movement' } },
+  { id: 'l5-dates', glyph: '日', title: 'Hónapok és napok',
+    desc: '〜月〜日: ついたち, ふつか, みっか…',
+    module: 'datetime', href: 'pages/datetime.html',
+    preset: { only: { categories: ['months', 'days'] }, set: { mode: 'recognition' } } },
+
+  // ── 6. lecke ──
+  { id: 'l6-lesson', glyph: '読', title: 'Magyarázat: を, で, 〜ませんか',
+    desc: 'Mit csinálsz, hol csinálod; meghívás és javaslat.',
+    module: 'lesson', href: 'pages/lesson.html?id=l6' },
+  { id: 'l6-daily', glyph: '食', title: 'Eszem, iszom, veszek',
+    desc: '食べます, 飲みます, 買います: mind a négy alakban.',
+    module: 'arimasu-imasu', href: 'pages/module.html?id=arimasu-imasu',
+    preset: { category: 'consumption' } },
   { id: 'particles', glyph: '助', title: 'Partikulák',
     desc: 'を, に, で, へ, と, が: mit, hol, hová, kivel.',
     module: 'practice', href: 'pages/practice.html',
@@ -1246,17 +1310,27 @@ const NIHONCORE_PATH = [
     desc: 'Rakd össze a mondatot az összekevert szavakból.',
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N5', mode: 'puzzle' } },
-  { id: 'datetime', glyph: '時', title: 'Dátum és idő',
-    desc: 'Hónapok, napok, a hét napjai, órák: a rendhagyó olvasatokkal.',
-    module: 'datetime', href: 'pages/datetime.html',
-    preset: { only: { categories: ['months', 'days', 'weekdays', 'times'] }, set: { mode: 'recognition' } } },
-  { id: 'counters', glyph: '数', title: 'Számlálók',
-    desc: '本, 枚, 人: mit mivel számolunk.',
-    module: 'counter', href: 'pages/module.html?id=szamlalok' },
+
+  // ── 7. lecke ──
+  { id: 'l7-lesson', glyph: '読', title: 'Magyarázat: 〜が好きです, から',
+    desc: 'Szeretem, nem szeretem; miért; milyen gyakran.',
+    module: 'lesson', href: 'pages/lesson.html?id=l7' },
+  { id: 'l7-ga', glyph: '好', title: 'A が partikula',
+    desc: 'Szeretem, van, értem: mondatok が-val.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N5', mode: 'particles', particlesAny: ['が'] } },
+
+  // ── 8. lecke ──
+  { id: 'l8-lesson', glyph: '読', title: 'Magyarázat: melléknevek, 〜たい',
+    desc: 'い- és な-melléknevek, tagadás, „szeretnék…".',
+    module: 'lesson', href: 'pages/lesson.html?id=l8' },
   { id: 'adjectives', glyph: '形', title: 'Melléknevek',
-    desc: 'I- és na-melléknevek: jelen, múlt, tagadás.',
+    desc: 'I- és na-melléknevek: állítás, tagadás, jelzőként.',
     module: 'adjectives', href: 'pages/adjectives.html',
-    preset: { set: { mode: 'recognition' } } },
+    preset: { only: { forms: ['i_present_affirmative', 'i_present_negative', 'na_noun_modifier', 'na_present_affirmative', 'na_present_negative'] },
+              set: { mode: 'recognition' } } },
+
+  // ── A 9. leckétől: egyelőre témák szerint ──
   { id: 'verb-forms', glyph: '活', title: 'Te-, nai- és ta-alak',
     desc: 'A három igecsoport és a bizalmas alakok.',
     module: 'conjugation', href: 'pages/conjugation.html',
@@ -1273,6 +1347,29 @@ const NIHONCORE_PATH = [
   { id: 'production', glyph: '作', title: 'Szabad fordítás',
     desc: 'Magyar mondatból japánt írsz, segítség nélkül.',
     module: 'production', href: 'pages/production.html' }
+];
+
+const NIHONCORE_PATH_UNITS = [
+  { id: 'u-kana', kicker: 'Előkészítő',          title: 'Az írás',             sub: 'Hiragana és katakana',
+    steps: ['kana-hira', 'kana-kata'] },
+  { id: 'u-l1',   kicker: 'Dekiru 1 · 1. lecke', title: 'Bemutatkozás',        sub: 'Ki vagyok, mivel foglalkozom: です, は, の, も, か',
+    steps: ['l1-lesson', 'first-sentences'] },
+  { id: 'u-l2',   kicker: 'Dekiru 1 · 2. lecke', title: 'Ez, az, amaz',        sub: 'これ, この, ここ; kié; tagadás',
+    steps: ['l2-lesson', 'l2-things', 'l2-places'] },
+  { id: 'u-l3',   kicker: 'Dekiru 1 · 3. lecke', title: 'Mi hol van?',         sub: 'あります és います, helyviszonyok, család',
+    steps: ['l3-lesson', 'basic-verbs', 'l3-where'] },
+  { id: 'u-l4',   kicker: 'Dekiru 1 · 4. lecke', title: 'Vásárlás és idő',     sub: '〜をください, számlálók, óra, a hét napjai',
+    steps: ['l4-lesson', 'counters', 'datetime'] },
+  { id: 'u-l5',   kicker: 'Dekiru 1 · 5. lecke', title: 'Hová, mikor, mivel?', sub: 'A ます-alak; へ, で, と; dátum',
+    steps: ['l5-lesson', 'l5-masu', 'l5-move', 'l5-dates'] },
+  { id: 'u-l6',   kicker: 'Dekiru 1 · 6. lecke', title: 'Mindennapok',         sub: 'を és で; 〜ませんか, 〜ましょう',
+    steps: ['l6-lesson', 'l6-daily', 'particles', 'word-order'] },
+  { id: 'u-l7',   kicker: 'Dekiru 1 · 7. lecke', title: 'Mit szeretsz?',       sub: '〜が好きです, から, よく és あまり',
+    steps: ['l7-lesson', 'l7-ga'] },
+  { id: 'u-l8',   kicker: 'Dekiru 1 · 8. lecke', title: 'Milyen?',             sub: 'い- és な-melléknevek, 〜たいです',
+    steps: ['l8-lesson', 'adjectives'] },
+  { id: 'u-next', kicker: 'A 9. leckétől',       title: 'Haladó gyakorlás',    sub: 'Egyelőre témák szerint; a leckékre bontás készül',
+    steps: ['verb-forms', 'listening', 'patterns', 'production'] }
 ];
 
 /* ====================================================

@@ -2785,7 +2785,7 @@ function initLanding() {
       return `
         <li class="path-unit${complete ? ' is-complete' : ''}">
           <div class="path-unit-head">
-            <span class="path-unit-no">${ui + 1}. fejezet</span>
+            <span class="path-unit-no">${esc(u.unit.kicker || ((ui + 1) + '. fejezet'))}</span>
             <h3 class="path-unit-title">${esc(u.unit.title)}</h3>
             ${u.unit.sub ? '<span class="path-unit-sub">' + esc(u.unit.sub) + '</span>' : ''}
             <span class="path-unit-count" aria-label="${done} / ${live.length} lépés kész">${live.length ? done + ' / ' + live.length : '–'}</span>
@@ -3312,7 +3312,7 @@ function initModulePage() {
     let categorySectionHtml = '';
     if (Array.isArray(m.categories) && m.categories.length > 0) {
       const catChips = m.categories.map(c => {
-        const cls = c.enabled ? 'ml-cat-btn active' : 'ml-cat-btn ml-cat-btn-locked';
+        const cls = c.enabled ? 'ml-cat-btn' + (c._uiOn !== false ? ' active' : '') : 'ml-cat-btn ml-cat-btn-locked';
         const stubBadge = c.enabled ? '' : '<span class="ml-fb-lock">🔒</span>';
         return `<button class="${cls}" data-vbcat="${c.id}" ${c.enabled ? '' : 'disabled'} title="${c.stubNote || c.hint || ''}" type="button">
           <span class="ml-fb-emoji">${c.emoji || ''}</span>
@@ -5432,12 +5432,36 @@ function initModulePage() {
     loadingEl.classList.add('hidden');
     errorEl.classList.remove('hidden');
   } else {
+    // Tanulási út: a lépés a modul egy szeletére szűkíti a kört, és rögtön a
+    // gyakorló fázist nyitja (a magyarázat a lecke-oldalon már megvolt).
+    const pathStep = window.NihonCorePath && NihonCorePath.activeStep();
+    const preset = pathStep && pathStep.preset;
+    let pathPhase = 1;
+    if (preset && pathStep.module === 'counter' && Array.isArray(preset.counters)) {
+      counterSettings.selectedCategoryIds = NIHONCORE_COUNTER_CATEGORIES
+        .filter(c => c.counters.some(id => preset.counters.indexOf(id) >= 0)).map(c => c.id);
+      counterSettings.selectedCounterIds = preset.counters.slice();
+      pathPhase = 2;
+    }
+    if (preset && pathStep.module === 'arimasu-imasu' && preset.category && Array.isArray(mod.categories)) {
+      const cat = mod.categories.find(c => c.id === preset.category);
+      if (cat) {
+        const base = {};
+        Object.keys(mod.verbEngine.bases).forEach(id => { base[id] = cat.baseIds.indexOf(id) >= 0; });
+        matrixState.filters.base = base;
+        mod.categories.forEach(c => { c._uiOn = (c.id === cat.id); });
+        if (cat.baseIds[0]) demoState.baseId = cat.baseIds[0];
+        pathPhase = 2;
+      }
+    }
+
     populateHero(mod);
     setupPhaseTabs(mod);
     renderPhase(mod, 1);
     loadingEl.classList.add('hidden');
     contentEl.classList.remove('hidden');
     document.title = `${mod.title} — NihonCore`;
+    if (pathPhase > 1) document.querySelector('.phase-tab[data-phase="' + pathPhase + '"]')?.click();
   }
 }
 
@@ -5580,6 +5604,15 @@ function initPracticePage() {
   const metaLabel = v => META_LABELS[v] || v;
 
   // Tanulási út: a lépés megszabhatja, mely partikulák szerepeljenek a körben
+  // Tanulási út: a lépés az s_n5_NNN mondatok egy tartományára szűkítheti a kört
+  function matchesIdRanges(s) {
+    const ranges = lobbyState.idRanges;
+    if (!ranges) return true;
+    const m = /^s_n5_(\d+)$/.exec(s.id || '');
+    if (!m) return false;
+    const n = parseInt(m[1], 10);
+    return ranges.some(r => n >= r[0] && n <= r[1]);
+  }
   function matchesParticleFocus(s) {
     const only = lobbyState.particlesOnly, any = lobbyState.particlesAny;
     if (!only && !any) return true;
@@ -5592,6 +5625,7 @@ function initPracticePage() {
   function filterSentences() {
     return NIHONCORE_SENTENCES.filter(s => {
       if (s.level !== lobbyState.level) return false;
+      if (!matchesIdRanges(s)) return false;
       if (!matchesParticleFocus(s)) return false;
       if (!lobbyState.filters.function[sentenceFunction(s)]) return false;
       if (!lobbyState.filters.tense[s.metadata.tense])       return false;
@@ -6400,6 +6434,7 @@ function initPracticePage() {
     if (!p) return;
     if (p.particlesOnly) lobbyState.particlesOnly = p.particlesOnly;
     if (p.particlesAny)  lobbyState.particlesAny  = p.particlesAny;
+    if (p.idRanges)      lobbyState.idRanges      = p.idRanges;
     if (p.level) document.querySelector('.pl-level-btn[data-level="' + p.level + '"]')?.click();
     if (p.mode)  document.querySelector('.pl-mode-btn[data-mode="' + p.mode + '"]')?.click();
     updateLobbyMatchCount();
@@ -15265,7 +15300,8 @@ function initStatsPage() {
     grammar: 'Nyelvtani minták',
     'arimasu-imasu': 'Alap igék',  // V5 P2 — verb-engine instrumented
     production: 'Szabad fordítás', // V7 P1
-    kana: 'Kana'
+    kana: 'Kana',
+    lesson: 'Lecke'
   };
   const MODE_LABELS = {
     recognition: 'Felismerés', build: 'Építkezés', mastery: 'Mester',
@@ -15273,6 +15309,7 @@ function initStatsPage() {
     cloze: 'Kiegészítés', translate: 'Fordítás', pro: 'Pro hallás',
     free: 'Szabad fordítás',
     reverse: 'Fordítva', typing: 'Beírás', match: 'Párosító',
+    check: 'Ellenőrzés',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
@@ -17025,6 +17062,278 @@ function initKanaPage() {
 
 
 /* ====================================================
+   9d. LESSON PAGE — a tanulási út magyarázó oldala (lesson.html)
+   ----------------------------------------------------
+   A lecke szövege a js/data/course.js-ben van (NIHONCORE_COURSE); az oldal
+   a ?id=<lecke-id> paraméter szerint rajzolja ki:
+     · fejléc: a lecke száma, címe, „a végére…" pontok
+     · nyelvtani pontok: minta, magyarázat, meghallgatható példamondatok
+     · „Ellenőrizd magad": rövid feleletválasztós kör a közös kör-keretben
+   Az ellenőrző kör a statisztikába 'lesson' / 'check' néven kerül, és a
+   tanulási út ezzel teljesíti a lecke lépését (legalább 60%).
+
+   Japán szöveg: a {漢字|かな} jelölésből furigana lesz a képernyőn, a
+   felolvasáshoz pedig a kana-olvasat megy.
+   ==================================================== */
+function initLessonPage() {
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const RB = /\{([^|{}]+)\|([^|{}]+)\}/g;
+  const ruby = s => esc(s).replace(RB, '<ruby>$1<rt>$2</rt></ruby>');       // képernyőre
+  const reading = s => String(s).replace(RB, '$2').replace(/[\s　＿…]/g, '');  // felolvasásra
+  const hasJp = s => /[぀-ヿ一-鿿]/.test(s);
+  const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+  const PLAY = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+
+  const course = (typeof NIHONCORE_COURSE !== 'undefined') ? NIHONCORE_COURSE : [];
+  let id = null;
+  try { id = new URLSearchParams(window.location.search).get('id'); } catch (e) {}
+  const lesson = course.find(l => l.id === id);
+  const hero = document.getElementById('lessonHero');
+  const content = document.getElementById('lessonContent');
+  const runtime = document.getElementById('lessonRuntime');
+
+  if (!lesson) {
+    hero.classList.add('hidden');
+    content.innerHTML = `
+      <div class="stats-empty glass-panel">
+        <p>Ez a lecke még nem készült el.</p>
+        <p class="stats-empty-sub">A tanulási út az 1–8. leckét tartalmazza; a többi folyamatosan készül.</p>
+        <a href="../index.html#path" class="btn btn-primary">Vissza a tanulási útra</a>
+      </div>`;
+    return;
+  }
+
+  /* ── A) Fejléc ─────────────────────────────────── */
+  document.title = lesson.no + '. lecke: ' + lesson.title + ' — NihonCore';
+  document.getElementById('lessonNo').textContent = lesson.no;
+  document.getElementById('lessonKicker').textContent = lesson.book + ' · ' + lesson.no + '. lecke';
+  document.getElementById('lessonTitle').textContent = lesson.title;
+  document.getElementById('lessonLead').textContent = lesson.lead;
+  document.getElementById('lessonCando').innerHTML = lesson.cando.map(c => '<li>' + esc(c) + '</li>').join('');
+  if (window.NihonCoreRound && NihonCoreRound.refresh) NihonCoreRound.refresh();   // modul-név a fejlécbe
+
+  /* ── B) Nyelvtani pontok ───────────────────────── */
+  function renderLesson() {
+    const toc = lesson.points.map((p, i) =>
+      `<a href="#p${i + 1}" class="lp-toc-link"><span class="lp-toc-no">${i + 1}</span><span lang="ja">${esc(p.title)}</span></a>`).join('');
+    const points = lesson.points.map((p, i) => `
+      <section class="lp-point glass-panel" id="p${i + 1}">
+        <div class="lp-point-head">
+          <span class="lp-point-no">${i + 1}</span>
+          <h2 class="lp-point-title" lang="ja">${esc(p.title)}</h2>
+          <span class="lp-point-sub">${esc(p.sub)}</span>
+        </div>
+        <div class="lp-pattern" lang="ja">${esc(p.pattern)}</div>
+        <p class="lp-body">${p.body}</p>
+        <ul class="lp-examples">
+          ${p.examples.map((e, k) => `
+            <li class="lp-ex">
+              <button class="lp-ex-play" type="button" data-p="${i}" data-e="${k}" aria-label="Meghallgatom">${PLAY}</button>
+              <div class="lp-ex-text">
+                <div class="lp-ex-jp" lang="ja">${ruby(e.jp)}</div>
+                <div class="lp-ex-romaji">${esc(e.romaji)}</div>
+                <div class="lp-ex-hu">${esc(e.hu)}</div>
+              </div>
+            </li>`).join('')}
+        </ul>
+        ${p.tip ? `<div class="lp-tip"><strong>Figyelj:</strong> ${p.tip}</div>` : ''}
+      </section>`).join('');
+
+    content.innerHTML = `
+      <nav class="lp-toc" aria-label="A lecke pontjai">${toc}</nav>
+      ${points}
+      <section class="lp-check glass-panel-heavy">
+        <h2 class="lp-check-title">Ellenőrizd magad</h2>
+        <p class="lp-check-sub">${lesson.quiz.length} rövid kérdés a leckéből. A lépés teljesítéséhez 60% kell; bármikor újrapróbálhatod.</p>
+        <button class="btn btn-primary btn-lg" id="lqStart" type="button">Kezdjük</button>
+      </section>`;
+
+    content.querySelectorAll('.lp-ex-play').forEach(btn => btn.addEventListener('click', () => {
+      const e = lesson.points[+btn.dataset.p].examples[+btn.dataset.e];
+      if (!window.NihonCoreAudio) return;
+      content.querySelectorAll('.lp-ex-play.is-playing').forEach(b => b.classList.remove('is-playing'));
+      btn.classList.add('is-playing');
+      const done = () => btn.classList.remove('is-playing');
+      setTimeout(done, 4000);
+      try { NihonCoreAudio.play(reading(e.jp), { speed: 0.9, onError: done }); } catch (err) { done(); }
+    }));
+    // oldalon belüli ugrás a lebegő fejléc alá
+    content.querySelectorAll('.lp-toc-link').forEach(a => a.addEventListener('click', ev => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      ev.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }));
+    document.getElementById('lqStart').addEventListener('click', startQuiz);
+  }
+
+  /* ── C) Ellenőrző kör ──────────────────────────── */
+  const run = { inLesson: true, cards: [], idx: 0, score: 0, streak: 0, results: [], submitted: false, startTs: 0 };
+
+  function startQuiz() {
+    run.cards = shuffle(lesson.quiz).map(q => ({ q: q, options: shuffle([q.a].concat(q.wrong)) }));
+    run.idx = 0; run.score = 0; run.streak = 0; run.results = []; run.startTs = Date.now(); run.inLesson = false;
+    NihonCoreRound.begin(function () {
+      return { module: 'lesson', mode: 'check', results: run.results, score: run.score, startTs: run.startTs };
+    });
+    hero.classList.add('hidden');
+    content.classList.add('hidden');
+    runtime.classList.remove('hidden');
+    const sEl = document.getElementById('lqSummary');
+    sEl.classList.add('hidden'); sEl.innerHTML = '';
+    renderCard();
+    NihonCoreRound.scrollToRound();
+  }
+
+  function updateBar() {
+    const total = run.cards.length;
+    document.getElementById('lqScore').textContent = run.score;
+    document.getElementById('lqStreak').textContent = `${run.streak} 🔥`;
+    document.getElementById('lqCount').textContent = `Kérdés ${Math.min(run.idx + 1, total)} / ${total}`;
+    document.getElementById('lqFill').style.width = `${total ? (run.idx / total) * 100 : 0}%`;
+  }
+
+  function optHtml(text) {
+    return `<span class="lq-opt"${hasJp(text) ? ' lang="ja"' : ''}>${ruby(text)}</span>`;
+  }
+
+  function renderCard() {
+    run.submitted = false;
+    updateBar();
+    const fb = document.getElementById('lqFeedback');
+    fb.classList.add('hidden'); fb.innerHTML = '';
+    const card = run.cards[run.idx];
+    const q = card.q;
+    const long = card.options.some(o => reading(o).length > 9);
+    document.getElementById('lqCard').innerHTML = `
+      <div class="cj-prompt">
+        <div class="cj-prompt-eyebrow">
+          <span class="cj-pe-group">${lesson.no}. lecke</span><span class="cj-pe-dot">·</span>Ellenőrzés
+        </div>
+        <div class="lq-question">${ruby(q.q)}</div>
+        ${q.jp ? `<div class="lq-jp" lang="ja">${ruby(q.jp)}</div>` : ''}
+      </div>
+      <div class="cj-options lq-options${long ? ' lq-options-long' : ''}">
+        ${card.options.map((o, i) => `<button class="cj-option" type="button" data-idx="${i}">${optHtml(o)}</button>`).join('')}
+      </div>
+      <button class="dont-know-btn" type="button">Nem tudom</button>`;
+
+    const buttons = document.querySelectorAll('#lqCard .cj-option');
+    const lock = () => document.querySelectorAll('#lqCard .cj-option, #lqCard .dont-know-btn').forEach(b => { b.disabled = true; });
+    const right = card.options.indexOf(q.a);
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      if (run.submitted) return;
+      const chosen = card.options[parseInt(btn.dataset.idx, 10)];
+      const ok = chosen === q.a;
+      lock();
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) buttons[right].classList.add('reveal-correct');
+      finalize(card, ok, { chosen: chosen });
+    }));
+    document.querySelector('#lqCard .dont-know-btn').addEventListener('click', () => {
+      if (run.submitted) return;
+      lock();
+      buttons[right].classList.add('reveal-correct');
+      finalize(card, false, { dontKnow: true });
+    });
+  }
+
+  function finalize(card, ok, info) {
+    run.submitted = true;
+    if (ok) { run.score += 10; run.streak++; } else { run.streak = 0; }
+    run.results.push({ q: lesson.id + ':' + lesson.quiz.indexOf(card.q), correct: ok,
+                       errorCode: ok ? null : (info.dontKnow ? 'dont_know' : 'wrong_choice') });
+    document.getElementById('lqScore').textContent = run.score;
+    document.getElementById('lqStreak').textContent = `${run.streak} 🔥`;
+
+    const q = card.q;
+    const isLast = run.idx + 1 >= run.cards.length;
+    const fb = document.getElementById('lqFeedback');
+    fb.className = 'conj-feedback ' + (ok ? 'pr-fb-correct' : info.dontKnow ? 'pr-fb-dontknow' : 'pr-fb-wrong');
+    fb.innerHTML = `
+      <div class="pr-fb-header">
+        <span class="pr-fb-mark">${ok ? '✅' : info.dontKnow ? '💡' : '🤔'}</span>
+        <span class="pr-fb-title">${ok ? 'Így van' : info.dontKnow ? 'Ez a helyes' : 'Nézzük meg együtt'}</span>
+      </div>
+      <div class="pr-fb-explain">
+        ${ok ? '' : `<div class="pfe-row pfe-correct">
+          <span class="pfe-label">Helyes</span>
+          <span class="pfe-text"><strong class="${hasJp(q.a) ? 'pfe-jp-ok' : ''}"${hasJp(q.a) ? ' lang="ja"' : ''}>${ruby(q.a)}</strong></span>
+        </div>`}
+        ${!ok && info.chosen ? `<div class="pfe-row pfe-wrong">
+          <span class="pfe-label">A te válaszod</span>
+          <span class="pfe-text"${hasJp(info.chosen) ? ' lang="ja"' : ''}>${ruby(info.chosen)}</span>
+        </div>` : ''}
+        <div class="pfe-row pfe-context">
+          <span class="pfe-label">Miért?</span>
+          <span class="pfe-text">${esc(q.why)}</span>
+        </div>
+      </div>
+      <button class="btn btn-primary cj-next" id="lqNext" type="button">${isLast ? 'Eredmény' : 'Következő'}</button>`;
+    document.getElementById('lqNext').addEventListener('click', advance);
+  }
+
+  function advance() {
+    run.idx++;
+    if (run.idx >= run.cards.length) showSummary(); else renderCard();
+    NihonCoreRound.scrollToRound();
+  }
+
+  function showSummary() {
+    NihonCoreStats.recordSession({ module: 'lesson', mode: 'check', results: run.results, score: run.score, startTs: run.startTs });
+    const total = run.results.length;
+    const correct = run.results.filter(r => r.correct).length;
+    const pct = total ? Math.round((correct / total) * 100) : 0;
+    const passed = pct >= 60;
+    document.getElementById('lqCard').innerHTML = '';
+    const fb = document.getElementById('lqFeedback');
+    fb.classList.add('hidden'); fb.innerHTML = '';
+    document.getElementById('lqFill').style.width = '100%';
+    const sEl = document.getElementById('lqSummary');
+    sEl.classList.remove('hidden');
+    sEl.innerHTML = `
+      <div class="summary-icon">${pct === 100 ? '🏆' : passed ? '🎯' : '🌱'}</div>
+      <h3>${passed ? 'Megvan a lecke' : 'Még egy kör, és megvan'}</h3>
+      <div class="summary-score">${correct} / ${total}</div>
+      <p class="lq-summary-note">${passed
+        ? 'Jöhetnek a lecke gyakorló lépései a tanulási úton.'
+        : 'Nézd át újra a pontokat, amik bizonytalanok, aztán próbáld meg ismét.'}</p>
+      <div class="kana-summary-actions">
+        ${passed
+          ? `<a class="btn btn-primary" href="../index.html#path">Tovább az úton</a>
+             <button class="btn btn-outline" id="lqBack" type="button">Vissza a leckéhez</button>`
+          : `<button class="btn btn-primary" id="lqBack" type="button">Vissza a leckéhez</button>
+             <button class="btn btn-outline" id="lqAgain" type="button">Újra</button>`}
+      </div>`;
+    document.getElementById('lqBack').addEventListener('click', backToLesson);
+    const again = document.getElementById('lqAgain');
+    if (again) again.addEventListener('click', startQuiz);
+    if (pct === 100 && window.NihonCoreMotion && NihonCoreMotion.celebrate) {
+      try { NihonCoreMotion.celebrate({ title: 'Hibátlan!', sub: `${total} / ${total}` }); } catch (e) {}
+    }
+  }
+
+  function backToLesson() {
+    run.inLesson = true; run.cards = [];
+    hero.classList.remove('hidden');          // → a kör-őr elmenti a részeredményt
+    content.classList.remove('hidden');
+    runtime.classList.add('hidden');
+    window.scrollTo({ top: 0 });
+  }
+
+  document.getElementById('lqExit').addEventListener('click', () => {
+    if (run.inLesson) return;
+    if (!confirm('Biztosan kilépsz a körből?\n\nA megkezdett kört nem fejezed be, ' +
+      'de az eddigi válaszaid (helyes/hibás) elmentődnek a statisztikába.')) return;
+    backToLesson();
+  });
+
+  renderLesson();
+  window._lesson = { lesson, ruby, reading, startQuiz };
+}
+
+
+/* ====================================================
    10. PAGE DETECTOR — egy oldal-init futtatása ─────
    ----------------------------------------------------
    A switch egy függvénybe csomagolva (window.NihonCoreInitPage).
@@ -17035,6 +17344,8 @@ function initCurrentPage() {
     initStatsPage();
   } else if (document.getElementById('kanaMain')) {
     initKanaPage();
+  } else if (document.getElementById('lessonMain')) {
+    initLessonPage();
   } else if (document.getElementById('prodMain')) {
     initProductionPage();
   } else if (document.getElementById('grmMain')) {
