@@ -366,19 +366,25 @@ window.NihonCoreRound = (function () {
     document.removeEventListener('keydown', _sheet._onKey, true);
     _sheet.remove(); _sheet = null;
   }
-  function confirmExit(onYes) {
+  // Általános megerősítő lap. opts: { title, text, yes, no } — minden mező egyszerű szöveg.
+  // A biztonságos gomb (no) kapja a fókuszt; Esc és a háttérre kattintás = mégsem.
+  function confirmSheet(opts, onYes) {
     closeSheet();
     var el = document.createElement('div');
     el.className = 'nc-exit-backdrop';
     el.innerHTML =
       '<div class="nc-exit-sheet" role="alertdialog" aria-modal="true" aria-labelledby="ncExitTitle" aria-describedby="ncExitText">' +
-        '<h2 class="nc-exit-title" id="ncExitTitle">Kilépsz a körből?</h2>' +
-        '<p class="nc-exit-text" id="ncExitText">A kört nem fejezed be, de az eddigi válaszaid elmentődnek a statisztikába.</p>' +
+        '<h2 class="nc-exit-title" id="ncExitTitle"></h2>' +
+        '<p class="nc-exit-text" id="ncExitText"></p>' +
         '<div class="nc-exit-actions">' +
-          '<button class="btn btn-outline nc-exit-yes" type="button">Kilépés</button>' +
-          '<button class="btn btn-primary nc-exit-no" type="button">Folytatom</button>' +
+          '<button class="btn btn-outline nc-exit-yes" type="button"></button>' +
+          '<button class="btn btn-primary nc-exit-no" type="button"></button>' +
         '</div>' +
       '</div>';
+    el.querySelector('.nc-exit-title').textContent = opts.title;
+    el.querySelector('.nc-exit-text').textContent = opts.text;
+    el.querySelector('.nc-exit-yes').textContent = opts.yes;
+    el.querySelector('.nc-exit-no').textContent = opts.no || 'Mégsem';
     document.body.appendChild(el);
     _sheet = el;
     el._onKey = function (e) {
@@ -389,6 +395,17 @@ window.NihonCoreRound = (function () {
     el.querySelector('.nc-exit-no').addEventListener('click', closeSheet);
     el.querySelector('.nc-exit-yes').addEventListener('click', function () { closeSheet(); onYes(); });
     try { el.querySelector('.nc-exit-no').focus(); } catch (err) {}
+  }
+  function confirmExit(onYes) {
+    confirmSheet({
+      title: 'Kilépsz a körből?',
+      text: 'A kört nem fejezed be, de az eddigi válaszaid elmentődnek a statisztikába.',
+      yes: 'Kilépés', no: 'Folytatom'
+    }, onYes);
+  }
+  // Törlés megerősítése (profil, ismétlés-ütemezés, előzmények)
+  function confirmDelete(title, text, onYes) {
+    confirmSheet({ title: title, text: text, yes: 'Törlés', no: 'Mégsem' }, onYes);
   }
 
   // ✕ gomb: a modul saját kezelője confirm()-ot hív — az újra-kattintás idejére igent adunk
@@ -439,7 +456,7 @@ window.NihonCoreRound = (function () {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
-  return { begin: begin, isActive: isActive, markComplete: markComplete, flush: flush, refresh: refresh, scrollToRound: scrollToRound };
+  return { begin: begin, isActive: isActive, markComplete: markComplete, flush: flush, refresh: refresh, scrollToRound: scrollToRound, confirmDelete: confirmDelete };
 })();
 
 
@@ -7447,10 +7464,10 @@ function initConjugationPage() {
       const resetBtn = panel.querySelector('#conjProfileReset');
       if (resetBtn) {
         resetBtn.addEventListener('click', () => {
-          if (confirm('Biztosan törlöd a Ragozó modul teljes profilját? Ez nem visszafordítható.')) {
+          NihonCoreRound.confirmDelete('Törlöd a Ragozó profilját?', 'A modul összes eddigi eredménye elvész. Ez nem vonható vissza.', () => {
             try { localStorage.removeItem(PROFILE_KEY); } catch (e) {}
             renderStatsBar();
-          }
+          });
         });
       }
     } else {
@@ -9101,10 +9118,10 @@ function initAdjectivesPage() {
       const resetBtn = panel.querySelector('#adjProfileReset');
       if (resetBtn) {
         resetBtn.addEventListener('click', () => {
-          if (confirm('Biztosan törlöd a Melléknév modul teljes profilját? Ez nem visszafordítható.')) {
+          NihonCoreRound.confirmDelete('Törlöd a Melléknév profilját?', 'A modul összes eddigi eredménye elvész. Ez nem vonható vissza.', () => {
             try { localStorage.removeItem(PROFILE_KEY); } catch (e) {}
             renderAdjStatsBar();
-          }
+          });
         });
       }
     } else {
@@ -10518,10 +10535,10 @@ function initDateTimePage() {
       const resetBtn = panel.querySelector('#dtProfileReset');
       if (resetBtn) {
         resetBtn.addEventListener('click', () => {
-          if (confirm('Biztosan törlöd a Dátum & Idő modul teljes profilját? Ez nem visszafordítható.')) {
+          NihonCoreRound.confirmDelete('Törlöd a Dátum & Idő profilját?', 'A modul összes eddigi eredménye elvész. Ez nem vonható vissza.', () => {
             try { localStorage.removeItem(PROFILE_KEY); } catch (e) {}
             renderDtStatsBar();
-          }
+          });
         });
       }
     } else {
@@ -13091,19 +13108,19 @@ function initGrammarPage() {
       const resetBtn = panel.querySelector('#grmProfileReset');
       if (resetBtn) {
         resetBtn.addEventListener('click', () => {
-          if (confirm('Biztosan törlöd a Grammar Patterns modul teljes profilját? Ez nem visszafordítható.')) {
+          NihonCoreRound.confirmDelete('Törlöd a Nyelvtani minták profilját?', 'A modul összes eddigi eredménye elvész. Ez nem vonható vissza.', () => {
             try { localStorage.removeItem(PROFILE_KEY); } catch (e) {}
             renderGrmStatsBar();
-          }
+          });
         });
       }
       const srsBtn = panel.querySelector('#grmSrsReset');
       if (srsBtn) {
         srsBtn.addEventListener('click', () => {
-          if (confirm('Biztosan törlöd az SRS-ütemezést a Grammar Patterns területén? Minden minta visszaáll "új" állapotra.')) {
+          NihonCoreRound.confirmDelete('Törlöd az ismétlés-ütemezést?', 'Minden nyelvtani minta visszaáll „új" állapotra. Ez nem vonható vissza.', () => {
             NihonCoreSRS.clearScope(SRS_PREFIX);
             renderGrmStatsBar();
-          }
+          });
         });
       }
     } else {
@@ -13227,7 +13244,7 @@ function initGrammarPage() {
 
     document.getElementById('grmLobby').innerHTML = `
       <div class="lobby-header">
-        <div class="lobby-eyebrow">Grammar Patterns modul</div>
+        <div class="lobby-eyebrow">Nyelvtani minták</div>
         <h2 class="lobby-title">Állítsd be a kört</h2>
         <p class="lobby-sub">Válaszd ki a szintet és kategóriákat, majd indítsd a kört. Ha bekapcsolod az SRS-t, a sor az esedékes mintázatokból válogat.</p>
       </div>
@@ -14630,7 +14647,7 @@ function initProductionPage() {
 
     document.getElementById('prodLobby').innerHTML = `
       <div class="lobby-header">
-        <div class="lobby-eyebrow">Production modul</div>
+        <div class="lobby-eyebrow">Szabad fordítás</div>
         <h2 class="lobby-title">Állítsd be a kört</h2>
         <p class="lobby-sub">A legnehezebb mód: a magyar mondatot teljes japán mondatra fordítod. Írhatsz kanával vagy romajival — a visszajelzés azt is megmutatja, mennyire jártál közel.</p>
       </div>
@@ -15120,9 +15137,9 @@ function initStatsPage() {
   const MODULE_LABELS = {
     conjugation: 'Ragozó', adjectives: 'Melléknév', datetime: 'Dátum & Idő',
     listening: 'Hallás', counter: 'Számláló', practice: 'Mondat-Mester',
-    grammar: 'Mintázatok',
+    grammar: 'Nyelvtani minták',
     'arimasu-imasu': 'Alap igék',  // V5 P2 — verb-engine instrumented
-    production: 'Produkció',       // V7 P1
+    production: 'Szabad fordítás', // V7 P1
     kana: 'Kana'
   };
   const MODE_LABELS = {
@@ -15159,13 +15176,38 @@ function initStatsPage() {
     if (s < 60) return s + ' mp';
     return Math.floor(s / 60) + ' p ' + pad(s % 60) + ' mp';
   }
+  // Hibakód → magyar felirat. Elsőként a modulok hiba-katalógusainak `title` mezője
+  // (core.js), aztán a katalóguson kívüli, általános kódok; végső esetben a nyers kód.
+  const ERROR_CATALOGS = [
+    typeof NIHONCORE_ERROR_TYPES         !== 'undefined' ? NIHONCORE_ERROR_TYPES         : null,
+    typeof NIHONCORE_ADJ_ERROR_TYPES     !== 'undefined' ? NIHONCORE_ADJ_ERROR_TYPES     : null,
+    typeof NIHONCORE_DT_ERROR_TYPES      !== 'undefined' ? NIHONCORE_DT_ERROR_TYPES      : null,
+    typeof NIHONCORE_AUDIO_ERROR_TYPES   !== 'undefined' ? NIHONCORE_AUDIO_ERROR_TYPES   : null,
+    typeof NIHONCORE_GRAMMAR_ERROR_TYPES !== 'undefined' ? NIHONCORE_GRAMMAR_ERROR_TYPES : null
+  ].filter(Boolean);
+  const ERROR_LABELS = {
+    wrong_form: 'Rossz alak', wrong_choice: 'Rossz válasz', wrong_reading: 'Rossz olvasat',
+    wrong_type: 'Rossz típus', wrong_category: 'Rossz kategória', wrong_order: 'Rossz sorrend',
+    wrong_pattern: 'Másik minta', wrong_particle: 'Rossz partikula', wrong: 'Rossz válasz',
+    empty: 'Üres válasz', dont_know: 'Nem tudtam', typo: 'Elgépelés', timeout: 'Lejárt az idő',
+    partial_match: 'Részben jó', far: 'Messze járt', near: 'Közel járt', close: 'Majdnem jó',
+    long_vowel: 'Hosszú magánhangzó', sokuon: 'Kis っ', mora: 'Mora-ritmus'
+  };
+  function errorLabel(code) {
+    const key = String(code || '');
+    for (let i = 0; i < ERROR_CATALOGS.length; i++) {
+      const hit = ERROR_CATALOGS[i][key];
+      if (hit && hit.title) return hit.title;
+    }
+    return ERROR_LABELS[key] || key.replace(/[_-]/g, ' ');
+  }
   function topError(codes) {
     if (!codes || !codes.length) return null;
     const freq = {};
     codes.forEach(c => { freq[c] = (freq[c] || 0) + 1; });
     let best = null, n = 0;
     Object.keys(freq).forEach(c => { if (freq[c] > n) { n = freq[c]; best = c; } });
-    return best ? { code: best.replace(/_/g, ' '), count: n } : null;
+    return best ? { code: errorLabel(best), count: n } : null;
   }
 
   /* ── V4 P2 — stat-számítók ─────────────────────── */
@@ -15465,7 +15507,7 @@ function initStatsPage() {
       const p = readJson('nihoncore_listening_profile_v1');
       if (p && p.trapErrors) {
         const rows = Object.keys(p.trapErrors)
-          .map(k => ({ label: cleanKey(k), count: p.trapErrors[k] || 0 }))
+          .map(k => ({ label: errorLabel(k), count: p.trapErrors[k] || 0 }))
           .sort((x, y) => y.count - x.count);
         if (rows.some(r => r.count > 0))
           out.push({ title: 'Hang-csapda hibák', kind: 'count', rows: rows });
@@ -15642,10 +15684,10 @@ function initStatsPage() {
 
     const clr = document.getElementById('shClear');
     if (clr) clr.addEventListener('click', () => {
-      if (confirm('Biztosan törlöd a teljes gyakorlási előzményt?\nEz nem vonható vissza.')) {
+      NihonCoreRound.confirmDelete('Törlöd az előzményeket?', 'A teljes gyakorlási előzmény elvész, vele a statisztika is. Ez nem vonható vissza.', () => {
         NihonCoreStats.clearSessions();
         renderHistory();
-      }
+      });
     });
   }
 
@@ -15964,7 +16006,7 @@ function initStatsPage() {
 
   // V5 P3b — Ismert SRS-scope-ok listája. Jövőbeli modulok ide kerülnek.
   const SRS_SCOPES = [
-    { prefix: 'grammar:', label: '📐 Mintázatok (Grammar Patterns)' }
+    { prefix: 'grammar:', label: 'Nyelvtani minták' }
     // pl. jövőbeli: { prefix: 'listening:', label: '🔊 Hallás' }
   ];
 
@@ -16076,7 +16118,7 @@ function initStatsPage() {
       Object.keys(errFreq).forEach(c => { if (errFreq[c] > topN) { topN = errFreq[c]; topCode = c; } });
       if (topCode && topN / errTotal >= 0.35) {
         out.push({ severity: 46 + Math.round(topN / errTotal * 28), icon: '🔁',
-          title: 'Ismétlődő hibatípus: ' + cleanKey(topCode),
+          title: 'Ismétlődő hibatípus: ' + errorLabel(topCode),
           text: 'A hibáid nagy része ugyanaz a típus (' + topN + '× / ' + errTotal + ' hiba). ' +
                 'Ez nem véletlen — egy konkrét szabályt érdemes átnézni.' });
       }
