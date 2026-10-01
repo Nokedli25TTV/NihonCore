@@ -359,25 +359,75 @@ window.NihonCoreRound = (function () {
   // initCurrentPage hívja
   function refresh() { refreshBadge(); attachHeroObserver(); }
 
+  // ── Kilépés-megerősítő lap (a natív confirm() helyett) ──
+  var _sheet = null;
+  function closeSheet() {
+    if (!_sheet) return;
+    document.removeEventListener('keydown', _sheet._onKey, true);
+    _sheet.remove(); _sheet = null;
+  }
+  function confirmExit(onYes) {
+    closeSheet();
+    var el = document.createElement('div');
+    el.className = 'nc-exit-backdrop';
+    el.innerHTML =
+      '<div class="nc-exit-sheet" role="alertdialog" aria-modal="true" aria-labelledby="ncExitTitle" aria-describedby="ncExitText">' +
+        '<h2 class="nc-exit-title" id="ncExitTitle">Kilépsz a körből?</h2>' +
+        '<p class="nc-exit-text" id="ncExitText">A kört nem fejezed be, de az eddigi válaszaid elmentődnek a statisztikába.</p>' +
+        '<div class="nc-exit-actions">' +
+          '<button class="btn btn-outline nc-exit-yes" type="button">Kilépés</button>' +
+          '<button class="btn btn-primary nc-exit-no" type="button">Folytatom</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(el);
+    _sheet = el;
+    el._onKey = function (e) {
+      if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); closeSheet(); }
+    };
+    document.addEventListener('keydown', el._onKey, true);
+    el.addEventListener('click', function (e) { if (e.target === el) closeSheet(); });
+    el.querySelector('.nc-exit-no').addEventListener('click', closeSheet);
+    el.querySelector('.nc-exit-yes').addEventListener('click', function () { closeSheet(); onYes(); });
+    try { el.querySelector('.nc-exit-no').focus(); } catch (err) {}
+  }
+
+  // ✕ gomb: a modul saját kezelője confirm()-ot hív — az újra-kattintás idejére igent adunk
+  function onExitClick(e) {
+    var btn = (e.target && e.target.closest) ? e.target.closest('.round-exit') : null;
+    if (!btn || !_active) return;
+    if (btn._ncConfirmed) { btn._ncConfirmed = false; return; }     // megerősítve: mehet a modul kezelője
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    confirmExit(function () {
+      var orig = window.confirm;
+      window.confirm = function () { return true; };
+      btn._ncConfirmed = true;
+      try { btn.click(); } finally { window.confirm = orig; btn._ncConfirmed = false; }
+    });
+  }
+
   // ── Req 1 — navigációs őr (capture fázisban) ──
   function onClick(e) {
     if (!_active) return;
     var a = (e.target && e.target.closest) ? e.target.closest('a[href]') : null;
     if (!a) return;
-    if (a.closest('.round-exit')) return;            // saját confirm-je van
+    if (a.closest('.round-exit')) return;            // a ✕ gombot az onExitClick kezeli
     if (a.hasAttribute('data-no-guard')) return;
     var href = a.getAttribute('href') || '';
     if (!href || href.charAt(0) === '#' || href.indexOf('javascript:') === 0) return;
-    if (confirm(EXIT_MSG)) {
-      flush();                                        // megerősítve → mentsük a részeredményt
-    } else {
-      e.preventDefault();
-      e.stopPropagation();
-      if (e.stopImmediatePropagation) e.stopImmediatePropagation();
-    }
+    // Kör közben elnavigálna: megerősítés a saját lappal, igen esetén mentés + navigáció
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+    confirmExit(function () {
+      flush();
+      window.location.href = a.href;
+    });
   }
 
   function init() {
+    document.addEventListener('click', onExitClick, true);
     document.addEventListener('click', onClick, true);
     window.addEventListener('beforeunload', function (e) {
       if (_active) { e.preventDefault(); e.returnValue = ''; return ''; }
