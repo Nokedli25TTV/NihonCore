@@ -83,6 +83,7 @@ NihonCoreV2/
 │   ├── grammar.html        ← V5 P1+P3+P4 Grammar Patterns modul
 │   ├── production.html     ← V7 P1 Production modul
 │   ├── kana.html           ← ★ Redesign 6.: Kana-tréner
+│   ├── modules.html        ← ★ Modulok oldal: a modul-kártyák (Szabad gyakorlás) — statikus
 │   ├── login.html          ← Auth (mock)
 │   └── register.html       ← Auth (mock)
 ├── css/                    ← ★ V7 P3
@@ -136,7 +137,7 @@ ugyanaz a regisztrációs URL keletkezik — a SW scope-ja `./` marad.
 1. Új HTML fájl → `pages/` mappába
 2. A `<head>` path-ok: `../css/style.css`, `../img/fav_icon_nihoncore.png`, `../manifest.webmanifest`, stb.
 3. A logo + home-btn `href="../index.html"`
-4. Az index.html-ben új modul-kártya `href="pages/újfájl.html"`
+4. A `pages/modules.html`-ben új modul-kártya `href="újfájl.html"` (a modul-kártyák ott vannak, nem az index.html-ben)
 5. `sw.js` APP_SHELL listájába `'./pages/újfájl.html'` + `CACHE_VERSION` bump
 6. `js/app.js` page-detector új ágat kap (új `initŰjPage()` mintát követve)
 
@@ -339,7 +340,8 @@ app.js (egyetlen entry point minden HTML-en)
     else if (document.getElementById('moduleMain'))      initModulePage();
     else if (document.getElementById('practiceMain'))    initPracticePage();
     else if (document.querySelector('.auth-card'))       initAuthPages();
-    else if (document.querySelector('.modules-grid'))    initLanding();
+    else if (document.getElementById('homeMain'))        initLanding();
+    // pages/modules.html (#modulesMain): statikus kártyarács, nincs saját init
 ```
 
 **Fontos:** minden init függvény **closure-scope** ad — nincs globális state-szennyezés.
@@ -436,6 +438,7 @@ használt, most **8 defer-elt** script tag-et tölt be a `js/data/` mappából.
 |---|---|---|---|
 | `index.html` | csak `core.js` (tanulási út) | ✓ | root |
 | `pages/kana.html` | `core.js` + `kana.js` | ✓ | pages/ |
+| `pages/modules.html` | — | ✓ (csak az univerzális részek: fejléc, fül-sáv, téma) | pages/ |
 | `pages/module.html` | ✓ | ✓ | pages/ |
 | `pages/practice.html` | ✓ | ✓ | pages/ |
 | `pages/conjugation.html` | ✓ | ✓ | pages/ |
@@ -532,16 +535,18 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 | **Redesign 4. fázis — kezdőlap + tanulási út** | **(2026-10-01)** Az index.html már nem marketing-oldal: **első alkalommal szintválasztó** (nulláról / a kanát már olvasom), utána **„Folytatás" kártya** a következő lépéssel, alatta a **tanulási út** (13 lépés) és a **Szabad gyakorlás** (modul-kártyák). `NIHONCORE_PATH` (core.js) + `NihonCorePath` (app.js): haladás a `nihoncore_path_v1`-ben (szinkronizálva), aktív lépés a modul-oldal `?step=<id>` paraméteréből, `apply(modul, settings)` a lépés előre beállított körét ülteti a modulra (`only` / `set`), `onSession` (a `recordSession`-ből) dönti el a lépést (**≥ 60% = kész**), a kör végén `.path-result` jelzés visszaúttal. Mondat-Mester: partikula-fókusz (`particlesOnly` / `particlesAny`), és egy körben már nem ismétlődik mondat. |
 | **Redesign 5. fázis — feladat-javítások** | **(2026-10-01)** **Nyelvtani minták, Felismerés**: a kártya nem árulja el a választ (nincs kategória és fordítás; a kérdés „Mit fejez ki ez a mondat?"; az opció a jelentés, a minta neve válasz után jelenik meg). **Ragozó, Felismerés**: hibánál `recognitionExplanation` megmondja, mit választottál (másik alak / másik igecsoport / rossz tő), `howItsBuilt` pedig hogyan épül a helyes alak. **Szabad fordítás**: N5 szint + valódi szint-szűrés, **„Az én válaszom is helyes"** gomb (önértékelés), fejlesztői címkék ki. **Hang**: ha a Google TTS-végpont hibázik, a `NihonCoreAudio` a böngésző beépített japán felolvasójára (Web Speech API) vált. A magyarázatok magyarul indulnak. |
 | **Redesign 6. fázis — új feladatok** | **(2026-10-01)** **Kana-tréner** (új modul: `pages/kana.html`, `js/data/kana.js`, `initKanaPage`): hiragana + katakana (46 alapjel + zöngés + összetett), **tábla hanggal** és jelenkénti haladás-színezéssel, 4 mód: felismerés · fordítva · beírás · **párosító**; jó válasznál magától lép tovább, hibánál megmutatja, mit választottál; a gyengébb jelek gyakrabban jönnek (`nihoncore_kana_profile_v1`). **Mini-leckék** (`NIHONCORE_LESSONS` a core.js-ben + `initLessons`): „Tanuld meg" panel a lobbi fölött, első alkalommal nyitva. **Minta-készlet: modulonként EGY lecke** — a bővítés a végső tartalom-feltöltés része. |
+| **Görgetés-teljesítmény + Modulok oldal** | **(2026-10-01)** **(1) Akadó görgetés javítva.** Az ok: a tartalommal együtt görgő üveg-elemek (`.glass-panel`, `.glass-panel-heavy`, `.glass-card`, `.path-step-link`, `.helpers-bar`, `.phase-tabs`, `.stats-tabs`, összesítő, belépő-kártya) mind saját `backdrop-filter` elmosást kaptak — a kezdőlapon **27 elmosott réteg** volt, amit a böngésző görgetéskor képkockánként újraszámolt a rögzített háttér fölött. Most **elmosás csak rögzített rétegen** van (fejléc + fül-sáv = 2 réteg, kisebb sugárral: `blur(16px) saturate(1.4)`); a görgő panelek „matt üveget" kapnak (`--glass-bg` 0,56 → 0,70 átlátszatlanság — mögöttük úgyis csak a lágy háttér-mezők vannak, ott az elmosás nem látszott). További: a `.bg-decoration` saját, stabil méretű réteg (`translateZ(0)` + `100lvh` + `contain: strict` — telefonon a címsor mozgása nem rajzolja újra), kisebb árnyék-sugarak, a kártya-hover keret-színt vált (nem árnyékot animál), a visszajelzés-lap és a `.path-result` tömör (0,97) elmosás nélkül, a globális `scroll-behavior: smooth` és a `text-rendering: optimizeLegibility` törölve (sima görgetést a JS kér, ahol kell), `prefers-reduced-transparency` támogatás. **(2) Modulok külön oldalon:** új `pages/modules.html` (`#modulesMain`, statikus — nincs saját init) a 10 modul-kártyával; a kezdőlapról a rács kikerült, a helyén egy „Szabad gyakorlás" sor visz az új oldalra. A fejléc „Modulok" linkje és a fül-sáv „Modulok" füle oda mutat; a régi `index.html#modules` horgony átirányít. Az oldal-felismerő a kezdőlapot `#homeMain` alapján ismeri fel. **Közben javítva:** egy régi `a.module-card { display: block }` szabály felülírta a kártyák rács/flex elrendezését (telefonon nem volt meg a tömör sor, tableten a lábléc nem nyúlt ki); a statisztika üres állapotának „Irány a modulok" linkje nem létező oldalra mutatott. `CACHE_VERSION` → v49. |
 
 ### 🔴 Redesign 2026-10 — user-döntések (ezekhez mérj minden további UI-munkát)
 
 - **Célközönség:** nulláról induló ÉS kanát már olvasó kezdő, első indításkor szintválasztóval.
 - **Vizuális irány:** a zen paletta és a betűk maradnak, a felületek **üvegesek** (glass panelek + lebegő navbar), és az app **nagyon telefon- és tabletbarát** (user explicit kérése — felülírta a Zen Polish „nincs glassmorphism" elvét).
-- **Szerkezet:** vezetett tanulási út a kezdőlapon „Folytatás" gombbal + a modulok „Szabad gyakorlás"-ként.
+- **Szerkezet:** vezetett tanulási út a kezdőlapon „Folytatás" gombbal + a modulok „Szabad gyakorlás"-ként — **a modul-kártyák külön oldalon** vannak (`pages/modules.html`), nem a kezdőlapon (user-kérés, 2026-10-01).
+- **Görgetés:** a simaság elsőbbséget élvez a látvánnyal szemben — **elmosás (`backdrop-filter`) csak rögzített rétegen** lehet (user-panasz: „szétlaggolja magát görgetésnél").
 - **Utólagos kiegészítések (2026-10-01):** szó–jelentés **Párosító** az igékhez, melléknevekhez és dátumokhoz (`[data-match-launcher]`, a szókártya-adapterekből) · **kilépés-megerősítő lap** a natív `confirm()` helyett (`NihonCoreRound.confirmExit`; a modulok kezelői változatlanok) · **`window.NihonCoreStats` / `NihonCoreAudio` / `NihonCoreSRS`**: top-level `const`-ként nem voltak a `window`-n, ezért a V18 részmentés (`NihonCoreRound.flush`) **soha nem futott le** — most tényleg mentődnek a félbehagyott körök · **Számlálók 2–3. fázis**: a „Következő" a felismerő-kártyát rajzolta, a kör az első kártya után elakadt (javítva).
 - **Nyitva maradt:** a „Grammar Patterns" és a „Production modul" **neve** (user-döntés) · a profil-törlések még natív `confirm()`-ot használnak · a statisztika hibakódjai még nyersen jelennek meg („fő hiba: wrong form").
-- **Ellenőrzés szerver nélkül:** a redesign alatt a vizuális és funkcionális ellenőrzés fej nélküli Edge-dzsel történt a helyi fájlokon (`file://`), preview-szerver és localhost nélkül.
-- **Ág:** a redesign a `redesign-2026-10` ágon van; élesítéshez `main`-be kell olvasztani és pusholni.
+- **Ellenőrzés szerver nélkül:** a vizuális és funkcionális ellenőrzés fej nélküli böngészővel (Edge vagy Chrome) történik a helyi fájlokon (`file://`), preview-szerver és localhost nélkül.
+- **Ág:** a redesign a `main`-en van és élesítve lett (2026-10-01); a `redesign-2026-10` ág lezárult.
 
 **Jelenleg élő modulok:**
 - ✅ **Alap igék (Arimasu/Imasu) — V5 P2** verb engine + kategória-tudatos lobby (1 aktív + 2 stub kategória) · session-log instrumentálva (stats)
@@ -581,7 +586,7 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 
 A keretet a stíluslap végi **KÖR-KERET** és **LOBBI** blokk, valamint az app.js univerzális IIFE-i adják. Új modulnál elég a meglévő osztályneveket használni.
 
-1. **Fejléc**: lebegő üveg-sáv. Bal: logó · közép: modul-név (`.nav.module-page-nav`, JS tölti) · jobb: `Bejelentkezés`, téma-gomb (JS injektálja), 🏠 `.btn-home`. Telefonon (< 768 px) a navigáció az **alsó fül-sávban** van (`initAppTabbar`).
+1. **Fejléc**: lebegő üveg-sáv. Bal: logó · közép: modul-név (`.nav.module-page-nav`, JS tölti) · jobb: `Bejelentkezés`, téma-gomb (JS injektálja), 🏠 `.btn-home`. Telefonon (< 768 px) a navigáció az **alsó fül-sávban** van (`initAppTabbar`: Kezdőlap → `index.html`, Modulok → `pages/modules.html`, Statisztika, Fiók).
 
 2. **Modul-fejléc** (`.module-hero`): lobbiban látszik, **kör alatt rejtett** (`classList.add('hidden')` indításkor, `remove` visszatéréskor). Az újra-megjelenése jelzi a kör-őrnek a kilépést.
 
@@ -677,9 +682,10 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 --accent / --accent-hover / --on-accent   (elsődleges gomb)
 
 /* Üveg */
---glass-bg         lebegő panel (kártya, lobbi)
---glass-bg-strong  szöveg-sűrű vagy rétegzett felület (fejléc, menü)
---glass-border · --glass-blur · --glass-shadow · --glass-shadow-lg
+--glass-bg         görgő panel (kártya, lobbi): matt üveg, ELMOSÁS NÉLKÜL
+--glass-bg-strong  rögzített réteg (fejléc, fül-sáv, menü)
+--glass-blur       elmosás — CSAK rögzített (position: fixed) rétegen
+--glass-border · --glass-shadow · --glass-shadow-lg
 --glass-fill / --glass-fill-edge   beágyazott blokk töltése (NEM újabb elmosás!)
 
 /* Tipográfia: fix skála, 12 px alatt nincs szöveg */
@@ -695,7 +701,8 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 **Szabályok**
 - **Új színt csak tokenből.** Áttetsző szín: `rgb(var(--tint-rgb) / 0.08)` — soha ne beégetett `rgba(…)`, mert az nem követi a sötét témát.
 - **Szövegszín kontrasztja:** arany szöveg `--gold-ink`, zöld szöveg `--matcha-deep`, borostyán `--amber-ink` (az alapszínek washi-n nem érik el a 4,5:1-et).
-- **Üveg csak lebegő rétegre** (`.glass-panel`, `.glass-panel-heavy`, `.glass-card`, fejléc, fül-sáv, lapok). **Üvegen belül ne legyen újabb üveg** — beágyazott blokk: `--glass-fill`. `backdrop-filter`-es szülőn belül a `position: fixed` gyerek a szülőhöz rögzül!
+- **Üveg csak lebegő rétegre** (`.glass-panel`, `.glass-panel-heavy`, `.glass-card`, fejléc, fül-sáv, lapok). **Üvegen belül ne legyen újabb üveg** — beágyazott blokk: `--glass-fill`.
+- 🔴 **Elmosás (`backdrop-filter`) CSAK rögzített rétegen** (`.header`, `.nc-tabbar`). A tartalommal együtt görgő elemre **tilos** tenni: a böngésző görgetéskor minden képkockán újraszámolja, és akad az oldal (ez volt a 2026-10-01-es görgetés-hiba oka: 27 elmosott réteg a kezdőlapon). Görgő panel = `--glass-bg` áttetsző töltés, elmosás nélkül. Kerüld a `box-shadow` animálását nagy kártyán (hover: keret-szín vagy `transform`), és a `will-change`-et állandó szabályban. `backdrop-filter`-es szülőn belül a `position: fixed` gyerek a szülőhöz rögzül!
 - **Betűméret csak a skáláról** (`var(--fs-*)`); a japán dísz-glyph-ek `clamp()`-ben maradhatnak.
 - **Érintési célpont ≥ 44 px**, beviteli mező betűmérete ≥ 16 px (iOS nem nagyít rá).
 - **Töréspontok:** telefon ≤ 599 · tablet 600–1023 · asztali ≥ 1024; a navigáció 768-nál vált (alatta alsó fül-sáv). Telefon az első: az alap-szabály a telefonos, a `min-width` média-lekérdezés bővít.
@@ -709,7 +716,7 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 
 ### Új modul hozzáadása
 1. Új rekord a `data.js NIHONCORE_MODULES`-ba (verb-engine vagy counter-engine config)
-2. Új kártya az `index.html`-ben hivatkozással `module.html?id=ÚJ_ID`
+2. Új kártya a `pages/modules.html`-ben hivatkozással `module.html?id=ÚJ_ID`
 3. Ha új phase-mechanika kell, új case az `app.js initModulePage() renderPhase` switch-ében
 
 ### Új phase-type hozzáadása (új mechanika)

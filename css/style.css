@@ -81,19 +81,23 @@
   --green-glow: rgb(var(--matcha-rgb) / 0.22);
 
   /* ── Üveg ────────────────────────────────────────────
-     --glass-bg        lebegő panel (kártya, lobbi)
-     --glass-bg-strong szöveg-sűrű vagy rétegzett felület (fejléc, menü)
-     Egymásba ágyazott elem NEM kap újabb elmosást: ott halvány tinta-töltés van. */
-  --glass-bg:         rgb(var(--glass-rgb) / 0.56);
-  --glass-bg-strong:  rgb(var(--glass-rgb) / 0.78);
+     --glass-bg        görgő panel (kártya, lobbi): matt üveg, ELMOSÁS NÉLKÜL
+     --glass-bg-strong rögzített réteg (fejléc, fül-sáv, menü)
+     --glass-blur      CSAK rögzített rétegen (position: fixed). A tartalommal
+                       együtt görgő elemen tilos: a böngésző minden képkockán
+                       újraszámolná a mögötte lévő hátteret, és akad a görgetés.
+     A görgő panelek mögött csak a lágy háttér-mezők vannak, ott az elmosás
+     nem is látszana: az áttetsző töltés ugyanazt a hatást adja, ingyen. */
+  --glass-bg:         rgb(var(--glass-rgb) / 0.70);
+  --glass-bg-strong:  rgb(var(--glass-rgb) / 0.80);
   --glass-border:     rgb(var(--glass-rgb) / 0.85);
-  --glass-blur:       blur(22px) saturate(1.6);
+  --glass-blur:       blur(16px) saturate(1.4);
   --glass-shadow:     0 0 0 1px rgb(var(--tint-rgb) / 0.05),
                       0 1px 2px rgb(var(--shade-rgb) / 0.05),
-                      0 12px 32px rgb(var(--shade-rgb) / 0.09);
+                      0 8px 24px rgb(var(--shade-rgb) / 0.08);
   --glass-shadow-lg:  0 0 0 1px rgb(var(--tint-rgb) / 0.06),
                       0 2px 6px rgb(var(--shade-rgb) / 0.07),
-                      0 20px 48px rgb(var(--shade-rgb) / 0.14);
+                      0 14px 36px rgb(var(--shade-rgb) / 0.12);
   --glass-fill:       rgb(var(--tint-rgb) / 0.045);   /* beágyazott blokk töltése */
   --glass-fill-edge:  rgb(var(--tint-rgb) / 0.09);
 
@@ -185,7 +189,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 html {
-  scroll-behavior: smooth; font-size: 16px;
+  font-size: 16px;
   -webkit-text-size-adjust: 100%;
   scroll-padding-top: calc(var(--header-h) + 16px);
 }
@@ -200,7 +204,6 @@ body {
   min-height: 100dvh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -244,9 +247,15 @@ rt {
 /* ── Háttér: washi papír + lágy tinta-mezők ──────────────
    Az üveg csak akkor látszik üvegnek, ha van mögötte mit elmosnia:
    három nagyon lágy szín-mező (matcha, arany, indigo) a papíron.
-   Rögzített rétegen ül, így görgetéskor nem festődik újra. */
+   Saját, rögzített rétegen ül (translateZ), így görgetéskor nem festődik újra.
+   A magassága a LEGNAGYOBB nézet (lvh): telefonon a címsor el- és előbukkanása
+   nem méretezi át, tehát nem rajzolja újra a színátmeneteket görgetés közben. */
 .bg-decoration {
-  position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  position: fixed; top: 0; left: 0; width: 100%;
+  height: 100vh; height: 100lvh;
+  pointer-events: none; z-index: 0; overflow: hidden;
+  transform: translateZ(0);
+  contain: strict;
   background:
     radial-gradient(ellipse 70% 55% at 0% 0%,     rgb(var(--matcha-rgb) / 0.30), transparent 62%),
     radial-gradient(ellipse 60% 50% at 100% 18%,  rgb(var(--gold-rgb)   / 0.26), transparent 60%),
@@ -265,21 +274,27 @@ rt {
    .glass-panel-heavy  fő tartalom-panel (lobbi, kártya, hero)
    .glass-panel        másodlagos panel
    .glass-card         kattintható kártya (modul-kártya)
-   Mind ugyanaz az anyag; a súlyt az árnyék adja. */
+   Mind ugyanaz az anyag; a súlyt az árnyék adja. Ezek a tartalommal együtt
+   görögnek, ezért NINCS rajtuk elmosás (lásd a --glass-blur megjegyzését). */
 .glass-panel,
 .glass-panel-heavy,
 .glass-card {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  -webkit-backdrop-filter: var(--glass-blur);
-  backdrop-filter: var(--glass-blur);
 }
 .glass-panel-heavy { box-shadow: var(--glass-shadow-lg); }
 
-/* Régebbi böngésző elmosás nélkül: tömörebb felület, hogy a szöveg olvasható maradjon */
+/* Elmosás nélkül (régebbi böngésző, vagy a felhasználó kevesebb áttetszőséget kér):
+   a rögzített rétegek tömörek, hogy a szöveg olvasható maradjon. */
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .glass-panel, .glass-panel-heavy, .glass-card { background: rgb(var(--glass-rgb) / 0.94); }
+  .header, .nc-tabbar { background: rgb(var(--glass-rgb) / 0.96); }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .header, .nc-tabbar {
+    background: rgb(var(--glass-rgb) / 0.96);
+    -webkit-backdrop-filter: none; backdrop-filter: none;
+  }
 }
 
 /* ── Gombok ─────────────────────────────────────────────
@@ -566,10 +581,9 @@ rt {
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
-  transition: box-shadow var(--t-base), border-color var(--t-base), transform var(--t-fast);
+  transition: border-color var(--t-base), transform var(--t-fast);
 }
-.path-step-link:hover { box-shadow: var(--glass-shadow-lg); }
+.path-step-link:hover { border-color: rgb(var(--matcha-rgb) / 0.6); }
 .path-step-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
 .path-step-title { font-size: var(--fs-base); font-weight: 800; color: var(--sumi); line-height: 1.3; }
 .path-step-desc  { font-size: var(--fs-sm); color: var(--sumi-soft); line-height: 1.4; }
@@ -625,10 +639,9 @@ body.round-active .path-banner { display: none; }
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
   padding: 14px 44px 14px 16px;
   border-radius: var(--radius-lg);
-  background: rgb(var(--glass-rgb) / 0.95);
+  background: rgb(var(--glass-rgb) / 0.97);
   border: 1px solid rgb(var(--matcha-rgb) / 0.55);
   box-shadow: var(--glass-shadow-lg);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
   animation: nc-sheet-up 260ms var(--ease-out);
 }
 .path-result-retry { border-color: rgb(var(--amber-rgb) / 0.6); }
@@ -643,7 +656,12 @@ body.round-active .path-banner { display: none; }
 }
 .path-result-x:hover { background: rgb(var(--tint-rgb) / 0.08); color: var(--sumi); }
 
-/* ── Kezdőlap: szekciók + modul-kártyák ──────────────── */
+/* A kezdőlap alján egyetlen sor visz a Modulok oldalra (pages/modules.html) */
+.home-free { padding-top: 4px; padding-bottom: 28px; }
+
+/* ── Modulok oldal: szekció-fejléc + modul-kártyák ───── */
+.modules-main { position: relative; z-index: 1; padding-top: var(--header-h); }
+.modules-main .modules-section { padding-top: 24px; padding-bottom: 48px; }
 .modules-section {
   padding: 40px var(--page-pad) 56px; max-width: 1120px; margin: 0 auto;
   position: relative; z-index: 1;
@@ -665,7 +683,7 @@ body.round-active .path-banner { display: none; }
   border-radius: var(--radius-lg);
   padding: 18px;
   position: relative;
-  transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
+  transition: transform var(--t-base), border-color var(--t-base);
 }
 /* Telefon: sűrű sor — ikon balra, cím és egy mondat jobbra. A címkék és a
    lábléc tableten jelenik meg, ahol van helye. */
@@ -675,7 +693,7 @@ body.round-active .path-banner { display: none; }
 }
 .module-card > * { grid-column: 2; }
 .module-card > .module-icon { grid-column: 1; grid-row: 1 / span 3; }
-.module-available:hover { transform: translateY(-2px); box-shadow: var(--glass-shadow-lg); }
+.module-available:hover { transform: translateY(-2px); border-color: rgb(var(--matcha-rgb) / 0.6); }
 .module-locked { opacity: 0.55; }
 
 .module-icon {
@@ -719,7 +737,7 @@ body.round-active .path-banner { display: none; }
   .section-header { margin-bottom: 40px; }
   .modules-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .glass-card { padding: 24px; }
-  .module-card { display: flex; flex-direction: column; }
+  .module-card { display: flex; flex-direction: column; align-items: stretch; }
   .module-icon { margin-bottom: 16px; }
   .module-phase { margin-bottom: 4px; }
   .module-title { font-size: var(--fs-lg); margin-bottom: 6px; }
@@ -802,7 +820,6 @@ body.round-active .glass-footer { display: none; }
   width: fit-content; max-width: 100%;
   margin: 0 auto 20px;
   box-shadow: var(--glass-shadow);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
 }
 .hb-label {
   font-size: var(--fs-2xs); font-weight: 700;
@@ -962,7 +979,6 @@ body.round-active .module-main { padding-bottom: 32px; }
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   box-shadow: var(--glass-shadow);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
 }
 .phase-tab {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
@@ -1208,7 +1224,7 @@ body.round-active .module-main { padding-bottom: 32px; }
 .module-page-nav .nav-link { font-size: var(--fs-sm); }
 
 /* Hover állapot a modul-kártyákon (most már <a> tag-ek) */
-a.module-card { display: block; cursor: pointer; }
+a.module-card { cursor: pointer; }
 a.module-card.module-locked { cursor: pointer; }
 
 /* ====================================================
@@ -5677,13 +5693,6 @@ button:disabled, .btn:disabled, input:disabled, textarea:disabled,
 .nc-sync-now:disabled { opacity: 0.6; cursor: default; }
 
 
-/* ── Barba.js SPA wrapper + container ──────────────────
-   A wrapper a body (data-barba="wrapper"), a container a <main>
-   (data-barba="container"). A Barba a containert cseréli AJAX-szal,
-   minden más (header/footer/bg-decoration) MARAD a viewportban. */
-[data-barba="container"] {
-  will-change: opacity, transform;
-}
 
 /* ════════════════════════════════════════════════════════
    V8 — SUMI TÉMA (sötét mód)
@@ -5729,11 +5738,11 @@ html.theme-sumi {
   --accent-hover: #B7C77F;
   --on-accent:    #1B1B22;
 
-  --glass-bg:        rgb(var(--glass-rgb) / 0.50);
-  --glass-bg-strong: rgb(var(--glass-rgb) / 0.74);
+  --glass-bg:        rgb(var(--glass-rgb) / 0.66);
+  --glass-bg-strong: rgb(var(--glass-rgb) / 0.80);
   --glass-border:    rgb(255 250 240 / 0.09);
-  --glass-shadow:    0 1px 2px rgb(0 0 0 / 0.30), 0 12px 32px rgb(0 0 0 / 0.30);
-  --glass-shadow-lg: 0 2px 6px rgb(0 0 0 / 0.35), 0 20px 48px rgb(0 0 0 / 0.42);
+  --glass-shadow:    0 1px 2px rgb(0 0 0 / 0.30), 0 8px 24px rgb(0 0 0 / 0.28);
+  --glass-shadow-lg: 0 2px 6px rgb(0 0 0 / 0.35), 0 14px 36px rgb(0 0 0 / 0.38);
   --slot-bg-filled:  rgb(var(--glass-rgb) / 0.9);
 
   --shadow-paper-1: 0 1px 2px rgb(0 0 0 / 0.30), 0 1px 1px rgb(0 0 0 / 0.20);
@@ -6378,9 +6387,8 @@ body.round-active .module-main { padding-top: calc(var(--header-h) + 12px); }
   padding: 16px var(--page-pad) 0;
   border-radius: 24px 24px 0 0;
   border: 1px solid var(--glass-border); border-bottom: 0;
-  background: rgb(var(--glass-rgb) / 0.94);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
-  box-shadow: 0 -10px 40px rgb(var(--shade-rgb) / 0.16);
+  background: rgb(var(--glass-rgb) / 0.97);
+  box-shadow: 0 -8px 28px rgb(var(--shade-rgb) / 0.14);
   display: flex; flex-direction: column; gap: 12px;
   animation: nc-sheet-up 260ms var(--ease-out);
 }
@@ -6469,7 +6477,6 @@ body:has(.pr-feedback:not(.hidden)) .module-main { padding-bottom: min(66vh, 580
   background: var(--glass-bg);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow-lg);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
 }
 
 /* ── Mondat-Mester kártya: tömör elrendezés ──────────── */
@@ -6825,7 +6832,6 @@ body.round-active .phase-tabs { display: none; }
   overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
   background: var(--glass-bg); border: 1px solid var(--glass-border);
   border-radius: 999px; box-shadow: var(--glass-shadow);
-  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
 }
 .stats-tabs::-webkit-scrollbar { display: none; }
 .stats-tab {

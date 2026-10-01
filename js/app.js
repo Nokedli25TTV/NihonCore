@@ -1718,12 +1718,14 @@ window.NihonCoreFlashcard = (function () {
   function inPages() { return window.location.pathname.includes('/pages/'); }
   function onIndex() { return !inPages(); }
 
+  function onModules() { return /\/modules\.html$/.test(window.location.pathname); }
+
+  // A Modulok oldal és minden modul-oldal a „Modulok" fülhöz tartozik.
   function currentTab() {
     const p = window.location.pathname;
     if (/\/stats\.html$/.test(p)) return 'stats';
     if (/\/(login|register)\.html$/.test(p)) return 'account';
-    if (inPages()) return 'modules';
-    return window.location.hash === '#modules' ? 'modules' : 'home';
+    return inPages() ? 'modules' : 'home';
   }
 
   function setup() {
@@ -1731,7 +1733,7 @@ window.NihonCoreFlashcard = (function () {
     const root = inPages() ? '../' : '';
     const tabs = [
       { id: 'home',    label: 'Kezdőlap',    href: root + 'index.html' },
-      { id: 'modules', label: 'Modulok',     href: root + 'index.html#modules' },
+      { id: 'modules', label: 'Modulok',     href: root + 'pages/modules.html' },
       { id: 'stats',   label: 'Statisztika', href: root + 'pages/stats.html' },
       { id: 'account', label: 'Fiók',        href: root + 'pages/login.html' }
     ];
@@ -1745,20 +1747,15 @@ window.NihonCoreFlashcard = (function () {
     ).join('');
     document.body.appendChild(nav);
 
-    const mark = id => nav.querySelectorAll('.nc-tab').forEach(a => {
-      const on = a.dataset.tab === id;
-      a.classList.toggle('active', on);
-      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
-    });
-
-    // Kezdőlapon a „Kezdőlap" fül nem tölt újra: a lap tetejére görget.
-    nav.querySelector('[data-tab="home"]').addEventListener('click', e => {
-      if (!onIndex()) return;
+    // Azon az oldalon, ahová a fül vinne, nem tölt újra: a lap tetejére görget.
+    const toTop = (tab, here) => nav.querySelector('[data-tab="' + tab + '"]').addEventListener('click', e => {
+      if (!here()) return;
       e.preventDefault();
       window.scrollTo({ top: 0, behavior: 'smooth' });
       try { history.replaceState(null, '', window.location.pathname); } catch (err) {}
-      mark('home');
     });
+    toTop('home', onIndex);
+    toTop('modules', onModules);
     // Fiók: bejelentkezve a fejléc fiók-menüjét nyitja (nincs külön profil-oldal);
     // kijelentkezve a link a belépésre visz.
     nav.querySelector('[data-tab="account"]').addEventListener('click', e => {
@@ -1767,7 +1764,6 @@ window.NihonCoreFlashcard = (function () {
       e.preventDefault(); e.stopPropagation();
       userBtn.click();
     });
-    window.addEventListener('hashchange', () => mark(currentTab()));
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
@@ -2557,6 +2553,9 @@ window.NihonCoreSRS   = NihonCoreSRS;
    ==================================================== */
 
 function initLanding() {
+  // Régi horgony (könyvjelző, gyorsítótárazott link): a modulok külön oldalra költöztek
+  if (window.location.hash === '#modules') { window.location.replace('pages/modules.html'); return; }
+
   const Path = window.NihonCorePath;
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const pctText = v => Math.round(v * 100) + '%';
@@ -2615,7 +2614,7 @@ function initLanding() {
               <p class="continue-desc">Innen a szabad gyakorlás és a statisztika vakfoltjai visznek tovább.</p>
             </div>
           </div>
-          <a class="btn btn-primary btn-lg" href="#modules">Szabad gyakorlás</a>
+          <a class="btn btn-primary btn-lg" href="pages/modules.html">Szabad gyakorlás</a>
         </div>`;
       return;
     }
@@ -2701,7 +2700,7 @@ function initLanding() {
       try { history.replaceState(null, '', anchor.getAttribute('href')); } catch (err) {}
     });
   });
-  // érkezés #path / #modules horgonnyal (pl. a modul-oldal „Tovább az úton" gombjáról)
+  // érkezés #path horgonnyal (pl. a modul-oldal „Tovább az úton" gombjáról)
   if (window.location.hash) {
     const target = document.querySelector(window.location.hash);
     if (target) requestAnimationFrame(() => {
@@ -15388,7 +15387,7 @@ function initStatsPage() {
         <div class="stats-empty-icon">${icon}</div>
         <p>${title}</p>
         <p class="stats-empty-sub">${sub}</p>
-        <a href="index.html#modules" class="btn btn-primary glow-effect">Irány a modulok →</a>
+        <a href="modules.html" class="btn btn-primary glow-effect">Irány a modulok →</a>
       </div>`;
   }
 
@@ -15595,7 +15594,7 @@ function initStatsPage() {
           <p>Még nincs gyakorlási előzményed.</p>
           <p class="stats-empty-sub">Játssz le egy teljes kört bármelyik modulban —
             a kör végén automatikusan ide mentődik.</p>
-          <a href="index.html#modules" class="btn btn-primary glow-effect">Irány a modulok →</a>
+          <a href="modules.html" class="btn btn-primary glow-effect">Irány a modulok →</a>
         </div>`;
       return;
     }
@@ -16858,9 +16857,10 @@ function initCurrentPage() {
     initPracticePage();
   } else if (document.querySelector('.auth-card')) {
     initAuthPages();
-  } else if (document.querySelector('.modules-grid')) {
+  } else if (document.getElementById('homeMain')) {
     initLanding();
   }
+  // pages/modules.html (#modulesMain): statikus kártyarács — csak az univerzális részek futnak.
   // V18: modul-név fejléc-badge + hero-observer (kör-őr) frissítése
   if (window.NihonCoreRound && NihonCoreRound.refresh) NihonCoreRound.refresh();
 }

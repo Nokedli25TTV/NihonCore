@@ -37,7 +37,7 @@
 
       <nav class="nav" aria-label="Fő navigáció">
         <a href="#path" class="nav-link">Tanulási út</a>
-        <a href="#modules" class="nav-link">Modulok</a>
+        <a href="pages/modules.html" class="nav-link">Modulok</a>
         <a href="pages/stats.html" class="nav-link">Statisztika</a>
       </nav>
 
@@ -65,205 +65,18 @@
     <p class="path-level" id="pathLevel"></p>
   </section>
 
-  <!-- SZABAD GYAKORLÁS — minden modul, saját beállításokkal -->
-  <section class="modules-section" id="modules" aria-labelledby="modulesTitle">
-    <div class="section-header">
-      <span class="section-tag" lang="ja">練習</span>
-      <h2 class="section-title" id="modulesTitle">Szabad gyakorlás</h2>
-      <p class="section-desc">Minden modul külön is megnyitható: te választod a módot, a szűrőket és a kártyaszámot.</p>
-    </div>
-
-    <div class="modules-grid">
-      <!-- Kana: hiragana + katakana -->
-      <a class="module-card module-available glass-card" href="pages/kana.html">
-        <div class="module-icon icon-glow-teal">
-          <div class="icon-inner" lang="ja">あ</div>
-        </div>
-        <div class="module-phase">Alapok</div>
-        <h3 class="module-title">Kana</h3>
-        <p class="module-desc">Hiragana és katakana: tábla hanggal, felismerés, beírás és párosító. A gyengébb jelek gyakrabban jönnek.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">ひらがな</span>
-          <span class="tag glass-tag">カタカナ</span>
-          <span class="tag glass-tag">párosító</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">Kezdő</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 1 — alap igék masu-alakban -->
-      <a class="module-card module-available glass-card" href="pages/module.html?id=arimasu-imasu">
-        <div class="module-icon icon-glow-teal">
-          <div class="icon-inner">動</div>
-        </div>
-        <div class="module-phase">Alap igék</div>
-        <h3 class="module-title">Alap igék (Masu forma)</h3>
-        <p class="module-desc">Létezés, étkezés, vásárlás és mozgás udvarias masu-alakban: jelen és múlt, állítás és tagadás, kérdés. 8 mindennapi igével.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">あります</span>
-          <span class="tag glass-tag">食べます</span>
-          <span class="tag glass-tag">行きます</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N5</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 2 — Mondat-Mester (Partikula-kitöltő + Mondat-Puzzle) -->
-      <a class="module-card module-available glass-card" href="pages/practice.html">
-        <div class="module-icon icon-glow-gold">
-          <div class="icon-inner">🧩</div>
-        </div>
-        <div class="module-phase">Mondatépítés</div>
-        <h3 class="module-title">Mondat-Mester</h3>
-        <p class="module-desc">Mondatszerkezet és partikula-gyakorló. Választható JLPT-szint, mód (Partikula-kitöltő / Mondat-Puzzle) és fókusz.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">Partikulák</span>
-          <span class="tag glass-tag">Szórend</span>
-          <span class="tag glass-tag">Húzd és ejtsd</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N5–N3</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 3 — Számláló Szavak -->
-      <a class="module-card module-available glass-card" href="pages/module.html?id=szamlalok">
-        <div class="module-icon icon-glow-green">
-          <div class="icon-inner">🔢</div>
-        </div>
-        <div class="module-phase">Számlálók</div>
-        <h3 class="module-title">Számláló Szavak</h3>
-        <p class="module-desc">A japán számlálók (本, 枚, 冊, 人...) felismerése és helyes alkalmazása — kategória-szűrővel, három lépcsőben.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">本 hon</span>
-          <span class="tag glass-tag">枚 mai</span>
-          <span class="tag glass-tag">人 nin</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N5</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 5 — Ragozó modul -->
-      <a class="module-card module-available glass-card" href="pages/conjugation.html">
-        <div class="module-icon icon-glow-gold">
-          <div class="icon-inner">活</div>
-        </div>
-        <div class="module-phase">Igeragozás</div>
-        <h3 class="module-title">Ragozó modul</h3>
-        <p class="module-desc">A japán „szorzótáblája" — Godan / Ichidan / Rendhagyó igék reflexszintű ragozása. Felismerés, Építkezés és Mester mód, részletes hibamagyarázattal.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">masu</span>
-          <span class="tag glass-tag">nai</span>
-          <span class="tag glass-tag">te / ta</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N5–N4</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 6 — Melléknév modul -->
-      <a class="module-card module-available glass-card" href="pages/adjectives.html">
-        <div class="module-icon icon-glow-teal">
-          <div class="icon-inner">形</div>
-        </div>
-        <div class="module-phase">Melléknevek</div>
-        <h3 class="module-title">Melléknév modul</h3>
-        <p class="module-desc">I-melléknév és na-melléknév: típusfelismerés és ragozás, az いい → よい kivétellel.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">i-melléknév</span>
-          <span class="tag glass-tag">na-melléknév</span>
-          <span class="tag glass-tag">です</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N5–N3</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 7 — Dátum & Idő modul -->
-      <a class="module-card module-available glass-card" href="pages/datetime.html">
-        <div class="module-icon icon-glow-green">
-          <div class="icon-inner">時</div>
-        </div>
-        <div class="module-phase">Dátum & Idő</div>
-        <h3 class="module-title">Dátum & Idő modul</h3>
-        <p class="module-desc">Japán dátumok és időpontok: hónapok, napok, hét napjai, órák — a sok rendhagyó olvasattal együtt.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">月 hónap</span>
-          <span class="tag glass-tag">日 nap</span>
-          <span class="tag glass-tag">時 óra</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N5</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 9 — Production modul (HU→JP szabad fordítás) -->
-      <a class="module-card module-available glass-card" href="pages/production.html">
-        <div class="module-icon icon-glow-red">
-          <div class="icon-inner">作</div>
-        </div>
-        <div class="module-phase">Szabad fordítás</div>
-        <h3 class="module-title">Production modul</h3>
-        <p class="module-desc">Magyarból japánra fordítasz teljesen szabadon (kana vagy romaji). A visszajelzés megmutatja, mennyire jártál közel, és pontosan hol tér el a válaszod.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">HU→JP</span>
-          <span class="tag glass-tag">szabad beírás</span>
-          <span class="tag glass-tag">részletes visszajelzés</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N5–N3</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 8 — Grammar Patterns modul -->
-      <a class="module-card module-available glass-card" href="pages/grammar.html">
-        <div class="module-icon icon-glow-gold">
-          <div class="icon-inner">文</div>
-        </div>
-        <div class="module-phase">Nyelvtani minták</div>
-        <h3 class="module-title">Grammar Patterns</h3>
-        <p class="module-desc">Mondatszintű nyelvtani minták: 〜たら, 〜なきゃ, 〜のに, 〜と思う stb. Felismerés, kiegészítés és fordítás — kérhető időzített ismétléssel (SRS).</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">〜たら</span>
-          <span class="tag glass-tag">〜のに</span>
-          <span class="tag glass-tag">SRS</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N4 / N3</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-
-      <!-- Module 4 — Hallás & Kiejtés -->
-      <a class="module-card module-available glass-card" href="pages/listening.html">
-        <div class="module-icon icon-glow-red">
-          <div class="icon-inner">🔊</div>
-        </div>
-        <div class="module-phase">Hallás</div>
-        <h3 class="module-title">Hallás & Kiejtés</h3>
-        <p class="module-desc">Japán hangzás-felismerés audióval: hosszú/rövid hangok, kis っ, mora-ritmus. Hallás után ismerd fel.</p>
-        <div class="module-tags">
-          <span class="tag glass-tag">hanganyag</span>
-          <span class="tag glass-tag">長音</span>
-          <span class="tag glass-tag">促音</span>
-        </div>
-        <div class="module-footer">
-          <span class="module-lessons">JLPT N5–N3</span>
-          <div class="module-coming glow-text">Megnyitható</div>
-        </div>
-      </a>
-    </div>
+  <!-- SZABAD GYAKORLÁS — a modulok külön oldalon vannak: pages/modules.html -->
+  <section class="path-section home-free" aria-label="Szabad gyakorlás">
+    <a class="path-step-link" href="pages/modules.html">
+      <span class="path-glyph" lang="ja">練</span>
+      <span class="path-step-body">
+        <span class="path-step-title">Szabad gyakorlás</span>
+        <span class="path-step-desc">Minden modul külön is megnyitható: te választod a módot, a szűrőket és a kártyaszámot.</span>
+      </span>
+      <span class="path-step-end">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>
+      </span>
+    </a>
   </section>
 
   <!-- Fiók: csak kijelentkezve látszik (app.js rejti el, ha van bejelentkezett felhasználó) -->
