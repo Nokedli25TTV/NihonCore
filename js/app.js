@@ -252,105 +252,9 @@ window.NihonCoreMotion = (function () {
   document.head.appendChild(style);
 })();
 
-// ── Barba.js SPA oldalváltás (V8) ──
-//   Finom fade transition az oldalak között (NEM vakító fehér reload).
-//   Csak akkor aktiválódik, ha a window.barba elérhető (CDN sikeres betöltés).
-//   A page-detector (window.NihonCoreInitPage) afterEnter-ben újra-hívódik.
-(function initBarbaSPA() {
-  // Várjuk meg, amíg a Barba CDN betölt (defer-rel) — DOMContentLoaded után
-  function setup() {
-    if (typeof window.barba === 'undefined') return;
-    // file:// protokollon a Barba AJAX-fetchje CORS-blokkolt — ne aktiváljuk
-    if (window.location.protocol === 'file:') return;
-
-    try {
-      window.barba.init({
-        debug: false,
-        timeout: 5000,
-        // V21: a [data-barba-prevent] linkeket a böngésző natívan navigálja
-        // (pl. a user-menü Statisztika/Kezdőlap linkjei — a Barba AJAX-fetch
-        //  elakadt rajtuk a modul-oldalakon).
-        prevent: ({ el }) => el && el.hasAttribute && el.hasAttribute('data-barba-prevent'),
-        transitions: [{
-          name: 'zen-fade',
-          leave({ current }) {
-            // Eltüntetés (140ms ease-out)
-            return new Promise(resolve => {
-              if (window.anime) {
-                window.anime({
-                  targets: current.container,
-                  opacity: [1, 0],
-                  translateY: [0, 6],
-                  duration: 140,
-                  easing: 'easeOutQuad',
-                  complete: resolve
-                });
-              } else {
-                current.container.style.transition = 'opacity 140ms ease-out';
-                current.container.style.opacity = '0';
-                setTimeout(resolve, 140);
-              }
-            });
-          },
-          enter({ next }) {
-            // Bejövetel (180ms ease-out)
-            window.scrollTo(0, 0);
-            return new Promise(resolve => {
-              if (window.anime) {
-                next.container.style.opacity = '0';
-                next.container.style.transform = 'translateY(-6px)';
-                window.anime({
-                  targets: next.container,
-                  opacity: [0, 1],
-                  translateY: [-6, 0],
-                  duration: 180,
-                  easing: 'easeOutCubic',
-                  complete: () => {
-                    next.container.style.transform = '';
-                    resolve();
-                  }
-                });
-              } else {
-                next.container.style.opacity = '0';
-                next.container.style.transition = 'opacity 180ms ease-out';
-                requestAnimationFrame(() => {
-                  next.container.style.opacity = '1';
-                  setTimeout(resolve, 180);
-                });
-              }
-            });
-          }
-        }],
-        // Az új oldal renderelése után újraindítjuk a page-init-et
-        hooks: {
-          afterEnter() {
-            if (typeof window.NihonCoreInitPage === 'function') {
-              try { window.NihonCoreInitPage(); } catch (e) { /* csendes */ }
-            }
-            // V8: a téma-toggle gombot újra-injektáljuk az új page-en
-            if (window.NihonCoreTheme && window.NihonCoreTheme.inject) {
-              try { window.NihonCoreTheme.inject(); } catch (e) {}
-            }
-            // Az új oldal data-script-jei (data/*.js) is bekerülnek a body-ba
-            // → de mivel a Barba a body-n KÍVÜLI dolgokat nem cseréli, a globális
-            //   NIHONCORE_* már megmaradt az első page-load-tól. A header és footer
-            //   sem cserélődik (kívül vannak a [data-barba="wrapper"]-en).
-            // A SW-cache miatt az új page is gyors.
-          }
-        }
-      });
-    } catch (e) {
-      // Csendes — ha a Barba nem inicializálható, a normál multi-page reload marad
-      console && console.warn && console.warn('[Barba] init skipped:', e);
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setup);
-  } else {
-    setup();
-  }
-})();
+// Oldalváltás: sima többoldalas navigáció. Az áttűnést a böngésző natív
+// cross-document view-transition-je adja (style.css: @view-transition) —
+// nincs SPA-réteg, így minden oldal a saját fejlécével és adataival tölt be.
 
 
 // ── NihonCoreRound ── Univerzális kör-őr + modul-név (V18) ────────────
@@ -380,6 +284,7 @@ window.NihonCoreRound = (function () {
   function begin(snapshotFn) {
     _active = true; _recorded = false;
     _snapshot = (typeof snapshotFn === 'function') ? snapshotFn : null;
+    markBody();
     scrollToRound();
   }
   function isActive() { return _active; }
@@ -403,10 +308,15 @@ window.NihonCoreRound = (function () {
       }
     });
   }
-  function markComplete() { _recorded = true; _active = false; }
+  function markComplete() { _recorded = true; _active = false; markBody(); }
+
+  // body.round-active: kör közben a fül-sáv és a lábléc helyet ad a kártyának
+  function markBody() {
+    if (document.body) document.body.classList.toggle('round-active', _active);
+  }
 
   function flush() {
-    if (!_active || _recorded || !_snapshot) { _active = false; return; }
+    if (!_active || _recorded || !_snapshot) { _active = false; markBody(); return; }
     try {
       var info = _snapshot();
       if (info && info.results && info.results.length > 0 &&
@@ -417,6 +327,7 @@ window.NihonCoreRound = (function () {
       }
     } catch (e) {}
     _active = false;
+    markBody();
   }
 
   // ── Req 2 — modul-név a fejlécben ───────────────────
@@ -445,10 +356,10 @@ window.NihonCoreRound = (function () {
     _heroObserver.observe(hero, { attributes: true, attributeFilter: ['class'] });
   }
 
-  // initCurrentPage (kezdeti + Barba afterEnter) hívja
+  // initCurrentPage hívja
   function refresh() { refreshBadge(); attachHeroObserver(); }
 
-  // ── Req 1 — navigációs őr (capture — a Barba elé fut) ──
+  // ── Req 1 — navigációs őr (capture fázisban) ──
   function onClick(e) {
     if (!_active) return;
     var a = (e.target && e.target.closest) ? e.target.closest('a[href]') : null;
@@ -1157,12 +1068,7 @@ window.NihonCoreFlashcard = (function () {
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', t === 'sumi' ? '#1B1B22' : '#F3EEE3');
     // Frissítsd minden injektált toggle-gomb ikonját
-    document.querySelectorAll('.ht-theme-btn').forEach(btn => {
-      btn.classList.toggle('active', t === 'sumi');
-      const icon = btn.querySelector('.ht-theme-icon');
-      if (icon) icon.textContent = t === 'sumi' ? '☀️' : '🌙';
-      btn.setAttribute('title', t === 'sumi' ? 'Világos téma' : 'Sötét téma');
-    });
+    document.querySelectorAll('.ht-theme-btn').forEach(btn => paintButton(btn, t));
     // Eltávolítjuk a transition class-t a tranzíció után — különben minden mozgás 220ms lenne
     setTimeout(() => root.classList.remove('theme-transition'), 260);
   }
@@ -1170,45 +1076,25 @@ window.NihonCoreFlashcard = (function () {
     setTheme(getTheme() === 'sumi' ? 'washi' : 'sumi');
   }
 
-  // Beilleszt egy 🌙/☀️ gombot a meglévő helpers-bar-ba (ha még nincs ott)
-  function injectThemeButton() {
-    const bars = document.querySelectorAll('.helpers-bar .helpers-toggle');
-    bars.forEach(barEl => {
-      if (barEl.querySelector('.ht-theme-btn')) return;
-      const t = getTheme();
-      const btn = document.createElement('button');
-      btn.className = 'ht-btn ht-theme-btn' + (t === 'sumi' ? ' active' : '');
-      btn.type = 'button';
-      btn.setAttribute('data-helper', 'theme');
-      btn.setAttribute('title', t === 'sumi' ? 'Világos téma' : 'Sötét téma');
-      btn.innerHTML = `<span class="ht-theme-icon">${t === 'sumi' ? '☀️' : '🌙'}</span>Téma`;
-      btn.addEventListener('click', toggle);
-      barEl.appendChild(btn);
-    });
+  const ICON_MOON = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>';
+  const ICON_SUN  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+
+  function paintButton(btn, t) {
+    btn.innerHTML = t === 'sumi' ? ICON_SUN : ICON_MOON;
+    const label = t === 'sumi' ? 'Világos téma' : 'Sötét téma';
+    btn.setAttribute('title', label);
+    btn.setAttribute('aria-label', label);
   }
 
-  // Az index.html-en nincs helpers-bar — oda a nav-ba teszünk gombot.
-  function injectIndexButton() {
-    // Csak akkor, ha nincs helpers-bar (NEM modul-page) ÉS van .auth-buttons
-    if (document.querySelector('.helpers-bar')) return;
-    const authBtns = document.querySelector('.auth-buttons');
-    if (!authBtns || authBtns.querySelector('.theme-toggle-nav')) return;
-    const t = getTheme();
+  // Egy téma-gomb a fejléc jobb oldalán, minden oldalon ugyanott.
+  function injectThemeButton() {
+    const authBtns = document.querySelector('.header .auth-buttons');
+    if (!authBtns || authBtns.querySelector('.ht-theme-btn')) return;
     const btn = document.createElement('button');
-    btn.className = 'btn-home theme-toggle-nav';
+    btn.className = 'nc-icon-btn ht-theme-btn';
     btn.type = 'button';
-    btn.setAttribute('title', t === 'sumi' ? 'Világos téma' : 'Sötét téma');
-    btn.setAttribute('aria-label', 'Téma váltása');
-    btn.style.background = 'transparent';
-    btn.style.border = '1px solid var(--washi-edge)';
-    btn.style.borderRadius = '999px';
-    btn.style.padding = '8px 10px';
-    btn.style.cursor = 'pointer';
-    btn.style.fontSize = '1rem';
-    btn.style.color = 'var(--sumi)';
-    btn.innerHTML = `<span class="ht-theme-icon">${t === 'sumi' ? '☀️' : '🌙'}</span>`;
+    paintButton(btn, getTheme());
     btn.addEventListener('click', toggle);
-    // A 🏠 gomb ELÉ szúrjuk
     const home = authBtns.querySelector('.btn-home');
     if (home) authBtns.insertBefore(btn, home);
     else      authBtns.appendChild(btn);
@@ -1216,7 +1102,9 @@ window.NihonCoreFlashcard = (function () {
 
   function setup() {
     injectThemeButton();
-    injectIndexButton();
+    // a mentett téma szerint a böngésző-keret színe is (PWA telefonon)
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', getTheme() === 'sumi' ? '#1B1B22' : '#F3EEE3');
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setup);
@@ -1224,9 +1112,80 @@ window.NihonCoreFlashcard = (function () {
     setup();
   }
 
-  // Barba.js afterEnter-hez: a navigáció után újra-injektáljuk a gombot
-  // (de a body-szinten meglévők megmaradnak)
   window.NihonCoreTheme = { get: getTheme, set: setTheme, toggle: toggle, inject: setup };
+})();
+
+
+// ── Alsó fül-sáv (telefon) ──
+//   768px alatt ez a fő navigáció: Kezdőlap · Modulok · Statisztika · Fiók.
+//   Minden oldalon ugyanaz, a body végére injektálva. Kör közben a
+//   body.round-active rejti (style.css), hogy a kártyáé legyen a hely.
+(function initAppTabbar() {
+  const svg = d => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+  const ICONS = {
+    home:    svg('<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>'),
+    modules: svg('<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>'),
+    stats:   svg('<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'),
+    account: svg('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>')
+  };
+
+  function inPages() { return window.location.pathname.includes('/pages/'); }
+  function onIndex() { return !inPages(); }
+
+  function currentTab() {
+    const p = window.location.pathname;
+    if (/\/stats\.html$/.test(p)) return 'stats';
+    if (/\/(login|register)\.html$/.test(p)) return 'account';
+    if (inPages()) return 'modules';
+    return window.location.hash === '#modules' ? 'modules' : 'home';
+  }
+
+  function setup() {
+    if (document.querySelector('.nc-tabbar') || !document.body) return;
+    const root = inPages() ? '../' : '';
+    const tabs = [
+      { id: 'home',    label: 'Kezdőlap',    href: root + 'index.html' },
+      { id: 'modules', label: 'Modulok',     href: root + 'index.html#modules' },
+      { id: 'stats',   label: 'Statisztika', href: root + 'pages/stats.html' },
+      { id: 'account', label: 'Fiók',        href: root + 'pages/login.html' }
+    ];
+    const cur = currentTab();
+    const nav = document.createElement('nav');
+    nav.className = 'nc-tabbar';
+    nav.setAttribute('aria-label', 'Fő navigáció');
+    nav.innerHTML = tabs.map(t =>
+      '<a class="nc-tab' + (t.id === cur ? ' active' : '') + '" data-tab="' + t.id + '" href="' + t.href + '"' +
+      (t.id === cur ? ' aria-current="page"' : '') + '>' + ICONS[t.id] + '<span>' + t.label + '</span></a>'
+    ).join('');
+    document.body.appendChild(nav);
+
+    const mark = id => nav.querySelectorAll('.nc-tab').forEach(a => {
+      const on = a.dataset.tab === id;
+      a.classList.toggle('active', on);
+      if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+
+    // Kezdőlapon a „Kezdőlap" fül nem tölt újra: a lap tetejére görget.
+    nav.querySelector('[data-tab="home"]').addEventListener('click', e => {
+      if (!onIndex()) return;
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      try { history.replaceState(null, '', window.location.pathname); } catch (err) {}
+      mark('home');
+    });
+    // Fiók: bejelentkezve a fejléc fiók-menüjét nyitja (nincs külön profil-oldal);
+    // kijelentkezve a link a belépésre visz.
+    nav.querySelector('[data-tab="account"]').addEventListener('click', e => {
+      const userBtn = document.querySelector('.nc-user-btn');
+      if (!userBtn) return;
+      e.preventDefault(); e.stopPropagation();
+      userBtn.click();
+    });
+    window.addEventListener('hashchange', () => mark(currentTab()));
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
+  else setup();
 })();
 
 
@@ -1272,8 +1231,8 @@ window.NihonCoreFlashcard = (function () {
         <div class="nc-user-menu" hidden>
           <div class="nc-user-menu-name">${displayName(user)}</div>
           <div class="nc-user-menu-email">${user.email || ''}</div>
-          <a class="nc-user-menu-link" href="${statsHref()}" data-barba-prevent>📊 Statisztika</a>
-          <a class="nc-user-menu-link" href="${homeHref()}" data-barba-prevent>🏠 Kezdőlap</a>
+          <a class="nc-user-menu-link" href="${statsHref()}">Statisztika</a>
+          <a class="nc-user-menu-link" href="${homeHref()}">Kezdőlap</a>
           <div class="nc-sync-status" id="ncSyncStatus">☁️ Felhő-szinkron aktív</div>
           <button class="nc-sync-now" type="button">☁️ Szinkronizálás most</button>
           <button class="nc-user-logout" type="button">Kijelentkezés</button>
@@ -1291,8 +1250,8 @@ window.NihonCoreFlashcard = (function () {
       });
       document.addEventListener('click', () => { menu.hidden = true; });
 
-      // V22 fix: a menü-linkek explicit JS-navigációval — megkerüli a Barba
-      // AJAX-elfogását ÉS a document click-listener interferenciáját.
+      // A menü-linkek explicit JS-navigációval mennek, hogy a document
+      // click-listener (menü bezárása) ne zavarjon be.
       chip.querySelectorAll('.nc-user-menu-link').forEach(link => {
         link.addEventListener('click', e => {
           e.preventDefault();
@@ -15351,8 +15310,7 @@ function initStatsPage() {
 /* ====================================================
    10. PAGE DETECTOR — egy oldal-init futtatása ─────
    ----------------------------------------------------
-   V8 (Barba.js SPA): a switch egy függvénybe csomagolva,
-   így a Barba afterEnter-ben újra-meghívható navigáció után.
+   A switch egy függvénybe csomagolva (window.NihonCoreInitPage).
    ==================================================== */
 
 function initCurrentPage() {
@@ -15385,4 +15343,4 @@ function initCurrentPage() {
 
 // Kezdeti init
 initCurrentPage();
-window.NihonCoreInitPage = initCurrentPage;   // Barba afterEnter-ből hívja
+window.NihonCoreInitPage = initCurrentPage;
