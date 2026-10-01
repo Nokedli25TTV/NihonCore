@@ -6545,3 +6545,178 @@ body.round-active .phase-tabs { display: none; }
 
 /* Kör végén a kiürített kártya ne maradjon üres üveg-csíkként a képen */
 .conj-card:empty, .pr-card:empty, .sd-card:empty, .sd-options:empty { display: none; }
+
+
+
+/* ════════════════════════════════════════════════════════
+   LOBBI — a kör indítása
+   ────────────────────────────────────────────────────────
+   Sorrend minden modulban (app.js: initLobbyQuickStart rendezi át):
+     fejléc → Mód → Indítás → Testreszabás (összecsukva)
+   A kezdő egy koppintással indít; a szűrők ott vannak, de nem állnak útban.
+   ════════════════════════════════════════════════════════ */
+
+.conj-lobby, .practice-lobby, .ms-lobby, .cnt-lobby {
+  width: 100%; max-width: 720px; margin: 0 auto 20px;
+  padding: 18px 16px;
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column; gap: 14px;
+}
+@media (min-width: 600px) {
+  .conj-lobby, .practice-lobby, .ms-lobby, .cnt-lobby { padding: 28px; gap: 18px; border-radius: var(--radius-xl); }
+}
+
+.lobby-header { text-align: left; }
+.lobby-eyebrow {
+  font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--gold-ink); margin-bottom: 4px;
+}
+.lobby-title { font-family: var(--font-serif); font-size: var(--fs-xl); font-weight: 600; margin-bottom: 4px; }
+.lobby-sub { color: var(--sumi-soft); font-size: var(--fs-sm); line-height: 1.5; max-width: 60ch; }
+
+.lobby-section {
+  display: flex; flex-direction: column; gap: 10px;
+  padding: 14px;
+  background: var(--glass-fill);
+  border: 1px solid var(--glass-fill-edge);
+  border-radius: var(--radius-md);
+}
+.lobby-section-label {
+  font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--sumi-faint);
+}
+/* a Mód szekció a lobbi fő választása: nincs doboza, a kártyák maguk a dobozok */
+.lobby-enhanced > .lobby-section { padding: 0; background: none; border: 0; }
+
+/* ── Kapcsolók: egy forma, egy „kiválasztva" állapot ─── */
+.cj-group-btn, .cj-form-chip, .cj-mode-btn,
+.pl-level-btn, .pl-mode-btn, .pl-f-btn,
+.ml-fb, .ml-cat-btn {
+  min-height: var(--touch);
+  background: rgb(var(--glass-rgb) / 0.62);
+  border: 1.5px solid rgb(var(--tint-rgb) / 0.14);
+  border-radius: var(--radius-md);
+  color: var(--sumi-soft);
+  font-family: var(--font-body);
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color var(--t-base), border-color var(--t-base), color var(--t-base);
+}
+.cj-group-btn:hover, .cj-form-chip:hover, .cj-mode-btn:hover,
+.pl-level-btn:hover:not(:disabled), .pl-mode-btn:hover, .pl-f-btn:hover,
+.ml-fb:hover, .ml-cat-btn:hover:not(:disabled) {
+  border-color: rgb(var(--matcha-rgb) / 0.6);
+  background: rgb(var(--glass-rgb) / 0.9);
+  color: var(--sumi); transform: none;
+}
+.cj-group-btn.active, .cj-form-chip.active, .cj-mode-btn.active,
+.pl-level-btn.active, .pl-mode-btn.active, .pl-f-btn.active,
+.ml-fb.active, .ml-cat-btn.active {
+  background: var(--matcha-soft);
+  border-color: var(--matcha);
+  color: var(--sumi);
+  box-shadow: none;
+}
+.pl-level-btn:disabled, .ml-cat-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Mód-kártyák: telefonon egymás alatt, név + egy sor magyarázat */
+.cj-mode-row, .pl-mode-row { display: grid; grid-template-columns: 1fr; gap: 8px; }
+.cj-mode-btn, .pl-mode-btn {
+  display: flex; flex-direction: column; align-items: flex-start; justify-content: center; gap: 1px;
+  min-height: 56px; padding: 8px 14px; text-align: left;
+}
+.pl-mode-btn { flex-direction: row; align-items: center; justify-content: flex-start; gap: 12px; }
+.pl-m-text { display: flex; flex-direction: column; gap: 1px; }
+.cj-m-name, .pl-m-name { font-size: var(--fs-base); font-weight: 800; color: var(--sumi); }
+.cj-m-sub, .pl-m-sub   { font-size: var(--fs-xs); color: var(--sumi-faint); line-height: 1.35; }
+.cj-mode-btn.active .cj-m-name, .pl-mode-btn.active .pl-m-name { color: var(--matcha-deep); }
+@media (min-width: 600px) {
+  .cj-mode-row, .pl-mode-row { grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); gap: 10px; }
+  .cj-mode-btn { min-height: 68px; }
+}
+
+/* Csoport- és kategória-gombok rácsa */
+.cj-group-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(132px, 1fr)); gap: 8px; }
+.cj-group-btn { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; text-align: left; }
+.cj-g-name { font-size: var(--fs-sm); font-weight: 800; color: var(--sumi); }
+.cj-g-hint { font-size: var(--fs-2xs); color: var(--sumi-faint); }
+.cj-form-row { display: flex; flex-direction: column; gap: 6px; padding: 0; background: none; border: 0; }
+.cj-form-row-label { font-size: var(--fs-2xs); font-weight: 700; color: var(--sumi-faint); }
+.cj-form-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.cj-form-chip { display: flex; flex-direction: column; gap: 0; padding: 6px 12px; text-align: left; }
+.cjfc-name { font-size: var(--fs-sm); font-weight: 800; color: var(--sumi); }
+.cjfc-sub  { font-size: var(--fs-2xs); color: var(--sumi-faint); }
+
+/* ── Indítás ─────────────────────────────────────────── */
+.lobby-quick { display: flex; flex-direction: column; gap: 8px; }
+.ml-start {
+  width: 100%; min-height: 56px; padding: 0 20px;
+  font-size: var(--fs-md); border-radius: 18px;
+}
+.ml-start:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── Testreszabás (összecsukható) ────────────────────── */
+.lobby-custom { border-top: 1px solid var(--washi-edge); }
+.lobby-custom-summary {
+  list-style: none;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  min-height: 56px; padding: 8px 4px;
+  cursor: pointer; border-radius: var(--radius-sm);
+  -webkit-user-select: none; user-select: none;
+}
+.lobby-custom-summary::-webkit-details-marker { display: none; }
+.lcs-text { display: flex; flex-direction: column; }
+.lcs-title { font-size: var(--fs-base); font-weight: 800; color: var(--sumi); }
+.lcs-sub   { font-size: var(--fs-xs); color: var(--sumi-faint); }
+.lcs-chevron { color: var(--sumi-faint); flex-shrink: 0; transition: transform var(--t-slow); }
+.lobby-custom[open] .lcs-chevron { transform: rotate(180deg); }
+.lobby-custom-body { display: flex; flex-direction: column; gap: 10px; padding: 4px 0 4px; }
+
+/* Jelölőnégyzetes sorok (adaptív, SRS, időlimit) */
+.cj-adaptive-section { padding: 12px 14px; }
+.cj-adapt-switch { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+.cj-adapt-switch input[type="checkbox"] { width: 22px; height: 22px; margin-top: 1px; flex-shrink: 0; accent-color: var(--accent); cursor: pointer; }
+.cj-adapt-text { display: flex; flex-direction: column; gap: 2px; }
+.cj-adapt-text strong { font-size: var(--fs-sm); font-weight: 800; color: var(--sumi); }
+.cj-adapt-text em { font-style: normal; font-size: var(--fs-xs); color: var(--sumi-faint); line-height: 1.45; }
+
+.lobby-stats { justify-content: flex-start; padding: 4px 2px; font-size: var(--fs-xs); color: var(--sumi-faint); flex-wrap: wrap; gap: 6px 12px; }
+.lobby-combos strong { color: var(--sumi); font-size: var(--fs-sm); }
+
+/* Az átrendezett lobbiban az indítás a fő művelet: a hosszú „állítsd be" leírás nem kell */
+.lobby-enhanced .lobby-sub { display: none; }
+
+/* ── Modul-fejléc telefonon: a lobbi (Indítás) az első képernyőn legyen ── */
+@media (max-width: 599px) {
+  .module-page-desc { display: none; }
+  .module-hero { padding: 14px; gap: 10px 12px; margin-bottom: 12px; }
+  .module-page-title { font-size: var(--fs-lg); margin-bottom: 8px; }
+  .module-meta-row { margin-bottom: 4px; }
+  .conj-stats-bar { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; }
+  .module-hero > .module-hero-meta > .conj-stats-bar,
+  .module-hero > .module-hero-meta > .module-extra-actions { grid-column: 1 / -1; }
+}
+/* A részletek/szótár másodlagos gombok: kicsi, egy sorban */
+.conj-stat-toggle {
+  grid-column: 1 / -1; justify-self: start;
+  min-height: 36px; padding: 0 14px;
+  background: transparent; border: 1px solid rgb(var(--tint-rgb) / 0.18); border-radius: 999px;
+  color: var(--sumi-soft); font-family: var(--font-body); font-size: var(--fs-xs); font-weight: 700;
+  cursor: pointer;
+}
+.conj-stat-toggle:hover, .conj-stat-toggle.active { background: rgb(var(--tint-rgb) / 0.06); color: var(--sumi); }
+.module-extra-actions { margin-top: 8px; }
+.module-extra-actions .btn { min-height: 36px; padding: 0 14px; font-size: var(--fs-xs); border-radius: 999px; }
+
+/* Szókártya-szűrő: telefonon egy sorban görgethető, nem chip-fal */
+@media (max-width: 599px) {
+  .nc-fc-filter {
+    flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto;
+    margin: 0 calc(-1 * var(--page-pad)); padding: 2px var(--page-pad);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+  }
+  .nc-fc-filter::-webkit-scrollbar { display: none; }
+  .nc-fc-chip, .nc-fc-filter-label { flex: 0 0 auto; white-space: nowrap; }
+}
+.sd-intro-text { color: var(--sumi-soft); font-size: var(--fs-base); line-height: 1.55; max-width: 52ch; }
+.csc-label { overflow-wrap: anywhere; }

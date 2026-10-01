@@ -393,6 +393,111 @@ window.NihonCoreRound = (function () {
 })();
 
 
+// ── NihonCorePrefs ── eszköz-szintű gyakorlási beállítások ──
+//   timerOn(): kell-e időlimit a beírós (Mester / Kiegészítés) módokban.
+//   Alapból KI: a kezdő nyugodtan gondolkodhat; aki reflexet edz, bekapcsolja
+//   a lobbi „Testreszabás" részében.
+window.NihonCorePrefs = (function () {
+  const TIMER_KEY = 'nihoncore_timer';
+  function timerOn() {
+    try { return localStorage.getItem(TIMER_KEY) === 'on'; } catch (e) { return false; }
+  }
+  function setTimer(on) {
+    try { localStorage.setItem(TIMER_KEY, on ? 'on' : 'off'); } catch (e) {}
+  }
+  return { timerOn: timerOn, setTimer: setTimer };
+})();
+
+
+// ── Lobbi-átrendező ── „Gyors indítás" minden modulban ──
+//   A modulok lobbija eredetileg beállítópanel volt: 4–5 szekció után jött
+//   az Indítás. Itt egységesen átrendezzük:
+//     fejléc → Mód (ha van) → Indítás → <details> Testreszabás (minden más)
+//   A csomópontokat MOZGATJUK (nem újraírjuk), így a modulok eseménykezelői
+//   élnek tovább. A lobbi teljes újra-renderelésekor a MutationObserver
+//   újra lefut; a Testreszabás nyitott/zárt állapota megmarad.
+(function initLobbyQuickStart() {
+  const LOBBY_SEL = '.conj-lobby, .practice-lobby, .ms-lobby, .cnt-lobby';
+  const OPEN_KEY = 'nihoncore_lobby_custom_open';
+  const TIMED_LOBBIES = { conjLobby: 8, adjLobby: 10, dtLobby: 10, grmLobby: 18 };   // mp / kártya
+  const CHEVRON = '<svg class="lcs-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+
+  function isOpen() { try { return localStorage.getItem(OPEN_KEY) === '1'; } catch (e) { return false; } }
+
+  function timerRow(seconds) {
+    const row = document.createElement('div');
+    row.className = 'lobby-section cj-adaptive-section';
+    row.innerHTML =
+      '<label class="cj-adapt-switch">' +
+        '<input type="checkbox" class="lobby-timer-toggle"' + (NihonCorePrefs.timerOn() ? ' checked' : '') + ' />' +
+        '<span class="cj-adapt-text"><strong>Időlimit a beírós módokban</strong>' +
+        '<em>Bekapcsolva ' + seconds + ' másodperc jut egy kártyára. Kikapcsolva nyugodtan gondolkodhatsz.</em></span>' +
+      '</label>';
+    row.querySelector('input').addEventListener('change', e => NihonCorePrefs.setTimer(e.target.checked));
+    return row;
+  }
+
+  function enhance(lobby) {
+    const sections = Array.prototype.filter.call(lobby.children, c => c.classList.contains('lobby-section'));
+    if (!sections.length || lobby.querySelector(':scope > .lobby-custom')) return;
+
+    const isMode = s => !!s.querySelector('[class*="mode-row"]');
+    const modeSections = sections.filter(isMode);
+    const rest = sections.filter(s => !isMode(s));
+    const start = Array.prototype.find.call(lobby.children, c => c.classList.contains('ml-start'));
+    const stats = Array.prototype.find.call(lobby.children, c => c.classList.contains('lobby-stats'));
+    if (!start || !rest.length) return;
+
+    // a szekció-címkék sorszámai az új sorrendben már nem igazak
+    lobby.querySelectorAll('.lobby-section-label').forEach(l => {
+      const first = l.firstChild;
+      if (first && first.nodeType === 3) first.nodeValue = first.nodeValue.replace(/^\s*\d+\s*·\s*/, '');
+    });
+
+    const details = document.createElement('details');
+    details.className = 'lobby-custom';
+    details.open = isOpen();
+    details.innerHTML =
+      '<summary class="lobby-custom-summary">' +
+        '<span class="lcs-text"><span class="lcs-title">Testreszabás</span>' +
+        '<span class="lcs-sub">szűrők, kártyaszám, haladó beállítások</span></span>' + CHEVRON +
+      '</summary><div class="lobby-custom-body"></div>';
+    details.addEventListener('toggle', () => {
+      try { localStorage.setItem(OPEN_KEY, details.open ? '1' : '0'); } catch (e) {}
+    });
+    const body = details.querySelector('.lobby-custom-body');
+
+    lobby.insertBefore(details, rest[0]);
+    rest.forEach(s => body.appendChild(s));
+    if (TIMED_LOBBIES[lobby.id]) body.appendChild(timerRow(TIMED_LOBBIES[lobby.id]));
+    if (stats) body.appendChild(stats);
+
+    // Indítás: a mód-szekció(k) után, a Testreszabás elé
+    modeSections.forEach(s => lobby.insertBefore(s, details));
+    const quick = document.createElement('div');
+    quick.className = 'lobby-quick';
+    lobby.insertBefore(quick, details);
+    quick.appendChild(start);
+    lobby.classList.add('lobby-enhanced');
+
+    const title = lobby.querySelector('.lobby-title');
+    if (title) title.textContent = modeSections.length ? 'Mit gyakorolnál?' : 'Indulhat a kör';
+  }
+
+  function scan(root) {
+    (root || document).querySelectorAll(LOBBY_SEL).forEach(enhance);
+  }
+  function start() {
+    scan(document);
+    if (!window.MutationObserver) return;
+    new MutationObserver(() => scan(document))
+      .observe(document.body, { childList: true, subtree: true });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
+
 // ── Kör-billentyűk + fókusz ──
 //   Egységes billentyűzet-kezelés minden gyakorló körben:
 //     1–9     a megfelelő válaszlehetőség
@@ -2226,6 +2331,7 @@ function initModulePage() {
         // Counter / Matrix lobby visszahozatala phase-váltáskor (state reset)
         counterSettings.inLobby = true;
         matrixState.inLobby = true;
+        drillState.started = false;
         // Hero default-show fázis-váltáskor (a renderPhase / kör-indítás rejtheti újra)
         document.querySelector('.module-hero')?.classList.remove('hidden');
         renderPhase(m, phase);
@@ -3118,6 +3224,20 @@ function initModulePage() {
 
   // ── PHASE 3 — Speed Drill ────────────────────────
   function renderSpeedDrill(m, phase) {
+    // Indító képernyő: a fül megnyitása még nem indítja el az órát
+    if (!drillState.started) {
+      return `
+        <div class="ms-lobby glass-panel-heavy">
+          <div class="lobby-header">
+            <div class="lobby-eyebrow">${phase.name}</div>
+            <h3 class="lobby-title">Gyorskör</h3>
+            <p class="sd-intro-text">${phase.cards.length} kártya, kártyánként ${Math.round(phase.timeLimit / 1000)} másodperc.
+              Válaszd ki a helyes alakot, mielőtt lejár az idő.</p>
+          </div>
+          <button class="btn btn-primary ml-start" id="sdStart" type="button">Indítás — ${phase.cards.length} kártya</button>
+        </div>
+      `;
+    }
     drillState.cardIdx = 0;
     drillState.score = 0;
     drillState.streak = 0;
@@ -3126,7 +3246,6 @@ function initModulePage() {
     drillState.roundStartTs = Date.now();   // V5 P2 — stats
     if (window.NihonCoreRound) NihonCoreRound.begin(function(){ return { module:'arimasu-imasu', mode:'speed-drill', results: drillState.results, score: drillState.score, startTs: drillState.roundStartTs }; });
 
-    // Speed Drill auto-indul a phase-tab kattintásra → hero rejtése
     document.querySelector('.module-hero')?.classList.add('hidden');
 
     return `
@@ -3152,6 +3271,17 @@ function initModulePage() {
   }
 
   function attachSpeedDrillHandlers(m, phase) {
+    const startBtn = document.getElementById('sdStart');
+    if (startBtn) {
+      startBtn.addEventListener('click', () => {
+        drillState.started = true;
+        const container = document.getElementById('phaseContent');
+        container.innerHTML = renderSpeedDrill(m, phase);
+        attachSpeedDrillHandlers(m, phase);
+        container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      return;
+    }
     renderDrillCard(m, phase);
     // Exit gomb
     const exit = document.getElementById('sdExit');
@@ -3325,7 +3455,7 @@ function initModulePage() {
         <div class="sd-final-stat"><span class="sf-label">Pontszám</span><span class="sf-value">${drillState.score}</span></div>
         <div class="sd-final-stat"><span class="sf-label">Helyes</span><span class="sf-value">${correct}/${total} <small>(${pct}%)</small></span></div>
         <div class="sd-final-stat"><span class="sf-label">Átlag idő</span><span class="sf-value">${avgSec}s</span></div>
-        <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${drillState.bestStreak} 🔥</span></div>
+        <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillState.bestStreak} 🔥</span></div>
       </div>
       <button class="btn btn-primary glow-effect" id="sdRestart">Még egyszer</button>
     `;
@@ -4605,7 +4735,7 @@ function initModulePage() {
         </p>
         <div class="sd-final-grid">
           <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${counterRunState.score}</span></div>
-          <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${counterRunState.bestStreak} 🔥</span></div>
+          <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${counterRunState.bestStreak} 🔥</span></div>
         </div>
         <button class="btn btn-primary glow-effect" id="cntReset">Új kör beállításokkal →</button>
       </div>
@@ -5166,7 +5296,7 @@ function initPracticePage() {
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pontszám</span><span class="sf-value">${runtimeState.score}</span></div>
         <div class="sd-final-stat"><span class="sf-label">Helyes</span><span class="sf-value">${correct}/${total} <small>(${pct}%)</small></span></div>
-        <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${runtimeState.bestStreak} 🔥</span></div>
+        <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${runtimeState.bestStreak} 🔥</span></div>
         <div class="sd-final-stat"><span class="sf-label">Mód</span><span class="sf-value">${lobbyState.mode === 'particles' ? 'Partikula' : 'Puzzle'}</span></div>
       </div>
       <button class="btn btn-primary glow-effect" id="prRestart">Új kör beállításokkal →</button>
@@ -5833,13 +5963,14 @@ function initConjugationPage() {
     groups:   { godan: true, ichidan: true, irregular: true },
     // V8: tematikus kategória-szűrő (6 user-tematika + daily)
     themes:   {
-      daily: true, movement: true, transitivity: true, clothing: true,
-      giving: true, state: true, weather: true
+      // Kezdő alap: a leggyakoribb igék; a többi téma a Testreszabásban kapcsolható
+      daily: true, movement: true, transitivity: false, clothing: false,
+      giving: false, state: false, weather: false
     },
     forms:    {
-      // P1 alapok
-      masu: true, masen: true, mashita: true, masen_deshita: false,
-      nai: true, te: true, ta: true,
+      // Kezdő alap: az udvarias (masu) család; a bizalmas alakok kapcsolhatók
+      masu: true, masen: true, mashita: true, masen_deshita: true,
+      nai: false, te: false, ta: false,
       // P2 haladó (alapból kikapcsolva — explicit pipálás kell hozzá)
       potential: false, passive: false, causative: false,
       causative_passive: false, volitional: false
@@ -6727,7 +6858,7 @@ function initConjugationPage() {
         <span class="csc-label">leghosszabb sorozat</span>
       </div>
       ${hasData ? `
-        <button class="conj-stat-toggle" id="conjStatsToggle">📊 Részletek</button>
+        <button class="conj-stat-toggle" id="conjStatsToggle">Részletek</button>
       ` : ''}
       <div class="conj-stats-panel hidden" id="conjStatsPanel"></div>
     `;
@@ -6761,7 +6892,7 @@ function initConjugationPage() {
       panel.classList.add('hidden');
       panel.innerHTML = '';
       btn.classList.remove('active');
-      btn.textContent = '📊 Részletek';
+      btn.textContent = 'Részletek';
     }
   }
 
@@ -6900,9 +7031,9 @@ function initConjugationPage() {
     }).join('');
 
     const modes = [
-      { id: 'recognition', name: 'Felismerés', sub: '4 választós kártyák' },
-      { id: 'build',       name: 'Építkezés',  sub: 'tő + toldalék külön' },
-      { id: 'mastery',     name: 'Mester',     sub: 'szabad input + időlimit' }
+      { id: 'recognition', name: 'Felismerés', sub: 'négy válaszból választasz' },
+      { id: 'build',       name: 'Építkezés',  sub: 'tőből és toldalékból rakod össze' },
+      { id: 'mastery',     name: 'Mester',     sub: 'magad írod be az alakot' }
     ].map(m => `
       <button class="cj-mode-btn ${drillSettings.mode === m.id ? 'active' : ''}" data-mode="${m.id}">
         <span class="cj-m-name">${m.name}</span>
@@ -7504,6 +7635,8 @@ function initConjugationPage() {
 
   function startMasteryTimer() {
     const fill = document.getElementById('cjTimerFill');
+    // Időlimit csak akkor, ha a tanuló bekapcsolta (NihonCorePrefs)
+    if (!NihonCorePrefs.timerOn()) { if (fill && fill.parentElement) fill.parentElement.style.display = 'none'; return; }
     const limit = drillSettings.timeLimit;
     fill.style.transition = 'none';
     fill.style.width = '100%';
@@ -7725,7 +7858,7 @@ function initConjugationPage() {
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
-        <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
+        <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
       <button class="btn btn-primary glow-effect" id="cjReset">Új kör beállításokkal →</button>
     `;
@@ -8335,7 +8468,7 @@ function initAdjectivesPage() {
       <div class="conj-stat-chip"><span class="csc-num">${p.totalAttempts}</span><span class="csc-label">összes</span></div>
       <div class="conj-stat-chip"><span class="csc-num">${pct}%</span><span class="csc-label">pontosság</span></div>
       <div class="conj-stat-chip"><span class="csc-num">${p.bestStreak} 🔥</span><span class="csc-label">leghosszabb sorozat</span></div>
-      ${hasData ? `<button class="conj-stat-toggle" id="adjStatsToggle">📊 Részletek</button>` : ''}
+      ${hasData ? `<button class="conj-stat-toggle" id="adjStatsToggle">Részletek</button>` : ''}
       <div class="conj-stats-panel hidden" id="adjStatsPanel"></div>
     `;
     const tBtn = document.getElementById('adjStatsToggle');
@@ -8365,7 +8498,7 @@ function initAdjectivesPage() {
       panel.classList.add('hidden');
       panel.innerHTML = '';
       btn.classList.remove('active');
-      btn.textContent = '📊 Részletek';
+      btn.textContent = 'Részletek';
     }
   }
 
@@ -8476,9 +8609,9 @@ function initAdjectivesPage() {
     }).join('');
 
     const modes = [
-      { id: 'recognition', name: 'Felismerés', sub: 'Típus + 4-választós (~25% típuskérdés)' },
-      { id: 'build',       name: 'Építkezés',  sub: 'tő + toldalék külön (kivételek vizuálisan)' },
-      { id: 'mastery',     name: 'Mester',     sub: 'szabad input + 10s timer' }
+      { id: 'recognition', name: 'Felismerés', sub: 'négy válaszból választasz' },
+      { id: 'build',       name: 'Építkezés',  sub: 'tőből és toldalékból rakod össze' },
+      { id: 'mastery',     name: 'Mester',     sub: 'magad írod be az alakot' }
     ].map(m => `
       <button class="cj-mode-btn ${drillSettings.mode === m.id ? 'active' : ''}" data-adj-mode="${m.id}">
         <span class="cj-m-name">${m.name}</span>
@@ -9049,6 +9182,8 @@ function initAdjectivesPage() {
 
   function startAdjMasteryTimer(card) {
     const fill = document.getElementById('adjTimerFill');
+    // Időlimit csak akkor, ha a tanuló bekapcsolta (NihonCorePrefs)
+    if (!NihonCorePrefs.timerOn()) { if (fill && fill.parentElement) fill.parentElement.style.display = 'none'; return; }
     const limit = drillSettings.timeLimit;
     fill.style.transition = 'none'; fill.style.width = '100%'; fill.offsetHeight;
     fill.style.transition = `width ${limit}ms linear`;
@@ -9311,7 +9446,7 @@ function initAdjectivesPage() {
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
-        <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
+        <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
       <button class="btn btn-primary glow-effect" id="adjReset">Új kör beállításokkal →</button>
     `;
@@ -9749,7 +9884,7 @@ function initDateTimePage() {
       <div class="conj-stat-chip"><span class="csc-num">${p.totalAttempts}</span><span class="csc-label">összes</span></div>
       <div class="conj-stat-chip"><span class="csc-num">${pct}%</span><span class="csc-label">pontosság</span></div>
       <div class="conj-stat-chip"><span class="csc-num">${p.bestStreak} 🔥</span><span class="csc-label">leghosszabb sorozat</span></div>
-      ${hasData ? `<button class="conj-stat-toggle" id="dtStatsToggle">📊 Részletek</button>` : ''}
+      ${hasData ? `<button class="conj-stat-toggle" id="dtStatsToggle">Részletek</button>` : ''}
       <div class="conj-stats-panel hidden" id="dtStatsPanel"></div>
     `;
     const tBtn = document.getElementById('dtStatsToggle');
@@ -9779,7 +9914,7 @@ function initDateTimePage() {
       panel.classList.add('hidden');
       panel.innerHTML = '';
       btn.classList.remove('active');
-      btn.textContent = '📊 Részletek';
+      btn.textContent = 'Részletek';
     }
   }
 
@@ -9840,9 +9975,9 @@ function initDateTimePage() {
     `).join('');
 
     const modes = [
-      { id: 'recognition', name: 'Felismerés', sub: '4-választós olvasat' },
-      { id: 'build',       name: 'Építkezés',  sub: 'szám + counter külön' },
-      { id: 'mastery',     name: 'Mester',     sub: 'szabad input + 10s timer' }
+      { id: 'recognition', name: 'Felismerés', sub: 'négy olvasatból választasz' },
+      { id: 'build',       name: 'Építkezés',  sub: 'számból és számlálóból rakod össze' },
+      { id: 'mastery',     name: 'Mester',     sub: 'magad írod be az olvasatot' }
     ].map(m => `
       <button class="cj-mode-btn ${drillSettings.mode === m.id ? 'active' : ''}" data-dt-mode="${m.id}">
         <span class="cj-m-name">${m.name}</span>
@@ -10318,6 +10453,8 @@ function initDateTimePage() {
 
   function startDtMasteryTimer(card) {
     const fill = document.getElementById('dtTimerFill');
+    // Időlimit csak akkor, ha a tanuló bekapcsolta (NihonCorePrefs)
+    if (!NihonCorePrefs.timerOn()) { if (fill && fill.parentElement) fill.parentElement.style.display = 'none'; return; }
     const limit = drillSettings.timeLimit;
     fill.style.transition = 'none'; fill.style.width = '100%'; fill.offsetHeight;
     fill.style.transition = `width ${limit}ms linear`;
@@ -10510,7 +10647,7 @@ function initDateTimePage() {
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
-        <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
+        <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
       <button class="btn btn-primary glow-effect" id="dtReset">Új kör beállításokkal →</button>
     `;
@@ -11073,9 +11210,9 @@ function initListeningPage() {
     `).join('');
 
     const modes = [
-      { id: 'recognition', name: 'Felismerés', sub: 'PLAY → 4 választós', enabled: true },
-      { id: 'dictation',   name: 'Diktálás',   sub: 'PLAY → beírod romaji-val', enabled: true },
-      { id: 'pro',         name: 'Pro',        sub: 'mondat-szintű, természetes tempó', enabled: true }
+      { id: 'recognition', name: 'Felismerés', sub: 'meghallgatod, négyből választasz', enabled: true },
+      { id: 'dictation',   name: 'Diktálás', sub: 'meghallgatod, és leírod romajival', enabled: true },
+      { id: 'pro',         name: 'Mondatok',   sub: 'egész mondat, természetes tempóban', enabled: true }
     ].map(m => `
       <button class="cj-mode-btn ${drillSettings.mode === m.id ? 'active' : ''} ${m.enabled ? '' : 'lst-mode-locked'}"
               data-lst-mode="${m.id}" ${m.enabled ? '' : 'disabled'}>
@@ -11760,7 +11897,7 @@ function initListeningPage() {
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
-        <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
+        <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
         <div class="sd-final-stat"><span class="sf-label">Összes lejátszás</span><span class="sf-value">${totalReplays}×</span></div>
       </div>
       <button class="btn btn-primary glow-effect" id="lstReset">Új kör beállításokkal →</button>
@@ -12318,7 +12455,7 @@ function initGrammarPage() {
       <div class="conj-stat-chip"><span class="csc-num">${pct}%</span><span class="csc-label">pontosság</span></div>
       <div class="conj-stat-chip"><span class="csc-num">${p.bestStreak} 🔥</span><span class="csc-label">leghosszabb sorozat</span></div>
       <div class="conj-stat-chip"><span class="csc-num">${srsCount}</span><span class="csc-label">SRS itemek</span></div>
-      ${hasData ? `<button class="conj-stat-toggle" id="grmStatsToggle">📊 Részletek</button>` : ''}
+      ${hasData ? `<button class="conj-stat-toggle" id="grmStatsToggle">Részletek</button>` : ''}
       <div class="conj-stats-panel hidden" id="grmStatsPanel"></div>
     `;
     const tBtn = document.getElementById('grmStatsToggle');
@@ -12357,7 +12494,7 @@ function initGrammarPage() {
       panel.classList.add('hidden');
       panel.innerHTML = '';
       btn.classList.remove('active');
-      btn.textContent = '📊 Részletek';
+      btn.textContent = 'Részletek';
     }
   }
 
@@ -12458,9 +12595,9 @@ function initGrammarPage() {
     }).join('');
 
     const modes = [
-      { id: 'recognition', name: 'Felismerés', sub: 'melyik mintát látod?' },
-      { id: 'cloze',       name: 'Kiegészítés', sub: 'írd be a hiányzó részt' },
-      { id: 'translate',   name: 'Fordítás',  sub: 'HU → JP frázis-tálca' }
+      { id: 'recognition', name: 'Felismerés', sub: 'melyik minta van a mondatban?' },
+      { id: 'cloze',       name: 'Kiegészítés', sub: 'beírod a hiányzó részt' },
+      { id: 'translate',   name: 'Fordítás',  sub: 'japán mondatot raksz össze' }
     ].map(m => `
       <button class="cj-mode-btn ${drillSettings.mode === m.id ? 'active' : ''}" data-grm-mode="${m.id}">
         <span class="cj-m-name">${m.name}</span>
@@ -12908,6 +13045,8 @@ function initGrammarPage() {
 
   function startGrmClozeTimer(card) {
     const fill = document.getElementById('grmTimerFill');
+    // Időlimit csak akkor, ha a tanuló bekapcsolta (NihonCorePrefs)
+    if (!NihonCorePrefs.timerOn()) { if (fill && fill.parentElement) fill.parentElement.style.display = 'none'; return; }
     const limit = drillSettings.timeLimit;
     fill.style.transition = 'none'; fill.style.width = '100%'; fill.offsetHeight;
     fill.style.transition = `width ${limit}ms linear`;
@@ -13358,7 +13497,7 @@ function initGrammarPage() {
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
-        <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
+        <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
       <button class="btn btn-primary glow-effect" id="grmReset">Új kör beállításokkal →</button>
     `;
@@ -14302,7 +14441,7 @@ function initProductionPage() {
       </div>
       <div class="sd-final-grid">
         <div class="sd-final-stat"><span class="sf-label">Pont</span><span class="sf-value">${drillRunState.score}</span></div>
-        <div class="sd-final-stat"><span class="sf-label">Leghosszabb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
+        <div class="sd-final-stat"><span class="sf-label">Legjobb sorozat</span><span class="sf-value">${drillRunState.bestStreak} 🔥</span></div>
       </div>
       <button class="btn btn-primary glow-effect" id="prodReset">Új kör beállításokkal →</button>
     `;
