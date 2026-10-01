@@ -31,6 +31,8 @@ Ezért minden modul **szándékosan kicsi, tesztelhető starter-szetttel** indul
 | Dátum & Idő modul (V2.3) | **227 elem**: 12 hónap + 31 nap + 7 hétnap + 24 idő + 21×24h (12 sima + 9 AM/PM) + 35 perc + 37 év + 60 relatív (user-bővítés + 2026-06-03 bugfix) |
 | Hallás & Kiejtés modul (V3) | **134 audió-lecke** (17 dátum + 18 idő + 23 ige + 20 melléknév + 26 minimal pair + 13 szám + 7 hétnap + 10 kifejezés) + 30 Pro mondat (Grammar reuse) — user-bővítés + 2026-06-03 bugfix |
 | Grammar Patterns modul (V5 P1) | 15 sentence-szintű minta (12 N4 + 3 N3), patternenként 2 példa (összesen 30) |
+| Kana-tréner (Redesign 6.) | **104 jel / írás** (46 alapjel + 25 zöngés + 33 összetett), hiragana + katakana — zárt, teljes készlet |
+| Mini-leckék (Redesign 6.) | **7 lecke** (modulonként egy minta) — a bővítés a végső feltöltés része |
 
 **A teljes tartalmi feltöltés szándékosan a legutolsó lépés** — minden modul végleges
 működésének leigazolása után, **egyben** kell elvégezni. Addig:
@@ -68,6 +70,7 @@ NihonCoreV2/
 ├── sw.js                   ← ★ V7 P2 PWA Service Worker — ROOT-on (scope!)
 ├── manifest.webmanifest    ← PWA manifest
 ├── CLAUDE.md               ← Ez a fájl (dev kontextus)
+├── PRODUCT.md              ← Design-kontextus (kinek, milyen hangon) — az impeccable skill olvassa
 ├── CONTENT_LOAD_GUIDE.md   ← Tartalom-feltöltési útmutató (utolsó lépéshez)
 ├── pages/                  ← ★ V7 P3 — minden HTML kivéve index
 │   ├── module.html         ← Generikus modul-oldal (verb engine + counter engine)
@@ -79,6 +82,7 @@ NihonCoreV2/
 │   ├── stats.html          ← V4 Statisztika & Dashboard
 │   ├── grammar.html        ← V5 P1+P3+P4 Grammar Patterns modul
 │   ├── production.html     ← V7 P1 Production modul
+│   ├── kana.html           ← ★ Redesign 6.: Kana-tréner
 │   ├── login.html          ← Auth (mock)
 │   └── register.html       ← Auth (mock)
 ├── css/                    ← ★ V7 P3
@@ -94,7 +98,8 @@ NihonCoreV2/
 │       ├── counters.js     ← NIHONCORE_COUNTERS + CATEGORIES + ITEMS (~260 sor)
 │       ├── datetime.js     ← NIHONCORE_DT_* (8 kategória) (~150 sor)
 │       ├── audio.js        ← NIHONCORE_AUDIO_LESSONS (~55 sor)
-│       └── grammar.js      ← NIHONCORE_GRAMMAR_PATTERNS (~300 sor)
+│       ├── grammar.js      ← NIHONCORE_GRAMMAR_PATTERNS (~300 sor)
+│       └── kana.js         ← ★ NIHONCORE_KANA_ROWS / _GROUPS / _CONFUSABLE
 └── img/                    ← ★ V7 P3
     ├── fav_icon_nihoncore.png
     └── app_icon.png
@@ -429,7 +434,8 @@ használt, most **8 defer-elt** script tag-et tölt be a `js/data/` mappából.
 
 | HTML | data/* (8 fájl) | app.js | helyzet |
 |---|---|---|---|
-| `index.html` | — | ✓ (csak engine) | root |
+| `index.html` | csak `core.js` (tanulási út) | ✓ | root |
+| `pages/kana.html` | `core.js` + `kana.js` | ✓ | pages/ |
 | `pages/module.html` | ✓ | ✓ | pages/ |
 | `pages/practice.html` | ✓ | ✓ | pages/ |
 | `pages/conjugation.html` | ✓ | ✓ | pages/ |
@@ -439,8 +445,8 @@ használt, most **8 defer-elt** script tag-et tölt be a `js/data/` mappából.
 | `pages/grammar.html` | ✓ | ✓ | pages/ |
 | `pages/production.html` | ✓ | ✓ | pages/ |
 | `pages/stats.html` | ✓ | ✓ | pages/ |
-| `pages/login.html` | — | ✓ (csak engine) | pages/ |
-| `pages/register.html` | — | ✓ (csak engine) | pages/ |
+| `pages/login.html` | — | ✓ (csak engine; `style.css` + `auth.css`) | pages/ |
+| `pages/register.html` | — | ✓ (csak engine; `style.css` + `auth.css`) | pages/ |
 
 A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 ```html
@@ -520,13 +526,20 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 | **Bugfix — Hallás & Kiejtés modul review (engine + globális audio)** | **A 9. modul (Hallás & Kiejtés / `NihonCoreAudio` + `initGlobalAnswerAudio` + `initListeningPage` az app.js-ben) bug-fixe (2026-06-03).** A user-bővítés óta a fájl már **134 audió-lecke** (17+18+23+20+26+13+7+10) + 30 Pro mondat (Grammar Patterns reuse). **Adat-validáció PASS:** 0 duplikátum-id, 0 broken `pairWith` (minden minimal-pair partner valid), 0 érvénytelen `trap` tag. **KRITIKUS bugok:** **(B1+B2) Pro-mód tempó:** a `lessonSpeed()` mindig a tier-speed-et adta (0.75/0.9/1.0×), de a Pro-mód spec szerint MINDIG natural 1.0× alap (mondatnál a tier-lassítás a prozódiát tönkretenné). A feedback-replay (2 helyen: recognition + dictation/pro) `lessonSpeed(c)`-vel hívott — Pro replay 0.75×-en ment volna. Az `adaptiveAfterAnswer` clone (replay-elt kártya) **elveszítette az `isPro: true` flaget**, így a 2.-szor odakerült Pro-kártya is tier-speed-en futott. **Fix:** új `computeLessonSpeed(card)` Pro-aware helper (`card.isPro ? 1.0 : tierSpeed()`); a 3 hívóhelyen csere; a clone `isPro: !!card.isPro` megőrzéssel. **(B3) Globális válasz-felolvasás kanji-duplázás:** a `initGlobalAnswerAudio.findAnswer` a `.pfe-jp-ok` strong `.textContent`-jét vette közvetlenül — de ha a strong belsejében `<ruby>水<rt>みず</rt></ruby>` van (Grammar Patterns feedback gyakran ilyet renderel), a textContent összefűzi: `水みず` → a TTS **kétszer ejti** a kanjit. **Pontosan ez a user által említett kanji-félreolvasás konkrét forrása.** **Fix:** új `extractKanaPreferringText(el)` helper — clone-olja a node-ot, és minden `<ruby>` tag-et lecseréli **csak a `<rt>` (furigana) tartalmára**, így csak a pure-kana olvasat megy a TTS-nek (`みず` mizu). **Speak-regex bővítve:** `[一-龯]` (U+4E00..U+9FAF) → `[一-鿿]` (U+4E00..U+9FFF) — modern ritka kanjik nem esnek ki. **MEDIUM bugok:** **(B4) onError-disable:** a `handleLstAudioError` csak text-fallback-et mutatott, a PLAY/Slow gombok továbbra is kattinthatók (spam-elhető hiba). A spec szerint az onError letiltja a hanggombokat. **Fix:** a fallback megjelenítése MELLETT a `#lstPlayBtn`, `#lstSlowBtn`, `#lstFbReplay` `disabled = true` + `.lst-audio-disabled` class. **(B5) Silent replay-fail:** a feedback `lstFbReplay` `onError: () => {}` — ha a TTS-API kiesik a replay alatt, semmi nem történik (zavart UX). **Fix:** `onError: () => handleLstAudioError(card)`. **(B6) Lobby outdated:** `'a teljes 38-leckés készleten gyakorolsz'` (régi starter-szám) → dinamikus `${countLstPool()}` (most 134). **MINOR:** **(B7)** `lessonSpeed(c)` paramétert ignorált — refaktorálva `computeLessonSpeed(card)`-ra (signature pollution kivédve). **(B8)** `listeningDontKnow` results.push errorCode='dont_know', feedback errorCode='wrong_choice' — inkonzisztens. **Fix:** `errorCode: 'wrong_choice'` + külön `dontKnow: true` flag. **(B10)** `listening.html` `badge-jlpt JLPT N5` → `JLPT N5–N3` (Pro mód N4/N3 mondatokat is használ). **VM-context teszt-eredmény:** speak-regex új-range U+9FD0 és U+9FFF kanji-kat befogadja (régi range NEM); kanji-duplázás: régi `'水みずを飲のみたい'` → új `'みずをのみたい'` (a kanji nem megy TTS-be); Pro-clone `isPro: true` megőrzött; lobby-string dinamikus; listening.html badge frissítve. **CSS-jegyzet:** `.lst-audio-disabled` class hozzáadható később a style.css-be (disabled-gomb halvány stílus); a `disabled` attribútum már így is letiltja a kattintást. `CACHE_VERSION` → v40. CSS opcionális, HTML egyetlen sor (badge). |
 | **Redesign 0. fázis — gyors javítások** | **(2026-10-01) A teljes redesign első, önálló lépése.** (1) **Mondat-Mester haladási csík**: a `.round-progress` `margin: 0 auto`-ja a flex-oszlop `.practice-runtime`-ban tartalom-szélességre zsugorította a csíkot (a sáv 0 px volt) → `margin: 0 0 28px`. (2) **Görgetés a körhöz**: új `NihonCoreRound.scrollToRound()` — a `begin()` és a 6 dedikált modul `advance*Card()`-ja + a Mondat-Mester hívja; a Pont/Sorozat sort (`.pr-stats`) a fix fejléc alá görgeti. A module.html fázisainak nincs `.pr-stats` sora → ott no-op. (3) **Mondat-Mester szűrő-bug**: a lobby Funkció-szűrője csak Affirmative/Negative/Question-t ismert, az N4 batchek ~70-féle `metadata.function` címkéje miatt **a 161 N4 mondatból 140 soha nem került elő**. Új `sentenceFunction(s)` a 3 alap-kategóriára képez le; a kártya fejlécén `metaLabel()` magyar címkét ad (a nyers „QUESTION · NON-PAST" helyett). (4) **Halott „Haladásod ezen a modulon 0%" sáv** törölve (module.html + CSS) — semmi nem írta. (5) **Fázisfülek** felirata a `m.phases[n].name/subtitle`-ből jön (`setupPhaseTabs`), a core.js alcímek magyarítva. (6) **Kezdőlap**: verzió-jelvények (`.module-badge`) törölve, az Alap igék kártya a tényleges tartalmat írja le, „-motor"/„free input"/„fuzzy diff" feliratok magyarítva. (7) **Zsargon**: „Drill-paraméterek" → „Állítsd be a kört", „attempt" → „megválaszolt kártya", „Cloze" → „Kiegészítés", „Speed Drill" → „Gyorskör", „Pro listening" → „Pro hallás", verziószámok ki a látható feliratokból. (8) `theme-color` a pages/ oldalakon `#0a0b14` → `#F3EEE3`. `CACHE_VERSION` → v41. **A modul-nevek („Grammar Patterns", „Production modul") NEM változtak** — az a 4. fázis döntése. |
 
-### 🔴 Redesign 2026-10 (folyamatban) — user-döntések
+| **Redesign 1. fázis — üveges design-alap** | **(2026-10-01)** Új token-rendszer: **szín-csatornák** (`rgb(var(--x-rgb) / alfa)`), **üveg-tokenek** (`--glass-bg/-strong/-border/-blur/-shadow`), **fix betűméret-skála** (`--fs-2xs`…`--fs-4xl`, 12 px minimum). Szkripttel normalizálva: 358 beégetett régi szín és 427 betűméret tokenre; 129 ragyogás/dísz-színátmenet ki. **Lebegő üveg-fejléc** (`.header`), telefonon **alsó fül-sáv** (`initAppTabbar` → `.nc-tabbar`: Kezdőlap · Modulok · Statisztika · Fiók), a hamburger-menü megszűnt. Téma-gomb egységesen a fejlécben. Sötét téma a csatorna-tokenekből. Belépő oldalak a közös stíluslapra állítva (`auth.css` 655 → 176 sor; a login/register a `style.css`-t IS betölti). **Barba.js eltávolítva** (az index.html-en soha nem aktiválódott, a modul-oldalakon hibára futott) → natív `@view-transition`. Új `PRODUCT.md` (design-kontextus az impeccable skillnek). |
+| **Redesign 2. fázis — egységes kör-keret** | **(2026-10-01)** A stíluslap végén álló **KÖR-KERET** blokk minden modul futó körét egységesíti: **kompakt kör-sáv** (✕ · haladás · sorozat · pont; a `.pr-stats` + `.round-progress` `display: contents`-szel egy rácsban), **egy képernyős kártya** telefonon, **alulról becsúszó visszajelzés-lap** (`.conj-feedback` / `.pr-feedback` rögzített; a „Következő" gomb ragadós és fókuszt kap). `initRoundKeys`: **1–9** válasz, **Enter** tovább, **Esc** kilépés. `body.round-active` (NihonCoreRound állítja) rejti a segítők sávot, a fázisfüleket, a fül-sávot és a láblécet. Oldalsávos (side-stripe) keretek ki. |
+| **Redesign 3. fázis — lobbi** | **(2026-10-01)** `initLobbyQuickStart`: minden lobbit átrendez (csomópont-mozgatással, a modul-kód érintése nélkül): fejléc → **Mód** → **Indítás** → összecsukott **Testreszabás** (`<details class="lobby-custom">`, állapota: `nihoncore_lobby_custom_open`). Elöl marad a `[class*="mode-row"]`-t tartalmazó vagy `data-lobby-keep` jelű szekció. `NihonCorePrefs.timerOn()`: az **időlimit a beírós módokban kapcsolható, alapból KI** (`nihoncore_timer`). **Gyorskör**: indító képernyő (`drillState.started`), az óra nem indul a fül megnyitásakor. Ragozó kezdő-alapértékek: mindennapi + mozgás-igék, masu-család. |
+| **Redesign 4. fázis — kezdőlap + tanulási út** | **(2026-10-01)** Az index.html már nem marketing-oldal: **első alkalommal szintválasztó** (nulláról / a kanát már olvasom), utána **„Folytatás" kártya** a következő lépéssel, alatta a **tanulási út** (13 lépés) és a **Szabad gyakorlás** (modul-kártyák). `NIHONCORE_PATH` (core.js) + `NihonCorePath` (app.js): haladás a `nihoncore_path_v1`-ben (szinkronizálva), aktív lépés a modul-oldal `?step=<id>` paraméteréből, `apply(modul, settings)` a lépés előre beállított körét ülteti a modulra (`only` / `set`), `onSession` (a `recordSession`-ből) dönti el a lépést (**≥ 60% = kész**), a kör végén `.path-result` jelzés visszaúttal. Mondat-Mester: partikula-fókusz (`particlesOnly` / `particlesAny`), és egy körben már nem ismétlődik mondat. |
+| **Redesign 5. fázis — feladat-javítások** | **(2026-10-01)** **Nyelvtani minták, Felismerés**: a kártya nem árulja el a választ (nincs kategória és fordítás; a kérdés „Mit fejez ki ez a mondat?"; az opció a jelentés, a minta neve válasz után jelenik meg). **Ragozó, Felismerés**: hibánál `recognitionExplanation` megmondja, mit választottál (másik alak / másik igecsoport / rossz tő), `howItsBuilt` pedig hogyan épül a helyes alak. **Szabad fordítás**: N5 szint + valódi szint-szűrés, **„Az én válaszom is helyes"** gomb (önértékelés), fejlesztői címkék ki. **Hang**: ha a Google TTS-végpont hibázik, a `NihonCoreAudio` a böngésző beépített japán felolvasójára (Web Speech API) vált. A magyarázatok magyarul indulnak. |
+| **Redesign 6. fázis — új feladatok** | **(2026-10-01)** **Kana-tréner** (új modul: `pages/kana.html`, `js/data/kana.js`, `initKanaPage`): hiragana + katakana (46 alapjel + zöngés + összetett), **tábla hanggal** és jelenkénti haladás-színezéssel, 4 mód: felismerés · fordítva · beírás · **párosító**; jó válasznál magától lép tovább, hibánál megmutatja, mit választottál; a gyengébb jelek gyakrabban jönnek (`nihoncore_kana_profile_v1`). **Mini-leckék** (`NIHONCORE_LESSONS` a core.js-ben + `initLessons`): „Tanuld meg" panel a lobbi fölött, első alkalommal nyitva. **Minta-készlet: modulonként EGY lecke** — a bővítés a végső tartalom-feltöltés része. |
+
+### 🔴 Redesign 2026-10 — user-döntések (ezekhez mérj minden további UI-munkát)
 
 - **Célközönség:** nulláról induló ÉS kanát már olvasó kezdő, első indításkor szintválasztóval.
-- **Vizuális irány:** a zen paletta és a betűk maradnak, DE az 1. fázisban **újra glass panelek + lebegő navbar** kellenek, és az app legyen **nagyon telefon- és tabletbarát** (user explicit kérése — felülírja a Zen Polish „nincs glassmorphism" elvét; a 8. szekció ennek megfelelően frissítendő az 1. fázisban).
-- **Szerkezet:** vezetett tanulási út a kezdőlapon „Folytatás" gombbal + a modulok megmaradnak „Szabad gyakorlás"-nak.
-- **Fázisok:** 0 gyors javítások ✅ · 1 design-alap (glass + lebegő navbar + mobil/tablet) · 2 egységes feladat-keret · 3 lobbi (Gyors indítás) · 4 kezdőlap + tanulási út · 5 feladat-javítások · 6 új feladatok (kana-tréner, mini-leckék).
-- **Ismert, még nyitott hibák (5. fázis):** Grammar Felismerés elárulja a választ · Ragozó felismerés hibánál nincs szabály-magyarázat · Production egy referencia-válasszal · a hang nem hivatalos Google TTS-végpontról jön tartalék nélkül · a Mondat-Mester visszatevéssel húz (egy körben ismétlődhet a mondat) · a Gyorskör a fül megnyitásakor azonnal indul.
+- **Vizuális irány:** a zen paletta és a betűk maradnak, a felületek **üvegesek** (glass panelek + lebegő navbar), és az app **nagyon telefon- és tabletbarát** (user explicit kérése — felülírta a Zen Polish „nincs glassmorphism" elvét).
+- **Szerkezet:** vezetett tanulási út a kezdőlapon „Folytatás" gombbal + a modulok „Szabad gyakorlás"-ként.
+- **Nyitva maradt:** a „Grammar Patterns" és a „Production modul" **neve** (user-döntés) · natív `confirm()` ablakok saját párbeszédre cserélése · a statisztika-oldal részletes újratervezése.
+- **Ág:** a redesign a `redesign-2026-10` ágon van; élesítéshez `main`-be kell olvasztani és pusholni.
 
 **Jelenleg élő modulok:**
 - ✅ **Alap igék (Arimasu/Imasu) — V5 P2** verb engine + kategória-tudatos lobby (1 aktív + 2 stub kategória) · session-log instrumentálva (stats)
@@ -543,7 +556,10 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 - ✅ **Firebase Auth (V16)** — `js/auth.js` · email/jelszó + Google · single-user · lazy SDK-load (mobil-perf) · header user-chip + menü · `auth.css` zen
 - ✅ **Firestore sync (V17)** — `js/sync.js` · `users/{uid}` doc · login PULL+merge, debounce/interval/visibility PUSH · sessions=append / srs=per-item / profilok=last-write-wins · csak tanulási adat (eszköz-specifikus kulcsok nem)
 - ✅ **3D Flashcard rendszer** — `NihonCoreFlashcard` univerzális motor · flip+swipe · mind a 4 tartalmi modul „Szótár" módja · `nc_fc_state_*` localStorage
-- ✅ **Zen UI + dual-téma** — washi/sumi/matcha paletta · `html.theme-sumi` sötét mód · anime.js mikro-interakciók · Barba.js SPA oldalváltás · PWA install/update toast
+- ✅ **Zen UI + dual-téma** — washi/sumi/matcha paletta üveges felületeken · `html.theme-sumi` sötét mód · anime.js mikro-interakciók · natív view-transition oldalváltás · PWA install/update toast
+- ✅ **Kana-tréner (Redesign 6.)** — `kana.html` · hiragana + katakana · tábla hanggal · felismerés / fordítva / beírás / párosító
+- ✅ **Tanulási út (Redesign 4.)** — `NIHONCORE_PATH` + `NihonCorePath` · 13 lépés · szintválasztó · „Folytatás"
+- ✅ **Mini-leckék (Redesign 6.)** — `NIHONCORE_LESSONS` + `initLessons` · modulonként egy minta-lecke
 
 ---
 
@@ -561,54 +577,25 @@ A 9 modul-page mindegyikén ugyanaz a 9-tag-es head:
 
 ### 🔴 Univerzális runtime UI-konvenciók (minden modul-page)
 
-Minden kör futása alatt **azonos UI-elemek** vannak ugyanazon a helyen:
+A keretet a stíluslap végi **KÖR-KERET** és **LOBBI** blokk, valamint az app.js univerzális IIFE-i adják. Új modulnál elég a meglévő osztályneveket használni.
 
-1. **Header (top)**
-   - Bal: logo (`<a class="logo">`)
-   - Jobb: `Bejelentkezés` + 🏠 home ikon (`.btn-home`) — az ikon az `index.html`-re visz
-   - **NE** legyen "← Modulok" szöveges link a nav-ban
+1. **Fejléc**: lebegő üveg-sáv. Bal: logó · közép: modul-név (`.nav.module-page-nav`, JS tölti) · jobb: `Bejelentkezés`, téma-gomb (JS injektálja), 🏠 `.btn-home`. Telefonon (< 768 px) a navigáció az **alsó fül-sávban** van (`initAppTabbar`).
 
-2. **Hero (modul-cím + ikon + leírás)**
-   - Class: `.module-hero`
-   - Lobby módban látszik, **kör futása alatt rejtett** (`hidden` class) — utility:
-     ```js
-     document.querySelector('.module-hero')?.classList.add('hidden');     // round start
-     document.querySelector('.module-hero')?.classList.remove('hidden');  // back to lobby
-     ```
+2. **Modul-fejléc** (`.module-hero`): lobbiban látszik, **kör alatt rejtett** (`classList.add('hidden')` indításkor, `remove` visszatéréskor). Az újra-megjelenése jelzi a kör-őrnek a kilépést.
 
-3. **Runtime stats sor** (`.pr-stats`)
-   - **2 chip**: Pont + Sorozat (3. chip NE legyen "Kártya N/M" — az progress-stripbe megy)
-   - **Jobb szélén** `.round-exit` gomb (X ikon + "Kilépés" label) — `margin-left: auto` flex-layout-tal
+3. **Lobbi** (`.conj-lobby` / `.practice-lobby` / `.ms-lobby` / `.cnt-lobby`): a szokásos sorrendben rendereld (`.lobby-header`, `.lobby-section`-ök, `.lobby-stats`, `.ml-start` gomb). Az `initLobbyQuickStart` magától átrendezi: Mód → Indítás → Testreszabás. A módválasztó sor osztályneve tartalmazza a `mode-row`-t; ami még elöl maradjon, kapjon `data-lobby-keep`-et.
 
-4. **Round progress strip** (`.round-progress`)
-   - Külön elem a stats sor után, 28px alulról spacing a card-előtt
-   - Tartalom: `Kártya N / M` szöveg + gradient progress-bar
-   - HTML séma:
-     ```html
-     <div class="round-progress">
-       <span class="round-progress-text" id="xxCardCount">Kártya 1 / N</span>
-       <div class="round-progress-bar"><div class="round-progress-fill" id="xxProgressFill" style="width: 0%"></div></div>
-     </div>
-     ```
+4. **Kör-sáv**: a HTML-ben `.pr-stats` (2 × `.pr-stat`: Pont, Sorozat + `.round-exit`) és utána `.round-progress` (`.round-progress-text` + `.round-progress-bar > .round-progress-fill`); a CSS egyetlen sorba rendezi. A futó kör tárolója `.conj-runtime` (vagy `.practice-runtime`).
 
-5. **Kilépés-confirm**
-   - Minden exit-gomb `confirm()` dialóggal kérdez:
-     ```
-     "Biztosan kilépsz a körből?
-     A jelenleg játszott kör adatai elvesznek, a teljes kör végéig nem mentődik az eredményed.
-     (Folyamatban lévő statisztika-mentés a V3-ban várható.)"
-     ```
-   - Igen → vissza lobby-ba, `module-hero` újra látszik
+5. **Kártya**: `.conj-card` (vagy `.pr-card`), benne `.cj-prompt`, `.cj-options > .cj-option` (2×2 rács; `correct` / `wrong` / `reveal-correct` állapot), `.dont-know-btn`. Beírós módnál a beküldés a `.conj-actions`-ben van (ragadós).
 
-6. **„Nem tudom" gomb** (feleletválasztós Recognition kártyák)
-   - Minden MC Recognition kártyán `<button class="dont-know-btn">🤔 Nem tudom</button>`
-     az opciók után, a kártyában (nem külön actions-konténerben)
-   - Kattintásra: felfedi a helyes választ + magyarázat, nem-helyesként számít
-     (streak 0, 0 pont), `markDontKnowFeedback()` a feedback-fejlécet semlegesíti
-   - A gomb a „disable minden opció" sweepbe is bekerül (`.cj-option, .dont-know-btn`)
-     → `:disabled { display:none }` miatt bármely válasz után eltűnik
+6. **Visszajelzés**: `.conj-feedback` (vagy `.pr-feedback`) a kártya TESTVÉRE (nem üveg-panelen belül!) → rögzített alsó lap. Állapot-osztály: `pr-fb-correct` / `pr-fb-wrong` / `pr-fb-dontknow`. Tartalom: `.pr-fb-header`, `.pr-fb-explain > .pfe-row` (`pfe-correct` / `pfe-wrong` / `pfe-context` / `pfe-rule`), a végén `.btn.btn-primary` (Következő). A helyes japán válasz `.pfe-jp-ok`-ban legyen (ezt olvassa fel a hang).
 
-Új modul készítésekor ezeket az elemeket kötelezően be kell vezetni — **NE** legyen olyan modul, ahol nincs exit gomb vagy ahol a hero látszik kör alatt.
+7. **Kör-életciklus**: indításkor `NihonCoreRound.begin(snapshotFn)`; lapozáskor `NihonCoreRound.scrollToRound()`; a végén `NihonCoreStats.recordSession({...})` (ez zárja a kört és értesíti a tanulási utat). Kilépésnél a megerősítő szöveg: az eddigi válaszok elmentődnek.
+
+8. **„Nem tudom" gomb**: minden feleletválasztós és beírós kártyán `<button class="dont-know-btn">`; felfedi a helyes választ, nem-helyesként számít, a visszajelzés fejléce semleges (`markDontKnowFeedback()` vagy `pr-fb-dontknow`).
+
+9. **Billentyűk**: az `initRoundKeys` adja (1–9, Enter, Esc) — ehhez az opciók osztálya `.cj-option` / `.cnt-option` / `.sd-option` / `.mc-choice` legyen.
 
 ### 🔴 2-RÉSZES UPDATE — kötelező 2. part ellenőrzések
 
@@ -667,55 +654,52 @@ Részletek és kontextus: `memory/no_preview_servers.md`.
 
 ---
 
-## 8. Design tokenek (style.css :root) — ★ ZEN PALETTA
+## 8. Design tokenek (style.css :root) — ★ ZEN PALETTA, ÜVEGES FELÜLETEK
 
-> A „Zen Polish" óta a paletta autentikus japán: washi papír + sumi tinta +
-> matcha. **NINCS kék-lila gradient, nincs neon-glow.** A régi modern tokenek
-> (`--ink`, `--gold`, `--teal`, `--white`) **alias-ok** az új zen-értékekre,
-> hogy a régi kód ne törjön.
+> A paletta japán zen (washi papír · sumi tinta · matcha), a felületek üvegesek:
+> áttetsző, lebegő panelek a papír-háttér fölött. **Nincs kék-lila gradient, nincs
+> neon-ragyogás, nincs színátmenetes szöveg, nincs oldalsávos (side-stripe) keret.**
+> A design-kontextus (kinek, milyen hangon) a `PRODUCT.md`-ben van.
 
 ```css
-/* Zen alap-paletta */
---washi:      #F3EEE3   (papír háttér — alap)
---washi-deep: #ECE5D5   (árnyaltabb papír)    --washi-soft: #F8F4EA  (világosabb)
---washi-edge: rgba(58,50,38,0.10)  (finom meleg keret — NEM feketés)
---sumi:       #2A2A2E   (fő szöveg — NEM tiszta fekete)
---sumi-soft:  #4A4A52   --sumi-faint: #6E6E78
---matcha:     #7A8B4F   (primary accent / siker)   --matcha-deep: #5F7038
---indigo:     (másodlagos hideg akcent)   --vermilion: (hiba/wrong, meleg piros)
---gold-trad:  #B8862F   (hagyományos lakk-arany)    --amber: #C68E3A
+/* Szín-csatornák — MINDEN áttetsző szín ezekből: rgb(var(--x-rgb) / alfa) */
+--tint-rgb   (meleg tinta: halvány töltés, keret)     --shade-rgb  (árnyék, fátyol)
+--glass-rgb  (az üveg anyaga)                          --matcha-rgb / --gold-rgb / --verm-rgb / --amber-rgb / --indigo-rgb
 
-/* Drop-slot + meleg felület paletta (partikula-slotok + grammar drop-zónák) */
---slot-bg / --slot-border           (üres: homok-mélyedés + meleg taupe szaggatott)
---slot-bg-active / --slot-border-active   (fókusz/drag-over: matcha jelzés)
---slot-bg-filled / --slot-border-filled   (kitöltve: kiemelt papír + arany)
---slot-placeholder                  (placeholder glyph — lágy taupe)
---surface-warm / --surface-warm-edge      (mondat/fordítás-konténer meleg háttér)
+/* Paletta */
+--washi #F3EEE3 · --washi-deep · --washi-soft · --washi-edge
+--sumi #2A2A2E · --sumi-soft · --sumi-faint (4,9:1 — a legkisebb szövegnek is elég)
+--matcha (felület, keret) · --matcha-deep (SZÖVEG és gomb)
+--gold-trad (felület, keret) · --gold-ink (arany SZÖVEG) · --amber / --amber-ink
+--vermilion (hiba) · --indigo (info)
+--accent / --accent-hover / --on-accent   (elsődleges gomb)
 
-/* Kontroll-panel felület (helpers-bár, fázis-tabok, Pont/Sorozat chipek) */
---panel-bg / --panel-border / --panel-shadow   (világos krém kártya + papír-árnyék)
+/* Üveg */
+--glass-bg         lebegő panel (kártya, lobbi)
+--glass-bg-strong  szöveg-sűrű vagy rétegzett felület (fejléc, menü)
+--glass-border · --glass-blur · --glass-shadow · --glass-shadow-lg
+--glass-fill / --glass-fill-edge   beágyazott blokk töltése (NEM újabb elmosás!)
 
-/* Régi → zen ALIASOK (ne használd újhoz, de a régi kód miatt élnek) */
---ink → washi · --gold → gold-trad · --teal → matcha · --white → sumi
+/* Tipográfia: fix skála, 12 px alatt nincs szöveg */
+--fs-2xs 12 · --fs-xs 13 · --fs-sm 14 · --fs-base 16 · --fs-md 18 · --fs-lg 20 · --fs-xl 24 · --fs-2xl 32 · --fs-3xl 40 · --fs-4xl 48
+--font-body Nunito (UI) · --font-serif Lora (logó, modul-címek) · --font-jp Noto Serif JP
 
-/* Tipográfia */
---font-jp:   'Noto Serif JP', 'Zen Kaku Gothic New', serif   (kanji/furigana)
---font-body: 'Nunito', system-ui, sans-serif                  (UI)
---font-serif:'Lora', Georgia, serif                           (HU/EN mondatok, hero)
-
-/* Tranzíció: KIZÁRÓLAG ease-out (Emil-szabály) */
---t-fast: 120ms · --t-base: 160ms · --t-slow: 220ms ease-out
---radius-sm: 8px, --radius-md: 14px, --radius-lg: 20px, --radius-xl: 28px
+/* App-váz */
+--nav-h · --nav-gap · --header-h (a tetején lefoglalt hely) · --tabbar-h · --tabbar-space · --page-pad · --touch (44 px)
+--radius-sm 10 · --radius-md 16 · --radius-lg 24 · --radius-xl 32
+--t-fast 120ms · --t-base 160ms · --t-slow 220ms (csak ease-out) · --ease-out
 ```
 
-**Dual-téma:** `html.theme-sumi` (sötét) felülírja a tokeneket — minden komponens
-auto-adaptál a `var()` miatt. **Új színt mindig token-en keresztül adj** (és ha
-hard-kódolsz, használj `var(--surface-warm)`-szerű téma-tudatos tokent — a hideg
-`rgba(42,42,46)` / régi navy `rgba(20,22,41)` háttér NEM adaptál és töri a harmóniát).
+**Szabályok**
+- **Új színt csak tokenből.** Áttetsző szín: `rgb(var(--tint-rgb) / 0.08)` — soha ne beégetett `rgba(…)`, mert az nem követi a sötét témát.
+- **Szövegszín kontrasztja:** arany szöveg `--gold-ink`, zöld szöveg `--matcha-deep`, borostyán `--amber-ink` (az alapszínek washi-n nem érik el a 4,5:1-et).
+- **Üveg csak lebegő rétegre** (`.glass-panel`, `.glass-panel-heavy`, `.glass-card`, fejléc, fül-sáv, lapok). **Üvegen belül ne legyen újabb üveg** — beágyazott blokk: `--glass-fill`. `backdrop-filter`-es szülőn belül a `position: fixed` gyerek a szülőhöz rögzül!
+- **Betűméret csak a skáláról** (`var(--fs-*)`); a japán dísz-glyph-ek `clamp()`-ben maradhatnak.
+- **Érintési célpont ≥ 44 px**, beviteli mező betűmérete ≥ 16 px (iOS nem nagyít rá).
+- **Töréspontok:** telefon ≤ 599 · tablet 600–1023 · asztali ≥ 1024; a navigáció 768-nál vált (alatta alsó fül-sáv). Telefon az első: az alap-szabály a telefonos, a `min-width` média-lekérdezés bővít.
+- **Dual-téma:** `html.theme-sumi` csak a csatornákat és a paletta-tokeneket cseréli.
 
-**Árnyékok:** `--shadow-paper-1/2/3` (finom „papír egymáson", nincs neon-glow).
-**Glassmorphism osztályok (legacy):** `.glass-panel`, `.glass-card`, `.glass-pill`
-(zen-redesign után papír-felületek, nem üveg).
+**A stíluslap rétegei:** alap (tokenek, váz) → modulok régebbi szabályai → a fájl VÉGÉN a közös rétegek: **KÖR-KERET**, **LOBBI**, **KANA**, **MINI-LECKE**. A végső blokkok felülírják a modulok korábbi futásidejű szabályait — közös viselkedést oda írj, ne a modul-szekcióba.
 
 ---
 

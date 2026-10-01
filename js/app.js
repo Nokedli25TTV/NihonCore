@@ -523,6 +523,63 @@ window.NihonCorePath = (function () {
 })();
 
 
+// ── Mini-leckék ── „Tanuld meg" a lobbi fölött ──
+//   A NIHONCORE_LESSONS (js/data/core.js) modulhoz tartozó leckéjét a lobbi
+//   elé illeszti, összecsukható panelként. Első alkalommal nyitva van; ha a
+//   tanuló becsukja vagy kört indít, legközelebb összecsukva jelenik meg.
+//   Kör közben nem látszik (style.css: body.round-active .lesson).
+(function initLessons() {
+  const SEEN_KEY = 'nihoncore_lessons_seen';
+  const PAGE_MODULE = {
+    conjugationMain: 'conjugation', adjMain: 'adjectives', dtMain: 'datetime',
+    listeningMain: 'listening', practiceMain: 'practice', grmMain: 'grammar',
+    prodMain: 'production'
+  };
+  function seenMap() { try { return JSON.parse(localStorage.getItem(SEEN_KEY) || '{}') || {}; } catch (e) { return {}; } }
+  function markSeen(key) {
+    const m = seenMap(); if (m[key]) return;
+    m[key] = 1;
+    try { localStorage.setItem(SEEN_KEY, JSON.stringify(m)); } catch (e) {}
+  }
+
+  function setup() {
+    if (typeof NIHONCORE_LESSONS === 'undefined') return;
+    let key = null;
+    Object.keys(PAGE_MODULE).forEach(id => { if (document.getElementById(id)) key = PAGE_MODULE[id]; });
+    const lesson = key && NIHONCORE_LESSONS[key];
+    const lobby = document.querySelector('.conj-lobby, .practice-lobby');
+    if (!lesson || !lobby || document.querySelector('.lesson')) return;
+
+    const el = document.createElement('details');
+    el.className = 'lesson glass-panel';
+    el.open = !seenMap()[key];
+    el.innerHTML =
+      '<summary class="lesson-summary">' +
+        '<span class="lesson-head"><span class="lesson-kicker">Tanuld meg</span>' +
+        '<span class="lesson-title">' + lesson.title + '</span></span>' +
+        '<svg class="lcs-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>' +
+      '</summary>' +
+      '<div class="lesson-body">' +
+        '<ol class="lesson-points">' + lesson.points.map(p =>
+          '<li><strong class="lesson-point-h">' + p.h + '</strong><p>' + p.t + '</p></li>').join('') + '</ol>' +
+        ((lesson.examples && lesson.examples.length)
+          ? '<div class="lesson-examples">' + lesson.examples.map(x =>
+              '<div class="lesson-ex"><span class="lesson-ex-jp" lang="ja">' + x.jp + '</span>' +
+              '<span class="lesson-ex-ro">' + x.ro + '</span><span class="lesson-ex-hu">' + x.hu + '</span></div>').join('') + '</div>'
+          : '') +
+      '</div>';
+    lobby.parentNode.insertBefore(el, lobby);
+    el.addEventListener('toggle', () => { if (!el.open) markSeen(key); });
+    // kör indítása = a leckét látta
+    document.addEventListener('click', e => {
+      if (e.target && e.target.closest && e.target.closest('.ml-start')) markSeen(key);
+    }, true);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', setup);
+  else setup();
+})();
+
+
 // ── NihonCorePrefs ── eszköz-szintű gyakorlási beállítások ──
 //   timerOn(): kell-e időlimit a beírós (Mester / Kiegészítés) módokban.
 //   Alapból KI: a kezdő nyugodtan gondolkodhat; aki reflexet edz, bekapcsolja
@@ -4419,9 +4476,11 @@ function initModulePage() {
     if (counterRunState.cardIdx >= counterRunState.cards.length) {
       showCounterRoundSummary(m, phase);
     } else {
+      // A fázis saját kártyája (hibrid / mester), nem a felismerő-kártya:
+      // különben a 2. kártyánál a kör elakad (a hibrid kártyának nincs options mezője).
       const container = document.getElementById('phaseContent');
-      container.innerHTML = renderCounterCard(m, phase);
-      attachCounterCardHandlers(m, phase);
+      container.innerHTML = renderCounterCardForPhase(m, phase);
+      attachCounterCardHandlersForPhase(m, phase);
       container.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }

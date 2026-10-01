@@ -1256,3 +1256,128 @@ const NIHONCORE_PATH = [
     desc: 'Magyar mondatból japánt írsz, segítség nélkül.',
     module: 'production', href: 'pages/production.html' }
 ];
+
+/* ====================================================
+   MINI-LECKÉK — „Tanuld meg" a gyakorlás előtt
+   ----------------------------------------------------
+   Modulonként egy rövid magyarázat, ami a lobbi fölött jelenik meg
+   (app.js: initLessons). Első alkalommal nyitva van, utána összecsukva.
+   Mezők:
+     title    a lecke címe
+     points   [{ h: alcím, t: szöveg (HTML megengedett) }]
+     examples [{ jp, ro, hu }]  — példamondatok
+   Kulcs: a NihonCoreStats modul-kulcsa.
+   MINTA-KÉSZLET: modulonként egy lecke; a bővítés a végső tartalom-feltöltés része.
+   ==================================================== */
+const NIHONCORE_LESSONS = {
+  practice: {
+    title: 'A japán mondat váza',
+    points: [
+      { h: 'Az ige a mondat végén áll',
+        t: 'A magyarban a szórend szabad, a japánban az ige (vagy a <strong lang="ja">です</strong>) mindig zárja a mondatot.' },
+      { h: 'A szó szerepét a partikula mutatja',
+        t: 'A partikula a szó <em>után</em> áll: <strong lang="ja">は</strong> téma, <strong lang="ja">が</strong> alany, <strong lang="ja">を</strong> tárgy, <strong lang="ja">に</strong> cél vagy időpont, <strong lang="ja">で</strong> a cselekvés helye vagy eszköze, <strong lang="ja">へ</strong> irány, <strong lang="ja">と</strong> „-val", <strong lang="ja">も</strong> „is", <strong lang="ja">の</strong> birtokos.' },
+      { h: 'Kérdés: か a végére',
+        t: 'A szórend nem változik, csak a mondat végére kerül a <strong lang="ja">か</strong>.' }
+    ],
+    examples: [
+      { jp: '私は寿司を食べます。', ro: 'watashi wa sushi o tabemasu.', hu: 'Én sushit eszem.' },
+      { jp: 'これは本ですか。', ro: 'kore wa hon desu ka.', hu: 'Ez könyv?' }
+    ]
+  },
+
+  conjugation: {
+    title: 'A három igecsoport',
+    points: [
+      { h: 'Ichidan (II.): a る lemarad',
+        t: 'Az <em>-iru / -eru</em> végű igék többsége. A végső <strong lang="ja">る</strong> helyére jön a toldalék: <span lang="ja">食べる → 食べます, 食べない, 食べて</span>.' },
+      { h: 'Godan (I.): az utolsó szótag sort vált',
+        t: 'Az utolsó szótag a toldaléktól függően másik magánhangzó-sorra lép: <span lang="ja">書く → 書きます</span> (i-sor), <span lang="ja">書かない</span> (a-sor).' },
+      { h: 'Godan te- és ta-alak: a végződés dönt',
+        t: '<span lang="ja">う・つ・る → って</span>, <span lang="ja">む・ぶ・ぬ → んで</span>, <span lang="ja">く → いて</span>, <span lang="ja">ぐ → いで</span>, <span lang="ja">す → して</span>. Kivétel: <span lang="ja">行く → 行って</span>.' },
+      { h: 'Rendhagyó (III.): kettő van',
+        t: '<span lang="ja">する → します, しない, して</span> és <span lang="ja">来る → 来ます</span> (kimasu), <span lang="ja">来ない</span> (konai), <span lang="ja">来て</span> (kite).' }
+    ],
+    examples: [
+      { jp: '毎日日本語を勉強します。', ro: 'mainichi nihongo o benkyou shimasu.', hu: 'Minden nap japánt tanulok.' }
+    ]
+  },
+
+  adjectives: {
+    title: 'I- és na-melléknevek',
+    points: [
+      { h: 'I-melléknév: a végső い változik',
+        t: 'Tagadás: <span lang="ja">い → くない</span>. Múlt: <span lang="ja">い → かった</span>. Múlt tagadás: <span lang="ja">くなかった</span>. Például <span lang="ja">高い → 高くない, 高かった</span>.' },
+      { h: 'Kivétel: いい',
+        t: 'A ragozott alakok a <span lang="ja">よい</span> tőből képződnek: <span lang="ja">よくない, よかった</span>.' },
+      { h: 'Na-melléknév: a です ragozódik',
+        t: 'Főnév előtt <strong lang="ja">な</strong> áll: <span lang="ja">静かな部屋</span>. Állítmányként: <span lang="ja">静かです, 静かじゃありません, 静かでした</span>.' },
+      { h: 'Csapda: い-re végződő na-melléknevek',
+        t: '<span lang="ja">きれい</span>, <span lang="ja">きらい</span> és <span lang="ja">ゆうめい</span> na-melléknév, pedig い-re végződik.' }
+    ],
+    examples: [
+      { jp: 'この本は面白かったです。', ro: 'kono hon wa omoshirokatta desu.', hu: 'Ez a könyv érdekes volt.' }
+    ]
+  },
+
+  datetime: {
+    title: 'Dátum és idő: a rendhagyó olvasatok',
+    points: [
+      { h: 'Hónapok: szám + がつ',
+        t: 'Három rendhagyó: <span lang="ja">4月 しがつ</span>, <span lang="ja">7月 しちがつ</span>, <span lang="ja">9月 くがつ</span>.' },
+      { h: 'A hónap napjai 1–10: külön szavak',
+        t: '<span lang="ja">ついたち, ふつか, みっか, よっか, いつか, むいか, なのか, ようか, ここのか, とおか</span>. Rendhagyó még a <span lang="ja">14日 じゅうよっか</span>, a <span lang="ja">20日 はつか</span> és a <span lang="ja">24日 にじゅうよっか</span>.' },
+      { h: 'Órák: szám + じ',
+        t: 'Rendhagyó: <span lang="ja">4時 よじ</span>, <span lang="ja">7時 しちじ</span>, <span lang="ja">9時 くじ</span>. A fél óra: <span lang="ja">〜半 (はん)</span>.' },
+      { h: 'Percek: ふん vagy ぷん',
+        t: '<span lang="ja">いっぷん, さんぷん, よんぷん, ろっぷん, はっぷん, じゅっぷん</span>: az 1, 3, 4, 6, 8 és 10 után ぷん.' }
+    ],
+    examples: [
+      { jp: '今、四時半です。', ro: 'ima, yoji han desu.', hu: 'Most fél öt van.' }
+    ]
+  },
+
+  listening: {
+    title: 'Mire figyelj hallás közben',
+    points: [
+      { h: 'Hosszú és rövid magánhangzó',
+        t: 'A hossz jelentést különböztet meg: <span lang="ja">おばさん</span> (néni) és <span lang="ja">おばあさん</span> (nagymama), <span lang="ja">ビル</span> (épület) és <span lang="ja">ビール</span> (sör).' },
+      { h: 'A kis っ: egy ütésnyi szünet',
+        t: 'A következő mássalhangzó megnyúlik: <span lang="ja">きて</span> (gyere) és <span lang="ja">きって</span> (bélyeg).' },
+      { h: 'A ritmus morákból áll',
+        t: 'Minden kana egy ütés, a <span lang="ja">ん</span> és a <span lang="ja">っ</span> is. Ha számolod az ütéseket, a hosszú hangot és a kis っ-t is meghallod.' }
+    ],
+    examples: []
+  },
+
+  grammar: {
+    title: 'Hogyan olvass egy nyelvtani mintát',
+    points: [
+      { h: 'A minta egy igealakhoz kapcsolódik',
+        t: '<span lang="ja">〜たい</span> a masu-tőhöz (<span lang="ja">飲み + たい</span>), <span lang="ja">〜てもいい</span> a te-alakhoz, <span lang="ja">〜なければならない</span> a nai-tőhöz.' },
+      { h: 'A jelentést a mondat vége hordozza',
+        t: 'A japánban az ige zárja a mondatot, a minta pedig az igén ül. Először a mondat végét nézd meg.' },
+      { h: 'Hasonló minták, más helyzet',
+        t: '<span lang="ja">〜たら</span>, <span lang="ja">〜ば</span> és <span lang="ja">〜なら</span> mind „ha", de nem cserélhetők fel szabadon. A visszajelzés megmutatja a különbséget.' }
+    ],
+    examples: [
+      { jp: '水を飲みたい。', ro: 'mizu o nomitai.', hu: 'Vizet akarok inni.' }
+    ]
+  },
+
+  production: {
+    title: 'Így építs japán mondatot',
+    points: [
+      { h: 'Kezdd az igével',
+        t: 'Találd meg a magyar mondat igéjét, ragozd japánul, és tedd a mondat végére.' },
+      { h: 'A többi az ige elé kerül, partikulával',
+        t: 'Szokásos sorrend: téma <span lang="ja">は</span>, idő, hely <span lang="ja">で / に</span>, tárgy <span lang="ja">を</span>, ige.' },
+      { h: 'Több jó megoldás is lehet',
+        t: 'A gép egy mintamondathoz hasonlít. Ha a tiéd más, de helyes, a visszajelzésnél jelöld annak.' }
+    ],
+    examples: [
+      { jp: '明日、友達と映画を見ます。', ro: 'ashita, tomodachi to eiga o mimasu.', hu: 'Holnap filmet nézek a barátommal.' }
+    ]
+  }
+};
+
