@@ -393,6 +393,85 @@ window.NihonCoreRound = (function () {
 })();
 
 
+// ── Kör-billentyűk + fókusz ──
+//   Egységes billentyűzet-kezelés minden gyakorló körben:
+//     1–9     a megfelelő válaszlehetőség
+//     Enter   tovább (a visszajelzés fő gombja) — a gomb fókuszt is kap,
+//             így a szóköz és az Enter natívan is működik
+//     Esc     kilépés a körből (a megszokott megerősítéssel)
+//   A visszajelzés megjelenésekor a fő gombja fókuszt kap; ha a visszajelzés
+//   nem rögzített lap (module.html fázisai), a képernyőre is görgetjük.
+(function initRoundKeys() {
+  const OPTION_SEL = '.cj-option, .cnt-option, .sd-option, .mc-choice';
+  const FEEDBACK_SEL = '.conj-feedback, .pr-feedback, .ms-feedback, .cnt-feedback, .sd-advance';
+  const visible = el => !!el && el.offsetParent !== null;
+
+  function primaryButton(fb) {
+    return fb.querySelector('.btn-primary:not(:disabled)') || fb.querySelector('button:not(:disabled)');
+  }
+  function openFeedback() {
+    const all = document.querySelectorAll(FEEDBACK_SEL);
+    for (let i = 0; i < all.length; i++) {
+      if (!all[i].classList.contains('hidden') && all[i].childElementCount > 0 &&
+          (visible(all[i]) || getComputedStyle(all[i]).position === 'fixed')) return all[i];
+    }
+    return null;
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (!window.NihonCoreRound || !NihonCoreRound.isActive()) return;
+    const t = e.target;
+    const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT' || t.isContentEditable);
+
+    if (e.key === 'Escape') {
+      const exit = Array.prototype.find.call(document.querySelectorAll('.round-exit'), visible);
+      if (exit) { e.preventDefault(); exit.click(); }
+      return;
+    }
+    if (typing) return;
+
+    if (e.key === 'Enter') {
+      // gombon/linken állva a böngésző maga kattint
+      if (t && (t.tagName === 'BUTTON' || t.tagName === 'A')) return;
+      const fb = openFeedback();
+      const btn = fb && primaryButton(fb);
+      if (btn) { e.preventDefault(); btn.click(); }
+      return;
+    }
+    if (/^[1-9]$/.test(e.key)) {
+      const opts = Array.prototype.filter.call(document.querySelectorAll(OPTION_SEL), o => visible(o) && !o.disabled);
+      const pick = opts[parseInt(e.key, 10) - 1];
+      if (pick) { e.preventDefault(); pick.click(); }
+    }
+  });
+
+  // Visszajelzés megjelent → fókusz a fő gombra (+ görgetés, ha nem rögzített lap)
+  function onFeedbackShown(fb) {
+    if (fb.classList.contains('hidden') || fb.childElementCount === 0) return;
+    requestAnimationFrame(() => {
+      const btn = primaryButton(fb);
+      if (getComputedStyle(fb).position !== 'fixed') {
+        try { fb.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (err) {}
+      }
+      if (btn) { try { btn.focus({ preventScroll: true }); } catch (err) {} }
+    });
+  }
+  function start() {
+    if (!window.MutationObserver || !document.body) return;
+    new MutationObserver(muts => {
+      const seen = new Set();
+      muts.forEach(m => {
+        const el = m.target && m.target.closest ? m.target.closest(FEEDBACK_SEL) : null;
+        if (el && !seen.has(el)) { seen.add(el); onFeedbackShown(el); }
+      });
+    }).observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
+})();
+
+
 // ── NihonCoreFlashcard ── Univerzális 3D flashcard motor (V8) ──
 //   Egy újrahasznosítható komponens minden modulhoz:
 //   Számláló · Ragozó · Melléknév · Datetime.

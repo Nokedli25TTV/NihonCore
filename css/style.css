@@ -1154,12 +1154,10 @@ body.round-active .module-main { padding-bottom: 32px; }
 }
 .mc-feedback.fb-correct {
   background: rgb(var(--matcha-rgb) / 0.08);
-  border-left: 3px solid var(--teal);
   color: var(--white);
 }
 .mc-feedback.fb-wrong {
   background: rgb(var(--verm-rgb) / 0.08);
-  border-left: 3px solid var(--red-light);
   color: var(--white);
 }
 .fb-mark {
@@ -2066,34 +2064,6 @@ a.module-card.module-locked { cursor: pointer; }
 .pl-f-btn.shake { animation: lobbyShake 0.4s ease; }
 
 /* ── Practice runtime ───────────────────────────── */
-.practice-runtime {
-  display: flex; flex-direction: column; gap: 18px;
-}
-
-.pr-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-}
-.pr-stat {
-  flex: 1 1 0;
-  min-width: 120px;
-  background: var(--panel-bg);
-  border: 1px solid var(--panel-border);
-  border-radius: var(--radius-md);
-  padding: 14px 16px;
-  text-align: center;
-  box-shadow: var(--panel-shadow);
-}
-.pr-stat-label {
-  display: block; font-size: var(--fs-2xs); letter-spacing: 1.8px; text-transform: uppercase;
-  color: var(--sumi-faint); font-weight: 600; margin-bottom: 5px;
-}
-.pr-stat-value {
-  display: block; font-family: var(--font-jp); font-size: var(--fs-xl); font-weight: 800;
-  color: var(--sumi);
-}
 
 /* ── Card (mondat + tálca) ──────────────────────── */
 .pr-card {
@@ -2270,18 +2240,15 @@ a.module-card.module-locked { cursor: pointer; }
 .pr-fb-correct {
   background: rgb(var(--matcha-rgb) / 0.08);
   border: 1px solid rgb(var(--matcha-rgb) / 0.4);
-  border-left: 3px solid var(--teal);
 }
 .pr-fb-wrong {
   background: rgb(var(--verm-rgb) / 0.08);
   border: 1px solid rgb(var(--verm-rgb) / 0.4);
-  border-left: 3px solid var(--red-light);
 }
 /* V3 P2 — „Nem tudom" feedback-panel (semleges amber, nem hibajelzés) */
 .pr-fb-dontknow {
   background: rgb(var(--amber-rgb) / 0.08);
   border: 1px solid rgb(var(--amber-rgb) / 0.4);
-  border-left: 3px solid var(--amber);
 }
 
 /* V3 P2 — „Nem tudom" gomb a feleletválasztós kártyákon */
@@ -2374,7 +2341,6 @@ a.module-card.module-locked { cursor: pointer; }
 /* Per-réteg színes oldalsáv */
 .pfe-wrong {
   background: rgb(var(--verm-rgb) / 0.07);
-  border-left: 3px solid var(--red-light);
 }
 .pfe-wrong .pfe-jp-wrong {
   color: var(--vermilion);
@@ -2382,7 +2348,6 @@ a.module-card.module-locked { cursor: pointer; }
 
 .pfe-correct {
   background: rgb(var(--matcha-rgb) / 0.07);
-  border-left: 3px solid var(--teal);
 }
 .pfe-correct .pfe-jp-ok {
   color: var(--matcha-deep);
@@ -2390,7 +2355,6 @@ a.module-card.module-locked { cursor: pointer; }
 
 .pfe-context {
   background: rgb(var(--gold-rgb) / 0.06);
-  border-left: 3px solid var(--gold);
 }
 .pfe-context strong {
   color: var(--gold-ink);
@@ -2398,7 +2362,6 @@ a.module-card.module-locked { cursor: pointer; }
 
 .pfe-rule {
   background: rgb(var(--tint-rgb) / 0.04);
-  border-left: 3px solid rgb(var(--tint-rgb) / 0.22);
   font-size: var(--fs-sm);
 }
 .pfe-rule strong { color: var(--gold-ink); }
@@ -3847,89 +3810,6 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
    ==================================================== */
 
 
-/* Runtime stats és kártya közti gap */
-.pr-stats {
-  margin-bottom: 14px;
-  align-items: center;
-}
-
-/* Progress strip — minden modul körének előrehaladása */
-.round-progress {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  /* NEM `0 auto`: a .practice-runtime flex-oszlop, ott az auto oldalmargó
-     tartalom-szélességre zsugorítja a csíkot (a sáv 0px lesz). */
-  margin: 0 0 28px;          /* 28px hézag a kártya előtt — szép space */
-  padding: 10px 16px;
-  background: rgb(var(--tint-rgb) / 0.04);
-  border: 1px solid var(--ink-border);
-  border-radius: var(--radius-md);
-}
-.round-progress-text {
-  font-size: var(--fs-xs);
-  color: var(--white-dim);
-  letter-spacing: 0.04em;
-  font-variant-numeric: tabular-nums;
-  min-width: 100px;
-  white-space: nowrap;
-}
-.round-progress-bar {
-  flex: 1;
-  height: 8px;
-  background: rgb(var(--tint-rgb) / 0.08);
-  border-radius: 999px;
-  overflow: hidden;
-}
-.round-progress-fill {
-  height: 100%;
-  background: var(--matcha);
-  border-radius: 999px;
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Kilépés gomb a stats-sor jobb szélén */
-.round-exit {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-left: auto;
-  padding: 8px 14px;
-  background: rgb(var(--verm-rgb) / 0.06);
-  border: 1px solid rgb(var(--verm-rgb) / 0.25);
-  border-radius: 999px;
-  cursor: pointer; transition: var(--transition);
-  color: rgb(var(--verm-rgb) / 0.9);
-  font-family: var(--font-body);
-  font-size: var(--fs-xs);
-  font-weight: 500;
-}
-.round-exit:hover {
-  background: rgb(var(--verm-rgb) / 0.14);
-  border-color: rgb(var(--verm-rgb) / 0.5);
-  color: var(--vermilion);
-  transform: translateY(-1px);
-}
-.round-exit svg { display: block; }
-
-/* Speed Drill specifikus: az sd-stats grid-jébe is illeszkedik */
-.sd-stats { align-items: center; }
-.sd-exit-btn { margin-left: auto; }
-
-/* Counter cnt-progress: az exit a sor jobb szélén */
-.cnt-progress { align-items: center; flex-wrap: wrap; }
-.cnt-exit-btn { margin-left: auto; }
-
-/* Matrix ms-progress: szintén jobb szélén */
-.ms-progress { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-.ms-exit-btn { margin-left: auto; }
-
-/* Mobil */
-@media (max-width: 720px) {
-  .round-progress { flex-wrap: wrap; gap: 8px; }
-  .round-progress-text { width: 100%; }
-  .round-exit span { display: none; }   /* mobilon csak az X ikon */
-  .round-exit { padding: 8px 10px; }
-}
-
 
 /* ====================================================
    ── DATE & TIME MODULE (V2.3) ─────────────────────
@@ -4237,7 +4117,6 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   padding: 13px 18px;
   background: rgb(var(--tint-rgb) / 0.04);
   border: 1px solid var(--ink-border);
-  border-left: 3px solid var(--white-dim);
   border-radius: var(--radius-sm);
 }
 .sh-row.sh-ok   { border-left-color: var(--teal); }
@@ -4523,7 +4402,6 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
 /* ── V4 P4 — Blind Spot Detector (D) ────────────── */
 .bs-primary {
   padding: 20px 24px; margin-bottom: 14px; border-radius: var(--radius-md);
-  border-left: 3px solid var(--gold);
 }
 .bs-primary-label {
   font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase;
@@ -4753,7 +4631,6 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   margin-top: 10px;
   padding: 8px 12px;
   background: rgb(var(--amber-rgb) / 0.06);
-  border-left: 3px solid var(--amber);
   border-radius: 4px;
   font-size: var(--fs-xs);
   color: var(--white-dim);
@@ -6221,3 +6098,450 @@ input[type="number"][id$="CustomCount"]:focus {
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root), ::view-transition-new(root) { animation: none; }
 }
+
+
+/* ════════════════════════════════════════════════════════
+   KÖR-KERET — minden gyakorló kör közös váza
+   ────────────────────────────────────────────────────────
+   Elv: egy kártya, egy képernyő. Telefonon a kérdés, a válaszok és
+   a visszajelzés görgetés nélkül látszik.
+
+     ┌ kör-sáv ───────────────────────────────┐   ✕ · haladás · sorozat · pont
+     │ kártya (kérdés + válaszok)             │
+     └ visszajelzés-lap (alulról csúszik be)  ┘   mindig látszik a „Következő"
+
+   A stíluslap VÉGÉN áll: a modulok korábbi futásidejű szabályait
+   felülírja, így minden modul ugyanazt a keretet kapja.
+   ════════════════════════════════════════════════════════ */
+
+/* ── Kör közben: csak a kör látszik ──────────────────── */
+body.round-active .helpers-bar { display: none; }
+body.round-active .module-main { padding-top: calc(var(--header-h) + 12px); }
+
+/* ── Kör-sáv ─────────────────────────────────────────────
+   A HTML-ben két külön blokk van (.pr-stats + .round-progress);
+   display: contents-szel egyetlen rácsba kerülnek. */
+.conj-runtime,
+.practice-runtime,
+.speed-drill {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "exit count streak score"
+    "exit bar   streak score";
+  column-gap: 8px; row-gap: 2px;
+  align-items: center;
+  max-width: 720px; margin: 0 auto;
+}
+.conj-runtime > *,
+.practice-runtime > *,
+.speed-drill > * { grid-column: 1 / -1; min-width: 0; }
+.pr-stats, .sd-stats, .round-progress { display: contents; }
+
+.round-exit {
+  grid-area: exit;
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; padding: 0; margin: 0; flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-paper-1);
+  color: var(--sumi-soft);
+  cursor: pointer;
+  transition: background-color var(--t-base), color var(--t-base);
+}
+.round-exit:hover { background: var(--vermilion-soft); color: var(--vermilion); }
+.round-exit svg { display: block; }
+.round-exit span { display: none; }
+
+.round-progress-text {
+  grid-area: count; align-self: end;
+  font-size: var(--fs-2xs); font-weight: 700; color: var(--sumi-faint);
+  letter-spacing: 0.02em; font-variant-numeric: tabular-nums; white-space: nowrap;
+  min-width: 0; line-height: 1.3;
+}
+.round-progress-bar {
+  grid-area: bar; align-self: start;
+  height: 8px; border-radius: 999px; overflow: hidden;
+  background: rgb(var(--tint-rgb) / 0.10);
+}
+.round-progress-fill {
+  height: 100%; border-radius: 999px;
+  background: var(--matcha);
+  transition: width 400ms var(--ease-out);
+}
+
+.pr-stat, .sd-stat {
+  display: inline-flex; align-items: center; gap: 5px;
+  min-height: 40px; padding: 0 12px; margin: 0;
+  flex: none; min-width: 0;
+  border-radius: 999px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-paper-1);
+  text-align: left;
+}
+.pr-stat:nth-of-type(1), .sd-stat:nth-of-type(1) { grid-area: score; }
+.pr-stat:nth-of-type(2), .sd-stat:nth-of-type(2) { grid-area: streak; }
+.pr-stat-label, .sd-stat-label {
+  display: inline; margin: 0;
+  font-size: var(--fs-2xs); font-weight: 700; letter-spacing: 0.02em; text-transform: none;
+  color: var(--sumi-faint);
+}
+/* a sorozatnál a láng elég jelzés */
+.pr-stat:nth-of-type(2) .pr-stat-label,
+.sd-stat:nth-of-type(2) .sd-stat-label { display: none; }
+.pr-stat-value, .sd-stat-value {
+  display: inline;
+  font-family: var(--font-body); font-size: var(--fs-sm); font-weight: 800;
+  color: var(--sumi); font-variant-numeric: tabular-nums; white-space: nowrap;
+}
+
+/* module.html fázisai: egy sorban ülő régi sáv, ugyanazzal a külsővel */
+.ms-progress, .cnt-progress {
+  display: flex; align-items: center; gap: 10px; flex-wrap: nowrap;
+  width: 100%; max-width: 720px; margin: 0 auto;
+}
+.ms-progress .round-exit, .cnt-progress .round-exit { order: -1; margin: 0; }
+.ms-counter, .cnt-counter-label, .cnt-score {
+  font-size: var(--fs-2xs); font-weight: 700; color: var(--sumi-faint);
+  white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.cnt-score strong { color: var(--sumi); }
+.ms-progressbar, .cnt-progress-bar {
+  flex: 1 1 auto; min-width: 40px; height: 8px; border-radius: 999px; overflow: hidden;
+  background: rgb(var(--tint-rgb) / 0.10);
+}
+.ms-progressfill, .cnt-progress-fill {
+  height: 100%; border-radius: 999px; background: var(--matcha);
+  transition: width 400ms var(--ease-out);
+}
+
+/* ── Kártya ──────────────────────────────────────────── */
+.conj-card, .pr-card, .sd-card, .cnt-card, .matrix-task {
+  width: 100%; margin: 12px auto 0; max-width: 720px;
+  padding: 18px 16px;
+  border-radius: var(--radius-lg);
+  display: flex; flex-direction: column; gap: 14px;
+}
+@media (min-width: 600px) {
+  .conj-card, .pr-card, .sd-card, .cnt-card, .matrix-task { padding: 28px; gap: 18px; margin-top: 16px; }
+}
+
+.cj-prompt { gap: 4px; }
+.cj-prompt-eyebrow { font-size: var(--fs-2xs); font-weight: 700; letter-spacing: 0.08em; color: var(--sumi-faint); }
+.cj-prompt-lemma { margin-top: 2px; gap: 2px; }
+.cj-pl-kanji { font-size: clamp(2.25rem, 11vw, 3rem); font-weight: 600; line-height: 1.15; }
+.cj-pl-kana  { font-size: var(--fs-md); color: var(--sumi-soft); }
+.cj-pl-romaji { font-size: var(--fs-sm); color: var(--sumi-faint); }
+.cj-prompt-meaning { font-size: var(--fs-base); color: var(--sumi-soft); }
+.cj-target {
+  margin-top: 8px; padding: 8px 14px; gap: 2px 8px;
+  background: var(--matcha-soft); border-color: rgb(var(--matcha-rgb) / 0.30);
+  border-radius: var(--radius-sm);
+}
+.cj-target-label { font-size: var(--fs-2xs); font-weight: 800; }
+.cj-target-name { font-weight: 800; color: var(--sumi); }
+.cj-target-sub { font-size: var(--fs-xs); color: var(--sumi-soft); }
+
+/* ── Válaszlehetőségek ───────────────────────────────── */
+.cj-options, .cnt-options, .sd-options, .mc-choices {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px;
+  counter-reset: nc-opt;
+}
+/* hosszabb szövegű opciók (nyelvtani minta + leírás) egy oszlopban */
+.grm-options { grid-template-columns: 1fr; }
+@media (min-width: 600px) {
+  .cj-options, .cnt-options, .sd-options, .mc-choices { gap: 12px; }
+  .grm-options { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.cj-option, .cnt-option, .sd-option, .mc-choice {
+  position: relative;
+  min-height: 60px; padding: 10px 12px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  background: rgb(var(--glass-rgb) / 0.62);
+  border: 1.5px solid rgb(var(--tint-rgb) / 0.14);
+  border-radius: var(--radius-md);
+  color: var(--sumi); font-family: var(--font-body); text-align: center;
+  cursor: pointer;
+  counter-increment: nc-opt;
+  transition: background-color var(--t-base), border-color var(--t-base), transform var(--t-fast);
+}
+.cj-option:hover:not(:disabled),
+.cnt-option:hover:not(:disabled),
+.sd-option:hover:not(:disabled),
+.mc-choice:hover:not(:disabled) {
+  border-color: var(--matcha); background: rgb(var(--glass-rgb) / 0.9); transform: none;
+}
+/* Válasz után a többi opció halványul, de olvasható marad (nem „letiltott" szürke) */
+.cj-option:disabled, .cnt-option:disabled, .sd-option:disabled, .mc-choice:disabled {
+  opacity: 1; filter: none; cursor: default;
+}
+.cj-option:disabled:not(.correct):not(.wrong):not(.reveal-correct),
+.cnt-option:disabled:not(.correct):not(.wrong):not(.reveal-correct),
+.sd-option:disabled:not(.correct):not(.wrong):not(.reveal-correct) { opacity: 0.55; }
+.cj-option.correct, .cj-option.reveal-correct,
+.cnt-option.correct, .cnt-option.reveal-correct,
+.sd-option.correct, .sd-option.reveal-correct {
+  border-color: var(--matcha); background: rgb(var(--matcha-rgb) / 0.18);
+}
+.cj-option.wrong, .cnt-option.wrong, .sd-option.wrong {
+  border-color: var(--vermilion); background: rgb(var(--verm-rgb) / 0.14);
+}
+.cj-opt-jp { font-size: var(--fs-lg); line-height: 1.3; color: var(--sumi); }
+.cj-opt-romaji { font-size: var(--fs-xs); color: var(--sumi-faint); }
+
+/* Billentyű-jelzés az opciókon — csak ahol van billentyűzet */
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) {
+  .cj-option::before, .cnt-option::before, .sd-option::before, .mc-choice::before {
+    content: counter(nc-opt);
+    position: absolute; top: 8px; left: 10px;
+    min-width: 20px; height: 20px; padding: 0 5px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 6px;
+    background: rgb(var(--tint-rgb) / 0.07);
+    color: var(--sumi-faint); font-size: var(--fs-2xs); font-weight: 800; font-family: var(--font-body);
+  }
+}
+
+/* ── Tipp + „Nem tudom" ──────────────────────────────── */
+.cj-hint-bar { display: flex; justify-content: flex-end; margin: 0; }
+.cj-hint-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  min-height: 36px; padding: 0 12px;
+  background: var(--gold-soft); border: 1px solid rgb(var(--gold-rgb) / 0.4);
+  border-radius: 999px;
+  color: var(--gold-ink); font-family: var(--font-body); font-size: var(--fs-xs); font-weight: 700;
+  cursor: pointer;
+}
+.cj-hint-btn:hover:not(:disabled) { background: rgb(var(--gold-rgb) / 0.22); }
+.cjh-pts { font-weight: 600; opacity: 0.85; }
+.dont-know-btn {
+  display: block; margin: 0 auto;
+  min-height: 40px; padding: 0 20px;
+  background: transparent; border: 1.5px dashed rgb(var(--tint-rgb) / 0.28);
+  border-radius: 999px;
+  color: var(--sumi-soft); font-family: var(--font-body); font-size: var(--fs-sm); font-weight: 700;
+  cursor: pointer;
+}
+.dont-know-btn:hover { border-color: var(--amber); color: var(--amber-ink); background: rgb(var(--amber-rgb) / 0.08); }
+.dont-know-btn:disabled { display: none; }
+
+/* ── Beírós feladatok: mező + beküldés ───────────────── */
+.cj-input, .cnh-input, .cnm-input, .prod-input, .lst-input, .grm-input {
+  font-size: max(1rem, var(--fs-md));   /* ≥16px: iOS nem nagyít rá */
+  background: rgb(var(--glass-rgb) / 0.7);
+  border: 1.5px solid rgb(var(--tint-rgb) / 0.18);
+  border-radius: var(--radius-md);
+  color: var(--sumi);
+}
+.conj-actions, .pr-actions {
+  display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+  width: 100%; max-width: 720px; margin: 12px auto 0;
+  /* a beküldés gomb a képernyő alján marad, amíg a kártya hosszabb nála */
+  position: sticky; z-index: 5;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+}
+.conj-actions:empty, .pr-actions:empty { display: none; }
+.conj-actions .btn, .pr-actions .btn { width: 100%; min-height: 52px; }
+
+/* ── Visszajelzés-lap ────────────────────────────────────
+   A válasz után alulról csúszik be, és a „Következő" gomb mindig
+   látszik. A dedikált modul-oldalakon a lap a képernyő aljához rögzül;
+   a module.html fázisaiban a kártyán belül marad (ott üveg-panel a szülő). */
+.conj-feedback, .pr-feedback {
+  position: fixed; z-index: 96;
+  left: 0; right: 0; bottom: 0;
+  max-width: 720px; margin: 0 auto;
+  max-height: min(64vh, 560px); overflow-y: auto; overscroll-behavior: contain;
+  padding: 16px var(--page-pad) 0;
+  border-radius: 24px 24px 0 0;
+  border: 1px solid var(--glass-border); border-bottom: 0;
+  background: rgb(var(--glass-rgb) / 0.94);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+  box-shadow: 0 -10px 40px rgb(var(--shade-rgb) / 0.16);
+  display: flex; flex-direction: column; gap: 12px;
+  animation: nc-sheet-up 260ms var(--ease-out);
+}
+.conj-feedback.hidden, .pr-feedback.hidden { display: none !important; }
+@keyframes nc-sheet-up {
+  from { transform: translateY(24px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+@media (min-width: 760px) {
+  .conj-feedback, .pr-feedback { bottom: 16px; border-radius: 24px; border-bottom: 1px solid var(--glass-border); }
+}
+
+/* A lap színe jelzi az eredményt — ikon és szöveg is mondja, nem csak a szín */
+.pr-fb-correct, .pr-fb-perfect, .pr-fb-close { border-color: rgb(var(--matcha-rgb) / 0.55); }
+.pr-fb-wrong  { border-color: rgb(var(--verm-rgb) / 0.50); }
+.pr-fb-dontknow, .pr-fb-near, .pr-fb-far { border-color: rgb(var(--amber-rgb) / 0.55); }
+.conj-feedback.pr-fb-correct, .pr-feedback.pr-fb-correct,
+.pr-feedback.pr-fb-perfect, .pr-feedback.pr-fb-close, .conj-feedback.pr-fb-perfect, .conj-feedback.pr-fb-close {
+  background: linear-gradient(rgb(var(--matcha-rgb) / 0.13), rgb(var(--matcha-rgb) / 0.13)), rgb(var(--glass-rgb) / 0.95);
+}
+.conj-feedback.pr-fb-wrong, .pr-feedback.pr-fb-wrong {
+  background: linear-gradient(rgb(var(--verm-rgb) / 0.10), rgb(var(--verm-rgb) / 0.10)), rgb(var(--glass-rgb) / 0.95);
+}
+.conj-feedback.pr-fb-dontknow, .pr-feedback.pr-fb-dontknow,
+.conj-feedback.pr-fb-near, .pr-feedback.pr-fb-near, .conj-feedback.pr-fb-far, .pr-feedback.pr-fb-far {
+  background: linear-gradient(rgb(var(--amber-rgb) / 0.11), rgb(var(--amber-rgb) / 0.11)), rgb(var(--glass-rgb) / 0.95);
+}
+
+.pr-fb-header { display: flex; align-items: center; gap: 10px; margin: 0; }
+.pr-fb-mark  { font-size: var(--fs-xl); line-height: 1; }
+.pr-fb-title { font-size: var(--fs-md); font-weight: 800; }
+.pr-fb-correct .pr-fb-title, .pr-fb-perfect .pr-fb-title, .pr-fb-close .pr-fb-title { color: var(--matcha-deep); }
+.pr-fb-wrong .pr-fb-title { color: var(--vermilion); }
+
+.pr-fb-explain { display: flex; flex-direction: column; gap: 6px; }
+.pfe-row {
+  display: grid; grid-template-columns: 1fr; gap: 2px;
+  padding: 8px 12px; border: 0; border-radius: var(--radius-sm);
+  font-size: var(--fs-sm); line-height: 1.5;
+}
+.pfe-label { font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 0; }
+.pfe-wrong   { background: rgb(var(--verm-rgb) / 0.10);   border: 0; }
+.pfe-correct { background: rgb(var(--matcha-rgb) / 0.12); border: 0; }
+.pfe-context { background: rgb(var(--gold-rgb) / 0.10);   border: 0; }
+.pfe-rule    { background: rgb(var(--tint-rgb) / 0.05);   border: 0; }
+.pfe-wrong   .pfe-label { color: var(--vermilion); }
+.pfe-correct .pfe-label { color: var(--matcha-deep); }
+.pfe-context .pfe-label { color: var(--gold-ink); }
+.pfe-rule    .pfe-label { color: var(--sumi-faint); }
+@media (min-width: 600px) {
+  .pfe-row { grid-template-columns: 96px 1fr; gap: 12px; padding: 10px 14px; }
+  .pfe-label { padding-top: 2px; }
+}
+
+/* A lap fő gombja („Következő") a lap aljához ragad: hosszú magyarázatnál
+   is látszik, a szöveg alatta görög el. */
+.conj-feedback > .btn, .pr-feedback > .btn,
+.conj-feedback > .prod-fb-actions, .pr-feedback > .prod-fb-actions {
+  position: sticky; z-index: 1;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  flex-shrink: 0;
+}
+.conj-feedback > .btn, .pr-feedback > .btn {
+  width: 100%; min-height: 52px;
+}
+/* a ragadós gomb alatti hely (a lap alsó margója) */
+.conj-feedback::after, .pr-feedback::after {
+  content: ''; flex: 0 0 calc(14px + env(safe-area-inset-bottom, 0px));
+}
+
+/* Hely a lap mögött: a kártya alja a lap fölé görgethető */
+body:has(.conj-feedback:not(.hidden)) .module-main,
+body:has(.pr-feedback:not(.hidden)) .module-main { padding-bottom: min(66vh, 580px); }
+
+/* module.html fázisai: a visszajelzés a kártyán belül marad */
+.ms-feedback, .cnt-feedback, .sd-advance {
+  padding: 14px; border-radius: var(--radius-md);
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+/* ── Kör vége ────────────────────────────────────────── */
+.conj-summary, .pr-summary, .sd-summary {
+  max-width: 720px; margin: 12px auto 0;
+  padding: 28px 20px; border-radius: var(--radius-lg);
+  text-align: center;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-lg);
+  -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur);
+}
+
+/* ── Mondat-Mester kártya: tömör elrendezés ──────────── */
+.prc-eyebrow { margin: 0; }
+.prc-translation {
+  padding: 0; margin: 0; background: none; border: 0;
+  font-family: var(--font-serif); font-size: var(--fs-md); font-style: italic; line-height: 1.4;
+}
+.prc-tr-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.prc-tr-text { color: var(--sumi); font-weight: 500; }
+.prc-sentence {
+  margin: 0; padding: 14px 8px; gap: 6px 2px; min-height: 0;
+  border-radius: var(--radius-md); justify-content: center; align-items: flex-start;
+}
+.prc-word, .prc-verb { padding: 4px 6px; }
+.prc-tok-jp { font-size: var(--fs-lg); line-height: 1.25; }
+.prc-tok-hu { color: var(--gold-ink); }
+.prc-slot { min-width: 48px; min-height: 48px; padding: 4px 8px; border-width: 1.5px; }
+.prc-slot-content, .prc-filled-jp { font-size: var(--fs-lg); }
+.prc-tray { padding: 0; margin: 0; background: none; border: 0; }
+.prc-tray-label { margin-bottom: 8px; font-size: var(--fs-2xs); letter-spacing: 0.06em; color: var(--sumi-faint); }
+.prc-tray-particles { gap: 6px; justify-content: center; }
+.prc-particle {
+  min-width: 48px; min-height: 52px; padding: 4px 8px;
+  background: rgb(var(--glass-rgb) / 0.62);
+  border: 1.5px solid rgb(var(--tint-rgb) / 0.14);
+}
+.prc-particle:not(:disabled):hover { transform: none; }
+.prc-p-jp { font-size: var(--fs-lg); line-height: 1.2; }
+@media (min-width: 600px) {
+  .prc-sentence { padding: 22px 16px; gap: 10px 6px; }
+  .prc-tok-jp, .prc-slot-content, .prc-filled-jp, .prc-p-jp { font-size: var(--fs-xl); }
+  .prc-slot, .prc-particle { min-width: 56px; }
+}
+
+/* ── Kártya-címkék (kategória, szint, minta) ─────────── */
+.dt-cat-tag, .grm-jlpt-tag, .grm-pattern-tag, .lst-pro-tag, .prod-tag, .adj-type-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 3px 10px; border-radius: 999px;
+  font-size: var(--fs-2xs); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+  color: var(--sumi-soft);
+}
+.grm-jlpt-tag { background: var(--gold-soft); border-color: rgb(var(--gold-rgb) / 0.35); color: var(--gold-ink); }
+.grm-pattern-tag, .lst-pro-tag { background: var(--matcha-soft); border-color: rgb(var(--matcha-rgb) / 0.35); color: var(--matcha-deep); }
+.prod-eyebrow, .lst-pro-eyebrow { gap: 6px; margin: 0; }
+
+/* ── module.html fázisai (Alap igék, Számlálók) ──────── */
+.phase-content { scroll-margin-top: calc(var(--header-h) + 12px); }
+body.round-active .phase-tabs { display: none; }
+.ms-progressbar, .cnt-progress-bar { flex: 1 1 0; width: auto; max-width: none; }
+
+.task-header { margin: 0; }
+.task-prompt { font-family: var(--font-serif); font-size: var(--fs-lg); font-weight: 600; }
+.task-context { font-size: var(--fs-xs); color: var(--sumi-faint); }
+.ms-section { margin: 0; }
+.ms-section-label { margin-bottom: 6px; font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.06em; color: var(--sumi-faint); }
+
+/* Ige-választó: tömör csempe-rács (ikon + név), nem hosszú lista */
+.base-cat-group { margin-bottom: 8px; }
+.base-cat-label { margin-bottom: 6px; font-size: var(--fs-2xs); }
+.base-picker { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.base-btn {
+  flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  min-height: 68px; padding: 6px 4px; text-align: center;
+  background: rgb(var(--glass-rgb) / 0.62); border-color: rgb(var(--tint-rgb) / 0.14);
+}
+.base-btn:hover { transform: none; }
+.base-icon { font-size: var(--fs-xl); filter: none; }
+.base-text { align-items: center; gap: 0; }
+.base-name { font-size: var(--fs-sm); font-family: var(--font-body); font-weight: 800; }
+.base-sub  { font-size: var(--fs-2xs); color: var(--sumi-faint); letter-spacing: 0; }
+@media (min-width: 600px) {
+  .base-picker { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }
+  .base-btn { flex-direction: row; justify-content: flex-start; gap: 12px; padding: 10px 14px; text-align: left; }
+  .base-text { align-items: flex-start; }
+}
+
+/* Számláló-pirulák: négy oszlop; a magyar leírás tablettől látszik */
+.cnh-counter-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.cnh-counter-pill {
+  min-height: 56px; padding: 6px 4px; justify-content: center;
+  background: rgb(var(--glass-rgb) / 0.62); border-color: rgb(var(--tint-rgb) / 0.14);
+}
+.cnh-counter-pill:hover:not(:disabled) { transform: none; }
+.cnh-pill-jp { font-size: var(--fs-lg); }
+.cnh-pill-hu { display: none; }
+@media (min-width: 600px) {
+  .cnh-counter-grid { gap: 8px; }
+  .cnh-counter-pill { padding: 10px 8px; }
+  .cnh-pill-hu { display: block; }
+}
+.cnt-visual { padding: 12px; margin: 0; }
+
+/* Kör végén a kiürített kártya ne maradjon üres üveg-csíkként a képen */
+.conj-card:empty, .pr-card:empty, .sd-card:empty, .sd-options:empty { display: none; }
