@@ -12846,7 +12846,16 @@ function initGrammarPage() {
     return NIHONCORE_GRAMMAR_PATTERNS.filter(p => p.jlpt === jlpt);
   }
 
+  // Tanulási út: a lépés felsorolt mintákra szűkítheti a kört (preset.patterns).
+  // Nem a beállítások része, így a szabad gyakorlás szűrőit nem írja át.
+  const pathPatterns = (function () {
+    const step = window.NihonCorePath && NihonCorePath.activeStep();
+    const ids = step && step.module === 'grammar' && step.preset && step.preset.patterns;
+    return Array.isArray(ids) && ids.length ? ids : null;
+  })();
+
   function getActivePool() {
+    if (pathPatterns) return NIHONCORE_GRAMMAR_PATTERNS.filter(p => pathPatterns.indexOf(p.id) >= 0);
     return NIHONCORE_GRAMMAR_PATTERNS.filter(p =>
       drillSettings.jlpt[p.jlpt] && drillSettings.categories[p.category]
     );
@@ -17148,7 +17157,7 @@ function initLessonPage() {
     content.innerHTML = `
       <div class="stats-empty glass-panel">
         <p>Ez a lecke még nem készült el.</p>
-        <p class="stats-empty-sub">A tanulási út a Dekiru 1 1–24. leckéjét tartalmazza.</p>
+        <p class="stats-empty-sub">Ilyen számú lecke nincs a tanulási úton.</p>
         <a href="../index.html#path" class="btn btn-primary">Vissza a tanulási útra</a>
       </div>`;
     return;

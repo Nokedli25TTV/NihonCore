@@ -1205,8 +1205,8 @@ const NIHONCORE_GRAMMAR_ERROR_TYPES = {
    Minden lecke egy magyarázó lépéssel indul (pages/lesson.html, a szövege a
    js/data/course.js-ben), utána a leckéhez illő gyakorló lépések jönnek a
    meglévő modulokból, előre beállított körrel.
-   Kész: a Dekiru 1 mind a 24 leckéje. Az utolsó fejezet három általános,
-   összefoglaló lépés (hallás, minták, szabad fordítás).
+   A Dekiru 1 (1–24. lecke) után három általános, összefoglaló lépés áll
+   (hallás, minták, szabad fordítás), majd a Dekiru 2 leckéi (25–48.) jönnek.
 
    NIHONCORE_PATH — lépések:
      id       egyedi kulcs (a haladás ezzel mentődik)
@@ -1223,6 +1223,7 @@ const NIHONCORE_GRAMMAR_ERROR_TYPES = {
               Mondat-Mester: level, mode, particlesOnly / particlesAny,
                              idRanges: [[tól, ig], …] az s_n5_NNN mondatokra,
                              ids: [mondat-azonosítók] — pontosan ezek a mondatok
+              Nyelvtani minták: patterns: [minta-azonosítók] — pontosan ezek a minták
               Számlálók:     counters: [számláló-azonosítók]
               Alap igék:     category: 'existence' | 'consumption' | 'movement'
    A lépés akkor „kész", ha az innen indított kör legalább 60%-os.
@@ -1550,7 +1551,94 @@ const NIHONCORE_PATH = [
     preset: { set: { mode: 'recognition' } } },
   { id: 'production', glyph: '作', title: 'Szabad fordítás',
     desc: 'Magyar mondatból japánt írsz, segítség nélkül.',
-    module: 'production', href: 'pages/production.html' }
+    module: 'production', href: 'pages/production.html' },
+
+  // ════════ DEKIRU 2 (25–48. lecke) ════════
+
+  // ── 25. lecke ──
+  { id: 'l25-lesson', glyph: '読', title: 'Magyarázat: 〜だろう, 〜はずです',
+    desc: 'Feltevés és megalapozott várakozás; kérdés a mondatban.',
+    module: 'lesson', href: 'pages/lesson.html?id=l25' },
+
+  // ── 26. lecke ──
+  { id: 'l26-lesson', glyph: '読', title: 'Magyarázat: 〜たら, szándékos alak',
+    desc: 'Ha…; csináljuk!; azt tervezem; határidő.',
+    module: 'lesson', href: 'pages/lesson.html?id=l26' },
+  { id: 'l26-volitional', glyph: '志', title: 'Szándékos alak',
+    desc: '行こう, 食べよう, しよう: ismerd fel a helyes alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['volitional'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+  { id: 'l26-tara', glyph: '夢', title: 'Ha… és azt tervezem…',
+    desc: '〜たら, 〜ようと思っています: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_cnd_001', 's_n4_cnd_008', 's_n4_cnd_012', 's_n4_cnd_013', 's_n4_cnd_016', 's_n4_cnd_020',
+                    's_n4_vol_004', 's_n4_vol_007', 's_n4_vol_011', 's_n4_vol_016', 's_n4_vol_019'] } },
+
+  // ── 27. lecke ──
+  { id: 'l27-lesson', glyph: '読', title: 'Magyarázat: ható alak',
+    desc: 'Tudok, lehet; egészen biztos; például; 〜さ.',
+    module: 'lesson', href: 'pages/lesson.html?id=l27' },
+  { id: 'l27-potential', glyph: '能', title: 'Ható alak',
+    desc: '書けます, 食べられます, できます: ismerd fel a helyes alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['potential'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+  { id: 'l27-potential-w', glyph: '可', title: 'Ható alak: írd be',
+    desc: 'Most te képzed a ható alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['potential'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+
+  // ── 28. lecke ──
+  { id: 'l28-lesson', glyph: '読', title: 'Magyarázat: 〜ば, 〜なら',
+    desc: 'Feltételek; udvarias bolti beszéd; indokok; bizonyosság.',
+    module: 'lesson', href: 'pages/lesson.html?id=l28' },
+  { id: 'l28-if', glyph: '条', title: 'Feltételek mondatban',
+    desc: '〜ば és 〜なら: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_cnd_002', 's_n4_cnd_003', 's_n4_cnd_005', 's_n4_cnd_006', 's_n4_cnd_007', 's_n4_cnd_010',
+                    's_n4_cnd_011', 's_n4_cnd_014', 's_n4_cnd_015', 's_n4_cnd_017', 's_n4_cnd_018'] } },
+  { id: 'l28-patterns', glyph: '若', title: 'たら, ば, なら',
+    desc: 'A három feltételes szerkezet: mit fejez ki a mondat?',
+    module: 'grammar', href: 'pages/grammar.html',
+    preset: { patterns: ['tara', 'eba', 'nara'], set: { mode: 'recognition' } } },
+
+  // ── 29. lecke ──
+  { id: 'l29-lesson', glyph: '読', title: 'Magyarázat: 〜ところ, 〜について',
+    desc: 'Éppen készülök, csinálom, most fejeztem be; üzenet átadása.',
+    module: 'lesson', href: 'pages/lesson.html?id=l29' },
+
+  // ── 30. lecke ──
+  { id: 'l30-lesson', glyph: '読', title: 'Magyarázat: 〜のに, 〜によって',
+    desc: 'Pedig…; nem baj, ha…; országonként más.',
+    module: 'lesson', href: 'pages/lesson.html?id=l30' },
+  { id: 'l30-patterns', glyph: '逆', title: 'Pedig, szabad, nem kell',
+    desc: '〜のに, 〜てもいい, 〜なくてもいい: mit fejez ki a mondat?',
+    module: 'grammar', href: 'pages/grammar.html',
+    preset: { patterns: ['noni', 'te_mo_ii', 'nakute_mo_ii'], set: { mode: 'recognition' } } },
+
+  // ── 31. lecke ──
+  { id: 'l31-lesson', glyph: '読', title: 'Magyarázat: 〜と, 〜ようです',
+    desc: 'Útbaigazítás; látszik, hallatszik; úgy tűnik; már tudok.',
+    module: 'lesson', href: 'pages/lesson.html?id=l31' },
+  { id: 'l31-senses', glyph: '見', title: 'Látszik, hallatszik, úgy tűnik',
+    desc: '見えます, 聞こえます, 〜と, 〜ようです: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_chg_006', 's_n4_chg_007', 's_n4_chg_008', 's_n4_chg_009', 's_n4_chg_010', 's_n4_chg_014',
+                    's_n4_cnd_004', 's_n4_cnd_009', 's_n4_cnd_019', 's_n4_app_004', 's_n4_app_014', 's_n4_app_017'] } },
+
+  // ── 32. lecke ──
+  { id: 'l32-lesson', glyph: '読', title: 'Magyarázat: 〜ても, 〜ために',
+    desc: 'Akkor is, ha…; úgy alakult; ez a szabály; cél és ok.',
+    module: 'lesson', href: 'pages/lesson.html?id=l32' },
+  { id: 'l32-patterns', glyph: '譲', title: 'Ha, akkor is ha, pedig',
+    desc: '〜たら, 〜ても, 〜のに: mit fejez ki a mondat?',
+    module: 'grammar', href: 'pages/grammar.html',
+    preset: { patterns: ['tara', 'temo', 'noni'], set: { mode: 'recognition' } } }
 ];
 
 const NIHONCORE_PATH_UNITS = [
@@ -1604,8 +1692,24 @@ const NIHONCORE_PATH_UNITS = [
     steps: ['l23-lesson', 'l23-te'] },
   { id: 'u-l24',  kicker: 'Dekiru 1 · 24. lecke', title: 'Búcsú',                sub: '〜てきます, 〜ていきます; 〜ています (állapot)',
     steps: ['l24-lesson', 'l24-state'] },
-  { id: 'u-next', kicker: 'A Dekiru 1 után',      title: 'Összefoglaló gyakorlás', sub: 'Hallás, nyelvtani minták, szabad fordítás; a Dekiru 2 leckéi ezután jönnek',
-    steps: ['listening', 'patterns', 'production'] }
+  { id: 'u-next', kicker: 'A Dekiru 1 után',      title: 'Összefoglaló gyakorlás', sub: 'Hallás, nyelvtani minták, szabad fordítás; utána a Dekiru 2 leckéi jönnek',
+    steps: ['listening', 'patterns', 'production'] },
+  { id: 'u-l25',  kicker: 'Dekiru 2 · 25. lecke', title: 'A repülőtéren',        sub: '〜だろう, 〜はずです; 〜か és 〜かどうか; 〜の？',
+    steps: ['l25-lesson'] },
+  { id: 'u-l26',  kicker: 'Dekiru 2 · 26. lecke', title: 'Álmok és tervek',      sub: '〜たら; szándékos alak; 〜までに; 〜らしい',
+    steps: ['l26-lesson', 'l26-volitional', 'l26-tara'] },
+  { id: 'u-l27',  kicker: 'Dekiru 2 · 27. lecke', title: 'Ki mit tud?',          sub: 'Ható alak; 〜にきまっています; 〜とか; 〜さ',
+    steps: ['l27-lesson', 'l27-potential', 'l27-potential-w'] },
+  { id: 'u-l28',  kicker: 'Dekiru 2 · 28. lecke', title: 'Melyiket ajánlja?',    sub: '〜ば, 〜なら; 〜でございます; 〜し; 〜にちがいありません',
+    steps: ['l28-lesson', 'l28-if', 'l28-patterns'] },
+  { id: 'u-l29',  kicker: 'Dekiru 2 · 29. lecke', title: 'Új félév',             sub: '〜ところ; 〜ように言います; 〜ということです; 〜について',
+    steps: ['l29-lesson'] },
+  { id: 'u-l30',  kicker: 'Dekiru 2 · 30. lecke', title: 'Közös munka',          sub: '〜のに; 〜なくてもかまいません; 〜によって',
+    steps: ['l30-lesson', 'l30-patterns'] },
+  { id: 'u-l31',  kicker: 'Dekiru 2 · 31. lecke', title: 'Útbaigazítás',         sub: '〜と; 〜にくらべて; 見えます, 聞こえます; 〜ようです',
+    steps: ['l31-lesson', 'l31-senses'] },
+  { id: 'u-l32',  kicker: 'Dekiru 2 · 32. lecke', title: 'Külföldi tanulmányok', sub: '〜ても; 〜ことになります; 〜ばかり; 〜ために',
+    steps: ['l32-lesson', 'l32-patterns'] }
 ];
 
 /* ====================================================
