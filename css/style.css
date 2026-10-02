@@ -7694,7 +7694,8 @@ html.theme-sumi .path-pop { background: #1B2038; }
 }
 .lp-body { max-width: 64ch; font-size: var(--fs-base); line-height: 1.7; color: var(--sumi); }
 .lp-body b { font-weight: 800; }
-.lp-body i { color: var(--sumi-soft); }
+/* kiemelés a magyarázatban: álló betű (nincs dőlt), a fő szín szövegváltozatával */
+.lp-body i, .lp-tip i { font-style: normal; font-weight: 700; color: var(--brand-deep); }
 
 /* Példamondatok */
 .lp-examples { list-style: none; display: grid; gap: 8px; margin-top: 14px; }
@@ -7730,6 +7731,23 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
 .lp-check-title { font-size: var(--fs-xl); font-weight: 800; letter-spacing: -0.02em; }
 .lp-check-sub { max-width: 44ch; margin: 6px auto 16px; font-size: var(--fs-sm); line-height: 1.55; color: var(--sumi-soft); }
 .lp-check .btn { width: 100%; max-width: 340px; }
+.lp-check-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.lp-check-hint { max-width: 44ch; margin: 12px auto 0; font-size: var(--fs-xs); line-height: 1.5; color: var(--sumi-faint); }
+
+/* Hallás utáni kör: nagy lejátszó gomb a kérdés alatt */
+.lq-listen { display: flex; flex-direction: column; align-items: center; gap: 4px; margin-top: 14px; }
+.lq-listen-btn {
+  width: 84px; height: 84px; border-radius: 50%; border: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--on-accent); background: linear-gradient(180deg, var(--brand-fill-top), var(--accent));
+  box-shadow: 0 4px 0 var(--brand-fill-deep);
+  transition: transform 110ms ease-out, box-shadow 110ms ease-out;
+}
+.lq-listen-btn svg { width: 34px; height: 34px; }
+.lq-listen-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--brand-fill-deep); }
+.lq-listen-btn.is-playing { filter: brightness(1.12); }
+.lq-listen-slow { min-height: var(--touch); font-size: var(--fs-sm); }
+.lq-listen-text { font-size: clamp(1.1rem, 4.6vw, 1.4rem); }
 
 /* A lecke gyakorló lépései: a tanulási út lépései, innen is indíthatók */
 .lp-practice { margin-top: 14px; padding: 24px 16px; border-radius: var(--radius-xl); text-align: center; }

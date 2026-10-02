@@ -524,9 +524,19 @@ window.NihonCorePath = (function () {
     return true;
   }
 
+  // A lecke-oldalon kétféle kör fut (ellenőrző és hallás utáni): a kör azt a lépést teljesíti,
+  // amelyik ehhez a leckéhez és ehhez a körfajtához tartozik, bármelyik lépésről nyílt az oldal.
+  function lessonStep(rec) {
+    let id = null;
+    try { id = new URLSearchParams(window.location.search).get('id'); } catch (e) {}
+    if (!id || !/^\w+$/.test(id)) return null;
+    const re = new RegExp('[?&]id=' + id + '(&|$)');
+    return STEPS.find(s => s.module === 'lesson' && (s.mode || 'check') === rec.mode && re.test(s.href)) || null;
+  }
+
   // Befejezett kör → a lépés eredménye (NihonCoreStats.recordSession hívja)
   function onSession(rec) {
-    const step = activeStep();
+    const step = (rec && rec.module === 'lesson') ? lessonStep(rec) : activeStep();
     if (!step || !rec || rec.partial || rec.module !== step.module || !rec.questionCount) return;
     const pct = rec.correctCount / rec.questionCount;
     const st = load();
@@ -15374,7 +15384,7 @@ function initStatsPage() {
     cloze: 'Kiegészítés', translate: 'Fordítás', pro: 'Pro hallás',
     free: 'Szabad fordítás',
     reverse: 'Fordítva', typing: 'Beírás', match: 'Párosító',
-    check: 'Ellenőrzés',
+    check: 'Ellenőrzés', listen: 'Hallás utáni kör',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
@@ -17170,9 +17180,11 @@ function initLessonPage() {
   }
 
   /* ── A) Fejléc ─────────────────────────────────── */
-  document.title = lesson.no + '. lecke: ' + lesson.title + ' — NihonCore';
-  document.getElementById('lessonNo').textContent = lesson.no;
-  document.getElementById('lessonKicker').textContent = lesson.book + ' · ' + lesson.no + '. lecke';
+  // A könyv leckéi számot kapnak; az előkészítő és a kiegészítő leckék saját jelet (badge) és címkét (kicker, label).
+  const lessonLabel = lesson.label || (lesson.no + '. lecke');
+  document.title = lessonLabel + ': ' + lesson.title + ' — NihonCore';
+  document.getElementById('lessonNo').textContent = lesson.badge || lesson.no;
+  document.getElementById('lessonKicker').textContent = lesson.kicker || (lesson.book + ' · ' + lesson.no + '. lecke');
   document.getElementById('lessonTitle').textContent = lesson.title;
   document.getElementById('lessonLead').textContent = lesson.lead;
   document.getElementById('lessonCando').innerHTML = lesson.cando.map(c => '<li>' + esc(c) + '</li>').join('');
@@ -17189,8 +17201,12 @@ function initLessonPage() {
     if (!mine) return [];
     const unit = NIHONCORE_PATH_UNITS.find(u => u.steps.indexOf(mine.step.id) >= 0);
     if (!unit) return [];
+    // csak a gyakorló lépések: más modul köre, vagy ennek a leckének a saját hallás-lépése
+    // (a fejezet többi magyarázó leckéje és azok hallás-lépései nem ide tartoznak)
+    const isMine = st => new RegExp('[?&]id=' + lesson.id + '(&|$)').test(st.href);
     return unit.steps.filter(sid => sid !== mine.step.id)
-      .map(sid => v.rows.find(r => r.step.id === sid)).filter(Boolean);
+      .map(sid => v.rows.find(r => r.step.id === sid))
+      .filter(r => r && (r.step.module !== 'lesson' || (r.step.mode === 'listen' && isMine(r.step))));
   }
   function practiceHtml() {
     const rows = practiceRows();
@@ -17202,7 +17218,7 @@ function initLessonPage() {
         <ul class="lp-practice-list">
           ${rows.map(r => `
             <li>
-              <a class="path-step-link" href="${Path.stepHref(r.step, false)}">
+              <a class="path-step-link"${r.step.module === 'lesson' ? ' data-listen="1"' : ''} href="${Path.stepHref(r.step, false)}">
                 <span class="path-glyph" lang="ja">${esc(r.step.glyph)}</span>
                 <span class="path-step-body">
                   <span class="path-step-title">${esc(r.step.title)}</span>
@@ -17251,7 +17267,11 @@ function initLessonPage() {
       <section class="lp-check glass-panel-heavy" id="lpCheck">
         <h2 class="lp-check-title">Ellenőrizd magad</h2>
         <p class="lp-check-sub">${ROUND} kérdés a leckéből: szabályok és a példamondatok fordítása. Minden kör más; a lépéshez 60% kell.</p>
-        <button class="btn btn-primary btn-lg" id="lqStart" type="button">Kezdjük</button>
+        <div class="lp-check-actions">
+          <button class="btn btn-primary btn-lg" id="lqStart" type="button">${canListen ? 'Ellenőrző kör' : 'Kezdjük'}</button>
+          ${canListen ? '<button class="btn btn-outline btn-lg" id="lqListen" type="button">Hallás utáni kör</button>' : ''}
+        </div>
+        ${canListen ? '<p class="lp-check-hint">A hallás utáni körben a lecke példamondatait hallod, és ki kell választanod, mit jelentenek.</p>' : ''}
       </section>
       ${practiceHtml()}`;
 
@@ -17271,11 +17291,28 @@ function initLessonPage() {
       ev.preventDefault();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }));
-    document.getElementById('lqStart').addEventListener('click', startQuiz);
+    document.getElementById('lqStart').addEventListener('click', () => startQuiz('check'));
+    if (!canListen) return;
+    document.getElementById('lqListen').addEventListener('click', () => startQuiz('listen'));
+    // a „Gyakorlás" lista hallás-sora helyben indítja a kört
+    content.querySelectorAll('.path-step-link[data-listen]').forEach(a => a.addEventListener('click', ev => {
+      ev.preventDefault();
+      startQuiz('listen');
+    }));
+    // A tanulási út hallás-lépése (…&round=listen): a hallás utáni kör a fő gomb, és odagörgetünk
+    let wantListen = false;
+    try { wantListen = new URLSearchParams(window.location.search).get('round') === 'listen'; } catch (e) {}
+    if (wantListen) {
+      const a = document.getElementById('lqStart'), b = document.getElementById('lqListen');
+      a.classList.replace('btn-primary', 'btn-outline'); b.classList.replace('btn-outline', 'btn-primary');
+      b.parentNode.insertBefore(b, a);
+      const check = document.getElementById('lpCheck');
+      if (check) setTimeout(() => check.scrollIntoView({ block: 'center' }), 60);
+    }
   }
 
   /* ── C) Ellenőrző kör ──────────────────────────── */
-  const run = { inLesson: true, cards: [], idx: 0, score: 0, streak: 0, results: [], submitted: false, startTs: 0 };
+  const run = { inLesson: true, kind: 'check', cards: [], idx: 0, score: 0, streak: 0, results: [], submitted: false, startTs: 0 };
 
   // Egy kör ROUND kérdés: a lecke saját kérdéseiből OWN_PER_ROUND, a többi a
   // példamondatokból készül (japán → magyar és magyar → japán), így minden kör más.
@@ -17308,17 +17345,42 @@ function initLessonPage() {
     return out;
   }
   function buildRound() {
-    const own = shuffle(lesson.quiz).slice(0, OWN_PER_ROUND);
-    let qs = own.concat(generatedQuestions(ROUND - own.length));
+    // ownOnly: a lecke csak a saját kérdéseit kapja (pl. az előkészítő leckénél,
+    // ahol a tanuló még nem olvas kanát, így a példákból készített kérdés nem volna fair)
+    const own = shuffle(lesson.quiz).slice(0, lesson.ownOnly ? ROUND : OWN_PER_ROUND);
+    let qs = lesson.ownOnly ? own : own.concat(generatedQuestions(ROUND - own.length));
     if (qs.length < ROUND) qs = qs.concat(shuffle(lesson.quiz).filter(q => qs.indexOf(q) < 0).slice(0, ROUND - qs.length));
     return shuffle(qs).map(q => ({ q: q, options: shuffle([q.a].concat(q.wrong)) }));
   }
 
-  function startQuiz() {
-    run.cards = buildRound();
+  // Hallás utáni kör: a lecke példamondatai hang alapján; a válasz a magyar jelentés.
+  // (Az előkészítő leckénél nincs: ott a tanuló még nem ismer szavakat.)
+  const canListen = !lesson.ownOnly && allExamples.length >= 8;
+  function buildListenRound() {
+    return shuffle(allExamples).slice(0, ROUND).map(item => {
+      const wrong = pickOthers(item, 'hu');
+      const q = { listen: true, gen: true, q: 'Melyik mondatot hallod?', ex: item.ex, a: item.ex.hu, wrong: wrong,
+                  why: 'Így olvasod: ' + item.ex.romaji };
+      return { q: q, options: shuffle([q.a].concat(wrong)) };
+    }).filter(c => c.options.length === 4);
+  }
+  function playListen(card, speed, btn) {
+    if (!window.NihonCoreAudio) return listenFailed();
+    if (btn) { btn.classList.add('is-playing'); setTimeout(() => btn.classList.remove('is-playing'), 3500); }
+    try { NihonCoreAudio.play(reading(card.q.ex.jp), { speed: speed, onError: listenFailed }); } catch (err) { listenFailed(); }
+  }
+  // Ha nincs hang, a mondat írásban jelenik meg: a kártya így is megválaszolható.
+  function listenFailed() {
+    const el = document.getElementById('lqListenText');
+    if (el) el.classList.remove('hidden');
+  }
+
+  function startQuiz(kind) {
+    run.kind = kind === 'listen' ? 'listen' : 'check';
+    run.cards = run.kind === 'listen' ? buildListenRound() : buildRound();
     run.idx = 0; run.score = 0; run.streak = 0; run.results = []; run.startTs = Date.now(); run.inLesson = false;
     NihonCoreRound.begin(function () {
-      return { module: 'lesson', mode: 'check', results: run.results, score: run.score, startTs: run.startTs };
+      return { module: 'lesson', mode: run.kind, results: run.results, score: run.score, startTs: run.startTs };
     });
     hero.classList.add('hidden');
     content.classList.add('hidden');
@@ -17352,16 +17414,28 @@ function initLessonPage() {
     document.getElementById('lqCard').innerHTML = `
       <div class="cj-prompt">
         <div class="cj-prompt-eyebrow">
-          <span class="cj-pe-group">${lesson.no}. lecke</span><span class="cj-pe-dot">·</span>Ellenőrzés
+          <span class="cj-pe-group">${esc(lessonLabel)}</span><span class="cj-pe-dot">·</span>${q.listen ? 'Hallás' : 'Ellenőrzés'}
         </div>
         <div class="lq-question">${ruby(q.q)}</div>
         ${q.jp ? `<div class="lq-jp" lang="ja">${ruby(q.jp)}</div>` : ''}
+        ${q.listen ? `
+          <div class="lq-listen">
+            <button class="lq-listen-btn" id="lqPlay" type="button" aria-label="Lejátszás">${PLAY}</button>
+            <button class="btn btn-ghost lq-listen-slow" id="lqSlow" type="button">Lassabban</button>
+          </div>
+          <div class="lq-jp lq-listen-text hidden" id="lqListenText" lang="ja">${ruby(q.ex.jp)}</div>` : ''}
       </div>
       <div class="cj-options lq-options${long ? ' lq-options-long' : ''}">
         ${card.options.map((o, i) => `<button class="cj-option" type="button" data-idx="${i}">${optHtml(o)}</button>`).join('')}
       </div>
       <button class="dont-know-btn" type="button">Nem tudom</button>`;
 
+    if (q.listen) {
+      const playBtn = document.getElementById('lqPlay');
+      playBtn.addEventListener('click', () => playListen(card, 0.9, playBtn));
+      document.getElementById('lqSlow').addEventListener('click', () => playListen(card, 0.65, playBtn));
+      playListen(card, 0.9, playBtn);          // a kártya megjelenésekor magától megszólal
+    }
     const buttons = document.querySelectorAll('#lqCard .cj-option');
     const lock = () => document.querySelectorAll('#lqCard .cj-option, #lqCard .dont-know-btn').forEach(b => { b.disabled = true; });
     const right = card.options.indexOf(q.a);
@@ -17385,7 +17459,7 @@ function initLessonPage() {
   function finalize(card, ok, info) {
     run.submitted = true;
     if (ok) { run.score += 10; run.streak++; } else { run.streak = 0; }
-    run.results.push({ q: lesson.id + ':' + (card.q.gen ? 'gen' : lesson.quiz.indexOf(card.q)), correct: ok,
+    run.results.push({ q: lesson.id + ':' + (card.q.listen ? 'listen' : card.q.gen ? 'gen' : lesson.quiz.indexOf(card.q)), correct: ok,
                        errorCode: ok ? null : (info.dontKnow ? 'dont_know' : 'wrong_choice') });
     document.getElementById('lqScore').textContent = run.score;
     document.getElementById('lqStreak').textContent = `${run.streak} 🔥`;
@@ -17400,8 +17474,12 @@ function initLessonPage() {
         <span class="pr-fb-title">${ok ? 'Így van' : info.dontKnow ? 'Ez a helyes' : 'Nézzük meg együtt'}</span>
       </div>
       <div class="pr-fb-explain">
+        ${q.listen ? `<div class="pfe-row pfe-rule">
+          <span class="pfe-label">Ezt hallottad</span>
+          <span class="pfe-text"><strong class="pfe-jp-ok" lang="ja">${ruby(q.ex.jp)}</strong></span>
+        </div>` : ''}
         ${ok ? '' : `<div class="pfe-row pfe-correct">
-          <span class="pfe-label">Helyes</span>
+          <span class="pfe-label">${q.listen ? 'Jelentése' : 'Helyes'}</span>
           <span class="pfe-text"><strong class="${hasJp(q.a) ? 'pfe-jp-ok' : ''}"${hasJp(q.a) ? ' lang="ja"' : ''}>${ruby(q.a)}</strong></span>
         </div>`}
         ${!ok && info.chosen ? `<div class="pfe-row pfe-wrong">
@@ -17424,7 +17502,9 @@ function initLessonPage() {
   }
 
   function showSummary() {
-    NihonCoreStats.recordSession({ module: 'lesson', mode: 'check', results: run.results, score: run.score, startTs: run.startTs });
+    NihonCoreStats.recordSession({ module: 'lesson', mode: run.kind, results: run.results, score: run.score, startTs: run.startTs });
+    const listen = run.kind === 'listen';
+    if (listen && window.NihonCoreAudio) NihonCoreAudio.stop();
     const total = run.results.length;
     const correct = run.results.filter(r => r.correct).length;
     const pct = total ? Math.round((correct / total) * 100) : 0;
@@ -17438,16 +17518,18 @@ function initLessonPage() {
     sEl.classList.remove('hidden');
     sEl.innerHTML = `
       <div class="summary-icon">${pct === 100 ? '🏆' : passed ? '🎯' : '🌱'}</div>
-      <h3>${passed ? 'Megvan a lecke' : 'Még egy kör, és megvan'}</h3>
+      <h3>${!passed ? 'Még egy kör, és megvan' : listen ? 'Megvan a hallás utáni kör' : 'Megvan a lecke'}</h3>
       <div class="summary-score">${correct} / ${total}</div>
       <p class="lq-summary-note">${!passed
-        ? 'Nézd át újra a pontokat, amik bizonytalanok, aztán próbáld meg ismét.'
+        ? (listen ? 'Hallgasd meg újra a példákat a leckében, aztán próbáld meg ismét.' : 'Nézd át újra a pontokat, amik bizonytalanok, aztán próbáld meg ismét.')
         : nextPractice ? 'Most jöhet a gyakorlás: a lecke anyaga feladatokban.'
         : 'A lecke minden gyakorlása megvan. Mehet a következő lecke.'}</p>
       <div class="kana-summary-actions">
         ${passed
           ? `${nextPractice
-               ? '<a class="btn btn-primary" href="' + Path.stepHref(nextPractice.step, false) + '">Gyakorlás: ' + esc(nextPractice.step.title) + '</a>'
+               ? (nextPractice.step.module === 'lesson'
+                   ? '<button class="btn btn-primary" id="lqGoListen" type="button">Gyakorlás: ' + esc(nextPractice.step.title) + '</button>'
+                   : '<a class="btn btn-primary" href="' + Path.stepHref(nextPractice.step, false) + '">Gyakorlás: ' + esc(nextPractice.step.title) + '</a>')
                : '<a class="btn btn-primary" href="../index.html#path">Tovább az úton</a>'}
              <button class="btn btn-outline" id="lqAgain" type="button">Még egy kör</button>
              <button class="btn btn-ghost" id="lqBack" type="button">Vissza a leckéhez</button>`
@@ -17456,13 +17538,16 @@ function initLessonPage() {
       </div>`;
     document.getElementById('lqBack').addEventListener('click', backToLesson);
     const again = document.getElementById('lqAgain');
-    if (again) again.addEventListener('click', startQuiz);
+    if (again) again.addEventListener('click', () => startQuiz(run.kind));
+    const goListen = document.getElementById('lqGoListen');
+    if (goListen) goListen.addEventListener('click', () => startQuiz('listen'));
     if (pct === 100 && window.NihonCoreMotion && NihonCoreMotion.celebrate) {
       try { NihonCoreMotion.celebrate({ title: 'Hibátlan!', sub: `${total} / ${total}` }); } catch (e) {}
     }
   }
 
   function backToLesson() {
+    if (window.NihonCoreAudio) NihonCoreAudio.stop();
     run.inLesson = true; run.cards = [];
     hero.classList.remove('hidden');          // → a kör-őr elmenti a részeredményt
     content.classList.remove('hidden');
@@ -17478,7 +17563,7 @@ function initLessonPage() {
   });
 
   renderLesson();
-  window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, practiceRows };
+  window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, buildListenRound, practiceRows };
 }
 
 

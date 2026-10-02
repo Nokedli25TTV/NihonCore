@@ -697,7 +697,7 @@ az `items` cellái `[hiragana, katakana, romaji, [további elfogadott átíráso
 
 ## 8c. Leckék (a tanulási út magyarázó oldalai)
 
-A tanulási út a Dekiru 1 (1–24. lecke) és a Dekiru 2 (25–48. lecke) leckéit követi. Egy új lecke három helyen jelenik meg, kód nélkül:
+A tanulási út a Dekiru 1 (1–24. lecke) és a Dekiru 2 (25–48. lecke) leckéit követi; előtte egy előkészítő lecke (`l0`), mellettük nyolc kiegészítő lecke (`k1`…`k8`) áll. Egy új lecke három helyen jelenik meg, kód nélkül:
 
 1. **`js/data/course.js` → `NIHONCORE_COURSE`**: a lecke szövege.
    ```js
@@ -718,7 +718,11 @@ A tanulási út a Dekiru 1 (1–24. lecke) és a Dekiru 2 (25–48. lecke) leck�
    - Leckénként **10 saját kérdés** kell; egy kör 10 kérdés: 6 saját + 4 a példamondatokból készített fordítós kérdés (ezeket a kód állítja elő, nem kell megírni). Ehhez a lecke példamondatainak `jp` és `hu` mezője legyen egyedi a leckén belül.
    - A `wrong` pontosan három, egymástól és a helyestől különböző válasz; a kérdésnek egyetlen jó megoldása legyen (ha a hiány több partikulával is értelmes, add meg a magyar jelentést a kérdésben).
    - **Saját megfogalmazás és saját példamondat** kell: a tankönyv szövege, párbeszédei és feladatai nem másolhatók.
+   - Nem számozott lecke (előkészítő, kiegészítő): `badge: 'K1'` (a fejléc jele), `kicker: 'Kiegészítő · JLPT N5'`, `label: 'Kiegészítő lecke'`; a `no` ilyenkor csak sorszám (a 49-től).
+   - `ownOnly: true`: az ellenőrző kör csak a saját kérdésekből áll, és nincs hallás utáni kör (olyan leckénél, ahol a tanuló még nem olvas kanát). Ilyenkor legalább 10 saját kérdés kell.
+   - A **hallás utáni kört** a kód a példamondatokból állítja elő (hang → négy magyar jelentés): ehhez legalább 8 példamondat kell, egyedi `hu` mezővel.
 2. **`js/data/core.js` → `NIHONCORE_PATH`**: a lecke lépései. Az első mindig a magyarázat (`module: 'lesson', href: 'pages/lesson.html?id=l9'`), utána a gyakorló lépések meglévő modulokból, `preset`-tel.
+   - Ha a leckéhez nincs illő gyakorló készlet, kapjon hallás-lépést: `{ id: 'l25-listen', glyph: '聞', title: 'Hallás utáni kör', desc: '…', module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l25&round=listen' }`. Így minden leckének van gyakorló lépése.
    - Nyelvtani minták lépés adott mintákra: `preset: { patterns: ['tara', 'eba', 'nara'], set: { mode: 'recognition' } }`. Legalább 2–3 minta legyen benne, különben a kör ugyanazt a pár példát ismétli.
    - Mondat-Mester lépés adott mondatokra: `preset: { level: 'N4', mode: 'puzzle', ids: ['s_n4_prm_001', …] }`. A kör ilyenkor a teljes felsorolt készletet végigveszi (legfeljebb 10 mondat). Legalább 5 mondat legyen benne.
    - `mode: 'particles'` csak olyan mondattal működik, amelyben van partikula-token, és mindegyik szerepel a tálcán (`NIHONCORE_PARTICLES`: は が を に で へ と も の から まで). A más partikulát (か, ね, よ, なら, でも) tartalmazó mondat a partikula-módból kimarad; puzzle-módban használható.

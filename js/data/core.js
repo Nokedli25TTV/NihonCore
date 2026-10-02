@@ -1233,6 +1233,9 @@ const NIHONCORE_GRAMMAR_ERROR_TYPES = {
    ==================================================== */
 const NIHONCORE_PATH = [
   // ── Előkészítő: az írás ──
+  { id: 'l0-lesson', glyph: '音', title: 'Magyarázat: írás és kiejtés',
+    desc: 'Három írás egy mondatban, és hogyan ejtsd a latin betűs átírást.',
+    module: 'lesson', href: 'pages/lesson.html?id=l0', level: 'zero' },
   { id: 'kana-hira', glyph: 'あ', title: 'Hiragana',
     desc: 'A 46 alapjel: ezzel olvasol el mindent, ami ezután jön.',
     module: 'kana', href: 'pages/kana.html', level: 'zero',
@@ -1553,12 +1556,41 @@ const NIHONCORE_PATH = [
     desc: 'Magyar mondatból japánt írsz, segítség nélkül.',
     module: 'production', href: 'pages/production.html' },
 
+  // ── Kiegészítő leckék: JLPT N5 (ami a Dekiru 1-ből kimaradt) ──
+  { id: 'k1-lesson', glyph: '接', title: 'Kiegészítés: kötőszavak',
+    desc: 'でも, しかし, けど; そして, それから; だから, それでも.',
+    module: 'lesson', href: 'pages/lesson.html?id=k1' },
+  { id: 'k1-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k1&round=listen' },
+  { id: 'k2-lesson', glyph: '終', title: 'Kiegészítés: a mondat vége',
+    desc: 'ね, よ, なあ, かな, かい, じゃないか.',
+    module: 'lesson', href: 'pages/lesson.html?id=k2' },
+  { id: 'k2-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k2&round=listen' },
+  { id: 'k3-lesson', glyph: '略', title: 'Kiegészítés: beszélt rövidítések',
+    desc: 'なくちゃ, ちゃいけない, ちゃう, てる, って.',
+    module: 'lesson', href: 'pages/lesson.html?id=k3' },
+  { id: 'k3-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k3&round=listen' },
+  { id: 'k4-lesson', glyph: '様', title: 'Kiegészítés: hogyan, milyen jól',
+    desc: '〜ないで, どうやって, 〜のが上手, いつも és たまに.',
+    module: 'lesson', href: 'pages/lesson.html?id=k4' },
+  { id: 'k4-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k4&round=listen' },
+
   // ════════ DEKIRU 2 (25–48. lecke) ════════
 
   // ── 25. lecke ──
   { id: 'l25-lesson', glyph: '読', title: 'Magyarázat: 〜だろう, 〜はずです',
     desc: 'Feltevés és megalapozott várakozás; kérdés a mondatban.',
     module: 'lesson', href: 'pages/lesson.html?id=l25' },
+  { id: 'l25-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 25. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l25&round=listen' },
 
   // ── 26. lecke ──
   { id: 'l26-lesson', glyph: '読', title: 'Magyarázat: 〜たら, szándékos alak',
@@ -1610,6 +1642,9 @@ const NIHONCORE_PATH = [
   { id: 'l29-lesson', glyph: '読', title: 'Magyarázat: 〜ところ, 〜について',
     desc: 'Éppen készülök, csinálom, most fejeztem be; üzenet átadása.',
     module: 'lesson', href: 'pages/lesson.html?id=l29' },
+  { id: 'l29-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 29. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l29&round=listen' },
 
   // ── 30. lecke ──
   { id: 'l30-lesson', glyph: '読', title: 'Magyarázat: 〜のに, 〜によって',
@@ -1655,11 +1690,17 @@ const NIHONCORE_PATH = [
   { id: 'l34-lesson', glyph: '読', title: 'Magyarázat: hallomás, 〜らしい',
     desc: 'Azt hallottam; … szerint; úgy tudni.',
     module: 'lesson', href: 'pages/lesson.html?id=l34' },
+  { id: 'l34-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 34. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l34&round=listen' },
 
   // ── 35. lecke ──
   { id: 'l35-lesson', glyph: '読', title: 'Magyarázat: 〜方, 〜かわりに, 〜まま',
     desc: 'Hogyan kell; helyett; úgy, ahogy van.',
     module: 'lesson', href: 'pages/lesson.html?id=l35' },
+  { id: 'l35-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 35. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l35&round=listen' },
 
   // ── 36. lecke ──
   { id: 'l36-lesson', glyph: '読', title: 'Magyarázat: szenvedő alak',
@@ -1695,26 +1736,41 @@ const NIHONCORE_PATH = [
   { id: 'l39-lesson', glyph: '読', title: 'Magyarázat: szerény nyelv',
     desc: 'お〜します, 参ります, 申します; könnyű, nehéz, túl sok.',
     module: 'lesson', href: 'pages/lesson.html?id=l39' },
+  { id: 'l39-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 39. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l39&round=listen' },
 
   // ── 40. lecke ──
   { id: 'l40-lesson', glyph: '読', title: 'Magyarázat: bármi, elkezd, folytat',
     desc: 'いくら〜ても, 何でも; 〜始めます, 〜続けます; 〜そうです.',
     module: 'lesson', href: 'pages/lesson.html?id=l40' },
+  { id: 'l40-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 40. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l40&round=listen' },
 
   // ── 41. lecke ──
   { id: 'l41-lesson', glyph: '読', title: 'Magyarázat: まるで〜よう, 〜しかない',
     desc: 'Mintha…; egész sok; nincs más hátra; nem hiába.',
     module: 'lesson', href: 'pages/lesson.html?id=l41' },
+  { id: 'l41-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 41. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l41&round=listen' },
 
   // ── 42. lecke ──
   { id: 'l42-lesson', glyph: '読', title: 'Magyarázat: 〜にとって, 〜こそ',
     desc: 'Kinek a szemével; kiemelés; egyetértés és ellenvetés.',
     module: 'lesson', href: 'pages/lesson.html?id=l42' },
+  { id: 'l42-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 42. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l42&round=listen' },
 
   // ── 43. lecke ──
   { id: 'l43-lesson', glyph: '読', title: 'Magyarázat: parancsoló alak',
     desc: 'Menj! Ne…!; hogy…, nehogy…; igyekszem; pontosan úgy.',
     module: 'lesson', href: 'pages/lesson.html?id=l43' },
+  { id: 'l43-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 43. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l43&round=listen' },
 
   // ── 44. lecke ──
   { id: 'l44-lesson', glyph: '読', title: 'Magyarázat: 〜べきです, 〜ずに',
@@ -1760,6 +1816,35 @@ const NIHONCORE_PATH = [
   { id: 'l48-lesson', glyph: '読', title: 'Magyarázat: 〜ば〜ほど, 〜として',
     desc: 'Mi indította el; mi okozta; minél…, annál…; köszönet és búcsú.',
     module: 'lesson', href: 'pages/lesson.html?id=l48' },
+  { id: 'l48-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A 48. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l48&round=listen' },
+
+  // ── Kiegészítő leckék: JLPT N4 (ami a két kötetből kimaradt) ──
+  { id: 'k5-lesson', glyph: '間', title: 'Kiegészítés: közben, éppen, az imént',
+    desc: '〜間, 〜間に, 〜たばかり, 〜ていました, 〜おきに.',
+    module: 'lesson', href: 'pages/lesson.html?id=k5' },
+  { id: 'k5-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k5&round=listen' },
+  { id: 'k6-lesson', glyph: '願', title: 'Kiegészítés: kívánság és tanács',
+    desc: '〜てほしい, 〜たらどうですか, 〜てよかった, 〜予定です.',
+    module: 'lesson', href: 'pages/lesson.html?id=k6' },
+  { id: 'k6-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k6&round=listen' },
+  { id: 'k7-lesson', glyph: '確', title: 'Kiegészítés: biztos? kizárt?',
+    desc: '〜はずがない, 〜に見える, なかなか〜ない, さすが.',
+    module: 'lesson', href: 'pages/lesson.html?id=k7' },
+  { id: 'k7-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k7&round=listen' },
+  { id: 'k8-lesson', glyph: '要', title: 'Kiegészítés: ha úgy adódik',
+    desc: '〜が必要, 〜場合は, 〜など, 〜のに (cél), 〜だけで.',
+    module: 'lesson', href: 'pages/lesson.html?id=k8' },
+  { id: 'k8-listen', glyph: '聞', title: 'Hallás utáni kör',
+    desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
+    module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k8&round=listen' },
 
   // ── A Dekiru 2 után: záró gyakorlás ──
   { id: 'final-cloze', glyph: '結', title: 'Minták kiegészítéssel',
@@ -1773,8 +1858,8 @@ const NIHONCORE_PATH = [
 ];
 
 const NIHONCORE_PATH_UNITS = [
-  { id: 'u-kana', kicker: 'Előkészítő',          title: 'Az írás',             sub: 'Hiragana és katakana',
-    steps: ['kana-hira', 'kana-kata'] },
+  { id: 'u-kana', kicker: 'Előkészítő',          title: 'Az írás',             sub: 'Kiejtés, hiragana és katakana',
+    steps: ['l0-lesson', 'kana-hira', 'kana-kata'] },
   { id: 'u-l1',   kicker: 'Dekiru 1 · 1. lecke', title: 'Bemutatkozás',        sub: 'Ki vagyok, mivel foglalkozom: です, は, の, も, か',
     steps: ['l1-lesson', 'first-sentences'] },
   { id: 'u-l2',   kicker: 'Dekiru 1 · 2. lecke', title: 'Ez, az, amaz',        sub: 'これ, この, ここ; kié; tagadás',
@@ -1825,8 +1910,10 @@ const NIHONCORE_PATH_UNITS = [
     steps: ['l24-lesson', 'l24-state'] },
   { id: 'u-next', kicker: 'A Dekiru 1 után',      title: 'Összefoglaló gyakorlás', sub: 'Hallás, nyelvtani minták, szabad fordítás; utána a Dekiru 2 leckéi jönnek',
     steps: ['listening', 'patterns', 'production'] },
+  { id: 'u-k-n5', kicker: 'Kiegészítő · JLPT N5', title: 'Ami a könyvből kimaradt', sub: 'Kötőszavak, mondatvégi partikulák, beszélt rövidítések, hogyan és milyen gyakran',
+    steps: ['k1-lesson', 'k1-listen', 'k2-lesson', 'k2-listen', 'k3-lesson', 'k3-listen', 'k4-lesson', 'k4-listen'] },
   { id: 'u-l25',  kicker: 'Dekiru 2 · 25. lecke', title: 'A repülőtéren',        sub: '〜だろう, 〜はずです; 〜か és 〜かどうか; 〜の？',
-    steps: ['l25-lesson'] },
+    steps: ['l25-lesson', 'l25-listen'] },
   { id: 'u-l26',  kicker: 'Dekiru 2 · 26. lecke', title: 'Álmok és tervek',      sub: '〜たら; szándékos alak; 〜までに; 〜らしい',
     steps: ['l26-lesson', 'l26-volitional', 'l26-tara'] },
   { id: 'u-l27',  kicker: 'Dekiru 2 · 27. lecke', title: 'Ki mit tud?',          sub: 'Ható alak; 〜にきまっています; 〜とか; 〜さ',
@@ -1834,7 +1921,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l28',  kicker: 'Dekiru 2 · 28. lecke', title: 'Melyiket ajánlja?',    sub: '〜ば, 〜なら; 〜でございます; 〜し; 〜にちがいありません',
     steps: ['l28-lesson', 'l28-if', 'l28-patterns'] },
   { id: 'u-l29',  kicker: 'Dekiru 2 · 29. lecke', title: 'Új félév',             sub: '〜ところ; 〜ように言います; 〜ということです; 〜について',
-    steps: ['l29-lesson'] },
+    steps: ['l29-lesson', 'l29-listen'] },
   { id: 'u-l30',  kicker: 'Dekiru 2 · 30. lecke', title: 'Közös munka',          sub: '〜のに; 〜なくてもかまいません; 〜によって',
     steps: ['l30-lesson', 'l30-patterns'] },
   { id: 'u-l31',  kicker: 'Dekiru 2 · 31. lecke', title: 'Útbaigazítás',         sub: '〜と; 〜にくらべて; 見えます, 聞こえます; 〜ようです',
@@ -1844,9 +1931,9 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l33',  kicker: 'Dekiru 2 · 33. lecke', title: 'A konyhában',          sub: '〜そうです (látszat); 〜みたいな; 〜くらい; 〜がします',
     steps: ['l33-lesson', 'l33-looks'] },
   { id: 'u-l34',  kicker: 'Dekiru 2 · 34. lecke', title: 'Mit hallottál?',       sub: '〜そうです (hallomás); 〜によると; 〜らしいです',
-    steps: ['l34-lesson'] },
+    steps: ['l34-lesson', 'l34-listen'] },
   { id: 'u-l35',  kicker: 'Dekiru 2 · 35. lecke', title: 'Hogyan kell?',         sub: '〜方; 〜かわりに; 〜にかわって; 〜まま',
-    steps: ['l35-lesson'] },
+    steps: ['l35-lesson', 'l35-listen'] },
   { id: 'u-l36',  kicker: 'Dekiru 2 · 36. lecke', title: 'Rendezvény',           sub: 'Szenvedő alak; 〜によって; 〜から〜にかけて; 〜でも',
     steps: ['l36-lesson', 'l36-passive'] },
   { id: 'u-l37',  kicker: 'Dekiru 2 · 37. lecke', title: 'Baj történt',          sub: 'Szenvedő mondat emberrel; kellemetlenség; 〜おかげで',
@@ -1854,15 +1941,15 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l38',  kicker: 'Dekiru 2 · 38. lecke', title: 'Tiszteletteljes beszéd', sub: 'お〜になります; いらっしゃいます; ご〜ください; 〜うちに',
     steps: ['l38-lesson', 'l38-honorific'] },
   { id: 'u-l39',  kicker: 'Dekiru 2 · 39. lecke', title: 'Szerényen szólva',     sub: 'お〜します; 参ります, 申します; 〜やすい, 〜にくい; 〜すぎます',
-    steps: ['l39-lesson'] },
+    steps: ['l39-lesson', 'l39-listen'] },
   { id: 'u-l40',  kicker: 'Dekiru 2 · 40. lecke', title: 'Interjú',              sub: 'いくら〜ても; 何でも; 〜始めます, 〜出します, 〜続けます',
-    steps: ['l40-lesson'] },
+    steps: ['l40-lesson', 'l40-listen'] },
   { id: 'u-l41',  kicker: 'Dekiru 2 · 41. lecke', title: 'Bemutató',             sub: 'まるで〜ようです; 〜も; 〜しかありません; 〜だけあって',
-    steps: ['l41-lesson'] },
+    steps: ['l41-lesson', 'l41-listen'] },
   { id: 'u-l42',  kicker: 'Dekiru 2 · 42. lecke', title: 'Vita',                 sub: '〜にとって; 〜から見ると; 〜こそ; egyetértés és ellenvetés',
-    steps: ['l42-lesson'] },
+    steps: ['l42-lesson', 'l42-listen'] },
   { id: 'u-l43',  kicker: 'Dekiru 2 · 43. lecke', title: 'Tanulási tanácsok',    sub: 'Parancsoló alak; 〜な; 〜ように; 〜ようにします; 〜とおりに',
-    steps: ['l43-lesson'] },
+    steps: ['l43-lesson', 'l43-listen'] },
   { id: 'u-l44',  kicker: 'Dekiru 2 · 44. lecke', title: 'Beszédverseny',        sub: '〜べきです; 〜ずに; 〜を中心に',
     steps: ['l44-lesson', 'l44-nai'] },
   { id: 'u-l45',  kicker: 'Dekiru 2 · 45. lecke', title: 'Félreértés',           sub: '〜ようとします; műveltető alak; 〜がります, 〜たがります',
@@ -1872,7 +1959,9 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l47',  kicker: 'Dekiru 2 · 47. lecke', title: 'Nyelvtanulás',         sub: 'Műveltető-szenvedő alak: 〜させられます, 〜されます',
     steps: ['l47-lesson', 'l47-causpass'] },
   { id: 'u-l48',  kicker: 'Dekiru 2 · 48. lecke', title: 'Köszönet és búcsú',    sub: '〜をきっかけに; 〜せいで; 〜ば〜ほど; 〜として',
-    steps: ['l48-lesson'] },
+    steps: ['l48-lesson', 'l48-listen'] },
+  { id: 'u-k-n4', kicker: 'Kiegészítő · JLPT N4', title: 'Ami a könyvekből kimaradt', sub: 'Idő, kívánság és tanács, bizonyosság, szükség és eset',
+    steps: ['k5-lesson', 'k5-listen', 'k6-lesson', 'k6-listen', 'k7-lesson', 'k7-listen', 'k8-lesson', 'k8-listen'] },
   { id: 'u-end',  kicker: 'A Dekiru 2 után',      title: 'Záró gyakorlás',       sub: 'Nyelvtani minták kiegészítéssel és mondatszintű hallás',
     steps: ['final-cloze', 'final-pro'] }
 ];
