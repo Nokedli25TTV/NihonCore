@@ -17235,9 +17235,35 @@ function initLessonPage() {
 
   /* ── B) Nyelvtani pontok ───────────────────────── */
   function renderLesson() {
-    const toc = lesson.points.map((p, i) =>
+    const tocSec = (cond, href, label) => cond ? `<a href="${href}" class="lp-toc-link lp-toc-sec">${label}</a>` : '';
+    const toc = tocSec(lesson.dialogue, '#lpDialogue', 'Párbeszéd') +
+      lesson.points.map((p, i) =>
       `<a href="#p${i + 1}" class="lp-toc-link"><span class="lp-toc-no">${i + 1}</span><span lang="ja">${esc(p.title)}</span></a>`).join('') +
+      tocSec(lesson.phrases && lesson.phrases.length, '#lpPhrases', 'Kifejezések') +
+      tocSec(lesson.words && lesson.words.length, '#lpWords', 'Szavak') +
+      tocSec(lesson.culture && lesson.culture.length, '#lpCulture', 'Jó tudni') +
       '<a href="#lpCheck" class="lp-toc-link lp-toc-go">Ellenőrzés és gyakorlás</a>';
+    // meghallgatható sor (példa, párbeszéd, kifejezés): a hang a data-say-ből megy
+    const sayRow = (e, extra) => `
+            <li class="lp-ex${extra && extra.who ? ' lp-ex-line' : ''}">
+              <button class="lp-ex-play" type="button" data-say="${esc(reading(e.jp))}" aria-label="Meghallgatom">${PLAY}</button>
+              <div class="lp-ex-text">
+                ${extra && extra.who ? `<div class="lp-ex-who">${esc(extra.who)}</div>` : ''}
+                <div class="lp-ex-jp" lang="ja">${ruby(e.jp)}</div>
+                <div class="lp-ex-romaji">${esc(e.romaji)}</div>
+                <div class="lp-ex-hu">${esc(e.hu)}</div>
+                ${e.note ? `<div class="lp-ex-note">${rubyHtml(e.note)}</div>` : ''}
+              </div>
+            </li>`;
+    const tableHtml = t => `
+        <figure class="lp-table-fig">
+          ${t.caption ? `<figcaption class="lp-table-cap">${rubyHtml(t.caption)}</figcaption>` : ''}
+          <div class="lp-table-wrap"><table class="lp-table">
+            ${t.head ? `<thead><tr>${t.head.map(h => `<th>${rubyHtml(h)}</th>`).join('')}</tr></thead>` : ''}
+            <tbody>${t.rows.map(r => `<tr>${r.map((c, k) => k === 0 ? `<th scope="row">${rubyHtml(c)}</th>` : `<td>${rubyHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+          </table></div>
+        </figure>`;
+
     const points = lesson.points.map((p, i) => `
       <section class="lp-point glass-panel" id="p${i + 1}">
         <div class="lp-point-head">
@@ -17247,23 +17273,103 @@ function initLessonPage() {
         </div>
         <div class="lp-pattern" lang="ja">${ruby(p.pattern)}</div>
         <p class="lp-body">${rubyHtml(p.body)}</p>
+        ${(p.more || []).map(m => `<p class="lp-body lp-more">${rubyHtml(m)}</p>`).join('')}
+        ${(p.tables || []).map(tableHtml).join('')}
         <ul class="lp-examples">
-          ${p.examples.map((e, k) => `
-            <li class="lp-ex">
-              <button class="lp-ex-play" type="button" data-p="${i}" data-e="${k}" aria-label="Meghallgatom">${PLAY}</button>
-              <div class="lp-ex-text">
-                <div class="lp-ex-jp" lang="ja">${ruby(e.jp)}</div>
-                <div class="lp-ex-romaji">${esc(e.romaji)}</div>
-                <div class="lp-ex-hu">${esc(e.hu)}</div>
-              </div>
-            </li>`).join('')}
+          ${p.examples.map(e => sayRow(e)).join('')}
         </ul>
+        ${p.notes && p.notes.length ? `
+          <div class="lp-notes">
+            <div class="lp-block-title">Jó tudni</div>
+            <ul>${p.notes.map(n => `<li>${rubyHtml(n)}</li>`).join('')}</ul>
+          </div>` : ''}
+        ${p.mistakes && p.mistakes.length ? `
+          <div class="lp-mistakes">
+            <div class="lp-block-title">Gyakori hiba</div>
+            ${p.mistakes.map(m => `
+              <div class="lp-mistake">
+                <div class="lp-mis-bad" lang="ja"><span class="lp-mis-mark" aria-label="Hibás">✕</span>${ruby(m.bad)}</div>
+                <div class="lp-mis-good" lang="ja"><span class="lp-mis-mark" aria-label="Helyes">✓</span>${ruby(m.good)}</div>
+                <div class="lp-mis-why">${rubyHtml(m.why)}</div>
+              </div>`).join('')}
+          </div>` : ''}
         ${p.tip ? `<div class="lp-tip"><strong>Figyelj:</strong> ${rubyHtml(p.tip)}</div>` : ''}
       </section>`).join('');
 
+    // A lecke elején: miről szól, és egy rövid párbeszéd, amelyben a lecke nyelvtana élőben látszik
+    const introHtml = lesson.intro && lesson.intro.length ? `
+      <section class="lp-intro glass-panel" id="lpIntro">
+        <h2 class="lp-sec-title">Miről szól ez a lecke?</h2>
+        ${lesson.intro.map(t => `<p class="lp-body">${rubyHtml(t)}</p>`).join('')}
+      </section>` : '';
+    const dlg = lesson.dialogue;
+    const dialogueHtml = dlg ? `
+      <section class="lp-dialogue glass-panel" id="lpDialogue">
+        <h2 class="lp-sec-title">Párbeszéd<span class="lp-sec-sub">${esc(dlg.title || '')}</span></h2>
+        ${dlg.scene ? `<p class="lp-body lp-scene">${rubyHtml(dlg.scene)}</p>` : ''}
+        <ul class="lp-examples">${dlg.lines.map(l => sayRow(l, { who: l.who })).join('')}</ul>
+        ${dlg.notes && dlg.notes.length ? `
+          <div class="lp-notes">
+            <div class="lp-block-title">Amit a párbeszédből érdemes megjegyezni</div>
+            <ul>${dlg.notes.map(n => `<li>${rubyHtml(n)}</li>`).join('')}</ul>
+          </div>` : ''}
+      </section>` : '';
+
+    // A lecke végén: kifejezések, szavak, kulturális tudnivalók, összefoglaló
+    const phrasesHtml = lesson.phrases && lesson.phrases.length ? `
+      <section class="lp-phrases glass-panel" id="lpPhrases">
+        <h2 class="lp-sec-title">Hasznos kifejezések</h2>
+        <p class="lp-body lp-scene">Kész fordulatok: ezeket egyben érdemes megtanulni, ahogy vannak.</p>
+        <ul class="lp-examples">${lesson.phrases.map(e => sayRow(e)).join('')}</ul>
+      </section>` : '';
+    const wordsHtml = lesson.words && lesson.words.length ? `
+      <section class="lp-words glass-panel" id="lpWords">
+        <h2 class="lp-sec-title">Szavak a leckéhez</h2>
+        <p class="lp-body lp-scene">Koppints egy szóra, és meghallgatod.</p>
+        ${lesson.words.map(g => `
+          <div class="lp-word-group">
+            <h3 class="lp-word-title">${esc(g.title)}</h3>
+            ${g.note ? `<p class="lp-word-note">${rubyHtml(g.note)}</p>` : ''}
+            <div class="lp-word-grid">
+              ${g.items.map(w => `
+                <button class="lp-word" type="button" data-say="${esc(reading(w.say || w.jp))}">
+                  <span class="lp-word-jp" lang="ja">${ruby(w.jp)}</span>
+                  <span class="lp-word-romaji lp-ex-romaji">${esc(w.romaji)}</span>
+                  <span class="lp-word-hu lp-ex-hu">${esc(w.hu)}</span>
+                </button>`).join('')}
+            </div>
+          </div>`).join('')}
+      </section>` : '';
+    const cultureHtml = lesson.culture && lesson.culture.length ? `
+      <section class="lp-culture glass-panel" id="lpCulture">
+        <h2 class="lp-sec-title">Jó tudni Japánról</h2>
+        ${lesson.culture.map(c => `
+          <div class="lp-culture-item">
+            <h3 class="lp-word-title">${esc(c.title)}</h3>
+            <p class="lp-body">${rubyHtml(c.text)}</p>
+          </div>`).join('')}
+      </section>` : '';
+    const glanceHtml = (lesson.intro || lesson.dialogue) ? `
+      <section class="lp-glance glass-panel" id="lpGlance">
+        <h2 class="lp-sec-title">A lecke egy pillantásra</h2>
+        <ul class="lp-glance-list">
+          ${lesson.points.map((p, i) => `
+            <li><a href="#p${i + 1}" class="lp-glance-row lp-toc-link-plain">
+              <span class="lp-glance-pattern" lang="ja">${ruby(p.pattern)}</span>
+              <span class="lp-glance-sub">${esc(p.sub)}</span>
+            </a></li>`).join('')}
+        </ul>
+      </section>` : '';
+
     content.innerHTML = `
       <nav class="lp-toc" aria-label="A lecke pontjai">${toc}</nav>
+      ${introHtml}
+      ${dialogueHtml}
       ${points}
+      ${phrasesHtml}
+      ${wordsHtml}
+      ${cultureHtml}
+      ${glanceHtml}
       <section class="lp-check glass-panel-heavy" id="lpCheck">
         <h2 class="lp-check-title">Ellenőrizd magad</h2>
         <p class="lp-check-sub">${ROUND} kérdés a leckéből: szabályok és a példamondatok fordítása. Minden kör más; a lépéshez 60% kell.</p>
@@ -17275,14 +17381,19 @@ function initLessonPage() {
       </section>
       ${practiceHtml()}`;
 
-    content.querySelectorAll('.lp-ex-play').forEach(btn => btn.addEventListener('click', () => {
-      const e = lesson.points[+btn.dataset.p].examples[+btn.dataset.e];
+    content.querySelectorAll('[data-say]').forEach(btn => btn.addEventListener('click', () => {
       if (!window.NihonCoreAudio) return;
-      content.querySelectorAll('.lp-ex-play.is-playing').forEach(b => b.classList.remove('is-playing'));
+      content.querySelectorAll('.is-playing').forEach(b => b.classList.remove('is-playing'));
       btn.classList.add('is-playing');
       const done = () => btn.classList.remove('is-playing');
       setTimeout(done, 4000);
-      try { NihonCoreAudio.play(reading(e.jp), { speed: 0.9, onError: done }); } catch (err) { done(); }
+      try { NihonCoreAudio.play(btn.dataset.say, { speed: 0.9, onError: done }); } catch (err) { done(); }
+    }));
+    content.querySelectorAll('.lp-glance-row').forEach(a => a.addEventListener('click', ev => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      ev.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }));
     // oldalon belüli ugrás a lebegő fejléc alá
     content.querySelectorAll('.lp-toc-link').forEach(a => a.addEventListener('click', ev => {
@@ -17319,6 +17430,7 @@ function initLessonPage() {
   const ROUND = 10, OWN_PER_ROUND = 6;
   const allExamples = [];
   lesson.points.forEach((p, pi) => p.examples.forEach(e => allExamples.push({ ex: e, point: pi })));
+  (lesson.phrases || []).forEach(e => allExamples.push({ ex: e, point: 'phrases' }));
 
   // elterelő válaszok: előbb ugyanabból a pontból (hasonlóbbak), aztán a lecke többi példájából
   function pickOthers(item, field) {

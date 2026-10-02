@@ -714,6 +714,7 @@ A tanulási út a Dekiru 1 (1–24. lecke) és a Dekiru 2 (25–48. lecke) leck�
      quiz: [{ q: 'A kérdés magyarul', jp: 'hiányos mondat ＿ jellel (nem kötelező)',
               a: 'a helyes válasz', wrong: ['rossz 1', 'rossz 2', 'rossz 3'], why: 'Egy mondat: miért.' }] }
    ```
+   - **Részletes lecke** (ez az elvárt forma): a fentieken túl `intro: [bekezdések]`, `dialogue: { title, scene, lines: [{ who, jp, romaji, hu }], notes: [] }`, `phrases: [{ jp, romaji, hu, note? }]`, `words: [{ title, note?, items: [{ jp, romaji, hu, say? }] }]`, `culture: [{ title, text }]`; pontonként `more: [további bekezdések]`, `tables: [{ caption, head: [], rows: [[]] }]`, `notes: []` („Jó tudni"), `mistakes: [{ bad, good, why }]` („Gyakori hiba"). Egy pont attól jó, hogy megmondja: mikor használod, hogyan képzed, mi a kivétel, mivel szokás összekeverni, és mit ne mondj.
    - Kanji csak `{漢字|かな}` jelöléssel: ebből lesz a furigana és a felolvasott kana.
    - Leckénként **10 saját kérdés** kell; egy kör 10 kérdés: 6 saját + 4 a példamondatokból készített fordítós kérdés (ezeket a kód állítja elő, nem kell megírni). Ehhez a lecke példamondatainak `jp` és `hu` mezője legyen egyedi a leckén belül.
    - A `wrong` pontosan három, egymástól és a helyestől különböző válasz; a kérdésnek egyetlen jó megoldása legyen (ha a hiány több partikulával is értelmes, add meg a magyar jelentést a kérdésben).
