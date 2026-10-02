@@ -1699,7 +1699,77 @@ const NIHONCORE_PATH = [
   // ── 40. lecke ──
   { id: 'l40-lesson', glyph: '読', title: 'Magyarázat: bármi, elkezd, folytat',
     desc: 'いくら〜ても, 何でも; 〜始めます, 〜続けます; 〜そうです.',
-    module: 'lesson', href: 'pages/lesson.html?id=l40' }
+    module: 'lesson', href: 'pages/lesson.html?id=l40' },
+
+  // ── 41. lecke ──
+  { id: 'l41-lesson', glyph: '読', title: 'Magyarázat: まるで〜よう, 〜しかない',
+    desc: 'Mintha…; egész sok; nincs más hátra; nem hiába.',
+    module: 'lesson', href: 'pages/lesson.html?id=l41' },
+
+  // ── 42. lecke ──
+  { id: 'l42-lesson', glyph: '読', title: 'Magyarázat: 〜にとって, 〜こそ',
+    desc: 'Kinek a szemével; kiemelés; egyetértés és ellenvetés.',
+    module: 'lesson', href: 'pages/lesson.html?id=l42' },
+
+  // ── 43. lecke ──
+  { id: 'l43-lesson', glyph: '読', title: 'Magyarázat: parancsoló alak',
+    desc: 'Menj! Ne…!; hogy…, nehogy…; igyekszem; pontosan úgy.',
+    module: 'lesson', href: 'pages/lesson.html?id=l43' },
+
+  // ── 44. lecke ──
+  { id: 'l44-lesson', glyph: '読', title: 'Magyarázat: 〜べきです, 〜ずに',
+    desc: 'Mi a helyes; anélkül, hogy…; a beszéd váza.',
+    module: 'lesson', href: 'pages/lesson.html?id=l44' },
+  { id: 'l44-nai', glyph: '無', title: 'A 〜ずに alapja: ない-alak',
+    desc: 'Állapot és öltözködés igéi: írd be a ない-alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['nai'], themes: ['state', 'clothing'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+
+  // ── 45. lecke ──
+  { id: 'l45-lesson', glyph: '読', title: 'Magyarázat: műveltető alak',
+    desc: 'Megpróbál; megcsináltat valakivel; más érzései és vágyai.',
+    module: 'lesson', href: 'pages/lesson.html?id=l45' },
+  { id: 'l45-causative', glyph: '使', title: 'Műveltető alak',
+    desc: '書かせます, 食べさせます, させます: ismerd fel a helyes alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['causative'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+
+  // ── 46. lecke ──
+  { id: 'l46-lesson', glyph: '読', title: 'Magyarázat: 〜なさい, 〜させてください',
+    desc: 'Utasítás; elküld, hagy, megnevettet; nagyon udvarias engedélykérés.',
+    module: 'lesson', href: 'pages/lesson.html?id=l46' },
+  { id: 'l46-causative-w', glyph: '任', title: 'Műveltető alak: írd be',
+    desc: 'Most te képzed a műveltető alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['causative'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+
+  // ── 47. lecke ──
+  { id: 'l47-lesson', glyph: '読', title: 'Magyarázat: 〜させられます',
+    desc: 'Velem csináltatják: akaratom ellenére kellett megtennem.',
+    module: 'lesson', href: 'pages/lesson.html?id=l47' },
+  { id: 'l47-causpass', glyph: '強', title: 'Műveltető-szenvedő alak',
+    desc: '食べさせられます, 書かせられます: ismerd fel a helyes alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['causative_passive'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+
+  // ── 48. lecke ──
+  { id: 'l48-lesson', glyph: '読', title: 'Magyarázat: 〜ば〜ほど, 〜として',
+    desc: 'Mi indította el; mi okozta; minél…, annál…; köszönet és búcsú.',
+    module: 'lesson', href: 'pages/lesson.html?id=l48' },
+
+  // ── A Dekiru 2 után: záró gyakorlás ──
+  { id: 'final-cloze', glyph: '結', title: 'Minták kiegészítéssel',
+    desc: 'Nyelvtani minták: most te írod be a hiányzó részt.',
+    module: 'grammar', href: 'pages/grammar.html',
+    preset: { set: { mode: 'cloze' } } },
+  { id: 'final-pro', glyph: '耳', title: 'Mondatok hallás után',
+    desc: 'Pro hallás: egész mondatot hallasz, és leírod.',
+    module: 'listening', href: 'pages/listening.html',
+    preset: { set: { mode: 'pro' } } }
 ];
 
 const NIHONCORE_PATH_UNITS = [
@@ -1786,7 +1856,25 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l39',  kicker: 'Dekiru 2 · 39. lecke', title: 'Szerényen szólva',     sub: 'お〜します; 参ります, 申します; 〜やすい, 〜にくい; 〜すぎます',
     steps: ['l39-lesson'] },
   { id: 'u-l40',  kicker: 'Dekiru 2 · 40. lecke', title: 'Interjú',              sub: 'いくら〜ても; 何でも; 〜始めます, 〜出します, 〜続けます',
-    steps: ['l40-lesson'] }
+    steps: ['l40-lesson'] },
+  { id: 'u-l41',  kicker: 'Dekiru 2 · 41. lecke', title: 'Bemutató',             sub: 'まるで〜ようです; 〜も; 〜しかありません; 〜だけあって',
+    steps: ['l41-lesson'] },
+  { id: 'u-l42',  kicker: 'Dekiru 2 · 42. lecke', title: 'Vita',                 sub: '〜にとって; 〜から見ると; 〜こそ; egyetértés és ellenvetés',
+    steps: ['l42-lesson'] },
+  { id: 'u-l43',  kicker: 'Dekiru 2 · 43. lecke', title: 'Tanulási tanácsok',    sub: 'Parancsoló alak; 〜な; 〜ように; 〜ようにします; 〜とおりに',
+    steps: ['l43-lesson'] },
+  { id: 'u-l44',  kicker: 'Dekiru 2 · 44. lecke', title: 'Beszédverseny',        sub: '〜べきです; 〜ずに; 〜を中心に',
+    steps: ['l44-lesson', 'l44-nai'] },
+  { id: 'u-l45',  kicker: 'Dekiru 2 · 45. lecke', title: 'Félreértés',           sub: '〜ようとします; műveltető alak; 〜がります, 〜たがります',
+    steps: ['l45-lesson', 'l45-causative'] },
+  { id: 'u-l46',  kicker: 'Dekiru 2 · 46. lecke', title: 'Megbeszélés',          sub: '〜なさい; műveltető mondatok; 〜させてください',
+    steps: ['l46-lesson', 'l46-causative-w'] },
+  { id: 'u-l47',  kicker: 'Dekiru 2 · 47. lecke', title: 'Nyelvtanulás',         sub: 'Műveltető-szenvedő alak: 〜させられます, 〜されます',
+    steps: ['l47-lesson', 'l47-causpass'] },
+  { id: 'u-l48',  kicker: 'Dekiru 2 · 48. lecke', title: 'Köszönet és búcsú',    sub: '〜をきっかけに; 〜せいで; 〜ば〜ほど; 〜として',
+    steps: ['l48-lesson'] },
+  { id: 'u-end',  kicker: 'A Dekiru 2 után',      title: 'Záró gyakorlás',       sub: 'Nyelvtani minták kiegészítéssel és mondatszintű hallás',
+    steps: ['final-cloze', 'final-pro'] }
 ];
 
 /* ====================================================

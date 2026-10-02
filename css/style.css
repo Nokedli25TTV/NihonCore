@@ -7168,6 +7168,14 @@ body.round-active .lesson { display: none; }
 .continue .continue-bar { background: rgb(255 255 255 / 0.22); }
 .continue .continue-fill { background: #FCFCFF; }
 .continue .continue-count { color: rgb(255 255 255 / 0.82); }
+/* Ugrás a térképen a következő lépéshez (a térkép sok fejezetnél hosszú) */
+.continue-jump {
+  align-self: center; min-height: var(--touch); margin: -8px 0 -10px; padding: 0 12px;
+  font: inherit; font-size: var(--fs-sm); font-weight: 700;
+  color: rgb(255 255 255 / 0.92); background: none; border: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 3px;
+}
+.continue-jump:active { transform: translateY(1px); }
 html.theme-sumi .continue .btn-primary { color: #2A4BD0; }
 
 /* ── Szekció-fejléc a térkép fölött ── */

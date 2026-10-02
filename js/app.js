@@ -2655,7 +2655,13 @@ function initLanding() {
           <div class="continue-bar"><div class="continue-fill" style="width: ${v.total ? (v.doneCount / v.total) * 100 : 0}%"></div></div>
           <span class="continue-count">${v.doneCount} / ${v.total} lépés kész</span>
         </div>
+        <button class="continue-jump" type="button">Mutasd a térképen</button>
       </div>`;
+    // A térkép hosszú: a gomb a következő lépés csomópontjához görget.
+    top.querySelector('.continue-jump').addEventListener('click', () => {
+      const node = document.querySelector('.path-node.is-next');
+      if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
   }
 
   // ── A tanulási út térképe ──
