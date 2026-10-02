@@ -17238,7 +17238,7 @@ function initLessonPage() {
     const tocSec = (cond, href, label) => cond ? `<a href="${href}" class="lp-toc-link lp-toc-sec">${label}</a>` : '';
     const toc = tocSec(lesson.dialogue, '#lpDialogue', 'Párbeszéd') +
       lesson.points.map((p, i) =>
-      `<a href="#p${i + 1}" class="lp-toc-link"><span class="lp-toc-no">${i + 1}</span><span lang="ja">${esc(p.title)}</span></a>`).join('') +
+      `<a href="#p${i + 1}" class="lp-toc-link"><span class="lp-toc-no">${i + 1}</span><span lang="ja">${ruby(p.title)}</span></a>`).join('') +
       tocSec(lesson.phrases && lesson.phrases.length, '#lpPhrases', 'Kifejezések') +
       tocSec(lesson.words && lesson.words.length, '#lpWords', 'Szavak') +
       tocSec(lesson.culture && lesson.culture.length, '#lpCulture', 'Jó tudni') +
@@ -17268,8 +17268,8 @@ function initLessonPage() {
       <section class="lp-point glass-panel" id="p${i + 1}">
         <div class="lp-point-head">
           <span class="lp-point-no">${i + 1}</span>
-          <h2 class="lp-point-title" lang="ja">${esc(p.title)}</h2>
-          <span class="lp-point-sub">${esc(p.sub)}</span>
+          <h2 class="lp-point-title" lang="ja">${ruby(p.title)}</h2>
+          <span class="lp-point-sub">${ruby(p.sub)}</span>
         </div>
         <div class="lp-pattern" lang="ja">${ruby(p.pattern)}</div>
         <p class="lp-body">${rubyHtml(p.body)}</p>
@@ -17288,8 +17288,8 @@ function initLessonPage() {
             <div class="lp-block-title">Gyakori hiba</div>
             ${p.mistakes.map(m => `
               <div class="lp-mistake">
-                <div class="lp-mis-bad" lang="ja"><span class="lp-mis-mark" aria-label="Hibás">✕</span>${ruby(m.bad)}</div>
-                <div class="lp-mis-good" lang="ja"><span class="lp-mis-mark" aria-label="Helyes">✓</span>${ruby(m.good)}</div>
+                <div class="lp-mis-bad" lang="ja"><span class="lp-mis-mark" aria-label="Hibás">✕</span><span>${ruby(m.bad)}</span></div>
+                <div class="lp-mis-good" lang="ja"><span class="lp-mis-mark" aria-label="Helyes">✓</span><span>${ruby(m.good)}</span></div>
                 <div class="lp-mis-why">${rubyHtml(m.why)}</div>
               </div>`).join('')}
           </div>` : ''}
@@ -17328,7 +17328,7 @@ function initLessonPage() {
         <p class="lp-body lp-scene">Koppints egy szóra, és meghallgatod.</p>
         ${lesson.words.map(g => `
           <div class="lp-word-group">
-            <h3 class="lp-word-title">${esc(g.title)}</h3>
+            <h3 class="lp-word-title">${ruby(g.title)}</h3>
             ${g.note ? `<p class="lp-word-note">${rubyHtml(g.note)}</p>` : ''}
             <div class="lp-word-grid">
               ${g.items.map(w => `
@@ -17345,7 +17345,7 @@ function initLessonPage() {
         <h2 class="lp-sec-title">Jó tudni Japánról</h2>
         ${lesson.culture.map(c => `
           <div class="lp-culture-item">
-            <h3 class="lp-word-title">${esc(c.title)}</h3>
+            <h3 class="lp-word-title">${ruby(c.title)}</h3>
             <p class="lp-body">${rubyHtml(c.text)}</p>
           </div>`).join('')}
       </section>` : '';
@@ -17356,7 +17356,7 @@ function initLessonPage() {
           ${lesson.points.map((p, i) => `
             <li><a href="#p${i + 1}" class="lp-glance-row lp-toc-link-plain">
               <span class="lp-glance-pattern" lang="ja">${ruby(p.pattern)}</span>
-              <span class="lp-glance-sub">${esc(p.sub)}</span>
+              <span class="lp-glance-sub">${ruby(p.sub)}</span>
             </a></li>`).join('')}
         </ul>
       </section>` : '';
@@ -17389,6 +17389,10 @@ function initLessonPage() {
       setTimeout(done, 4000);
       try { NihonCoreAudio.play(btn.dataset.say, { speed: 0.9, onError: done }); } catch (err) { done(); }
     }));
+    // széles tábla: jelzés, hogy oldalra húzható
+    content.querySelectorAll('.lp-table-wrap').forEach(w => {
+      if (w.scrollWidth > w.clientWidth + 4) w.parentNode.classList.add('is-wide');
+    });
     content.querySelectorAll('.lp-glance-row').forEach(a => a.addEventListener('click', ev => {
       const target = document.querySelector(a.getAttribute('href'));
       if (!target) return;

@@ -7761,9 +7761,16 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
   overflow-x: auto; -webkit-overflow-scrolling: touch;
   border-radius: var(--radius-md); border: 1px solid var(--glass-fill-edge); background: var(--glass-fill);
 }
-.lp-table { width: 100%; border-collapse: collapse; font-size: var(--fs-sm); line-height: 1.6; }
+/* A tábla a tartalmához igazodik: a japán szó egyben marad, a széles tábla vízszintesen húzható. */
+.lp-table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: var(--fs-sm); line-height: 1.6; }
+.lesson-main .lp-table th, .lesson-main .lp-table td { overflow-wrap: normal; word-break: keep-all; }
+.lp-table td { max-width: 20ch; }
+.lp-table-fig.is-wide::after {
+  content: 'Oldalra húzható →'; display: block; margin-top: 4px;
+  font-size: var(--fs-2xs); font-weight: 600; text-align: right; color: var(--sumi-faint);
+}
 .lp-table th, .lp-table td {
-  padding: 8px 12px; text-align: left; vertical-align: top;
+  padding: 8px 9px; text-align: left; vertical-align: top;
   border-bottom: 1px solid rgb(var(--tint-rgb) / 0.10);
   font-family: 'Figtree', var(--font-jp-text);
 }
@@ -7775,7 +7782,6 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
 .lp-table tbody th { font-weight: 700; color: var(--sumi); }
 .lp-table td { font-weight: 500; color: var(--sumi); }
 .lp-table b { font-weight: 800; color: var(--brand-deep); }
-.lesson-main .lp-table th { overflow-wrap: normal; }
 .lp-table tbody th { min-width: 2.4em; }
 .lp-table rt { font-weight: 500; }
 
@@ -7847,6 +7853,8 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
   .lp-intro, .lp-dialogue, .lp-phrases, .lp-words, .lp-culture, .lp-glance { padding: 26px 28px; }
   .lp-word-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .lp-table { font-size: var(--fs-base); }
+  .lp-table th, .lp-table td { padding: 9px 14px; }
+  .lp-table td { max-width: 34ch; }
 }
 
 /* Ellenőrzés indítása */
