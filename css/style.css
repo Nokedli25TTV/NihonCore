@@ -132,6 +132,7 @@
   --font-body:  'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
   --font-logo:  'Sora', 'Figtree', system-ui, sans-serif;   /* csak a NihonCore felirat */
+  --font-jp-text: 'Noto Sans JP', 'Zen Kaku Gothic New', system-ui, sans-serif;   /* japán FOLYÓSZÖVEG (mondatok): talp nélküli, kis méretben is olvasható */
 
   /* Fix betűméret-skála: 12 · 13 · 14 · 16 · 18 · 20 · 24 · 32 · 40 · 48 px.
      12 px alatt nincs szöveg. A dísz-méretek (japán kártya-glyph) em/clamp-ban maradnak. */
@@ -7618,10 +7619,15 @@ html.theme-sumi .path-pop { background: #1B2038; }
    Rajzolja: app.js → initLessonPage; a szöveg: js/data/course.js.
    ════════════════════════════════════════════════════════ */
 .lesson-main { max-width: 760px; }
-/* Magyar szövegbe ágyazott japán: a latin betű a UI-betű, a kana tiszta gótikus */
-.lp-body, .lp-tip, .lp-pattern, .lp-point-title, .lp-toc-link, .lq-question, .lp-point-sub {
-  font-family: 'Figtree', 'Zen Kaku Gothic New', system-ui, sans-serif;
+/* Japán szöveg a lecke-oldalon: a mondatok talp nélküli betűvel (--font-jp-text) jelennek meg,
+   mert a talpas betű kis méretben nehezen olvasható. A magyar szövegbe ágyazott japánnál
+   a latin betű a UI-betű marad. A lépések nagy jele (.path-glyph) marad a díszesebb betű. */
+.lesson-main [lang="ja"], .lesson-main rt { font-family: var(--font-jp-text); }
+.lesson-main .lp-body, .lesson-main .lp-tip, .lesson-main .lp-pattern, .lesson-main .lp-point-title,
+.lesson-main .lp-toc-link, .lesson-main .lp-toc-link [lang="ja"], .lesson-main .lq-question, .lesson-main .lp-point-sub {
+  font-family: 'Figtree', var(--font-jp-text);
 }
+.lesson-main .path-glyph { font-family: var(--font-jp); }
 
 /* Fejléc: a lecke száma az ikon helyén */
 .lesson-hero .module-hero-icon { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-2xl); letter-spacing: -0.03em; }
@@ -7699,7 +7705,7 @@ html.theme-sumi .path-pop { background: #1B2038; }
 .lp-ex-play:hover { background: rgb(var(--brand-rgb) / 0.20); }
 .lp-ex-play:active { transform: scale(0.92); }
 .lp-ex-play.is-playing { color: var(--on-accent); background: var(--accent); }
-.lp-ex-jp { font-family: var(--font-jp); font-size: var(--fs-md); line-height: 1.9; color: var(--sumi); }
+.lp-ex-jp { font-family: var(--font-jp-text); font-size: var(--fs-md); font-weight: 500; line-height: 1.9; letter-spacing: 0.01em; color: var(--sumi); }
 .lp-ex-romaji { font-size: var(--fs-sm); font-style: italic; color: var(--sumi-faint); line-height: 1.4; }
 .lp-ex-hu { margin-top: 2px; font-size: var(--fs-base); color: var(--sumi-soft); line-height: 1.45; }
 body.helpers-no-romaji .lp-ex-romaji { display: none; }
@@ -7727,10 +7733,10 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
 
 /* Ellenőrző kör kártyája */
 .lq-question { font-size: var(--fs-md); font-weight: 700; line-height: 1.45; text-align: center; text-wrap: balance; }
-.lq-jp { margin-top: 10px; font-family: var(--font-jp); font-size: clamp(1.35rem, 5.6vw, 1.8rem); line-height: 2; text-align: center; color: var(--sumi); }
+.lq-jp { margin-top: 10px; font-family: var(--font-jp-text); font-weight: 500; font-size: clamp(1.3rem, 5.4vw, 1.7rem); line-height: 2; text-align: center; color: var(--sumi); }
 .lq-options-long { grid-template-columns: 1fr !important; }
 .lq-opt { font-size: var(--fs-md); font-weight: 700; line-height: 1.7; }
-.lq-opt[lang="ja"] { font-family: var(--font-jp); font-weight: 500; }
+.lq-opt[lang="ja"] { font-family: var(--font-jp-text); font-weight: 500; }
 .lq-summary-note { max-width: 40ch; margin: 8px auto 0; font-size: var(--fs-sm); color: var(--sumi-soft); line-height: 1.5; }
 
 @media (prefers-reduced-motion: no-preference) {
