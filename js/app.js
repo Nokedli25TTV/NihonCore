@@ -538,7 +538,8 @@ window.NihonCorePath = (function () {
       ts: Date.now()
     };
     save(st);
-    showResult(step, pct, pct >= PASS, wasDone);
+    // A lecke-oldal összesítője maga vezet tovább a gyakorlásra: ott nem kell a lebegő jelzés.
+    if (step.module !== 'lesson') showResult(step, pct, pct >= PASS, wasDone);
   }
 
   const homeHref = () => (window.location.pathname.includes('/pages/') ? '../' : '') + 'index.html#path';
@@ -17112,10 +17113,50 @@ function initLessonPage() {
   document.getElementById('lessonCando').innerHTML = lesson.cando.map(c => '<li>' + esc(c) + '</li>').join('');
   if (window.NihonCoreRound && NihonCoreRound.refresh) NihonCoreRound.refresh();   // modul-név a fejlécbe
 
+  /* ── A2) A lecke gyakorló lépései a tanulási útról ─ */
+  //   A fejezet (NIHONCORE_PATH_UNITS) többi lépése: ezekbe vezet a lecke az
+  //   ellenőrzés után, hogy az átvett anyagot rögtön gyakorolni lehessen.
+  const Path = window.NihonCorePath;
+  function practiceRows() {
+    if (!Path || typeof NIHONCORE_PATH_UNITS === 'undefined') return [];
+    const v = Path.view();
+    const mine = v.rows.find(r => r.step.module === 'lesson' && new RegExp('[?&]id=' + lesson.id + '$').test(r.step.href));
+    if (!mine) return [];
+    const unit = NIHONCORE_PATH_UNITS.find(u => u.steps.indexOf(mine.step.id) >= 0);
+    if (!unit) return [];
+    return unit.steps.filter(sid => sid !== mine.step.id)
+      .map(sid => v.rows.find(r => r.step.id === sid)).filter(Boolean);
+  }
+  function practiceHtml() {
+    const rows = practiceRows();
+    if (!rows.length) return '';
+    return `
+      <section class="lp-practice glass-panel" id="lpPractice">
+        <h2 class="lp-check-title">Gyakorlás</h2>
+        <p class="lp-check-sub">A lecke anyaga feladatokban. Sorban érdemes haladni, de bármelyik indítható.</p>
+        <ul class="lp-practice-list">
+          ${rows.map(r => `
+            <li>
+              <a class="path-step-link" href="${Path.stepHref(r.step, false)}">
+                <span class="path-glyph" lang="ja">${esc(r.step.glyph)}</span>
+                <span class="path-step-body">
+                  <span class="path-step-title">${esc(r.step.title)}</span>
+                  <span class="path-step-desc">${esc(r.step.desc)}</span>
+                </span>
+                <span class="path-step-end">${r.done
+                  ? '<span class="path-state path-state-done">' + (r.best !== null ? Math.round(r.best * 100) + '%' : 'Kész') + '</span>'
+                  : '<span class="path-state path-state-next">Indítás</span>'}</span>
+              </a>
+            </li>`).join('')}
+        </ul>
+      </section>`;
+  }
+
   /* ── B) Nyelvtani pontok ───────────────────────── */
   function renderLesson() {
     const toc = lesson.points.map((p, i) =>
-      `<a href="#p${i + 1}" class="lp-toc-link"><span class="lp-toc-no">${i + 1}</span><span lang="ja">${esc(p.title)}</span></a>`).join('');
+      `<a href="#p${i + 1}" class="lp-toc-link"><span class="lp-toc-no">${i + 1}</span><span lang="ja">${esc(p.title)}</span></a>`).join('') +
+      '<a href="#lpCheck" class="lp-toc-link lp-toc-go">Ellenőrzés és gyakorlás</a>';
     const points = lesson.points.map((p, i) => `
       <section class="lp-point glass-panel" id="p${i + 1}">
         <div class="lp-point-head">
@@ -17142,11 +17183,12 @@ function initLessonPage() {
     content.innerHTML = `
       <nav class="lp-toc" aria-label="A lecke pontjai">${toc}</nav>
       ${points}
-      <section class="lp-check glass-panel-heavy">
+      <section class="lp-check glass-panel-heavy" id="lpCheck">
         <h2 class="lp-check-title">Ellenőrizd magad</h2>
-        <p class="lp-check-sub">${lesson.quiz.length} rövid kérdés a leckéből. A lépés teljesítéséhez 60% kell; bármikor újrapróbálhatod.</p>
+        <p class="lp-check-sub">${ROUND} kérdés a leckéből: szabályok és a példamondatok fordítása. Minden kör más; a lépéshez 60% kell.</p>
         <button class="btn btn-primary btn-lg" id="lqStart" type="button">Kezdjük</button>
-      </section>`;
+      </section>
+      ${practiceHtml()}`;
 
     content.querySelectorAll('.lp-ex-play').forEach(btn => btn.addEventListener('click', () => {
       const e = lesson.points[+btn.dataset.p].examples[+btn.dataset.e];
@@ -17170,8 +17212,45 @@ function initLessonPage() {
   /* ── C) Ellenőrző kör ──────────────────────────── */
   const run = { inLesson: true, cards: [], idx: 0, score: 0, streak: 0, results: [], submitted: false, startTs: 0 };
 
+  // Egy kör ROUND kérdés: a lecke saját kérdéseiből OWN_PER_ROUND, a többi a
+  // példamondatokból készül (japán → magyar és magyar → japán), így minden kör más.
+  const ROUND = 10, OWN_PER_ROUND = 6;
+  const allExamples = [];
+  lesson.points.forEach((p, pi) => p.examples.forEach(e => allExamples.push({ ex: e, point: pi })));
+
+  // elterelő válaszok: előbb ugyanabból a pontból (hasonlóbbak), aztán a lecke többi példájából
+  function pickOthers(item, field) {
+    const same = shuffle(allExamples.filter(x => x !== item && x.point === item.point));
+    const rest = shuffle(allExamples.filter(x => x.point !== item.point));
+    const out = [];
+    same.concat(rest).forEach(x => {
+      const v = x.ex[field];
+      if (out.length < 3 && v !== item.ex[field] && out.indexOf(v) < 0) out.push(v);
+    });
+    return out;
+  }
+  function generatedQuestions(n) {
+    const out = [];
+    shuffle(allExamples).forEach(item => {
+      if (out.length >= n) return;
+      const toHu = out.length % 2 === 0;
+      const wrong = pickOthers(item, toHu ? 'hu' : 'jp');
+      if (wrong.length < 3) return;
+      out.push(toHu
+        ? { q: 'Mit jelent ez a mondat?', jp: item.ex.jp, a: item.ex.hu, wrong: wrong, why: 'Így olvasod: ' + item.ex.romaji, gen: true }
+        : { q: '„' + item.ex.hu + '" Melyik a japán mondat?', a: item.ex.jp, wrong: wrong, why: 'Így olvasod: ' + item.ex.romaji, gen: true });
+    });
+    return out;
+  }
+  function buildRound() {
+    const own = shuffle(lesson.quiz).slice(0, OWN_PER_ROUND);
+    let qs = own.concat(generatedQuestions(ROUND - own.length));
+    if (qs.length < ROUND) qs = qs.concat(shuffle(lesson.quiz).filter(q => qs.indexOf(q) < 0).slice(0, ROUND - qs.length));
+    return shuffle(qs).map(q => ({ q: q, options: shuffle([q.a].concat(q.wrong)) }));
+  }
+
   function startQuiz() {
-    run.cards = shuffle(lesson.quiz).map(q => ({ q: q, options: shuffle([q.a].concat(q.wrong)) }));
+    run.cards = buildRound();
     run.idx = 0; run.score = 0; run.streak = 0; run.results = []; run.startTs = Date.now(); run.inLesson = false;
     NihonCoreRound.begin(function () {
       return { module: 'lesson', mode: 'check', results: run.results, score: run.score, startTs: run.startTs };
@@ -17241,7 +17320,7 @@ function initLessonPage() {
   function finalize(card, ok, info) {
     run.submitted = true;
     if (ok) { run.score += 10; run.streak++; } else { run.streak = 0; }
-    run.results.push({ q: lesson.id + ':' + lesson.quiz.indexOf(card.q), correct: ok,
+    run.results.push({ q: lesson.id + ':' + (card.q.gen ? 'gen' : lesson.quiz.indexOf(card.q)), correct: ok,
                        errorCode: ok ? null : (info.dontKnow ? 'dont_know' : 'wrong_choice') });
     document.getElementById('lqScore').textContent = run.score;
     document.getElementById('lqStreak').textContent = `${run.streak} 🔥`;
@@ -17285,6 +17364,7 @@ function initLessonPage() {
     const correct = run.results.filter(r => r.correct).length;
     const pct = total ? Math.round((correct / total) * 100) : 0;
     const passed = pct >= 60;
+    const nextPractice = practiceRows().find(r => !r.done);
     document.getElementById('lqCard').innerHTML = '';
     const fb = document.getElementById('lqFeedback');
     fb.classList.add('hidden'); fb.innerHTML = '';
@@ -17295,13 +17375,17 @@ function initLessonPage() {
       <div class="summary-icon">${pct === 100 ? '🏆' : passed ? '🎯' : '🌱'}</div>
       <h3>${passed ? 'Megvan a lecke' : 'Még egy kör, és megvan'}</h3>
       <div class="summary-score">${correct} / ${total}</div>
-      <p class="lq-summary-note">${passed
-        ? 'Jöhetnek a lecke gyakorló lépései a tanulási úton.'
-        : 'Nézd át újra a pontokat, amik bizonytalanok, aztán próbáld meg ismét.'}</p>
+      <p class="lq-summary-note">${!passed
+        ? 'Nézd át újra a pontokat, amik bizonytalanok, aztán próbáld meg ismét.'
+        : nextPractice ? 'Most jöhet a gyakorlás: a lecke anyaga feladatokban.'
+        : 'A lecke minden gyakorlása megvan. Mehet a következő lecke.'}</p>
       <div class="kana-summary-actions">
         ${passed
-          ? `<a class="btn btn-primary" href="../index.html#path">Tovább az úton</a>
-             <button class="btn btn-outline" id="lqBack" type="button">Vissza a leckéhez</button>`
+          ? `${nextPractice
+               ? '<a class="btn btn-primary" href="' + Path.stepHref(nextPractice.step, false) + '">Gyakorlás: ' + esc(nextPractice.step.title) + '</a>'
+               : '<a class="btn btn-primary" href="../index.html#path">Tovább az úton</a>'}
+             <button class="btn btn-outline" id="lqAgain" type="button">Még egy kör</button>
+             <button class="btn btn-ghost" id="lqBack" type="button">Vissza a leckéhez</button>`
           : `<button class="btn btn-primary" id="lqBack" type="button">Vissza a leckéhez</button>
              <button class="btn btn-outline" id="lqAgain" type="button">Újra</button>`}
       </div>`;
@@ -17329,7 +17413,7 @@ function initLessonPage() {
   });
 
   renderLesson();
-  window._lesson = { lesson, ruby, reading, startQuiz };
+  window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, practiceRows };
 }
 
 

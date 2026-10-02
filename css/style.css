@@ -7718,6 +7718,13 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
 .lp-check-sub { max-width: 44ch; margin: 6px auto 16px; font-size: var(--fs-sm); line-height: 1.55; color: var(--sumi-soft); }
 .lp-check .btn { width: 100%; max-width: 340px; }
 
+/* A lecke gyakorló lépései: a tanulási út lépései, innen is indíthatók */
+.lp-practice { margin-top: 14px; padding: 24px 16px; border-radius: var(--radius-xl); text-align: center; }
+.lp-practice-list { list-style: none; display: grid; gap: 8px; text-align: left; }
+.lp-practice .path-step-link { background: var(--glass-fill); border-color: var(--glass-fill-edge); box-shadow: none; }
+.lp-practice .path-step-link:hover { border-color: rgb(var(--brand-rgb) / 0.6); }
+.lp-toc-go { padding-left: 14px; color: var(--brand-deep); border-color: rgb(var(--brand-rgb) / 0.35); }
+
 /* Ellenőrző kör kártyája */
 .lq-question { font-size: var(--fs-md); font-weight: 700; line-height: 1.45; text-align: center; text-wrap: balance; }
 .lq-jp { margin-top: 10px; font-family: var(--font-jp); font-size: clamp(1.35rem, 5.6vw, 1.8rem); line-height: 2; text-align: center; color: var(--sumi); }
@@ -7736,5 +7743,5 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
   .lp-point { padding: 26px 28px; }
   .lp-ex-jp { font-size: var(--fs-lg); }
   .lp-toc { margin-left: 0; margin-right: 0; padding-left: 2px; padding-right: 2px; flex-wrap: wrap; overflow: visible; }
-  .lp-check { padding: 32px 28px; }
+  .lp-check, .lp-practice { padding: 32px 28px; }
 }

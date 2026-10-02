@@ -1230,7 +1230,7 @@ const NIHONCORE_PATH = [
 
   // ── 1. lecke ──
   { id: 'l1-lesson', glyph: '読', title: 'Magyarázat: です, は, の',
-    desc: 'Elolvasod, hogyan épül fel az első mondat, aztán öt kérdéssel ellenőrzöd.',
+    desc: 'Elolvasod, hogyan épül fel az első mondat, aztán tíz kérdéssel ellenőrzöd.',
     module: 'lesson', href: 'pages/lesson.html?id=l1' },
   { id: 'first-sentences', glyph: '文', title: 'Első mondatok',
     desc: 'は, の, か, も: töltsd ki a hiányzó partikulát.',

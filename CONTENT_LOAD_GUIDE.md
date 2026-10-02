@@ -715,6 +715,7 @@ A tanulási út a Dekiru 1 leckéit követi. Egy új lecke három helyen jelenik
               a: 'a helyes válasz', wrong: ['rossz 1', 'rossz 2', 'rossz 3'], why: 'Egy mondat: miért.' }] }
    ```
    - Kanji csak `{漢字|かな}` jelöléssel: ebből lesz a furigana és a felolvasott kana.
+   - Leckénként **10 saját kérdés** kell; egy kör 10 kérdés: 6 saját + 4 a példamondatokból készített fordítós kérdés (ezeket a kód állítja elő, nem kell megírni). Ehhez a lecke példamondatainak `jp` és `hu` mezője legyen egyedi a leckén belül.
    - A `wrong` pontosan három, egymástól és a helyestől különböző válasz; a kérdésnek egyetlen jó megoldása legyen (ha a hiány több partikulával is értelmes, add meg a magyar jelentést a kérdésben).
    - **Saját megfogalmazás és saját példamondat** kell: a tankönyv szövege, párbeszédei és feladatai nem másolhatók.
 2. **`js/data/core.js` → `NIHONCORE_PATH`**: a lecke lépései. Az első mindig a magyarázat (`module: 'lesson', href: 'pages/lesson.html?id=l9'`), utána a gyakorló lépések meglévő modulokból, `preset`-tel.
