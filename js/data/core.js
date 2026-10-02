@@ -1205,8 +1205,8 @@ const NIHONCORE_GRAMMAR_ERROR_TYPES = {
    Minden lecke egy magyarázó lépéssel indul (pages/lesson.html, a szövege a
    js/data/course.js-ben), utána a leckéhez illő gyakorló lépések jönnek a
    meglévő modulokból, előre beállított körrel.
-   Kész: 1–16. lecke. A 17. leckétől a régi, témák szerinti lépések állnak
-   az utolsó fejezetben, amíg azok a leckék is elkészülnek.
+   Kész: a Dekiru 1 mind a 24 leckéje. Az utolsó fejezet három általános,
+   összefoglaló lépés (hallás, minták, szabad fordítás).
 
    NIHONCORE_PATH — lépések:
      id       egyedi kulcs (a haladás ezzel mentődik)
@@ -1445,7 +1445,101 @@ const NIHONCORE_PATH = [
               ids: ['s_n4_app_006', 's_n4_app_007', 's_n4_app_008', 's_n4_app_010', 's_n4_app_013',
                     's_n4_app_016', 's_n4_app_019'] } },
 
-  // ── A 17. leckétől: egyelőre témák szerint ──
+  // ── 17. lecke ──
+  { id: 'l17-lesson', glyph: '読', title: 'Magyarázat: 〜とき, 〜てはいけません',
+    desc: 'Amikor…; mi szabad és mi tilos; két állítás egy mondatban.',
+    module: 'lesson', href: 'pages/lesson.html?id=l17' },
+  { id: 'l17-rules', glyph: '禁', title: 'Tilos! 〜てはいけません',
+    desc: 'Szabályok és tilalmak: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_prm_002', 's_n4_prm_003', 's_n4_prm_005', 's_n4_prm_006', 's_n4_prm_008',
+                    's_n4_prm_010', 's_n4_prm_012', 's_n4_prm_014', 's_n4_prm_016', 's_n4_prm_018'] } },
+
+  // ── 18. lecke ──
+  { id: 'l18-lesson', glyph: '読', title: 'Magyarázat: 〜かもしれません, 〜なります',
+    desc: 'Lehet, hogy…; változás; elhatározás; tiszteleti adás-kapás.',
+    module: 'lesson', href: 'pages/lesson.html?id=l18' },
+  { id: 'l18-change', glyph: '変', title: 'Mi lett belőle? 〜なります',
+    desc: '〜くなります, 〜になります: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_chg_001', 's_n4_chg_002', 's_n4_chg_003', 's_n4_chg_004', 's_n4_chg_005',
+                    's_n4_chg_015', 's_n4_chg_017'] } },
+
+  // ── 19. lecke ──
+  { id: 'l19-lesson', glyph: '読', title: 'Magyarázat: 〜なければなりません',
+    desc: 'Kell és nem kell; hogyan és merre mész; だけ és しか.',
+    module: 'lesson', href: 'pages/lesson.html?id=l19' },
+  { id: 'l19-nai', glyph: '要', title: 'ない-alak: írd be',
+    desc: 'A 〜なければなりません és a 〜なくてもいい alapja.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['nai'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+  { id: 'l19-patterns', glyph: '則', title: 'Szabad, tilos, kell',
+    desc: '〜てもいい, 〜てはいけない, 〜なければならない: mit fejez ki a mondat?',
+    module: 'grammar', href: 'pages/grammar.html',
+    preset: { only: { categories: ['permission', 'prohibition', 'obligation'] }, set: { mode: 'recognition' } } },
+
+  // ── 20. lecke ──
+  { id: 'l20-lesson', glyph: '読', title: 'Magyarázat: kinyitom és kinyílik',
+    desc: 'Tárgyas és tárgyatlan igék; állapot; A か B; 〜という.',
+    module: 'lesson', href: 'pages/lesson.html?id=l20' },
+  { id: 'l20-pairs', glyph: '対', title: 'を vagy が? Igepárok',
+    desc: 'Valaki csinálja (を) vagy magától történik (が)?',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'particles',
+              ids: ['s_n4_trn_001', 's_n4_trn_002', 's_n4_trn_003', 's_n4_trn_004', 's_n4_trn_005', 's_n4_trn_006',
+                    's_n4_trn_008', 's_n4_trn_010', 's_n4_trn_012', 's_n4_trn_013', 's_n4_trn_014', 's_n4_trn_016'] } },
+  { id: 'l20-verbs', glyph: '開', title: 'Igepárok alakjai',
+    desc: '開ける / 開く, 消す / 消える: a legfontosabb alakokban.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['masu', 'mashita', 'te'], themes: ['transitivity'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+
+  // ── 21. lecke ──
+  { id: 'l21-lesson', glyph: '読', title: 'Magyarázat: 〜くします, 〜てあります',
+    desc: 'Valamilyenné tesz; el van készítve; úgy hívják, azt mondta.',
+    module: 'lesson', href: 'pages/lesson.html?id=l21' },
+  { id: 'l21-te', glyph: '置', title: 'Igepárok て-alakja',
+    desc: 'A 〜てあります és a 〜ています alapja: most te írod le.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['te'], themes: ['transitivity'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+
+  // ── 22. lecke ──
+  { id: 'l22-lesson', glyph: '読', title: 'Magyarázat: 〜てあげます, 〜ておきます',
+    desc: 'Szívességek; előre megteszem; közben.',
+    module: 'lesson', href: 'pages/lesson.html?id=l22' },
+  { id: 'l22-favors', glyph: '助', title: 'Szívességek mondatban',
+    desc: '〜てあげます, 〜てくれます, 〜てもらいます: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_dyn_004', 's_n4_dyn_005', 's_n4_dyn_006', 's_n4_dyn_007', 's_n4_dyn_011', 's_n4_dyn_012',
+                    's_n4_dyn_013', 's_n4_dyn_015', 's_n4_dyn_016', 's_n4_dyn_018', 's_n4_dyn_020'] } },
+
+  // ── 23. lecke ──
+  { id: 'l23-lesson', glyph: '読', title: 'Magyarázat: udvarias kérések, 〜の',
+    desc: 'Tiszteleti szívességek; kérés; igéből főnév; まだ és もう.',
+    module: 'lesson', href: 'pages/lesson.html?id=l23' },
+  { id: 'l23-te', glyph: '願', title: 'Kérés előtt: て-alak',
+    desc: '貸して, 教えて, 送って: az udvarias kérések alapja.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['te'], themes: ['giving'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+
+  // ── 24. lecke ──
+  { id: 'l24-lesson', glyph: '読', title: 'Magyarázat: 〜てきます, 〜ていきます',
+    desc: 'Felém és tőlem el; változás eddig és ezután; állapotok.',
+    module: 'lesson', href: 'pages/lesson.html?id=l24' },
+  { id: 'l24-state', glyph: '止', title: 'Magától történt',
+    desc: 'が + tárgyatlan ige, 〜ています: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_trn_002', 's_n4_trn_004', 's_n4_trn_006', 's_n4_trn_008', 's_n4_trn_010',
+                    's_n4_trn_012', 's_n4_trn_014', 's_n4_trn_016', 's_n4_trn_018', 's_n4_trn_019'] } },
+
+  // ── A Dekiru 1 után: összefoglaló gyakorlás ──
   { id: 'listening', glyph: '聴', title: 'Hallás',
     desc: 'Hosszú és rövid hangok, kis っ: halld meg a különbséget.',
     module: 'listening', href: 'pages/listening.html',
@@ -1494,7 +1588,23 @@ const NIHONCORE_PATH_UNITS = [
     steps: ['l15-lesson', 'l15-permission'] },
   { id: 'u-l16',  kicker: 'Dekiru 1 · 16. lecke', title: 'Hobbi és tapasztalat', sub: '〜こと, 〜たことがあります, 〜ことができます',
     steps: ['l16-lesson', 'l16-experience'] },
-  { id: 'u-next', kicker: 'A 17. leckétől',       title: 'Haladó gyakorlás',     sub: 'Egyelőre témák szerint; a 17–24. lecke készül',
+  { id: 'u-l17',  kicker: 'Dekiru 1 · 17. lecke', title: 'Szabad és tilos',      sub: '〜とき; 〜てはいけません; A は B で、C は D です',
+    steps: ['l17-lesson', 'l17-rules'] },
+  { id: 'u-l18',  kicker: 'Dekiru 1 · 18. lecke', title: 'Készülődés',           sub: '〜かもしれません; 〜なります; 〜ことにします; さしあげます',
+    steps: ['l18-lesson', 'l18-change'] },
+  { id: 'u-l19',  kicker: 'Dekiru 1 · 19. lecke', title: 'Úton',                 sub: '〜なければなりません; 〜ていきます; だけ és しか',
+    steps: ['l19-lesson', 'l19-nai', 'l19-patterns'] },
+  { id: 'u-l20',  kicker: 'Dekiru 1 · 20. lecke', title: 'Városnézés',           sub: 'Tárgyas és tárgyatlan igék; 〜ています (állapot); 〜という',
+    steps: ['l20-lesson', 'l20-pairs', 'l20-verbs'] },
+  { id: 'u-l21',  kicker: 'Dekiru 1 · 21. lecke', title: 'Minden készen áll',    sub: '〜くします; 〜てあります; 〜といいます',
+    steps: ['l21-lesson', 'l21-te'] },
+  { id: 'u-l22',  kicker: 'Dekiru 1 · 22. lecke', title: 'Szívességek',          sub: '〜てあげます, 〜てくれます, 〜てもらいます; 〜ておきます; 〜ながら',
+    steps: ['l22-lesson', 'l22-favors'] },
+  { id: 'u-l23',  kicker: 'Dekiru 1 · 23. lecke', title: 'Udvarias kérések',     sub: '〜てくださいます, 〜ていただきます; 〜の; まだ és もう',
+    steps: ['l23-lesson', 'l23-te'] },
+  { id: 'u-l24',  kicker: 'Dekiru 1 · 24. lecke', title: 'Búcsú',                sub: '〜てきます, 〜ていきます; 〜ています (állapot)',
+    steps: ['l24-lesson', 'l24-state'] },
+  { id: 'u-next', kicker: 'A Dekiru 1 után',      title: 'Összefoglaló gyakorlás', sub: 'Hallás, nyelvtani minták, szabad fordítás; a Dekiru 2 leckéi ezután jönnek',
     steps: ['listening', 'patterns', 'production'] }
 ];
 

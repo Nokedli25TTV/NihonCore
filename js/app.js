@@ -17148,7 +17148,7 @@ function initLessonPage() {
     content.innerHTML = `
       <div class="stats-empty glass-panel">
         <p>Ez a lecke még nem készült el.</p>
-        <p class="stats-empty-sub">A tanulási út az 1–16. leckét tartalmazza; a többi folyamatosan készül.</p>
+        <p class="stats-empty-sub">A tanulási út a Dekiru 1 1–24. leckéjét tartalmazza.</p>
         <a href="../index.html#path" class="btn btn-primary">Vissza a tanulási útra</a>
       </div>`;
     return;
