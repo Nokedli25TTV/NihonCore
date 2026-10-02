@@ -1638,7 +1638,68 @@ const NIHONCORE_PATH = [
   { id: 'l32-patterns', glyph: '譲', title: 'Ha, akkor is ha, pedig',
     desc: '〜たら, 〜ても, 〜のに: mit fejez ki a mondat?',
     module: 'grammar', href: 'pages/grammar.html',
-    preset: { patterns: ['tara', 'temo', 'noni'], set: { mode: 'recognition' } } }
+    preset: { patterns: ['tara', 'temo', 'noni'], set: { mode: 'recognition' } } },
+
+  // ── 33. lecke ──
+  { id: 'l33-lesson', glyph: '読', title: 'Magyarázat: 〜そうです, 〜みたい',
+    desc: 'Minek látszik; olyan, mint; körülbelül; íz, illat, hang.',
+    module: 'lesson', href: 'pages/lesson.html?id=l33' },
+  { id: 'l33-looks', glyph: '様', title: 'Minek látszik?',
+    desc: '〜そうです, 〜みたいです: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_app_001', 's_n4_app_002', 's_n4_app_003', 's_n4_app_005', 's_n4_app_009',
+                    's_n4_app_011', 's_n4_app_012', 's_n4_app_015', 's_n4_app_018', 's_n4_app_020'] } },
+
+  // ── 34. lecke ──
+  { id: 'l34-lesson', glyph: '読', title: 'Magyarázat: hallomás, 〜らしい',
+    desc: 'Azt hallottam; … szerint; úgy tudni.',
+    module: 'lesson', href: 'pages/lesson.html?id=l34' },
+
+  // ── 35. lecke ──
+  { id: 'l35-lesson', glyph: '読', title: 'Magyarázat: 〜方, 〜かわりに, 〜まま',
+    desc: 'Hogyan kell; helyett; úgy, ahogy van.',
+    module: 'lesson', href: 'pages/lesson.html?id=l35' },
+
+  // ── 36. lecke ──
+  { id: 'l36-lesson', glyph: '読', title: 'Magyarázat: szenvedő alak',
+    desc: 'Megrendezik, megépítették; ki készítette; nagyjából mettől meddig.',
+    module: 'lesson', href: 'pages/lesson.html?id=l36' },
+  { id: 'l36-passive', glyph: '受', title: 'Szenvedő alak',
+    desc: '書かれます, 食べられます, されます: ismerd fel a helyes alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['passive'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+
+  // ── 37. lecke ──
+  { id: 'l37-lesson', glyph: '読', title: 'Magyarázat: megdicsértek, elloptak',
+    desc: 'Szenvedő mondat emberrel; kellemetlenség; 〜おかげで.',
+    module: 'lesson', href: 'pages/lesson.html?id=l37' },
+  { id: 'l37-passive-w', glyph: '被', title: 'Szenvedő alak: írd be',
+    desc: 'Most te képzed a szenvedő alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['passive'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+
+  // ── 38. lecke ──
+  { id: 'l38-lesson', glyph: '読', title: 'Magyarázat: tiszteleti nyelv',
+    desc: 'お〜になります, いらっしゃいます, ご〜ください; 〜うちに.',
+    module: 'lesson', href: 'pages/lesson.html?id=l38' },
+  { id: 'l38-honorific', glyph: '敬', title: 'Tiszteleti alak a mozgás igéivel',
+    desc: '来られます, 帰られます, 行かれます: ugyanaz az alak, tisztelettel.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['passive'], themes: ['movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+
+  // ── 39. lecke ──
+  { id: 'l39-lesson', glyph: '読', title: 'Magyarázat: szerény nyelv',
+    desc: 'お〜します, 参ります, 申します; könnyű, nehéz, túl sok.',
+    module: 'lesson', href: 'pages/lesson.html?id=l39' },
+
+  // ── 40. lecke ──
+  { id: 'l40-lesson', glyph: '読', title: 'Magyarázat: bármi, elkezd, folytat',
+    desc: 'いくら〜ても, 何でも; 〜始めます, 〜続けます; 〜そうです.',
+    module: 'lesson', href: 'pages/lesson.html?id=l40' }
 ];
 
 const NIHONCORE_PATH_UNITS = [
@@ -1709,7 +1770,23 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l31',  kicker: 'Dekiru 2 · 31. lecke', title: 'Útbaigazítás',         sub: '〜と; 〜にくらべて; 見えます, 聞こえます; 〜ようです',
     steps: ['l31-lesson', 'l31-senses'] },
   { id: 'u-l32',  kicker: 'Dekiru 2 · 32. lecke', title: 'Külföldi tanulmányok', sub: '〜ても; 〜ことになります; 〜ばかり; 〜ために',
-    steps: ['l32-lesson', 'l32-patterns'] }
+    steps: ['l32-lesson', 'l32-patterns'] },
+  { id: 'u-l33',  kicker: 'Dekiru 2 · 33. lecke', title: 'A konyhában',          sub: '〜そうです (látszat); 〜みたいな; 〜くらい; 〜がします',
+    steps: ['l33-lesson', 'l33-looks'] },
+  { id: 'u-l34',  kicker: 'Dekiru 2 · 34. lecke', title: 'Mit hallottál?',       sub: '〜そうです (hallomás); 〜によると; 〜らしいです',
+    steps: ['l34-lesson'] },
+  { id: 'u-l35',  kicker: 'Dekiru 2 · 35. lecke', title: 'Hogyan kell?',         sub: '〜方; 〜かわりに; 〜にかわって; 〜まま',
+    steps: ['l35-lesson'] },
+  { id: 'u-l36',  kicker: 'Dekiru 2 · 36. lecke', title: 'Rendezvény',           sub: 'Szenvedő alak; 〜によって; 〜から〜にかけて; 〜でも',
+    steps: ['l36-lesson', 'l36-passive'] },
+  { id: 'u-l37',  kicker: 'Dekiru 2 · 37. lecke', title: 'Baj történt',          sub: 'Szenvedő mondat emberrel; kellemetlenség; 〜おかげで',
+    steps: ['l37-lesson', 'l37-passive-w'] },
+  { id: 'u-l38',  kicker: 'Dekiru 2 · 38. lecke', title: 'Tiszteletteljes beszéd', sub: 'お〜になります; いらっしゃいます; ご〜ください; 〜うちに',
+    steps: ['l38-lesson', 'l38-honorific'] },
+  { id: 'u-l39',  kicker: 'Dekiru 2 · 39. lecke', title: 'Szerényen szólva',     sub: 'お〜します; 参ります, 申します; 〜やすい, 〜にくい; 〜すぎます',
+    steps: ['l39-lesson'] },
+  { id: 'u-l40',  kicker: 'Dekiru 2 · 40. lecke', title: 'Interjú',              sub: 'いくら〜ても; 何でも; 〜始めます, 〜出します, 〜続けます',
+    steps: ['l40-lesson'] }
 ];
 
 /* ====================================================
