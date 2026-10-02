@@ -127,12 +127,13 @@
   --panel-shadow:  var(--glass-shadow);
 
   /* ── Tipográfia ──────────────────────────────────────
-     Nunito: UI · Lora: logó, modul-címek · Noto Serif JP: japán szöveg */
-  --font-jp:    'Noto Serif JP', 'Zen Kaku Gothic New', 'Noto Sans JP', serif;
+     Figtree: UI és címek · Sora: logó · Lora: magyar példamondat ·
+     Noto Sans JP: MINDEN japán szöveg (talp nélküli, jól olvasható — user-döntés) */
+  --font-jp:    'Noto Sans JP', 'Zen Kaku Gothic New', system-ui, sans-serif;
   --font-body:  'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
   --font-logo:  'Sora', 'Figtree', system-ui, sans-serif;   /* csak a NihonCore felirat */
-  --font-jp-text: 'Noto Sans JP', 'Zen Kaku Gothic New', system-ui, sans-serif;   /* japán FOLYÓSZÖVEG (mondatok): talp nélküli, kis méretben is olvasható */
+  --font-jp-text: var(--font-jp);   /* régi név: ugyanaz, mint a --font-jp */
 
   /* Fix betűméret-skála: 12 · 13 · 14 · 16 · 18 · 20 · 24 · 32 · 40 · 48 px.
      12 px alatt nincs szöveg. A dísz-méretek (japán kártya-glyph) em/clamp-ban maradnak. */
@@ -7619,9 +7620,7 @@ html.theme-sumi .path-pop { background: #1B2038; }
    Rajzolja: app.js → initLessonPage; a szöveg: js/data/course.js.
    ════════════════════════════════════════════════════════ */
 .lesson-main { max-width: 760px; }
-/* Japán szöveg a lecke-oldalon: a mondatok talp nélküli betűvel (--font-jp-text) jelennek meg,
-   mert a talpas betű kis méretben nehezen olvasható. A magyar szövegbe ágyazott japánnál
-   a latin betű a UI-betű marad. A lépések nagy jele (.path-glyph) marad a díszesebb betű. */
+/* Japán szöveg a lecke-oldalon. A magyar szövegbe ágyazott japánnál a latin betű a UI-betű marad. */
 .lesson-main [lang="ja"], .lesson-main rt { font-family: var(--font-jp-text); }
 .lesson-main .lp-body, .lesson-main .lp-tip, .lesson-main .lp-pattern, .lesson-main .lp-point-title,
 .lesson-main .lp-toc-link, .lesson-main .lp-toc-link [lang="ja"], .lesson-main .lq-question, .lesson-main .lp-point-sub {
