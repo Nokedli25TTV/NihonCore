@@ -719,6 +719,8 @@ A tanulási út a Dekiru 1 leckéit követi. Egy új lecke három helyen jelenik
    - A `wrong` pontosan három, egymástól és a helyestől különböző válasz; a kérdésnek egyetlen jó megoldása legyen (ha a hiány több partikulával is értelmes, add meg a magyar jelentést a kérdésben).
    - **Saját megfogalmazás és saját példamondat** kell: a tankönyv szövege, párbeszédei és feladatai nem másolhatók.
 2. **`js/data/core.js` → `NIHONCORE_PATH`**: a lecke lépései. Az első mindig a magyarázat (`module: 'lesson', href: 'pages/lesson.html?id=l9'`), utána a gyakorló lépések meglévő modulokból, `preset`-tel.
+   - Mondat-Mester lépés adott mondatokra: `preset: { level: 'N4', mode: 'puzzle', ids: ['s_n4_prm_001', …] }`. A kör ilyenkor a teljes felsorolt készletet végigveszi (legfeljebb 10 mondat). Legalább 5 mondat legyen benne.
+   - `mode: 'particles'` csak olyan mondattal működik, amelyben van partikula-token, és mindegyik szerepel a tálcán (`NIHONCORE_PARTICLES`: は が を に で へ と も の から まで). A más partikulát (か, ね, よ, なら, でも) tartalmazó mondat a partikula-módból kimarad; puzzle-módban használható.
 3. **`js/data/core.js` → `NIHONCORE_PATH_UNITS`**: a fejezet (`kicker: 'Dekiru 1 · 9. lecke'`, `title`, `sub`, `steps`).
 
 Ellenőrzés: minden `steps` azonosító létezzen a `NIHONCORE_PATH`-ban, és minden lépés szerepeljen pontosan egy fejezetben.

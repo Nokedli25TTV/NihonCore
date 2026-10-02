@@ -414,6 +414,18 @@ const NIHONCORE_PARTICLES = [
     hint: 'Birtokos / leíró',
     shortPurpose: 'birtoklás / leírás',
     fullExplain: 'birtoklást vagy leíró kapcsolatot jelöl (X-é, X tulajdonsága)'
+  },
+  {
+    id: 'kara', jp: 'から', romaji: 'kara',
+    hint: 'Kiindulópont ("-tól, -ból") vagy ok ("mert")',
+    shortPurpose: 'kiindulópont / ok',
+    fullExplain: 'kiindulópontot jelöl (honnan, kitől, mettől), mondat végén pedig okot ad meg ("mert")'
+  },
+  {
+    id: 'made', jp: 'まで', romaji: 'made',
+    hint: 'Végpont ("-ig")',
+    shortPurpose: 'végpont',
+    fullExplain: 'végpontot jelöl (meddig: hely vagy idő)'
   }
 ];
 
@@ -1193,7 +1205,7 @@ const NIHONCORE_GRAMMAR_ERROR_TYPES = {
    Minden lecke egy magyarázó lépéssel indul (pages/lesson.html, a szövege a
    js/data/course.js-ben), utána a leckéhez illő gyakorló lépések jönnek a
    meglévő modulokból, előre beállított körrel.
-   Kész: 1–8. lecke. A 9. leckétől a régi, témák szerinti lépések állnak
+   Kész: 1–16. lecke. A 17. leckétől a régi, témák szerinti lépések állnak
    az utolsó fejezetben, amíg azok a leckék is elkészülnek.
 
    NIHONCORE_PATH — lépések:
@@ -1209,7 +1221,8 @@ const NIHONCORE_GRAMMAR_ERROR_TYPES = {
                 only: { térkép-kulcs: [bekapcsolt elemek] }  — a többi ki
                 set:  { skalár kulcs: érték }
               Mondat-Mester: level, mode, particlesOnly / particlesAny,
-                             idRanges: [[tól, ig], …] az s_n5_NNN mondatokra
+                             idRanges: [[tól, ig], …] az s_n5_NNN mondatokra,
+                             ids: [mondat-azonosítók] — pontosan ezek a mondatok
               Számlálók:     counters: [számláló-azonosítók]
               Alap igék:     category: 'existence' | 'consumption' | 'movement'
    A lépés akkor „kész", ha az innen indított kör legalább 60%-os.
@@ -1330,12 +1343,109 @@ const NIHONCORE_PATH = [
     preset: { only: { forms: ['i_present_affirmative', 'i_present_negative', 'na_noun_modifier', 'na_present_affirmative', 'na_present_negative'] },
               set: { mode: 'recognition' } } },
 
-  // ── A 9. leckétől: egyelőre témák szerint ──
-  { id: 'verb-forms', glyph: '活', title: 'Te-, nai- és ta-alak',
-    desc: 'A három igecsoport és a bizalmas alakok.',
-    module: 'conjugation', href: 'pages/conjugation.html',
-    preset: { only: { forms: ['nai', 'te', 'ta'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+  // ── 9. lecke ──
+  { id: 'l9-lesson', glyph: '読', title: 'Magyarázat: 〜かった, 〜でした, て-alak',
+    desc: 'Múlt idő a mellékneveknél, és a て-alak, ami mondatokat fűz össze.',
+    module: 'lesson', href: 'pages/lesson.html?id=l9' },
+  { id: 'l9-adj-past', glyph: '昔', title: 'Melléknevek múlt időben',
+    desc: '〜かったです, 〜くなかったです, 〜でした: milyen volt?',
+    module: 'adjectives', href: 'pages/adjectives.html',
+    preset: { only: { forms: ['i_past_affirmative', 'i_past_negative', 'na_past_affirmative', 'na_past_negative'] },
               set: { mode: 'recognition' } } },
+  { id: 'l9-te', glyph: 'て', title: 'A て-alak',
+    desc: 'って, んで, いて, して: ismerd fel a helyes alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['te'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+
+  // ── 10. lecke ──
+  { id: 'l10-lesson', glyph: '読', title: 'Magyarázat: より, いちばん, 〜てください',
+    desc: 'Összehasonlítás, kérés, „miután", „kipróbálom".',
+    module: 'lesson', href: 'pages/lesson.html?id=l10' },
+  { id: 'l10-te', glyph: '書', title: 'て-alak: írd be',
+    desc: 'A 〜てください, 〜てから, 〜てみます alapja: most te írod le.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['te'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+
+  // ── 11. lecke ──
+  { id: 'l11-lesson', glyph: '読', title: 'Magyarázat: た-alak, ない-alak, tanács',
+    desc: 'A rövid alakok; 〜たほうがいい, 〜ないでください, 〜んです.',
+    module: 'lesson', href: 'pages/lesson.html?id=l11' },
+  { id: 'verb-forms', glyph: '活', title: 'ない- és た-alak',
+    desc: 'A rövid tagadás és a rövid múlt: ismerd fel a helyes alakot.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['nai', 'ta'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+
+  // ── 12. lecke ──
+  { id: 'l12-lesson', glyph: '読', title: 'Magyarázat: közvetlen stílus, 〜ています',
+    desc: 'Baráti beszéd, folyamat és állapot, mondat a főnév előtt.',
+    module: 'lesson', href: 'pages/lesson.html?id=l12' },
+  { id: 'l12-forms', glyph: '短', title: 'Rövid alakok: írd be',
+    desc: 'ない-, て- és た-alak vegyesen, a ruházkodás igéivel is.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['nai', 'te', 'ta'], themes: ['daily', 'movement', 'clothing'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'mastery' } } },
+  { id: 'l12-teiru', glyph: '今', title: 'Éppen most: 〜ています',
+    desc: 'Rakd össze a 〜ています-es és a baráti stílusú mondatokat.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_001', 's_n4_004', 's_n4_006', 's_n4_008', 's_n4_009', 's_n4_010', 's_n4_011'] } },
+
+  // ── 13. lecke ──
+  { id: 'l13-lesson', glyph: '読', title: 'Magyarázat: 〜ので, あげます, もらいます',
+    desc: 'Indoklás, választás, adás és kapás.',
+    module: 'lesson', href: 'pages/lesson.html?id=l13' },
+  { id: 'l13-giving', glyph: '贈', title: 'Ki kinek ad?',
+    desc: 'に, を, が, から: partikulák az adás-kapás mondataiban.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'particles',
+              ids: ['s_n4_002', 's_n4_020', 's_n4_dyn_001', 's_n4_dyn_002', 's_n4_dyn_003', 's_n4_dyn_017'] } },
+  { id: 'l13-verbs', glyph: '貸', title: 'Adok, kapok, kölcsönadok',
+    desc: 'あげる, もらう, くれる, 貸す, 返す: a legfontosabb alakokban.',
+    module: 'conjugation', href: 'pages/conjugation.html',
+    preset: { only: { forms: ['masu', 'mashita', 'te', 'ta'], themes: ['giving'], groups: ['godan', 'ichidan', 'irregular'] },
+              set: { mode: 'recognition' } } },
+
+  // ── 14. lecke ──
+  { id: 'l14-lesson', glyph: '読', title: 'Magyarázat: もう, まだ, 〜と思います',
+    desc: 'Már és még nem; előtte, utána; vélemény, vágy, szándék.',
+    module: 'lesson', href: 'pages/lesson.html?id=l14' },
+  { id: 'l14-patterns', glyph: '思', title: 'Vágy, vélemény, szándék',
+    desc: '〜たい, 〜と思う, 〜つもり: ismerd fel, mit fejez ki a mondat.',
+    module: 'grammar', href: 'pages/grammar.html',
+    preset: { only: { categories: ['desire', 'opinion', 'intention'] }, set: { mode: 'recognition' } } },
+  { id: 'l14-plans', glyph: '予', title: 'Tervek mondatban',
+    desc: 'つもりです, 〜たいです, もう, まだ: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_011', 's_n4_021', 's_n4_vol_001', 's_n4_vol_002', 's_n4_vol_005', 's_n4_vol_006',
+                    's_n4_vol_008', 's_n4_vol_009', 's_n4_vol_013', 's_n4_vol_018'] } },
+
+  // ── 15. lecke ──
+  { id: 'l15-lesson', glyph: '読', title: 'Magyarázat: 〜でしょう, 〜てしまう, 〜たり',
+    desc: 'Feltevés, sajnálkozás, felsorolás, ok, engedélykérés.',
+    module: 'lesson', href: 'pages/lesson.html?id=l15' },
+  { id: 'l15-permission', glyph: '可', title: 'Szabad? 〜てもいいですか',
+    desc: 'Engedélyt kérsz és adsz: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_prm_001', 's_n4_prm_004', 's_n4_prm_007', 's_n4_prm_009', 's_n4_prm_011',
+                    's_n4_prm_013', 's_n4_prm_015', 's_n4_prm_017', 's_n4_prm_019', 's_n4_prm_020'] } },
+
+  // ── 16. lecke ──
+  { id: 'l16-lesson', glyph: '読', title: 'Magyarázat: 〜こと, 〜たことがある, できます',
+    desc: 'Hobbi, tapasztalat, képesség, tiszteleti kérés.',
+    module: 'lesson', href: 'pages/lesson.html?id=l16' },
+  { id: 'l16-experience', glyph: '験', title: 'Csináltam már: 〜たことがあります',
+    desc: 'Tapasztalat állítva, tagadva, kérdezve: rakd össze a mondatot.',
+    module: 'practice', href: 'pages/practice.html',
+    preset: { level: 'N4', mode: 'puzzle',
+              ids: ['s_n4_app_006', 's_n4_app_007', 's_n4_app_008', 's_n4_app_010', 's_n4_app_013',
+                    's_n4_app_016', 's_n4_app_019'] } },
+
+  // ── A 17. leckétől: egyelőre témák szerint ──
   { id: 'listening', glyph: '聴', title: 'Hallás',
     desc: 'Hosszú és rövid hangok, kis っ: halld meg a különbséget.',
     module: 'listening', href: 'pages/listening.html',
@@ -1368,8 +1478,24 @@ const NIHONCORE_PATH_UNITS = [
     steps: ['l7-lesson', 'l7-ga'] },
   { id: 'u-l8',   kicker: 'Dekiru 1 · 8. lecke', title: 'Milyen?',             sub: 'い- és な-melléknevek, 〜たいです',
     steps: ['l8-lesson', 'adjectives'] },
-  { id: 'u-next', kicker: 'A 9. leckétől',       title: 'Haladó gyakorlás',    sub: 'Egyelőre témák szerint; a leckékre bontás készül',
-    steps: ['verb-forms', 'listening', 'patterns', 'production'] }
+  { id: 'u-l9',   kicker: 'Dekiru 1 · 9. lecke',  title: 'Milyen volt?',         sub: 'Múlt idejű melléknevek; a て-alak',
+    steps: ['l9-lesson', 'l9-adj-past', 'l9-te'] },
+  { id: 'u-l10',  kicker: 'Dekiru 1 · 10. lecke', title: 'Melyik a jobb?',       sub: 'より, いちばん; 〜てください, 〜てから, 〜てみます',
+    steps: ['l10-lesson', 'l10-te'] },
+  { id: 'u-l11',  kicker: 'Dekiru 1 · 11. lecke', title: 'Mit tegyek?',          sub: 'た- és ない-alak; tanács, tiltás, 〜んです',
+    steps: ['l11-lesson', 'verb-forms'] },
+  { id: 'u-l12',  kicker: 'Dekiru 1 · 12. lecke', title: 'Barátok között',       sub: 'Közvetlen stílus; 〜ています; jelzős szerkezet',
+    steps: ['l12-lesson', 'l12-forms', 'l12-teiru'] },
+  { id: 'u-l13',  kicker: 'Dekiru 1 · 13. lecke', title: 'Ajándék',              sub: '〜ので, 〜にします; あげます, くれます, もらいます',
+    steps: ['l13-lesson', 'l13-giving', 'l13-verbs'] },
+  { id: 'u-l14',  kicker: 'Dekiru 1 · 14. lecke', title: 'Tervek és vélemények', sub: 'もう és まだ; 〜と思います, 〜がほしい, 〜つもりです',
+    steps: ['l14-lesson', 'l14-patterns', 'l14-plans'] },
+  { id: 'u-l15',  kicker: 'Dekiru 1 · 15. lecke', title: 'Találkozunk?',         sub: '〜でしょう, 〜てしまいます, 〜たり; 〜てもいいですか',
+    steps: ['l15-lesson', 'l15-permission'] },
+  { id: 'u-l16',  kicker: 'Dekiru 1 · 16. lecke', title: 'Hobbi és tapasztalat', sub: '〜こと, 〜たことがあります, 〜ことができます',
+    steps: ['l16-lesson', 'l16-experience'] },
+  { id: 'u-next', kicker: 'A 17. leckétől',       title: 'Haladó gyakorlás',     sub: 'Egyelőre témák szerint; a 17–24. lecke készül',
+    steps: ['listening', 'patterns', 'production'] }
 ];
 
 /* ====================================================

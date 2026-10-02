@@ -5521,6 +5521,7 @@ function initPracticePage() {
         lobbyState.mode = btn.dataset.mode;
         document.querySelectorAll('.pl-mode-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
+        updateLobbyMatchCount();   // a két mód készlete eltérhet
       });
     });
 
@@ -5605,8 +5606,10 @@ function initPracticePage() {
   const metaLabel = v => META_LABELS[v] || v;
 
   // Tanulási út: a lépés megszabhatja, mely partikulák szerepeljenek a körben
-  // Tanulási út: a lépés az s_n5_NNN mondatok egy tartományára szűkítheti a kört
+  // Tanulási út: a lépés az s_n5_NNN mondatok egy tartományára (idRanges)
+  // vagy felsorolt mondatokra (ids) szűkítheti a kört
   function matchesIdRanges(s) {
+    if (lobbyState.ids) return lobbyState.ids.indexOf(s.id) >= 0;
     const ranges = lobbyState.idRanges;
     if (!ranges) return true;
     const m = /^s_n5_(\d+)$/.exec(s.id || '');
@@ -5623,9 +5626,18 @@ function initPracticePage() {
     return true;
   }
 
+  // Partikula-mód: csak az a mondat kerülhet a körbe, amelyben van kitöltendő
+  // partikula, és mindegyik szerepel a tálcán (különben a kártya megoldhatatlan).
+  const TRAY_IDS = NIHONCORE_PARTICLES.map(p => p.id);
+  function particleSolvable(s) {
+    const ps = s.tokens.filter(t => t.type === 'particle');
+    return ps.length > 0 && ps.every(t => TRAY_IDS.indexOf(t.romaji) >= 0);
+  }
+
   function filterSentences() {
     return NIHONCORE_SENTENCES.filter(s => {
       if (s.level !== lobbyState.level) return false;
+      if (lobbyState.mode === 'particles' && !particleSolvable(s)) return false;
       if (!matchesIdRanges(s)) return false;
       if (!matchesParticleFocus(s)) return false;
       if (!lobbyState.filters.function[sentenceFunction(s)]) return false;
@@ -6273,6 +6285,31 @@ function initPracticePage() {
     if (tokens.length !== sentence.tokens.length) {
       return { valid: false, errorType: 'incomplete', message: 'Még nincs minden token a válasz-területen.', hint: 'Húzd / kattintsd a maradék tokeneket a tálcáról.' };
     }
+
+    // A mondat eredeti sorrendje mindig helyes (az azonos szövegű tokenek felcserélhetők).
+    const sameTok = (a, b) => a.type === b.type && a.jp === b.jp;
+    const orig = sentence.tokens;
+    if (tokens.every((t, i) => sameTok(t, orig[i]))) return { valid: true };
+
+    // Összetett állítmány (行く つもりです · 撮って も いいですか · 行った こと が あります):
+    // több ige, ige utáni partikula vagy segédszó. Itt az első igétől a mondat végéig
+    // kötött a sorrend; előtte a „szó + partikula" egységek szabadon cserélhetők.
+    const firstVerb = orig.findIndex(t => t.type === 'verb');
+    if (firstVerb !== orig.length - 1) {
+      const cut = firstVerb < 0 ? orig.length - 1 : firstVerb;
+      const tailOk = tokens.slice(cut).every((t, i) => sameTok(t, orig[cut + i]));
+      if (!tailOk) {
+        return { valid: false, errorType: 'predicate_order',
+          message: `Ennek a mondatnak a vége több szóból álló állítmány: <strong class="pp-fb-jp">${orig.slice(cut).map(t => t.jp).join(' ')}</strong>. Ezek a mondat végén, ebben a sorrendben állnak.`,
+          hint: 'Az előtte álló „szó + partikula" párok sorrendje szabad, de a pár tagjai együtt maradnak.' };
+      }
+      const headKeys = arr => extractPhrases(arr.slice(0, cut)).map(phraseKey).sort().join('||');
+      if (headKeys(tokens) !== headKeys(orig)) {
+        return { valid: false, errorType: 'pair_broken', message: 'Egy főnév-partikula pár fel van bontva — ezek mindig együtt kell maradjanak.', hint: 'A „szó + partikula" mindig egymás mellett áll a japánban (pl. <strong class="pp-fb-jp">寿司を</strong>, <strong class="pp-fb-jp">公園に</strong>).' };
+      }
+      return { valid: true };
+    }
+
     const last = tokens[tokens.length - 1];
     if (last.type !== 'verb') {
       return { valid: false, errorType: 'verb_not_at_end', message: 'A japán mondatban az ige <strong>mindig a mondat végén</strong> áll.', hint: `Az ige itt: <strong class="pp-fb-jp">${sentence.tokens.find(t => t.type === 'verb').jp}</strong> — tedd a legvégére.` };
@@ -6402,6 +6439,7 @@ function initPracticePage() {
       case 'particle_after_verb':     return 'Partikula az ige után';
       case 'particle_after_particle': return 'Két partikula egymás után';
       case 'pair_broken':             return 'Felbontott főnév-partikula pár';
+      case 'predicate_order':         return 'Az állítmány szavai nem a mondat végén állnak';
       default:                        return 'Hibás sorrend';
     }
   }
@@ -6436,8 +6474,19 @@ function initPracticePage() {
     if (p.particlesOnly) lobbyState.particlesOnly = p.particlesOnly;
     if (p.particlesAny)  lobbyState.particlesAny  = p.particlesAny;
     if (p.idRanges)      lobbyState.idRanges      = p.idRanges;
+    if (p.ids)           lobbyState.ids           = p.ids;
     if (p.level) document.querySelector('.pl-level-btn[data-level="' + p.level + '"]')?.click();
     if (p.mode)  document.querySelector('.pl-mode-btn[data-mode="' + p.mode + '"]')?.click();
+    // Felsorolt mondatoknál a kör a teljes készletet végigveszi (legfeljebb 10 mondat)
+    if (p.ids) {
+      const n = Math.min(10, filterSentences().length);
+      if (n > 0) {
+        lobbyState.cardCount = n;
+        document.querySelectorAll('.ml-count-btn').forEach(b => b.classList.toggle('active', parseInt(b.dataset.count, 10) === n));
+        const custom = document.getElementById('plCustomCount');
+        if (custom) custom.value = document.querySelector('.ml-count-btn.active') ? '' : String(n);
+      }
+    }
     updateLobbyMatchCount();
   })();
 
@@ -17081,6 +17130,7 @@ function initLessonPage() {
   const RB = /\{([^|{}]+)\|([^|{}]+)\}/g;
   const ruby = s => esc(s).replace(RB, '<ruby>$1<rt>$2</rt></ruby>');       // képernyőre
   const reading = s => String(s).replace(RB, '$2').replace(/[\s　＿…]/g, '');  // felolvasásra
+  const rubyHtml = s => String(s).replace(RB, '<ruby>$1<rt>$2</rt></ruby>');   // HTML-es magyarázó szövegbe (body, tip)
   const hasJp = s => /[぀-ヿ一-鿿]/.test(s);
   const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
   const PLAY = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
@@ -17098,7 +17148,7 @@ function initLessonPage() {
     content.innerHTML = `
       <div class="stats-empty glass-panel">
         <p>Ez a lecke még nem készült el.</p>
-        <p class="stats-empty-sub">A tanulási út az 1–8. leckét tartalmazza; a többi folyamatosan készül.</p>
+        <p class="stats-empty-sub">A tanulási út az 1–16. leckét tartalmazza; a többi folyamatosan készül.</p>
         <a href="../index.html#path" class="btn btn-primary">Vissza a tanulási útra</a>
       </div>`;
     return;
@@ -17164,8 +17214,8 @@ function initLessonPage() {
           <h2 class="lp-point-title" lang="ja">${esc(p.title)}</h2>
           <span class="lp-point-sub">${esc(p.sub)}</span>
         </div>
-        <div class="lp-pattern" lang="ja">${esc(p.pattern)}</div>
-        <p class="lp-body">${p.body}</p>
+        <div class="lp-pattern" lang="ja">${ruby(p.pattern)}</div>
+        <p class="lp-body">${rubyHtml(p.body)}</p>
         <ul class="lp-examples">
           ${p.examples.map((e, k) => `
             <li class="lp-ex">
@@ -17177,7 +17227,7 @@ function initLessonPage() {
               </div>
             </li>`).join('')}
         </ul>
-        ${p.tip ? `<div class="lp-tip"><strong>Figyelj:</strong> ${p.tip}</div>` : ''}
+        ${p.tip ? `<div class="lp-tip"><strong>Figyelj:</strong> ${rubyHtml(p.tip)}</div>` : ''}
       </section>`).join('');
 
     content.innerHTML = `
@@ -17345,7 +17395,7 @@ function initLessonPage() {
         </div>` : ''}
         <div class="pfe-row pfe-context">
           <span class="pfe-label">Miért?</span>
-          <span class="pfe-text">${esc(q.why)}</span>
+          <span class="pfe-text">${ruby(q.why)}</span>
         </div>
       </div>
       <button class="btn btn-primary cj-next" id="lqNext" type="button">${isLast ? 'Eredmény' : 'Következő'}</button>`;
