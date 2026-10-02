@@ -43,7 +43,7 @@
 .panel-quote { display: flex; flex-direction: column; gap: 6px; }
 .quote-kanji   { font-family: var(--font-jp); font-size: 4.6rem; font-weight: 500; line-height: 1.1; color: var(--sumi); }
 .quote-reading { font-size: var(--fs-sm); letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold-ink); font-weight: 700; }
-.quote-meaning { font-family: var(--font-serif); font-size: var(--fs-lg); font-style: italic; color: var(--sumi-soft); margin-top: 8px; }
+.quote-meaning { font-family: var(--font-serif); font-size: var(--fs-lg); font-style: normal; color: var(--sumi-soft); margin-top: 8px; }
 
 .panel-features { display: flex; flex-direction: column; gap: 10px; }
 .pf-item { display: flex; align-items: center; gap: 12px; color: var(--sumi-soft); font-size: var(--fs-base); }

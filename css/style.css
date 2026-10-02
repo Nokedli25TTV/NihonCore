@@ -32,8 +32,8 @@
   --washi-edge:   rgb(var(--tint-rgb) / 0.10);
 
   --sumi:         #171C2E;
-  --sumi-soft:    #434A62;
-  --sumi-faint:   #626A84;       /* 4,9:1 washi-n — a legkisebb szövegnek is elég */
+  --sumi-soft:    #353C55;
+  --sumi-faint:   #565E7A;       /* 4,9:1 washi-n — a legkisebb szövegnek is elég */
   --sumi-line:    rgb(var(--tint-rgb) / 0.12);
 
   --brand:       #3B63EB;       /* felület, keret, jelzés */
@@ -129,9 +129,9 @@
   /* ── Tipográfia ──────────────────────────────────────
      Figtree: UI és címek · Sora: logó · Lora: magyar példamondat ·
      Noto Sans JP: MINDEN japán szöveg (talp nélküli, jól olvasható — user-döntés) */
-  --font-jp:    'Noto Sans JP', 'Zen Kaku Gothic New', system-ui, sans-serif;
+  --font-jp:    'Figtree', 'Noto Sans JP', 'Zen Kaku Gothic New', system-ui, sans-serif;   /* latin: Figtree · kana, kanji: Noto Sans JP */
   --font-body:  'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-serif: 'Lora', Georgia, 'Times New Roman', serif;
+  --font-serif: var(--font-body);   /* a talpas betű megszűnt (vékony volt); a név a régi szabályok miatt maradt */
   --font-logo:  'Sora', 'Figtree', system-ui, sans-serif;   /* csak a NihonCore felirat */
   --font-jp-text: var(--font-jp);   /* régi név: ugyanaz, mint a --font-jp */
 
@@ -228,7 +228,7 @@ body {
   background-color: var(--washi);
   color: var(--sumi);
   font-family: var(--font-body);
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.6;
   min-height: 100vh;
   min-height: 100dvh;
@@ -267,7 +267,7 @@ ruby { ruby-position: over; ruby-align: center; }
 rt {
   font-family: var(--font-jp);
   font-size: 0.56em;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--sumi-soft);
   letter-spacing: 0.02em;
   line-height: 1;
@@ -1175,7 +1175,7 @@ body.round-active .module-main { padding-bottom: 32px; }
 .q-translation {
   font-size: var(--fs-sm);
   color: var(--white-dim);
-  font-style: italic;
+  font-style: normal;
   margin-bottom: 20px;
 }
 
@@ -1503,7 +1503,7 @@ a.module-card.module-locked { cursor: pointer; }
 .ex-context {
   font-size: var(--fs-sm);
   color: var(--white-dim);
-  font-style: italic;
+  font-style: normal;
 }
 
 /* ====================================================
@@ -2196,7 +2196,7 @@ a.module-card.module-locked { cursor: pointer; }
 }
 .prc-tok-jp     { font-family: var(--font-jp); font-size: var(--fs-xl); font-weight: 700; color: var(--white); line-height: 1.1; }
 .prc-tok-romaji { font-size: var(--fs-2xs); color: var(--white-dim); letter-spacing: 0.3px; }
-.prc-tok-hu     { font-size: var(--fs-2xs); color: rgb(var(--gold-rgb) / 0.7); font-style: italic; }
+.prc-tok-hu     { font-size: var(--fs-2xs); color: rgb(var(--gold-rgb) / 0.7); font-style: normal; }
 .prc-verb .prc-tok-jp { color: var(--gold-ink);}
 
 /* Slot (üres particle hely) */
@@ -2519,7 +2519,7 @@ a.module-card.module-locked { cursor: pointer; }
   font-size: var(--fs-sm);
   color: var(--sumi-faint);
   padding: 18px 0;
-  font-style: italic;
+  font-style: normal;
 }
 
 /* Token */
@@ -2558,7 +2558,7 @@ a.module-card.module-locked { cursor: pointer; }
 
 .pp-tok-jp     { font-family: var(--font-jp); font-size: var(--fs-xl); font-weight: 700; line-height: 1.1; }
 .pp-tok-romaji { font-size: var(--fs-2xs); color: var(--white-dim); letter-spacing: 0.3px; }
-.pp-tok-hu     { font-size: var(--fs-2xs); color: rgb(var(--gold-rgb) / 0.65); font-style: italic; }
+.pp-tok-hu     { font-size: var(--fs-2xs); color: rgb(var(--gold-rgb) / 0.65); font-style: normal; }
 
 /* Ellenőrzés utáni állapotok */
 .pp-token.pp-correct {
@@ -2670,7 +2670,7 @@ a.module-card.module-locked { cursor: pointer; }
 
 .ccc-jp     { font-family: var(--font-jp); font-size: var(--fs-lg); font-weight: 700; line-height: 1; }
 .ccc-romaji { font-size: var(--fs-2xs); color: var(--white-dim); letter-spacing: 0.3px; }
-.ccc-hu     { font-size: var(--fs-2xs); color: var(--sumi-faint); font-style: italic; }
+.ccc-hu     { font-size: var(--fs-2xs); color: var(--sumi-faint); font-style: normal; }
 
 /* ── Card — Recognition phase ──────────────────── */
 .cnt-progress {
@@ -2883,7 +2883,7 @@ a.module-card.module-locked { cursor: pointer; }
 
 .cnh-pill-jp     { font-family: var(--font-jp); font-size: var(--fs-xl); font-weight: 700; line-height: 1; }
 .cnh-pill-romaji { font-size: var(--fs-2xs); color: var(--white-dim); letter-spacing: 0.3px; }
-.cnh-pill-hu     { font-size: var(--fs-2xs); color: var(--sumi-faint); font-style: italic; }
+.cnh-pill-hu     { font-size: var(--fs-2xs); color: var(--sumi-faint); font-style: normal; }
 
 .cnh-input, .cnm-input {
   width: 100%;
@@ -3309,7 +3309,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
 }
 .cj-pl-kanji { font-family: var(--font-jp); font-size: var(--fs-4xl); font-weight: 700; color: var(--white); line-height: 1; }
 .cj-pl-kana { font-family: var(--font-jp); font-size: var(--fs-lg); color: var(--white-dim); }
-.cj-pl-romaji { font-size: var(--fs-sm); color: var(--white-dim); font-style: italic; }
+.cj-pl-romaji { font-size: var(--fs-sm); color: var(--white-dim); font-style: normal; }
 .cj-prompt-meaning { font-size: var(--fs-base); color: var(--white); }
 .cj-target {
   display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: center;
@@ -3357,7 +3357,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   box-shadow: none;
 }
 .cj-opt-jp { font-family: var(--font-jp); font-size: var(--fs-xl); color: var(--white); }
-.cj-opt-romaji { font-size: var(--fs-sm); color: var(--white-dim); font-style: italic; }
+.cj-opt-romaji { font-size: var(--fs-sm); color: var(--white-dim); font-style: normal; }
 
 /* Mastery input */
 .cj-input-area { display: flex; flex-direction: column; gap: 12px; align-items: center; }
@@ -3579,7 +3579,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   color: var(--gold-ink); font-weight: 600;
 }
 .cjbs-jp { font-family: var(--font-jp); font-size: var(--fs-xl); color: var(--white); font-weight: 700; }
-.cjbs-roman { font-size: var(--fs-xs); color: var(--white-dim); font-style: italic; }
+.cjbs-roman { font-size: var(--fs-xs); color: var(--white-dim); font-style: normal; }
 
 /* Suffix bank */
 .cj-build-suffixes {
@@ -3612,7 +3612,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   box-shadow: none;
 }
 .cjbf-jp { font-family: var(--font-jp); font-size: var(--fs-lg); color: var(--white); font-weight: 600; }
-.cjbf-roman { font-size: var(--fs-2xs); color: var(--white-dim); font-style: italic; }
+.cjbf-roman { font-size: var(--fs-2xs); color: var(--white-dim); font-style: normal; }
 
 /* Live preview */
 .cj-build-preview {
@@ -3857,7 +3857,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
 .adj-type-opt-sub {
   font-size: var(--fs-sm);
   color: var(--white-dim);
-  font-style: italic;
+  font-style: normal;
   margin-top: 4px;
 }
 .adj-type-opt.type-i-adj {
@@ -4583,7 +4583,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
 .grm-sentence-romaji {
   font-size: var(--fs-sm);
   color: var(--white-dim);
-  font-style: italic;
+  font-style: normal;
   letter-spacing: 0.3px;
   text-align: center;
 }
@@ -4641,7 +4641,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   font-size: var(--fs-sm);
 }
 .grm-srs-label { color: var(--white-dim); }
-.grm-srs-label em { color: var(--sumi-faint); font-style: italic; font-size: 0.85em; }
+.grm-srs-label em { color: var(--sumi-faint); font-style: normal; font-size: 0.85em; }
 .grm-srs-bar {
   height: 8px;
   background: rgb(var(--tint-rgb) / 0.08);
@@ -4777,7 +4777,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   text-align: center;
   line-height: 1.3;
 }
-.srs-box-label em { color: var(--sumi-faint); font-style: italic; font-size: 0.95em; }
+.srs-box-label em { color: var(--sumi-faint); font-style: normal; font-size: 0.95em; }
 
 @media (max-width: 720px) {
   .srs-chart { gap: 8px; min-height: 140px; }
@@ -4830,7 +4830,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   letter-spacing: 0.3px;
   font-weight: 400;
   color: var(--sumi-faint);
-  font-style: italic;
+  font-style: normal;
 }
 
 .grm-trans-answer,
@@ -4857,7 +4857,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
 }
 .grm-trans-empty {
   color: var(--sumi-faint);
-  font-style: italic;
+  font-style: normal;
   font-size: var(--fs-sm);
   padding: 4px 8px;
 }
@@ -4990,7 +4990,7 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   font-family: var(--font-jp);
   font-size: var(--fs-sm);
   color: rgb(var(--brand-rgb) / 0.7);
-  font-style: italic;
+  font-style: normal;
   letter-spacing: 0.3px;
 }
 .prod-preview:empty { display: none; }
@@ -5413,7 +5413,7 @@ button:disabled, .btn:disabled, input:disabled, textarea:disabled,
   font-family: var(--font-body);
   font-size: var(--fs-base);
   color: var(--sumi-faint);
-  font-style: italic;
+  font-style: normal;
   letter-spacing: 0.02em;
 }
 .nc-fc-hint {
@@ -5449,7 +5449,7 @@ button:disabled, .btn:disabled, input:disabled, textarea:disabled,
   font-family: var(--font-body);
   font-size: var(--fs-sm);
   color: var(--sumi-faint);
-  font-style: italic;
+  font-style: normal;
   letter-spacing: 0.04em;
 }
 @media (max-width: 720px) {
@@ -5468,7 +5468,7 @@ button:disabled, .btn:disabled, input:disabled, textarea:disabled,
 }
 .nc-fc-meaning {
   font-family: var(--font-serif);
-  font-style: italic;
+  font-style: normal;
   font-size: clamp(1.3rem, 3vw, 1.7rem);
   font-weight: 500;
   color: var(--sumi);
@@ -5485,7 +5485,7 @@ button:disabled, .btn:disabled, input:disabled, textarea:disabled,
   font-family: var(--font-body);
   font-size: var(--fs-sm);
   color: var(--sumi-faint);
-  font-style: italic;
+  font-style: normal;
   margin-bottom: 4px;
 }
 .nc-fc-example-hu {
@@ -5766,8 +5766,8 @@ html.theme-sumi {
   --hinoki:      #252B49;
 
   --sumi:        #ECEFFA;
-  --sumi-soft:   #BEC5DD;
-  --sumi-faint:  #979FBD;
+  --sumi-soft:   #CCD2E6;
+  --sumi-faint:  #A9B0CC;
 
   --brand:      #849CFF;
   --brand-deep: #AFC0FF;       /* sötét háttéren a SZÖVEG világosabb zöld */
@@ -6550,7 +6550,7 @@ body:has(.pr-feedback:not(.hidden)) .module-main { padding-bottom: min(66vh, 580
 .prc-eyebrow { margin: 0; }
 .prc-translation {
   padding: 0; margin: 0; background: none; border: 0;
-  font-family: var(--font-serif); font-size: var(--fs-md); font-style: italic; line-height: 1.4;
+  font-family: var(--font-serif); font-size: var(--fs-md); font-style: normal; line-height: 1.4;
 }
 .prc-tr-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .prc-tr-text { color: var(--sumi); font-weight: 500; }
@@ -6644,7 +6644,7 @@ body.round-active .phase-tabs { display: none; }
 /* ── Nyelvtani minták: Felismerés ────────────────────────
    Az opció a JELENTÉS; a minta neve csak válasz után jelenik meg rajta. */
 .grm-sentence { font-family: var(--font-jp); font-size: clamp(1.4rem, 6.5vw, 2rem); line-height: 1.9; text-align: center; }
-.grm-sentence-romaji { font-size: var(--fs-sm); color: var(--sumi-faint); font-style: italic; text-align: center; }
+.grm-sentence-romaji { font-size: var(--fs-sm); color: var(--sumi-faint); font-style: normal; text-align: center; }
 .grm-opt { align-items: flex-start; text-align: left; padding: 12px 14px; gap: 4px; }
 .grm-opt-summary { font-size: var(--fs-sm); font-weight: 600; color: var(--sumi); line-height: 1.4; font-style: normal; }
 .grm-opt-label { display: none; font-size: var(--fs-md); color: var(--brand-deep); }
@@ -7104,7 +7104,7 @@ body.round-active .lesson { display: none; }
   background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
 }
 .lesson-ex-jp { font-family: var(--font-jp); font-size: var(--fs-md); color: var(--sumi); line-height: 1.5; }
-.lesson-ex-ro { font-size: var(--fs-xs); color: var(--sumi-faint); font-style: italic; }
+.lesson-ex-ro { font-size: var(--fs-xs); color: var(--sumi-faint); font-style: normal; }
 .lesson-ex-hu { font-size: var(--fs-sm); color: var(--sumi-soft); }
 @media (min-width: 600px) {
   .lesson { border-radius: var(--radius-xl); margin-bottom: 16px; }
@@ -7705,7 +7705,7 @@ html.theme-sumi .path-pop { background: #1B2038; }
 .lp-ex-play:active { transform: scale(0.92); }
 .lp-ex-play.is-playing { color: var(--on-accent); background: var(--accent); }
 .lp-ex-jp { font-family: var(--font-jp-text); font-size: var(--fs-md); font-weight: 500; line-height: 1.9; letter-spacing: 0.01em; color: var(--sumi); }
-.lp-ex-romaji { font-size: var(--fs-sm); font-style: italic; color: var(--sumi-faint); line-height: 1.4; }
+.lp-ex-romaji { font-size: var(--fs-sm); font-style: normal; color: var(--sumi-faint); line-height: 1.4; }
 .lp-ex-hu { margin-top: 2px; font-size: var(--fs-base); color: var(--sumi-soft); line-height: 1.45; }
 body.helpers-no-romaji .lp-ex-romaji { display: none; }
 body.helpers-no-hu .lp-ex-hu { display: none; }
@@ -7750,3 +7750,29 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
   .lp-toc { margin-left: 0; margin-right: 0; padding-left: 2px; padding-right: 2px; flex-wrap: wrap; overflow: visible; }
   .lp-check, .lp-practice { padding: 32px 28px; }
 }
+
+/* ════════════════════════════════════════════════════════
+   SZÖVEG-ERŐSÍTÉS (user-visszajelzés: a kérdések és a magyarázatok
+   szövege „vékony és csúnya" volt)
+   ----------------------------------------------------
+   Kérdés = vastag, sötét, jól látható méret. Magyarázat = alapméret,
+   közepes súly, teljes kontraszt. Nincs dőlt és nincs talpas betű.
+   ════════════════════════════════════════════════════════ */
+.kana-task, .lq-question, .task-prompt {
+  font-size: var(--fs-md); font-weight: 700; color: var(--sumi); line-height: 1.4;
+}
+.prc-translation { font-family: var(--font-body); font-size: var(--fs-lg); font-weight: 700; line-height: 1.35; }
+.prc-tr-text, .grm-trans-hu-text { font-weight: 700; color: var(--sumi); }
+
+/* visszajelzés: a magyarázó sorok */
+.pfe-row { font-size: var(--fs-base); line-height: 1.55; }
+.pfe-text { color: var(--sumi); font-weight: 500; }
+.pfe-text strong, .pfe-text em { font-family: var(--font-jp); font-weight: 700; }
+.pr-fb-title { font-weight: 800; }
+
+/* leckék és mini-leckék: folyószöveg */
+.lp-body, .lp-tip { font-weight: 500; color: var(--sumi); }
+.lesson-points p { font-size: var(--fs-base); color: var(--sumi); }
+.lp-ex-hu, .lesson-ex-hu { color: var(--sumi); font-weight: 500; }
+.lp-ex-romaji, .lesson-ex-ro, .grm-sentence-romaji, .cj-pl-romaji, .cj-opt-romaji { color: var(--sumi-soft); font-weight: 500; }
+.module-page-desc, .section-desc, .path-step-desc, .lobby-sub, .lp-check-sub, .continue-desc { font-weight: 500; }
