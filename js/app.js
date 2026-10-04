@@ -2692,6 +2692,7 @@ function initLanding() {
     pop.remove();
     btn.setAttribute('aria-expanded', 'false');
     if (section) section.classList.remove('has-pop');
+    document.documentElement.classList.remove('has-path-pop');
   }
 
   function openNode(btn, row, v) {
@@ -2722,6 +2723,7 @@ function initLanding() {
     btn.setAttribute('aria-controls', 'pathPop');
     const section = li.closest('.path-section');
     if (section) section.classList.add('has-pop');
+    document.documentElement.classList.add('has-path-pop');   // a tartalomjegyzék lebegő gombja ne takarja a buborékot
     openPop = { pop: pop, btn: btn, section: section };
     // a buborék a lebegő fejléc és az alsó fül-sáv között legyen
     const r = pop.getBoundingClientRect();
@@ -2800,7 +2802,7 @@ function initLanding() {
       }).join('');
       gi += u.rows.length;
       return `
-        <li class="path-unit${complete ? ' is-complete' : ''}">
+        <li class="path-unit${complete ? ' is-complete' : ''}" data-unit="${esc(u.unit.id || ('u' + ui))}">
           <div class="path-unit-head">
             <span class="path-unit-no">${esc(u.unit.kicker || ((ui + 1) + '. fejezet'))}</span>
             <h3 class="path-unit-title">${esc(u.unit.title)}</h3>
@@ -2827,6 +2829,8 @@ function initLanding() {
       const b = levelEl.querySelector('.path-level-btn');
       if (b) b.addEventListener('click', () => { Path.setLevel(v.level === 'zero' ? 'kana' : 'zero'); renderAll(); });
     }
+
+    renderToc(units, v);
   }
   // a buborék bezárása: kattintás máshová, Esc
   document.addEventListener('click', e => { if (openPop && !openPop.pop.contains(e.target)) closePop(); });
@@ -2835,6 +2839,239 @@ function initLanding() {
   });
   // a töréspont átlépésekor a térkép geometriája változik
   if (wide.addEventListener) wide.addEventListener('change', () => renderPath());
+
+  // ── A tanulási út tartalomjegyzéke ──
+  //   Ugyanazokból a fejezetekből épül, mint a térkép (renderPath hívja). Asztali gépen
+  //   (≥ 1100 px) rögzített oldalsáv, a tartalom mellé tolva; keskenyebb kijelzőn balról
+  //   kihúzható fiók. Egy fejezetre vagy lépésre kattintva a térkép odagördül.
+  //   A stílusa: style.css „TANULÁSI ÚT — térkép" blokk, „Tartalomjegyzék" rész.
+  const TOC_KEY = 'nihoncore_toc_v1';                      // eszköz-helyi: nyitva van-e a sáv, minden fejezet nyitva van-e
+  const tocEl = document.getElementById('pathToc');
+  const tocBody = document.getElementById('ptocBody');
+  const tocToggle = document.getElementById('ptocToggle');
+  const tocScrim = document.getElementById('ptocScrim');
+  const tocClose = document.getElementById('ptocClose');
+  const tocAll = document.getElementById('ptocAll');
+  const tocDock = window.matchMedia('(min-width: 1100px)');
+  const calm = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const FOLD = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  const tocState = { open: null, all: false };
+  try { Object.assign(tocState, JSON.parse(localStorage.getItem(TOC_KEY) || '{}')); } catch (e) {}
+  const tocFolded = {};                                    // fejezet → nyitva van-e (erre a munkamenetre)
+  let tocOpen = false, tocActive = null, tocSpy = null, locateTimer = 0;
+  const saveToc = () => { try { localStorage.setItem(TOC_KEY, JSON.stringify(tocState)); } catch (e) {} };
+  const scrollMode = () => calm.matches ? 'auto' : 'smooth';
+
+  function renderToc(units, v) {
+    if (!tocEl || !tocBody) return;
+    const nextId = v.next && v.level ? v.next.step.id : null;
+    const prog = document.getElementById('ptocProgress');
+    if (prog) prog.textContent = v.doneCount + ' / ' + v.total + ' lépés kész';
+
+    tocBody.innerHTML = units.map((u, ui) => {
+      const uid = u.unit.id || ('u' + ui);
+      const live = u.rows.filter(r => !r.skipped);
+      const done = live.filter(r => r.done).length;
+      const complete = live.length > 0 && done === live.length;
+      const hasNext = !!nextId && u.rows.some(r => r.step.id === nextId);
+      if (!(uid in tocFolded)) tocFolded[uid] = hasNext || (!nextId && ui === 0);
+      const isOpen = tocState.all || tocFolded[uid];
+      const steps = u.rows.map(r => {
+        const s = r.step;
+        const isNext = s.id === nextId;
+        const cls = r.done ? ' is-done' : r.skipped ? ' is-skipped' : isNext ? ' is-next' : '';
+        const state = r.done ? 'kész' : r.skipped ? 'átugorva' : isNext ? 'következő lépés' : 'még nem kezdted el';
+        return `
+          <li class="ptoc-step${cls}">
+            <button class="ptoc-step-btn" type="button" data-step="${esc(s.id)}" aria-label="${esc(s.title)}, ${state}">
+              <span class="ptoc-glyph" lang="ja" aria-hidden="true">${esc(s.glyph)}</span>
+              <span class="ptoc-step-title">${esc(s.title)}</span>
+              ${r.done ? '<span class="ptoc-step-mark">' + CHECK + '</span>' : isNext ? '<span class="ptoc-step-mark ptoc-step-here">Itt tartasz</span>' : ''}
+            </button>
+          </li>`;
+      }).join('');
+      return `
+        <section class="ptoc-unit${complete ? ' is-complete' : ''}${isOpen ? ' is-unfolded' : ''}" data-unit="${esc(uid)}">
+          <div class="ptoc-unit-row">
+            <button class="ptoc-unit-btn" type="button">
+              <span class="ptoc-kicker">${esc(u.unit.kicker || ((ui + 1) + '. fejezet'))}</span>
+              <span class="ptoc-unit-title">${esc(u.unit.title)}</span>
+              ${u.unit.sub ? '<span class="ptoc-unit-sub">' + esc(u.unit.sub) + '</span>' : ''}
+            </button>
+            <span class="ptoc-count" aria-label="${done} / ${live.length} lépés kész">${live.length ? done + ' / ' + live.length : '–'}</span>
+            <button class="ptoc-fold" type="button" aria-expanded="${isOpen ? 'true' : 'false'}" aria-controls="ptocSteps${ui}"
+                    aria-label="${esc(u.unit.title)}: a lépések ${isOpen ? 'elrejtése' : 'megjelenítése'}">${FOLD}</button>
+          </div>
+          <ol class="ptoc-steps" id="ptocSteps${ui}"${isOpen ? '' : ' hidden'}>${steps}</ol>
+        </section>`;
+    }).join('');
+
+    if (tocAll) {
+      tocAll.textContent = tocState.all ? 'Mindet becsuk' : 'Mindet kinyit';
+      tocAll.setAttribute('aria-pressed', tocState.all ? 'true' : 'false');
+    }
+    const keep = tocActive; tocActive = null;
+    watchUnits();
+    if (keep) markTocActive(keep);
+    else if (tocOpen) {                                    // induláskor a sáv ott álljon, ahol tartasz
+      const here = tocBody.querySelector('.ptoc-step.is-next');
+      if (here) revealInToc(here.closest('.ptoc-unit'));
+    }
+  }
+
+  // Egy fejezet lépéseinek kinyitása / becsukása a sávban
+  function foldTocUnit(sec, open) {
+    if (!sec) return;
+    tocFolded[sec.dataset.unit] = open;
+    sec.classList.toggle('is-unfolded', open);
+    const list = sec.querySelector('.ptoc-steps');
+    const fold = sec.querySelector('.ptoc-fold');
+    if (list) list.hidden = !open;
+    if (fold) {
+      fold.setAttribute('aria-expanded', open ? 'true' : 'false');
+      fold.setAttribute('aria-label', fold.getAttribute('aria-label').replace(open ? 'megjelenítése' : 'elrejtése', open ? 'elrejtése' : 'megjelenítése'));
+    }
+  }
+
+  // Az a fejezet, amelyik éppen a képernyő felső sávjában van (görgetés-követés)
+  function watchUnits() {
+    if (tocSpy) { tocSpy.disconnect(); tocSpy = null; }
+    if (!tocBody || !('IntersectionObserver' in window)) return;
+    const els = Array.prototype.slice.call(document.querySelectorAll('#pathList .path-unit'));
+    const header = document.getElementById('header');
+    const cut = Math.round((header ? header.getBoundingClientRect().bottom : 0) + 16);
+    const inView = new Set();
+    tocSpy = new IntersectionObserver(entries => {
+      entries.forEach(en => { if (en.isIntersecting) inView.add(en.target); else inView.delete(en.target); });
+      const first = els.find(el => inView.has(el));
+      markTocActive(first ? first.dataset.unit : null);
+    }, { rootMargin: '-' + cut + 'px 0px -55% 0px', threshold: 0 });
+    els.forEach(el => tocSpy.observe(el));
+  }
+
+  function markTocActive(uid) {
+    if (uid === tocActive || !tocBody) return;
+    tocActive = uid;
+    tocBody.querySelectorAll('.ptoc-unit.is-active').forEach(s => {
+      s.classList.remove('is-active');
+      const b = s.querySelector('.ptoc-unit-btn'); if (b) b.removeAttribute('aria-current');
+    });
+    if (!uid) return;
+    const sec = tocBody.querySelector('.ptoc-unit[data-unit="' + uid + '"]');
+    if (!sec) return;
+    sec.classList.add('is-active');
+    const b = sec.querySelector('.ptoc-unit-btn'); if (b) b.setAttribute('aria-current', 'true');
+    if (tocOpen) revealInToc(sec);
+  }
+
+  // a sáv saját görgetése: az aktív fejezet maradjon látható (az oldal nem mozdul)
+  function revealInToc(sec) {
+    const b = tocBody.getBoundingClientRect();
+    // ha a fejezet a lépéseivel együtt kifér, az egész látsszon; különben legalább a címsora
+    const whole = sec.getBoundingClientRect();
+    const r = whole.height <= b.height - 12 ? whole : (sec.querySelector('.ptoc-unit-row') || sec).getBoundingClientRect();
+    if (r.top < b.top + 6) tocBody.scrollTop += r.top - b.top - 6;
+    else if (r.bottom > b.bottom - 6) tocBody.scrollTop += r.bottom - b.bottom + 6;
+  }
+
+  function setTocOpen(open, focus) {
+    if (!tocEl) return;
+    tocOpen = open;
+    const dock = tocDock.matches;
+    tocEl.classList.toggle('is-open', open);
+    document.documentElement.classList.toggle('toc-docked', open && dock);
+    if (tocScrim) tocScrim.classList.toggle('is-open', open && !dock);
+    if (tocToggle) {
+      tocToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      tocToggle.classList.toggle('is-away', open);
+    }
+    if (dock) { tocState.open = open; saveToc(); }       // a fiók (telefon) mindig csukva indul
+    if (open) {
+      const sec = tocActive && tocBody.querySelector('.ptoc-unit[data-unit="' + tocActive + '"]');
+      const here = sec || tocBody.querySelector('.ptoc-step.is-next');
+      if (here) revealInToc(here.closest('.ptoc-unit') || here);
+      if (focus && tocClose) tocClose.focus();
+    } else if (focus && tocToggle) tocToggle.focus();
+  }
+
+  // A térkép odagördül: a fejezet címe a lebegő fejléc alá, a lépés a képernyő közepére
+  function locate(el) {
+    if (!el) return;
+    document.querySelectorAll('.is-located').forEach(x => x.classList.remove('is-located'));
+    el.classList.add('is-located');
+    clearTimeout(locateTimer);
+    locateTimer = setTimeout(() => el.classList.remove('is-located'), 2400);
+  }
+  function goToUnit(uid) {
+    const unit = document.querySelector('#pathList .path-unit[data-unit="' + uid + '"]');
+    if (!unit) return;
+    closePop();
+    if (!tocDock.matches) setTocOpen(false);
+    const header = document.getElementById('header');
+    const y = unit.getBoundingClientRect().top + window.scrollY - (header ? header.getBoundingClientRect().bottom : 0) - 4;
+    window.scrollTo({ top: Math.max(0, y), behavior: scrollMode() });
+    locate(unit);
+  }
+  function goToStep(id) {
+    const btn = document.querySelector('#pathList .path-node-btn[data-step="' + id + '"]');
+    if (!btn) return;
+    closePop();
+    if (!tocDock.matches) setTocOpen(false);
+    const node = btn.closest('.path-node');
+    node.scrollIntoView({ behavior: scrollMode(), block: 'center' });
+    locate(node);
+    try { btn.focus({ preventScroll: true }); } catch (e) {}
+  }
+
+  if (tocEl && tocBody) {
+    tocBody.addEventListener('click', e => {
+      const fold = e.target.closest('.ptoc-fold');
+      if (fold) {
+        const sec = fold.closest('.ptoc-unit'), open = !sec.classList.contains('is-unfolded');
+        foldTocUnit(sec, open);
+        if (open) revealInToc(sec);
+        return;
+      }
+      const unitBtn = e.target.closest('.ptoc-unit-btn');
+      if (unitBtn) {
+        const sec = unitBtn.closest('.ptoc-unit');
+        foldTocUnit(sec, true);
+        if (tocDock.matches) revealInToc(sec);
+        goToUnit(sec.dataset.unit);
+        return;
+      }
+      const stepBtn = e.target.closest('.ptoc-step-btn');
+      if (stepBtn) goToStep(stepBtn.dataset.step);
+    });
+    if (tocToggle) tocToggle.addEventListener('click', () => setTocOpen(true, true));
+    if (tocClose) tocClose.addEventListener('click', () => setTocOpen(false, true));
+    if (tocScrim) tocScrim.addEventListener('click', () => setTocOpen(false));
+    if (tocAll) tocAll.addEventListener('click', () => {
+      tocState.all = !tocState.all; saveToc();
+      if (!tocState.all) Object.keys(tocFolded).forEach(k => { tocFolded[k] = false; });   // becsukáskor csak az marad nyitva, ahol tartasz
+      const next = tocBody.querySelector('.ptoc-step.is-next');
+      tocBody.querySelectorAll('.ptoc-unit').forEach(sec => foldTocUnit(sec, tocState.all || (!!next && sec.contains(next))));
+      tocAll.textContent = tocState.all ? 'Mindet becsuk' : 'Mindet kinyit';
+      tocAll.setAttribute('aria-pressed', tocState.all ? 'true' : 'false');
+      const sec = tocActive && tocBody.querySelector('.ptoc-unit[data-unit="' + tocActive + '"]');
+      if (sec) revealInToc(sec);
+    });
+    // fiók-módban: Esc bezár, a Tab a fiókon belül marad
+    document.addEventListener('keydown', e => {
+      if (!tocOpen || tocDock.matches) return;
+      if (e.key === 'Escape') { setTocOpen(false, true); return; }
+      if (e.key !== 'Tab') return;
+      const items = Array.prototype.filter.call(tocEl.querySelectorAll('button'), b => b.offsetParent !== null);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
+    // a töréspont átlépésekor: asztali gépen a mentett állapot, fiók-módban csukva
+    const syncTocMode = () => setTocOpen(tocDock.matches ? tocState.open !== false : false);
+    if (tocDock.addEventListener) tocDock.addEventListener('change', syncTocMode);
+    syncTocMode();
+  }
 
   function renderAll() { renderHomeTop(); renderPath(); }
   renderAll();

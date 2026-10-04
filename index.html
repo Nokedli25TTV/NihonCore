@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- Tartalomjegyzék-sáv (asztali): a tartalom eltolása még az első kirajzolás előtt, hogy ne ugorjon az oldal -->
+  <script>(function(){try{if(window.matchMedia("(min-width: 1100px)").matches){var s=JSON.parse(localStorage.getItem("nihoncore_toc_v1")||"{}");if(s.open!==false)document.documentElement.classList.add("toc-docked");}}catch(e){}})();</script>
   <meta name="theme-color" content="#E9EDF6" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -47,6 +49,27 @@
       </div>
     </div>
   </header>
+
+  <!-- A TANULÁSI ÚT TARTALOMJEGYZÉKE — asztali gépen rögzített oldalsáv, keskenyebb kijelzőn
+       balról kihúzható fiók. A listát a JS tölti (app.js: initLanding → renderToc). -->
+  <button class="ptoc-toggle" id="ptocToggle" type="button" aria-controls="pathToc" aria-expanded="false" aria-label="A tanulási út tartalomjegyzéke">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>
+    <span class="ptoc-toggle-text">Tartalom</span>
+  </button>
+  <div class="ptoc-scrim" id="ptocScrim"></div>
+  <aside class="ptoc" id="pathToc" aria-label="A tanulási út tartalomjegyzéke">
+    <div class="ptoc-head">
+      <div class="ptoc-head-text">
+        <h2 class="ptoc-title">Tartalom</h2>
+        <span class="ptoc-progress" id="ptocProgress"></span>
+      </div>
+      <button class="ptoc-all" id="ptocAll" type="button" aria-pressed="false">Mindet kinyit</button>
+      <button class="ptoc-close" id="ptocClose" type="button" aria-label="Tartalomjegyzék becsukása">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m14 6-6 6 6 6"/><path d="M19 5v14"/></svg>
+      </button>
+    </div>
+    <nav class="ptoc-body" id="ptocBody" aria-label="Fejezetek és lépések"></nav>
+  </aside>
 
   <main class="home" id="homeMain">
 
