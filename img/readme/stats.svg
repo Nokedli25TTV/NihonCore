@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 190" width="1200" height="190" role="img" aria-labelledby="st sd">
+  <title id="st">NihonCore számokban</title>
+  <desc id="sd">57 lecke, 402 nyelvtani pont, 2390 példamondat, 1142 kérdés, 136 lépés a tanulási úton, 10 gyakorló modul.</desc>
+  <defs>
+    <linearGradient id="c1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5B76F5"/><stop offset="1" stop-color="#2F44C4"/></linearGradient>
+    <linearGradient id="c2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FB6C6"/><stop offset="1" stop-color="#157F96"/></linearGradient>
+    <linearGradient id="c3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F2B544"/><stop offset="1" stop-color="#C98412"/></linearGradient>
+    <linearGradient id="c4" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3FBF8B"/><stop offset="1" stop-color="#1D8A60"/></linearGradient>
+    <linearGradient id="c5" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9A7BF2"/><stop offset="1" stop-color="#6443C9"/></linearGradient>
+    <linearGradient id="c6" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F07A64"/><stop offset="1" stop-color="#C5432F"/></linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset="0.5" stop-color="#FFFFFF" stop-opacity="0.28"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="k"><rect width="184" height="170" rx="24"/></clipPath>
+  </defs>
+  <style>
+    .t { font-family: 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial, sans-serif; fill: #FFFFFF; }
+    .jp { font-family: 'Noto Sans JP', 'Hiragino Sans', 'Yu Gothic UI', 'Yu Gothic', Meiryo, sans-serif; font-weight: 700; fill: #FFFFFF; fill-opacity: 0.16; }
+    .n { font-size: 46px; font-weight: 800; letter-spacing: -1px; }
+    .l { font-size: 16px; font-weight: 700; fill-opacity: 0.95; }
+    .s { font-size: 13px; font-weight: 600; fill-opacity: 0.78; }
+    .card { opacity: 0; animation: up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+    .d2 { animation-delay: 0.12s; } .d3 { animation-delay: 0.24s; } .d4 { animation-delay: 0.36s; } .d5 { animation-delay: 0.48s; } .d6 { animation-delay: 0.60s; }
+    .sh { animation: sweep 5s ease-in-out infinite; }
+    .s2 { animation-delay: 0.8s; } .s3 { animation-delay: 1.6s; } .s4 { animation-delay: 2.4s; } .s5 { animation-delay: 3.2s; } .s6 { animation-delay: 4s; }
+    @keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes sweep { 0%, 55% { transform: translateX(-200px); } 100% { transform: translateX(240px); } }
+    @media (prefers-reduced-motion: reduce) { .card { opacity: 1; animation: none; } .sh { animation: none; opacity: 0; } }
+  </style>
+
+  <g class="card"><g transform="translate(8 10)"><g clip-path="url(#k)">
+    <rect width="184" height="170" fill="url(#c1)"/><text class="jp" x="92" y="162" font-size="118">課</text>
+    <rect class="sh" x="0" y="0" width="90" height="170" fill="url(#shine)"/></g>
+    <text class="t n" x="22" y="78">57</text><text class="t l" x="22" y="108">lecke</text><text class="t s" x="22" y="131">két tankönyv nyomán</text></g></g>
+
+  <g class="card d2"><g transform="translate(208 10)"><g clip-path="url(#k)">
+    <rect width="184" height="170" fill="url(#c2)"/><text class="jp" x="92" y="162" font-size="118">文</text>
+    <rect class="sh s2" x="0" y="0" width="90" height="170" fill="url(#shine)"/></g>
+    <text class="t n" x="22" y="78">402</text><text class="t l" x="22" y="108">nyelvtani pont</text><text class="t s" x="22" y="131">321 táblával</text></g></g>
+
+  <g class="card d3"><g transform="translate(408 10)"><g clip-path="url(#k)">
+    <rect width="184" height="170" fill="url(#c3)"/><text class="jp" x="92" y="162" font-size="118">例</text>
+    <rect class="sh s3" x="0" y="0" width="90" height="170" fill="url(#shine)"/></g>
+    <text class="t n" x="22" y="78">2390</text><text class="t l" x="22" y="108">példamondat</text><text class="t s" x="22" y="131">mind hanggal</text></g></g>
+
+  <g class="card d4"><g transform="translate(608 10)"><g clip-path="url(#k)">
+    <rect width="184" height="170" fill="url(#c4)"/><text class="jp" x="92" y="162" font-size="118">問</text>
+    <rect class="sh s4" x="0" y="0" width="90" height="170" fill="url(#shine)"/></g>
+    <text class="t n" x="22" y="78">1142</text><text class="t l" x="22" y="108">kérdés</text><text class="t s" x="22" y="131">magyarázattal</text></g></g>
+
+  <g class="card d5"><g transform="translate(808 10)"><g clip-path="url(#k)">
+    <rect width="184" height="170" fill="url(#c5)"/><text class="jp" x="92" y="162" font-size="118">道</text>
+    <rect class="sh s5" x="0" y="0" width="90" height="170" fill="url(#shine)"/></g>
+    <text class="t n" x="22" y="78">136</text><text class="t l" x="22" y="108">lépés az úton</text><text class="t s" x="22" y="131">53 fejezetben</text></g></g>
+
+  <g class="card d6"><g transform="translate(1008 10)"><g clip-path="url(#k)">
+    <rect width="184" height="170" fill="url(#c6)"/><text class="jp" x="92" y="162" font-size="118">練</text>
+    <rect class="sh s6" x="0" y="0" width="90" height="170" fill="url(#shine)"/></g>
+    <text class="t n" x="22" y="78">10</text><text class="t l" x="22" y="108">gyakorló modul</text><text class="t s" x="22" y="131">és statisztika</text></g></g>
+</svg>
