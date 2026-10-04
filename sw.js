@@ -16,7 +16,7 @@
    CACHE_VERSION-t — a régi cache automatikusan törlődik.
    ==================================================== */
 
-const CACHE_VERSION = 'nihoncore-v73-2026-10-04-reszletes-leckek-37-40';
+const CACHE_VERSION = 'nihoncore-v74-2026-10-04-reszletes-leckek-41-44';
 const APP_SHELL_CACHE = CACHE_VERSION + '-shell';
 const RUNTIME_CACHE   = CACHE_VERSION + '-runtime';
 
