@@ -35,7 +35,8 @@ window.NihonCoreSync = (function () {
     'nihoncore_grm_profile_v1',     'nihoncore_grm_settings_v1',
     'nihoncore_prod_profile_v1',    'nihoncore_prod_settings_v1',
     'nihoncore_path_v1',            // tanulási út: szint + lépések haladása
-    'nihoncore_kana_profile_v1'
+    'nihoncore_kana_profile_v1',
+    'nihoncore_goal_v1'             // napi cél (a kezdőlap „Folytatás" kártyáján)
   ];
   const PREFIX_KEYS = ['nc_fc_state_'];   // flashcard "tudom/nem tudom" minden modul
 
@@ -96,8 +97,12 @@ window.NihonCoreSync = (function () {
     Object.keys(local).forEach(itemId => {
       const l = local[itemId], c = cloud[itemId];
       if (!c) { out[itemId] = l; return; }
-      // a frissebb (újabb lastReview ts), tie-break: magasabb box
-      const lts = (l && l.lastReview) || 0, cts = (c && c.lastReview) || 0;
+      // a frissebb nyer (az ütemező a `lastTs` mezőbe írja az utolsó válasz idejét; a `lastReview`
+      // régi név). Döntetlennél: magasabb box. — Korábban csak a `lastReview`-t nézte, ami soha
+      // nincs kitöltve, ezért mindig a magasabb box nyert: egy elrontott kérdés (box 0) a másik
+      // eszköz régebbi, jobb állapotára íródott vissza.
+      const when = x => (x && (x.lastTs || x.lastReview)) || 0;
+      const lts = when(l), cts = when(c);
       if (lts > cts) out[itemId] = l;
       else if (lts === cts && (l.box || 0) > (c.box || 0)) out[itemId] = l;
     });

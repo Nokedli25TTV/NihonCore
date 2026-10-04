@@ -426,6 +426,37 @@ const NIHONCORE_PARTICLES = [
     hint: 'Végpont ("-ig")',
     shortPurpose: 'végpont',
     fullExplain: 'végpontot jelöl (meddig: hely vagy idő)'
+  },
+  // Mondatvégi és feltételes szócskák: enélkül az őket kérő mondatok a tálcáról megoldhatatlanok
+  {
+    id: 'ka', jp: 'か', romaji: 'ka',
+    hint: 'Kérdőszócska — a mondat végén kérdést jelöl',
+    shortPurpose: 'kérdés',
+    fullExplain: 'a mondat végén kérdéssé teszi az állítást'
+  },
+  {
+    id: 'ne', jp: 'ね', romaji: 'ne',
+    hint: 'Megerősítést vár — „ugye?"',
+    shortPurpose: 'megerősítés („ugye?")',
+    fullExplain: 'a mondat végén egyetértést vagy megerősítést vár („ugye?", „igaz?")'
+  },
+  {
+    id: 'yo', jp: 'よ', romaji: 'yo',
+    hint: 'Nyomatékosít — új információt közöl',
+    shortPurpose: 'nyomaték',
+    fullExplain: 'a mondat végén nyomatékosít: olyat közöl, amit a másik még nem tud'
+  },
+  {
+    id: 'nara', jp: 'なら', romaji: 'nara',
+    hint: 'Feltétel — „ha (arról van szó)"',
+    shortPurpose: 'feltétel („ha")',
+    fullExplain: 'feltételt jelöl („ha …, akkor …"); főnév és な-melléknév után közvetlenül áll'
+  },
+  {
+    id: 'demo', jp: 'でも', romaji: 'demo',
+    hint: '„még … is", „akár … is"',
+    shortPurpose: '„még … is"',
+    fullExplain: '„még … is" / „akár … is" jelentést ad (szélső eset, engedmény)'
   }
 ];
 

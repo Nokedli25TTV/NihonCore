@@ -2674,7 +2674,7 @@ function initLanding() {
   //   A cél a naponta megválaszolt kérdések száma (a körök és a leckék gyors kérdései, a
   //   statisztika mai napjából); a sorozat az egymást követő gyakorló napok száma.
   //   A célra koppintva három fokozat közül lehet választani.
-  const GOAL_KEY = 'nihoncore_goal_v1';                    // eszköz-helyi: { daily }
+  const GOAL_KEY = 'nihoncore_goal_v1';                    // { daily } — a fiókkal szinkronizálódik (sync.js)
   const GOALS = [{ n: 10, label: 'Könnyed' }, { n: 20, label: 'Rendes' }, { n: 40, label: 'Komoly' }];
   let goalOpen = false;
   function dailyGoal() {
@@ -2723,6 +2723,7 @@ function initLanding() {
     });
     pick.querySelectorAll('.day-pick-btn').forEach(b => b.addEventListener('click', () => {
       try { localStorage.setItem(GOAL_KEY, JSON.stringify({ daily: parseInt(b.dataset.goal, 10) })); } catch (e) {}
+      if (window.NihonCoreSync && NihonCoreSync.schedulePush) NihonCoreSync.schedulePush();   // a cél a fiókkal együtt jár
       goalOpen = false;
       renderHomeTop();
       const again = document.getElementById('dayGoalBtn');
@@ -17984,7 +17985,17 @@ function initLessonPage() {
   // A gyors kérdés: a lecke saját kérdései közül az, amelyik a ponthoz tartozik
   // (a japán szöveg egyezése alapján); ha nincs ilyen, a pont egyik példamondatából készül.
   let quickMap = null;
+  let quickTagged = false;                                 // a lecke kérdései meg vannak-e jelölve (point mező)
   function buildQuickMap() {
+    // A kérdés `point` mezője megmondja, melyik nyelvtani ponthoz tartozik (sorszám 1-től; ha nincs,
+    // a kérdés egyik ponthoz sem kötődik — pl. köszönés, kultúra). Jelöletlen leckénél a
+    // szövegegyezés dönt (lent).
+    quickTagged = lesson.quiz.some(q => typeof q.point === 'number');
+    if (quickTagged) {
+      const tagged = lesson.points.map(() => []);
+      lesson.quiz.forEach(q => { if (tagged[q.point - 1]) tagged[q.point - 1].push({ q: q, score: 9 }); });
+      return tagged;
+    }
     const JP = /[぀-ヿ一-鿿]+/g;
     const jpRuns = s => (plainText(s).match(JP) || []);
     const pointJp = lesson.points.map(p => {
@@ -18030,7 +18041,8 @@ function initLessonPage() {
     if (!quickMap) quickMap = buildQuickMap();
     const list = quickMap[pi];
     if (list.length) {
-      const top = list.filter(x => x.score >= Math.max(3, list[0].score * 0.6)).slice(0, 3);
+      // jelölt leckénél a pont bármelyik kérdése jöhet; becslésnél csak a legjobban illő három
+      const top = quickTagged ? list : list.filter(x => x.score >= Math.max(3, list[0].score * 0.6)).slice(0, 3);
       return top[Math.floor(Math.random() * top.length)].q;
     }
     if (lesson.ownOnly) return null;

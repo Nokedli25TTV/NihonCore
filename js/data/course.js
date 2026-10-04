@@ -32,11 +32,17 @@
        phrases  [{ jp, romaji, hu, note? }] kész fordulatok (a kérdés-készletbe is bekerülnek)
        words    [{ title, note?, items: [{ jp, romaji, hu, say? }] }] a leckéhez kellő szavak
        culture  [{ title, text }] tudnivalók Japánról
-     quiz    ellenőrző kérdések: { q, jp?, a, wrong: [3 rossz válasz], why }
-             (leckénként 10; egy kör ezekből és a példamondatokból készített
+     quiz    ellenőrző kérdések: { point?, q, jp?, a, wrong: [3 rossz válasz], why }
+             (leckénként 20; egy kör ezekből és a példamondatokból készített
               fordítós kérdésekből áll össze — app.js: initLessonPage)
+             · point: melyik nyelvtani ponthoz tartozik (sorszám 1-től) — a pont
+               lapja után ezek közül jön a gyors kérdés; ha a kérdés egyik ponthoz
+               sem kötődik (köszönés, kultúra), a mező elmarad
              · q: a kérdés magyarul · jp: a hiányos japán mondat (＿ a hiány)
              · a: a helyes válasz · why: egy mondat, miért az
+             FONTOS: a kérdés helye a tömbben az ismétlés-ütemező azonosítója
+             (lesson:<id>:<sorszám>) — új kérdés a tömb VÉGÉRE kerüljön, meglévőt
+             ne törölj és ne cserélj fel.
 
    Japán szöveg jelölése:
      · az 1–4. leckében kana, szóközökkel tagolva (ahogy a kezdő olvas)
@@ -458,31 +464,31 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'Melyik írással írják a jövevényszavakat és az idegen neveket?', a: 'Katakanával', wrong: ['Hiraganával', 'Kanjival', 'Latin betűvel'], why: 'A katakana a jövevényszavak és az idegen nevek írása: テレビ, コーヒー.' },
+      { point: 1, q: 'Melyik írással írják a jövevényszavakat és az idegen neveket?', a: 'Katakanával', wrong: ['Hiraganával', 'Kanjival', 'Latin betűvel'], why: 'A katakana a jövevényszavak és az idegen nevek írása: テレビ, コーヒー.' },
       {
-        q: 'Mire való leginkább a hiragana?',
+        point: 1, q: 'Mire való leginkább a hiragana?',
         a: 'A végződések, a partikulák és sok japán szó leírására.',
         wrong: ['Csak idegen szavak leírására.', 'Csak számok leírására.', 'Csak nevek leírására.'],
         why: 'A hiragana a japán írás alapja: ezzel bármi leírható.'
       },
       {
-        q: 'Mi a kanji?',
+        point: 1, q: 'Mi a kanji?',
         a: 'Kínai eredetű fogalomjel: a szavak jelentéses részét írja.',
         wrong: ['A latin betűs átírás neve.', 'A hosszú magánhangzó jele.', 'A katakana másik neve.'],
         why: 'A kanji jelentést hordoz; a latin betűs átírás neve rómadzsi.'
       },
-      { q: 'Hogyan ejted magyarul: sashimi?', a: 'szasimi', wrong: ['sasimi', 'szaszimi', 'saszimi'], why: 'Az s mindig „sz", az sh pedig „s".' },
-      { q: 'Hogyan ejted magyarul: ocha?', a: 'ocsa', wrong: ['oha', 'okha', 'occa'], why: 'A ch a magyar „cs".' },
-      { q: 'Hogyan ejted a j betűt az átírásban (például: Fuji)?', a: 'dzs', wrong: ['j', 'zs', 'h'], why: 'A j a magyar „dzs": Fuji = „fudzsi".' },
-      { q: 'Hogyan ejted magyarul: tsunami?', a: 'cunami', wrong: ['csunami', 'tunami', 'szunami'], why: 'A ts a magyar „c".' },
-      { q: 'Mit jelöl a felülvonás (például: Tōkyō, kōhī)?', a: 'Hosszú magánhangzót.', wrong: ['Hangsúlyt.', 'Kettőzött mássalhangzót.', 'Néma hangot.'], why: 'ō = hosszú o, ī = hosszú i.' },
-      { q: 'Melyik szó jelenti: „nagymama"?', a: 'obāsan', wrong: ['obasan', 'ōbasan', 'obassan'], why: 'Az obasan „néni"; a hosszú ā-val ejtett obāsan „nagymama".' },
-      { q: 'Mit jelöl a kis っ (például: kitte)?', a: 'A következő mássalhangzót megkettőzve ejted.', wrong: ['A magánhangzó megnyúlik.', 'A szó véget ér.', 'A szótag néma.'], why: 'きって = kitte: hosszú, kettőzött t.' },
-      { q: 'Hogyan ejted a は jelet, amikor partikula?', a: 'wa', wrong: ['ha', 'ba', 'pa'], why: 'Partikulaként は = wa; szó belsejében ha.' },
-      { q: 'Hogyan hangzik a mondat végi です?', a: 'desz', wrong: ['deszu, hangsúlyos u-val', 'desu, magyar s-sel', 'dec'], why: 'A szó végi u alig hallatszik: „desz".' },
-      { q: 'Hogyan ejted magyarul: jūdō?', a: 'dzsúdó', wrong: ['júdó', 'zsúdó', 'dzsudo'], why: 'A j „dzs"; a felülvonásos magánhangzó hosszú.' },
+      { point: 2, q: 'Hogyan ejted magyarul: sashimi?', a: 'szasimi', wrong: ['sasimi', 'szaszimi', 'saszimi'], why: 'Az s mindig „sz", az sh pedig „s".' },
+      { point: 2, q: 'Hogyan ejted magyarul: ocha?', a: 'ocsa', wrong: ['oha', 'okha', 'occa'], why: 'A ch a magyar „cs".' },
+      { point: 2, q: 'Hogyan ejted a j betűt az átírásban (például: Fuji)?', a: 'dzs', wrong: ['j', 'zs', 'h'], why: 'A j a magyar „dzs": Fuji = „fudzsi".' },
+      { point: 2, q: 'Hogyan ejted magyarul: tsunami?', a: 'cunami', wrong: ['csunami', 'tunami', 'szunami'], why: 'A ts a magyar „c".' },
+      { point: 6, q: 'Mit jelöl a felülvonás (például: Tōkyō, kōhī)?', a: 'Hosszú magánhangzót.', wrong: ['Hangsúlyt.', 'Kettőzött mássalhangzót.', 'Néma hangot.'], why: 'ō = hosszú o, ī = hosszú i.' },
+      { point: 6, q: 'Melyik szó jelenti: „nagymama"?', a: 'obāsan', wrong: ['obasan', 'ōbasan', 'obassan'], why: 'Az obasan „néni"; a hosszú ā-val ejtett obāsan „nagymama".' },
+      { point: 7, q: 'Mit jelöl a kis っ (például: kitte)?', a: 'A következő mássalhangzót megkettőzve ejted.', wrong: ['A magánhangzó megnyúlik.', 'A szó véget ér.', 'A szótag néma.'], why: 'きって = kitte: hosszú, kettőzött t.' },
+      { point: 9, q: 'Hogyan ejted a は jelet, amikor partikula?', a: 'wa', wrong: ['ha', 'ba', 'pa'], why: 'Partikulaként は = wa; szó belsejében ha.' },
+      { point: 8, q: 'Hogyan hangzik a mondat végi です?', a: 'desz', wrong: ['deszu, hangsúlyos u-val', 'desu, magyar s-sel', 'dec'], why: 'A szó végi u alig hallatszik: „desz".' },
+      { point: 6, q: 'Hogyan ejted magyarul: jūdō?', a: 'dzsúdó', wrong: ['júdó', 'zsúdó', 'dzsudo'], why: 'A j „dzs"; a felülvonásos magánhangzó hosszú.' },
       {
-        q: 'Melyik átírást használja az app a japán sorok alatt?',
+        point: 2, q: 'Melyik átírást használja az app a japán sorok alatt?',
         a: 'A Hepburn-átírást (shi, chi, tsu).',
         wrong: [
           'A magyaros átírást (si, csi, cu).',
@@ -491,13 +497,13 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A Hepburn-átírás az angol kiejtéshez igazodik; ezt látod az állomásneveken is.'
       },
-      { q: 'Mit jelöl a két kis vessző (゛) a jel jobb felső sarkán?', a: 'A hang zöngés párját: ka → ga.', wrong: ['Hosszú magánhangzót.', 'Kettőzött mássalhangzót.', 'A szó végét.'], why: 'か → が, さ → ざ, た → だ, は → ば.' },
-      { q: 'Hogyan ejted: kyō („ma")?', a: '„kjó" — egyetlen szótagként', wrong: ['„ki-jó" — két szótagban', '„kó"', '„csó"'], why: 'A きょ összetett szótag: a kis ょ egybeolvad az előző jellel.' },
-      { q: 'Hány ütemből áll: にほん (ni-ho-n)?', a: 'Háromból.', wrong: ['Kettőből.', 'Négyből.', 'Egyből.'], why: 'Minden kana egy ütem — az ん is.' },
-      { q: 'Hogyan írják hiraganával legtöbbször a hosszú ō hangot?', a: 'お-sor + う (például: がっこう)', wrong: ['お-sor + っ', 'お-sor + ん', 'お-sor + を'], why: 'Az おう írásképet hosszú ō-nak ejtjük.' },
-      { q: 'Hogyan ejted az ん hangot ebben: さんぽ (sanpo)?', a: 'm-nek: „szampo"', wrong: ['egyáltalán nem ejted', 'külön „nu" szótagnak', 'hosszú „nn"-nek'], why: 'P, b, m előtt az ん „m"-nek hangzik.' },
+      { point: 4, q: 'Mit jelöl a két kis vessző (゛) a jel jobb felső sarkán?', a: 'A hang zöngés párját: ka → ga.', wrong: ['Hosszú magánhangzót.', 'Kettőzött mássalhangzót.', 'A szó végét.'], why: 'か → が, さ → ざ, た → だ, は → ば.' },
+      { point: 5, q: 'Hogyan ejted: kyō („ma")?', a: '„kjó" — egyetlen szótagként', wrong: ['„ki-jó" — két szótagban', '„kó"', '„csó"'], why: 'A きょ összetett szótag: a kis ょ egybeolvad az előző jellel.' },
+      { point: 10, q: 'Hány ütemből áll: にほん (ni-ho-n)?', a: 'Háromból.', wrong: ['Kettőből.', 'Négyből.', 'Egyből.'], why: 'Minden kana egy ütem — az ん is.' },
+      { point: 6, q: 'Hogyan írják hiraganával legtöbbször a hosszú ō hangot?', a: 'お-sor + う (például: がっこう)', wrong: ['お-sor + っ', 'お-sor + ん', 'お-sor + を'], why: 'Az おう írásképet hosszú ō-nak ejtjük.' },
+      { point: 7, q: 'Hogyan ejted az ん hangot ebben: さんぽ (sanpo)?', a: 'm-nek: „szampo"', wrong: ['egyáltalán nem ejted', 'külön „nu" szótagnak', 'hosszú „nn"-nek'], why: 'P, b, m előtt az ん „m"-nek hangzik.' },
       {
-        q: 'Mi a különbség: びょういん ↔ びよういん?',
+        point: 5, q: 'Mi a különbség: びょういん ↔ びよういん?',
         a: 'Az első kórház (byō-in), a második fodrászat (bi-yō-in).',
         wrong: [
           'Ugyanaz a szó kétféle írással.',
@@ -513,7 +519,7 @@ const NIHONCORE_COURSE = [
         why: 'A hagyományos japán szedés jobbról balra halad.'
       },
       {
-        q: 'Miért は-val írják a こんにちは végét, ha „wa"-nak ejtjük?',
+        point: 9, q: 'Miért は-val írják a こんにちは végét, ha „wa"-nak ejtjük?',
         a: 'Mert eredetileg partikula volt.',
         wrong: ['Mert hosszú magánhangzó.', 'Mert katakanás szó.', 'Mert kis っ áll előtte.'],
         why: 'A partikula は kiejtése „wa", az írása megőrizte a régi alakot.'
@@ -887,31 +893,31 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Diák vagyok." Melyik partikula hiányzik?', jp: 'わたし＿ がくせいです。', a: 'は', wrong: ['の', 'か', 'を'], why: 'A は jelöli, miről szól a mondat: „ami engem illet, diák".' },
-      { q: '„A nevem Anna." Melyik partikula hiányzik?', jp: 'わたし＿ なまえは アンナです。', a: 'の', wrong: ['は', 'も', 'か'], why: 'A の köti össze a birtokost a birtokkal: わたしの なまえ = az én nevem.' },
-      { q: 'Hogyan lesz kérdés ebből: たなかさんは せんせいです。', a: 'たなかさんは せんせいですか。', wrong: ['たなかさんか せんせいです。', 'か たなかさんは せんせいです。', 'たなかさんは か せんせいです。'], why: 'A szórend nem változik, a か a mondat legvégére kerül.' },
-      { q: '„Lí is diák." Melyik partikula hiányzik?', jp: 'リーさん＿ がくせいです。', a: 'も', wrong: ['は', 'の', 'か'], why: 'Az „is" a も: a は helyére lép.' },
-      { q: 'Mit jelent: しゅみは なんですか。', a: 'Mi a hobbid?', wrong: ['Ez a hobbid?', 'A hobbim a zene.', 'Kinek a hobbija?'], why: 'A なん = „mi?", és a です elé kerül, oda, ahová a válasz.' },
-      { q: 'Tanaka diák? A válasz: „Nem, irodai dolgozó." Melyik szóval kezded?', a: 'いいえ', wrong: ['はい', 'も', 'なん'], why: 'Tagadó válasz elején いいえ áll.' },
-      { q: 'Hogyan mondod: „Tizennyolc éves vagyok."', a: 'わたしは じゅうはっさいです。', wrong: ['わたしは じゅうはちねんせいです。', 'わたしの じゅうはっさいです。', 'わたしは じゅうはっさいですか。'], why: 'Életkor: szám + さい; a 8 kiejtése itt はっ.' },
-      { q: 'Melyik mondat helytelen?', a: 'わたしは アンナさんです。', wrong: ['わたしは アンナです。', 'やまださんは せんせいです。', 'リーさんも がくせいです。'], why: 'A さん másoknak jár: a saját nevedhez nem teszed hozzá.' },
-      { q: '„Japántanár." Melyik partikula hiányzik?', jp: 'にほんご＿ せんせいです。', a: 'の', wrong: ['は', 'も', 'か'], why: 'A の köti a pontosító főnevet a másikhoz: a japán nyelv tanára.' },
-      { q: 'Mit jelent: いもうとは にねんせいです。', a: 'A húgom másodikos.', wrong: ['A húgom kétéves.', 'Két húgom van.', 'A húgom a második gyerek.'], why: 'ねんせい = évfolyam; a kétéves にさい lenne.' },
-      { q: 'Melyik mondatot mondod CSAK az első találkozáskor?', a: 'はじめまして。', wrong: ['こんにちは。', 'すみません。', 'さようなら。'], why: 'A はじめまして szó szerint „először": ismerősnek már nem mondod.' },
-      { q: 'Valaki azt mondja: よろしく おねがいします。 Mit felelsz?', a: 'こちらこそ。', wrong: ['いいえ。', 'そうですか。', 'はじめまして。'], why: 'A こちらこそ = „részemről a szerencse": visszaadja az udvariasságot.' },
-      { q: '„Magyarországról jöttem." Melyik partikula hiányzik?', jp: 'ハンガリー＿ きました。', a: 'から', wrong: ['は', 'の', 'も'], why: 'A から a kiindulópontot jelöli: -ból, -ről.' },
-      { q: 'Hogy mondod: „angol nyelv"?', a: 'えいご', wrong: ['イギリスご', 'アメリカご', 'えいじん'], why: 'Az angol nyelv kivétel: nem az ország nevéből képezzük.' },
-      { q: 'Tanaka tanár. Hogyan szólítod meg?', a: 'たなかせんせい', wrong: ['たなかくん', 'たなかちゃん', 'たなかきょうし'], why: 'Tanárt a nevével és a せんせい utótaggal szólítunk meg; a きょうし csak a foglalkozás neve.' },
-      { q: 'Hogy mondod: „húszéves"?', a: 'はたち', wrong: ['にじゅっさい', 'にじゅうさい', 'はつか'], why: 'A húszévesre külön szó van: はたち.' },
+      { point: 1, q: '„Diák vagyok." Melyik partikula hiányzik?', jp: 'わたし＿ がくせいです。', a: 'は', wrong: ['の', 'か', 'を'], why: 'A は jelöli, miről szól a mondat: „ami engem illet, diák".' },
+      { point: 3, q: '„A nevem Anna." Melyik partikula hiányzik?', jp: 'わたし＿ なまえは アンナです。', a: 'の', wrong: ['は', 'も', 'か'], why: 'A の köti össze a birtokost a birtokkal: わたしの なまえ = az én nevem.' },
+      { point: 6, q: 'Hogyan lesz kérdés ebből: たなかさんは せんせいです。', a: 'たなかさんは せんせいですか。', wrong: ['たなかさんか せんせいです。', 'か たなかさんは せんせいです。', 'たなかさんは か せんせいです。'], why: 'A szórend nem változik, a か a mondat legvégére kerül.' },
+      { point: 8, q: '„Lí is diák." Melyik partikula hiányzik?', jp: 'リーさん＿ がくせいです。', a: 'も', wrong: ['は', 'の', 'か'], why: 'Az „is" a も: a は helyére lép.' },
+      { point: 7, q: 'Mit jelent: しゅみは なんですか。', a: 'Mi a hobbid?', wrong: ['Ez a hobbid?', 'A hobbim a zene.', 'Kinek a hobbija?'], why: 'A なん = „mi?", és a です elé kerül, oda, ahová a válasz.' },
+      { point: 6, q: 'Tanaka diák? A válasz: „Nem, irodai dolgozó." Melyik szóval kezded?', a: 'いいえ', wrong: ['はい', 'も', 'なん'], why: 'Tagadó válasz elején いいえ áll.' },
+      { point: 9, q: 'Hogyan mondod: „Tizennyolc éves vagyok."', a: 'わたしは じゅうはっさいです。', wrong: ['わたしは じゅうはちねんせいです。', 'わたしの じゅうはっさいです。', 'わたしは じゅうはっさいですか。'], why: 'Életkor: szám + さい; a 8 kiejtése itt はっ.' },
+      { point: 2, q: 'Melyik mondat helytelen?', a: 'わたしは アンナさんです。', wrong: ['わたしは アンナです。', 'やまださんは せんせいです。', 'リーさんも がくせいです。'], why: 'A さん másoknak jár: a saját nevedhez nem teszed hozzá.' },
+      { point: 3, q: '„Japántanár." Melyik partikula hiányzik?', jp: 'にほんご＿ せんせいです。', a: 'の', wrong: ['は', 'も', 'か'], why: 'A の köti a pontosító főnevet a másikhoz: a japán nyelv tanára.' },
+      { point: 9, q: 'Mit jelent: いもうとは にねんせいです。', a: 'A húgom másodikos.', wrong: ['A húgom kétéves.', 'Két húgom van.', 'A húgom a második gyerek.'], why: 'ねんせい = évfolyam; a kétéves にさい lenne.' },
+      { point: 5, q: 'Melyik mondatot mondod CSAK az első találkozáskor?', a: 'はじめまして。', wrong: ['こんにちは。', 'すみません。', 'さようなら。'], why: 'A はじめまして szó szerint „először": ismerősnek már nem mondod.' },
+      { point: 2, q: 'Valaki azt mondja: よろしく おねがいします。 Mit felelsz?', a: 'こちらこそ。', wrong: ['いいえ。', 'そうですか。', 'はじめまして。'], why: 'A こちらこそ = „részemről a szerencse": visszaadja az udvariasságot.' },
+      { point: 5, q: '„Magyarországról jöttem." Melyik partikula hiányzik?', jp: 'ハンガリー＿ きました。', a: 'から', wrong: ['は', 'の', 'も'], why: 'A から a kiindulópontot jelöli: -ból, -ről.' },
+      { point: 4, q: 'Hogy mondod: „angol nyelv"?', a: 'えいご', wrong: ['イギリスご', 'アメリカご', 'えいじん'], why: 'Az angol nyelv kivétel: nem az ország nevéből képezzük.' },
+      { point: 2, q: 'Tanaka tanár. Hogyan szólítod meg?', a: 'たなかせんせい', wrong: ['たなかくん', 'たなかちゃん', 'たなかきょうし'], why: 'Tanárt a nevével és a せんせい utótaggal szólítunk meg; a きょうし csak a foglalkozás neve.' },
+      { point: 9, q: 'Hogy mondod: „húszéves"?', a: 'はたち', wrong: ['にじゅっさい', 'にじゅうさい', 'はつか'], why: 'A húszévesre külön szó van: はたち.' },
       {
-        q: 'Egy tizenhét éves japán diák a felső középiskola második évfolyamára jár. Hogy mondja?',
+        point: 9, q: 'Egy tizenhét éves japán diák a felső középiskola második évfolyamára jár. Hogy mondja?',
         a: 'こうこうの にねんせいです。',
         wrong: ['こうこうの じゅういちねんせいです。', 'にねんせいの こうこうです。', 'こうこうは にさいです。'],
         why: 'Az évfolyamot iskolatípusonként újraszámolják, és az iskola a の-val áll elöl.'
       },
-      { q: 'Melyik a helyes kérdés a névre?', a: 'おなまえは なんですか。', wrong: ['なんですか おなまえは。', 'おなまえは なにですか。', 'おなまえの なんですか。'], why: 'A kérdőszó a です elé kerül, és ott なん alakban áll.' },
-      { q: 'Mit jelent ereszkedő hanglejtéssel: そうですか。', a: 'Értem.', wrong: ['Tényleg így van?', 'Igen, így van.', 'Nem így van.'], why: 'Ereszkedő hanglejtéssel nem kérdés, hanem tudomásulvétel.' },
-      { q: 'Melyik szó áll a „te / ön" helyén egy udvarias japán mondatban?', a: 'a másik ember neve + さん', wrong: ['あなた', 'わたし', 'こちら'], why: 'A japán a megszólított nevét használja; az あなた idegenül hat.' }
+      { point: 7, q: 'Melyik a helyes kérdés a névre?', a: 'おなまえは なんですか。', wrong: ['なんですか おなまえは。', 'おなまえは なにですか。', 'おなまえの なんですか。'], why: 'A kérdőszó a です elé kerül, és ott なん alakban áll.' },
+      { point: 6, q: 'Mit jelent ereszkedő hanglejtéssel: そうですか。', a: 'Értem.', wrong: ['Tényleg így van?', 'Igen, így van.', 'Nem így van.'], why: 'Ereszkedő hanglejtéssel nem kérdés, hanem tudomásulvétel.' },
+      { point: 2, q: 'Melyik szó áll a „te / ön" helyén egy udvarias japán mondatban?', a: 'a másik ember neve + さん', wrong: ['あなた', 'わたし', 'こちら'], why: 'A japán a megszólított nevét használja; az あなた idegenül hat.' }
     ]
   },
 
@@ -1211,25 +1217,25 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'A tárgy a beszélgetőtársad kezében van. Melyik szóval mutatsz rá?', a: 'それ', wrong: ['これ', 'あれ', 'どれ'], why: 'A それ arra vonatkozik, ami a hallgatóhoz van közel.' },
-      { q: '„Ez a táska az enyém." Mi hiányzik?', jp: '＿ かばんは わたしのです。', a: 'この', wrong: ['これ', 'ここ', 'どの'], why: 'Főnév előtt この áll; a これ csak önállóan.' },
-      { q: '„Hol van a mosdó?" Mi hiányzik?', jp: 'トイレは ＿ ですか。', a: 'どこ', wrong: ['だれ', 'なん', 'どれ'], why: 'Helyre a どこ kérdez.' },
-      { q: 'Mit jelent: これは だれの かさですか。', a: 'Kié ez az esernyő?', wrong: ['Ki ez?', 'Hol van az esernyő?', 'Ez esernyő?'], why: 'だれの = „kié", utána a birtok: かさ (esernyő).' },
-      { q: 'Melyik mondat jelenti: „Ez nem könyv."', a: 'これは ほんじゃありません。', wrong: ['これは ほんですか。', 'これも ほんです。', 'これは ほんのです。'], why: 'A です tagadása じゃありません.' },
-      { q: 'Egy épület mindkettőtöktől távol áll. Hogyan kérdezed meg, mi az?', a: 'あれは なんですか。', wrong: ['これは なんですか。', 'それは なんですか。', 'あの なんですか。'], why: 'Ami mindkét beszélőtől távol van: あれ.' },
-      { q: '„Az anyámé." Melyik partikula hiányzik?', jp: 'はは＿です。', a: 'の', wrong: ['は', 'も', 'が'], why: 'A birtokos の után a főnév elhagyható: ははのです.' },
-      { q: 'Melyik mondat helyes?', a: 'その ほんは わたしのです。', wrong: ['それ ほんは わたしのです。', 'そこ ほんは わたしのです。', 'その は わたしのです。'], why: 'Főnév előtt その áll; a それ csak önállóan.' },
-      { q: '„Ki az az ember ott?" Mi hiányzik?', jp: 'あの ひとは ＿ですか。', a: 'だれ', wrong: ['どこ', 'なん', 'どれ'], why: 'Személyre a だれ kérdez.' },
-      { q: 'Mit jelent: ここは きょうしつではありません。', a: 'Ez itt nem tanterem.', wrong: ['Ez itt a tanterem.', 'Hol van a tanterem?', 'Ez az én tantermem.'], why: 'A ではありません a です tagadása (írott, hivatalosabb alak).' },
-      { q: 'A barátod kezében van egy könyv. Rákérdezel: „Az mi?"', a: 'それは なんですか。', wrong: ['これは なんですか。', 'あれは なんですか。', 'どれは なんですか。'], why: 'Ami a másiknál van, arra a それ mutat.' },
-      { q: 'Azt kérdezik tőled: それは なんですか。 A kezedben szótár van. Hogy felelsz?', a: 'これは じしょです。', wrong: ['それは じしょです。', 'あれは じしょです。', 'ここは じしょです。'], why: 'A válaszban megfordul a nézőpont: ami neki それ, az neked これ.' },
-      { q: 'Melyik mondatban jó a mutatószó?', a: 'この ほんは わたしのです。', wrong: ['これ ほんは わたしのです。', 'このは わたしの ほんです。', 'ここ ほんは わたしのです。'], why: 'Főnév előtt この áll; a これ önállóan használatos.' },
-      { q: '„Ez itt a konyha." Melyik szó hiányzik?', jp: '＿は だいどころです。', a: 'ここ', wrong: ['これ', 'この', 'どこ'], why: 'A konyha hely: a helyre a ここ mutat.' },
-      { q: 'Hogy mondod: „a földszinten"?', a: 'いっかい', wrong: ['にかい', 'ぜろかい', 'さんがい'], why: 'A japán szinteket számol: az utcaszint az első szint.' },
+      { point: 1, q: 'A tárgy a beszélgetőtársad kezében van. Melyik szóval mutatsz rá?', a: 'それ', wrong: ['これ', 'あれ', 'どれ'], why: 'A それ arra vonatkozik, ami a hallgatóhoz van közel.' },
+      { point: 2, q: '„Ez a táska az enyém." Mi hiányzik?', jp: '＿ かばんは わたしのです。', a: 'この', wrong: ['これ', 'ここ', 'どの'], why: 'Főnév előtt この áll; a これ csak önállóan.' },
+      { point: 3, q: '„Hol van a mosdó?" Mi hiányzik?', jp: 'トイレは ＿ ですか。', a: 'どこ', wrong: ['だれ', 'なん', 'どれ'], why: 'Helyre a どこ kérdez.' },
+      { point: 5, q: 'Mit jelent: これは だれの かさですか。', a: 'Kié ez az esernyő?', wrong: ['Ki ez?', 'Hol van az esernyő?', 'Ez esernyő?'], why: 'だれの = „kié", utána a birtok: かさ (esernyő).' },
+      { point: 6, q: 'Melyik mondat jelenti: „Ez nem könyv."', a: 'これは ほんじゃありません。', wrong: ['これは ほんですか。', 'これも ほんです。', 'これは ほんのです。'], why: 'A です tagadása じゃありません.' },
+      { point: 1, q: 'Egy épület mindkettőtöktől távol áll. Hogyan kérdezed meg, mi az?', a: 'あれは なんですか。', wrong: ['これは なんですか。', 'それは なんですか。', 'あの なんですか。'], why: 'Ami mindkét beszélőtől távol van: あれ.' },
+      { point: 5, q: '„Az anyámé." Melyik partikula hiányzik?', jp: 'はは＿です。', a: 'の', wrong: ['は', 'も', 'が'], why: 'A birtokos の után a főnév elhagyható: ははのです.' },
+      { point: 2, q: 'Melyik mondat helyes?', a: 'その ほんは わたしのです。', wrong: ['それ ほんは わたしのです。', 'そこ ほんは わたしのです。', 'その は わたしのです。'], why: 'Főnév előtt その áll; a それ csak önállóan.' },
+      { point: 5, q: '„Ki az az ember ott?" Mi hiányzik?', jp: 'あの ひとは ＿ですか。', a: 'だれ', wrong: ['どこ', 'なん', 'どれ'], why: 'Személyre a だれ kérdez.' },
+      { point: 6, q: 'Mit jelent: ここは きょうしつではありません。', a: 'Ez itt nem tanterem.', wrong: ['Ez itt a tanterem.', 'Hol van a tanterem?', 'Ez az én tantermem.'], why: 'A ではありません a です tagadása (írott, hivatalosabb alak).' },
+      { point: 1, q: 'A barátod kezében van egy könyv. Rákérdezel: „Az mi?"', a: 'それは なんですか。', wrong: ['これは なんですか。', 'あれは なんですか。', 'どれは なんですか。'], why: 'Ami a másiknál van, arra a それ mutat.' },
+      { point: 1, q: 'Azt kérdezik tőled: それは なんですか。 A kezedben szótár van. Hogy felelsz?', a: 'これは じしょです。', wrong: ['それは じしょです。', 'あれは じしょです。', 'ここは じしょです。'], why: 'A válaszban megfordul a nézőpont: ami neki それ, az neked これ.' },
+      { point: 2, q: 'Melyik mondatban jó a mutatószó?', a: 'この ほんは わたしのです。', wrong: ['これ ほんは わたしのです。', 'このは わたしの ほんです。', 'ここ ほんは わたしのです。'], why: 'Főnév előtt この áll; a これ önállóan használatos.' },
+      { point: 3, q: '„Ez itt a konyha." Melyik szó hiányzik?', jp: '＿は だいどころです。', a: 'ここ', wrong: ['これ', 'この', 'どこ'], why: 'A konyha hely: a helyre a ここ mutat.' },
+      { point: 4, q: 'Hogy mondod: „a földszinten"?', a: 'いっかい', wrong: ['にかい', 'ぜろかい', 'さんがい'], why: 'A japán szinteket számol: az utcaszint az első szint.' },
       { q: 'Mit mondasz, amikor vendégként belépsz valaki lakásába?', a: 'おじゃまします。', wrong: ['ただいま。', 'おかえりなさい。', 'はじめまして。'], why: 'Az おじゃまします a belépő vendég mondata; a ただいま-t az mondja, aki hazaér.' },
-      { q: 'Mi a 〜じゃ ありません hivatalosabb párja?', a: '〜では ありません', wrong: ['〜です ありません', '〜も ありません', '〜の ありません'], why: 'A じゃ a では összevont, beszélt alakja.' },
-      { q: 'Valaki megkérdezi: これは だれの かさですか。 Az esernyő a tiéd. Mi a legrövidebb helyes válasz?', a: 'わたしのです。', wrong: ['わたしです。', 'わたしの です かさ。', 'これは わたしです。'], why: 'A birtokot a の után elhagyhatod: わたしのです = az enyém.' },
-      { q: 'Melyik a „hányadik szinten?" kérdés?', a: 'なんがい', wrong: ['いくつかい', 'なにかい', 'どこかい'], why: 'A kérdésben a かい zöngés: なんがい, akárcsak a さんがい-ban.' },
+      { point: 6, q: 'Mi a 〜じゃ ありません hivatalosabb párja?', a: '〜では ありません', wrong: ['〜です ありません', '〜も ありません', '〜の ありません'], why: 'A じゃ a では összevont, beszélt alakja.' },
+      { point: 5, q: 'Valaki megkérdezi: これは だれの かさですか。 Az esernyő a tiéd. Mi a legrövidebb helyes válasz?', a: 'わたしのです。', wrong: ['わたしです。', 'わたしの です かさ。', 'これは わたしです。'], why: 'A birtokot a の után elhagyhatod: わたしのです = az enyém.' },
+      { point: 4, q: 'Melyik a „hányadik szinten?" kérdés?', a: 'なんがい', wrong: ['いくつかい', 'なにかい', 'どこかい'], why: 'A kérdésben a かい zöngés: なんがい, akárcsak a さんがい-ban.' },
       { q: 'Hol veszed le a cipődet egy japán lakásban?', a: 'a げんかん-ban', wrong: ['a たたみ-n', 'az おしいれ-ben', 'a リビング-ben'], why: 'A げんかん az előtér: innen lépsz fel a lakásba, már cipő nélkül.' }
     ]
   },
@@ -1593,31 +1599,31 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„A parkban van egy kutya." Mi hiányzik?', jp: 'こうえんに いぬが ＿。', a: 'います', wrong: ['あります', 'です', 'ありません'], why: 'Élőlényre います jár.' },
-      { q: '„Az asztalon van egy könyv." Mi hiányzik?', jp: 'つくえの ＿に ほんが あります。', a: 'うえ', wrong: ['した', 'まえ', 'なか'], why: 'うえ = fölött, rajta.' },
-      { q: '„Senki sincs a szobában." Melyik partikula hiányzik?', jp: 'へやに だれ＿ いません。', a: 'も', wrong: ['か', 'が', 'は'], why: 'Kérdőszó + も + tagadó ige = „senki, semmi".' },
-      { q: 'Melyik mondat helyes? (A bank épület.)', a: 'ぎんこうは えきの まえに あります。', wrong: ['ぎんこうは えきの まえに います。', 'ぎんこうは えきの まえを あります。', 'ぎんこうを えきの まえに あります。'], why: 'Épületre あります jár, a helyet pedig に jelöli.' },
-      { q: '„Két húgom van." Mi hiányzik?', jp: 'いもうとが ＿ います。', a: 'ふたり', wrong: ['ににん', 'ふたつ', 'にさい'], why: 'Két főre a rendhagyó ふたり alak jár.' },
-      { q: '„A szobában van egy asztal." Mi hiányzik?', jp: 'へやに つくえが ＿。', a: 'あります', wrong: ['います', 'です', 'いません'], why: 'Tárgyra あります jár.' },
-      { q: '„A macska a szék alatt van." Melyik partikula hiányzik?', jp: 'ねこは いすの した＿ います。', a: 'に', wrong: ['で', 'を', 'が'], why: 'A létezés helyét a に jelöli.' },
-      { q: 'Melyik felsorolás jelenti: „bank, szupermarket meg egyebek"?', a: 'ぎんこうや スーパー', wrong: ['ぎんこうと スーパー', 'ぎんこうも スーパー', 'ぎんこうの スーパー'], why: 'A や nyitott felsorolás: „például ezek".' },
-      { q: '„Van valaki a szobában." Melyik partikula hiányzik?', jp: 'へやに だれ＿ います。', a: 'か', wrong: ['も', 'を', 'の'], why: 'Kérdőszó + か = „valaki, valami"; も-val és tagadással „senki".' },
-      { q: 'Mit jelent: かぞくは よにんです。', a: 'Négyen vagyunk a családban.', wrong: ['Négy családom van.', 'A családom négyéves.', 'A negyedik gyerek vagyok.'], why: 'A 〜にん embereket számol: よにん = négy fő.' },
-      { q: '„A kertben van egy fa." Melyik ige kell?', jp: 'にわに きが ＿。', a: 'あります', wrong: ['います', 'です', 'いません'], why: 'A növény él, de nem mozog magától: あります.' },
-      { q: '„Ki van a szobában?" Melyik partikula hiányzik?', jp: 'へやに だれ＿ いますか。', a: 'が', wrong: ['は', 'の', 'を'], why: 'Kérdőszó után が áll, は soha.' },
+      { point: 1, q: '„A parkban van egy kutya." Mi hiányzik?', jp: 'こうえんに いぬが ＿。', a: 'います', wrong: ['あります', 'です', 'ありません'], why: 'Élőlényre います jár.' },
+      { point: 3, q: '„Az asztalon van egy könyv." Mi hiányzik?', jp: 'つくえの ＿に ほんが あります。', a: 'うえ', wrong: ['した', 'まえ', 'なか'], why: 'うえ = fölött, rajta.' },
+      { point: 4, q: '„Senki sincs a szobában." Melyik partikula hiányzik?', jp: 'へやに だれ＿ いません。', a: 'も', wrong: ['か', 'が', 'は'], why: 'Kérdőszó + も + tagadó ige = „senki, semmi".' },
+      { point: 2, q: 'Melyik mondat helyes? (A bank épület.)', a: 'ぎんこうは えきの まえに あります。', wrong: ['ぎんこうは えきの まえに います。', 'ぎんこうは えきの まえを あります。', 'ぎんこうを えきの まえに あります。'], why: 'Épületre あります jár, a helyet pedig に jelöli.' },
+      { point: 6, q: '„Két húgom van." Mi hiányzik?', jp: 'いもうとが ＿ います。', a: 'ふたり', wrong: ['ににん', 'ふたつ', 'にさい'], why: 'Két főre a rendhagyó ふたり alak jár.' },
+      { point: 1, q: '„A szobában van egy asztal." Mi hiányzik?', jp: 'へやに つくえが ＿。', a: 'あります', wrong: ['います', 'です', 'いません'], why: 'Tárgyra あります jár.' },
+      { point: 2, q: '„A macska a szék alatt van." Melyik partikula hiányzik?', jp: 'ねこは いすの した＿ います。', a: 'に', wrong: ['で', 'を', 'が'], why: 'A létezés helyét a に jelöli.' },
+      { point: 5, q: 'Melyik felsorolás jelenti: „bank, szupermarket meg egyebek"?', a: 'ぎんこうや スーパー', wrong: ['ぎんこうと スーパー', 'ぎんこうも スーパー', 'ぎんこうの スーパー'], why: 'A や nyitott felsorolás: „például ezek".' },
+      { point: 4, q: '„Van valaki a szobában." Melyik partikula hiányzik?', jp: 'へやに だれ＿ います。', a: 'か', wrong: ['も', 'を', 'の'], why: 'Kérdőszó + か = „valaki, valami"; も-val és tagadással „senki".' },
+      { point: 6, q: 'Mit jelent: かぞくは よにんです。', a: 'Négyen vagyunk a családban.', wrong: ['Négy családom van.', 'A családom négyéves.', 'A negyedik gyerek vagyok.'], why: 'A 〜にん embereket számol: よにん = négy fő.' },
+      { point: 1, q: '„A kertben van egy fa." Melyik ige kell?', jp: 'にわに きが ＿。', a: 'あります', wrong: ['います', 'です', 'いません'], why: 'A növény él, de nem mozog magától: あります.' },
+      { point: 1, q: '„Ki van a szobában?" Melyik partikula hiányzik?', jp: 'へやに だれ＿ いますか。', a: 'が', wrong: ['は', 'の', 'を'], why: 'Kérdőszó után が áll, は soha.' },
       {
-        q: 'Melyik mondat felel arra: „Hol van a bank?"',
+        point: 2, q: 'Melyik mondat felel arra: „Hol van a bank?"',
         a: 'ぎんこうは えきの となりに あります。',
         wrong: ['えきの となりに ぎんこうが います。', 'ぎんこうが えきの となりです あります。', 'ぎんこうは えきの となりを あります。'],
         why: 'Az ismert dolog は-val áll elöl, a hely に-vel utána; a bank épület, ezért あります.'
       },
-      { q: 'Hogy mondod: „négy fő"?', a: 'よにん', wrong: ['よんにん', 'しにん', 'よっつにん'], why: 'A négy fő rendhagyó: よにん.' },
-      { q: 'Egy ismerősödnek mesélsz az édesanyádról. Melyik szót használod?', a: 'はは', wrong: ['おかあさん', 'ごかぞく', 'おばあさん'], why: 'A saját családodról másnak a szerény alakkal beszélsz.' },
+      { point: 6, q: 'Hogy mondod: „négy fő"?', a: 'よにん', wrong: ['よんにん', 'しにん', 'よっつにん'], why: 'A négy fő rendhagyó: よにん.' },
+      { point: 6, q: 'Egy ismerősödnek mesélsz az édesanyádról. Melyik szót használod?', a: 'はは', wrong: ['おかあさん', 'ごかぞく', 'おばあさん'], why: 'A saját családodról másnak a szerény alakkal beszélsz.' },
       { q: 'Mit mondasz, mielőtt enni kezdesz?', a: 'いただきます。', wrong: ['ごちそうさまでした。', 'いって きます。', 'おなかが すきました。'], why: 'Az いただきます az evés előtti köszönet; a ごちそうさまでした az evés utáni.' },
-      { q: '„Van valami a dobozban?" Melyik szó hiányzik?', jp: 'はこの なかに ＿ ありますか。', a: 'なにか', wrong: ['なにも', 'だれか', 'どこか'], why: 'A なにか = „valami"; a なにも tagadó igét kér.' },
+      { point: 4, q: '„Van valami a dobozban?" Melyik szó hiányzik?', jp: 'はこの なかに ＿ ありますか。', a: 'なにか', wrong: ['なにも', 'だれか', 'どこか'], why: 'A なにか = „valami"; a なにも tagadó igét kér.' },
       { q: 'A barátod elindul otthonról, és azt mondja: いって きます。 Mit felelsz?', a: 'いって らっしゃい。', wrong: ['おかえりなさい。', 'ただいま。', 'おじゃまします。'], why: 'Az いって らっしゃい az otthon maradó válasza az indulónak.' },
-      { q: 'Melyik szócska vár egyetértést a mondat végén?', a: 'ね', wrong: ['よ', 'か', 'も'], why: 'A ね azt jelzi: „ugye te is így látod?".' },
-      { q: '„A bank a könyvesbolt és a szupermarket között van." Melyik szó hiányzik?', jp: 'ぎんこうは ほんやと スーパーの ＿に あります。', a: 'あいだ', wrong: ['となり', 'なか', 'うえ'], why: 'Az あいだ = „között": két viszonyítási pontot kér, と-val összekötve.' }
+      { point: 7, q: 'Melyik szócska vár egyetértést a mondat végén?', a: 'ね', wrong: ['よ', 'か', 'も'], why: 'A ね azt jelzi: „ugye te is így látod?".' },
+      { point: 3, q: '„A bank a könyvesbolt és a szupermarket között van." Melyik szó hiányzik?', jp: 'ぎんこうは ほんやと スーパーの ＿に あります。', a: 'あいだ', wrong: ['となり', 'なか', 'うえ'], why: 'Az あいだ = „között": két viszonyítási pontot kér, と-val összekötve.' }
     ]
   },
 
@@ -2020,31 +2026,31 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Három almát kérek." Mi hiányzik?', jp: 'りんごを ＿ ください。', a: 'みっつ', wrong: ['さんまい', 'さんぼん', 'さんさつ'], why: 'Az almára az általános 〜つ sor jár: みっつ = három darab.' },
-      { q: 'Melyik számlálóval számolod a bélyeget? (lapos tárgy)', a: '〜まい', wrong: ['〜ほん', '〜さつ', '〜にん'], why: 'Lapos, vékony tárgyakra 〜まい jár.' },
-      { q: '„Négy óra van." Melyik a helyes olvasat?', a: 'よじです。', wrong: ['よんじです。', 'しじです。', 'よっつじです。'], why: 'A négy óra rendhagyó: よじ.' },
-      { q: '„A bank kilenctől háromig van nyitva." Mi hiányzik?', jp: 'ぎんこうは くじ＿ さんじ＿です。', a: 'から … まで', wrong: ['まで … から', 'に … へ', 'と … も'], why: 'から = -tól, まで = -ig.' },
-      { q: 'Mit jelent: ペンを にほん ください。', a: 'Két tollat kérek.', wrong: ['Japán tollat kérek.', 'Két könyvet kérek.', 'Egy tollat kérek.'], why: 'Itt a にほん = に + ほん, vagyis két darab hosszú tárgy.' },
-      { q: '„Ezt kérem." Melyik partikula hiányzik?', jp: 'これ＿ ください。', a: 'を', wrong: ['に', 'で', 'と'], why: 'Amit kérsz, az を-t kap.' },
-      { q: '„Egy füzetet kérek." Mi hiányzik?', jp: 'ノートを ＿ ください。', a: 'いっさつ', wrong: ['いっぽん', 'いちまい', 'ひとり'], why: 'Könyvre, füzetre 〜さつ jár: いっさつ.' },
-      { q: '„Fél tíz van." Melyik a helyes?', a: 'くじはんです。', wrong: ['きゅうじはんです。', 'じゅうじはんです。', 'くじからです。'], why: 'A 9 óra rendhagyó: くじ; a fél: はん. A fél tíz = kilenc és fél.' },
-      { q: '„Milyen nap van ma?" Mi hiányzik?', jp: 'きょうは ＿ですか。', a: 'なんようび', wrong: ['なんさい', 'だれ', 'どれ'], why: 'A hét napjára なんようび kérdez.' },
-      { q: 'Mit jelent: みせは なんじまでですか。', a: 'Meddig van nyitva a bolt?', wrong: ['Mikor nyit a bolt?', 'Hol van a bolt?', 'Hány bolt van?'], why: 'まで = -ig; なんじまで = hány óráig.' },
-      { q: 'Hogy kérdezed meg, mennyibe kerül valami?', a: 'いくらですか。', wrong: ['いくつですか。', 'なんじですか。', 'どこですか。'], why: 'Az いくら az árra kérdez; az いくつ a darabszámra.' },
-      { q: 'Hogy mondod: 300?', a: 'さんびゃく', wrong: ['さんひゃく', 'さんぴゃく', 'みっつひゃく'], why: 'A 3 után a ひゃく zöngés lesz: さんびゃく.' },
-      { q: 'Hogy mondod: 10 000 jen?', a: 'いちまんえん', wrong: ['まんえん', 'じゅうせんえん', 'いちせんえん'], why: 'A tízezer külön egység (まん), és elé kötelező az いち.' },
-      { q: 'Melyik számlálóval számolod az esernyőt?', a: '〜ほん', wrong: ['〜まい', '〜さつ', '〜にん'], why: 'Az esernyő hosszú és vékony: ほん.' },
-      { q: '„Három üveg vizet kérek." Mi hiányzik?', jp: 'みずを ＿ ください。', a: 'さんぼん', wrong: ['さんほん', 'さんぽん', 'さんまい'], why: 'A 3 után a ほん ぼん-ra változik.' },
-      { q: 'A ごじはん hány óra?', a: '5:30 (fél hat)', wrong: ['4:30 (fél öt)', '5:15 (negyed hat)', '6:30 (fél hét)'], why: 'A はん az előtte kimondott órához ad harminc percet.' },
-      { q: 'Hogy mondod: „hét óra"?', a: 'しちじ', wrong: ['ななじ', 'しちふん', 'なのか'], why: 'A hét óra olvasata しちじ.' },
+      { point: 3, q: '„Három almát kérek." Mi hiányzik?', jp: 'りんごを ＿ ください。', a: 'みっつ', wrong: ['さんまい', 'さんぼん', 'さんさつ'], why: 'Az almára az általános 〜つ sor jár: みっつ = három darab.' },
+      { point: 3, q: 'Melyik számlálóval számolod a bélyeget? (lapos tárgy)', a: '〜まい', wrong: ['〜ほん', '〜さつ', '〜にん'], why: 'Lapos, vékony tárgyakra 〜まい jár.' },
+      { point: 5, q: '„Négy óra van." Melyik a helyes olvasat?', a: 'よじです。', wrong: ['よんじです。', 'しじです。', 'よっつじです。'], why: 'A négy óra rendhagyó: よじ.' },
+      { point: 7, q: '„A bank kilenctől háromig van nyitva." Mi hiányzik?', jp: 'ぎんこうは くじ＿ さんじ＿です。', a: 'から … まで', wrong: ['まで … から', 'に … へ', 'と … も'], why: 'から = -tól, まで = -ig.' },
+      { point: 3, q: 'Mit jelent: ペンを にほん ください。', a: 'Két tollat kérek.', wrong: ['Japán tollat kérek.', 'Két könyvet kérek.', 'Egy tollat kérek.'], why: 'Itt a にほん = に + ほん, vagyis két darab hosszú tárgy.' },
+      { point: 1, q: '„Ezt kérem." Melyik partikula hiányzik?', jp: 'これ＿ ください。', a: 'を', wrong: ['に', 'で', 'と'], why: 'Amit kérsz, az を-t kap.' },
+      { point: 3, q: '„Egy füzetet kérek." Mi hiányzik?', jp: 'ノートを ＿ ください。', a: 'いっさつ', wrong: ['いっぽん', 'いちまい', 'ひとり'], why: 'Könyvre, füzetre 〜さつ jár: いっさつ.' },
+      { point: 5, q: '„Fél tíz van." Melyik a helyes?', a: 'くじはんです。', wrong: ['きゅうじはんです。', 'じゅうじはんです。', 'くじからです。'], why: 'A 9 óra rendhagyó: くじ; a fél: はん. A fél tíz = kilenc és fél.' },
+      { point: 6, q: '„Milyen nap van ma?" Mi hiányzik?', jp: 'きょうは ＿ですか。', a: 'なんようび', wrong: ['なんさい', 'だれ', 'どれ'], why: 'A hét napjára なんようび kérdez.' },
+      { point: 7, q: 'Mit jelent: みせは なんじまでですか。', a: 'Meddig van nyitva a bolt?', wrong: ['Mikor nyit a bolt?', 'Hol van a bolt?', 'Hány bolt van?'], why: 'まで = -ig; なんじまで = hány óráig.' },
+      { point: 2, q: 'Hogy kérdezed meg, mennyibe kerül valami?', a: 'いくらですか。', wrong: ['いくつですか。', 'なんじですか。', 'どこですか。'], why: 'Az いくら az árra kérdez; az いくつ a darabszámra.' },
+      { point: 2, q: 'Hogy mondod: 300?', a: 'さんびゃく', wrong: ['さんひゃく', 'さんぴゃく', 'みっつひゃく'], why: 'A 3 után a ひゃく zöngés lesz: さんびゃく.' },
+      { point: 2, q: 'Hogy mondod: 10 000 jen?', a: 'いちまんえん', wrong: ['まんえん', 'じゅうせんえん', 'いちせんえん'], why: 'A tízezer külön egység (まん), és elé kötelező az いち.' },
+      { point: 3, q: 'Melyik számlálóval számolod az esernyőt?', a: '〜ほん', wrong: ['〜まい', '〜さつ', '〜にん'], why: 'Az esernyő hosszú és vékony: ほん.' },
+      { point: 3, q: '„Három üveg vizet kérek." Mi hiányzik?', jp: 'みずを ＿ ください。', a: 'さんぼん', wrong: ['さんほん', 'さんぽん', 'さんまい'], why: 'A 3 után a ほん ぼん-ra változik.' },
+      { point: 5, q: 'A ごじはん hány óra?', a: '5:30 (fél hat)', wrong: ['4:30 (fél öt)', '5:15 (negyed hat)', '6:30 (fél hét)'], why: 'A はん az előtte kimondott órához ad harminc percet.' },
+      { point: 5, q: 'Hogy mondod: „hét óra"?', a: 'しちじ', wrong: ['ななじ', 'しちふん', 'なのか'], why: 'A hét óra olvasata しちじ.' },
       {
         q: 'Belépsz egy boltba, az eladó azt mondja: いらっしゃいませ。 Mit teszel?',
         a: 'Semmit nem kell felelned, legfeljebb biccentesz.',
         wrong: ['Azt feleled: いらっしゃいませ。', 'Azt feleled: おじゃまします。', 'Azt feleled: いただきます。'],
         why: 'Az いらっしゃいませ az eladó köszöntése; a vevő nem válaszol rá.'
       },
-      { q: 'Azt kérdezik: これは あなたの かさでは ありませんか。 Az esernyő NEM a tiéd. Hogy kezded a választ?', a: 'はい、…', wrong: ['いいえ、…', 'そうです、…', 'どうぞ、…'], why: 'A はい itt azt jelenti: „igazad van, nem az enyém". A japán a kérdés szavaira felel.' },
-      { q: 'Melyik nap a もくようび?', a: 'csütörtök', wrong: ['kedd', 'szerda', 'péntek'], why: 'もく = fa; a sorrend: hold, tűz, víz, fa, arany, föld, nap.' }
+      { point: 8, q: 'Azt kérdezik: これは あなたの かさでは ありませんか。 Az esernyő NEM a tiéd. Hogy kezded a választ?', a: 'はい、…', wrong: ['いいえ、…', 'そうです、…', 'どうぞ、…'], why: 'A はい itt azt jelenti: „igazad van, nem az enyém". A japán a kérdés szavaira felel.' },
+      { point: 6, q: 'Melyik nap a もくようび?', a: 'csütörtök', wrong: ['kedd', 'szerda', 'péntek'], why: 'もく = fa; a sorrend: hold, tűz, víz, fa, arany, föld, nap.' }
     ]
   },
 
@@ -2437,29 +2443,29 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Tegnap könyvtárba mentem." Mi hiányzik?', jp: 'きのう{図書館|としょかん}へ＿。', a: '{行|い}きました', wrong: ['{行|い}きます', '{行|い}きません', '{行|い}きませんでした'], why: 'Múlt idő, állítás: 〜ました.' },
-      { q: '„Busszal megyek." Melyik partikula hiányzik?', jp: 'バス＿{行|い}きます。', a: 'で', wrong: ['に', 'へ', 'と'], why: 'Az eszközt a で jelöli.' },
-      { q: 'Melyik időszó után NEM áll に?', a: '{明日|あした}', wrong: ['{八時|はちじ}', '{土曜日|どようび}', '{四月|しがつ}{三日|みっか}'], why: 'A viszonylagos időszavak (ma, holnap, jövő héten) után nincs に.' },
-      { q: '„A barátommal megyek." Melyik partikula hiányzik?', jp: '{友|とも}だち＿{行|い}きます。', a: 'と', wrong: ['で', 'を', 'が'], why: 'A társat a と jelöli.' },
-      { q: 'Hogyan olvasod: 四月三日', a: 'しがつ みっか', wrong: ['よんがつ さんにち', 'しがつ さんにち', 'よんがつ みっか'], why: 'Április: しがつ; harmadika: みっか. Mindkettő rendhagyó.' },
-      { q: '„Vasárnap nem megyek iskolába." Mi hiányzik?', jp: '{日曜日|にちようび}は{学校|がっこう}へ＿。', a: '{行|い}きません', wrong: ['{行|い}きます', '{行|い}きました', '{行|い}きませんでした'], why: 'Jelen vagy jövő idő, tagadás: 〜ません.' },
-      { q: '„A barátom Pécsről jött." Melyik partikula hiányzik?', jp: '{友|とも}だちはペーチ＿{来|き}ました。', a: 'から', wrong: ['まで', 'へ', 'を'], why: 'A kiindulópontot a から jelöli.' },
-      { q: '„Nyolckor megyek iskolába." Melyik partikula hiányzik?', jp: '{八時|はちじ}＿{学校|がっこう}へ{行|い}きます。', a: 'に', wrong: ['で', 'を', 'と'], why: 'Számmal kifejezett időpont után に áll.' },
-      { q: 'Hogyan mondod: „Gyalog megyek haza."', a: '{歩|ある}いて{帰|かえ}ります。', wrong: ['{歩|ある}いてで{帰|かえ}ります。', 'バスで{帰|かえ}ります。', '{歩|ある}いて{来|き}ました。'], why: 'A gyaloglás {歩|ある}いて, で nélkül; hazamenni: {帰|かえ}ります.' },
-      { q: '„Hetente kétszer megyek könyvtárba." Mi hiányzik?', jp: '{週|しゅう}に＿{図書館|としょかん}へ{行|い}きます。', a: '{二回|にかい}', wrong: ['{二時間|にじかん}', '{二日|ふつか}', '{二人|ふたり}'], why: 'A gyakoriság: időszak に + szám + {回|かい}.' },
-      { q: 'Melyik a „megy" ige múlt idejű tagadó alakja?', a: '{行|い}きませんでした', wrong: ['{行|い}きませんです', '{行|い}きましたません', '{行|い}きないでした'], why: 'A jelen tagadó alakhoz (〜ません) でした járul.' },
-      { q: 'A japán iskolában állsz. Megkérdezed az osztálytársadat, mivel jár ide. Melyik ige kell?', a: '{来|き}ます', wrong: ['{行|い}きます', '{帰|かえ}ります', 'います'], why: 'A cél az a hely, ahol te vagy: ide „jönni" kell.' },
-      { q: '„Hétkor megyek haza." Melyik a helyes?', a: '{七時|しちじ}にうちへ{帰|かえ}ります。', wrong: ['{七時|しちじ}にうちへ{行|い}きます。', '{七時|しちじ}うちで{帰|かえ}ります。', '{七時|しちじ}にうちを{帰|かえ}ります。'], why: 'A saját otthonodba „hazatérsz": {帰|かえ}ります; a cél へ-t kap.' },
-      { q: '„Egyedül mentem." Melyik partikula hiányzik?', jp: '{一人|ひとり}＿{行|い}きました。', a: 'で', wrong: ['と', 'に', 'を'], why: 'A létszámot kifejező szavak で-t kapnak: {一人|ひとり}で, {二人|ふたり}で, みんなで.' },
-      { q: 'Melyik mondatban van hiba?', a: 'いつに{行|い}きますか。', wrong: ['いつ{行|い}きますか。', '{八時|はちじ}に{行|い}きます。', '{来週|らいしゅう}{行|い}きます。'], why: 'Az いつ után soha nincs に.' },
-      { q: 'Hogy olvasod: 二十日 (a hónap 20. napja)?', a: 'はつか', wrong: ['にじゅうにち', 'ふつか', 'にじゅっか'], why: 'A huszadika rendhagyó: はつか.' },
+      { point: 1, q: '„Tegnap könyvtárba mentem." Mi hiányzik?', jp: 'きのう{図書館|としょかん}へ＿。', a: '{行|い}きました', wrong: ['{行|い}きます', '{行|い}きません', '{行|い}きませんでした'], why: 'Múlt idő, állítás: 〜ました.' },
+      { point: 3, q: '„Busszal megyek." Melyik partikula hiányzik?', jp: 'バス＿{行|い}きます。', a: 'で', wrong: ['に', 'へ', 'と'], why: 'Az eszközt a で jelöli.' },
+      { point: 5, q: 'Melyik időszó után NEM áll に?', a: '{明日|あした}', wrong: ['{八時|はちじ}', '{土曜日|どようび}', '{四月|しがつ}{三日|みっか}'], why: 'A viszonylagos időszavak (ma, holnap, jövő héten) után nincs に.' },
+      { point: 4, q: '„A barátommal megyek." Melyik partikula hiányzik?', jp: '{友|とも}だち＿{行|い}きます。', a: 'と', wrong: ['で', 'を', 'が'], why: 'A társat a と jelöli.' },
+      { point: 6, q: 'Hogyan olvasod: 四月三日', a: 'しがつ みっか', wrong: ['よんがつ さんにち', 'しがつ さんにち', 'よんがつ みっか'], why: 'Április: しがつ; harmadika: みっか. Mindkettő rendhagyó.' },
+      { point: 1, q: '„Vasárnap nem megyek iskolába." Mi hiányzik?', jp: '{日曜日|にちようび}は{学校|がっこう}へ＿。', a: '{行|い}きません', wrong: ['{行|い}きます', '{行|い}きました', '{行|い}きませんでした'], why: 'Jelen vagy jövő idő, tagadás: 〜ません.' },
+      { point: 2, q: '„A barátom Pécsről jött." Melyik partikula hiányzik?', jp: '{友|とも}だちはペーチ＿{来|き}ました。', a: 'から', wrong: ['まで', 'へ', 'を'], why: 'A kiindulópontot a から jelöli.' },
+      { point: 5, q: '„Nyolckor megyek iskolába." Melyik partikula hiányzik?', jp: '{八時|はちじ}＿{学校|がっこう}へ{行|い}きます。', a: 'に', wrong: ['で', 'を', 'と'], why: 'Számmal kifejezett időpont után に áll.' },
+      { point: 3, q: 'Hogyan mondod: „Gyalog megyek haza."', a: '{歩|ある}いて{帰|かえ}ります。', wrong: ['{歩|ある}いてで{帰|かえ}ります。', 'バスで{帰|かえ}ります。', '{歩|ある}いて{来|き}ました。'], why: 'A gyaloglás {歩|ある}いて, で nélkül; hazamenni: {帰|かえ}ります.' },
+      { point: 7, q: '„Hetente kétszer megyek könyvtárba." Mi hiányzik?', jp: '{週|しゅう}に＿{図書館|としょかん}へ{行|い}きます。', a: '{二回|にかい}', wrong: ['{二時間|にじかん}', '{二日|ふつか}', '{二人|ふたり}'], why: 'A gyakoriság: időszak に + szám + {回|かい}.' },
+      { point: 1, q: 'Melyik a „megy" ige múlt idejű tagadó alakja?', a: '{行|い}きませんでした', wrong: ['{行|い}きませんです', '{行|い}きましたません', '{行|い}きないでした'], why: 'A jelen tagadó alakhoz (〜ません) でした járul.' },
+      { point: 2, q: 'A japán iskolában állsz. Megkérdezed az osztálytársadat, mivel jár ide. Melyik ige kell?', a: '{来|き}ます', wrong: ['{行|い}きます', '{帰|かえ}ります', 'います'], why: 'A cél az a hely, ahol te vagy: ide „jönni" kell.' },
+      { point: 2, q: '„Hétkor megyek haza." Melyik a helyes?', a: '{七時|しちじ}にうちへ{帰|かえ}ります。', wrong: ['{七時|しちじ}にうちへ{行|い}きます。', '{七時|しちじ}うちで{帰|かえ}ります。', '{七時|しちじ}にうちを{帰|かえ}ります。'], why: 'A saját otthonodba „hazatérsz": {帰|かえ}ります; a cél へ-t kap.' },
+      { point: 4, q: '„Egyedül mentem." Melyik partikula hiányzik?', jp: '{一人|ひとり}＿{行|い}きました。', a: 'で', wrong: ['と', 'に', 'を'], why: 'A létszámot kifejező szavak で-t kapnak: {一人|ひとり}で, {二人|ふたり}で, みんなで.' },
+      { point: 5, q: 'Melyik mondatban van hiba?', a: 'いつに{行|い}きますか。', wrong: ['いつ{行|い}きますか。', '{八時|はちじ}に{行|い}きます。', '{来週|らいしゅう}{行|い}きます。'], why: 'Az いつ után soha nincs に.' },
+      { point: 6, q: 'Hogy olvasod: 二十日 (a hónap 20. napja)?', a: 'はつか', wrong: ['にじゅうにち', 'ふつか', 'にじゅっか'], why: 'A huszadika rendhagyó: はつか.' },
       {
-        q: 'Mi a különbség? {三時|さんじ} és {三時間|さんじかん}',
+        point: 7, q: 'Mi a különbség? {三時|さんじ} és {三時間|さんじかん}',
         a: 'az első időpont (háromkor), a második időtartam (három órán át)',
         wrong: ['az első időtartam, a második időpont', 'ugyanazt jelentik', 'az első délelőtt, a második délután'],
         why: 'A {間|かん} teszi időtartammá: {三時間|さんじかん} = három órán át.'
       },
-      { q: '„Sehová sem mentem." Mi hiányzik?', jp: '＿{行|い}きませんでした。', a: 'どこへも', wrong: ['どこかへ', 'どこへ', 'どこでも'], why: 'A どこへも + tagadás = „sehová"; a どこかへ „valahová".' },
+      { point: 2, q: '„Sehová sem mentem." Mi hiányzik?', jp: '＿{行|い}きませんでした。', a: 'どこへも', wrong: ['どこかへ', 'どこへ', 'どこでも'], why: 'A どこへも + tagadás = „sehová"; a どこかへ „valahová".' },
       { q: 'Felnőttnek, hivatalos helyen mutatkozol be. Melyik az udvariasabb?', a: 'アンナと{申|もう}します。', wrong: ['アンナさんです。', 'アンナが{来|き}ます。', 'アンナといいですか。'], why: 'A 〜と{申|もう}します a 〜です szerény, udvarias párja.' },
       { q: 'Mikor kezdődik a tanév Japánban?', a: 'áprilisban', wrong: ['szeptemberben', 'januárban', 'júliusban'], why: 'Az iskolaév áprilisban indul, a cseresznyevirágzás idején.' }
     ]
@@ -2806,30 +2812,30 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Könyvet olvasok." Melyik partikula hiányzik?', jp: '{本|ほん}＿{読|よ}みます。', a: 'を', wrong: ['が', 'に', 'で'], why: 'A cselekvés tárgyát a を jelöli.' },
-      { q: '„A könyvtárban tanulok." Melyik partikula hiányzik?', jp: '{図書館|としょかん}＿{勉強|べんきょう}します。', a: 'で', wrong: ['に', 'へ', 'を'], why: 'A cselekvés helye で; a に a létezés helye lenne.' },
-      { q: '„Megyek táskát venni." Mi hiányzik?', jp: 'かばんを＿{行|い}きます。', a: '{買|か}いに', wrong: ['{買|か}いますに', '{買|か}いで', '{買|か}いを'], why: 'A cél: az ige ます nélküli alakja + に.' },
-      { q: 'Mit jelent: いっしょに{映画|えいが}を{見|み}ませんか。', a: 'Nem néznénk meg együtt egy filmet?', wrong: ['Nem nézek filmet.', 'Együtt néztünk filmet.', 'Nem láttad a filmet?'], why: 'A 〜ませんか meghívás, nem tagadás.' },
-      { q: 'Hogyan mondod: „Találkozzunk az állomáson!"', a: '{駅|えき}で{会|あ}いましょう。', wrong: ['{駅|えき}に{会|あ}いません。', '{駅|えき}を{会|あ}います。', '{駅|えき}で{会|あ}いましたか。'], why: 'Közös cselekvésre a 〜ましょう szólít; a hely で.' },
-      { q: '„Mit iszol?" Melyik partikula hiányzik?', jp: '{何|なに}＿{飲|の}みますか。', a: 'を', wrong: ['で', 'に', 'へ'], why: 'A cselekvés tárgya を; a kérdőszó is megkapja.' },
-      { q: 'Melyik mondat jelenti: „A könyvtárban vagyok."', a: '{図書館|としょかん}にいます。', wrong: ['{図書館|としょかん}でいます。', '{図書館|としょかん}をいます。', '{図書館|としょかん}へいます。'], why: 'A létezés helye に; a で a cselekvés helye.' },
-      { q: 'Válasz a meghívásra: „Jó, igyunk!"', a: 'ええ、{飲|の}みましょう。', wrong: ['ええ、{飲|の}みません。', 'いいえ、{飲|の}みましょう。', 'ええ、{飲|の}みましたか。'], why: 'Beleegyezés: ええ + 〜ましょう.' },
-      { q: '„A parkba megyek sétálni." Melyik partikula hiányzik?', jp: '{公園|こうえん}へ{散歩|さんぽ}＿{行|い}きます。', a: 'に', wrong: ['を', 'が', 'と'], why: 'A mozgás célja: főnév vagy ます nélküli ige + に.' },
-      { q: 'Mit jelent: うちで{晩|ばん}ごはんを{食|た}べます。', a: 'Otthon vacsorázom.', wrong: ['Hazamegyek vacsorázni.', 'Otthon van a vacsora.', 'Nem vacsorázom otthon.'], why: 'で = a cselekvés helye, を = a tárgy.' },
-      { q: '„A kávézóban kávét iszom." Melyik két partikula hiányzik?', jp: '{喫茶店|きっさてん}＿コーヒー＿{飲|の}みます。', a: 'で … を', wrong: ['に … を', 'で … が', 'を … で'], why: 'A cselekvés helye で, a tárgy を.' },
-      { q: 'Melyik mondat helyes?', a: '{図書館|としょかん}にいます。', wrong: ['{図書館|としょかん}でいます。', '{図書館|としょかん}をいます。', '{図書館|としょかん}といます。'], why: 'Az います létezést fejez ki: a helyét に jelöli.' },
-      { q: 'Hogy mondod: „megyek filmet nézni"?', a: '{映画|えいが}を{見|み}に{行|い}きます。', wrong: ['{映画|えいが}を{見|み}ますに{行|い}きます。', '{映画|えいが}を{見|み}で{行|い}きます。', '{映画|えいが}に{見|み}を{行|い}きます。'], why: 'A cél: a ます nélküli tő + に, utána a mozgásige.' },
-      { q: 'A barátod azt mondja: いっしょに{行|い}きませんか。 El akarod fogadni. Mit felelsz?', a: 'ええ、{行|い}きましょう。', wrong: ['いいえ、{行|い}きません。', 'ええ、{行|い}きませんか。', 'はい、{行|い}きました。'], why: 'A meghívásra a beleegyező válasz a 〜ましょう.' },
+      { point: 1, q: '„Könyvet olvasok." Melyik partikula hiányzik?', jp: '{本|ほん}＿{読|よ}みます。', a: 'を', wrong: ['が', 'に', 'で'], why: 'A cselekvés tárgyát a を jelöli.' },
+      { point: 2, q: '„A könyvtárban tanulok." Melyik partikula hiányzik?', jp: '{図書館|としょかん}＿{勉強|べんきょう}します。', a: 'で', wrong: ['に', 'へ', 'を'], why: 'A cselekvés helye で; a に a létezés helye lenne.' },
+      { point: 3, q: '„Megyek táskát venni." Mi hiányzik?', jp: 'かばんを＿{行|い}きます。', a: '{買|か}いに', wrong: ['{買|か}いますに', '{買|か}いで', '{買|か}いを'], why: 'A cél: az ige ます nélküli alakja + に.' },
+      { point: 4, q: 'Mit jelent: いっしょに{映画|えいが}を{見|み}ませんか。', a: 'Nem néznénk meg együtt egy filmet?', wrong: ['Nem nézek filmet.', 'Együtt néztünk filmet.', 'Nem láttad a filmet?'], why: 'A 〜ませんか meghívás, nem tagadás.' },
+      { point: 5, q: 'Hogyan mondod: „Találkozzunk az állomáson!"', a: '{駅|えき}で{会|あ}いましょう。', wrong: ['{駅|えき}に{会|あ}いません。', '{駅|えき}を{会|あ}います。', '{駅|えき}で{会|あ}いましたか。'], why: 'Közös cselekvésre a 〜ましょう szólít; a hely で.' },
+      { point: 1, q: '„Mit iszol?" Melyik partikula hiányzik?', jp: '{何|なに}＿{飲|の}みますか。', a: 'を', wrong: ['で', 'に', 'へ'], why: 'A cselekvés tárgya を; a kérdőszó is megkapja.' },
+      { point: 2, q: 'Melyik mondat jelenti: „A könyvtárban vagyok."', a: '{図書館|としょかん}にいます。', wrong: ['{図書館|としょかん}でいます。', '{図書館|としょかん}をいます。', '{図書館|としょかん}へいます。'], why: 'A létezés helye に; a で a cselekvés helye.' },
+      { point: 5, q: 'Válasz a meghívásra: „Jó, igyunk!"', a: 'ええ、{飲|の}みましょう。', wrong: ['ええ、{飲|の}みません。', 'いいえ、{飲|の}みましょう。', 'ええ、{飲|の}みましたか。'], why: 'Beleegyezés: ええ + 〜ましょう.' },
+      { point: 3, q: '„A parkba megyek sétálni." Melyik partikula hiányzik?', jp: '{公園|こうえん}へ{散歩|さんぽ}＿{行|い}きます。', a: 'に', wrong: ['を', 'が', 'と'], why: 'A mozgás célja: főnév vagy ます nélküli ige + に.' },
+      { point: 2, q: 'Mit jelent: うちで{晩|ばん}ごはんを{食|た}べます。', a: 'Otthon vacsorázom.', wrong: ['Hazamegyek vacsorázni.', 'Otthon van a vacsora.', 'Nem vacsorázom otthon.'], why: 'で = a cselekvés helye, を = a tárgy.' },
+      { point: 2, q: '„A kávézóban kávét iszom." Melyik két partikula hiányzik?', jp: '{喫茶店|きっさてん}＿コーヒー＿{飲|の}みます。', a: 'で … を', wrong: ['に … を', 'で … が', 'を … で'], why: 'A cselekvés helye で, a tárgy を.' },
+      { point: 2, q: 'Melyik mondat helyes?', a: '{図書館|としょかん}にいます。', wrong: ['{図書館|としょかん}でいます。', '{図書館|としょかん}をいます。', '{図書館|としょかん}といます。'], why: 'Az います létezést fejez ki: a helyét に jelöli.' },
+      { point: 3, q: 'Hogy mondod: „megyek filmet nézni"?', a: '{映画|えいが}を{見|み}に{行|い}きます。', wrong: ['{映画|えいが}を{見|み}ますに{行|い}きます。', '{映画|えいが}を{見|み}で{行|い}きます。', '{映画|えいが}に{見|み}を{行|い}きます。'], why: 'A cél: a ます nélküli tő + に, utána a mozgásige.' },
+      { point: 4, q: 'A barátod azt mondja: いっしょに{行|い}きませんか。 El akarod fogadni. Mit felelsz?', a: 'ええ、{行|い}きましょう。', wrong: ['いいえ、{行|い}きません。', 'ええ、{行|い}きませんか。', 'はい、{行|い}きました。'], why: 'A meghívásra a beleegyező válasz a 〜ましょう.' },
       {
-        q: 'Udvariasan el akarsz hárítani egy holnapi meghívást. Melyik a legjobb?',
+        point: 4, q: 'Udvariasan el akarsz hárítani egy holnapi meghívást. Melyik a legjobb?',
         a: 'すみません、{明日|あした}はちょっと…。',
         wrong: ['いいえ、{行|い}きません。', '{明日|あした}は{行|い}きましょう。', 'そうしましょう。'],
         why: 'A japán nem mondja ki a nemet: a ちょっと… félbehagyott mondata az udvarias elhárítás.'
       },
-      { q: 'Mi a {食|た}べます szótári alakja?', a: '{食|た}べる', wrong: ['{食|た}ぶ', '{食|た}べく', '{食|た}べす'], why: 'II. csoportú ige: a ます helyére る kerül.' },
-      { q: 'Mi a {書|か}きます szótári alakja?', a: '{書|か}く', wrong: ['{書|か}きる', '{書|か}る', '{書|か}きう'], why: 'I. csoportú ige: a ます előtti i hangból (き) u hang (く) lesz.' },
-      { q: 'Melyik ige tartozik a III. (rendhagyó) csoportba?', a: 'します', wrong: ['{話|はな}します', '{食|た}べます', '{読|よ}みます'], why: 'A III. csoport két igéje a きます és a します; a {話|はな}します I. csoportú.' },
-      { q: '„Japánt tanulok." Melyik mondat HIBÁS?', a: '{日本語|にほんご}を{勉強|べんきょう}をします。', wrong: ['{日本語|にほんご}を{勉強|べんきょう}します。', '{日本語|にほんご}の{勉強|べんきょう}をします。', '{毎日|まいにち}{日本語|にほんご}を{勉強|べんきょう}します。'], why: 'Egy ige mellett csak egy を állhat.' },
+      { point: 7, q: 'Mi a {食|た}べます szótári alakja?', a: '{食|た}べる', wrong: ['{食|た}ぶ', '{食|た}べく', '{食|た}べす'], why: 'II. csoportú ige: a ます helyére る kerül.' },
+      { point: 7, q: 'Mi a {書|か}きます szótári alakja?', a: '{書|か}く', wrong: ['{書|か}きる', '{書|か}る', '{書|か}きう'], why: 'I. csoportú ige: a ます előtti i hangból (き) u hang (く) lesz.' },
+      { point: 7, q: 'Melyik ige tartozik a III. (rendhagyó) csoportba?', a: 'します', wrong: ['{話|はな}します', '{食|た}べます', '{読|よ}みます'], why: 'A III. csoport két igéje a きます és a します; a {話|はな}します I. csoportú.' },
+      { point: 1, q: '„Japánt tanulok." Melyik mondat HIBÁS?', a: '{日本語|にほんご}を{勉強|べんきょう}をします。', wrong: ['{日本語|にほんご}を{勉強|べんきょう}します。', '{日本語|にほんご}の{勉強|べんきょう}をします。', '{毎日|まいにち}{日本語|にほんご}を{勉強|べんきょう}します。'], why: 'Egy ige mellett csak egy を állhat.' },
       { q: 'Mit NEM szabad csinálni a japán fürdőkádban?', a: 'szappannal mosakodni', wrong: ['forró vízben ülni', 'pihenni', 'csendben lenni'], why: 'A kád vizét többen használják: előtte, a kádon kívül kell megmosakodni.' }
     ]
   },
@@ -3119,17 +3125,17 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Szeretem a zenét." Melyik partikula hiányzik?', jp: '{音楽|おんがく}＿{好|す}きです。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {好|す}き melléknév, ezért a tárgya が-t kap.' },
-      { q: '„Mert nincs időm." Mi hiányzik?', jp: '{時間|じかん}がありません＿。', a: 'から', wrong: ['まで', 'か', 'も'], why: 'Az ok mondata után から áll.' },
-      { q: 'Melyik mondat helyes?', a: 'テレビはあまり{見|み}ません。', wrong: ['テレビはあまり{見|み}ます。', 'テレビはぜんぜん{見|み}ます。', 'テレビはよく{見|み}ませんです。'], why: 'Az あまり és a ぜんぜん mindig tagadó igével jár.' },
-      { q: '„A húst szeretem, de a halat nem." Mi hiányzik?', jp: '{肉|にく}は{好|す}きです＿、{魚|さかな}は{好|す}きじゃありません。', a: 'が', wrong: ['から', 'と', 'も'], why: 'A tagmondat végi が = „de".' },
-      { q: 'Mit jelent: ときどき{料理|りょうり}をします。', a: 'Néha főzök.', wrong: ['Gyakran főzök.', 'Nem nagyon főzök.', 'Soha nem főzök.'], why: 'ときどき = néha.' },
-      { q: '„Milyen sportot szeretsz?" Mi hiányzik?', jp: '＿スポーツが{好|す}きですか。', a: 'どんな', wrong: ['どうして', 'だれ', 'どこ'], why: 'Főnév előtt „milyen": どんな.' },
-      { q: '„Miért nem mész el?" Mi hiányzik?', jp: '＿{行|い}きませんか。', a: 'どうして', wrong: ['どんな', 'だれの', 'なんの'], why: 'Az okra どうして kérdez.' },
-      { q: 'Melyik mondat jelenti: „Alkoholt egyáltalán nem iszom."', a: 'お{酒|さけ}はぜんぜん{飲|の}みません。', wrong: ['お{酒|さけ}はぜんぜん{飲|の}みます。', 'お{酒|さけ}はよく{飲|の}みます。', 'お{酒|さけ}はときどき{飲|の}みます。'], why: 'ぜんぜん + tagadó ige = egyáltalán nem.' },
-      { q: '„A halat nem nagyon szeretem." Mi hiányzik?', jp: '{魚|さかな}は＿{好|す}きじゃありません。', a: 'あまり', wrong: ['よく', 'ときどき', 'どんな'], why: 'Tagadással az あまり jelenti: „nem nagyon".' },
+      { point: 1, q: '„Szeretem a zenét." Melyik partikula hiányzik?', jp: '{音楽|おんがく}＿{好|す}きです。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {好|す}き melléknév, ezért a tárgya が-t kap.' },
+      { point: 3, q: '„Mert nincs időm." Mi hiányzik?', jp: '{時間|じかん}がありません＿。', a: 'から', wrong: ['まで', 'か', 'も'], why: 'Az ok mondata után から áll.' },
+      { point: 5, q: 'Melyik mondat helyes?', a: 'テレビはあまり{見|み}ません。', wrong: ['テレビはあまり{見|み}ます。', 'テレビはぜんぜん{見|み}ます。', 'テレビはよく{見|み}ませんです。'], why: 'Az あまり és a ぜんぜん mindig tagadó igével jár.' },
+      { point: 4, q: '„A húst szeretem, de a halat nem." Mi hiányzik?', jp: '{肉|にく}は{好|す}きです＿、{魚|さかな}は{好|す}きじゃありません。', a: 'が', wrong: ['から', 'と', 'も'], why: 'A tagmondat végi が = „de".' },
+      { point: 5, q: 'Mit jelent: ときどき{料理|りょうり}をします。', a: 'Néha főzök.', wrong: ['Gyakran főzök.', 'Nem nagyon főzök.', 'Soha nem főzök.'], why: 'ときどき = néha.' },
+      { point: 1, q: '„Milyen sportot szeretsz?" Mi hiányzik?', jp: '＿スポーツが{好|す}きですか。', a: 'どんな', wrong: ['どうして', 'だれ', 'どこ'], why: 'Főnév előtt „milyen": どんな.' },
+      { point: 3, q: '„Miért nem mész el?" Mi hiányzik?', jp: '＿{行|い}きませんか。', a: 'どうして', wrong: ['どんな', 'だれの', 'なんの'], why: 'Az okra どうして kérdez.' },
+      { point: 5, q: 'Melyik mondat jelenti: „Alkoholt egyáltalán nem iszom."', a: 'お{酒|さけ}はぜんぜん{飲|の}みません。', wrong: ['お{酒|さけ}はぜんぜん{飲|の}みます。', 'お{酒|さけ}はよく{飲|の}みます。', 'お{酒|さけ}はときどき{飲|の}みます。'], why: 'ぜんぜん + tagadó ige = egyáltalán nem.' },
+      { point: 5, q: '„A halat nem nagyon szeretem." Mi hiányzik?', jp: '{魚|さかな}は＿{好|す}きじゃありません。', a: 'あまり', wrong: ['よく', 'ときどき', 'どんな'], why: 'Tagadással az あまり jelenti: „nem nagyon".' },
       {
-        q: 'Mit jelent: {日本|にほん}が{好|す}きですから、{日本語|にほんご}を{勉強|べんきょう}します。',
+        point: 3, q: 'Mit jelent: {日本|にほん}が{好|す}きですから、{日本語|にほんご}を{勉強|べんきょう}します。',
         a: 'Szeretem Japánt, ezért tanulok japánul.',
         wrong: [
           'Japánul tanulok, de nem szeretem Japánt.',
@@ -3138,17 +3144,17 @@ const NIHONCORE_COURSE = [
         ],
         why: 'ok + から、következmény: „mert…, ezért…".'
       },
-      { q: 'Melyik mondatban jók a partikulák?', a: 'わたしは{音楽|おんがく}が{好|す}きです。', wrong: ['わたしは{音楽|おんがく}を{好|す}きです。', 'わたしが{音楽|おんがく}は{好|す}きます。', 'わたしは{音楽|おんがく}に{好|す}きです。'], why: 'A {好|す}き melléknév: amit szeretsz, が-t kap, és a mondatot です zárja.' },
-      { q: 'Hogy mondod: „a kedvenc ételem"?', a: '{好|す}きな{食|た}べ{物|もの}', wrong: ['{好|す}きい{食|た}べ{物|もの}', '{好|す}きの{食|た}べ{物|もの}', '{好|す}き{食|た}べ{物|もの}'], why: 'A {好|す}き な-melléknév: jelzőként な-val kapcsolódik a főnévhez.' },
+      { point: 1, q: 'Melyik mondatban jók a partikulák?', a: 'わたしは{音楽|おんがく}が{好|す}きです。', wrong: ['わたしは{音楽|おんがく}を{好|す}きです。', 'わたしが{音楽|おんがく}は{好|す}きます。', 'わたしは{音楽|おんがく}に{好|す}きです。'], why: 'A {好|す}き melléknév: amit szeretsz, が-t kap, és a mondatot です zárja.' },
+      { point: 1, q: 'Hogy mondod: „a kedvenc ételem"?', a: '{好|す}きな{食|た}べ{物|もの}', wrong: ['{好|す}きい{食|た}べ{物|もの}', '{好|す}きの{食|た}べ{物|もの}', '{好|す}き{食|た}べ{物|もの}'], why: 'A {好|す}き な-melléknév: jelzőként な-val kapcsolódik a főnévhez.' },
       {
-        q: '„Esik, ezért nem megyek." Hol áll a から?',
+        point: 3, q: '„Esik, ezért nem megyek." Hol áll a から?',
         a: '{雨|あめ}ですから、{行|い}きません。',
         wrong: ['から{雨|あめ}です、{行|い}きません。', '{雨|あめ}です、{行|い}きませんから。', '{雨|あめ}から、{行|い}きませんです。'],
         why: 'A から az okot kifejező tagmondat végén áll, a következmény utána jön.'
       },
-      { q: 'Azt mondják neked: {日本語|にほんご}が{上手|じょうず}ですね。 Mi az illendő válasz?', a: 'いいえ、まだまだです。', wrong: ['はい、{上手|じょうず}です。', 'はい、{好|す}きです。', 'いいえ、きらいです。'], why: 'A dicséretet szabadkozással fogadjuk: „ó, még messze vagyok attól".' },
-      { q: '„Egy kicsit értek japánul." Melyik partikula hiányzik?', jp: '{日本語|にほんご}＿{少|すこ}しわかります。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A わかります mellett az, amit értesz, が-t kap.' },
-      { q: 'Mi a {知|し}っています tagadása?', a: '{知|し}りません', wrong: ['{知|し}っていません', '{知|し}りないです', '{知|し}くないです'], why: 'A tudás állapot (〜ています), a nem-tudás egyszerű tény: {知|し}りません.' },
+      { point: 2, q: 'Azt mondják neked: {日本語|にほんご}が{上手|じょうず}ですね。 Mi az illendő válasz?', a: 'いいえ、まだまだです。', wrong: ['はい、{上手|じょうず}です。', 'はい、{好|す}きです。', 'いいえ、きらいです。'], why: 'A dicséretet szabadkozással fogadjuk: „ó, még messze vagyok attól".' },
+      { point: 2, q: '„Egy kicsit értek japánul." Melyik partikula hiányzik?', jp: '{日本語|にほんご}＿{少|すこ}しわかります。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A わかります mellett az, amit értesz, が-t kap.' },
+      { point: 2, q: 'Mi a {知|し}っています tagadása?', a: '{知|し}りません', wrong: ['{知|し}っていません', '{知|し}りないです', '{知|し}くないです'], why: 'A tudás állapot (〜ています), a nem-tudás egyszerű tény: {知|し}りません.' },
       {
         q: 'Szombatra hívnak, de nem érsz rá. Melyik a legudvariasabb válasz?',
         a: 'すみません、{土曜日|どようび}はちょっと…。',
@@ -3156,13 +3162,13 @@ const NIHONCORE_COURSE = [
         why: 'A japán nem mondja ki a nemet: megnevezi a napot, és félbehagyja a mondatot.'
       },
       {
-        q: 'Mit jelent: {日本語|にほんご}は{難|むずか}しいですが、おもしろいです。',
+        point: 4, q: 'Mit jelent: {日本語|にほんご}は{難|むずか}しいですが、おもしろいです。',
         a: 'A japán nehéz, de érdekes.',
         wrong: ['A japán nehéz, mert érdekes.', 'A japán nem nehéz, hanem érdekes.', 'A japán nehéz és unalmas.'],
         why: 'A tagmondat végi が ellentétet fejez ki: „de".'
       },
       { q: 'Ki a {先輩|せんぱい}?', a: 'aki előbb érkezett az iskolába, szakkörbe, munkahelyre', wrong: ['aki fiatalabb nálad', 'a tanár', 'az osztálytárs, aki veled egyidős'], why: 'A {先輩|せんぱい} a fölötted járó; a fiatalabb a {後輩|こうはい}.' },
-      { q: '„Mindig hétkor kelek." Melyik szó hiányzik?', jp: '＿{七時|しちじ}に{起|お}きます。', a: 'いつも', wrong: ['あまり', 'ぜんぜん', 'どうして'], why: 'Az いつも = „mindig"; az あまり és a ぜんぜん tagadó igét kérne.' }
+      { point: 5, q: '„Mindig hétkor kelek." Melyik szó hiányzik?', jp: '＿{七時|しちじ}に{起|お}きます。', a: 'いつも', wrong: ['あまり', 'ぜんぜん', 'どうして'], why: 'Az いつも = „mindig"; az あまり és a ぜんぜん tagadó igét kérne.' }
     ]
   },
 
@@ -3517,30 +3523,30 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Csendes város." Mi hiányzik?', jp: '{静|しず}か＿{町|まち}です。', a: 'な', wrong: ['い', 'の', 'に'], why: 'な-melléknév és főnév közé な kerül.' },
-      { q: 'Mi a 高い tagadása?', a: '{高|たか}くないです', wrong: ['{高|たか}いじゃありません', '{高|たか}じゃないです', '{高|たか}いくないです'], why: 'Az い helyére くない kerül.' },
-      { q: '„Japánba szeretnék menni." Mi hiányzik?', jp: '{日本|にほん}へ＿です。', a: '{行|い}きたい', wrong: ['{行|い}きますたい', '{行|い}くたい', '{行|い}きましょう'], why: 'ます nélküli alak + たい: {行|い}き + たい.' },
-      { q: 'Melyik mondat helyes?', a: 'あまり{遠|とお}くないです。', wrong: ['あまり{遠|とお}いです。', 'ぜんぜん{遠|とお}いです。', 'あまり{遠|とお}いくないです。'], why: 'Az あまり tagadó alakkal jár.' },
-      { q: 'Mit jelent: {窓|まど}を{開|あ}けましょうか。', a: 'Kinyissam az ablakot?', wrong: ['Nyisd ki az ablakot!', 'Kinyitottam az ablakot.', 'Ki akarom nyitni az ablakot.'], why: 'A 〜ましょうか felajánlás: „megtegyem?"' },
-      { q: '„Magas hegy." Mi hiányzik? (い-melléknév)', jp: '{高|たか}＿{山|やま}です。', a: 'い', wrong: ['な', 'の', 'く'], why: 'Az い-melléknév közvetlenül a főnév elé áll, な nélkül.' },
-      { q: 'Mi a {静|しず}かです tagadása?', a: '{静|しず}かじゃありません', wrong: ['{静|しず}かくないです', '{静|しず}くないです', '{静|しず}かいじゃありません'], why: 'A な-melléknév úgy tagad, mint a főnév.' },
-      { q: '„Ma nem jó az idő." Melyik a helyes?', a: '{今日|きょう}は{天気|てんき}がよくないです。', wrong: ['{今日|きょう}は{天気|てんき}がいくないです。', '{今日|きょう}は{天気|てんき}がいいじゃありません。', '{今日|きょう}は{天気|てんき}がよいくないです。'], why: 'Az いい rendhagyó: a tagadása よくないです.' },
-      { q: '„Milyen város Budapest?" Mi hiányzik?', jp: 'ブダペストは＿{町|まち}ですか。', a: 'どんな', wrong: ['どう', 'だれ', 'どうして'], why: 'Főnév előtt どんな; állítmányként どう.' },
-      { q: '„Ma semmit sem szeretnék enni." Mi hiányzik?', jp: '{今日|きょう}は{何|なに}も＿です。', a: '{食|た}べたくない', wrong: ['{食|た}べたい', '{食|た}べたいじゃない', '{食|た}べません'], why: 'A たい úgy tagad, mint az い-melléknév: たくない.' },
-      { q: 'Melyik szó な-melléknév, pedig い-re végződik?', a: 'きれい', wrong: ['おいしい', '{高|たか}い', '{新|あたら}しい'], why: 'A きれい い-je a szó része, nem rag: a főnév elé な kell (きれいな{花|はな}).' },
-      { q: 'Melyik helyes?', a: 'この{町|まち}は{静|しず}かです。', wrong: ['この{町|まち}は{静|しず}かなです。', 'この{町|まち}は{静|しず}かいです。', 'この{町|まち}は{静|しず}かのです。'], why: 'Állítmányként a な-melléknév な nélkül áll a です előtt.' },
-      { q: 'Mi az いいです tagadása?', a: 'よくないです', wrong: ['いくないです', 'いいじゃありません', 'いいくないです'], why: 'Az いい ragozott alakjai a よい tőből erednek.' },
-      { q: 'Mi a きれいです tagadása?', a: 'きれいじゃありません', wrong: ['きれくないです', 'きれいくないです', 'きれいないです'], why: 'A きれい な-melléknév: úgy tagadod, mint a főnevet.' },
-      { q: '„Milyen ember Tanaka?" Melyik szó hiányzik?', jp: '{田中|たなか}さんは＿{人|ひと}ですか。', a: 'どんな', wrong: ['どう', 'どこ', 'どれ'], why: 'Főnév előtt どんな áll; a どう állítmányra kérdez.' },
-      { q: '„Mit szeretnél enni?" Melyik a helyes?', a: '{何|なに}が{食|た}べたいですか。', wrong: ['{何|なに}が{食|た}べますたいですか。', '{何|なに}を{食|た}べるたいですか。', '{何|なに}に{食|た}べたいですか。'], why: 'A たい a ます-tőhöz járul: {食|た}べ + たい.' },
+      { point: 1, q: '„Csendes város." Mi hiányzik?', jp: '{静|しず}か＿{町|まち}です。', a: 'な', wrong: ['い', 'の', 'に'], why: 'な-melléknév és főnév közé な kerül.' },
+      { point: 3, q: 'Mi a 高い tagadása?', a: '{高|たか}くないです', wrong: ['{高|たか}いじゃありません', '{高|たか}じゃないです', '{高|たか}いくないです'], why: 'Az い helyére くない kerül.' },
+      { point: 5, q: '„Japánba szeretnék menni." Mi hiányzik?', jp: '{日本|にほん}へ＿です。', a: '{行|い}きたい', wrong: ['{行|い}きますたい', '{行|い}くたい', '{行|い}きましょう'], why: 'ます nélküli alak + たい: {行|い}き + たい.' },
+      { point: 4, q: 'Melyik mondat helyes?', a: 'あまり{遠|とお}くないです。', wrong: ['あまり{遠|とお}いです。', 'ぜんぜん{遠|とお}いです。', 'あまり{遠|とお}いくないです。'], why: 'Az あまり tagadó alakkal jár.' },
+      { point: 6, q: 'Mit jelent: {窓|まど}を{開|あ}けましょうか。', a: 'Kinyissam az ablakot?', wrong: ['Nyisd ki az ablakot!', 'Kinyitottam az ablakot.', 'Ki akarom nyitni az ablakot.'], why: 'A 〜ましょうか felajánlás: „megtegyem?"' },
+      { point: 1, q: '„Magas hegy." Mi hiányzik? (い-melléknév)', jp: '{高|たか}＿{山|やま}です。', a: 'い', wrong: ['な', 'の', 'く'], why: 'Az い-melléknév közvetlenül a főnév elé áll, な nélkül.' },
+      { point: 3, q: 'Mi a {静|しず}かです tagadása?', a: '{静|しず}かじゃありません', wrong: ['{静|しず}かくないです', '{静|しず}くないです', '{静|しず}かいじゃありません'], why: 'A な-melléknév úgy tagad, mint a főnév.' },
+      { point: 3, q: '„Ma nem jó az idő." Melyik a helyes?', a: '{今日|きょう}は{天気|てんき}がよくないです。', wrong: ['{今日|きょう}は{天気|てんき}がいくないです。', '{今日|きょう}は{天気|てんき}がいいじゃありません。', '{今日|きょう}は{天気|てんき}がよいくないです。'], why: 'Az いい rendhagyó: a tagadása よくないです.' },
+      { point: 2, q: '„Milyen város Budapest?" Mi hiányzik?', jp: 'ブダペストは＿{町|まち}ですか。', a: 'どんな', wrong: ['どう', 'だれ', 'どうして'], why: 'Főnév előtt どんな; állítmányként どう.' },
+      { point: 5, q: '„Ma semmit sem szeretnék enni." Mi hiányzik?', jp: '{今日|きょう}は{何|なに}も＿です。', a: '{食|た}べたくない', wrong: ['{食|た}べたい', '{食|た}べたいじゃない', '{食|た}べません'], why: 'A たい úgy tagad, mint az い-melléknév: たくない.' },
+      { point: 1, q: 'Melyik szó な-melléknév, pedig い-re végződik?', a: 'きれい', wrong: ['おいしい', '{高|たか}い', '{新|あたら}しい'], why: 'A きれい い-je a szó része, nem rag: a főnév elé な kell (きれいな{花|はな}).' },
+      { point: 1, q: 'Melyik helyes?', a: 'この{町|まち}は{静|しず}かです。', wrong: ['この{町|まち}は{静|しず}かなです。', 'この{町|まち}は{静|しず}かいです。', 'この{町|まち}は{静|しず}かのです。'], why: 'Állítmányként a な-melléknév な nélkül áll a です előtt.' },
+      { point: 3, q: 'Mi az いいです tagadása?', a: 'よくないです', wrong: ['いくないです', 'いいじゃありません', 'いいくないです'], why: 'Az いい ragozott alakjai a よい tőből erednek.' },
+      { point: 3, q: 'Mi a きれいです tagadása?', a: 'きれいじゃありません', wrong: ['きれくないです', 'きれいくないです', 'きれいないです'], why: 'A きれい な-melléknév: úgy tagadod, mint a főnevet.' },
+      { point: 2, q: '„Milyen ember Tanaka?" Melyik szó hiányzik?', jp: '{田中|たなか}さんは＿{人|ひと}ですか。', a: 'どんな', wrong: ['どう', 'どこ', 'どれ'], why: 'Főnév előtt どんな áll; a どう állítmányra kérdez.' },
+      { point: 5, q: '„Mit szeretnél enni?" Melyik a helyes?', a: '{何|なに}が{食|た}べたいですか。', wrong: ['{何|なに}が{食|た}べますたいですか。', '{何|なに}を{食|た}べるたいですか。', '{何|なに}に{食|た}べたいですか。'], why: 'A たい a ます-tőhöz járul: {食|た}べ + たい.' },
       {
-        q: 'Eltévedtél, és a múzeumot keresed. Melyik a legtermészetesebb megszólítás?',
+        point: 6, q: 'Eltévedtél, és a múzeumot keresed. Melyik a legtermészetesebb megszólítás?',
         a: 'あのう、すみません。{美術館|びじゅつかん}へ{行|い}きたいんですが…。',
         wrong: ['{美術館|びじゅつかん}へ{行|い}きましょう。', '{美術館|びじゅつかん}が{好|す}きですか。', '{美術館|びじゅつかん}へ{行|い}きませんか。'],
         why: 'A 〜たいんですが… a segítségkérés udvarias, befejezetlen formája.'
       },
-      { q: 'Valaki nehéz táskát cipel. Fel akarod ajánlani a segítségedet. Mit mondasz?', a: '{持|も}ちましょうか。', wrong: ['{持|も}ちましょう。', '{持|も}ちたいです。', '{持|も}ちませんか。'], why: 'A 〜ましょうか felajánlás: „vigyem?".' },
-      { q: 'Mit jelent: この{店|みせ}はあまり{高|たか}くないです。', a: 'Ez a bolt nem nagyon drága.', wrong: ['Ez a bolt nagyon drága.', 'Ez a bolt egyáltalán nem drága.', 'Ez a bolt kicsit drága.'], why: 'Az あまり + tagadás = „nem nagyon".' },
+      { point: 6, q: 'Valaki nehéz táskát cipel. Fel akarod ajánlani a segítségedet. Mit mondasz?', a: '{持|も}ちましょうか。', wrong: ['{持|も}ちましょう。', '{持|も}ちたいです。', '{持|も}ちませんか。'], why: 'A 〜ましょうか felajánlás: „vigyem?".' },
+      { point: 4, q: 'Mit jelent: この{店|みせ}はあまり{高|たか}くないです。', a: 'Ez a bolt nem nagyon drága.', wrong: ['Ez a bolt nagyon drága.', 'Ez a bolt egyáltalán nem drága.', 'Ez a bolt kicsit drága.'], why: 'Az あまり + tagadás = „nem nagyon".' },
       { q: 'Mi jelzi a sintó szentély bejáratát?', a: 'a {鳥居|とりい} kapu', wrong: ['egy Buddha-szobor', 'egy harangtorony', 'egy vörös lámpás'], why: 'A {神社|じんじゃ} bejáratánál {鳥居|とりい} áll; a buddhista templom az お{寺|てら}.' }
     ]
   },
@@ -3870,30 +3876,30 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„A film érdekes volt." Mi hiányzik?', jp: '{映画|えいが}は＿。', a: 'おもしろかったです', wrong: ['おもしろいでした', 'おもしろくてです', 'おもしろいかったです'], why: 'い-melléknév múltja: い → かった.' },
-      { q: '„A város csendes volt." Mi hiányzik?', jp: '{町|まち}は{静|しず}か＿。', a: 'でした', wrong: ['かったです', 'くてです', 'いでした'], why: 'A な-melléknév múltja でした, mint a főnévé.' },
-      { q: 'Mi az いいです múlt ideje?', a: 'よかったです', wrong: ['いかったです', 'いいでした', 'よいでした'], why: 'Az いい rendhagyó: よかった.' },
-      { q: 'Mi a {書|か}きます て-alakja?', a: '{書|か}いて', wrong: ['{書|か}きて', '{書|か}って', '{書|か}んで'], why: 'き → いて.' },
-      { q: 'Mi a {読|よ}みます て-alakja?', a: '{読|よ}んで', wrong: ['{読|よ}みて', '{読|よ}って', '{読|よ}いて'], why: 'み・び・に → んで.' },
-      { q: 'Mi a {行|い}きます て-alakja?', a: '{行|い}って', wrong: ['{行|い}いて', '{行|い}きて', '{行|い}んで'], why: 'A {行|い}きます rendhagyó: {行|い}って (nem {行|い}いて).' },
-      { q: '„Ez a szoba tágas és világos." Mi hiányzik?', jp: 'この{部屋|へや}は{広|ひろ}＿、{明|あか}るいです。', a: 'くて', wrong: ['で', 'いて', 'と'], why: 'い-melléknév összekötve: い → くて.' },
-      { q: '„Hazamegyek, és megvacsorázom." Mi hiányzik?', jp: 'うちへ＿、{晩|ばん}ごはんを{食|た}べます。', a: '{帰|かえ}って', wrong: ['{帰|かえ}りて', '{帰|かえ}ります', '{帰|かえ}んで'], why: 'り → って; a て-alak köti össze a cselekvéseket.' },
-      { q: 'Melyik mondat jelenti: „A teszt nem volt nehéz."', a: 'テストは{難|むずか}しくなかったです。', wrong: ['テストは{難|むずか}しいじゃありませんでした。', 'テストは{難|むずか}しくないでした。', 'テストは{難|むずか}しかったくないです。'], why: 'い-melléknév tagadó múltja: くなかったです.' },
-      { q: 'Mit jelent: {旅行|りょこう}はどうでしたか。', a: 'Milyen volt az utazás?', wrong: ['Hová utaztál?', 'Mikor volt az utazás?', 'Milyen az utazás?'], why: 'どうでしたか = milyen volt?' },
-      { q: 'Melyik a helyes múlt idő?', a: '{楽|たの}しかったです。', wrong: ['{楽|たの}しいでした。', '{楽|たの}しでした。', '{楽|たの}しいかったです。'], why: 'Az い-melléknév maga ragozódik: い → かった; a です jelen időben marad.' },
-      { q: 'Mi a きれいです múlt ideje?', a: 'きれいでした', wrong: ['きれかったです', 'きれいかったです', 'きれくでした'], why: 'A きれい な-melléknév: a です ragozódik.' },
-      { q: 'Mi a {話|はな}します て-alakja?', a: '{話|はな}して', wrong: ['{話|はな}って', '{話|はな}いて', '{話|はな}しって'], why: 'A し végű tő して-t kap: a ます helyére egyszerűen て kerül.' },
-      { q: 'Mi az {泳|およ}ぎます て-alakja?', a: '{泳|およ}いで', wrong: ['{泳|およ}いて', '{泳|およ}んで', '{泳|およ}って'], why: 'A ぎ végű tő いで-t kap: a て is zöngés lesz.' },
-      { q: 'Mi az {遊|あそ}びます て-alakja?', a: '{遊|あそ}んで', wrong: ['{遊|あそ}びて', '{遊|あそ}って', '{遊|あそ}いて'], why: 'A み, び, に végű tő んで-t kap.' },
-      { q: 'Mi az {起|お}きます (II. csoport) て-alakja?', a: '{起|お}きて', wrong: ['{起|お}いて', '{起|お}って', '{起|お}んで'], why: 'II. csoportú ige: a ます helyére egyszerűen て kerül.' },
-      { q: '„A város csendes és szép." Melyik a helyes?', a: '{町|まち}は{静|しず}かで、きれいです。', wrong: ['{町|まち}は{静|しず}かくて、きれいです。', '{町|まち}は{静|しず}かと、きれいです。', '{町|まち}は{静|しず}かて、きれいです。'], why: 'A な-melléknév kapcsoló alakja で.' },
+      { point: 2, q: '„A film érdekes volt." Mi hiányzik?', jp: '{映画|えいが}は＿。', a: 'おもしろかったです', wrong: ['おもしろいでした', 'おもしろくてです', 'おもしろいかったです'], why: 'い-melléknév múltja: い → かった.' },
+      { point: 3, q: '„A város csendes volt." Mi hiányzik?', jp: '{町|まち}は{静|しず}か＿。', a: 'でした', wrong: ['かったです', 'くてです', 'いでした'], why: 'A な-melléknév múltja でした, mint a főnévé.' },
+      { point: 2, q: 'Mi az いいです múlt ideje?', a: 'よかったです', wrong: ['いかったです', 'いいでした', 'よいでした'], why: 'Az いい rendhagyó: よかった.' },
+      { point: 4, q: 'Mi a {書|か}きます て-alakja?', a: '{書|か}いて', wrong: ['{書|か}きて', '{書|か}って', '{書|か}んで'], why: 'き → いて.' },
+      { point: 4, q: 'Mi a {読|よ}みます て-alakja?', a: '{読|よ}んで', wrong: ['{読|よ}みて', '{読|よ}って', '{読|よ}いて'], why: 'み・び・に → んで.' },
+      { point: 4, q: 'Mi a {行|い}きます て-alakja?', a: '{行|い}って', wrong: ['{行|い}いて', '{行|い}きて', '{行|い}んで'], why: 'A {行|い}きます rendhagyó: {行|い}って (nem {行|い}いて).' },
+      { point: 6, q: '„Ez a szoba tágas és világos." Mi hiányzik?', jp: 'この{部屋|へや}は{広|ひろ}＿、{明|あか}るいです。', a: 'くて', wrong: ['で', 'いて', 'と'], why: 'い-melléknév összekötve: い → くて.' },
+      { point: 5, q: '„Hazamegyek, és megvacsorázom." Mi hiányzik?', jp: 'うちへ＿、{晩|ばん}ごはんを{食|た}べます。', a: '{帰|かえ}って', wrong: ['{帰|かえ}りて', '{帰|かえ}ります', '{帰|かえ}んで'], why: 'り → って; a て-alak köti össze a cselekvéseket.' },
+      { point: 2, q: 'Melyik mondat jelenti: „A teszt nem volt nehéz."', a: 'テストは{難|むずか}しくなかったです。', wrong: ['テストは{難|むずか}しいじゃありませんでした。', 'テストは{難|むずか}しくないでした。', 'テストは{難|むずか}しかったくないです。'], why: 'い-melléknév tagadó múltja: くなかったです.' },
+      { point: 1, q: 'Mit jelent: {旅行|りょこう}はどうでしたか。', a: 'Milyen volt az utazás?', wrong: ['Hová utaztál?', 'Mikor volt az utazás?', 'Milyen az utazás?'], why: 'どうでしたか = milyen volt?' },
+      { point: 2, q: 'Melyik a helyes múlt idő?', a: '{楽|たの}しかったです。', wrong: ['{楽|たの}しいでした。', '{楽|たの}しでした。', '{楽|たの}しいかったです。'], why: 'Az い-melléknév maga ragozódik: い → かった; a です jelen időben marad.' },
+      { point: 3, q: 'Mi a きれいです múlt ideje?', a: 'きれいでした', wrong: ['きれかったです', 'きれいかったです', 'きれくでした'], why: 'A きれい な-melléknév: a です ragozódik.' },
+      { point: 4, q: 'Mi a {話|はな}します て-alakja?', a: '{話|はな}して', wrong: ['{話|はな}って', '{話|はな}いて', '{話|はな}しって'], why: 'A し végű tő して-t kap: a ます helyére egyszerűen て kerül.' },
+      { point: 4, q: 'Mi az {泳|およ}ぎます て-alakja?', a: '{泳|およ}いで', wrong: ['{泳|およ}いて', '{泳|およ}んで', '{泳|およ}って'], why: 'A ぎ végű tő いで-t kap: a て is zöngés lesz.' },
+      { point: 4, q: 'Mi az {遊|あそ}びます て-alakja?', a: '{遊|あそ}んで', wrong: ['{遊|あそ}びて', '{遊|あそ}って', '{遊|あそ}いて'], why: 'A み, び, に végű tő んで-t kap.' },
+      { point: 4, q: 'Mi az {起|お}きます (II. csoport) て-alakja?', a: '{起|お}きて', wrong: ['{起|お}いて', '{起|お}って', '{起|お}んで'], why: 'II. csoportú ige: a ます helyére egyszerűen て kerül.' },
+      { point: 6, q: '„A város csendes és szép." Melyik a helyes?', a: '{町|まち}は{静|しず}かで、きれいです。', wrong: ['{町|まち}は{静|しず}かくて、きれいです。', '{町|まち}は{静|しず}かと、きれいです。', '{町|まち}は{静|しず}かて、きれいです。'], why: 'A な-melléknév kapcsoló alakja で.' },
       {
-        q: 'Mikor történt? {朝|あさ}{起|お}きて、パンを{食|た}べました。',
+        point: 5, q: 'Mikor történt? {朝|あさ}{起|お}きて、パンを{食|た}べました。',
         a: 'a múltban: a mondat idejét az utolsó ige adja meg',
         wrong: ['a jelenben: a て-alak jelen idejű', 'nem lehet tudni', 'a jövőben'],
         why: 'A て-alaknak nincs ideje; a {食|た}べました múlt idő az egész mondatra érvényes.'
       },
-      { q: 'A barátod elmeséli, hogy remek hétvégéje volt. Mit felelsz?', a: 'それはよかったですね。', wrong: ['それは{大変|たいへん}でしたね。', 'お{元気|げんき}ですか。', 'いただきます。'], why: 'A jó hírre: それはよかったですね; a kellemetlenre: それは{大変|たいへん}でしたね.' },
+      { point: 2, q: 'A barátod elmeséli, hogy remek hétvégéje volt. Mit felelsz?', a: 'それはよかったですね。', wrong: ['それは{大変|たいへん}でしたね。', 'お{元気|げんき}ですか。', 'いただきます。'], why: 'A jó hírre: それはよかったですね; a kellemetlenre: それは{大変|たいへん}でしたね.' },
       { q: 'Mi kerül a borítékon a címzett neve után?', a: '{様|さま}', wrong: ['さん', 'くん', 'ちゃん'], why: 'Írásban, címzésben a tiszteletteljesebb {様|さま} áll; tanárnál {先生|せんせい}.' }
     ]
   },
@@ -4252,23 +4258,23 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„A vonat gyorsabb, mint a busz." Mi hiányzik?', jp: 'バス＿{電車|でんしゃ}のほうが{速|はや}いです。', a: 'より', wrong: ['から', 'まで', 'と'], why: 'Amihez hasonlítasz, az より-t kap.' },
-      { q: '„A kávét vagy a teát szereted jobban?" Mi hiányzik?', jp: 'コーヒーと{紅茶|こうちゃ}と＿が{好|す}きですか。', a: 'どちら', wrong: ['どれ', 'なに', 'どんな'], why: 'Két dolog közül どちら kérdez.' },
-      { q: '„A focit szeretem a legjobban." Mi hiányzik?', jp: 'サッカーが＿{好|す}きです。', a: 'いちばん', wrong: ['より', 'のほうが', 'どちら'], why: 'Felsőfok: いちばん.' },
-      { q: '„Kérem, írja ide a nevét." Mi hiányzik?', jp: 'ここに{名前|なまえ}を＿ください。', a: '{書|か}いて', wrong: ['{書|か}きて', '{書|か}きます', '{書|か}く'], why: 'Kérés: て-alak + ください; {書|か}きます → {書|か}いて.' },
-      { q: '„Miután kezet mostam, eszem." Mi hiányzik?', jp: '{手|て}を{洗|あら}って＿、{食|た}べます。', a: 'から', wrong: ['より', 'まで', 'みて'], why: 'て-alak + から = miután.' },
-      { q: 'Mit jelent: {使|つか}ってみてください。', a: 'Próbálja ki!', wrong: ['Ne használja!', 'Használni szeretném.', 'Használtam már.'], why: 'てみます = megteszem, hogy lássam, milyen.' },
-      { q: 'Hogyan mondod: „Mindkettőt szeretem."', a: 'どちらも{好|す}きです。', wrong: ['どちらが{好|す}きです。', 'どちらか{好|す}きです。', 'いちばん{好|す}きです。'], why: 'どちらも = mindkettő.' },
+      { point: 1, q: '„A vonat gyorsabb, mint a busz." Mi hiányzik?', jp: 'バス＿{電車|でんしゃ}のほうが{速|はや}いです。', a: 'より', wrong: ['から', 'まで', 'と'], why: 'Amihez hasonlítasz, az より-t kap.' },
+      { point: 2, q: '„A kávét vagy a teát szereted jobban?" Mi hiányzik?', jp: 'コーヒーと{紅茶|こうちゃ}と＿が{好|す}きですか。', a: 'どちら', wrong: ['どれ', 'なに', 'どんな'], why: 'Két dolog közül どちら kérdez.' },
+      { point: 3, q: '„A focit szeretem a legjobban." Mi hiányzik?', jp: 'サッカーが＿{好|す}きです。', a: 'いちばん', wrong: ['より', 'のほうが', 'どちら'], why: 'Felsőfok: いちばん.' },
+      { point: 5, q: '„Kérem, írja ide a nevét." Mi hiányzik?', jp: 'ここに{名前|なまえ}を＿ください。', a: '{書|か}いて', wrong: ['{書|か}きて', '{書|か}きます', '{書|か}く'], why: 'Kérés: て-alak + ください; {書|か}きます → {書|か}いて.' },
+      { point: 6, q: '„Miután kezet mostam, eszem." Mi hiányzik?', jp: '{手|て}を{洗|あら}って＿、{食|た}べます。', a: 'から', wrong: ['より', 'まで', 'みて'], why: 'て-alak + から = miután.' },
+      { point: 7, q: 'Mit jelent: {使|つか}ってみてください。', a: 'Próbálja ki!', wrong: ['Ne használja!', 'Használni szeretném.', 'Használtam már.'], why: 'てみます = megteszem, hogy lássam, milyen.' },
+      { point: 2, q: 'Hogyan mondod: „Mindkettőt szeretem."', a: 'どちらも{好|す}きです。', wrong: ['どちらが{好|す}きです。', 'どちらか{好|す}きです。', 'いちばん{好|す}きです。'], why: 'どちらも = mindkettő.' },
       {
-        q: 'Melyik mondat jelenti: „Ma hidegebb van, mint tegnap."',
+        point: 1, q: 'Melyik mondat jelenti: „Ma hidegebb van, mint tegnap."',
         a: '{今日|きょう}はきのうより{寒|さむ}いです。',
         wrong: ['きのうは{今日|きょう}より{寒|さむ}いです。', '{今日|きょう}はきのうと{寒|さむ}いです。', '{今日|きょう}はきのうがいちばん{寒|さむ}いです。'],
         why: 'Ami után より áll, ahhoz hasonlítasz: ma hidegebb, mint tegnap.'
       },
-      { q: 'Mi a {待|ま}ちます て-alakja?', a: '{待|ま}って', wrong: ['{待|ま}ちて', '{待|ま}いて', '{待|ま}んで'], why: 'い・ち・り → って.' },
-      { q: '„A sportok közül melyiket szereted a legjobban?" Mi hiányzik?', jp: 'スポーツの＿で{何|なに}がいちばん{好|す}きですか。', a: '{中|なか}', wrong: ['{上|うえ}', '{前|まえ}', '{下|した}'], why: 'A csoportot a 〜の{中|なか}で adja meg.' },
+      { point: 5, q: 'Mi a {待|ま}ちます て-alakja?', a: '{待|ま}って', wrong: ['{待|ま}ちて', '{待|ま}いて', '{待|ま}んで'], why: 'い・ち・り → って.' },
+      { point: 3, q: '„A sportok közül melyiket szereted a legjobban?" Mi hiányzik?', jp: 'スポーツの＿で{何|なに}がいちばん{好|す}きですか。', a: '{中|なか}', wrong: ['{上|うえ}', '{前|まえ}', '{下|した}'], why: 'A csoportot a 〜の{中|なか}で adja meg.' },
       {
-        q: '„Tokió nagyobb, mint Oszaka." Melyik a helyes?',
+        point: 1, q: '„Tokió nagyobb, mint Oszaka." Melyik a helyes?',
         a: '{東京|とうきょう}は{大阪|おおさか}より{大|おお}きいです。',
         wrong: [
           '{東京|とうきょう}より{大阪|おおさか}は{大|おお}きいです。',
@@ -4277,18 +4283,18 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A より a hasonlítás alapja (Oszaka) után áll.'
       },
-      { q: 'Két dolog közül választatsz. Melyik kérdőszó kell?', a: 'どちら', wrong: ['どれ', 'なに', 'だれ'], why: 'Két dolog közül mindig どちら kérdez, akár tárgy, akár ember.' },
-      { q: 'Azt kérdezik: コーヒーと{紅茶|こうちゃ}とどちらが{好|す}きですか。 Egyiket sem szereted. Mit felelsz?', a: 'どちらも{好|す}きじゃありません。', wrong: ['どちらも{好|す}きです。', 'どちらが{好|す}きじゃありません。', 'どれも{好|す}きです。'], why: 'A どちらも + tagadás = „egyik sem".' },
-      { q: '„Japánban melyik hely a legszebb?" Melyik kérdőszó hiányzik?', jp: '{日本|にほん}で＿がいちばんきれいですか。', a: 'どこ', wrong: ['どちら', 'だれ', 'いつ'], why: 'Helyek közül a どこ választ.' },
-      { q: 'A pincér megkérdezi: {何|なに}にしますか。 Mit felelsz?', a: 'うどんにします。', wrong: ['うどんをします。', 'うどんがします。', 'うどんでします。'], why: 'A választott dolog után に します áll.' },
+      { point: 2, q: 'Két dolog közül választatsz. Melyik kérdőszó kell?', a: 'どちら', wrong: ['どれ', 'なに', 'だれ'], why: 'Két dolog közül mindig どちら kérdez, akár tárgy, akár ember.' },
+      { point: 2, q: 'Azt kérdezik: コーヒーと{紅茶|こうちゃ}とどちらが{好|す}きですか。 Egyiket sem szereted. Mit felelsz?', a: 'どちらも{好|す}きじゃありません。', wrong: ['どちらも{好|す}きです。', 'どちらが{好|す}きじゃありません。', 'どれも{好|す}きです。'], why: 'A どちらも + tagadás = „egyik sem".' },
+      { point: 3, q: '„Japánban melyik hely a legszebb?" Melyik kérdőszó hiányzik?', jp: '{日本|にほん}で＿がいちばんきれいですか。', a: 'どこ', wrong: ['どちら', 'だれ', 'いつ'], why: 'Helyek közül a どこ választ.' },
+      { point: 4, q: 'A pincér megkérdezi: {何|なに}にしますか。 Mit felelsz?', a: 'うどんにします。', wrong: ['うどんをします。', 'うどんがします。', 'うどんでします。'], why: 'A választott dolog után に します áll.' },
       {
-        q: 'Mi a különbség? {食|た}べて、{行|い}きます ↔ {食|た}べてから、{行|い}きます',
+        point: 6, q: 'Mi a különbség? {食|た}べて、{行|い}きます ↔ {食|た}べてから、{行|い}きます',
         a: 'a második azt hangsúlyozza, hogy csak evés UTÁN megyek',
         wrong: ['a második azt jelenti: „mert eszem"', 'nincs különbség', 'az első múlt, a második jelen idő'],
         why: 'A てから sorrendet szab: „miután".'
       },
       {
-        q: 'Mit jelent: この{料理|りょうり}を{食|た}べてみたいです。',
+        point: 7, q: 'Mit jelent: この{料理|りょうり}を{食|た}べてみたいです。',
         a: 'Szeretném megkóstolni ezt az ételt.',
         wrong: [
           'Megpróbálom megenni ezt az ételt, pedig nehéz.',
@@ -4298,7 +4304,7 @@ const NIHONCORE_COURSE = [
         why: 'A 〜てみます kipróbálást jelent; a みたい a vágyat fejezi ki.'
       },
       {
-        q: 'Egy idegent kérsz meg, hogy fényképezzen le. Melyik a legudvariasabb?',
+        point: 5, q: 'Egy idegent kérsz meg, hogy fényképezzen le. Melyik a legudvariasabb?',
         a: '{写真|しゃしん}を{撮|と}ってくださいませんか。',
         wrong: ['{写真|しゃしん}を{撮|と}って。', '{写真|しゃしん}を{撮|と}ります。', '{写真|しゃしん}を{撮|と}りましょう。'],
         why: 'A 〜てくださいませんか a kérés legudvariasabb formája itt.'
@@ -4309,7 +4315,7 @@ const NIHONCORE_COURSE = [
         wrong: ['leülni, és várni a pincért', 'a pultnál fizetni evés után', 'tálcát kérni a konyhától'],
         why: 'A {食券|しょっけん}-t az automatából veszed, és azt adod át a pultnál.'
       },
-      { q: 'Melyik a helyes sorrend egy folyamat elmondásakor?', a: 'まず → それから → {最後|さいご}に', wrong: ['それから → まず → {最後|さいご}に', '{最後|さいご}に → まず → それから', 'まず → {最後|さいご}に → それから'], why: 'まず = először, それから = aztán, {最後|さいご}に = végül.' }
+      { point: 8, q: 'Melyik a helyes sorrend egy folyamat elmondásakor?', a: 'まず → それから → {最後|さいご}に', wrong: ['それから → まず → {最後|さいご}に', '{最後|さいご}に → まず → それから', 'まず → {最後|さいご}に → それから'], why: 'まず = először, それから = aztán, {最後|さいご}に = végül.' }
     ]
   },
 
@@ -4669,23 +4675,23 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'Mi a {飲|の}みます た-alakja?', a: '{飲|の}んだ', wrong: ['{飲|の}みた', '{飲|の}った', '{飲|の}いた'], why: 'み → んで, illetve んだ.' },
-      { q: 'Mi a {書|か}きます ない-alakja?', a: '{書|か}かない', wrong: ['{書|か}きない', '{書|か}くない', '{書|か}こない'], why: '1. csoport: az i-hang a-hangra vált: き → か.' },
-      { q: 'Mi a {買|か}います ない-alakja?', a: '{買|か}わない', wrong: ['{買|か}あない', '{買|か}いない', '{買|か}らない'], why: 'Az い-re végződő tőnél わ lesz: {買|か}わない.' },
-      { q: '„Kérem, itt ne fényképezzen." Mi hiányzik?', jp: 'ここで{写真|しゃしん}を＿ください。', a: '{撮|と}らないで', wrong: ['{撮|と}って', '{撮|と}らなくて', '{撮|と}りないで'], why: 'Tiltó kérés: ない-alak + でください.' },
-      { q: '„Jobb lenne, ha bevennéd a gyógyszert." Mi hiányzik?', jp: '{薬|くすり}を＿ほうがいいです。', a: '{飲|の}んだ', wrong: ['{飲|の}みます', '{飲|の}んで', '{飲|の}みたい'], why: 'Tanács: た-alak + ほうがいい.' },
-      { q: '„Ma jobb, ha nem mész el itthonról." Mi hiányzik?', jp: '{今日|きょう}は＿ほうがいいです。', a: '{出|で}かけない', wrong: ['{出|で}かけた', '{出|で}かけて', '{出|で}かけません'], why: 'Tagadó tanács: ない-alak + ほうがいい.' },
-      { q: 'Mit jelent: どうしたんですか。', a: 'Mi történt? Mi a baj?', wrong: ['Hogy vagy?', 'Mit csinálsz?', 'Miért mész el?'], why: 'A んですか magyarázatot kér: mi az oka annak, amit látok?' },
-      { q: 'Mi a します ない-alakja?', a: 'しない', wrong: ['すない', 'さない', 'しらない'], why: 'A します rendhagyó: しない.' },
-      { q: '„Fáj a fejem." (magyarázatként) Mi hiányzik?', jp: '{頭|あたま}が{痛|いた}い＿。', a: 'んです', wrong: ['でした', 'ください', 'ほうです'], why: 'Magyarázat: rövid alak + んです.' },
-      { q: 'Mi a {来|き}ます ない-alakja?', a: 'こない', wrong: ['きない', 'くない', 'こらない'], why: 'A {来|き}ます rendhagyó: こない.' },
-      { q: 'Mi az {行|い}きます た-alakja?', a: '{行|い}った', wrong: ['{行|い}いた', '{行|い}きた', '{行|い}んだ'], why: 'A た-alak a て-alakból lesz: {行|い}って → {行|い}った.' },
-      { q: 'Mi az {泳|およ}ぎます た-alakja?', a: '{泳|およ}いだ', wrong: ['{泳|およ}いた', '{泳|およ}んだ', '{泳|およ}った'], why: 'A て-alak {泳|およ}いで, ezért a た-alak {泳|およ}いだ.' },
-      { q: 'Mi az {話|はな}します ない-alakja?', a: '{話|はな}さない', wrong: ['{話|はな}しない', '{話|はな}すない', '{話|はな}わない'], why: 'I. csoport: し → さ, ehhez jön a ない.' },
-      { q: 'Mi az あります rövid tagadó alakja?', a: 'ない', wrong: ['あらない', 'ありない', 'あない'], why: 'Az あります az egyetlen kivétel: tagadása egyszerűen ない.' },
-      { q: 'Mi a {雨|あめ}でした rövid alakja?', a: '{雨|あめ}だった', wrong: ['{雨|あめ}かった', '{雨|あめ}だ', '{雨|あめ}でした'], why: 'A です rövid múlt alakja だった.' },
-      { q: 'Melyik a helyes tanács? „Jobb, ha nem mész el."', a: '{行|い}かないほうがいいです。', wrong: ['{行|い}かなかったほうがいいです。', '{行|い}ったないほうがいいです。', '{行|い}きませんほうがいいです。'], why: 'A tagadó tanácsban jelen idejű ない-alak áll.' },
-      { q: '„Holnap dolgozatot írok, tudja." Mi hiányzik?', jp: '{明日|あした}テスト＿んです。', a: 'な', wrong: ['だ', 'の', 'が'], why: 'Főnév után な áll az んです előtt.' },
+      { point: 1, q: 'Mi a {飲|の}みます た-alakja?', a: '{飲|の}んだ', wrong: ['{飲|の}みた', '{飲|の}った', '{飲|の}いた'], why: 'み → んで, illetve んだ.' },
+      { point: 2, q: 'Mi a {書|か}きます ない-alakja?', a: '{書|か}かない', wrong: ['{書|か}きない', '{書|か}くない', '{書|か}こない'], why: '1. csoport: az i-hang a-hangra vált: き → か.' },
+      { point: 2, q: 'Mi a {買|か}います ない-alakja?', a: '{買|か}わない', wrong: ['{買|か}あない', '{買|か}いない', '{買|か}らない'], why: 'Az い-re végződő tőnél わ lesz: {買|か}わない.' },
+      { point: 4, q: '„Kérem, itt ne fényképezzen." Mi hiányzik?', jp: 'ここで{写真|しゃしん}を＿ください。', a: '{撮|と}らないで', wrong: ['{撮|と}って', '{撮|と}らなくて', '{撮|と}りないで'], why: 'Tiltó kérés: ない-alak + でください.' },
+      { point: 5, q: '„Jobb lenne, ha bevennéd a gyógyszert." Mi hiányzik?', jp: '{薬|くすり}を＿ほうがいいです。', a: '{飲|の}んだ', wrong: ['{飲|の}みます', '{飲|の}んで', '{飲|の}みたい'], why: 'Tanács: た-alak + ほうがいい.' },
+      { point: 6, q: '„Ma jobb, ha nem mész el itthonról." Mi hiányzik?', jp: '{今日|きょう}は＿ほうがいいです。', a: '{出|で}かけない', wrong: ['{出|で}かけた', '{出|で}かけて', '{出|で}かけません'], why: 'Tagadó tanács: ない-alak + ほうがいい.' },
+      { point: 7, q: 'Mit jelent: どうしたんですか。', a: 'Mi történt? Mi a baj?', wrong: ['Hogy vagy?', 'Mit csinálsz?', 'Miért mész el?'], why: 'A んですか magyarázatot kér: mi az oka annak, amit látok?' },
+      { point: 2, q: 'Mi a します ない-alakja?', a: 'しない', wrong: ['すない', 'さない', 'しらない'], why: 'A します rendhagyó: しない.' },
+      { point: 7, q: '„Fáj a fejem." (magyarázatként) Mi hiányzik?', jp: '{頭|あたま}が{痛|いた}い＿。', a: 'んです', wrong: ['でした', 'ください', 'ほうです'], why: 'Magyarázat: rövid alak + んです.' },
+      { point: 2, q: 'Mi a {来|き}ます ない-alakja?', a: 'こない', wrong: ['きない', 'くない', 'こらない'], why: 'A {来|き}ます rendhagyó: こない.' },
+      { point: 1, q: 'Mi az {行|い}きます た-alakja?', a: '{行|い}った', wrong: ['{行|い}いた', '{行|い}きた', '{行|い}んだ'], why: 'A た-alak a て-alakból lesz: {行|い}って → {行|い}った.' },
+      { point: 1, q: 'Mi az {泳|およ}ぎます た-alakja?', a: '{泳|およ}いだ', wrong: ['{泳|およ}いた', '{泳|およ}んだ', '{泳|およ}った'], why: 'A て-alak {泳|およ}いで, ezért a た-alak {泳|およ}いだ.' },
+      { point: 2, q: 'Mi az {話|はな}します ない-alakja?', a: '{話|はな}さない', wrong: ['{話|はな}しない', '{話|はな}すない', '{話|はな}わない'], why: 'I. csoport: し → さ, ehhez jön a ない.' },
+      { point: 2, q: 'Mi az あります rövid tagadó alakja?', a: 'ない', wrong: ['あらない', 'ありない', 'あない'], why: 'Az あります az egyetlen kivétel: tagadása egyszerűen ない.' },
+      { point: 3, q: 'Mi a {雨|あめ}でした rövid alakja?', a: '{雨|あめ}だった', wrong: ['{雨|あめ}かった', '{雨|あめ}だ', '{雨|あめ}でした'], why: 'A です rövid múlt alakja だった.' },
+      { point: 6, q: 'Melyik a helyes tanács? „Jobb, ha nem mész el."', a: '{行|い}かないほうがいいです。', wrong: ['{行|い}かなかったほうがいいです。', '{行|い}ったないほうがいいです。', '{行|い}きませんほうがいいです。'], why: 'A tagadó tanácsban jelen idejű ない-alak áll.' },
+      { point: 7, q: '„Holnap dolgozatot írok, tudja." Mi hiányzik?', jp: '{明日|あした}テスト＿んです。', a: 'な', wrong: ['だ', 'の', 'が'], why: 'Főnév után な áll az んです előtt.' },
       { q: 'Az orvos azt mondja a végén: お{大事|だいじ}に。 Mit jelent?', a: 'Jobbulást!', wrong: ['Viszontlátásra!', 'Egészségére! (tüsszentésre)', 'Vigyázzon a gyógyszerre!'], why: 'Az お{大事|だいじ}に a betegnek szóló jókívánság.' },
       { q: 'Mit jelent: {病院|びょういん}へ{行|い}きます。', a: 'Orvoshoz megyek.', wrong: ['Kórházban fekszem.', 'Kórházban dolgozom.', 'Meglátogatok valakit a kórházban.'], why: 'A {病院|びょういん} a rendelőt is jelenti; a befekvés {入院|にゅういん}します.' },
       { q: 'Mit mondanak a japánok, ha valaki tüsszent?', a: 'Semmit.', wrong: ['お{大事|だいじ}に。', 'お{元気|げんき}で。', 'いただきます。'], why: 'Tüsszentésre nincs jókívánság; legfeljebb a tüsszentő kér elnézést.' }
@@ -5016,14 +5022,14 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'Mi a {行|い}きました közvetlen (rövid) alakja?', a: '{行|い}った', wrong: ['{行|い}く', '{行|い}かない', '{行|い}って'], why: 'A ました rövid párja a た-alak.' },
-      { q: 'Mi a {食|た}べません közvetlen alakja?', a: '{食|た}べない', wrong: ['{食|た}べた', '{食|た}べる', '{食|た}べなかった'], why: 'A ません rövid párja a ない-alak.' },
-      { q: '„Ma szünnap van." Közvetlen stílusban mi hiányzik?', jp: '{今日|きょう}は{休|やす}み＿。', a: 'だ', wrong: ['です', 'な', 'の'], why: 'Főnév után a です rövid alakja だ.' },
-      { q: '„Esik az eső." Mi hiányzik?', jp: '{雨|あめ}が＿います。', a: '{降|ふ}って', wrong: ['{降|ふ}り', '{降|ふ}る', '{降|ふ}った'], why: 'Folyamat: て-alak + います.' },
-      { q: 'Melyik mondat jelenti: „Tokióban lakom."', a: '{東京|とうきょう}に{住|す}んでいます。', wrong: ['{東京|とうきょう}に{住|す}みます。', '{東京|とうきょう}で{住|す}みました。', '{東京|とうきょう}を{住|す}んでいます。'], why: 'A lakóhely tartós állapot: {住|す}んでいます, a hely に-vel.' },
-      { q: '„Annának hosszú a haja." Mi hiányzik?', jp: 'アンナさんは{髪|かみ}＿{長|なが}いです。', a: 'が', wrong: ['を', 'に', 'で'], why: 'Az egész は, a rész が.' },
+      { point: 1, q: 'Mi a {行|い}きました közvetlen (rövid) alakja?', a: '{行|い}った', wrong: ['{行|い}く', '{行|い}かない', '{行|い}って'], why: 'A ました rövid párja a た-alak.' },
+      { point: 1, q: 'Mi a {食|た}べません közvetlen alakja?', a: '{食|た}べない', wrong: ['{食|た}べた', '{食|た}べる', '{食|た}べなかった'], why: 'A ません rövid párja a ない-alak.' },
+      { point: 1, q: '„Ma szünnap van." Közvetlen stílusban mi hiányzik?', jp: '{今日|きょう}は{休|やす}み＿。', a: 'だ', wrong: ['です', 'な', 'の'], why: 'Főnév után a です rövid alakja だ.' },
+      { point: 2, q: '„Esik az eső." Mi hiányzik?', jp: '{雨|あめ}が＿います。', a: '{降|ふ}って', wrong: ['{降|ふ}り', '{降|ふ}る', '{降|ふ}った'], why: 'Folyamat: て-alak + います.' },
+      { point: 3, q: 'Melyik mondat jelenti: „Tokióban lakom."', a: '{東京|とうきょう}に{住|す}んでいます。', wrong: ['{東京|とうきょう}に{住|す}みます。', '{東京|とうきょう}で{住|す}みました。', '{東京|とうきょう}を{住|す}んでいます。'], why: 'A lakóhely tartós állapot: {住|す}んでいます, a hely に-vel.' },
+      { point: 4, q: '„Annának hosszú a haja." Mi hiányzik?', jp: 'アンナさんは{髪|かみ}＿{長|なが}いです。', a: 'が', wrong: ['を', 'に', 'で'], why: 'Az egész は, a rész が.' },
       {
-        q: 'Mit jelent: これはきのう{買|か}った{本|ほん}です。',
+        point: 5, q: 'Mit jelent: これはきのう{買|か}った{本|ほん}です。',
         a: 'Ez az a könyv, amit tegnap vettem.',
         wrong: [
           'Tegnap ezt a könyvet olvastam.',
@@ -5032,27 +5038,27 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A főnév előtti rövid alakú mondat jelző: „a tegnap vett könyv".'
       },
-      { q: '„A szemüveges ember Tanaka." Mi hiányzik?', jp: 'めがねを＿{人|ひと}は{田中|たなか}さんです。', a: 'かけている', wrong: ['かけています', 'かけて', 'かけるの'], why: 'Főnév előtt rövid alak áll: かけている + {人|ひと}.' },
-      { q: 'Hogyan mondod: „Nem tudom."', a: '{知|し}りません。', wrong: ['{知|し}っていません。', '{知|し}りています。', '{知|し}らないでください。'], why: 'Tudom: {知|し}っています; nem tudom: {知|し}りません.' },
-      { q: '„Anyám bankban dolgozik." Mi hiányzik?', jp: '{母|はは}は{銀行|ぎんこう}で＿。', a: '{働|はたら}いています', wrong: ['{働|はたら}きています', '{働|はたら}っています', '{働|はたら}んでいます'], why: 'き → いて; a foglalkozás tartós állapot: {働|はたら}いています.' },
-      { q: 'Hogyan kérdezed meg egy barátodtól: „Mész?"', a: '{行|い}く？', wrong: ['{行|い}くか。', '{行|い}くだ？', '{行|い}きますだ？'], why: 'Közvetlen stílusban a kérdést az emelkedő hanglejtés jelzi, か nélkül.' },
-      { q: 'Mi az おいしいです közvetlen alakja?', a: 'おいしい', wrong: ['おいしいだ', 'おいしだ', 'おいしく'], why: 'Az い-melléknévről egyszerűen lemarad a です; だ nem kerül utána.' },
-      { q: 'Mi a 〜てください közvetlen párja?', a: '〜て', wrong: ['〜てだ', '〜てか', '〜ない'], why: 'Barátok között a ください elmarad: {待|ま}って, {見|み}て.' },
+      { point: 5, q: '„A szemüveges ember Tanaka." Mi hiányzik?', jp: 'めがねを＿{人|ひと}は{田中|たなか}さんです。', a: 'かけている', wrong: ['かけています', 'かけて', 'かけるの'], why: 'Főnév előtt rövid alak áll: かけている + {人|ひと}.' },
+      { point: 3, q: 'Hogyan mondod: „Nem tudom."', a: '{知|し}りません。', wrong: ['{知|し}っていません。', '{知|し}りています。', '{知|し}らないでください。'], why: 'Tudom: {知|し}っています; nem tudom: {知|し}りません.' },
+      { point: 3, q: '„Anyám bankban dolgozik." Mi hiányzik?', jp: '{母|はは}は{銀行|ぎんこう}で＿。', a: '{働|はたら}いています', wrong: ['{働|はたら}きています', '{働|はたら}っています', '{働|はたら}んでいます'], why: 'き → いて; a foglalkozás tartós állapot: {働|はたら}いています.' },
+      { point: 1, q: 'Hogyan kérdezed meg egy barátodtól: „Mész?"', a: '{行|い}く？', wrong: ['{行|い}くか。', '{行|い}くだ？', '{行|い}きますだ？'], why: 'Közvetlen stílusban a kérdést az emelkedő hanglejtés jelzi, か nélkül.' },
+      { point: 1, q: 'Mi az おいしいです közvetlen alakja?', a: 'おいしい', wrong: ['おいしいだ', 'おいしだ', 'おいしく'], why: 'Az い-melléknévről egyszerűen lemarad a です; だ nem kerül utána.' },
+      { point: 1, q: 'Mi a 〜てください közvetlen párja?', a: '〜て', wrong: ['〜てだ', '〜てか', '〜ない'], why: 'Barátok között a ください elmarad: {待|ま}って, {見|み}て.' },
       {
-        q: 'Mit jelent: {兄|あに}は{結婚|けっこん}しています。',
+        point: 3, q: 'Mit jelent: {兄|あに}は{結婚|けっこん}しています。',
         a: 'A bátyám házas.',
         wrong: ['A bátyám éppen most házasodik.', 'A bátyám meg fog házasodni.', 'A bátyám házasodni szeretne.'],
         why: 'A {結婚|けっこん}します pillanatnyi változás: a 〜ています az eredmény fennállását jelenti.'
       },
-      { q: 'Mit jelent: {今|いま}{晩|ばん}ごはんを{食|た}べています。', a: 'Éppen vacsorázom.', wrong: ['Minden este vacsorázom.', 'Már megvacsoráztam.', 'Vacsorázni fogok.'], why: 'Elnyúló cselekvésnél a 〜ています azt jelenti: éppen zajlik.' },
-      { q: 'Melyik ige kell a cipő viselésére?', a: 'はいています', wrong: ['{着|き}ています', 'かぶっています', 'かけています'], why: 'Lábra és alsótestre az はきます ige való.' },
+      { point: 2, q: 'Mit jelent: {今|いま}{晩|ばん}ごはんを{食|た}べています。', a: 'Éppen vacsorázom.', wrong: ['Minden este vacsorázom.', 'Már megvacsoráztam.', 'Vacsorázni fogok.'], why: 'Elnyúló cselekvésnél a 〜ています azt jelenti: éppen zajlik.' },
+      { point: 3, q: 'Melyik ige kell a cipő viselésére?', a: 'はいています', wrong: ['{着|き}ています', 'かぶっています', 'かけています'], why: 'Lábra és alsótestre az はきます ige való.' },
       {
-        q: '„A szemüveges ember, akivel tegnap találkoztam" — melyik a helyes?',
+        point: 5, q: '„A szemüveges ember, akivel tegnap találkoztam" — melyik a helyes?',
         a: 'きのう{会|あ}っためがねの{人|ひと}',
         wrong: ['きのう{会|あ}いましためがねの{人|ひと}', 'めがねの{人|ひと}はきのう{会|あ}った', '{人|ひと}きのう{会|あ}っためがねの'],
         why: 'A jelzői mondat rövid alakban, a főnév előtt áll.'
       },
-      { q: '„A curry, amit én főztem." Melyik partikula hiányzik?', jp: 'わたし＿{作|つく}ったカレー', a: 'が', wrong: ['は', 'を', 'に'], why: 'A jelzői mondat alanya が-t (vagy の-t) kap, は-t nem.' },
+      { point: 5, q: '„A curry, amit én főztem." Melyik partikula hiányzik?', jp: 'わたし＿{作|つく}ったカレー', a: 'が', wrong: ['は', 'を', 'に'], why: 'A jelzői mondat alanya が-t (vagy の-t) kap, は-t nem.' },
       { q: 'Tanárodat hívod telefonon. Hogyan kérdezed meg, ráér-e?', a: '{今|いま}、よろしいですか。', wrong: ['{今|いま}、ちょっといい？', '{今|いま}、ひま？', 'もしもし、いいね。'], why: 'Tanárnak az udvarias, tiszteletteljes forma jár: よろしいですか.' },
       { q: 'Mit ábrázol a m(_ _)m hangulatjel?', a: 'mély meghajlást: köszönetet vagy bocsánatkérést', wrong: ['alvást', 'sírást', 'dühöt'], why: 'A két m a földre tett kéz, középen a lehajtott fej.' }
     ]
@@ -5357,16 +5363,16 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Mivel esik az eső, nem megyek el itthonról." Mi hiányzik?', jp: '{雨|あめ}が{降|ふ}っている＿、{出|で}かけません。', a: 'ので', wrong: ['より', 'まで', 'だけ'], why: 'Ok: rövid alak + ので.' },
-      { q: '„Mivel ma szünnap van, otthon vagyok." Mi hiányzik?', jp: '{今日|きょう}は{休|やす}み＿、{家|うち}にいます。', a: 'なので', wrong: ['ので', 'だので', 'のので'], why: 'Főnév után なので áll.' },
-      { q: 'Mit jelent: {私|わたし}はコーヒーにします。', a: 'Én kávét kérek.', wrong: ['Én kávét főzök.', 'Én szeretem a kávét.', 'Nekem van kávém.'], why: 'főnév + にします = ezt választom.' },
-      { q: '„A feketét kérem." Mi hiányzik?', jp: '{黒|くろ}い＿をください。', a: 'の', wrong: ['な', 'に', 'が'], why: 'A の a már ismert főnevet helyettesíti: „a fekete".' },
-      { q: '„Adtam a barátomnak egy könyvet." Mi hiányzik?', jp: '{私|わたし}は{友|とも}だちに{本|ほん}を＿。', a: 'あげました', wrong: ['くれました', 'もらいました', 'ありました'], why: 'Tőlem kifelé irányuló adás: あげます.' },
-      { q: '„A barátom tortát adott nekem." Mi hiányzik?', jp: '{友|とも}だちが{私|わたし}にケーキを＿。', a: 'くれました', wrong: ['あげました', 'もらいました', 'いました'], why: 'Felém irányuló adás: くれます.' },
-      { q: '„Ajándékot kaptam a barátomtól." Mi hiányzik?', jp: '{私|わたし}は{友|とも}だち＿プレゼントをもらいました。', a: 'に', wrong: ['を', 'で', 'へ'], why: 'A もらいます mellett a に jelöli, akitől kapsz.' },
-      { q: 'Melyik mondat jelenti: „Anyám órát adott nekem."', a: '{母|はは}が{時計|とけい}をくれました。', wrong: ['{母|はは}に{時計|とけい}をあげました。', '{母|はは}が{時計|とけい}をもらいました。', '{母|はは}は{時計|とけい}にしました。'], why: 'Aki ad, が-t kap, és mivel nekem ad, az ige くれます.' },
-      { q: '„Mivel nincs időm, taxival megyek." Mi hiányzik?', jp: '{時間|じかん}が＿ので、タクシーで{行|い}きます。', a: 'ない', wrong: ['ないな', 'ないだ', 'なくて'], why: 'A ので előtt rövid alak áll: ない + ので.' },
-      { q: 'Mit jelent: だれにもらいましたか。', a: 'Kitől kaptad?', wrong: ['Kinek adtad?', 'Ki kapta meg?', 'Mit kaptál?'], why: 'A もらいます mellett a に „-tól, -től".' },
+      { point: 1, q: '„Mivel esik az eső, nem megyek el itthonról." Mi hiányzik?', jp: '{雨|あめ}が{降|ふ}っている＿、{出|で}かけません。', a: 'ので', wrong: ['より', 'まで', 'だけ'], why: 'Ok: rövid alak + ので.' },
+      { point: 1, q: '„Mivel ma szünnap van, otthon vagyok." Mi hiányzik?', jp: '{今日|きょう}は{休|やす}み＿、{家|うち}にいます。', a: 'なので', wrong: ['ので', 'だので', 'のので'], why: 'Főnév után なので áll.' },
+      { point: 2, q: 'Mit jelent: {私|わたし}はコーヒーにします。', a: 'Én kávét kérek.', wrong: ['Én kávét főzök.', 'Én szeretem a kávét.', 'Nekem van kávém.'], why: 'főnév + にします = ezt választom.' },
+      { point: 3, q: '„A feketét kérem." Mi hiányzik?', jp: '{黒|くろ}い＿をください。', a: 'の', wrong: ['な', 'に', 'が'], why: 'A の a már ismert főnevet helyettesíti: „a fekete".' },
+      { point: 4, q: '„Adtam a barátomnak egy könyvet." Mi hiányzik?', jp: '{私|わたし}は{友|とも}だちに{本|ほん}を＿。', a: 'あげました', wrong: ['くれました', 'もらいました', 'ありました'], why: 'Tőlem kifelé irányuló adás: あげます.' },
+      { point: 5, q: '„A barátom tortát adott nekem." Mi hiányzik?', jp: '{友|とも}だちが{私|わたし}にケーキを＿。', a: 'くれました', wrong: ['あげました', 'もらいました', 'いました'], why: 'Felém irányuló adás: くれます.' },
+      { point: 6, q: '„Ajándékot kaptam a barátomtól." Mi hiányzik?', jp: '{私|わたし}は{友|とも}だち＿プレゼントをもらいました。', a: 'に', wrong: ['を', 'で', 'へ'], why: 'A もらいます mellett a に jelöli, akitől kapsz.' },
+      { point: 5, q: 'Melyik mondat jelenti: „Anyám órát adott nekem."', a: '{母|はは}が{時計|とけい}をくれました。', wrong: ['{母|はは}に{時計|とけい}をあげました。', '{母|はは}が{時計|とけい}をもらいました。', '{母|はは}は{時計|とけい}にしました。'], why: 'Aki ad, が-t kap, és mivel nekem ad, az ige くれます.' },
+      { point: 1, q: '„Mivel nincs időm, taxival megyek." Mi hiányzik?', jp: '{時間|じかん}が＿ので、タクシーで{行|い}きます。', a: 'ない', wrong: ['ないな', 'ないだ', 'なくて'], why: 'A ので előtt rövid alak áll: ない + ので.' },
+      { point: 6, q: 'Mit jelent: だれにもらいましたか。', a: 'Kitől kaptad?', wrong: ['Kinek adtad?', 'Ki kapta meg?', 'Mit kaptál?'], why: 'A もらいます mellett a に „-tól, -től".' },
       {
         q: 'Az eladó azt mondja: セーターはこちらでございます。 Mi a でございます?',
         a: 'a です tiszteletteljes változata',
@@ -5374,21 +5380,21 @@ const NIHONCORE_COURSE = [
         why: 'Az eladók a vevővel szemben でございます / ございます alakot használnak.'
       },
       {
-        q: 'Melyik mondatban helyes az ok megadása?',
+        point: 1, q: 'Melyik mondatban helyes az ok megadása?',
         a: '{頭|あたま}が{痛|いた}いので、{帰|かえ}ります。',
         wrong: ['{頭|あたま}が{痛|いた}いだから、{帰|かえ}ります。', '{頭|あたま}が{痛|いた}いなので、{帰|かえ}ります。', '{頭|あたま}が{痛|いた}いだので、{帰|かえ}ります。'],
         why: 'Az い-melléknév után a ので és a から is közvetlenül áll: だ vagy な nem kell.'
       },
-      { q: '„Mivel csendes, szeretem." Mi hiányzik?', jp: '{静|しず}か＿ので、{好|す}きです。', a: 'な', wrong: ['だ', 'い', 'の'], why: 'な-melléknév után a ので előtt な áll.' },
+      { point: 1, q: '„Mivel csendes, szeretem." Mi hiányzik?', jp: '{静|しず}か＿ので、{好|す}きです。', a: 'な', wrong: ['だ', 'い', 'の'], why: 'な-melléknév után a ので előtt な áll.' },
       {
-        q: '„Van egy kicsit kisebb?" Melyik a helyes?',
+        point: 3, q: '„Van egy kicsit kisebb?" Melyik a helyes?',
         a: 'もう{少|すこ}し{小|ちい}さいのはありますか。',
         wrong: ['もう{少|すこ}し{小|ちい}さいなのはありますか。', 'もう{少|すこ}し{小|ちい}さいがありますか。', 'もう{少|すこ}し{小|ちい}さくのはありますか。'],
         why: 'い-melléknév után a helyettesítő の közvetlenül áll.'
       },
-      { q: 'A barátod tortát adott NEKED. Melyik ige kell?', a: 'くれました', wrong: ['あげました', 'もらいました (a barát az alany)', 'しました'], why: 'Ha a kapó a beszélő, az adás igéje くれます.' },
+      { point: 5, q: 'A barátod tortát adott NEKED. Melyik ige kell?', a: 'くれました', wrong: ['あげました', 'もらいました (a barát az alany)', 'しました'], why: 'Ha a kapó a beszélő, az adás igéje くれます.' },
       {
-        q: 'Melyik két mondat jelenti ugyanazt?',
+        point: 6, q: 'Melyik két mondat jelenti ugyanazt?',
         a: '{母|はは}がかばんをくれました。 = {母|はは}にかばんをもらいました。',
         wrong: [
           '{母|はは}がかばんをくれました。 = {母|はは}にかばんをあげました。',
@@ -5397,7 +5403,7 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A くれます az adó, a もらいます a kapó oldaláról mondja el ugyanazt.'
       },
-      { q: '„Levelet kaptam az iskolától." Melyik partikula a legjobb?', jp: '{学校|がっこう}＿{手紙|てがみ}をもらいました。', a: 'から', wrong: ['を', 'で', 'へ'], why: 'Intézménytől kapott dolognál a から használatos.' },
+      { point: 6, q: '„Levelet kaptam az iskolától." Melyik partikula a legjobb?', jp: '{学校|がっこう}＿{手紙|てがみ}をもらいました。', a: 'から', wrong: ['を', 'で', 'へ'], why: 'Intézménytől kapott dolognál a から használatos.' },
       { q: 'Étterembe lépsz, a pincér megkérdezi: {何名様|なんめいさま}ですか。 Mit felelsz?', a: '{二人|ふたり}です。', wrong: ['{二|ふた}つです。', '{二時|にじ}です。', 'コーヒーにします。'], why: 'A kérdés: hányan vannak? Az embereket ひとり, ふたり, さんにん… számolja.' },
       { q: 'Mit jelent: {別々|べつべつ}でお{願|ねが}いします。', a: 'Külön fizetünk.', wrong: ['Együtt fizetünk.', 'Más színben kérem.', 'Külön asztalt kérünk.'], why: '{別々|べつべつ} = külön-külön; együtt: いっしょで.' },
       {
@@ -5734,37 +5740,37 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Nem, még nem ettem." Mi hiányzik?', jp: 'いいえ、まだ＿。', a: '{食|た}べていません', wrong: ['{食|た}べませんでした', '{食|た}べました', '{食|た}べています'], why: 'Még nem: まだ + 〜ていません.' },
-      { q: '„Lefekvés előtt fogat mosok." Mi hiányzik?', jp: '＿まえに、{歯|は}をみがきます。', a: '{寝|ね}る', wrong: ['{寝|ね}た', '{寝|ね}て', '{寝|ね}ます'], why: 'A まえに előtt szótári alak áll.' },
-      { q: '„Miután megnéztük a filmet, vásároltunk." Mi hiányzik?', jp: '{映画|えいが}を＿あとで、{買|か}い{物|もの}をしました。', a: '{見|み}た', wrong: ['{見|み}る', '{見|み}て', '{見|み}ない'], why: 'Az あとで előtt た-alak áll.' },
-      { q: '„Azt hiszem, holnap esni fog." Mi hiányzik?', jp: 'あしたは{雨|あめ}が＿と{思|おも}います。', a: '{降|ふ}る', wrong: ['{降|ふ}ります', '{降|ふ}って', '{降|ふ}り'], why: 'A と{思|おも}います előtt rövid alak áll.' },
-      { q: '„Szeretnék egy új számítógépet." Mi hiányzik?', jp: '{新|あたら}しいパソコン＿ほしいです。', a: 'が', wrong: ['に', 'で', 'へ'], why: 'Amire vágysz, が-t kap: 〜がほしい.' },
-      { q: '„Jövőre Japánba szándékozom menni." Mi hiányzik?', jp: '{来年|らいねん}{日本|にほん}へ{行|い}く＿です。', a: 'つもり', wrong: ['ほしい', 'あとで', 'まえに'], why: 'Szándék: szótári alak + つもりです.' },
-      { q: 'Mit jelent: もう{宿題|しゅくだい}をしましたか。', a: 'Megcsináltad már a leckét?', wrong: ['Mikor csinálod meg a leckét?', 'Még mindig a leckét csinálod?', 'Miért nem csináltad meg a leckét?'], why: 'もう + múlt idő = már.' },
-      { q: '„Szerintem ő diák." Mi hiányzik?', jp: '{彼|かれ}は{学生|がくせい}＿と{思|おも}います。', a: 'だ', wrong: ['です', 'な', 'の'], why: 'Főnév után だ kell a と{思|おも}います elé.' },
-      { q: '„Evés után sétálok." Mi hiányzik?', jp: '{食事|しょくじ}＿あとで、{散歩|さんぽ}します。', a: 'の', wrong: ['を', 'に', 'が'], why: 'Főnév után: のあとで.' },
-      { q: 'Melyik mondat jelenti: „Vizet szeretnék inni."', a: '{水|みず}が{飲|の}みたいです。', wrong: ['{水|みず}がほしいたいです。', '{水|みず}を{飲|の}むほしいです。', '{水|みず}が{飲|の}みほしいです。'], why: 'Cselekvésre たい, tárgyra ほしい; a kettő nem keverhető.' },
+      { point: 1, q: '„Nem, még nem ettem." Mi hiányzik?', jp: 'いいえ、まだ＿。', a: '{食|た}べていません', wrong: ['{食|た}べませんでした', '{食|た}べました', '{食|た}べています'], why: 'Még nem: まだ + 〜ていません.' },
+      { point: 3, q: '„Lefekvés előtt fogat mosok." Mi hiányzik?', jp: '＿まえに、{歯|は}をみがきます。', a: '{寝|ね}る', wrong: ['{寝|ね}た', '{寝|ね}て', '{寝|ね}ます'], why: 'A まえに előtt szótári alak áll.' },
+      { point: 2, q: '„Miután megnéztük a filmet, vásároltunk." Mi hiányzik?', jp: '{映画|えいが}を＿あとで、{買|か}い{物|もの}をしました。', a: '{見|み}た', wrong: ['{見|み}る', '{見|み}て', '{見|み}ない'], why: 'Az あとで előtt た-alak áll.' },
+      { point: 4, q: '„Azt hiszem, holnap esni fog." Mi hiányzik?', jp: 'あしたは{雨|あめ}が＿と{思|おも}います。', a: '{降|ふ}る', wrong: ['{降|ふ}ります', '{降|ふ}って', '{降|ふ}り'], why: 'A と{思|おも}います előtt rövid alak áll.' },
+      { point: 6, q: '„Szeretnék egy új számítógépet." Mi hiányzik?', jp: '{新|あたら}しいパソコン＿ほしいです。', a: 'が', wrong: ['に', 'で', 'へ'], why: 'Amire vágysz, が-t kap: 〜がほしい.' },
+      { point: 7, q: '„Jövőre Japánba szándékozom menni." Mi hiányzik?', jp: '{来年|らいねん}{日本|にほん}へ{行|い}く＿です。', a: 'つもり', wrong: ['ほしい', 'あとで', 'まえに'], why: 'Szándék: szótári alak + つもりです.' },
+      { point: 1, q: 'Mit jelent: もう{宿題|しゅくだい}をしましたか。', a: 'Megcsináltad már a leckét?', wrong: ['Mikor csinálod meg a leckét?', 'Még mindig a leckét csinálod?', 'Miért nem csináltad meg a leckét?'], why: 'もう + múlt idő = már.' },
+      { point: 4, q: '„Szerintem ő diák." Mi hiányzik?', jp: '{彼|かれ}は{学生|がくせい}＿と{思|おも}います。', a: 'だ', wrong: ['です', 'な', 'の'], why: 'Főnév után だ kell a と{思|おも}います elé.' },
+      { point: 2, q: '„Evés után sétálok." Mi hiányzik?', jp: '{食事|しょくじ}＿あとで、{散歩|さんぽ}します。', a: 'の', wrong: ['を', 'に', 'が'], why: 'Főnév után: のあとで.' },
+      { point: 6, q: 'Melyik mondat jelenti: „Vizet szeretnék inni."', a: '{水|みず}が{飲|の}みたいです。', wrong: ['{水|みず}がほしいたいです。', '{水|みず}を{飲|の}むほしいです。', '{水|みず}が{飲|の}みほしいです。'], why: 'Cselekvésre たい, tárgyra ほしい; a kettő nem keverhető.' },
       { q: 'December 30-án búcsúzol a tanárodtól. Melyik jókívánság illik?', a: 'よいお{年|とし}を。', wrong: ['{明|あ}けましておめでとうございます。', 'お{大事|だいじ}に。', 'いってらっしゃい。'], why: 'Év vége előtt よいお{年|とし}を; az {明|あ}けまして… csak január elseje után.' },
-      { q: '„Ettél már?" — „Nem, még nem." Melyik a helyes rövid válasz?', a: 'いいえ、まだです。', wrong: ['いいえ、もうです。', 'いいえ、まだでした。', 'はい、まだです。'], why: 'A まだです a まだ〜ていません rövid változata.' },
-      { q: 'Mit jelent: まだ{雨|あめ}が{降|ふ}っています。', a: 'Még mindig esik az eső.', wrong: ['Még nem esik az eső.', 'Már esik az eső.', 'Már nem esik az eső.'], why: 'Állító mondatban a まだ = „még mindig".' },
+      { point: 1, q: '„Ettél már?" — „Nem, még nem." Melyik a helyes rövid válasz?', a: 'いいえ、まだです。', wrong: ['いいえ、もうです。', 'いいえ、まだでした。', 'はい、まだです。'], why: 'A まだです a まだ〜ていません rövid változata.' },
+      { point: 1, q: 'Mit jelent: まだ{雨|あめ}が{降|ふ}っています。', a: 'Még mindig esik az eső.', wrong: ['Még nem esik az eső.', 'Már esik az eső.', 'Már nem esik az eső.'], why: 'Állító mondatban a まだ = „még mindig".' },
       {
-        q: '„Mielőtt Japánba jöttem, japánul tanultam." Mi hiányzik?',
+        point: 3, q: '„Mielőtt Japánba jöttem, japánul tanultam." Mi hiányzik?',
         jp: '{日本|にほん}へ＿まえに、{日本語|にほんご}を{勉強|べんきょう}しました。',
         a: '{来|く}る',
         wrong: ['{来|き}た', '{来|き}て', '{来|き}ます'],
         why: 'A まえに előtt mindig szótári alak áll, múlt idejű mondatban is.'
       },
-      { q: '„Óra után könyvtárba megyek." Mi hiányzik?', jp: '{授業|じゅぎょう}＿あとで、{図書館|としょかん}へ{行|い}きます。', a: 'の', wrong: ['を', 'に', 'だ'], why: 'Főnév és あとで közé の kerül.' },
-      { q: 'Melyik a helyes?', a: '{簡単|かんたん}だと{思|おも}います。', wrong: ['{簡単|かんたん}と{思|おも}います。', '{簡単|かんたん}なと{思|おも}います。', '{簡単|かんたん}いと{思|おも}います。'], why: 'な-melléknév után a と előtt だ áll.' },
+      { point: 2, q: '„Óra után könyvtárba megyek." Mi hiányzik?', jp: '{授業|じゅぎょう}＿あとで、{図書館|としょかん}へ{行|い}きます。', a: 'の', wrong: ['を', 'に', 'だ'], why: 'Főnév és あとで közé の kerül.' },
+      { point: 4, q: 'Melyik a helyes?', a: '{簡単|かんたん}だと{思|おも}います。', wrong: ['{簡単|かんたん}と{思|おも}います。', '{簡単|かんたん}なと{思|おも}います。', '{簡単|かんたん}いと{思|おも}います。'], why: 'な-melléknév után a と előtt だ áll.' },
       {
-        q: 'Szeretnél egy új biciklit. Melyik mondat a jó?',
+        point: 6, q: 'Szeretnél egy új biciklit. Melyik mondat a jó?',
         a: '{新|あたら}しい{自転車|じてんしゃ}がほしいです。',
         wrong: ['{新|あたら}しい{自転車|じてんしゃ}をほしいです。', '{新|あたら}しい{自転車|じてんしゃ}がほしたいです。', '{新|あたら}しい{自転車|じてんしゃ}がほしです。'],
         why: 'A ほしい い-melléknév, és amire vágysz, が-t kap.'
       },
-      { q: 'Melyik fejez ki eldöntött tervet?', a: '{行|い}くつもりです。', wrong: ['{行|い}きたいです。', '{行|い}きませんか。', '{行|い}ったほうがいいです。'], why: 'A つもり megfontolt, eldöntött szándék; a たい csak vágy.' },
+      { point: 7, q: 'Melyik fejez ki eldöntött tervet?', a: '{行|い}くつもりです。', wrong: ['{行|い}きたいです。', '{行|い}きませんか。', '{行|い}ったほうがいいです。'], why: 'A つもり megfontolt, eldöntött szándék; a たい csak vágy.' },
       {
-        q: 'Mi a különbség? {勉強|べんきょう}したいです ↔ {勉強|べんきょう}したいと{思|おも}っています',
+        point: 5, q: 'Mi a különbség? {勉強|べんきょう}したいです ↔ {勉強|べんきょう}したいと{思|おも}っています',
         a: 'a második visszafogottabb, és tartós elhatározást jelez',
         wrong: ['a második múlt idő', 'a második más ember vágyát fejezi ki', 'nincs különbség, csak hosszabb'],
         why: 'A と{思|おも}っています tompít, és jelzi, hogy régebb óta így gondolod.'
@@ -6081,40 +6087,40 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Holnap valószínűleg napos idő lesz." Mi hiányzik?', jp: 'あしたは{晴|は}れる＿。', a: 'でしょう', wrong: ['ましょう', 'でした', 'ください'], why: 'Feltevés: rövid alak + でしょう.' },
-      { q: '„Otthon felejtettem a pénztárcámat." (sajnálkozva) Mi hiányzik?', jp: '{財布|さいふ}を{忘|わす}れて＿。', a: 'しまいました', wrong: ['ありました', 'ください', 'いいです'], why: 'Megtörtént, és bánom: て-alak + しまいました.' },
-      { q: '„Hétvégén olvasok, zenét hallgatok, ilyesmi." Mi hiányzik?', jp: '{週末|しゅうまつ}は{本|ほん}を＿、{音楽|おんがく}を{聞|き}いたりします。', a: '{読|よ}んだり', wrong: ['{読|よ}みたり', '{読|よ}むたり', '{読|よ}んたり'], why: 'た-alak + り: {読|よ}んだ → {読|よ}んだり.' },
-      { q: 'Mit jelent: コーヒーも{紅茶|こうちゃ}も{飲|の}みません。', a: 'Sem kávét, sem teát nem iszom.', wrong: ['Kávét iszom, teát nem.', 'Kávét is, teát is iszom.', 'Kávét vagy teát iszom.'], why: 'A も B も tagadással: sem ez, sem az.' },
-      { q: '„Megfáztam, ezért nem mentem iskolába." Mi hiányzik?', jp: '{風邪|かぜ}を＿、{学校|がっこう}を{休|やす}みました。', a: 'ひいて', wrong: ['ひいたり', 'ひく', 'ひいても'], why: 'Az okot itt a て-alak fejezi ki.' },
-      { q: '„Leülhetek ide?" Mi hiányzik?', jp: 'ここに{座|すわ}って＿いいですか。', a: 'も', wrong: ['は', 'が', 'を'], why: 'Engedélykérés: て-alak + もいいですか.' },
-      { q: '„Sok a lecke, nehéz dolgom van." Mi hiányzik?', jp: '{宿題|しゅくだい}が＿、{大変|たいへん}です。', a: '{多|おお}くて', wrong: ['{多|おお}いで', '{多|おお}いて', '{多|おお}で'], why: 'い-melléknév て-alakja: い → くて.' },
-      { q: 'Mit jelent: {電車|でんしゃ}が{行|い}ってしまいました。', a: 'Elment a vonat, lekéstem.', wrong: ['Megjött a vonat.', 'A vonat mindjárt indul.', 'Vonattal mentem.'], why: 'A てしまいました visszavonhatatlan, sajnálatos eseményt jelez.' },
-      { q: '„Tegnap vásároltam, találkoztam a barátommal, ilyesmi." Mi hiányzik?', jp: 'きのうは{買|か}い{物|もの}をしたり、{友|とも}だちに{会|あ}ったり＿。', a: 'しました', wrong: ['でした', 'ました', 'いました'], why: 'A たり-sort a します zárja; itt múlt időben.' },
-      { q: 'Valaki megkérdezi: ここでたばこを{吸|す}ってもいいですか。 Hogyan utasítod el udvariasan?', a: 'すみません、ちょっと…。', wrong: ['はい、どうぞ。', 'いいえ、ちがいます。', 'いいえ、ほしくないです。'], why: 'Az udvarias elutasítás kitérő: すみません、ちょっと…' },
-      { q: 'Elkéstél a találkozóról. Mit mondasz?', a: '{遅|おく}れてすみません。', wrong: ['{遅|おく}れるすみません。', '{遅|おく}れましょう。', '{遅|おく}れてもいいですか。'], why: 'A bocsánatkérés oka て-alakban áll a すみません előtt.' },
+      { point: 1, q: '„Holnap valószínűleg napos idő lesz." Mi hiányzik?', jp: 'あしたは{晴|は}れる＿。', a: 'でしょう', wrong: ['ましょう', 'でした', 'ください'], why: 'Feltevés: rövid alak + でしょう.' },
+      { point: 2, q: '„Otthon felejtettem a pénztárcámat." (sajnálkozva) Mi hiányzik?', jp: '{財布|さいふ}を{忘|わす}れて＿。', a: 'しまいました', wrong: ['ありました', 'ください', 'いいです'], why: 'Megtörtént, és bánom: て-alak + しまいました.' },
+      { point: 3, q: '„Hétvégén olvasok, zenét hallgatok, ilyesmi." Mi hiányzik?', jp: '{週末|しゅうまつ}は{本|ほん}を＿、{音楽|おんがく}を{聞|き}いたりします。', a: '{読|よ}んだり', wrong: ['{読|よ}みたり', '{読|よ}むたり', '{読|よ}んたり'], why: 'た-alak + り: {読|よ}んだ → {読|よ}んだり.' },
+      { point: 4, q: 'Mit jelent: コーヒーも{紅茶|こうちゃ}も{飲|の}みません。', a: 'Sem kávét, sem teát nem iszom.', wrong: ['Kávét iszom, teát nem.', 'Kávét is, teát is iszom.', 'Kávét vagy teát iszom.'], why: 'A も B も tagadással: sem ez, sem az.' },
+      { point: 5, q: '„Megfáztam, ezért nem mentem iskolába." Mi hiányzik?', jp: '{風邪|かぜ}を＿、{学校|がっこう}を{休|やす}みました。', a: 'ひいて', wrong: ['ひいたり', 'ひく', 'ひいても'], why: 'Az okot itt a て-alak fejezi ki.' },
+      { point: 6, q: '„Leülhetek ide?" Mi hiányzik?', jp: 'ここに{座|すわ}って＿いいですか。', a: 'も', wrong: ['は', 'が', 'を'], why: 'Engedélykérés: て-alak + もいいですか.' },
+      { point: 5, q: '„Sok a lecke, nehéz dolgom van." Mi hiányzik?', jp: '{宿題|しゅくだい}が＿、{大変|たいへん}です。', a: '{多|おお}くて', wrong: ['{多|おお}いで', '{多|おお}いて', '{多|おお}で'], why: 'い-melléknév て-alakja: い → くて.' },
+      { point: 2, q: 'Mit jelent: {電車|でんしゃ}が{行|い}ってしまいました。', a: 'Elment a vonat, lekéstem.', wrong: ['Megjött a vonat.', 'A vonat mindjárt indul.', 'Vonattal mentem.'], why: 'A てしまいました visszavonhatatlan, sajnálatos eseményt jelez.' },
+      { point: 3, q: '„Tegnap vásároltam, találkoztam a barátommal, ilyesmi." Mi hiányzik?', jp: 'きのうは{買|か}い{物|もの}をしたり、{友|とも}だちに{会|あ}ったり＿。', a: 'しました', wrong: ['でした', 'ました', 'いました'], why: 'A たり-sort a します zárja; itt múlt időben.' },
+      { point: 6, q: 'Valaki megkérdezi: ここでたばこを{吸|す}ってもいいですか。 Hogyan utasítod el udvariasan?', a: 'すみません、ちょっと…。', wrong: ['はい、どうぞ。', 'いいえ、ちがいます。', 'いいえ、ほしくないです。'], why: 'Az udvarias elutasítás kitérő: すみません、ちょっと…' },
+      { point: 5, q: 'Elkéstél a találkozóról. Mit mondasz?', a: '{遅|おく}れてすみません。', wrong: ['{遅|おく}れるすみません。', '{遅|おく}れましょう。', '{遅|おく}れてもいいですか。'], why: 'A bocsánatkérés oka て-alakban áll a すみません előtt.' },
       { q: 'Megdicsérik a japántudásodat. Mi az illendő válasz?', a: 'いえいえ、まだまだです。', wrong: ['はい、{上手|じょうず}です。', 'もちろんです。', 'お{疲|つか}れさまでした。'], why: 'A dicséretet szabadkozással fogadjuk.' },
-      { q: 'Melyik a helyes? „Valószínűleg eső lesz."', a: '{雨|あめ}でしょう。', wrong: ['{雨|あめ}だでしょう。', '{雨|あめ}なでしょう。', '{雨|あめ}のでしょう。'], why: 'Főnév után a でしょう elé nem kerül だ.' },
+      { point: 1, q: 'Melyik a helyes? „Valószínűleg eső lesz."', a: '{雨|あめ}でしょう。', wrong: ['{雨|あめ}だでしょう。', '{雨|あめ}なでしょう。', '{雨|あめ}のでしょう。'], why: 'Főnév után a でしょう elé nem kerül だ.' },
       {
-        q: 'Mit jelent: この{料理|りょうり}、おいしいでしょう？ (emelkedő hanglejtéssel)',
+        point: 1, q: 'Mit jelent: この{料理|りょうり}、おいしいでしょう？ (emelkedő hanglejtéssel)',
         a: 'Ez az étel finom, ugye?',
         wrong: ['Ez az étel valószínűleg finom lesz.', 'Ez az étel finom volt?', 'Ez az étel nem finom.'],
         why: 'Emelkedő hanglejtéssel a でしょう megerősítést kér.'
       },
       {
-        q: 'Mit fejez ki leggyakrabban a 〜てしまいました?',
+        point: 2, q: 'Mit fejez ki leggyakrabban a 〜てしまいました?',
         a: 'hogy valami visszavonhatatlanul megtörtént, és ezt bánod',
         wrong: ['hogy valamit szívesen megtettél', 'hogy valamit meg fogsz tenni', 'hogy valamit szabad megtenni'],
         why: 'A しまいます a lezártságot és a sajnálkozást hordozza.'
       },
-      { q: 'Mi a {読|よ}みます たり-alakja?', a: '{読|よ}んだり', wrong: ['{読|よ}んたり', '{読|よ}みたり', '{読|よ}んでり'], why: 'A た-alak {読|よ}んだ, ehhez járul a り.' },
+      { point: 3, q: 'Mi a {読|よ}みます たり-alakja?', a: '{読|よ}んだり', wrong: ['{読|よ}んたり', '{読|よ}みたり', '{読|よ}んでり'], why: 'A た-alak {読|よ}んだ, ehhez járul a り.' },
       {
-        q: 'Mi a különbség? {掃除|そうじ}して、{洗濯|せんたく}します ↔ {掃除|そうじ}したり、{洗濯|せんたく}したりします',
+        point: 3, q: 'Mi a különbség? {掃除|そうじ}して、{洗濯|せんたく}します ↔ {掃除|そうじ}したり、{洗濯|せんたく}したりします',
         a: 'az első mindent megnevez, sorrendben; a második csak példákat mond',
         wrong: ['az első múlt idő, a második jelen', 'az első tagadó, a második állító', 'nincs különbség'],
         why: 'A て-alak teljes, időrendi felsorolás; a たり részleges, sorrend nélküli.'
       },
-      { q: 'Melyik mondat HIBÁS?', a: '{時間|じかん}がなくて、{急|いそ}ぎましょう。', wrong: ['{時間|じかん}がないので、{急|いそ}ぎましょう。', '{時間|じかん}がないから、{急|いそ}ぎましょう。', '{時間|じかん}がなくて、{困|こま}りました。'], why: 'Javaslat előtt a て-alak nem adhat okot.' },
-      { q: 'Szombatra hívnak, de neked csak vasárnap jó. Hogyan javasolsz másik napot?', a: '{日曜日|にちようび}でもいいですか。', wrong: ['{日曜日|にちようび}でしょう。', '{日曜日|にちようび}にしまいます。', '{日曜日|にちようび}もいいですか。'], why: 'A főnév + でもいいですか = „… is megfelel?".' },
+      { point: 5, q: 'Melyik mondat HIBÁS?', a: '{時間|じかん}がなくて、{急|いそ}ぎましょう。', wrong: ['{時間|じかん}がないので、{急|いそ}ぎましょう。', '{時間|じかん}がないから、{急|いそ}ぎましょう。', '{時間|じかん}がなくて、{困|こま}りました。'], why: 'Javaslat előtt a て-alak nem adhat okot.' },
+      { point: 6, q: 'Szombatra hívnak, de neked csak vasárnap jó. Hogyan javasolsz másik napot?', a: '{日曜日|にちようび}でもいいですか。', wrong: ['{日曜日|にちようび}でしょう。', '{日曜日|にちようび}にしまいます。', '{日曜日|にちようび}もいいですか。'], why: 'A főnév + でもいいですか = „… is megfelel?".' },
       { q: 'Ki ad csokoládét Valentin-napon Japánban?', a: 'a nők a férfiaknak', wrong: ['a férfiak a nőknek', 'a szülők a gyerekeknek', 'a főnök a beosztottaknak'], why: 'A férfiak március 14-én, a ホワイトデー napján viszonozzák.' }
     ]
   },
@@ -6416,23 +6422,23 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„A hobbim a fényképezés." Mi hiányzik?', jp: '{趣味|しゅみ}は{写真|しゃしん}を＿ことです。', a: '{撮|と}る', wrong: ['{撮|と}って', '{撮|と}ります', '{撮|と}り'], why: 'A こと előtt szótári alak áll.' },
-      { q: '„Voltam már Japánban." Mi hiányzik?', jp: '{日本|にほん}へ＿ことがあります。', a: '{行|い}った', wrong: ['{行|い}って', '{行|い}きます', '{行|い}き'], why: 'Tapasztalat: た-alak + ことがあります.' },
-      { q: '„Tudok kanjit olvasni." Mi hiányzik?', jp: '{漢字|かんじ}を{読|よ}む＿ができます。', a: 'こと', wrong: ['もの', 'ところ', 'つもり'], why: 'Ige + こと + ができます.' },
-      { q: '„Tudok autót vezetni." Mi hiányzik?', jp: '{私|わたし}は{車|くるま}の{運転|うんてん}＿できます。', a: 'が', wrong: ['に', 'で', 'へ'], why: 'Főnév + ができます.' },
-      { q: '„Húst eszem, de halat nem." Mi hiányzik?', jp: '{肉|にく}は{食|た}べます＿、{魚|さかな}は{食|た}べません。', a: 'が', wrong: ['か', 'も', 'と'], why: 'A mondatvégi が itt „de".' },
-      { q: '„Kérem, várjon egy kicsit." (tiszteleti) Mi hiányzik?', jp: '{少々|しょうしょう}＿ください。', a: 'お{待|ま}ち', wrong: ['お{待|ま}って', '{待|ま}ち', 'お{待|ま}つ'], why: 'お + ます-tő + ください: {待|ま}ちます → お{待|ま}ちください.' },
-      { q: 'Mit jelent: すしを{食|た}べたことがありますか。', a: 'Ettél már szusit?', wrong: ['Szeretnél szusit enni?', 'Szoktál szusit enni?', 'Tegnap szusit ettél?'], why: '〜たことがあります = volt már rá példa az életedben.' },
-      { q: 'Melyik mondat jelenti: „Még soha nem ültem lovon."', a: '{馬|うま}に{乗|の}ったことがありません。', wrong: ['{馬|うま}に{乗|の}ることができません。', '{馬|うま}に{乗|の}りませんでした。', '{馬|うま}に{乗|の}らないことです。'], why: 'A tapasztalat hiánya: た-alak + ことがありません.' },
-      { q: '„Itt lehet internetet használni." Mi hiányzik?', jp: 'ここでインターネットを＿ことができます。', a: '{使|つか}う', wrong: ['{使|つか}って', '{使|つか}った', '{使|つか}います'], why: 'A ことができます előtt szótári alak áll.' },
+      { point: 1, q: '„A hobbim a fényképezés." Mi hiányzik?', jp: '{趣味|しゅみ}は{写真|しゃしん}を＿ことです。', a: '{撮|と}る', wrong: ['{撮|と}って', '{撮|と}ります', '{撮|と}り'], why: 'A こと előtt szótári alak áll.' },
+      { point: 2, q: '„Voltam már Japánban." Mi hiányzik?', jp: '{日本|にほん}へ＿ことがあります。', a: '{行|い}った', wrong: ['{行|い}って', '{行|い}きます', '{行|い}き'], why: 'Tapasztalat: た-alak + ことがあります.' },
+      { point: 3, q: '„Tudok kanjit olvasni." Mi hiányzik?', jp: '{漢字|かんじ}を{読|よ}む＿ができます。', a: 'こと', wrong: ['もの', 'ところ', 'つもり'], why: 'Ige + こと + ができます.' },
+      { point: 3, q: '„Tudok autót vezetni." Mi hiányzik?', jp: '{私|わたし}は{車|くるま}の{運転|うんてん}＿できます。', a: 'が', wrong: ['に', 'で', 'へ'], why: 'Főnév + ができます.' },
+      { point: 4, q: '„Húst eszem, de halat nem." Mi hiányzik?', jp: '{肉|にく}は{食|た}べます＿、{魚|さかな}は{食|た}べません。', a: 'が', wrong: ['か', 'も', 'と'], why: 'A mondatvégi が itt „de".' },
+      { point: 5, q: '„Kérem, várjon egy kicsit." (tiszteleti) Mi hiányzik?', jp: '{少々|しょうしょう}＿ください。', a: 'お{待|ま}ち', wrong: ['お{待|ま}って', '{待|ま}ち', 'お{待|ま}つ'], why: 'お + ます-tő + ください: {待|ま}ちます → お{待|ま}ちください.' },
+      { point: 2, q: 'Mit jelent: すしを{食|た}べたことがありますか。', a: 'Ettél már szusit?', wrong: ['Szeretnél szusit enni?', 'Szoktál szusit enni?', 'Tegnap szusit ettél?'], why: '〜たことがあります = volt már rá példa az életedben.' },
+      { point: 2, q: 'Melyik mondat jelenti: „Még soha nem ültem lovon."', a: '{馬|うま}に{乗|の}ったことがありません。', wrong: ['{馬|うま}に{乗|の}ることができません。', '{馬|うま}に{乗|の}りませんでした。', '{馬|うま}に{乗|の}らないことです。'], why: 'A tapasztalat hiánya: た-alak + ことがありません.' },
+      { point: 3, q: '„Itt lehet internetet használni." Mi hiányzik?', jp: 'ここでインターネットを＿ことができます。', a: '{使|つか}う', wrong: ['{使|つか}って', '{使|つか}った', '{使|つか}います'], why: 'A ことができます előtt szótári alak áll.' },
       {
-        q: 'Hol hallod leginkább: どうぞお{入|はい}りください。',
+        point: 5, q: 'Hol hallod leginkább: どうぞお{入|はい}りください。',
         a: 'Udvarias helyzetben: vendégnek, ügyfélnek mondják.',
         wrong: ['Barátok között, lazán.', 'Gyereknek szóló utasításként.', 'Csak írásban, tiltó táblán.'],
         why: 'Az お〜ください tiszteleti kérés.'
       },
       {
-        q: 'Melyik mondat helyes? „A hobbim a főzés."',
+        point: 1, q: 'Melyik mondat helyes? „A hobbim a főzés."',
         a: '{趣味|しゅみ}は{料理|りょうり}を{作|つく}ることです。',
         wrong: [
           '{趣味|しゅみ}は{料理|りょうり}を{作|つく}ります。',
@@ -6441,24 +6447,24 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A です elé főnév kell: az igét a こと főnevesíti, szótári alakban.'
       },
-      { q: 'Milyen alakban áll az ige a 〜ことがあります (tapasztalat) előtt?', a: 'た-alakban', wrong: ['szótári alakban', 'て-alakban', 'ます-alakban'], why: 'A tapasztalat: た-alak + ことがあります.' },
+      { point: 2, q: 'Milyen alakban áll az ige a 〜ことがあります (tapasztalat) előtt?', a: 'た-alakban', wrong: ['szótári alakban', 'て-alakban', 'ます-alakban'], why: 'A tapasztalat: た-alak + ことがあります.' },
       {
-        q: 'Melyik mondat HIBÁS?',
+        point: 2, q: 'Melyik mondat HIBÁS?',
         a: 'きのう{映画|えいが}を{見|み}たことがあります。',
         wrong: ['{日本|にほん}の{映画|えいが}を{見|み}たことがあります。', 'きのう{映画|えいが}を{見|み}ました。', '{一度|いちど}も{見|み}たことがありません。'],
         why: 'Konkrét, közeli időpontra a sima múlt idő való, nem a tapasztalat szerkezete.'
       },
-      { q: '„Tudok angolul." Melyik partikula hiányzik?', jp: '{英語|えいご}＿できます。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A できます mellett az, amit tudsz, が-t kap.' },
+      { point: 3, q: '„Tudok angolul." Melyik partikula hiányzik?', jp: '{英語|えいご}＿できます。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A できます mellett az, amit tudsz, が-t kap.' },
       {
-        q: 'Mit jelent: ここで{写真|しゃしん}を{撮|と}ることができます。',
+        point: 3, q: 'Mit jelent: ここで{写真|しゃしん}を{撮|と}ることができます。',
         a: 'Itt lehet fényképezni.',
         wrong: ['Itt fényképeztem már.', 'Itt szeretnék fényképezni.', 'Itt kell fényképezni.'],
         why: 'A ことができます lehetőséget is kifejez: a körülmények megengedik.'
       },
-      { q: '„Angolul tudok, de franciául nem." Mi hiányzik?', jp: '{英語|えいご}＿できますが、フランス{語|ご}＿できません。', a: 'は … は', wrong: ['が … が', 'を … を', 'に … に'], why: 'Szembeállításkor a が helyére mindkét oldalon は lép.' },
-      { q: 'Mi a {待|ま}ってください tiszteleti változata?', a: 'お{待|ま}ちください', wrong: ['お{待|ま}ってください', 'ご{待|ま}ちください', 'お{待|ま}つください'], why: 'お + ます-tő + ください.' },
+      { point: 4, q: '„Angolul tudok, de franciául nem." Mi hiányzik?', jp: '{英語|えいご}＿できますが、フランス{語|ご}＿できません。', a: 'は … は', wrong: ['が … が', 'を … を', 'に … に'], why: 'Szembeállításkor a が helyére mindkét oldalon は lép.' },
+      { point: 5, q: 'Mi a {待|ま}ってください tiszteleti változata?', a: 'お{待|ま}ちください', wrong: ['お{待|ま}ってください', 'ご{待|ま}ちください', 'お{待|ま}つください'], why: 'お + ます-tő + ください.' },
       {
-        q: 'Állásinterjún belépsz a szobába. Mit teszel?',
+        point: 5, q: 'Állásinterjún belépsz a szobába. Mit teszel?',
         a: 'Azt mondod: {失礼|しつれい}します, és megvárod, amíg hellyel kínálnak.',
         wrong: [
           'Rögtön leülsz, és azt mondod: いただきます。',
@@ -6746,10 +6752,10 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Gyerekkoromban Tokióban laktam." Mi hiányzik?', jp: '{子|こ}ども＿とき、{東京|とうきょう}に{住|す}んでいました。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のとき.' },
-      { q: '„Amikor ráérek, olvasok." Mi hiányzik?', jp: '{暇|ひま}＿とき、{本|ほん}を{読|よ}みます。', a: 'な', wrong: ['の', 'だ', 'い'], why: 'な-melléknév után: なとき.' },
+      { point: 1, q: '„Gyerekkoromban Tokióban laktam." Mi hiányzik?', jp: '{子|こ}ども＿とき、{東京|とうきょう}に{住|す}んでいました。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のとき.' },
+      { point: 1, q: '„Amikor ráérek, olvasok." Mi hiányzik?', jp: '{暇|ひま}＿とき、{本|ほん}を{読|よ}みます。', a: 'な', wrong: ['の', 'だ', 'い'], why: 'な-melléknév után: なとき.' },
       {
-        q: 'Mit jelent: {日本|にほん}へ{行|い}ったとき、かばんを{買|か}いました。',
+        point: 2, q: 'Mit jelent: {日本|にほん}へ{行|い}ったとき、かばんを{買|か}いました。',
         a: 'Japánban vettem a táskát, amikor már ott voltam.',
         wrong: [
           'Az út előtt, még itthon vettem a táskát.',
@@ -6758,13 +6764,13 @@ const NIHONCORE_COURSE = [
         ],
         why: 'た-alak + とき: az odautazás már megtörtént, amikor vásároltál.'
       },
-      { q: '„Itt tilos dohányozni." Mi hiányzik?', jp: 'ここでたばこを{吸|す}って＿。', a: 'はいけません', wrong: ['もいいです', 'ください', 'みます'], why: 'Tilalom: て-alak + はいけません.' },
-      { q: '„A múzeumban tilos fényképezni." Mi hiányzik?', jp: '{美術館|びじゅつかん}で{写真|しゃしん}を＿はいけません。', a: '{撮|と}って', wrong: ['{撮|と}る', '{撮|と}った', '{撮|と}り'], why: 'A はいけません előtt て-alak áll.' },
-      { q: '„A bátyám irodai dolgozó, a nővérem diák." Mi hiányzik?', jp: '{兄|あに}は{会社員|かいしゃいん}＿、{姉|あね}は{学生|がくせい}です。', a: 'で', wrong: ['と', 'も', 'くて'], why: 'A です て-alakja で: ez köti össze a két állítást.' },
-      { q: 'Valaki megkérdezi: ここに{車|くるま}を{止|と}めてもいいですか。 Melyik válasz tiltja meg?', a: 'いいえ、{止|と}めてはいけません。', wrong: ['ええ、いいですよ。', 'はい、どうぞ。', 'いいえ、{止|と}めてもいいです。'], why: 'A tiltás: 〜てはいけません.' },
-      { q: '„Amikor hideg van, kabátot veszek." Mi hiányzik?', jp: '＿とき、コートを{着|き}ます。', a: '{寒|さむ}い', wrong: ['{寒|さむ}いの', '{寒|さむ}いな', '{寒|さむ}くて'], why: 'い-melléknév közvetlenül áll a とき előtt.' },
+      { point: 3, q: '„Itt tilos dohányozni." Mi hiányzik?', jp: 'ここでたばこを{吸|す}って＿。', a: 'はいけません', wrong: ['もいいです', 'ください', 'みます'], why: 'Tilalom: て-alak + はいけません.' },
+      { point: 3, q: '„A múzeumban tilos fényképezni." Mi hiányzik?', jp: '{美術館|びじゅつかん}で{写真|しゃしん}を＿はいけません。', a: '{撮|と}って', wrong: ['{撮|と}る', '{撮|と}った', '{撮|と}り'], why: 'A はいけません előtt て-alak áll.' },
+      { point: 5, q: '„A bátyám irodai dolgozó, a nővérem diák." Mi hiányzik?', jp: '{兄|あに}は{会社員|かいしゃいん}＿、{姉|あね}は{学生|がくせい}です。', a: 'で', wrong: ['と', 'も', 'くて'], why: 'A です て-alakja で: ez köti össze a két állítást.' },
+      { point: 4, q: 'Valaki megkérdezi: ここに{車|くるま}を{止|と}めてもいいですか。 Melyik válasz tiltja meg?', a: 'いいえ、{止|と}めてはいけません。', wrong: ['ええ、いいですよ。', 'はい、どうぞ。', 'いいえ、{止|と}めてもいいです。'], why: 'A tiltás: 〜てはいけません.' },
+      { point: 1, q: '„Amikor hideg van, kabátot veszek." Mi hiányzik?', jp: '＿とき、コートを{着|き}ます。', a: '{寒|さむ}い', wrong: ['{寒|さむ}いの', '{寒|さむ}いな', '{寒|さむ}くて'], why: 'い-melléknév közvetlenül áll a とき előtt.' },
       {
-        q: 'Melyik mondat mondja azt, hogy a táskát még az út előtt vetted?',
+        point: 2, q: 'Melyik mondat mondja azt, hogy a táskát még az út előtt vetted?',
         a: '{日本|にほん}へ{行|い}くとき、かばんを{買|か}いました。',
         wrong: [
           '{日本|にほん}へ{行|い}ったとき、かばんを{買|か}いました。',
@@ -6773,10 +6779,10 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Szótári alak + とき: az utazás még nem zárult le, amikor vásároltál.'
       },
-      { q: '„Ebbe a szobába tilos belépni." Mi hiányzik?', jp: 'この{部屋|へや}に＿はいけません。', a: '{入|はい}って', wrong: ['{入|はい}て', '{入|はい}いて', '{入|はい}りて'], why: 'A {入|はい}ります 1. csoportú ige: り → って.' },
-      { q: '„Diákkoromban sokat utaztam." Mi hiányzik?', jp: '{学生|がくせい}＿とき、よく{旅行|りょこう}しました。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév és とき közé の kerül.' },
+      { point: 3, q: '„Ebbe a szobába tilos belépni." Mi hiányzik?', jp: 'この{部屋|へや}に＿はいけません。', a: '{入|はい}って', wrong: ['{入|はい}て', '{入|はい}いて', '{入|はい}りて'], why: 'A {入|はい}ります 1. csoportú ige: り → って.' },
+      { point: 1, q: '„Diákkoromban sokat utaztam." Mi hiányzik?', jp: '{学生|がくせい}＿とき、よく{旅行|りょこう}しました。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév és とき közé の kerül.' },
       {
-        q: 'Hazaértél, és azt mondod: ただいま。 Melyik a helyes leírás?',
+        point: 2, q: 'Hazaértél, és azt mondod: ただいま。 Melyik a helyes leírás?',
         a: 'うちへ{帰|かえ}ったとき、「ただいま」と{言|い}います。',
         wrong: [
           'うちへ{帰|かえ}るとき、「ただいま」と{言|い}います。',
@@ -6786,7 +6792,7 @@ const NIHONCORE_COURSE = [
         why: 'A hazaérkezés már megtörtént, amikor megszólalsz: た-alak.'
       },
       {
-        q: 'Mit jelent: {日本|にほん}へ{行|い}くとき、{空港|くうこう}でおみやげを{買|か}いました。',
+        point: 2, q: 'Mit jelent: {日本|にほん}へ{行|い}くとき、{空港|くうこう}でおみやげを{買|か}いました。',
         a: 'Az ajándékot még az út előtt, induláskor vettem.',
         wrong: [
           'Az ajándékot Japánban vettem, megérkezés után.',
@@ -6796,19 +6802,19 @@ const NIHONCORE_COURSE = [
         why: 'A szótári alak ({行|い}く) azt jelzi: az út akkor még nem zárult le.'
       },
       {
-        q: 'Mi a különbség? 〜てはいけません ↔ 〜ないでください',
+        point: 3, q: 'Mi a különbség? 〜てはいけません ↔ 〜ないでください',
         a: 'az első szabályt mond ki, a második személyes kérés',
         wrong: ['az első udvariasabb', 'az első engedély, a második tiltás', 'nincs különbség'],
         why: 'A てはいけません általános tilalom; embernek szemtől szemben a ないでください illik.'
       },
-      { q: '„Itt szabad fényképezni." Melyik a helyes?', a: 'ここで{写真|しゃしん}を{撮|と}ってもいいです。', wrong: ['ここで{写真|しゃしん}を{撮|と}ってはいけません。', 'ここで{写真|しゃしん}を{撮|と}らないでください。', 'ここで{写真|しゃしん}を{撮|と}るもいいです。'], why: 'Az engedély: て-alak + もいいです.' },
+      { point: 4, q: '„Itt szabad fényképezni." Melyik a helyes?', a: 'ここで{写真|しゃしん}を{撮|と}ってもいいです。', wrong: ['ここで{写真|しゃしん}を{撮|と}ってはいけません。', 'ここで{写真|しゃしん}を{撮|と}らないでください。', 'ここで{写真|しゃしん}を{撮|と}るもいいです。'], why: 'Az engedély: て-alak + もいいです.' },
       {
-        q: 'Hogyan kérdezel rá egy kanji olvasatára?',
+        point: 1, q: 'Hogyan kérdezel rá egy kanji olvasatára?',
         a: 'この{漢字|かんじ}は{何|なん}と{読|よ}みますか。',
         wrong: ['この{漢字|かんじ}は{何|なに}を{読|よ}みますか。', 'この{漢字|かんじ}はどこで{読|よ}みますか。', 'この{漢字|かんじ}はだれが{読|よ}みますか。'],
         why: 'A {何|なん}と{読|よ}みますか = „minek olvassuk?"; a と idéző partikula.'
       },
-      { q: '„Tanaka japán, és orvos." Mi hiányzik?', jp: '{田中|たなか}さんは{日本人|にほんじん}＿、{医者|いしゃ}です。', a: 'で', wrong: ['と', 'くて', 'も'], why: 'A です kapcsoló alakja で.' },
+      { point: 5, q: '„Tanaka japán, és orvos." Mi hiányzik?', jp: '{田中|たなか}さんは{日本人|にほんじん}＿、{医者|いしゃ}です。', a: 'で', wrong: ['と', 'くて', 'も'], why: 'A です kapcsoló alakja で.' },
       { q: 'A szállodából távozva megköszönöd a szolgáltatást. Melyik a helyes?', a: 'ありがとうございました。', wrong: ['ありがとうございます。', 'いただきます。', 'いらっしゃいませ。'], why: 'Lezárult dologért múlt időben mondunk köszönetet.' },
       {
         q: 'Miért hiányzik sok japán szállodából a 4-es szoba?',
@@ -7155,45 +7161,45 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Lehet, hogy holnap esni fog." Mi hiányzik?', jp: 'あしたは{雨|あめ}が{降|ふ}る＿。', a: 'かもしれません', wrong: ['ことにします', 'になります', 'てはいけません'], why: 'Bizonytalan lehetőség: rövid alak + かもしれません.' },
+      { point: 1, q: '„Lehet, hogy holnap esni fog." Mi hiányzik?', jp: 'あしたは{雨|あめ}が{降|ふ}る＿。', a: 'かもしれません', wrong: ['ことにします', 'になります', 'てはいけません'], why: 'Bizonytalan lehetőség: rövid alak + かもしれません.' },
       {
-        q: 'Melyik mondat helyes: „Lehet, hogy az az ember tanár."',
+        point: 1, q: 'Melyik mondat helyes: „Lehet, hogy az az ember tanár."',
         a: 'あの{人|ひと}は{先生|せんせい}かもしれません。',
         wrong: ['あの{人|ひと}は{先生|せんせい}だかもしれません。', 'あの{人|ひと}は{先生|せんせい}なかもしれません。', 'あの{人|ひと}は{先生|せんせい}のかもしれません。'],
         why: 'Főnév után közvetlenül áll a かもしれません, だ nélkül.'
       },
-      { q: '„Egyre hidegebb lesz." Mi hiányzik?', jp: 'だんだん＿なります。', a: '{寒|さむ}く', wrong: ['{寒|さむ}い', '{寒|さむ}いに', '{寒|さむ}に'], why: 'い-melléknév + なります: い → く.' },
-      { q: '„Az öcsém orvos lett." Mi hiányzik?', jp: '{弟|おとうと}は{医者|いしゃ}＿なりました。', a: 'に', wrong: ['く', 'を', 'で'], why: 'Főnév + になります.' },
-      { q: '„Kérem, írja szépen a betűket." Mi hiányzik?', jp: '{字|じ}を＿{書|か}いてください。', a: 'きれいに', wrong: ['きれいく', 'きれいな', 'きれいで'], why: 'A きれい な-melléknév: határozóként きれいに.' },
-      { q: '„Úgy döntöttem, hogy Japánba megyek." Mi hiányzik?', jp: '{日本|にほん}へ{行|い}く＿にしました。', a: 'こと', wrong: ['もの', 'とき', 'の'], why: 'Elhatározás: szótári alak + ことにします.' },
+      { point: 2, q: '„Egyre hidegebb lesz." Mi hiányzik?', jp: 'だんだん＿なります。', a: '{寒|さむ}く', wrong: ['{寒|さむ}い', '{寒|さむ}いに', '{寒|さむ}に'], why: 'い-melléknév + なります: い → く.' },
+      { point: 2, q: '„Az öcsém orvos lett." Mi hiányzik?', jp: '{弟|おとうと}は{医者|いしゃ}＿なりました。', a: 'に', wrong: ['く', 'を', 'で'], why: 'Főnév + になります.' },
+      { point: 3, q: '„Kérem, írja szépen a betűket." Mi hiányzik?', jp: '{字|じ}を＿{書|か}いてください。', a: 'きれいに', wrong: ['きれいく', 'きれいな', 'きれいで'], why: 'A きれい な-melléknév: határozóként きれいに.' },
+      { point: 4, q: '„Úgy döntöttem, hogy Japánba megyek." Mi hiányzik?', jp: '{日本|にほん}へ{行|い}く＿にしました。', a: 'こと', wrong: ['もの', 'とき', 'の'], why: 'Elhatározás: szótári alak + ことにします.' },
       {
-        q: 'Mit jelent: お{酒|さけ}を{飲|の}まないことにしました。',
+        point: 4, q: 'Mit jelent: お{酒|さけ}を{飲|の}まないことにしました。',
         a: 'Úgy döntöttem, hogy nem iszom alkoholt.',
         wrong: ['Nem szabad alkoholt innom.', 'Lehet, hogy nem iszom alkoholt.', 'Még soha nem ittam alkoholt.'],
         why: 'ない-alak + ことにしました: úgy döntöttem, hogy nem…'
       },
-      { q: '„Virágot adtam a tanárnak." (tisztelettel) Mi hiányzik?', jp: '{先生|せんせい}に{花|はな}を＿。', a: 'さしあげました', wrong: ['くださいました', 'いただきました', 'くれました'], why: 'Tisztelt személynek adok: さしあげます.' },
-      { q: '„Szótárat kaptam a tanártól." (tisztelettel) Mi hiányzik?', jp: '{先生|せんせい}に{辞書|じしょ}を＿。', a: 'いただきました', wrong: ['さしあげました', 'くださいました', 'あげました'], why: 'Tisztelt személytől kapok: いただきます.' },
-      { q: 'Melyik a くれます tiszteleti párja?', a: 'くださいます', wrong: ['いただきます', 'さしあげます', 'もらいます'], why: 'くれます → くださいます · もらいます → いただきます · あげます → さしあげます.' },
-      { q: 'Melyik fejezi ki a leggyengébb bizonyosságot?', a: '{雨|あめ}かもしれません。', wrong: ['{雨|あめ}です。', '{雨|あめ}でしょう。', '{雨|あめ}だと{思|おも}います。'], why: 'A かもしれません csak a lehetőséget hagyja nyitva.' },
-      { q: 'Melyik a helyes?', a: '{暇|ひま}かもしれません。', wrong: ['{暇|ひま}なかもしれません。', '{暇|ひま}だかもしれません。', '{暇|ひま}いかもしれません。'], why: 'な-melléknév után a かもしれません közvetlenül áll.' },
-      { q: '„Áprilisban melegebb lesz." Mi hiányzik?', jp: '{四月|しがつ}は{暖|あたた}か＿なります。', a: 'く', wrong: ['に', 'い', 'で'], why: 'い-melléknév: い → く + なります.' },
-      { q: '„Csendes lett." Melyik a helyes?', a: '{静|しず}かになりました。', wrong: ['{静|しず}かくなりました。', '{静|しず}かいなりました。', '{静|しず}かでなりました。'], why: 'な-melléknév + に + なります.' },
-      { q: 'Mit jelent: {病気|びょうき}がよくなりました。', a: 'Jobban lettem, meggyógyultam.', wrong: ['Gyakran vagyok beteg.', 'A betegségem rosszabbodott.', 'Jó, hogy beteg lettem.'], why: 'Az いい く-alakja よく: よくなります = jobb lesz.' },
-      { q: '„Kérem, írja nagyobban." Mi hiányzik?', jp: 'もう{少|すこ}し＿{書|か}いてください。', a: '{大|おお}きく', wrong: ['{大|おお}きい', '{大|おお}きに', '{大|おお}きな'], why: 'Ige előtt a melléknév határozói alakja áll: い → く.' },
+      { point: 5, q: '„Virágot adtam a tanárnak." (tisztelettel) Mi hiányzik?', jp: '{先生|せんせい}に{花|はな}を＿。', a: 'さしあげました', wrong: ['くださいました', 'いただきました', 'くれました'], why: 'Tisztelt személynek adok: さしあげます.' },
+      { point: 6, q: '„Szótárat kaptam a tanártól." (tisztelettel) Mi hiányzik?', jp: '{先生|せんせい}に{辞書|じしょ}を＿。', a: 'いただきました', wrong: ['さしあげました', 'くださいました', 'あげました'], why: 'Tisztelt személytől kapok: いただきます.' },
+      { point: 6, q: 'Melyik a くれます tiszteleti párja?', a: 'くださいます', wrong: ['いただきます', 'さしあげます', 'もらいます'], why: 'くれます → くださいます · もらいます → いただきます · あげます → さしあげます.' },
+      { point: 1, q: 'Melyik fejezi ki a leggyengébb bizonyosságot?', a: '{雨|あめ}かもしれません。', wrong: ['{雨|あめ}です。', '{雨|あめ}でしょう。', '{雨|あめ}だと{思|おも}います。'], why: 'A かもしれません csak a lehetőséget hagyja nyitva.' },
+      { point: 1, q: 'Melyik a helyes?', a: '{暇|ひま}かもしれません。', wrong: ['{暇|ひま}なかもしれません。', '{暇|ひま}だかもしれません。', '{暇|ひま}いかもしれません。'], why: 'な-melléknév után a かもしれません közvetlenül áll.' },
+      { point: 2, q: '„Áprilisban melegebb lesz." Mi hiányzik?', jp: '{四月|しがつ}は{暖|あたた}か＿なります。', a: 'く', wrong: ['に', 'い', 'で'], why: 'い-melléknév: い → く + なります.' },
+      { point: 2, q: '„Csendes lett." Melyik a helyes?', a: '{静|しず}かになりました。', wrong: ['{静|しず}かくなりました。', '{静|しず}かいなりました。', '{静|しず}かでなりました。'], why: 'な-melléknév + に + なります.' },
+      { point: 2, q: 'Mit jelent: {病気|びょうき}がよくなりました。', a: 'Jobban lettem, meggyógyultam.', wrong: ['Gyakran vagyok beteg.', 'A betegségem rosszabbodott.', 'Jó, hogy beteg lettem.'], why: 'Az いい く-alakja よく: よくなります = jobb lesz.' },
+      { point: 3, q: '„Kérem, írja nagyobban." Mi hiányzik?', jp: 'もう{少|すこ}し＿{書|か}いてください。', a: '{大|おお}きく', wrong: ['{大|おお}きい', '{大|おお}きに', '{大|おお}きな'], why: 'Ige előtt a melléknév határozói alakja áll: い → く.' },
       {
-        q: 'Mi a különbség? {行|い}くことにしました ↔ {行|い}くことにしています',
+        point: 4, q: 'Mi a különbség? {行|い}くことにしました ↔ {行|い}くことにしています',
         a: 'az első egyszeri döntés, a második elhatározásból fakadó szokás',
         wrong: ['az első jövő, a második múlt idő', 'az elsőt más döntötte el, a másodikat én', 'nincs különbség'],
         why: 'A 〜ことにしています rendszeresen követett elhatározást jelent.'
       },
       {
-        q: 'Ajándékot adsz a tanárodnak. Hogyan meséled el ezt másnak?',
+        point: 5, q: 'Ajándékot adsz a tanárodnak. Hogyan meséled el ezt másnak?',
         a: '{先生|せんせい}にお{土産|みやげ}をさしあげました。',
         wrong: ['{先生|せんせい}にお{土産|みやげ}をくれました。', '{先生|せんせい}にお{土産|みやげ}をいただきました。', '{先生|せんせい}がお{土産|みやげ}をさしあげました。'],
         why: 'Feljebb állónak adni: さしあげます.'
       },
-      { q: 'Mi a もらいます szerény párja?', a: 'いただきます', wrong: ['くださいます', 'さしあげます', 'あげます'], why: 'Feljebb állótól kapni: いただきます.' },
+      { point: 6, q: 'Mi a もらいます szerény párja?', a: 'いただきます', wrong: ['くださいます', 'さしあげます', 'あげます'], why: 'Feljebb állótól kapni: いただきます.' },
       {
         q: 'Mit jelent az {相槌|あいづち}?',
         a: 'a hallgató folyamatos visszajelzése: はい, ええ, そうですか',
@@ -7532,29 +7538,29 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Holnap korán kell kelnem." Mi hiányzik?', jp: 'あした{早|はや}く＿なりません。', a: '{起|お}きなければ', wrong: ['{起|お}きれば', '{起|お}きなくて', '{起|お}きないで'], why: 'ない-alak: {起|お}きない → {起|お}きなければなりません.' },
-      { q: 'Hogyan mondod: „Be kell vennem (meg kell innom)."', a: '{飲|の}まなければなりません。', wrong: ['{飲|の}みなければなりません。', '{飲|の}まなくてもいいです。', '{飲|の}んではいけません。'], why: '{飲|の}まない → {飲|の}まなければなりません.' },
-      { q: 'Mit jelent: {急|いそ}がなくてもいいですよ。', a: 'Nem kell sietned.', wrong: ['Nem szabad sietned.', 'Sietned kell.', 'Siethetsz.'], why: '〜なくてもいいです = nem kötelező.' },
-      { q: '„Az állomásig gyalog megyek." Mi hiányzik?', jp: '{駅|えき}まで＿いきます。', a: '{歩|ある}いて', wrong: ['{歩|ある}きて', '{歩|ある}いた', '{歩|ある}く'], why: 'Hogyan megyek: て-alak + いきます; き → いて.' },
-      { q: '„Leszállok a vonatról." Mi hiányzik?', jp: '{電車|でんしゃ}＿{降|お}ります。', a: 'を', wrong: ['に', 'で', 'へ'], why: 'Amit elhagysz, を-t kap: {電車|でんしゃ}を{降|お}ります.' },
-      { q: '„A saroknál jobbra fordulok." Mi hiányzik?', jp: '{角|かど}を{右|みぎ}＿{曲|ま}がります。', a: 'に', wrong: ['を', 'で', 'が'], why: 'A sarok (amin áthaladsz) を, az irány に.' },
-      { q: '„Mindössze ezer jenem van." Mi hiányzik?', jp: '{千円|せんえん}＿ありません。', a: 'しか', wrong: ['だけ', 'まで', 'より'], why: 'Tagadó igével a しか jelenti: „csak ennyi".' },
-      { q: '„Csak ezer jenem van." Mi hiányzik?', jp: '{千円|せんえん}だけ＿。', a: 'あります', wrong: ['ありません', 'いません', 'います'], why: 'A だけ állító igével áll.' },
-      { q: 'Mit jelent: お{酒|さけ}は{飲|の}みません。', a: 'Alkoholt nem iszom (mást talán igen).', wrong: ['Csak alkoholt iszom.', 'Nem szabad alkoholt inni.', 'Alkoholt is iszom.'], why: 'A は tagadásban szembeállít: éppen ezt nem.' },
-      { q: '„Viszek esernyőt." Mi hiányzik?', jp: '{傘|かさ}を＿いきます。', a: '{持|も}って', wrong: ['{持|も}ちて', '{持|も}て', '{持|も}んで'], why: '{持|も}ちます → {持|も}って; て-alak + いきます.' },
-      { q: 'Mi a {見|み}せます „kell" alakja?', a: '{見|み}せなければなりません', wrong: ['{見|み}せるなければなりません', '{見|み}せなくてもいいです', '{見|み}せてはいけません'], why: 'ない-alak ({見|み}せない) → い helyett ければなりません.' },
-      { q: 'Azt kérdezik: あしたも{来|こ}なければなりませんか。 Nem kell jönni. Mit felelsz?', a: 'いいえ、{来|こ}なくてもいいです。', wrong: ['いいえ、{来|き}てはいけません。', 'いいえ、{来|こ}なければなりません。', 'はい、{来|こ}なくてもいいです。'], why: 'A „nem kell" a 〜なくてもいいです; a 〜てはいけません tiltás volna.' },
+      { point: 1, q: '„Holnap korán kell kelnem." Mi hiányzik?', jp: 'あした{早|はや}く＿なりません。', a: '{起|お}きなければ', wrong: ['{起|お}きれば', '{起|お}きなくて', '{起|お}きないで'], why: 'ない-alak: {起|お}きない → {起|お}きなければなりません.' },
+      { point: 1, q: 'Hogyan mondod: „Be kell vennem (meg kell innom)."', a: '{飲|の}まなければなりません。', wrong: ['{飲|の}みなければなりません。', '{飲|の}まなくてもいいです。', '{飲|の}んではいけません。'], why: '{飲|の}まない → {飲|の}まなければなりません.' },
+      { point: 2, q: 'Mit jelent: {急|いそ}がなくてもいいですよ。', a: 'Nem kell sietned.', wrong: ['Nem szabad sietned.', 'Sietned kell.', 'Siethetsz.'], why: '〜なくてもいいです = nem kötelező.' },
+      { point: 3, q: '„Az állomásig gyalog megyek." Mi hiányzik?', jp: '{駅|えき}まで＿いきます。', a: '{歩|ある}いて', wrong: ['{歩|ある}きて', '{歩|ある}いた', '{歩|ある}く'], why: 'Hogyan megyek: て-alak + いきます; き → いて.' },
+      { point: 4, q: '„Leszállok a vonatról." Mi hiányzik?', jp: '{電車|でんしゃ}＿{降|お}ります。', a: 'を', wrong: ['に', 'で', 'へ'], why: 'Amit elhagysz, を-t kap: {電車|でんしゃ}を{降|お}ります.' },
+      { point: 4, q: '„A saroknál jobbra fordulok." Mi hiányzik?', jp: '{角|かど}を{右|みぎ}＿{曲|ま}がります。', a: 'に', wrong: ['を', 'で', 'が'], why: 'A sarok (amin áthaladsz) を, az irány に.' },
+      { point: 5, q: '„Mindössze ezer jenem van." Mi hiányzik?', jp: '{千円|せんえん}＿ありません。', a: 'しか', wrong: ['だけ', 'まで', 'より'], why: 'Tagadó igével a しか jelenti: „csak ennyi".' },
+      { point: 5, q: '„Csak ezer jenem van." Mi hiányzik?', jp: '{千円|せんえん}だけ＿。', a: 'あります', wrong: ['ありません', 'いません', 'います'], why: 'A だけ állító igével áll.' },
+      { point: 6, q: 'Mit jelent: お{酒|さけ}は{飲|の}みません。', a: 'Alkoholt nem iszom (mást talán igen).', wrong: ['Csak alkoholt iszom.', 'Nem szabad alkoholt inni.', 'Alkoholt is iszom.'], why: 'A は tagadásban szembeállít: éppen ezt nem.' },
+      { point: 3, q: '„Viszek esernyőt." Mi hiányzik?', jp: '{傘|かさ}を＿いきます。', a: '{持|も}って', wrong: ['{持|も}ちて', '{持|も}て', '{持|も}んで'], why: '{持|も}ちます → {持|も}って; て-alak + いきます.' },
+      { point: 1, q: 'Mi a {見|み}せます „kell" alakja?', a: '{見|み}せなければなりません', wrong: ['{見|み}せるなければなりません', '{見|み}せなくてもいいです', '{見|み}せてはいけません'], why: 'ない-alak ({見|み}せない) → い helyett ければなりません.' },
+      { point: 2, q: 'Azt kérdezik: あしたも{来|こ}なければなりませんか。 Nem kell jönni. Mit felelsz?', a: 'いいえ、{来|こ}なくてもいいです。', wrong: ['いいえ、{来|き}てはいけません。', 'いいえ、{来|こ}なければなりません。', 'はい、{来|こ}なくてもいいです。'], why: 'A „nem kell" a 〜なくてもいいです; a 〜てはいけません tiltás volna.' },
       {
-        q: 'Mi a különbség? {行|い}ってはいけません ↔ {行|い}かなくてもいいです',
+        point: 2, q: 'Mi a különbség? {行|い}ってはいけません ↔ {行|い}かなくてもいいです',
         a: 'az első: tilos menni; a második: nem kötelező menni',
         wrong: ['az első: nem kell menni; a második: tilos menni', 'mindkettő tiltás', 'mindkettő engedély'],
         why: 'A てはいけません tilalom, a なくてもいい felmentés a kötelesség alól.'
       },
-      { q: 'Hogy mondod: „hoz" (tárgyat ide)?', a: '{持|も}ってきます', wrong: ['{持|も}っていきます', '{連|つ}れてきます', '{持|も}ちにきます'], why: '{持|も}つ + くる = hoz; {持|も}つ + いく = visz.' },
-      { q: '„Felszállok a vonatra." Melyik partikula hiányzik?', jp: '{電車|でんしゃ}＿{乗|の}ります。', a: 'に', wrong: ['を', 'で', 'が'], why: 'Felszálláskor a jármű に-t kap.' },
-      { q: '„Minden reggel sétálok a parkban (végigjárom)." Melyik partikula?', jp: '{毎朝|まいあさ}{公園|こうえん}＿{散歩|さんぽ}します。', a: 'を', wrong: ['へ', 'が', 'と'], why: 'Az áthaladás helyét を jelöli.' },
-      { q: 'Melyik mondat fejezi ki, hogy kevesellem a pénzt?', a: '{千円|せんえん}しかありません。', wrong: ['{千円|せんえん}だけあります。', '{千円|せんえん}もあります。', '{千円|せんえん}はあります。'], why: 'A しか + tagadás keveslő „csak".' },
-      { q: '„Szombaton éppen nem megyek." Mi hiányzik?', jp: '{土曜日|どようび}＿{行|い}きません。', a: 'には', wrong: ['はに', 'をは', 'がは'], why: 'A に megmarad, a は mögé áll: には.' },
+      { point: 3, q: 'Hogy mondod: „hoz" (tárgyat ide)?', a: '{持|も}ってきます', wrong: ['{持|も}っていきます', '{連|つ}れてきます', '{持|も}ちにきます'], why: '{持|も}つ + くる = hoz; {持|も}つ + いく = visz.' },
+      { point: 4, q: '„Felszállok a vonatra." Melyik partikula hiányzik?', jp: '{電車|でんしゃ}＿{乗|の}ります。', a: 'に', wrong: ['を', 'で', 'が'], why: 'Felszálláskor a jármű に-t kap.' },
+      { point: 4, q: '„Minden reggel sétálok a parkban (végigjárom)." Melyik partikula?', jp: '{毎朝|まいあさ}{公園|こうえん}＿{散歩|さんぽ}します。', a: 'を', wrong: ['へ', 'が', 'と'], why: 'Az áthaladás helyét を jelöli.' },
+      { point: 5, q: 'Melyik mondat fejezi ki, hogy kevesellem a pénzt?', a: '{千円|せんえん}しかありません。', wrong: ['{千円|せんえん}だけあります。', '{千円|せんえん}もあります。', '{千円|せんえん}はあります。'], why: 'A しか + tagadás keveslő „csak".' },
+      { point: 6, q: '„Szombaton éppen nem megyek." Mi hiányzik?', jp: '{土曜日|どようび}＿{行|い}きません。', a: 'には', wrong: ['はに', 'をは', 'がは'], why: 'A に megmarad, a は mögé áll: には.' },
       { q: 'Mit jelent: ぜひ{行|い}ってみてください。', a: 'Feltétlenül menj el, nézd meg!', wrong: ['Kötelező elmenned.', 'Nem kell elmenned.', 'Tilos odamenni.'], why: 'A ぜひ + 〜てください lelkes ajánlás, nem kötelesség.' },
       {
         q: 'Mit csinálsz a jeggyel egy japán metróállomáson?',
@@ -7886,37 +7892,37 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Kinyitom az ablakot." Mi hiányzik?', jp: '{窓|まど}＿{開|あ}けます。', a: 'を', wrong: ['が', 'に', 'で'], why: 'A {開|あ}けます tárgyas ige: a tárgya を-t kap.' },
-      { q: '„Kinyílik az ablak." Mi hiányzik?', jp: '{窓|まど}＿{開|あ}きます。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {開|あ}きます tárgyatlan: ami változik, が-t kap.' },
-      { q: 'Melyik ige tárgyatlan (magától történik)?', a: '{消|き}える', wrong: ['{消|け}す', '{開|あ}ける', '{閉|し}める'], why: '{消|け}す = lekapcsol, {消|き}える = kialszik.' },
-      { q: '„Zárva van a bolt." Mi hiányzik?', jp: '{店|みせ}が＿います。', a: '{閉|し}まって', wrong: ['{閉|し}めて', '{閉|し}まり', '{閉|し}まった'], why: 'Állapot: tárgyatlan ige ({閉|し}まります) て-alakja + います.' },
-      { q: 'Mit jelent: テレビがついています。', a: 'Be van kapcsolva a tévé.', wrong: ['Bekapcsolom a tévét.', 'Elromlott a tévé.', 'Ki van kapcsolva a tévé.'], why: 'Tárgyatlan ige + ています: fennálló állapot.' },
-      { q: '„Busszal vagy vonattal megyek." Mi hiányzik?', jp: 'バス＿{電車|でんしゃ}で{行|い}きます。', a: 'か', wrong: ['と', 'も', 'を'], why: 'A か B = A vagy B.' },
-      { q: '„Ebből három darab ötszáz jen." Mi hiányzik?', jp: 'これは{三|みっ}つ＿{五百円|ごひゃくえん}です。', a: 'で', wrong: ['に', 'を', 'が'], why: 'Mennyiség + で: ennyi együtt.' },
-      { q: '„Mindkettő finom." Mi hiányzik?', jp: '＿おいしいです。', a: 'どちらも', wrong: ['どちらか', 'どちらが', 'どれか'], why: 'どちらも = mindkettő.' },
-      { q: '„Mi a neve ennek a virágnak?" Mi hiányzik?', jp: 'これは{何|なん}＿{花|はな}ですか。', a: 'という', wrong: ['といい', 'とか', 'のと'], why: 'A という B: „A nevű B".' },
-      { q: 'Melyik mondat jelenti: „Lekapcsoltam a villanyt."', a: '{電気|でんき}を{消|け}しました。', wrong: ['{電気|でんき}が{消|き}えました。', '{電気|でんき}が{消|き}えています。', '{電気|でんき}をつけました。'], why: 'Én tettem: tárgyas ige ({消|け}します) を-val.' },
-      { q: '„Kialudt a villany." (magától) Melyik a helyes?', a: '{電気|でんき}が{消|き}えました。', wrong: ['{電気|でんき}を{消|け}しました。', '{電気|でんき}が{消|け}しました。', '{電気|でんき}を{消|き}えました。'], why: 'Magától történt: tárgyatlan ige ({消|き}える) + が.' },
-      { q: 'Melyik ige tárgyas (valaki csinálja)?', a: '{閉|し}めます', wrong: ['{閉|し}まります', '{開|あ}きます', '{始|はじ}まります'], why: 'A {閉|し}めます mellett tárgy áll: ドアを{閉|し}めます.' },
-      { q: 'Mit jelent: {窓|まど}が{開|あ}いています。', a: 'Az ablak nyitva van.', wrong: ['Valaki éppen nyitja az ablakot.', 'Az ablak ki fog nyílni.', 'Nyisd ki az ablakot!'], why: 'Tárgyatlan ige + ています = fennálló állapot.' },
-      { q: 'Melyik mondat helyes kérésként?', a: 'ドアを{開|あ}けてください。', wrong: ['ドアが{開|あ}いてください。', 'ドアを{開|あ}いてください。', 'ドアが{開|あ}けてください。'], why: 'Kérni csak akaratlagos (tárgyas) cselekvést lehet.' },
-      { q: 'Hibás árut vettél. Melyik a legtermészetesebb?', a: 'すみません、これ、{壊|こわ}れているんですが…。', wrong: ['あなたがこれを{壊|こわ}しました。', 'これを{壊|こわ}してください。', 'これは{壊|こわ}しています。'], why: 'A reklamáció a helyzetet írja le tárgyatlan igével, nem vádol.' },
-      { q: '„Öt darab nyolcszáz forint." Mi hiányzik?', jp: '{五|いつ}つ＿{八百|はっぴゃく}フォリントです。', a: 'で', wrong: ['に', 'を', 'が'], why: 'A mennyiség utáni で az összeget, a keretet adja meg.' },
-      { q: 'Mit jelent: どれも{好|す}きじゃありません。', a: 'Egyiket sem szeretem.', wrong: ['Mindegyiket szeretem.', 'Valamelyiket szeretem.', 'Melyiket szereted?'], why: 'どれも + tagadás = „egyik sem".' },
+      { point: 1, q: '„Kinyitom az ablakot." Mi hiányzik?', jp: '{窓|まど}＿{開|あ}けます。', a: 'を', wrong: ['が', 'に', 'で'], why: 'A {開|あ}けます tárgyas ige: a tárgya を-t kap.' },
+      { point: 1, q: '„Kinyílik az ablak." Mi hiányzik?', jp: '{窓|まど}＿{開|あ}きます。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {開|あ}きます tárgyatlan: ami változik, が-t kap.' },
+      { point: 1, q: 'Melyik ige tárgyatlan (magától történik)?', a: '{消|き}える', wrong: ['{消|け}す', '{開|あ}ける', '{閉|し}める'], why: '{消|け}す = lekapcsol, {消|き}える = kialszik.' },
+      { point: 2, q: '„Zárva van a bolt." Mi hiányzik?', jp: '{店|みせ}が＿います。', a: '{閉|し}まって', wrong: ['{閉|し}めて', '{閉|し}まり', '{閉|し}まった'], why: 'Állapot: tárgyatlan ige ({閉|し}まります) て-alakja + います.' },
+      { point: 2, q: 'Mit jelent: テレビがついています。', a: 'Be van kapcsolva a tévé.', wrong: ['Bekapcsolom a tévét.', 'Elromlott a tévé.', 'Ki van kapcsolva a tévé.'], why: 'Tárgyatlan ige + ています: fennálló állapot.' },
+      { point: 3, q: '„Busszal vagy vonattal megyek." Mi hiányzik?', jp: 'バス＿{電車|でんしゃ}で{行|い}きます。', a: 'か', wrong: ['と', 'も', 'を'], why: 'A か B = A vagy B.' },
+      { point: 5, q: '„Ebből három darab ötszáz jen." Mi hiányzik?', jp: 'これは{三|みっ}つ＿{五百円|ごひゃくえん}です。', a: 'で', wrong: ['に', 'を', 'が'], why: 'Mennyiség + で: ennyi együtt.' },
+      { point: 6, q: '„Mindkettő finom." Mi hiányzik?', jp: '＿おいしいです。', a: 'どちらも', wrong: ['どちらか', 'どちらが', 'どれか'], why: 'どちらも = mindkettő.' },
+      { point: 7, q: '„Mi a neve ennek a virágnak?" Mi hiányzik?', jp: 'これは{何|なん}＿{花|はな}ですか。', a: 'という', wrong: ['といい', 'とか', 'のと'], why: 'A という B: „A nevű B".' },
+      { point: 1, q: 'Melyik mondat jelenti: „Lekapcsoltam a villanyt."', a: '{電気|でんき}を{消|け}しました。', wrong: ['{電気|でんき}が{消|き}えました。', '{電気|でんき}が{消|き}えています。', '{電気|でんき}をつけました。'], why: 'Én tettem: tárgyas ige ({消|け}します) を-val.' },
+      { point: 1, q: '„Kialudt a villany." (magától) Melyik a helyes?', a: '{電気|でんき}が{消|き}えました。', wrong: ['{電気|でんき}を{消|け}しました。', '{電気|でんき}が{消|け}しました。', '{電気|でんき}を{消|き}えました。'], why: 'Magától történt: tárgyatlan ige ({消|き}える) + が.' },
+      { point: 1, q: 'Melyik ige tárgyas (valaki csinálja)?', a: '{閉|し}めます', wrong: ['{閉|し}まります', '{開|あ}きます', '{始|はじ}まります'], why: 'A {閉|し}めます mellett tárgy áll: ドアを{閉|し}めます.' },
+      { point: 2, q: 'Mit jelent: {窓|まど}が{開|あ}いています。', a: 'Az ablak nyitva van.', wrong: ['Valaki éppen nyitja az ablakot.', 'Az ablak ki fog nyílni.', 'Nyisd ki az ablakot!'], why: 'Tárgyatlan ige + ています = fennálló állapot.' },
+      { point: 1, q: 'Melyik mondat helyes kérésként?', a: 'ドアを{開|あ}けてください。', wrong: ['ドアが{開|あ}いてください。', 'ドアを{開|あ}いてください。', 'ドアが{開|あ}けてください。'], why: 'Kérni csak akaratlagos (tárgyas) cselekvést lehet.' },
+      { point: 2, q: 'Hibás árut vettél. Melyik a legtermészetesebb?', a: 'すみません、これ、{壊|こわ}れているんですが…。', wrong: ['あなたがこれを{壊|こわ}しました。', 'これを{壊|こわ}してください。', 'これは{壊|こわ}しています。'], why: 'A reklamáció a helyzetet írja le tárgyatlan igével, nem vádol.' },
+      { point: 5, q: '„Öt darab nyolcszáz forint." Mi hiányzik?', jp: '{五|いつ}つ＿{八百|はっぴゃく}フォリントです。', a: 'で', wrong: ['に', 'を', 'が'], why: 'A mennyiség utáni で az összeget, a keretet adja meg.' },
+      { point: 6, q: 'Mit jelent: どれも{好|す}きじゃありません。', a: 'Egyiket sem szeretem.', wrong: ['Mindegyiket szeretem.', 'Valamelyiket szeretem.', 'Melyiket szereted?'], why: 'どれも + tagadás = „egyik sem".' },
       {
-        q: 'Egy ismeretlen konyhai eszközt látsz. Hogyan kérdezed meg, mire való?',
+        point: 4, q: 'Egy ismeretlen konyhai eszközt látsz. Hogyan kérdezed meg, mire való?',
         a: 'これは{何|なに}に{使|つか}いますか。',
         wrong: ['これは{何|なに}を{使|つか}いますか。', 'これは{何|なに}が{使|つか}いますか。', 'これは{何|なに}で{使|つか}いますか。'],
         why: 'A cél に-jével kérdezel: „mire használjuk?".'
       },
       {
-        q: 'Mikor használod a 〜という szerkezetet?',
+        point: 7, q: 'Mikor használod a 〜という szerkezetet?',
         a: 'ha a nevet a másik (vagy te) valószínűleg nem ismeri',
         wrong: ['ha valaki idézetet mond', 'ha a név nagyon híres', 'csak emberek nevénél'],
         why: 'A という ismeretlen nevet kapcsol a fajtát jelölő főnévhez.'
       },
       {
-        q: 'A japán vonaton ezt hallod: ドアが{閉|し}まります。 Mit jelent?',
+        point: 1, q: 'A japán vonaton ezt hallod: ドアが{閉|し}まります。 Mit jelent?',
         a: 'Az ajtók záródnak.',
         wrong: ['Csukja be az ajtót!', 'Az ajtó zárva van.', 'Ki fogom nyitni az ajtót.'],
         why: 'Tárgyatlan ige jelen időben: a változás most következik be.'
@@ -8307,56 +8313,56 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Kérem, halkítsa le a tévét." Mi hiányzik?', jp: 'テレビの{音|おと}を＿してください。', a: '{小|ちい}さく', wrong: ['{小|ちい}さい', '{小|ちい}さに', '{小|ちい}さくて'], why: 'い-melléknév + します: い → く.' },
-      { q: '„Rendbe tettem a szobát." Mi hiányzik?', jp: '{部屋|へや}を＿しました。', a: 'きれいに', wrong: ['きれいく', 'きれいな', 'きれいで'], why: 'な-melléknév + にします.' },
+      { point: 1, q: '„Kérem, halkítsa le a tévét." Mi hiányzik?', jp: 'テレビの{音|おと}を＿してください。', a: '{小|ちい}さく', wrong: ['{小|ちい}さい', '{小|ちい}さに', '{小|ちい}さくて'], why: 'い-melléknév + します: い → く.' },
+      { point: 1, q: '„Rendbe tettem a szobát." Mi hiányzik?', jp: '{部屋|へや}を＿しました。', a: 'きれいに', wrong: ['きれいく', 'きれいな', 'きれいで'], why: 'な-melléknév + にします.' },
       {
-        q: 'Mit jelent: {部屋|へや}が{明|あか}るくなりました。',
+        point: 1, q: 'Mit jelent: {部屋|へや}が{明|あか}るくなりました。',
         a: 'Világosabb lett a szoba (magától).',
         wrong: ['Világosabbá tettem a szobát.', 'Világosabbá kell tenni a szobát.', 'A szoba nem lett világosabb.'],
         why: 'なります: a változás magától történik; a szoba が-t kap.'
       },
-      { q: '„A táblára fel van írva a név." Mi hiányzik?', jp: '{黒板|こくばん}に{名前|なまえ}が{書|か}いて＿。', a: 'あります', wrong: ['います', 'いきます', 'ください'], why: 'Szándékos eredmény: tárgyas ige て-alakja + あります.' },
-      { q: '„Ki van nyitva az ablak (valaki kinyitotta)." Mi hiányzik?', jp: '{窓|まど}が＿あります。', a: '{開|あ}けて', wrong: ['{開|あ}いて', '{開|あ}け', '{開|あ}く'], why: 'A てあります előtt tárgyas ige áll: {開|あ}けます → {開|あ}けて.' },
-      { q: 'Melyik mondat helyes: „Nyitva van az ajtó."', a: 'ドアが{開|あ}いています。', wrong: ['ドアを{開|あ}いています。', 'ドアが{開|あ}いてあります。', 'ドアを{開|あ}きます。'], why: 'Tárgyatlan ige ({開|あ}きます) + ています, が-val.' },
-      { q: '„Tanakának hívnak." Mi hiányzik?', jp: '{私|わたし}は{田中|たなか}＿いいます。', a: 'と', wrong: ['を', 'に', 'が'], why: 'Az idéző と jelöli a nevet.' },
-      { q: '„Hogy mondják ezt japánul?" Mi hiányzik?', jp: 'これは{日本語|にほんご}で{何|なん}＿。', a: 'といいますか', wrong: ['にしますか', 'がありますか', 'になりますか'], why: '{何|なん}といいますか = minek mondják?' },
-      { q: '„A tanár azt mondta, a vizsga könnyű." Mi hiányzik?', jp: '{先生|せんせい}は{試験|しけん}は{簡単|かんたん}＿と{言|い}いました。', a: 'だ', wrong: ['な', 'の', 'で'], why: 'な-melléknév után だ kell az idéző と elé.' },
-      { q: '„Kérem, vágja félbe a tortát." Mi hiányzik?', jp: 'ケーキを{半分|はんぶん}＿してください。', a: 'に', wrong: ['く', 'を', 'で'], why: 'Főnév + にします.' },
-      { q: '„Kérem, adja egy kicsit olcsóbban." Mi hiányzik?', jp: 'もう{少|すこ}し＿してください。', a: '{安|やす}く', wrong: ['{安|やす}い', '{安|やす}に', '{安|やす}くて'], why: 'Az い-melléknév い-je く-ra vált a します előtt: {安|やす}くします.' },
+      { point: 3, q: '„A táblára fel van írva a név." Mi hiányzik?', jp: '{黒板|こくばん}に{名前|なまえ}が{書|か}いて＿。', a: 'あります', wrong: ['います', 'いきます', 'ください'], why: 'Szándékos eredmény: tárgyas ige て-alakja + あります.' },
+      { point: 3, q: '„Ki van nyitva az ablak (valaki kinyitotta)." Mi hiányzik?', jp: '{窓|まど}が＿あります。', a: '{開|あ}けて', wrong: ['{開|あ}いて', '{開|あ}け', '{開|あ}く'], why: 'A てあります előtt tárgyas ige áll: {開|あ}けます → {開|あ}けて.' },
+      { point: 4, q: 'Melyik mondat helyes: „Nyitva van az ajtó."', a: 'ドアが{開|あ}いています。', wrong: ['ドアを{開|あ}いています。', 'ドアが{開|あ}いてあります。', 'ドアを{開|あ}きます。'], why: 'Tárgyatlan ige ({開|あ}きます) + ています, が-val.' },
+      { point: 5, q: '„Tanakának hívnak." Mi hiányzik?', jp: '{私|わたし}は{田中|たなか}＿いいます。', a: 'と', wrong: ['を', 'に', 'が'], why: 'Az idéző と jelöli a nevet.' },
+      { point: 5, q: '„Hogy mondják ezt japánul?" Mi hiányzik?', jp: 'これは{日本語|にほんご}で{何|なん}＿。', a: 'といいますか', wrong: ['にしますか', 'がありますか', 'になりますか'], why: '{何|なん}といいますか = minek mondják?' },
+      { point: 6, q: '„A tanár azt mondta, a vizsga könnyű." Mi hiányzik?', jp: '{先生|せんせい}は{試験|しけん}は{簡単|かんたん}＿と{言|い}いました。', a: 'だ', wrong: ['な', 'の', 'で'], why: 'な-melléknév után だ kell az idéző と elé.' },
+      { point: 2, q: '„Kérem, vágja félbe a tortát." Mi hiányzik?', jp: 'ケーキを{半分|はんぶん}＿してください。', a: 'に', wrong: ['く', 'を', 'で'], why: 'Főnév + にします.' },
+      { point: 1, q: '„Kérem, adja egy kicsit olcsóbban." Mi hiányzik?', jp: 'もう{少|すこ}し＿してください。', a: '{安|やす}く', wrong: ['{安|やす}い', '{安|やす}に', '{安|やす}くて'], why: 'Az い-melléknév い-je く-ra vált a します előtt: {安|やす}くします.' },
       {
-        q: 'Melyik mondat mondja azt, hogy valaki szándékosan hagyta nyitva az ablakot?',
+        point: 4, q: 'Melyik mondat mondja azt, hogy valaki szándékosan hagyta nyitva az ablakot?',
         a: '{窓|まど}が{開|あ}けてあります。',
         wrong: ['{窓|まど}が{開|あ}いています。', '{窓|まど}を{開|あ}けています。', '{窓|まど}を{開|あ}けました。'],
         why: 'A tárgyas ige + てあります azt mondja: valaki céllal megtette, és az eredmény most is megvan.'
       },
       {
-        q: 'Mit jelent: いすが{並|なら}べてあります。',
+        point: 3, q: 'Mit jelent: いすが{並|なら}べてあります。',
         a: 'A székek sorba vannak rakva (valaki elrendezte őket).',
         wrong: ['Valaki éppen sorba rakja a székeket.', 'A székeket sorba fogják rakni.', 'Nincsenek székek.'],
         why: 'A てあります a szándékos cselekvés eredményét írja le.'
       },
-      { q: 'Mit jelent: 「ゆかた」って{何|なん}ですか。', a: 'Mi az a „jukata"?', wrong: ['Hol van a jukata?', 'Ez jukata?', 'Kié a jukata?'], why: 'A って a というのは beszélt alakja: egy ismeretlen szóra kérdezel rá vele.' },
-      { q: '„Tanaka azt mondta, holnap jön." Mi hiányzik?', jp: '{田中|たなか}さんはあした＿と{言|い}いました。', a: '{来|く}る', wrong: ['{来|き}て', '{来|き}た', '{来|こ}ない'], why: 'A と előtt rövid alak áll, és megtartja a saját idejét: {来|く}る (jönni fog).' },
+      { point: 7, q: 'Mit jelent: 「ゆかた」って{何|なん}ですか。', a: 'Mi az a „jukata"?', wrong: ['Hol van a jukata?', 'Ez jukata?', 'Kié a jukata?'], why: 'A って a というのは beszélt alakja: egy ismeretlen szóra kérdezel rá vele.' },
+      { point: 6, q: '„Tanaka azt mondta, holnap jön." Mi hiányzik?', jp: '{田中|たなか}さんはあした＿と{言|い}いました。', a: '{来|く}る', wrong: ['{来|き}て', '{来|き}た', '{来|こ}ない'], why: 'A と előtt rövid alak áll, és megtartja a saját idejét: {来|く}る (jönni fog).' },
       {
-        q: 'Mit jelent: ドアに「{押|お}す」と{書|か}いてあります。',
+        point: 3, q: 'Mit jelent: ドアに「{押|お}す」と{書|か}いてあります。',
         a: 'Az ajtóra az van írva: „Tolni".',
         wrong: ['Az ajtót be kell csukni.', 'Valaki éppen ír az ajtóra.', 'Az ajtó nyitva van.'],
         why: 'Az idéző と megmondja, mi áll ott; a {書|か}いてあります azt, hogy ki van írva.'
       },
       {
-        q: 'Melyik mondat helyes: „Rövidre vágattam a hajam."',
+        point: 1, q: 'Melyik mondat helyes: „Rövidre vágattam a hajam."',
         a: '{髪|かみ}を{短|みじか}くしました。',
         wrong: ['{髪|かみ}を{短|みじか}いにしました。', '{髪|かみ}が{短|みじか}くしました。', '{髪|かみ}を{短|みじか}くなりました。'],
         why: 'Amit megváltoztatsz, を-t kap; az い-melléknév く-ra vált; az ige します.'
       },
       {
-        q: 'Melyik mondatban változik meg valami magától?',
+        point: 1, q: 'Melyik mondatban változik meg valami magától?',
         a: '{部屋|へや}が{暗|くら}くなりました。',
         wrong: ['{部屋|へや}を{暗|くら}くしました。', '{部屋|へや}を{暗|くら}くしてください。', '{部屋|へや}を{暗|くら}くしましょう。'],
         why: 'A が + なります: magától lett sötét. A を + します: valaki tette sötétté.'
       },
-      { q: 'Mit rövidít a beszélt nyelvben a って?', a: 'A と / という idéző szerkezetet.', wrong: ['A から okhatározót.', 'A ています alakot.', 'A でしょう alakot.'], why: 'A って a と, a という és a というのは kötetlen megfelelője.' },
-      { q: '„Ezt darunak hívják." Mi hiányzik?', jp: 'これは「つる」と＿。', a: 'いいます', wrong: ['あります', 'します', 'きます'], why: 'Megnevezés: A は B といいます.' }
+      { point: 7, q: 'Mit rövidít a beszélt nyelvben a って?', a: 'A と / という idéző szerkezetet.', wrong: ['A から okhatározót.', 'A ています alakot.', 'A でしょう alakot.'], why: 'A って a と, a という és a というのは kötetlen megfelelője.' },
+      { point: 5, q: '„Ezt darunak hívják." Mi hiányzik?', jp: 'これは「つる」と＿。', a: 'いいます', wrong: ['あります', 'します', 'きます'], why: 'Megnevezés: A は B といいます.' }
     ]
   },
 
@@ -8669,11 +8675,11 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Kölcsönadtam az esernyőmet a barátomnak." Mi hiányzik?', jp: '{友|とも}だちに{傘|かさ}を{貸|か}して＿。', a: 'あげました', wrong: ['くれました', 'もらいました', 'おきました'], why: 'Én teszek szívességet másnak: てあげます.' },
-      { q: '„Anyám készített nekem uzsonnát." Mi hiányzik?', jp: '{母|はは}がお{弁当|べんとう}を{作|つく}って＿。', a: 'くれました', wrong: ['あげました', 'もらいました', 'いきました'], why: 'Nekem tesz szívességet, és ő az alany: てくれます.' },
-      { q: '„Megkértem a barátomat, hogy fényképezzen le." Mi hiányzik?', jp: '{友|とも}だち＿{写真|しゃしん}を{撮|と}ってもらいました。', a: 'に', wrong: ['が', 'を', 'で'], why: 'A てもらいます mellett a segítő に-t kap.' },
+      { point: 1, q: '„Kölcsönadtam az esernyőmet a barátomnak." Mi hiányzik?', jp: '{友|とも}だちに{傘|かさ}を{貸|か}して＿。', a: 'あげました', wrong: ['くれました', 'もらいました', 'おきました'], why: 'Én teszek szívességet másnak: てあげます.' },
+      { point: 2, q: '„Anyám készített nekem uzsonnát." Mi hiányzik?', jp: '{母|はは}がお{弁当|べんとう}を{作|つく}って＿。', a: 'くれました', wrong: ['あげました', 'もらいました', 'いきました'], why: 'Nekem tesz szívességet, és ő az alany: てくれます.' },
+      { point: 3, q: '„Megkértem a barátomat, hogy fényképezzen le." Mi hiányzik?', jp: '{友|とも}だち＿{写真|しゃしん}を{撮|と}ってもらいました。', a: 'に', wrong: ['が', 'を', 'で'], why: 'A てもらいます mellett a segítő に-t kap.' },
       {
-        q: 'Melyik mondat jelenti: „A nővérem tanított angolra."',
+        point: 3, q: 'Melyik mondat jelenti: „A nővérem tanított angolra."',
         a: '{姉|あね}に{英語|えいご}を{教|おし}えてもらいました。',
         wrong: [
           '{姉|あね}に{英語|えいご}を{教|おし}えてあげました。',
@@ -8682,13 +8688,13 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Én kaptam a szívességet (alany: én), a nővérem に-t kap: てもらいました.'
       },
-      { q: '„Előre lefoglaltam a szállodát." Mi hiányzik?', jp: 'ホテルを{予約|よやく}して＿。', a: 'おきました', wrong: ['いきました', 'くれました', 'あげました'], why: 'Előre, későbbi cél érdekében: ておきます.' },
-      { q: '„Zenehallgatás közben tanulok." Mi hiányzik?', jp: '{音楽|おんがく}を＿ながら、{勉強|べんきょう}します。', a: '{聞|き}き', wrong: ['{聞|き}いて', '{聞|き}く', '{聞|き}いた'], why: 'A ながら előtt a ます-tő áll: {聞|き}きます → {聞|き}き.' },
-      { q: 'Mit jelent: {窓|まど}を{開|あ}けておいてください。', a: 'Kérem, hagyja nyitva az ablakot.', wrong: ['Kérem, csukja be az ablakot.', 'Kinyithatom az ablakot?', 'Az ablak ki van nyitva.'], why: 'ておきます: úgy hagyni, ahogy van.' },
-      { q: 'Mit jelent: {手伝|てつだ}ってくれて、ありがとう。', a: 'Köszi, hogy segítettél.', wrong: ['Segítsek?', 'Köszi, de nem kell segítség.', 'Kérlek, segíts.'], why: 'てくれて、ありがとう: köszönet azért, amit értem tettek.' },
-      { q: '„Beszéljünk séta közben." Mi hiányzik?', jp: '＿ながら{話|はな}しましょう。', a: '{歩|ある}き', wrong: ['{歩|ある}いて', '{歩|ある}く', '{歩|ある}か'], why: 'ます-tő + ながら: {歩|ある}きます → {歩|ある}き.' },
+      { point: 5, q: '„Előre lefoglaltam a szállodát." Mi hiányzik?', jp: 'ホテルを{予約|よやく}して＿。', a: 'おきました', wrong: ['いきました', 'くれました', 'あげました'], why: 'Előre, későbbi cél érdekében: ておきます.' },
+      { point: 6, q: '„Zenehallgatás közben tanulok." Mi hiányzik?', jp: '{音楽|おんがく}を＿ながら、{勉強|べんきょう}します。', a: '{聞|き}き', wrong: ['{聞|き}いて', '{聞|き}く', '{聞|き}いた'], why: 'A ながら előtt a ます-tő áll: {聞|き}きます → {聞|き}き.' },
+      { point: 5, q: 'Mit jelent: {窓|まど}を{開|あ}けておいてください。', a: 'Kérem, hagyja nyitva az ablakot.', wrong: ['Kérem, csukja be az ablakot.', 'Kinyithatom az ablakot?', 'Az ablak ki van nyitva.'], why: 'ておきます: úgy hagyni, ahogy van.' },
+      { point: 4, q: 'Mit jelent: {手伝|てつだ}ってくれて、ありがとう。', a: 'Köszi, hogy segítettél.', wrong: ['Segítsek?', 'Köszi, de nem kell segítség.', 'Kérlek, segíts.'], why: 'てくれて、ありがとう: köszönet azért, amit értem tettek.' },
+      { point: 6, q: '„Beszéljünk séta közben." Mi hiányzik?', jp: '＿ながら{話|はな}しましょう。', a: '{歩|ある}き', wrong: ['{歩|ある}いて', '{歩|ある}く', '{歩|ある}か'], why: 'ます-tő + ながら: {歩|ある}きます → {歩|ある}き.' },
       {
-        q: 'Mit jelent: {兄|あに}が{自転車|じてんしゃ}を{直|なお}してくれました。',
+        point: 2, q: 'Mit jelent: {兄|あに}が{自転車|じてんしゃ}を{直|なお}してくれました。',
         a: 'A bátyám megjavította nekem a biciklit.',
         wrong: [
           'Megjavítottam a bátyám biciklijét.',
@@ -8698,21 +8704,21 @@ const NIHONCORE_COURSE = [
         why: 'てくれました: a bátyám (が) tette meg nekem.'
       },
       {
-        q: 'Te kaptad a szívességet. Melyik mondat helyes: „A barátom kölcsönadta az esernyőjét."',
+        point: 2, q: 'Te kaptad a szívességet. Melyik mondat helyes: „A barátom kölcsönadta az esernyőjét."',
         a: '{友|とも}だちが{傘|かさ}を{貸|か}してくれました。',
         wrong: ['{友|とも}だちが{傘|かさ}を{貸|か}してあげました。', '{友|とも}だちが{傘|かさ}を{貸|か}してもらいました。', '{友|とも}だちに{傘|かさ}を{貸|か}してくれました。'],
         why: 'Ha más tesz szívességet neked, a segítő が-t kap, az ige てくれます.'
       },
-      { q: '„Köszi, hogy eljöttél." Mi hiányzik?', jp: '{来|き}て＿、ありがとう。', a: 'くれて', wrong: ['あげて', 'おいて', 'しまって'], why: 'A köszönet okát a くれます て-alakja vezeti be: 〜てくれて、ありがとう.' },
-      { q: '„A nővérem levágta a hajam (megkértem rá)." Mi hiányzik?', jp: '{私|わたし}は{姉|あね}に{髪|かみ}を{切|き}って＿。', a: 'もらいました', wrong: ['くれました', 'あげました', 'おきました'], why: 'Ha te vagy az alany, és a segítő に-t kap, az ige てもらいます.' },
+      { point: 4, q: '„Köszi, hogy eljöttél." Mi hiányzik?', jp: '{来|き}て＿、ありがとう。', a: 'くれて', wrong: ['あげて', 'おいて', 'しまって'], why: 'A köszönet okát a くれます て-alakja vezeti be: 〜てくれて、ありがとう.' },
+      { point: 3, q: '„A nővérem levágta a hajam (megkértem rá)." Mi hiányzik?', jp: '{私|わたし}は{姉|あね}に{髪|かみ}を{切|き}って＿。', a: 'もらいました', wrong: ['くれました', 'あげました', 'おきました'], why: 'Ha te vagy az alany, és a segítő に-t kap, az ige てもらいます.' },
       {
-        q: 'Miért ne mondd a tanárodnak szemtől szemben: {持|も}ってあげます?',
+        point: 1, q: 'Miért ne mondd a tanárodnak szemtől szemben: {持|も}ってあげます?',
         a: 'Mert felettesnek lekezelően hat.',
         wrong: ['Mert nyelvtanilag hibás.', 'Mert csak múlt időben használható.', 'Mert csak tárgyakra mondható.'],
         why: 'A てあげます kimondja, hogy szívességet teszel; felettesnek inkább: {持|も}ちましょうか.'
       },
       {
-        q: 'Mit jelent: {行|い}きかたを{調|しら}べておきます。',
+        point: 5, q: 'Mit jelent: {行|い}きかたを{調|しら}べておきます。',
         a: 'Előre utánanézek, hogyan kell odamenni.',
         wrong: [
           'Már utánanéztek, hogyan kell odamenni.',
@@ -8722,25 +8728,25 @@ const NIHONCORE_COURSE = [
         why: 'A ておきます előkészületet jelent: egy későbbi cél érdekében előre megteszed.'
       },
       {
-        q: 'Melyik mondat írja le az eredményt (és nem a cselekvést)?',
+        point: 5, q: 'Melyik mondat írja le az eredményt (és nem a cselekvést)?',
         a: 'ホテルが{予約|よやく}してあります。',
         wrong: ['ホテルを{予約|よやく}しておきます。', 'ホテルを{予約|よやく}しましょう。', 'ホテルを{予約|よやく}してください。'],
         why: 'A ておきます az előkészítő cselekvés; az eredménye a てあります: „le van foglalva".'
       },
-      { q: '„Kávézás közben újságot olvasok." Mi hiányzik?', jp: 'コーヒーを＿ながら{新聞|しんぶん}を{読|よ}みます。', a: '{飲|の}み', wrong: ['{飲|の}む', '{飲|の}んで', '{飲|の}ま'], why: 'A ながら a ます-tőhöz kapcsolódik: {飲|の}みます → {飲|の}みながら.' },
+      { point: 6, q: '„Kávézás közben újságot olvasok." Mi hiányzik?', jp: 'コーヒーを＿ながら{新聞|しんぶん}を{読|よ}みます。', a: '{飲|の}み', wrong: ['{飲|の}む', '{飲|の}んで', '{飲|の}ま'], why: 'A ながら a ます-tőhöz kapcsolódik: {飲|の}みます → {飲|の}みながら.' },
       {
-        q: 'Melyik a fő cselekvés: {音楽|おんがく}を{聞|き}きながら{勉強|べんきょう}します。',
+        point: 6, q: 'Melyik a fő cselekvés: {音楽|おんがく}を{聞|き}きながら{勉強|べんきょう}します。',
         a: 'A tanulás.',
         wrong: ['A zenehallgatás.', 'Mindkettő egyformán.', 'Egyik sem: a mondat szokást ír le.'],
         why: 'A ながら előtti rész a kísérő cselekvés; a fő cselekvés a mondat végén áll.'
       },
       {
-        q: 'Mit tesz hozzá a てあげたい a {見|み}せたいです mondathoz?',
+        point: 1, q: 'Mit tesz hozzá a てあげたい a {見|み}せたいです mondathoz?',
         a: 'Azt, hogy a másik örömére szeretném megtenni.',
         wrong: ['Azt, hogy már megtettem.', 'Azt, hogy kötelező megtennem.', 'Azt, hogy más teszi meg helyettem.'],
         why: '{見|み}せてあげたいです: szeretném, ha ő is láthatná — a szívesség a másiknak szól.'
       },
-      { q: '„Elnézést, lefényképezne?" Mi hiányzik?', jp: 'すみません、{写真|しゃしん}を{撮|と}って＿。', a: 'もらえますか', wrong: ['あげますか', 'おきますか', 'ありますか'], why: 'Szívességet a もらいます ható alakjával kérsz: 〜てもらえますか.' }
+      { point: 3, q: '„Elnézést, lefényképezne?" Mi hiányzik?', jp: 'すみません、{写真|しゃしん}を{撮|と}って＿。', a: 'もらえますか', wrong: ['あげますか', 'おきますか', 'ありますか'], why: 'Szívességet a もらいます ható alakjával kérsz: 〜てもらえますか.' }
     ]
   },
 
@@ -9120,38 +9126,38 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„A tanár kijavította a fogalmazásomat." (tisztelettel) Mi hiányzik?', jp: '{先生|せんせい}が{作文|さくぶん}を{直|なお}して＿。', a: 'くださいました', wrong: ['いただきました', 'さしあげました', 'あげました'], why: 'A tanár az alany (が), nekem tette: てくださいました.' },
-      { q: '„A tanár úr tanított japánra." Mi hiányzik?', jp: '{先生|せんせい}＿{日本語|にほんご}を{教|おし}えていただきました。', a: 'に', wrong: ['が', 'を', 'で'], why: 'A ていただきます mellett a segítő に-t kap.' },
-      { q: 'Melyik a legudvariasabb kérés?', a: '{教|おし}えていただけませんか。', wrong: ['{教|おし}えてください。', '{教|おし}えてくれませんか。', '{教|おし}えて。'], why: 'Minél közvetettebb, annál udvariasabb: 〜ていただけませんか.' },
-      { q: '„Szeretek főzni." Mi hiányzik?', jp: '{料理|りょうり}を{作|つく}る＿が{好|す}きです。', a: 'の', wrong: ['を', 'に', 'と'], why: 'A の főnévvé teszi az igét: {作|つく}るのが{好|す}き.' },
-      { q: '„Elfelejtettem elhozni a leckét." Mi hiányzik?', jp: '{宿題|しゅくだい}を{持|も}ってくるの＿{忘|わす}れました。', a: 'を', wrong: ['が', 'に', 'で'], why: 'A の-val főnevesített rész a {忘|わす}れました tárgya: を.' },
-      { q: '„Még van idő." Mi hiányzik?', jp: '＿{時間|じかん}があります。', a: 'まだ', wrong: ['もう', 'しか', 'だけ'], why: 'まだ + állítás = még (mindig).' },
-      { q: 'Mit jelent: もう{時間|じかん}がありません。', a: 'Már nincs idő.', wrong: ['Még van idő.', 'Még nincs itt az ideje.', 'Már van időm.'], why: 'もう + tagadás = már nem.' },
-      { q: '„Ez a szék fából készül." Mi hiányzik?', jp: 'このいすは{木|き}＿{作|つく}ります。', a: 'で', wrong: ['に', 'を', 'が'], why: 'A felismerhető anyag で-t kap.' },
-      { q: '„A japán szaké rizsből készül." Mi hiányzik?', jp: '{日本|にほん}のお{酒|さけ}は{米|こめ}＿{作|つく}ります。', a: 'から', wrong: ['まで', 'より', 'へ'], why: 'Az átalakuló alapanyag から-t kap.' },
-      { q: 'Mit jelent: ちょっと{手伝|てつだ}ってくれませんか。', a: 'Segítenél egy kicsit?', wrong: ['Segítsek egy kicsit?', 'Miért nem segítettél?', 'Köszi, hogy segítettél.'], why: '〜てくれませんか: kérés, hogy tegyen meg nekem valamit.' },
+      { point: 1, q: '„A tanár kijavította a fogalmazásomat." (tisztelettel) Mi hiányzik?', jp: '{先生|せんせい}が{作文|さくぶん}を{直|なお}して＿。', a: 'くださいました', wrong: ['いただきました', 'さしあげました', 'あげました'], why: 'A tanár az alany (が), nekem tette: てくださいました.' },
+      { point: 1, q: '„A tanár úr tanított japánra." Mi hiányzik?', jp: '{先生|せんせい}＿{日本語|にほんご}を{教|おし}えていただきました。', a: 'に', wrong: ['が', 'を', 'で'], why: 'A ていただきます mellett a segítő に-t kap.' },
+      { point: 3, q: 'Melyik a legudvariasabb kérés?', a: '{教|おし}えていただけませんか。', wrong: ['{教|おし}えてください。', '{教|おし}えてくれませんか。', '{教|おし}えて。'], why: 'Minél közvetettebb, annál udvariasabb: 〜ていただけませんか.' },
+      { point: 4, q: '„Szeretek főzni." Mi hiányzik?', jp: '{料理|りょうり}を{作|つく}る＿が{好|す}きです。', a: 'の', wrong: ['を', 'に', 'と'], why: 'A の főnévvé teszi az igét: {作|つく}るのが{好|す}き.' },
+      { point: 4, q: '„Elfelejtettem elhozni a leckét." Mi hiányzik?', jp: '{宿題|しゅくだい}を{持|も}ってくるの＿{忘|わす}れました。', a: 'を', wrong: ['が', 'に', 'で'], why: 'A の-val főnevesített rész a {忘|わす}れました tárgya: を.' },
+      { point: 5, q: '„Még van idő." Mi hiányzik?', jp: '＿{時間|じかん}があります。', a: 'まだ', wrong: ['もう', 'しか', 'だけ'], why: 'まだ + állítás = még (mindig).' },
+      { point: 5, q: 'Mit jelent: もう{時間|じかん}がありません。', a: 'Már nincs idő.', wrong: ['Még van idő.', 'Még nincs itt az ideje.', 'Már van időm.'], why: 'もう + tagadás = már nem.' },
+      { point: 7, q: '„Ez a szék fából készül." Mi hiányzik?', jp: 'このいすは{木|き}＿{作|つく}ります。', a: 'で', wrong: ['に', 'を', 'が'], why: 'A felismerhető anyag で-t kap.' },
+      { point: 7, q: '„A japán szaké rizsből készül." Mi hiányzik?', jp: '{日本|にほん}のお{酒|さけ}は{米|こめ}＿{作|つく}ります。', a: 'から', wrong: ['まで', 'より', 'へ'], why: 'Az átalakuló alapanyag から-t kap.' },
+      { point: 3, q: 'Mit jelent: ちょっと{手伝|てつだ}ってくれませんか。', a: 'Segítenél egy kicsit?', wrong: ['Segítsek egy kicsit?', 'Miért nem segítettél?', 'Köszi, hogy segítettél.'], why: '〜てくれませんか: kérés, hogy tegyen meg nekem valamit.' },
       {
-        q: '„A tanár úr megnézte a fogalmazásomat." Te vagy az alany. Mi hiányzik?',
+        point: 1, q: '„A tanár úr megnézte a fogalmazásomat." Te vagy az alany. Mi hiányzik?',
         jp: '{私|わたし}は{先生|せんせい}に{作文|さくぶん}を{見|み}て＿。',
         a: 'いただきました',
         wrong: ['くださいました', 'さしあげました', 'くれました'],
         why: 'Ha te vagy az alany, és a tanár に-t kap, az ige ていただきます.'
       },
       {
-        q: 'Miért kényes szemtől szemben a てさしあげます?',
+        point: 2, q: 'Miért kényes szemtől szemben a てさしあげます?',
         a: 'Mert a szívesség hangoztatása fölényesnek hat.',
         wrong: ['Mert csak írásban használható.', 'Mert csak családtagnak mondható.', 'Mert nincs múlt ideje.'],
         why: 'Aki kimondja, hogy szívességet tesz, az a másikat rászorulónak mutatja. Helyette: {持|も}ちましょうか.'
       },
-      { q: '„Beszélne egy kicsit lassabban?" (a tanárodnak) Mi hiányzik?', jp: 'もう{少|すこ}しゆっくり{話|はな}して＿。', a: 'いただけませんか', wrong: ['いただきませんか', 'あげませんか', 'おきませんか'], why: 'Udvarias kérés: て-alak + いただけませんか (ható alak, tagadó kérdés).' },
-      { q: 'Melyik mondat helyes: „A hobbim az úszás."', a: '{趣味|しゅみ}は{泳|およ}ぐことです。', wrong: ['{趣味|しゅみ}は{泳|およ}ぐのです。', '{趣味|しゅみ}は{泳|およ}ぎますことです。', '{趣味|しゅみ}は{泳|およ}ぐです。'], why: 'A です előtt こと áll, és előtte rövid alak.' },
-      { q: '„Parancsol még egy csésze kávét?" Mi hiányzik?', jp: 'コーヒーを＿{一杯|いっぱい}いかがですか。', a: 'もう', wrong: ['まだ', 'もっと', 'よく'], why: 'Mennyiség előtt a もう jelenti azt: „még egy".' },
-      { q: 'Mit jelent: おなかがいっぱいです。', a: 'Tele vagyok.', wrong: ['Éhes vagyok.', 'Kérek még egy tányérral.', 'Fáj a hasam.'], why: 'Az いっぱい határozóként „tele"-t jelent.' },
-      { q: 'Mit jelent: {何|なに}で{作|つく}るんですか。', a: 'Miből készül?', wrong: ['Miért készíted?', 'Ki készíti?', 'Mikor készül el?'], why: 'A で az alapanyagot jelöli; なにで = „miből, mivel".' },
-      { q: '„Az öcsém még mindig alszik." Mi hiányzik?', jp: '{弟|おとうと}は＿{寝|ね}ています。', a: 'まだ', wrong: ['もう', 'また', 'よく'], why: 'A まだ + állítás: az állapot nem változott, még tart.' },
+      { point: 3, q: '„Beszélne egy kicsit lassabban?" (a tanárodnak) Mi hiányzik?', jp: 'もう{少|すこ}しゆっくり{話|はな}して＿。', a: 'いただけませんか', wrong: ['いただきませんか', 'あげませんか', 'おきませんか'], why: 'Udvarias kérés: て-alak + いただけませんか (ható alak, tagadó kérdés).' },
+      { point: 4, q: 'Melyik mondat helyes: „A hobbim az úszás."', a: '{趣味|しゅみ}は{泳|およ}ぐことです。', wrong: ['{趣味|しゅみ}は{泳|およ}ぐのです。', '{趣味|しゅみ}は{泳|およ}ぎますことです。', '{趣味|しゅみ}は{泳|およ}ぐです。'], why: 'A です előtt こと áll, és előtte rövid alak.' },
+      { point: 6, q: '„Parancsol még egy csésze kávét?" Mi hiányzik?', jp: 'コーヒーを＿{一杯|いっぱい}いかがですか。', a: 'もう', wrong: ['まだ', 'もっと', 'よく'], why: 'Mennyiség előtt a もう jelenti azt: „még egy".' },
+      { point: 6, q: 'Mit jelent: おなかがいっぱいです。', a: 'Tele vagyok.', wrong: ['Éhes vagyok.', 'Kérek még egy tányérral.', 'Fáj a hasam.'], why: 'Az いっぱい határozóként „tele"-t jelent.' },
+      { point: 7, q: 'Mit jelent: {何|なに}で{作|つく}るんですか。', a: 'Miből készül?', wrong: ['Miért készíted?', 'Ki készíti?', 'Mikor készül el?'], why: 'A で az alapanyagot jelöli; なにで = „miből, mivel".' },
+      { point: 5, q: '„Az öcsém még mindig alszik." Mi hiányzik?', jp: '{弟|おとうと}は＿{寝|ね}ています。', a: 'まだ', wrong: ['もう', 'また', 'よく'], why: 'A まだ + állítás: az állapot nem változott, még tart.' },
       { q: 'Hogyan hárítod el udvariasan a repetát?', a: 'もうけっこうです。', wrong: ['まだけっこうです。', 'もういかがですか。', 'まだいただきます。'], why: 'もうけっこうです = „köszönöm, már elég".' },
       {
-        q: 'Egy idegennek mesélsz az édesanyádról. Melyik mondat a helyes?',
+        point: 1, q: 'Egy idegennek mesélsz az édesanyádról. Melyik mondat a helyes?',
         a: '{母|はは}が{作|つく}ってくれました。',
         wrong: ['{母|はは}が{作|つく}ってくださいました。', 'お{母|かあ}さんが{作|つく}ってくださいました。', '{母|はは}に{作|つく}ってさしあげました。'],
         why: 'A saját családodról kifelé beszélve nem használsz tiszteleti alakot.'
@@ -9551,26 +9557,26 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Elugrom innivalóért, és visszajövök." Mi hiányzik?', jp: '{飲|の}み{物|もの}を{買|か}って＿。', a: 'きます', wrong: ['いきます', 'あります', 'います'], why: 'Megteszem és visszajövök: てきます.' },
-      { q: 'Mit mondasz, amikor elindulsz otthonról?', a: '{行|い}ってきます。', wrong: ['{行|い}っていきます。', 'ただいま。', 'おかえりなさい。'], why: '{行|い}ってきます: elmegyek, és visszajövök.' },
-      { q: '„Elrepült a madár." Mi hiányzik?', jp: '{鳥|とり}が{飛|と}んで＿。', a: 'いきました', wrong: ['きました', 'ありました', 'おきました'], why: 'Távolodik tőlem: ていきます.' },
-      { q: '„Eleredt az eső." Mi hiányzik?', jp: '{雨|あめ}が{降|ふ}って＿。', a: 'きました', wrong: ['いきました', 'ありました', 'おきました'], why: 'A változás mostanra ért ide: てきました.' },
-      { q: 'Mit jelent: {寒|さむ}くなってきました。', a: 'Kezd hideg lenni.', wrong: ['Már nincs hideg.', 'Hideg volt, amikor megjöttem.', 'Hidegben jöttem ide.'], why: 'なってきました: a változás elindult, és mostanra érezhető.' },
-      { q: '„Ezután is tovább tanulok japánul." Mi hiányzik?', jp: 'これからも{日本語|にほんご}を{勉強|べんきょう}して＿。', a: 'いきます', wrong: ['きました', 'あります', 'みました'], why: 'Mostantól a jövő felé: ていきます.' },
-      { q: '„Áll az óra." Mi hiányzik?', jp: '{時計|とけい}が＿います。', a: '{止|と}まって', wrong: ['{止|と}めて', '{止|と}まり', '{止|と}まる'], why: 'Állapot: tárgyatlan ige ({止|と}まります) て-alakja + います.' },
+      { point: 1, q: '„Elugrom innivalóért, és visszajövök." Mi hiányzik?', jp: '{飲|の}み{物|もの}を{買|か}って＿。', a: 'きます', wrong: ['いきます', 'あります', 'います'], why: 'Megteszem és visszajövök: てきます.' },
+      { point: 1, q: 'Mit mondasz, amikor elindulsz otthonról?', a: '{行|い}ってきます。', wrong: ['{行|い}っていきます。', 'ただいま。', 'おかえりなさい。'], why: '{行|い}ってきます: elmegyek, és visszajövök.' },
+      { point: 2, q: '„Elrepült a madár." Mi hiányzik?', jp: '{鳥|とり}が{飛|と}んで＿。', a: 'いきました', wrong: ['きました', 'ありました', 'おきました'], why: 'Távolodik tőlem: ていきます.' },
+      { point: 3, q: '„Eleredt az eső." Mi hiányzik?', jp: '{雨|あめ}が{降|ふ}って＿。', a: 'きました', wrong: ['いきました', 'ありました', 'おきました'], why: 'A változás mostanra ért ide: てきました.' },
+      { point: 3, q: 'Mit jelent: {寒|さむ}くなってきました。', a: 'Kezd hideg lenni.', wrong: ['Már nincs hideg.', 'Hideg volt, amikor megjöttem.', 'Hidegben jöttem ide.'], why: 'なってきました: a változás elindult, és mostanra érezhető.' },
+      { point: 4, q: '„Ezután is tovább tanulok japánul." Mi hiányzik?', jp: 'これからも{日本語|にほんご}を{勉強|べんきょう}して＿。', a: 'いきます', wrong: ['きました', 'あります', 'みました'], why: 'Mostantól a jövő felé: ていきます.' },
+      { point: 5, q: '„Áll az óra." Mi hiányzik?', jp: '{時計|とけい}が＿います。', a: '{止|と}まって', wrong: ['{止|と}めて', '{止|と}まり', '{止|と}まる'], why: 'Állapot: tárgyatlan ige ({止|と}まります) て-alakja + います.' },
       {
-        q: 'Mit jelent: {財布|さいふ}が{落|お}ちています。',
+        point: 5, q: 'Mit jelent: {財布|さいふ}が{落|お}ちています。',
         a: 'Egy pénztárca hever a földön.',
         wrong: ['Elejtem a pénztárcámat.', 'Éppen esik le a pénztárca.', 'Elvesztettem a pénztárcámat.'],
         why: 'Tárgyatlan ige + ています: az eredmény állapota, nem folyamat.'
       },
-      { q: '„A barátom hozott szuvenírt." Mi hiányzik?', jp: '{友|とも}だちがお{土産|みやげ}を{持|も}って＿。', a: 'きました', wrong: ['いきました', 'ありました', 'いました'], why: 'Ide, felém hozta: {持|も}ってきました.' },
-      { q: 'Melyik mondat ír le állapotot (nem cselekvést)?', a: 'コップが{割|わ}れています。', wrong: ['コップを{割|わ}りました。', 'コップを{割|わ}っています。', 'コップを{割|わ}らないでください。'], why: 'が + tárgyatlan ige + ています: állapot.' },
-      { q: '„Kimegyek a mosdóba, mindjárt jövök." Mi hiányzik?', jp: 'ちょっとトイレに{行|い}って＿。', a: 'きます', wrong: ['いきます', 'います', 'あります'], why: 'Megteszem, és visszajövök: て-alak + きます.' },
-      { q: 'Mit mond az, aki otthon marad, amikor a másik elindul?', a: '{行|い}ってらっしゃい。', wrong: ['{行|い}ってきます。', 'ただいま。', 'おかえりなさい。'], why: 'Az induló azt mondja: {行|い}ってきます; a válasz: {行|い}ってらっしゃい.' },
-      { q: '„Bort viszek a buliba." Mi hiányzik?', jp: 'パーティーにワインを{持|も}って＿。', a: 'いきます', wrong: ['きます', 'います', 'あります'], why: 'Innen elviszed: て-alak + いきます.' },
+      { point: 1, q: '„A barátom hozott szuvenírt." Mi hiányzik?', jp: '{友|とも}だちがお{土産|みやげ}を{持|も}って＿。', a: 'きました', wrong: ['いきました', 'ありました', 'いました'], why: 'Ide, felém hozta: {持|も}ってきました.' },
+      { point: 5, q: 'Melyik mondat ír le állapotot (nem cselekvést)?', a: 'コップが{割|わ}れています。', wrong: ['コップを{割|わ}りました。', 'コップを{割|わ}っています。', 'コップを{割|わ}らないでください。'], why: 'が + tárgyatlan ige + ています: állapot.' },
+      { point: 1, q: '„Kimegyek a mosdóba, mindjárt jövök." Mi hiányzik?', jp: 'ちょっとトイレに{行|い}って＿。', a: 'きます', wrong: ['いきます', 'います', 'あります'], why: 'Megteszem, és visszajövök: て-alak + きます.' },
+      { point: 1, q: 'Mit mond az, aki otthon marad, amikor a másik elindul?', a: '{行|い}ってらっしゃい。', wrong: ['{行|い}ってきます。', 'ただいま。', 'おかえりなさい。'], why: 'Az induló azt mondja: {行|い}ってきます; a válasz: {行|い}ってらっしゃい.' },
+      { point: 2, q: '„Bort viszek a buliba." Mi hiányzik?', jp: 'パーティーにワインを{持|も}って＿。', a: 'いきます', wrong: ['きます', 'います', 'あります'], why: 'Innen elviszed: て-alak + いきます.' },
       {
-        q: 'Mit jelent: {日本|にほん}の{生活|せいかつ}に{慣|な}れてきました。',
+        point: 3, q: 'Mit jelent: {日本|にほん}の{生活|せいかつ}に{慣|な}れてきました。',
         a: 'Kezdem megszokni a japán életet.',
         wrong: [
           'Ezután fogom megszokni a japán életet.',
@@ -9579,13 +9585,13 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A てきました a múltból a mostig tartó változást jelzi.'
       },
-      { q: '„Mostantól egyre hidegebb lesz." Mi hiányzik?', jp: 'これからどんどん{寒|さむ}くなって＿。', a: 'いきます', wrong: ['きました', 'いました', 'あります'], why: 'A これから a jövőre mutat: a változás a mosttól halad tovább — ていきます.' },
-      { q: 'Melyik mondat ír le olyan változást, amely a múltból a mostig tart?', a: '{人|ひと}が{増|ふ}えてきました。', wrong: ['{人|ひと}が{増|ふ}えていきます。', '{人|ひと}が{増|ふ}えるでしょう。', '{人|ひと}が{増|ふ}えません。'], why: 'てきました: mostanáig. ていきます: mostantól.' },
-      { q: '„Vizes a hajad." Mi hiányzik?', jp: '{髪|かみ}が＿いますよ。', a: 'ぬれて', wrong: ['ぬれ', 'ぬれる', 'ぬらして'], why: 'Állapot: tárgyatlan ige て-alakja + います.' },
-      { q: '„Nemcsak olcsó, hanem finom is." Mi hiányzik?', jp: 'このレストランは{安|やす}い＿、おいしいです。', a: 'だけでなく', wrong: ['だけ', 'しか', 'まで'], why: 'A だけでなく = „nem csak"; utána jön a ráadás.' },
-      { q: '„A tanáromnak köszönhetően átmentem a vizsgán." Mi hiányzik?', jp: '{先生|せんせい}の＿で、{試験|しけん}に{合格|ごうかく}しました。', a: 'おかげ', wrong: ['せい', 'まえ', 'あと'], why: 'Jó eredménynél おかげ; a せい rossz eredményt, hibáztatást jelez.' },
+      { point: 4, q: '„Mostantól egyre hidegebb lesz." Mi hiányzik?', jp: 'これからどんどん{寒|さむ}くなって＿。', a: 'いきます', wrong: ['きました', 'いました', 'あります'], why: 'A これから a jövőre mutat: a változás a mosttól halad tovább — ていきます.' },
+      { point: 3, q: 'Melyik mondat ír le olyan változást, amely a múltból a mostig tart?', a: '{人|ひと}が{増|ふ}えてきました。', wrong: ['{人|ひと}が{増|ふ}えていきます。', '{人|ひと}が{増|ふ}えるでしょう。', '{人|ひと}が{増|ふ}えません。'], why: 'てきました: mostanáig. ていきます: mostantól.' },
+      { point: 5, q: '„Vizes a hajad." Mi hiányzik?', jp: '{髪|かみ}が＿いますよ。', a: 'ぬれて', wrong: ['ぬれ', 'ぬれる', 'ぬらして'], why: 'Állapot: tárgyatlan ige て-alakja + います.' },
+      { point: 6, q: '„Nemcsak olcsó, hanem finom is." Mi hiányzik?', jp: 'このレストランは{安|やす}い＿、おいしいです。', a: 'だけでなく', wrong: ['だけ', 'しか', 'まで'], why: 'A だけでなく = „nem csak"; utána jön a ráadás.' },
+      { point: 7, q: '„A tanáromnak köszönhetően átmentem a vizsgán." Mi hiányzik?', jp: '{先生|せんせい}の＿で、{試験|しけん}に{合格|ごうかく}しました。', a: 'おかげ', wrong: ['せい', 'まえ', 'あと'], why: 'Jó eredménynél おかげ; a せい rossz eredményt, hibáztatást jelez.' },
       {
-        q: 'Mit jelent: {着|つ}いたとき、{店|みせ}はもう{閉|し}まっていました。',
+        point: 5, q: 'Mit jelent: {着|つ}いたとき、{店|みせ}はもう{閉|し}まっていました。',
         a: 'Mire odaértem, a bolt már zárva volt.',
         wrong: [
           'Amikor odaértem, éppen bezárták a boltot.',
@@ -9979,21 +9985,21 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Azt hiszem, a gép késni fog." Mi hiányzik?', jp: '{飛行機|ひこうき}は{遅|おく}れる＿と{思|おも}います。', a: 'だろう', wrong: ['です', 'ます', 'かどうか'], why: 'Feltevés: rövid alak + だろう + と{思|おも}います.' },
-      { q: '„Tanakának ma elvileg szabadnapja van." Mi hiányzik?', jp: '{田中|たなか}さんは{今日|きょう}{休|やす}み＿はずです。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のはずです.' },
-      { q: '„A csomagnak már meg kellett érkeznie." Mi hiányzik?', jp: '{荷物|にもつ}はもう{届|とど}いている＿です。', a: 'はず', wrong: ['かどうか', 'だろう', 'とき'], why: 'Megalapozott várakozás: rövid alak + はずです.' },
-      { q: '„Nem tudom, hánykor érkezünk." Mi hiányzik?', jp: '{何時|なんじ}に{着|つ}く＿、わかりません。', a: 'か', wrong: ['かどうか', 'と', 'を'], why: 'Kérdőszó mellett a beágyazott kérdést か zárja, nem かどうか.' },
-      { q: '„Nem tudom, odaérek-e időben." Mi hiányzik?', jp: '{間|ま}に{合|あ}う＿、わかりません。', a: 'かどうか', wrong: ['だろう', 'はず', 'ので'], why: 'Kérdőszó nélküli beágyazott kérdés: かどうか.' },
+      { point: 1, q: '„Azt hiszem, a gép késni fog." Mi hiányzik?', jp: '{飛行機|ひこうき}は{遅|おく}れる＿と{思|おも}います。', a: 'だろう', wrong: ['です', 'ます', 'かどうか'], why: 'Feltevés: rövid alak + だろう + と{思|おも}います.' },
+      { point: 2, q: '„Tanakának ma elvileg szabadnapja van." Mi hiányzik?', jp: '{田中|たなか}さんは{今日|きょう}{休|やす}み＿はずです。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のはずです.' },
+      { point: 2, q: '„A csomagnak már meg kellett érkeznie." Mi hiányzik?', jp: '{荷物|にもつ}はもう{届|とど}いている＿です。', a: 'はず', wrong: ['かどうか', 'だろう', 'とき'], why: 'Megalapozott várakozás: rövid alak + はずです.' },
+      { point: 4, q: '„Nem tudom, hánykor érkezünk." Mi hiányzik?', jp: '{何時|なんじ}に{着|つ}く＿、わかりません。', a: 'か', wrong: ['かどうか', 'と', 'を'], why: 'Kérdőszó mellett a beágyazott kérdést か zárja, nem かどうか.' },
+      { point: 5, q: '„Nem tudom, odaérek-e időben." Mi hiányzik?', jp: '{間|ま}に{合|あ}う＿、わかりません。', a: 'かどうか', wrong: ['だろう', 'はず', 'ので'], why: 'Kérdőszó nélküli beágyazott kérdés: かどうか.' },
       {
-        q: 'Melyik mondat helyes: „Mondja meg, kérem, hol van a mosdó."',
+        point: 4, q: 'Melyik mondat helyes: „Mondja meg, kérem, hol van a mosdó."',
         a: 'トイレがどこにあるか、{教|おし}えてください。',
         wrong: ['トイレがどこにあるかどうか、{教|おし}えてください。', 'トイレがどこにありますと、{教|おし}えてください。', 'トイレがどこにあるの、{教|おし}えてください。'],
         why: 'Kérdőszó + rövid alak + か.'
       },
-      { q: 'Mit jelent: どこへ{行|い}くの？', a: 'Hová mész? (baráti)', wrong: ['Hová menjek?', 'El kell menned?', 'Hová mentél?'], why: 'A の？ baráti kérdés; a {行|い}く jelen idejű.' },
-      { q: '„Holnap szabad vagy?" (baráti) Mi hiányzik?', jp: 'あした、{休|やす}み＿の？', a: 'な', wrong: ['だ', 'で', 'に'], why: 'Főnév után: なの？' },
+      { point: 6, q: 'Mit jelent: どこへ{行|い}くの？', a: 'Hová mész? (baráti)', wrong: ['Hová menjek?', 'El kell menned?', 'Hová mentél?'], why: 'A の？ baráti kérdés; a {行|い}く jelen idejű.' },
+      { point: 6, q: '„Holnap szabad vagy?" (baráti) Mi hiányzik?', jp: 'あした、{休|やす}み＿の？', a: 'な', wrong: ['だ', 'で', 'に'], why: 'Főnév után: なの？' },
       {
-        q: 'Melyik mondat fejez ki megalapozott várakozást (például a menetrend alapján)?',
+        point: 2, q: 'Melyik mondat fejez ki megalapozott várakozást (például a menetrend alapján)?',
         a: '{電車|でんしゃ}は{十時|じゅうじ}に{着|つ}くはずです。',
         wrong: [
           '{電車|でんしゃ}は{十時|じゅうじ}に{着|つ}くだろう。',
@@ -10002,22 +10008,22 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A はずです mögött ok áll; a だろう és a かもしれません csak feltevés.'
       },
-      { q: '„Kóstolja meg, finom-e." Mi hiányzik?', jp: 'おいしい＿、{食|た}べてみてください。', a: 'かどうか', wrong: ['だろう', 'はず', 'のに'], why: 'Igen–nem kérdés beágyazva: かどうか.' },
-      { q: '„Azt hiszem, ő diák." Mi hiányzik?', jp: 'あの{人|ひと}は{学生|がくせい}＿と{思|おも}います。', a: 'だろう', wrong: ['だだろう', 'なだろう', 'でだろう'], why: 'Főnév után a だろう közvetlenül áll.' },
-      { q: 'Melyik mondat helyes: „Bizonyára jól tud angolul."', a: '{英語|えいご}が{上手|じょうず}なはずです。', wrong: ['{英語|えいご}が{上手|じょうず}はずです。', '{英語|えいご}が{上手|じょうず}のはずです。', '{英語|えいご}が{上手|じょうず}だはずです。'], why: 'な-melléknév után な áll a はず előtt.' },
-      { q: 'Mit jelent: そんなはずはありません。', a: 'Az nem lehet!', wrong: ['Úgy kell lennie.', 'Nem tudom biztosan.', 'Valószínűleg úgy van.'], why: 'A はずはありません a várakozás tagadása: „kizárt".' },
+      { point: 5, q: '„Kóstolja meg, finom-e." Mi hiányzik?', jp: 'おいしい＿、{食|た}べてみてください。', a: 'かどうか', wrong: ['だろう', 'はず', 'のに'], why: 'Igen–nem kérdés beágyazva: かどうか.' },
+      { point: 1, q: '„Azt hiszem, ő diák." Mi hiányzik?', jp: 'あの{人|ひと}は{学生|がくせい}＿と{思|おも}います。', a: 'だろう', wrong: ['だだろう', 'なだろう', 'でだろう'], why: 'Főnév után a だろう közvetlenül áll.' },
+      { point: 2, q: 'Melyik mondat helyes: „Bizonyára jól tud angolul."', a: '{英語|えいご}が{上手|じょうず}なはずです。', wrong: ['{英語|えいご}が{上手|じょうず}はずです。', '{英語|えいご}が{上手|じょうず}のはずです。', '{英語|えいご}が{上手|じょうず}だはずです。'], why: 'な-melléknév után な áll a はず előtt.' },
+      { point: 2, q: 'Mit jelent: そんなはずはありません。', a: 'Az nem lehet!', wrong: ['Úgy kell lennie.', 'Nem tudom biztosan.', 'Valószínűleg úgy van.'], why: 'A はずはありません a várakozás tagadása: „kizárt".' },
       {
-        q: 'A saját tervedről beszélsz: „Holnap elmegyek." Melyik mondat nem jó?',
+        point: 2, q: 'A saját tervedről beszélsz: „Holnap elmegyek." Melyik mondat nem jó?',
         a: 'あした{行|い}くはずです。',
         wrong: ['あした{行|い}くつもりです。', 'あした{行|い}きます。', 'あした{行|い}く{予定|よてい}です。'],
         why: 'A はず következtetés; a saját akaratodtól függő dologra nem használjuk.'
       },
-      { q: '„Még nem döntöttem el, hol szállok meg." Mi hiányzik?', jp: 'どこに{泊|と}まる＿、まだ{決|き}めていません。', a: 'か', wrong: ['かどうか', 'の', 'と'], why: 'Kérdőszavas beágyazott kérdést か zár.' },
-      { q: '„Megkérdezem, kell-e foglalni." Mi hiányzik?', jp: '{予約|よやく}が{必要|ひつよう}＿、{聞|き}いてみます。', a: 'かどうか', wrong: ['だかどうか', 'なかどうか', 'とどうか'], why: 'Kérdőszó nélküli beágyazott kérdés: かどうか; な-melléknév után だ nélkül.' },
-      { q: 'Melyik mondat helyes?', a: 'いつ{来|く}るか、わかりません。', wrong: ['いつ{来|く}るかどうか、わかりません。', 'いつ{来|き}ますか、わかりません。', 'いつ{来|く}るの、わかりません。'], why: 'Kérdőszó mellett か áll, a beágyazott rész rövid alakban.' },
-      { q: 'Mit jelent: {何|なに}を{探|さが}しているの？', a: 'Mit keresel?', wrong: ['Megtaláltad, amit kerestél?', 'Hol keresed?', 'Mit fogsz keresni?'], why: 'A の？ a 〜んですか baráti megfelelője.' },
-      { q: 'Mit jelent: あしたは{晴|は}れるかな。', a: 'Vajon holnap kisüt a nap?', wrong: ['Holnap biztosan kisüt a nap.', 'Holnap nem süt ki a nap.', 'Tegnap kisütött a nap.'], why: 'A かな töprengő kérdés: „vajon…?".' },
-      { q: 'Melyik határozószó illik a 〜かもしれません mellé?', a: 'もしかしたら', wrong: ['きっと', 'ぜったい', 'なかなか'], why: 'A もしかしたら („lehet, hogy") bizonytalan mondatvéggel jár együtt.' }
+      { point: 4, q: '„Még nem döntöttem el, hol szállok meg." Mi hiányzik?', jp: 'どこに{泊|と}まる＿、まだ{決|き}めていません。', a: 'か', wrong: ['かどうか', 'の', 'と'], why: 'Kérdőszavas beágyazott kérdést か zár.' },
+      { point: 5, q: '„Megkérdezem, kell-e foglalni." Mi hiányzik?', jp: '{予約|よやく}が{必要|ひつよう}＿、{聞|き}いてみます。', a: 'かどうか', wrong: ['だかどうか', 'なかどうか', 'とどうか'], why: 'Kérdőszó nélküli beágyazott kérdés: かどうか; な-melléknév után だ nélkül.' },
+      { point: 4, q: 'Melyik mondat helyes?', a: 'いつ{来|く}るか、わかりません。', wrong: ['いつ{来|く}るかどうか、わかりません。', 'いつ{来|き}ますか、わかりません。', 'いつ{来|く}るの、わかりません。'], why: 'Kérdőszó mellett か áll, a beágyazott rész rövid alakban.' },
+      { point: 6, q: 'Mit jelent: {何|なに}を{探|さが}しているの？', a: 'Mit keresel?', wrong: ['Megtaláltad, amit kerestél?', 'Hol keresed?', 'Mit fogsz keresni?'], why: 'A の？ a 〜んですか baráti megfelelője.' },
+      { point: 7, q: 'Mit jelent: あしたは{晴|は}れるかな。', a: 'Vajon holnap kisüt a nap?', wrong: ['Holnap biztosan kisüt a nap.', 'Holnap nem süt ki a nap.', 'Tegnap kisütött a nap.'], why: 'A かな töprengő kérdés: „vajon…?".' },
+      { point: 3, q: 'Melyik határozószó illik a 〜かもしれません mellé?', a: 'もしかしたら', wrong: ['きっと', 'ぜったい', 'なかなか'], why: 'A もしかしたら („lehet, hogy") bizonytalan mondatvéggel jár együtt.' }
     ]
   },
 
@@ -10408,29 +10414,29 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Ha esik az eső, nem megyek." Mi hiányzik?', jp: '{雨|あめ}が＿、{行|い}きません。', a: '{降|ふ}ったら', wrong: ['{降|ふ}るたら', '{降|ふ}りたら', '{降|ふ}ってら'], why: 'た-alak + ら: {降|ふ}った → {降|ふ}ったら.' },
-      { q: '„Ha olcsó, megveszem." Mi hiányzik?', jp: '＿、{買|か}います。', a: '{安|やす}かったら', wrong: ['{安|やす}いたら', '{安|やす}いだったら', '{安|やす}くたら'], why: 'い-melléknév: い → かったら.' },
-      { q: '„Ha ráérsz, gyere el hozzánk." Mi hiányzik?', jp: '{暇|ひま}＿、{遊|あそ}びに{来|き}てください。', a: 'だったら', wrong: ['かったら', 'たら', 'くたら'], why: 'な-melléknév + だったら.' },
-      { q: 'Mi a {行|い}きます szándékos alakja?', a: '{行|い}こう', wrong: ['{行|い}きよう', '{行|い}くよう', '{行|い}かう'], why: '1. csoport: く → こう.' },
-      { q: 'Mi a {食|た}べます szándékos alakja?', a: '{食|た}べよう', wrong: ['{食|た}べろう', '{食|た}ぼう', '{食|た}べおう'], why: '2. csoport: る → よう.' },
-      { q: '„Azt tervezem, hogy jövőre külföldön tanulok." Mi hiányzik?', jp: '{来年|らいねん}、{留学|りゅうがく}＿と{思|おも}っています。', a: 'しよう', wrong: ['して', 'しろう', 'すよう'], why: 'A する szándékos alakja しよう.' },
-      { q: '„Péntekig adja le a beszámolót." Mi hiányzik?', jp: '{金曜日|きんようび}＿レポートを{出|だ}してください。', a: 'までに', wrong: ['まで', 'から', 'より'], why: 'Határidő: までに. A まで folyamatos időtartamot jelöl.' },
-      { q: 'Mit jelent: {五時|ごじ}まで{働|はたら}きます。', a: 'Ötig dolgozom (addig folyamatosan).', wrong: ['Öttől dolgozom.', 'Ötkor kezdek dolgozni.', 'Öt órát dolgozom.'], why: 'まで: addig tart a cselekvés.' },
+      { point: 1, q: '„Ha esik az eső, nem megyek." Mi hiányzik?', jp: '{雨|あめ}が＿、{行|い}きません。', a: '{降|ふ}ったら', wrong: ['{降|ふ}るたら', '{降|ふ}りたら', '{降|ふ}ってら'], why: 'た-alak + ら: {降|ふ}った → {降|ふ}ったら.' },
+      { point: 1, q: '„Ha olcsó, megveszem." Mi hiányzik?', jp: '＿、{買|か}います。', a: '{安|やす}かったら', wrong: ['{安|やす}いたら', '{安|やす}いだったら', '{安|やす}くたら'], why: 'い-melléknév: い → かったら.' },
+      { point: 1, q: '„Ha ráérsz, gyere el hozzánk." Mi hiányzik?', jp: '{暇|ひま}＿、{遊|あそ}びに{来|き}てください。', a: 'だったら', wrong: ['かったら', 'たら', 'くたら'], why: 'な-melléknév + だったら.' },
+      { point: 3, q: 'Mi a {行|い}きます szándékos alakja?', a: '{行|い}こう', wrong: ['{行|い}きよう', '{行|い}くよう', '{行|い}かう'], why: '1. csoport: く → こう.' },
+      { point: 3, q: 'Mi a {食|た}べます szándékos alakja?', a: '{食|た}べよう', wrong: ['{食|た}べろう', '{食|た}ぼう', '{食|た}べおう'], why: '2. csoport: る → よう.' },
+      { point: 4, q: '„Azt tervezem, hogy jövőre külföldön tanulok." Mi hiányzik?', jp: '{来年|らいねん}、{留学|りゅうがく}＿と{思|おも}っています。', a: 'しよう', wrong: ['して', 'しろう', 'すよう'], why: 'A する szándékos alakja しよう.' },
+      { point: 6, q: '„Péntekig adja le a beszámolót." Mi hiányzik?', jp: '{金曜日|きんようび}＿レポートを{出|だ}してください。', a: 'までに', wrong: ['まで', 'から', 'より'], why: 'Határidő: までに. A まで folyamatos időtartamot jelöl.' },
+      { point: 6, q: 'Mit jelent: {五時|ごじ}まで{働|はたら}きます。', a: 'Ötig dolgozom (addig folyamatosan).', wrong: ['Öttől dolgozom.', 'Ötkor kezdek dolgozni.', 'Öt órát dolgozom.'], why: 'まで: addig tart a cselekvés.' },
       {
-        q: 'Mit jelent: {今日|きょう}は{春|はる}らしい{天気|てんき}です。',
+        point: 7, q: 'Mit jelent: {今日|きょう}は{春|はる}らしい{天気|てんき}です。',
         a: 'Ma igazi tavaszi idő van.',
         wrong: ['Úgy hallom, ma tavaszias idő lesz.', 'Ma nincs tavaszias idő.', 'Tavasszal ilyen az idő?'],
         why: 'főnév + らしい: olyan, amilyennek a tavaszt elképzeljük.'
       },
-      { q: '„Amikor megérkezem az állomásra, telefonálok." Mi hiányzik?', jp: '{駅|えき}に＿、{電話|でんわ}します。', a: '{着|つ}いたら', wrong: ['{着|つ}くたら', '{着|つ}きたら', '{着|つ}いてら'], why: '{着|つ}いた + ら: miután megérkeztem.' },
+      { point: 2, q: '„Amikor megérkezem az állomásra, telefonálok." Mi hiányzik?', jp: '{駅|えき}に＿、{電話|でんわ}します。', a: '{着|つ}いたら', wrong: ['{着|つ}くたら', '{着|つ}きたら', '{着|つ}いてら'], why: '{着|つ}いた + ら: miután megérkeztem.' },
       {
-        q: 'Melyik mondat elé nem tehető もし?',
+        point: 2, q: 'Melyik mondat elé nem tehető もし?',
         a: '{五時|ごじ}になったら、{帰|かえ}ります。',
         wrong: ['{雨|あめ}が{降|ふ}ったら、{行|い}きません。', '{安|やす}かったら、{買|か}います。', 'お{金|かね}があったら、{旅行|りょこう}します。'],
         why: 'Az öt óra biztosan eljön: itt a たら „amikor"-t jelent, nem feltételt.'
       },
       {
-        q: 'Mit jelent: {窓|まど}を{開|あ}けたら、{雪|ゆき}が{降|ふ}っていました。',
+        point: 2, q: 'Mit jelent: {窓|まど}を{開|あ}けたら、{雪|ゆき}が{降|ふ}っていました。',
         a: 'Amikor kinyitottam az ablakot, esett a hó.',
         wrong: [
           'Ha kinyitom az ablakot, esni fog a hó.',
@@ -10439,19 +10445,19 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Múlt idejű főmondattal a たら váratlan felfedezést jelent.'
       },
-      { q: 'Mi a {帰|かえ}ります szándékos alakja?', a: '{帰|かえ}ろう', wrong: ['{帰|かえ}よう', '{帰|かえ}りよう', '{帰|かえ}れよう'], why: 'A {帰|かえ}る az 1. csoportba tartozik: る → ろう.' },
-      { q: 'Mi a {来|き}ます szándékos alakja?', a: 'こよう', wrong: ['きよう', 'くよう', 'こおう'], why: 'Rendhagyó: くる → こよう.' },
-      { q: 'Mit jelent: {手伝|てつだ}おうか。', a: 'Segítsek?', wrong: ['Segítenél?', 'Segítettél?', 'Nem segítek.'], why: 'A szándékos alak + か felajánlás: „megtegyem?".' },
+      { point: 3, q: 'Mi a {帰|かえ}ります szándékos alakja?', a: '{帰|かえ}ろう', wrong: ['{帰|かえ}よう', '{帰|かえ}りよう', '{帰|かえ}れよう'], why: 'A {帰|かえ}る az 1. csoportba tartozik: る → ろう.' },
+      { point: 3, q: 'Mi a {来|き}ます szándékos alakja?', a: 'こよう', wrong: ['きよう', 'くよう', 'こおう'], why: 'Rendhagyó: くる → こよう.' },
+      { point: 3, q: 'Mit jelent: {手伝|てつだ}おうか。', a: 'Segítsek?', wrong: ['Segítenél?', 'Segítettél?', 'Nem segítek.'], why: 'A szándékos alak + か felajánlás: „megtegyem?".' },
       {
-        q: 'Melyik mondat szól a saját tervedről?',
+        point: 4, q: 'Melyik mondat szól a saját tervedről?',
         a: '{留学|りゅうがく}しようと{思|おも}います。',
         wrong: ['{留学|りゅうがく}すると{思|おも}います。', '{留学|りゅうがく}するだろうと{思|おも}います。', '{留学|りゅうがく}するはずです。'],
         why: 'A terved a szándékos alakkal mondod el; a többi feltevés valaki másról.'
       },
-      { q: '„Ötig várok." Mi hiányzik?', jp: '{五時|ごじ}＿{待|ま}ちます。', a: 'まで', wrong: ['までに', 'で', 'を'], why: 'A várakozás addig folyamatosan tart: まで.' },
-      { q: 'Mit jelent: こっちのほうがいいんじゃない？', a: 'Nem ez a jobb inkább?', wrong: ['Ez nem jó.', 'Melyik a jobb?', 'Ez sem jó.'], why: 'A 〜んじゃない？ formája tagadó, a jelentése állítás: „szerintem ez a jobb".' },
+      { point: 6, q: '„Ötig várok." Mi hiányzik?', jp: '{五時|ごじ}＿{待|ま}ちます。', a: 'まで', wrong: ['までに', 'で', 'を'], why: 'A várakozás addig folyamatosan tart: まで.' },
+      { point: 5, q: 'Mit jelent: こっちのほうがいいんじゃない？', a: 'Nem ez a jobb inkább?', wrong: ['Ez nem jó.', 'Melyik a jobb?', 'Ez sem jó.'], why: 'A 〜んじゃない？ formája tagadó, a jelentése állítás: „szerintem ez a jobb".' },
       {
-        q: 'Mit jelent: {自分|じぶん}らしく{生|い}きたいです。',
+        point: 7, q: 'Mit jelent: {自分|じぶん}らしく{生|い}きたいです。',
         a: 'Úgy szeretnék élni, ahogy hozzám illik.',
         wrong: ['Egyedül szeretnék élni.', 'Úgy szeretnék élni, mint mások.', 'Sokáig szeretnék élni.'],
         why: 'A {自分|じぶん}らしい: „önmagához hű, rá jellemző".'
@@ -10877,36 +10883,36 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'Mi a {書|か}きます ható alakja?', a: '{書|か}けます', wrong: ['{書|か}かれます', '{書|か}きられます', '{書|か}こます'], why: '1. csoport: く → け + ます.' },
-      { q: 'Mi a {食|た}べます ható alakja?', a: '{食|た}べられます', wrong: ['{食|た}べえます', '{食|た}べできます', '{食|た}びられます'], why: '2. csoport: る → られます.' },
-      { q: 'Mi a します ható alakja?', a: 'できます', wrong: ['しられます', 'せます', 'しえます'], why: 'A します ható párja rendhagyó: できます.' },
-      { q: '„Tudok angolul." Mi hiányzik?', jp: '{英語|えいご}＿{話|はな}せます。', a: 'が', wrong: ['に', 'で', 'へ'], why: 'A ható alak mellett a tárgy が-t kap.' },
-      { q: '„Nem tudok korán felkelni." Mi hiányzik?', jp: '{朝|あさ}{早|はや}く＿。', a: '{起|お}きられません', wrong: ['{起|お}けません', '{起|お}きえません', '{起|お}きできません'], why: 'Az {起|お}きる 2. csoportú: {起|お}きられる → {起|お}きられません.' },
-      { q: '„Egészen biztos, hogy az a csapat nyer." Mi hiányzik?', jp: 'あのチームが{勝|か}つ＿。', a: 'にきまっています', wrong: ['かもしれません', 'かどうかです', 'までにです'], why: 'Teljes meggyőződés: にきまっています.' },
-      { q: '„Hozok innivalót, édességet, ilyesmit." Mi hiányzik?', jp: '{飲|の}み{物|もの}＿お{菓子|かし}とかを{買|か}ってきます。', a: 'とか', wrong: ['だけ', 'しか', 'まで'], why: 'Példák sorolása: A とか B とか.' },
-      { q: 'Mi a {高|たか}い főnévi alakja („magasság")?', a: '{高|たか}さ', wrong: ['{高|たか}く', '{高|たか}な', '{高|たか}いさ'], why: 'い → さ.' },
+      { point: 1, q: 'Mi a {書|か}きます ható alakja?', a: '{書|か}けます', wrong: ['{書|か}かれます', '{書|か}きられます', '{書|か}こます'], why: '1. csoport: く → け + ます.' },
+      { point: 2, q: 'Mi a {食|た}べます ható alakja?', a: '{食|た}べられます', wrong: ['{食|た}べえます', '{食|た}べできます', '{食|た}びられます'], why: '2. csoport: る → られます.' },
+      { point: 2, q: 'Mi a します ható alakja?', a: 'できます', wrong: ['しられます', 'せます', 'しえます'], why: 'A します ható párja rendhagyó: できます.' },
+      { point: 3, q: '„Tudok angolul." Mi hiányzik?', jp: '{英語|えいご}＿{話|はな}せます。', a: 'が', wrong: ['に', 'で', 'へ'], why: 'A ható alak mellett a tárgy が-t kap.' },
+      { point: 2, q: '„Nem tudok korán felkelni." Mi hiányzik?', jp: '{朝|あさ}{早|はや}く＿。', a: '{起|お}きられません', wrong: ['{起|お}けません', '{起|お}きえません', '{起|お}きできません'], why: 'Az {起|お}きる 2. csoportú: {起|お}きられる → {起|お}きられません.' },
+      { point: 6, q: '„Egészen biztos, hogy az a csapat nyer." Mi hiányzik?', jp: 'あのチームが{勝|か}つ＿。', a: 'にきまっています', wrong: ['かもしれません', 'かどうかです', 'までにです'], why: 'Teljes meggyőződés: にきまっています.' },
+      { point: 7, q: '„Hozok innivalót, édességet, ilyesmit." Mi hiányzik?', jp: '{飲|の}み{物|もの}＿お{菓子|かし}とかを{買|か}ってきます。', a: 'とか', wrong: ['だけ', 'しか', 'まで'], why: 'Példák sorolása: A とか B とか.' },
+      { point: 8, q: 'Mi a {高|たか}い főnévi alakja („magasság")?', a: '{高|たか}さ', wrong: ['{高|たか}く', '{高|たか}な', '{高|たか}いさ'], why: 'い → さ.' },
       {
-        q: 'Mit jelent: このカードは{使|つか}えません。',
+        point: 3, q: 'Mit jelent: このカードは{使|つか}えません。',
         a: 'Ez a kártya nem használható.',
         wrong: ['Ezt a kártyát nem használom.', 'Ezt a kártyát nem használtam.', 'Ezt a kártyát használni kell.'],
         why: '{使|つか}えません: a {使|つか}います ható alakjának tagadása.'
       },
-      { q: 'Mi a {来|き}ます ható alakja?', a: 'こられます', wrong: ['きられます', 'くられます', 'きえます'], why: 'A {来|き}ます rendhagyó: こられます.' },
-      { q: 'Mi a {待|ま}ちます ható alakja?', a: '{待|ま}てます', wrong: ['{待|ま}たれます', '{待|ま}ちられます', '{待|ま}とます'], why: '1. csoport: つ → て + ます.' },
-      { q: 'Melyik igének nincs ható alakja?', a: 'わかります', wrong: ['{泳|およ}ぎます', '{食|た}べます', '{書|か}きます'], why: 'A わかります maga is képességet jelent.' },
-      { q: '„Annyi a dolgom, hogy nem tudok elmenni a buliba." Mi hiányzik?', jp: '{忙|いそが}しくて、パーティーに＿。', a: '{行|い}けません', wrong: ['{行|い}かれません', '{行|い}きられません', '{行|い}くません'], why: '{行|い}く → {行|い}ける; tagadva {行|い}けません.' },
-      { q: 'Mit jelent: この{水|みず}は{飲|の}めますか。', a: 'Iható ez a víz?', wrong: ['Megiszod ezt a vizet?', 'Ittál ebből a vízből?', 'Kérsz vizet?'], why: 'A ható alak lehetőséget is kifejez: „meg lehet-e inni".' },
-      { q: '„Hol vegyem meg a jegyet?" Mi hiányzik?', jp: 'どこで{切符|きっぷ}を＿いいですか。', a: '{買|か}ったら', wrong: ['{買|か}う', '{買|か}い', '{買|か}った'], why: 'Útmutatást így kérsz: kérdőszó + 〜たらいいですか.' },
-      { q: 'Barátodat kéred: „Kinyitnád az ablakot?" Melyik a jó mondat?', a: '{窓|まど}を{開|あ}けてくれる？', wrong: ['{窓|まど}を{開|あ}けてあげる？', '{窓|まど}を{開|あ}けておく？', '{窓|まど}を{開|あ}けてある？'], why: 'Baráti kérés: て-alak + くれる？' },
-      { q: 'Mit fejez ki a 〜に{決|き}まっています?', a: 'A beszélő teljes meggyőződését.', wrong: ['Udvarias kérést.', 'Bizonytalan sejtést.', 'Jövőbeli tervet.'], why: '„Nyilván", „egészen biztos" — érzelmes bizonyosság.' },
+      { point: 2, q: 'Mi a {来|き}ます ható alakja?', a: 'こられます', wrong: ['きられます', 'くられます', 'きえます'], why: 'A {来|き}ます rendhagyó: こられます.' },
+      { point: 1, q: 'Mi a {待|ま}ちます ható alakja?', a: '{待|ま}てます', wrong: ['{待|ま}たれます', '{待|ま}ちられます', '{待|ま}とます'], why: '1. csoport: つ → て + ます.' },
+      { point: 3, q: 'Melyik igének nincs ható alakja?', a: 'わかります', wrong: ['{泳|およ}ぎます', '{食|た}べます', '{書|か}きます'], why: 'A わかります maga is képességet jelent.' },
+      { point: 3, q: '„Annyi a dolgom, hogy nem tudok elmenni a buliba." Mi hiányzik?', jp: '{忙|いそが}しくて、パーティーに＿。', a: '{行|い}けません', wrong: ['{行|い}かれません', '{行|い}きられません', '{行|い}くません'], why: '{行|い}く → {行|い}ける; tagadva {行|い}けません.' },
+      { point: 3, q: 'Mit jelent: この{水|みず}は{飲|の}めますか。', a: 'Iható ez a víz?', wrong: ['Megiszod ezt a vizet?', 'Ittál ebből a vízből?', 'Kérsz vizet?'], why: 'A ható alak lehetőséget is kifejez: „meg lehet-e inni".' },
+      { point: 4, q: '„Hol vegyem meg a jegyet?" Mi hiányzik?', jp: 'どこで{切符|きっぷ}を＿いいですか。', a: '{買|か}ったら', wrong: ['{買|か}う', '{買|か}い', '{買|か}った'], why: 'Útmutatást így kérsz: kérdőszó + 〜たらいいですか.' },
+      { point: 5, q: 'Barátodat kéred: „Kinyitnád az ablakot?" Melyik a jó mondat?', a: '{窓|まど}を{開|あ}けてくれる？', wrong: ['{窓|まど}を{開|あ}けてあげる？', '{窓|まど}を{開|あ}けておく？', '{窓|まど}を{開|あ}けてある？'], why: 'Baráti kérés: て-alak + くれる？' },
+      { point: 6, q: 'Mit fejez ki a 〜に{決|き}まっています?', a: 'A beszélő teljes meggyőződését.', wrong: ['Udvarias kérést.', 'Bizonytalan sejtést.', 'Jövőbeli tervet.'], why: '„Nyilván", „egészen biztos" — érzelmes bizonyosság.' },
       {
-        q: 'Melyik mondat illik vizsgára vagy állásinterjúra?',
+        point: 7, q: 'Melyik mondat illik vizsgára vagy állásinterjúra?',
         a: '{英語|えいご}や{歴史|れきし}などが{好|す}きです。',
         wrong: ['{英語|えいご}とか{歴史|れきし}とかが{好|す}き。', '{英語|えいご}とか{歴史|れきし}とか、{好|す}きだよ。', '{英語|えいご}とか、まあ、{好|す}きかな。'],
         why: 'A とか beszélt nyelvi; hivatalos helyzetben や…など illik.'
       },
-      { q: 'Mi az いい főnévi alakja („jó tulajdonság")?', a: 'よさ', wrong: ['いさ', 'いいさ', 'よいさ'], why: 'Az いい töve よ: よさ.' },
-      { q: 'Melyik mondat helyes?', a: '{母|はは}が{作|つく}ったケーキはおいしいです。', wrong: ['{母|はは}は{作|つく}ったケーキはおいしいです。', '{母|はは}を{作|つく}ったケーキはおいしいです。', '{母|はは}で{作|つく}ったケーキはおいしいです。'], why: 'A jelzős mondat alanya が-t (vagy の-t) kap, は-t soha.' }
+      { point: 8, q: 'Mi az いい főnévi alakja („jó tulajdonság")?', a: 'よさ', wrong: ['いさ', 'いいさ', 'よいさ'], why: 'Az いい töve よ: よさ.' },
+      { point: 9, q: 'Melyik mondat helyes?', a: '{母|はは}が{作|つく}ったケーキはおいしいです。', wrong: ['{母|はは}は{作|つく}ったケーキはおいしいです。', '{母|はは}を{作|つく}ったケーキはおいしいです。', '{母|はは}で{作|つく}ったケーキはおいしいです。'], why: 'A jelzős mondat alanya が-t (vagy の-t) kap, は-t soha.' }
     ]
   },
 
@@ -11263,22 +11269,22 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'Mi a {行|い}きます ば-alakja?', a: '{行|い}けば', wrong: ['{行|い}かば', '{行|い}きば', '{行|い}くば'], why: '1. csoport: く → けば.' },
-      { q: 'Mi az いい ば-alakja?', a: 'よければ', wrong: ['いければ', 'いいば', 'よくば'], why: 'Az いい rendhagyó: よければ.' },
-      { q: '„Ha megnyomod ezt a gombot, kinyílik az ajtó." Mi hiányzik?', jp: 'このボタンを＿、ドアが{開|あ}きます。', a: '{押|お}せば', wrong: ['{押|お}しば', '{押|お}さば', '{押|お}すば'], why: '{押|お}す → {押|お}せば.' },
-      { q: '„Ha számítógép kell, ez a bolt olcsó." Mi hiányzik?', jp: 'パソコン＿、この{店|みせ}が{安|やす}いですよ。', a: 'なら', wrong: ['ば', 'たら', 'し'], why: 'Főnév + なら: „ha arról van szó".' },
-      { q: '„Ha Kiotóba mész, az ősz a legjobb." Mi hiányzik?', jp: '{京都|きょうと}へ{行|い}く＿、{秋|あき}がいいです。', a: 'なら', wrong: ['ば', 'たら', 'さ'], why: 'Tanács a másik tervére: szótári alak + なら.' },
-      { q: 'Mit jelent: お{手洗|てあら}いは{二階|にかい}にございます。', a: 'A mosdó az emeleten található.', wrong: ['A mosdó az emeleten nem működik.', 'Az emeleten nincs mosdó.', 'Merre van a mosdó?'], why: 'ございます = あります, nagyon udvariasan.' },
-      { q: 'Ki mondja leginkább: こちらは{新|あたら}しいモデルでございます。', a: 'Eladó a vásárlónak.', wrong: ['Barát a barátnak.', 'Vásárló az eladónak.', 'Gyerek a szülőnek.'], why: 'A でございます a kiszolgálók nagyon udvarias stílusa.' },
-      { q: '„Ez a fényképező könnyű is, olcsó is." Mi hiányzik?', jp: 'このカメラは{軽|かる}い＿、{安|やす}いし、とてもいいです。', a: 'し', wrong: ['て', 'で', 'と'], why: 'Indokok sorolása: rövid alak + し.' },
-      { q: '„Az az ember kétségtelenül japán." Mi hiányzik?', jp: 'あの{人|ひと}は{日本人|にほんじん}＿。', a: 'にちがいありません', wrong: ['かもしれません', 'かどうかです', 'らしくないです'], why: 'Erős meggyőződés: にちがいありません.' },
-      { q: '„…csendes is: jó szoba." Mi hiányzik?', jp: '{駅|えき}から{近|ちか}いし、{静|しず}か＿し、いい{部屋|へや}ですね。', a: 'だ', wrong: ['な', 'の', 'で'], why: 'な-melléknév után: だし.' },
-      { q: 'Mi a {飲|の}みます ば-alakja?', a: '{飲|の}めば', wrong: ['{飲|の}まば', '{飲|の}みば', '{飲|の}むば'], why: '1. csoport: む → めば.' },
-      { q: 'Mi a {来|き}ます ば-alakja?', a: 'くれば', wrong: ['こば', 'きれば', 'こられば'], why: 'Rendhagyó: くる → くれば.' },
-      { q: 'Hogy mondod: „ha nem olcsó"?', a: '{安|やす}くなければ', wrong: ['{安|やす}いなければ', '{安|やす}くないば', '{安|やす}ければない'], why: 'A tagadó alak ない-ja ければ-ra vált: {安|やす}くない → {安|やす}くなければ.' },
-      { q: '„Ha nem sietsz, nem érsz oda." Mi hiányzik?', jp: '＿、{間|ま}に{合|あ}いませんよ。', a: '{急|いそ}がなければ', wrong: ['{急|いそ}げば', '{急|いそ}がないば', '{急|いそ}ぐなければ'], why: 'Tagadó ば: {急|いそ}がない → {急|いそ}がなければ.' },
+      { point: 1, q: 'Mi a {行|い}きます ば-alakja?', a: '{行|い}けば', wrong: ['{行|い}かば', '{行|い}きば', '{行|い}くば'], why: '1. csoport: く → けば.' },
+      { point: 1, q: 'Mi az いい ば-alakja?', a: 'よければ', wrong: ['いければ', 'いいば', 'よくば'], why: 'Az いい rendhagyó: よければ.' },
+      { point: 1, q: '„Ha megnyomod ezt a gombot, kinyílik az ajtó." Mi hiányzik?', jp: 'このボタンを＿、ドアが{開|あ}きます。', a: '{押|お}せば', wrong: ['{押|お}しば', '{押|お}さば', '{押|お}すば'], why: '{押|お}す → {押|お}せば.' },
+      { point: 2, q: '„Ha számítógép kell, ez a bolt olcsó." Mi hiányzik?', jp: 'パソコン＿、この{店|みせ}が{安|やす}いですよ。', a: 'なら', wrong: ['ば', 'たら', 'し'], why: 'Főnév + なら: „ha arról van szó".' },
+      { point: 2, q: '„Ha Kiotóba mész, az ősz a legjobb." Mi hiányzik?', jp: '{京都|きょうと}へ{行|い}く＿、{秋|あき}がいいです。', a: 'なら', wrong: ['ば', 'たら', 'さ'], why: 'Tanács a másik tervére: szótári alak + なら.' },
+      { point: 4, q: 'Mit jelent: お{手洗|てあら}いは{二階|にかい}にございます。', a: 'A mosdó az emeleten található.', wrong: ['A mosdó az emeleten nem működik.', 'Az emeleten nincs mosdó.', 'Merre van a mosdó?'], why: 'ございます = あります, nagyon udvariasan.' },
+      { point: 4, q: 'Ki mondja leginkább: こちらは{新|あたら}しいモデルでございます。', a: 'Eladó a vásárlónak.', wrong: ['Barát a barátnak.', 'Vásárló az eladónak.', 'Gyerek a szülőnek.'], why: 'A でございます a kiszolgálók nagyon udvarias stílusa.' },
+      { point: 5, q: '„Ez a fényképező könnyű is, olcsó is." Mi hiányzik?', jp: 'このカメラは{軽|かる}い＿、{安|やす}いし、とてもいいです。', a: 'し', wrong: ['て', 'で', 'と'], why: 'Indokok sorolása: rövid alak + し.' },
+      { point: 6, q: '„Az az ember kétségtelenül japán." Mi hiányzik?', jp: 'あの{人|ひと}は{日本人|にほんじん}＿。', a: 'にちがいありません', wrong: ['かもしれません', 'かどうかです', 'らしくないです'], why: 'Erős meggyőződés: にちがいありません.' },
+      { point: 5, q: '„…csendes is: jó szoba." Mi hiányzik?', jp: '{駅|えき}から{近|ちか}いし、{静|しず}か＿し、いい{部屋|へや}ですね。', a: 'だ', wrong: ['な', 'の', 'で'], why: 'な-melléknév után: だし.' },
+      { point: 1, q: 'Mi a {飲|の}みます ば-alakja?', a: '{飲|の}めば', wrong: ['{飲|の}まば', '{飲|の}みば', '{飲|の}むば'], why: '1. csoport: む → めば.' },
+      { point: 1, q: 'Mi a {来|き}ます ば-alakja?', a: 'くれば', wrong: ['こば', 'きれば', 'こられば'], why: 'Rendhagyó: くる → くれば.' },
+      { point: 1, q: 'Hogy mondod: „ha nem olcsó"?', a: '{安|やす}くなければ', wrong: ['{安|やす}いなければ', '{安|やす}くないば', '{安|やす}ければない'], why: 'A tagadó alak ない-ja ければ-ra vált: {安|やす}くない → {安|やす}くなければ.' },
+      { point: 1, q: '„Ha nem sietsz, nem érsz oda." Mi hiányzik?', jp: '＿、{間|ま}に{合|あ}いませんよ。', a: '{急|いそ}がなければ', wrong: ['{急|いそ}げば', '{急|いそ}がないば', '{急|いそ}ぐなければ'], why: 'Tagadó ば: {急|いそ}がない → {急|いそ}がなければ.' },
       {
-        q: 'Melyik mondatban történik a főmondat cselekvése előbb, mint a feltételé?',
+        point: 2, q: 'Melyik mondatban történik a főmondat cselekvése előbb, mint a feltételé?',
         a: '{車|くるま}で{行|い}くなら、{地図|ちず}を{買|か}っておいてください。',
         wrong: [
           '{駅|えき}に{着|つ}いたら、{電話|でんわ}してください。',
@@ -11287,16 +11293,16 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A なら után álló cselekvés megelőzheti a feltételt: előbb térkép, aztán indulás.'
       },
-      { q: '„Kávét nem iszom, de teát igen." Mi hiányzik?', jp: 'コーヒーは{飲|の}めませんが、{紅茶|こうちゃ}＿{飲|の}めます。', a: 'なら', wrong: ['ば', 'たら', 'と'], why: 'A なら szembeállít: „a tea viszont megy".' },
-      { q: 'Mit mond az eladó a わかりました helyett?', a: 'かしこまりました。', wrong: ['いらっしゃいませ。', 'ございます。', 'いかがですか。'], why: 'A かしこまりました a „megértettem" bolti, nagyon udvarias alakja.' },
-      { q: '„Fáradt is vagyok, ma korán hazamegyek." Mi hiányzik?', jp: '{今日|きょう}は{疲|つか}れた＿、{早|はや}く{帰|かえ}ります。', a: 'し', wrong: ['だし', 'なし', 'ば'], why: 'Ige rövid alakja után közvetlenül し áll.' },
+      { point: 2, q: '„Kávét nem iszom, de teát igen." Mi hiányzik?', jp: 'コーヒーは{飲|の}めませんが、{紅茶|こうちゃ}＿{飲|の}めます。', a: 'なら', wrong: ['ば', 'たら', 'と'], why: 'A なら szembeállít: „a tea viszont megy".' },
+      { point: 4, q: 'Mit mond az eladó a わかりました helyett?', a: 'かしこまりました。', wrong: ['いらっしゃいませ。', 'ございます。', 'いかがですか。'], why: 'A かしこまりました a „megértettem" bolti, nagyon udvarias alakja.' },
+      { point: 5, q: '„Fáradt is vagyok, ma korán hazamegyek." Mi hiányzik?', jp: '{今日|きょう}は{疲|つか}れた＿、{早|はや}く{帰|かえ}ります。', a: 'し', wrong: ['だし', 'なし', 'ば'], why: 'Ige rövid alakja után közvetlenül し áll.' },
       {
-        q: 'Mit jelent: もう{少|すこ}し{安|やす}ければ{買|か}うんですが…。',
+        point: 1, q: 'Mit jelent: もう{少|すこ}し{安|やす}ければ{買|か}うんですが…。',
         a: 'Ha valamivel olcsóbb lenne, megvenném… (most nem veszem meg).',
         wrong: ['Olcsó, úgyhogy megveszem.', 'Kérem, adja olcsóbban!', 'Megvettem, mert olcsó volt.'],
         why: 'A félbehagyott 〜んですが… udvarias nem.'
       },
-      { q: 'Melyik kifejezés illik egy újságcikkbe: „minden bizonnyal"?', a: '〜にちがいない', wrong: ['〜に{決|き}まってるよ', '〜かな', '〜の？'], why: 'A にちがいない választékos, írott hangú; a többi beszélt nyelvi.' }
+      { point: 6, q: 'Melyik kifejezés illik egy újságcikkbe: „minden bizonnyal"?', a: '〜にちがいない', wrong: ['〜に{決|き}まってるよ', '〜かな', '〜の？'], why: 'A にちがいない választékos, írott hangú; a többi beszélt nyelvi.' }
     ]
   },
 
@@ -11629,28 +11635,28 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Éppen indulni készülök." Mi hiányzik?', jp: 'これから＿ところです。', a: '{出|で}かける', wrong: ['{出|で}かけた', '{出|で}かけている', '{出|で}かけて'], why: 'Közvetlenül előtte: szótári alak + ところです.' },
-      { q: '„Éppen most érkeztem." Mi hiányzik?', jp: 'たった{今|いま}＿ところです。', a: '{着|つ}いた', wrong: ['{着|つ}く', '{着|つ}いている', '{着|つ}いて'], why: 'Épp befejeződött: た-alak + ところです.' },
-      { q: '„Éppen az anyagot készítem." Mi hiányzik?', jp: '{今|いま}、{資料|しりょう}を＿ところです。', a: '{作|つく}っている', wrong: ['{作|つく}った', '{作|つく}り', '{作|つく}って'], why: 'A cselekvés közepén: 〜ているところです.' },
-      { q: 'Mit jelent: {今|いま}{起|お}きたところです。', a: 'Most keltem fel.', wrong: ['Mindjárt felkelek.', 'Még alszom.', 'Fel kell kelnem.'], why: 'た-alak + ところ: épp az imént történt.' },
-      { q: '„Az orvos azt mondta, ne igyak alkoholt." Mi hiányzik?', jp: '{医者|いしゃ}はお{酒|さけ}を＿ように{言|い}いました。', a: '{飲|の}まない', wrong: ['{飲|の}まなくて', '{飲|の}みません', '{飲|の}んで'], why: 'Tiltó utasítás átadva: ない-alak + ように{言|い}います.' },
-      { q: '„Mondja meg Tanakának, hogy háromra jöjjön." Mi hiányzik?', jp: '{田中|たなか}さんに{三時|さんじ}に{来|く}る＿{伝|つた}えてください。', a: 'ように', wrong: ['ことに', 'ために', 'ところに'], why: 'Utasítás továbbadása: szótári alak + ように.' },
-      { q: '„A japán kultúráról beszélek." Mi hiányzik?', jp: '{日本|にほん}の{文化|ぶんか}＿{話|はな}します。', a: 'について', wrong: ['にとって', 'によって', 'として'], why: 'A téma: 〜について.' },
+      { point: 1, q: '„Éppen indulni készülök." Mi hiányzik?', jp: 'これから＿ところです。', a: '{出|で}かける', wrong: ['{出|で}かけた', '{出|で}かけている', '{出|で}かけて'], why: 'Közvetlenül előtte: szótári alak + ところです.' },
+      { point: 3, q: '„Éppen most érkeztem." Mi hiányzik?', jp: 'たった{今|いま}＿ところです。', a: '{着|つ}いた', wrong: ['{着|つ}く', '{着|つ}いている', '{着|つ}いて'], why: 'Épp befejeződött: た-alak + ところです.' },
+      { point: 2, q: '„Éppen az anyagot készítem." Mi hiányzik?', jp: '{今|いま}、{資料|しりょう}を＿ところです。', a: '{作|つく}っている', wrong: ['{作|つく}った', '{作|つく}り', '{作|つく}って'], why: 'A cselekvés közepén: 〜ているところです.' },
+      { point: 3, q: 'Mit jelent: {今|いま}{起|お}きたところです。', a: 'Most keltem fel.', wrong: ['Mindjárt felkelek.', 'Még alszom.', 'Fel kell kelnem.'], why: 'た-alak + ところ: épp az imént történt.' },
+      { point: 4, q: '„Az orvos azt mondta, ne igyak alkoholt." Mi hiányzik?', jp: '{医者|いしゃ}はお{酒|さけ}を＿ように{言|い}いました。', a: '{飲|の}まない', wrong: ['{飲|の}まなくて', '{飲|の}みません', '{飲|の}んで'], why: 'Tiltó utasítás átadva: ない-alak + ように{言|い}います.' },
+      { point: 4, q: '„Mondja meg Tanakának, hogy háromra jöjjön." Mi hiányzik?', jp: '{田中|たなか}さんに{三時|さんじ}に{来|く}る＿{伝|つた}えてください。', a: 'ように', wrong: ['ことに', 'ために', 'ところに'], why: 'Utasítás továbbadása: szótári alak + ように.' },
+      { point: 6, q: '„A japán kultúráról beszélek." Mi hiányzik?', jp: '{日本|にほん}の{文化|ぶんか}＿{話|はな}します。', a: 'について', wrong: ['にとって', 'によって', 'として'], why: 'A téma: 〜について.' },
       {
-        q: 'Mit jelent: {田中|たなか}さんは{少|すこ}し{遅|おく}れるということです。',
+        point: 5, q: 'Mit jelent: {田中|たなか}さんは{少|すこ}し{遅|おく}れるということです。',
         a: 'Tanaka azt üzeni, kicsit késik.',
         wrong: ['Tanaka mindig késik.', 'Tanakának nem szabad késnie.', 'Tanaka éppen most késett el.'],
         why: '〜ということです: mástól kapott információ továbbadása.'
       },
-      { q: '„Úgy tudom, a holnapi óra elmarad." Mi hiányzik?', jp: 'あしたの{授業|じゅぎょう}は{休|やす}み＿ということです。', a: 'だ', wrong: ['な', 'の', 'で'], why: 'Főnév után だ kell a という elé.' },
+      { point: 5, q: '„Úgy tudom, a holnapi óra elmarad." Mi hiányzik?', jp: 'あしたの{授業|じゅぎょう}は{休|やす}み＿ということです。', a: 'だ', wrong: ['な', 'の', 'で'], why: 'Főnév után だ kell a という elé.' },
       {
-        q: 'Melyik mondat jelenti: „Épp telefonálni akartam."',
+        point: 1, q: 'Melyik mondat jelenti: „Épp telefonálni akartam."',
         a: 'ちょうど{電話|でんわ}するところでした。',
         wrong: ['ちょうど{電話|でんわ}したところでした。', 'ちょうど{電話|でんわ}しているところです。', 'ちょうど{電話|でんわ}したことがあります。'],
         why: 'Szótári alak + ところでした: épp azon voltam, hogy megtegyem.'
       },
       {
-        q: 'Melyik mondat jelenti: „Kis híján lekéstem a vonatot"?',
+        point: 1, q: 'Melyik mondat jelenti: „Kis híján lekéstem a vonatot"?',
         a: 'もう{少|すこ}しで{電車|でんしゃ}に{乗|の}り{遅|おく}れるところでした。',
         wrong: [
           '{電車|でんしゃ}に{乗|の}り{遅|おく}れたところです。',
@@ -11660,14 +11666,14 @@ const NIHONCORE_COURSE = [
         why: 'A szótári alak + ところでした: „már épp azon voltam" — de nem történt meg.'
       },
       {
-        q: 'Megkérdezik: „Kész a házi?" Azt feleled: „Épp most írom." Melyik a jó mondat?',
+        point: 2, q: 'Megkérdezik: „Kész a házi?" Azt feleled: „Épp most írom." Melyik a jó mondat?',
         a: '{今|いま}、{書|か}いているところです。',
         wrong: ['{今|いま}、{書|か}くところです。', '{今|いま}、{書|か}いたところです。', '{今|いま}、{書|か}きますところです。'],
         why: 'A cselekvés közepén tartasz: ている + ところ.'
       },
-      { q: '„A busz két perce ment el." Mi hiányzik?', jp: 'バスは{二分前|にふんまえ}に＿ところです。', a: '{出|で}た', wrong: ['{出|で}る', '{出|で}ている', '{出|で}て'], why: 'Épp most fejeződött be: た-alak + ところ.' },
+      { point: 3, q: '„A busz két perce ment el." Mi hiányzik?', jp: 'バスは{二分前|にふんまえ}に＿ところです。', a: '{出|で}た', wrong: ['{出|で}る', '{出|で}ている', '{出|で}て'], why: 'Épp most fejeződött be: た-alak + ところ.' },
       {
-        q: 'A tanár azt mondta: 「{宿題|しゅくだい}を{出|だ}してください」. Hogyan adod tovább?',
+        point: 4, q: 'A tanár azt mondta: 「{宿題|しゅくだい}を{出|だ}してください」. Hogyan adod tovább?',
         a: '{先生|せんせい}は{宿題|しゅくだい}を{出|だ}すように{言|い}いました。',
         wrong: [
           '{先生|せんせい}は{宿題|しゅくだい}を{出|だ}すと{言|い}いました。',
@@ -11676,22 +11682,22 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Kérés tartalma: szótári alak + ように.'
       },
-      { q: 'Megkérnek, hogy adj át egy üzenetet. Mit felelsz?', a: 'わかりました。{伝|つた}えておきます。', wrong: ['しかたがないですね。', 'よろしいでしょうか。', 'じつは、ちょっと…。'], why: 'A {伝|つた}えておきます: „átadom" (előre elintézem).' },
+      { point: 4, q: 'Megkérnek, hogy adj át egy üzenetet. Mit felelsz?', a: 'わかりました。{伝|つた}えておきます。', wrong: ['しかたがないですね。', 'よろしいでしょうか。', 'じつは、ちょっと…。'], why: 'A {伝|つた}えておきます: „átadom" (előre elintézem).' },
       {
-        q: 'Mit jelent: つまり、{間|ま}に{合|あ}わないということですね。',
+        point: 5, q: 'Mit jelent: つまり、{間|ま}に{合|あ}わないということですね。',
         a: 'Vagyis nem készül el időre, ugye?',
         wrong: ['Úgy hallottam, időre elkészül.', 'Kérem, készüljön el időre!', 'Nem tudom, elkészül-e időre.'],
         why: 'A 〜ということですね visszakérdezés: a saját szavaiddal foglalod össze, amit hallottál.'
       },
-      { q: '„Könyv a japán kultúráról." Mi hiányzik?', jp: '{日本|にほん}の{文化|ぶんか}について＿{本|ほん}', a: 'の', wrong: ['な', 'に', 'を'], why: 'Főnév előtt: についての.' },
+      { point: 6, q: '„Könyv a japán kultúráról." Mi hiányzik?', jp: '{日本|にほん}の{文化|ぶんか}について＿{本|ほん}', a: 'の', wrong: ['な', 'に', 'を'], why: 'Főnév előtt: についての.' },
       {
-        q: 'Hogyan szólítod meg udvariasan a tanárodat, mielőtt kérsz valamit?',
+        point: 7, q: 'Hogyan szólítod meg udvariasan a tanárodat, mielőtt kérsz valamit?',
         a: '{先生|せんせい}、{今|いま}、よろしいでしょうか。',
         wrong: ['{先生|せんせい}、ちょっと{待|ま}って。', '{先生|せんせい}、{聞|き}いて。', '{先生|せんせい}、{何|なに}をしているの？'],
         why: 'Előbb megkérdezed, ráér-e: よろしいでしょうか.'
       },
       {
-        q: 'Mit jelez a じつは a mondat elején?',
+        point: 7, q: 'Mit jelez a じつは a mondat elején?',
         a: 'Hogy most következik a valódi ok, a lényeg.',
         wrong: ['Hogy a beszélő viccel.', 'Hogy a mondat kérdés.', 'Hogy a beszélő hallomásból tud valamit.'],
         why: 'じつは = „az a helyzet, hogy…": a háttér, az ok bevezetése.'
@@ -12041,21 +12047,21 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Bevettem a gyógyszert, mégsem megy le a lázam." Mi hiányzik?', jp: '{薬|くすり}を{飲|の}んだ＿、{熱|ねつ}が{下|さ}がりません。', a: 'のに', wrong: ['ので', 'から', 'なら'], why: 'A várttal ellentétes eredmény: のに.' },
-      { q: '„Vasárnap van, mégis dolgoznom kell." Mi hiányzik?', jp: '{日曜日|にちようび}＿のに、{働|はたら}かなければなりません。', a: 'な', wrong: ['だ', 'の', 'で'], why: 'Főnév után: なのに.' },
+      { point: 1, q: '„Bevettem a gyógyszert, mégsem megy le a lázam." Mi hiányzik?', jp: '{薬|くすり}を{飲|の}んだ＿、{熱|ねつ}が{下|さ}がりません。', a: 'のに', wrong: ['ので', 'から', 'なら'], why: 'A várttal ellentétes eredmény: のに.' },
+      { point: 1, q: '„Vasárnap van, mégis dolgoznom kell." Mi hiányzik?', jp: '{日曜日|にちようび}＿のに、{働|はたら}かなければなりません。', a: 'な', wrong: ['だ', 'の', 'で'], why: 'Főnév után: なのに.' },
       {
-        q: 'Mit jelent: {約束|やくそく}したのに、{彼|かれ}は{来|き}ませんでした。',
+        point: 1, q: 'Mit jelent: {約束|やくそく}したのに、{彼|かれ}は{来|き}ませんでした。',
         a: 'Megígérte, mégsem jött el.',
         wrong: ['Megígérte, ezért eljött.', 'Ha megígéri, eljön.', 'Nem ígérte meg, ezért nem jött el.'],
         why: 'A のに csalódást fejez ki: pedig megígérte.'
       },
-      { q: '„Nem baj, ha nem írja oda a nevét." Mi hiányzik?', jp: '{名前|なまえ}は{書|か}か＿かまいません。', a: 'なくても', wrong: ['なければ', 'なくては', 'ないと'], why: 'Nem kötelező: 〜なくてもかまいません.' },
-      { q: '„Nem baj, ha ideülök?" Mi hiányzik?', jp: 'ここに＿かまいませんか。', a: '{座|すわ}っても', wrong: ['{座|すわ}っては', '{座|すわ}ると', '{座|すわ}れば'], why: 'Engedély: て-alak + もかまいません.' },
-      { q: '„Országonként mások a szokások." Mi hiányzik?', jp: '{国|くに}＿{習慣|しゅうかん}が{違|ちが}います。', a: 'によって', wrong: ['について', 'にとって', 'として'], why: 'Mi szerint különbözik: 〜によって.' },
-      { q: 'Mit jelent: {日|ひ}によって{値段|ねだん}が{変|か}わります。', a: 'Naptól függően változik az ár.', wrong: ['Minden nap ugyanannyi az ár.', 'Ma megváltozott az ár.', 'Az árról naponta beszélünk.'], why: '〜によって{変|か}わります: aszerint változik.' },
-      { q: '„Az internet révén közelebb került a világ." Mi hiányzik?', jp: 'インターネット＿{世界|せかい}が{近|ちか}くなりました。', a: 'によって', wrong: ['について', 'のに', 'までに'], why: 'Eszköz, ok: 〜によって.' },
+      { point: 2, q: '„Nem baj, ha nem írja oda a nevét." Mi hiányzik?', jp: '{名前|なまえ}は{書|か}か＿かまいません。', a: 'なくても', wrong: ['なければ', 'なくては', 'ないと'], why: 'Nem kötelező: 〜なくてもかまいません.' },
+      { point: 3, q: '„Nem baj, ha ideülök?" Mi hiányzik?', jp: 'ここに＿かまいませんか。', a: '{座|すわ}っても', wrong: ['{座|すわ}っては', '{座|すわ}ると', '{座|すわ}れば'], why: 'Engedély: て-alak + もかまいません.' },
+      { point: 4, q: '„Országonként mások a szokások." Mi hiányzik?', jp: '{国|くに}＿{習慣|しゅうかん}が{違|ちが}います。', a: 'によって', wrong: ['について', 'にとって', 'として'], why: 'Mi szerint különbözik: 〜によって.' },
+      { point: 4, q: 'Mit jelent: {日|ひ}によって{値段|ねだん}が{変|か}わります。', a: 'Naptól függően változik az ár.', wrong: ['Minden nap ugyanannyi az ár.', 'Ma megváltozott az ár.', 'Az árról naponta beszélünk.'], why: '〜によって{変|か}わります: aszerint változik.' },
+      { point: 5, q: '„Az internet révén közelebb került a világ." Mi hiányzik?', jp: 'インターネット＿{世界|せかい}が{近|ちか}くなりました。', a: 'によって', wrong: ['について', 'のに', 'までに'], why: 'Eszköz, ok: 〜によって.' },
       {
-        q: 'Melyik mondat helyes? (A のに után nem állhat kérés, javaslat vagy szándék.)',
+        point: 1, q: 'Melyik mondat helyes? (A のに után nem állhat kérés, javaslat vagy szándék.)',
         a: '{勉強|べんきょう}したのに、{試験|しけん}に{落|お}ちました。',
         wrong: [
           '{寒|さむ}いのに、{窓|まど}を{閉|し}めてください。',
@@ -12064,21 +12070,21 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A のに tényt állít szembe egy váratlan ténnyel.'
       },
-      { q: '„Nem baj, ha kicsit késik." Mi hiányzik?', jp: '{少|すこ}し{遅|おく}れても＿。', a: 'かまいません', wrong: ['いけません', 'なりません', 'ちがいません'], why: '〜てもかまいません: megengedett.' },
-      { q: 'Melyik mondat helyes?', a: '{日曜日|にちようび}なのに、{学校|がっこう}へ{行|い}きます。', wrong: ['{日曜日|にちようび}だのに、{学校|がっこう}へ{行|い}きます。', '{日曜日|にちようび}のに、{学校|がっこう}へ{行|い}きます。', '{日曜日|にちようび}でのに、{学校|がっこう}へ{行|い}きます。'], why: 'Főnév után なのに áll.' },
-      { q: 'Mit jelent: {言|い}ってくれればよかったのに。', a: 'Bárcsak szóltál volna!', wrong: ['Jó, hogy szóltál.', 'Kérlek, szólj majd!', 'Nem kellett volna szólnod.'], why: 'A 〜ばよかったのに sajnálkozás: nem történt meg, pedig jó lett volna.' },
+      { point: 3, q: '„Nem baj, ha kicsit késik." Mi hiányzik?', jp: '{少|すこ}し{遅|おく}れても＿。', a: 'かまいません', wrong: ['いけません', 'なりません', 'ちがいません'], why: '〜てもかまいません: megengedett.' },
+      { point: 1, q: 'Melyik mondat helyes?', a: '{日曜日|にちようび}なのに、{学校|がっこう}へ{行|い}きます。', wrong: ['{日曜日|にちようび}だのに、{学校|がっこう}へ{行|い}きます。', '{日曜日|にちようび}のに、{学校|がっこう}へ{行|い}きます。', '{日曜日|にちようび}でのに、{学校|がっこう}へ{行|い}きます。'], why: 'Főnév után なのに áll.' },
+      { point: 1, q: 'Mit jelent: {言|い}ってくれればよかったのに。', a: 'Bárcsak szóltál volna!', wrong: ['Jó, hogy szóltál.', 'Kérlek, szólj majd!', 'Nem kellett volna szólnod.'], why: 'A 〜ばよかったのに sajnálkozás: nem történt meg, pedig jó lett volna.' },
       {
-        q: 'Melyik mondat fejez ki megtörtént tényt és csalódást?',
+        point: 1, q: 'Melyik mondat fejez ki megtörtént tényt és csalódást?',
         a: '{薬|くすり}を{飲|の}んだのに、{治|なお}りません。',
         wrong: ['{薬|くすり}を{飲|の}んでも、{治|なお}りません。', '{薬|くすり}を{飲|の}めば、{治|なお}ります。', '{薬|くすり}を{飲|の}んだら、{治|なお}ります。'],
         why: 'A のに előtt tény áll: bevettem — mégsem gyógyultam meg.'
       },
-      { q: '„Nem baj, ha nem ma válaszol." Mi hiányzik?', jp: '{返事|へんじ}は{今日|きょう}＿かまいません。', a: 'じゃなくても', wrong: ['なくても', 'じゃないても', 'くなくても'], why: 'Főnév után: じゃなくても.' },
-      { q: '„Nem kell megírni." Melyik mondat jelenti ezt?', a: '{書|か}かなくてもいいです。', wrong: ['{書|か}いてはいけません。', '{書|か}かなければなりません。', '{書|か}いてもいいです。'], why: '〜なくてもいいです: nem kötelező.' },
-      { q: '„Lehet japánul is, angolul is." Mi hiányzik?', jp: '{日本語|にほんご}でも{英語|えいご}でも＿。', a: 'かまいません', wrong: ['かまいます', 'なりません', 'いけません'], why: 'A かまいません („nem gond") mindig tagadó alakban áll.' },
-      { q: '„Van, aki nem reggelizik." Mi hiányzik?', jp: '{人|ひと}＿、{朝|あさ}ごはんを{食|た}べない{人|ひと}もいます。', a: 'によっては', wrong: ['については', 'にとっては', 'によると'], why: 'A によっては egy esetet emel ki a sok közül: „van, aki…".' },
+      { point: 2, q: '„Nem baj, ha nem ma válaszol." Mi hiányzik?', jp: '{返事|へんじ}は{今日|きょう}＿かまいません。', a: 'じゃなくても', wrong: ['なくても', 'じゃないても', 'くなくても'], why: 'Főnév után: じゃなくても.' },
+      { point: 2, q: '„Nem kell megírni." Melyik mondat jelenti ezt?', a: '{書|か}かなくてもいいです。', wrong: ['{書|か}いてはいけません。', '{書|か}かなければなりません。', '{書|か}いてもいいです。'], why: '〜なくてもいいです: nem kötelező.' },
+      { point: 3, q: '„Lehet japánul is, angolul is." Mi hiányzik?', jp: '{日本語|にほんご}でも{英語|えいご}でも＿。', a: 'かまいません', wrong: ['かまいます', 'なりません', 'いけません'], why: 'A かまいません („nem gond") mindig tagadó alakban áll.' },
+      { point: 4, q: '„Van, aki nem reggelizik." Mi hiányzik?', jp: '{人|ひと}＿、{朝|あさ}ごはんを{食|た}べない{人|ひと}もいます。', a: 'によっては', wrong: ['については', 'にとっては', 'によると'], why: 'A によっては egy esetet emel ki a sok közül: „van, aki…".' },
       {
-        q: 'Felkérnek valamire, és azt feleled: {私|わたし}には、ちょっと…。 Mit fejezel ki?',
+        point: 6, q: 'Felkérnek valamire, és azt feleled: {私|わたし}には、ちょっと…。 Mit fejezel ki?',
         a: 'Szabadkozol: a feladat nehéznek tűnik.',
         wrong: [
           'Kérsz belőle egy keveset.',
@@ -12087,9 +12093,9 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Félbehagyott mondat: szerény szabadkozás.'
       },
-      { q: 'Hogyan biztatod azt, aki szabadkozik?', a: '{山田|やまだ}さんなら{大丈夫|だいじょうぶ}ですよ。', wrong: ['しかたがないですね。', 'それは{困|こま}りましたね。', '{無理|むり}に{決|き}まっています。'], why: '〜さんなら{大丈夫|だいじょうぶ}: „önnek menni fog".' },
+      { point: 6, q: 'Hogyan biztatod azt, aki szabadkozik?', a: '{山田|やまだ}さんなら{大丈夫|だいじょうぶ}ですよ。', wrong: ['しかたがないですね。', 'それは{困|こま}りましたね。', '{無理|むり}に{決|き}まっています。'], why: '〜さんなら{大丈夫|だいじょうぶ}: „önnek menni fog".' },
       {
-        q: 'Miért furcsa ez a mondat: {辛|から}いのに、おいしいです。',
+        point: 1, q: 'Miért furcsa ez a mondat: {辛|から}いのに、おいしいです。',
         a: 'Mert a のに azt sugallja: a csípős ételtől nem várnánk, hogy finom.',
         wrong: [
           'Mert a のに után nem állhat melléknév.',
@@ -12474,17 +12480,17 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Ha egyenesen megy, jobbra lesz egy bank." Mi hiányzik?', jp: 'まっすぐ{行|い}く＿、{右|みぎ}に{銀行|ぎんこう}があります。', a: 'と', wrong: ['ば', 'たら', 'のに'], why: 'Útbaigazítás, törvényszerű eredmény: szótári alak + と.' },
+      { point: 1, q: '„Ha egyenesen megy, jobbra lesz egy bank." Mi hiányzik?', jp: 'まっすぐ{行|い}く＿、{右|みぎ}に{銀行|ぎんこう}があります。', a: 'と', wrong: ['ば', 'たら', 'のに'], why: 'Útbaigazítás, törvényszerű eredmény: szótári alak + と.' },
       {
-        q: 'Melyik mondat helyes? (A と után nem állhat kérés, javaslat vagy szándék.)',
+        point: 1, q: 'Melyik mondat helyes? (A と után nem állhat kérés, javaslat vagy szándék.)',
         a: '{春|はる}になると、{暖|あたた}かくなります。',
         wrong: ['{春|はる}になると、{旅行|りょこう}しましょう。', '{春|はる}になると、{遊|あそ}びに{来|き}てください。', '{春|はる}になると、{日本|にほん}へ{行|い}きたいです。'],
         why: 'A と után magától bekövetkező eredmény áll.'
       },
-      { q: '„Tokióhoz képest ez a város csendes." Mi hiányzik?', jp: '{東京|とうきょう}＿、この{町|まち}は{静|しず}かです。', a: 'にくらべて', wrong: ['について', 'によって', 'にとって'], why: 'Viszonyítás: 〜にくらべて.' },
-      { q: '„Az ablakból látszik a tenger." Mi hiányzik?', jp: '{窓|まど}から{海|うみ}＿{見|み}えます。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {見|み}えます mellett az, ami látszik, が-t kap.' },
+      { point: 3, q: '„Tokióhoz képest ez a város csendes." Mi hiányzik?', jp: '{東京|とうきょう}＿、この{町|まち}は{静|しず}かです。', a: 'にくらべて', wrong: ['について', 'によって', 'にとって'], why: 'Viszonyítás: 〜にくらべて.' },
+      { point: 4, q: '„Az ablakból látszik a tenger." Mi hiányzik?', jp: '{窓|まど}から{海|うみ}＿{見|み}えます。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {見|み}えます mellett az, ami látszik, が-t kap.' },
       {
-        q: 'Mit jelent: {字|じ}が{小|ちい}さくて、よく{見|み}えません。',
+        point: 4, q: 'Mit jelent: {字|じ}が{小|ちい}さくて、よく{見|み}えません。',
         a: 'Kicsik a betűk, nem látom jól.',
         wrong: [
           'Kicsik a betűk, nem nézem meg.',
@@ -12493,31 +12499,31 @@ const NIHONCORE_COURSE = [
         ],
         why: '{見|み}えません: nem látszik (a szándékomtól függetlenül).'
       },
-      { q: '„Úgy tűnik, Tanaka nincs otthon." Mi hiányzik?', jp: '{田中|たなか}さんは{留守|るす}＿ようです。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のようです.' },
-      { q: '„Úgy tűnik, jött valaki." Mi hiányzik?', jp: 'だれか＿ようです。', a: '{来|き}た', wrong: ['{来|き}ます', '{来|き}て', '{来|き}たの'], why: 'A ようです előtt rövid alak áll.' },
-      { q: '„Már tudok japánul beszélni." Mi hiányzik?', jp: '{日本語|にほんご}が{話|はな}せる＿なりました。', a: 'ように', wrong: ['ことに', 'ために', 'そうに'], why: 'Fokozatos változás: 〜ようになりました.' },
-      { q: '„Mostanában már nem nézek tévét." Mi hiányzik?', jp: '{最近|さいきん}、テレビを＿なりました。', a: '{見|み}なく', wrong: ['{見|み}ない', '{見|み}なくて', '{見|み}ず'], why: 'A tagadó változás: ない → なくなりました.' },
-      { q: '„A szomszéd szobából zene hallatszik." Mi hiányzik?', jp: '{隣|となり}の{部屋|へや}から{音楽|おんがく}が＿。', a: '{聞|き}こえます', wrong: ['{聞|き}きます', '{聞|き}かれます', '{聞|き}いています'], why: 'Magától hallatszik: {聞|き}こえます.' },
-      { q: '„Ha nem sietsz, elkésel." Mi hiányzik?', jp: '{急|いそ}が＿、{遅|おく}れますよ。', a: 'ないと', wrong: ['なくと', 'ないば', 'なかったと'], why: 'A と előtt jelen idejű rövid alak áll: {急|いそ}がないと.' },
-      { q: '„A második sarkon forduljon balra!" Mi hiányzik?', jp: '{二|ふた}つ{目|め}の{角|かど}＿{左|ひだり}に{曲|ま}がってください。', a: 'を', wrong: ['に', 'が', 'へ'], why: 'A hely, amelyen áthaladsz, を-t kap.' },
-      { q: 'Mit jelent: {突|つ}き{当|あ}たり', a: 'az utca vége', wrong: ['kereszteződés', 'gyalogátkelő', 'sarok'], why: 'A {突|つ}き{当|あ}たり az a pont, ahol az út véget ér, és csak jobbra-balra lehet menni.' },
-      { q: '„Halk a hang, nem hallom jól." Mi hiányzik?', jp: '{声|こえ}が{小|ちい}さくて、よく＿。', a: '{聞|き}こえません', wrong: ['{聞|き}きません', '{聞|き}かれません', '{聞|き}こえます'], why: 'Ami magától nem jut a füledbe: {聞|き}こえません.' },
+      { point: 5, q: '„Úgy tűnik, Tanaka nincs otthon." Mi hiányzik?', jp: '{田中|たなか}さんは{留守|るす}＿ようです。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のようです.' },
+      { point: 5, q: '„Úgy tűnik, jött valaki." Mi hiányzik?', jp: 'だれか＿ようです。', a: '{来|き}た', wrong: ['{来|き}ます', '{来|き}て', '{来|き}たの'], why: 'A ようです előtt rövid alak áll.' },
+      { point: 6, q: '„Már tudok japánul beszélni." Mi hiányzik?', jp: '{日本語|にほんご}が{話|はな}せる＿なりました。', a: 'ように', wrong: ['ことに', 'ために', 'そうに'], why: 'Fokozatos változás: 〜ようになりました.' },
+      { point: 6, q: '„Mostanában már nem nézek tévét." Mi hiányzik?', jp: '{最近|さいきん}、テレビを＿なりました。', a: '{見|み}なく', wrong: ['{見|み}ない', '{見|み}なくて', '{見|み}ず'], why: 'A tagadó változás: ない → なくなりました.' },
+      { point: 4, q: '„A szomszéd szobából zene hallatszik." Mi hiányzik?', jp: '{隣|となり}の{部屋|へや}から{音楽|おんがく}が＿。', a: '{聞|き}こえます', wrong: ['{聞|き}きます', '{聞|き}かれます', '{聞|き}いています'], why: 'Magától hallatszik: {聞|き}こえます.' },
+      { point: 1, q: '„Ha nem sietsz, elkésel." Mi hiányzik?', jp: '{急|いそ}が＿、{遅|おく}れますよ。', a: 'ないと', wrong: ['なくと', 'ないば', 'なかったと'], why: 'A と előtt jelen idejű rövid alak áll: {急|いそ}がないと.' },
+      { point: 2, q: '„A második sarkon forduljon balra!" Mi hiányzik?', jp: '{二|ふた}つ{目|め}の{角|かど}＿{左|ひだり}に{曲|ま}がってください。', a: 'を', wrong: ['に', 'が', 'へ'], why: 'A hely, amelyen áthaladsz, を-t kap.' },
+      { point: 2, q: 'Mit jelent: {突|つ}き{当|あ}たり', a: 'az utca vége', wrong: ['kereszteződés', 'gyalogátkelő', 'sarok'], why: 'A {突|つ}き{当|あ}たり az a pont, ahol az út véget ér, és csak jobbra-balra lehet menni.' },
+      { point: 4, q: '„Halk a hang, nem hallom jól." Mi hiányzik?', jp: '{声|こえ}が{小|ちい}さくて、よく＿。', a: '{聞|き}こえません', wrong: ['{聞|き}きません', '{聞|き}かれません', '{聞|き}こえます'], why: 'Ami magától nem jut a füledbe: {聞|き}こえません.' },
       {
-        q: 'Melyik mondat szól lehetőségről (és nem arról, ami magától látszik)?',
+        point: 4, q: 'Melyik mondat szól lehetőségről (és nem arról, ami magától látszik)?',
         a: 'この{美術館|びじゅつかん}では、{有名|ゆうめい}な{絵|え}が{見|み}られます。',
         wrong: ['{窓|まど}から{山|やま}が{見|み}えます。', '{遠|とお}くに{海|うみ}が{見|み}えます。', '{暗|くら}くて、{何|なに}も{見|み}えません。'],
         why: 'A {見|み}られます ható alak: megvan a lehetőség, hogy megnézd.'
       },
       {
-        q: 'Mit jelent: {田中|たなか}さんは{若|わか}く{見|み}えます。',
+        point: 4, q: 'Mit jelent: {田中|たなか}さんは{若|わか}く{見|み}えます。',
         a: 'Tanaka fiatalnak látszik.',
         wrong: ['Tanaka fiatalokat lát.', 'Tanaka fiatalon jól látott.', 'Tanakát fiatalok nézik.'],
         why: 'Melléknév く-alakja + {見|み}えます: „valamilyennek látszik".'
       },
-      { q: '„Le van kapcsolva a villany. Úgy tűnik, már lefeküdt." Mi hiányzik?', jp: '{電気|でんき}が{消|き}えています。もう{寝|ね}た＿。', a: 'ようです', wrong: ['のようです', 'なようです', 'ようにです'], why: 'Ige rövid alakja után közvetlenül áll a ようです.' },
-      { q: '„Mióta Japánban vagyok, gyakran eszem halat." Mi hiányzik?', jp: '{日本|にほん}に{来|き}てから、{魚|さかな}をよく{食|た}べる＿。', a: 'ようになりました', wrong: ['になりました', 'くなりました', 'そうになりました'], why: 'Szokás változása: szótári alak + ようになりました.' },
-      { q: 'Kanszai nyelvjárásban mit jelent: おおきに', a: 'Köszönöm.', wrong: ['Nagyon.', 'Elnézést.', 'Viszlát.'], why: 'おおきに = ありがとう.' },
-      { q: 'Kanszai nyelvjárásban hogy mondják: {食|た}べない', a: '{食|た}べへん', wrong: ['{食|た}べや', '{食|た}べねん', '{食|た}べわ'], why: 'A kanszai tagadás: 〜へん.' }
+      { point: 5, q: '„Le van kapcsolva a villany. Úgy tűnik, már lefeküdt." Mi hiányzik?', jp: '{電気|でんき}が{消|き}えています。もう{寝|ね}た＿。', a: 'ようです', wrong: ['のようです', 'なようです', 'ようにです'], why: 'Ige rövid alakja után közvetlenül áll a ようです.' },
+      { point: 6, q: '„Mióta Japánban vagyok, gyakran eszem halat." Mi hiányzik?', jp: '{日本|にほん}に{来|き}てから、{魚|さかな}をよく{食|た}べる＿。', a: 'ようになりました', wrong: ['になりました', 'くなりました', 'そうになりました'], why: 'Szokás változása: szótári alak + ようになりました.' },
+      { point: 7, q: 'Kanszai nyelvjárásban mit jelent: おおきに', a: 'Köszönöm.', wrong: ['Nagyon.', 'Elnézést.', 'Viszlát.'], why: 'おおきに = ありがとう.' },
+      { point: 7, q: 'Kanszai nyelvjárásban hogy mondják: {食|た}べない', a: '{食|た}べへん', wrong: ['{食|た}べや', '{食|た}べねん', '{食|た}べわ'], why: 'A kanszai tagadás: 〜へん.' }
     ]
   },
 
@@ -12924,11 +12930,11 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Akkor is lesz meccs, ha esik." Mi hiányzik?', jp: '{雨|あめ}が＿、{試合|しあい}はあります。', a: '{降|ふ}っても', wrong: ['{降|ふ}ったら', '{降|ふ}れば', '{降|ふ}ると'], why: 'Megengedő feltétel: て-alak + も.' },
-      { q: '„Akkor is megveszem, ha drága." Mi hiányzik?', jp: '＿、{買|か}います。', a: '{高|たか}くても', wrong: ['{高|たか}いても', '{高|たか}でも', '{高|たか}ければ'], why: 'い-melléknév: い → くても.' },
-      { q: '„Úgy alakult, hogy Oszakába helyeznek." Mi hiányzik?', jp: '{大阪|おおさか}へ{転勤|てんきん}する＿なりました。', a: 'ことに', wrong: ['ものに', 'ために', 'ばかり'], why: 'Külső döntés: 〜ことになりました.' },
+      { point: 1, q: '„Akkor is lesz meccs, ha esik." Mi hiányzik?', jp: '{雨|あめ}が＿、{試合|しあい}はあります。', a: '{降|ふ}っても', wrong: ['{降|ふ}ったら', '{降|ふ}れば', '{降|ふ}ると'], why: 'Megengedő feltétel: て-alak + も.' },
+      { point: 1, q: '„Akkor is megveszem, ha drága." Mi hiányzik?', jp: '＿、{買|か}います。', a: '{高|たか}くても', wrong: ['{高|たか}いても', '{高|たか}でも', '{高|たか}ければ'], why: 'い-melléknév: い → くても.' },
+      { point: 2, q: '„Úgy alakult, hogy Oszakába helyeznek." Mi hiányzik?', jp: '{大阪|おおさか}へ{転勤|てんきん}する＿なりました。', a: 'ことに', wrong: ['ものに', 'ために', 'ばかり'], why: 'Külső döntés: 〜ことになりました.' },
       {
-        q: 'Mit jelent: {私|わたし}が{発表|はっぴょう}することになりました。',
+        point: 2, q: 'Mit jelent: {私|わたし}が{発表|はっぴょう}することになりました。',
         a: 'Úgy alakult, hogy én tartom az előadást (mások döntöttek így).',
         wrong: [
           'Úgy döntöttem, hogy én tartom az előadást.',
@@ -12937,37 +12943,37 @@ const NIHONCORE_COURSE = [
         ],
         why: 'ことになりました: a döntés nem az enyém volt.'
       },
-      { q: '„Itt le kell venni a cipőt (ez a szabály)." Mi hiányzik?', jp: 'ここでは{靴|くつ}を{脱|ぬ}ぐことに＿。', a: 'なっています', wrong: ['なりません', 'あります', 'います'], why: 'Érvényes szabály: 〜ことになっています.' },
-      { q: '„Az öcsém folyton csak játszik." Mi hiányzik?', jp: '{弟|おとうと}はゲーム＿しています。', a: 'ばかり', wrong: ['しか', 'までに', 'について'], why: 'Folyton csak ez: főnév + ばかり.' },
-      { q: '„Előfordul, hogy nem reggelizem." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿ことがあります。', a: '{食|た}べない', wrong: ['{食|た}べなくて', '{食|た}べません', '{食|た}べず'], why: 'Időnként megesik: ない-alak + ことがあります.' },
-      { q: 'Mit jelent: ときどき{道|みち}に{迷|まよ}うことがあります。', a: 'Néha előfordul, hogy eltévedek.', wrong: ['Egyszer már eltévedtem.', 'Soha nem tévedek el.', 'Mindig eltévedek.'], why: 'Szótári alak + ことがあります: időnként megesik.' },
-      { q: '„Azért tanulok japánul, hogy Japánban dolgozhassak." Mi hiányzik?', jp: '{日本|にほん}で{働|はたら}く＿、{日本語|にほんご}を{勉強|べんきょう}しています。', a: 'ために', wrong: ['ても', 'ばかり', 'ことに'], why: 'Cél: szótári alak + ために.' },
-      { q: '„Baleset miatt késik a vonat." Mi hiányzik?', jp: '{事故|じこ}＿ために、{電車|でんしゃ}が{遅|おく}れています。', a: 'の', wrong: ['な', 'に', 'を'], why: 'Főnév után: のために.' },
-      { q: '„Akkor is reggelizem, ha nincs időm." Mi hiányzik?', jp: '{時間|じかん}が＿、{朝|あさ}ごはんは{食|た}べます。', a: 'なくても', wrong: ['ないても', 'なかっても', 'なければ'], why: 'A ない て-alakja なくて; hozzá も: なくても.' },
-      { q: '„Ezt a feladatot egy gyerek is megérti." Mi hiányzik?', jp: 'この{問題|もんだい}は{子|こ}ども＿わかります。', a: 'でも', wrong: ['ても', 'しか', 'ばかり'], why: 'Főnév után でも: „még … is".' },
+      { point: 3, q: '„Itt le kell venni a cipőt (ez a szabály)." Mi hiányzik?', jp: 'ここでは{靴|くつ}を{脱|ぬ}ぐことに＿。', a: 'なっています', wrong: ['なりません', 'あります', 'います'], why: 'Érvényes szabály: 〜ことになっています.' },
+      { point: 4, q: '„Az öcsém folyton csak játszik." Mi hiányzik?', jp: '{弟|おとうと}はゲーム＿しています。', a: 'ばかり', wrong: ['しか', 'までに', 'について'], why: 'Folyton csak ez: főnév + ばかり.' },
+      { point: 6, q: '„Előfordul, hogy nem reggelizem." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿ことがあります。', a: '{食|た}べない', wrong: ['{食|た}べなくて', '{食|た}べません', '{食|た}べず'], why: 'Időnként megesik: ない-alak + ことがあります.' },
+      { point: 6, q: 'Mit jelent: ときどき{道|みち}に{迷|まよ}うことがあります。', a: 'Néha előfordul, hogy eltévedek.', wrong: ['Egyszer már eltévedtem.', 'Soha nem tévedek el.', 'Mindig eltévedek.'], why: 'Szótári alak + ことがあります: időnként megesik.' },
+      { point: 7, q: '„Azért tanulok japánul, hogy Japánban dolgozhassak." Mi hiányzik?', jp: '{日本|にほん}で{働|はたら}く＿、{日本語|にほんご}を{勉強|べんきょう}しています。', a: 'ために', wrong: ['ても', 'ばかり', 'ことに'], why: 'Cél: szótári alak + ために.' },
+      { point: 7, q: '„Baleset miatt késik a vonat." Mi hiányzik?', jp: '{事故|じこ}＿ために、{電車|でんしゃ}が{遅|おく}れています。', a: 'の', wrong: ['な', 'に', 'を'], why: 'Főnév után: のために.' },
+      { point: 1, q: '„Akkor is reggelizem, ha nincs időm." Mi hiányzik?', jp: '{時間|じかん}が＿、{朝|あさ}ごはんは{食|た}べます。', a: 'なくても', wrong: ['ないても', 'なかっても', 'なければ'], why: 'A ない て-alakja なくて; hozzá も: なくても.' },
+      { point: 1, q: '„Ezt a feladatot egy gyerek is megérti." Mi hiányzik?', jp: 'この{問題|もんだい}は{子|こ}ども＿わかります。', a: 'でも', wrong: ['ても', 'しか', 'ばかり'], why: 'Főnév után でも: „még … is".' },
       {
-        q: 'Melyik mondat jelenti: „Akkor is megyek, ha esik"?',
+        point: 1, q: 'Melyik mondat jelenti: „Akkor is megyek, ha esik"?',
         a: '{雨|あめ}が{降|ふ}っても、{行|い}きます。',
         wrong: ['{雨|あめ}が{降|ふ}ったら、{行|い}きます。', '{雨|あめ}が{降|ふ}ると、{行|い}きます。', '{雨|あめ}が{降|ふ}るので、{行|い}きます。'],
         why: 'A ても: a feltétel nem változtat az eredményen.'
       },
-      { q: 'Ki döntött ebben a mondatban: {毎朝|まいあさ}{歩|ある}くことにしています。', a: 'Én magam: ez a saját szokásom.', wrong: ['A főnököm.', 'Az orvos írta elő.', 'Egy szabály írja elő.'], why: 'ことにしています: saját elhatározásból fakadó szokás.' },
+      { point: 2, q: 'Ki döntött ebben a mondatban: {毎朝|まいあさ}{歩|ある}くことにしています。', a: 'Én magam: ez a saját szokásom.', wrong: ['A főnököm.', 'Az orvos írta elő.', 'Egy szabály írja elő.'], why: 'ことにしています: saját elhatározásból fakadó szokás.' },
       {
-        q: 'Szerényen bejelented az esküvődet. Melyik mondat illik?',
+        point: 2, q: 'Szerényen bejelented az esküvődet. Melyik mondat illik?',
         a: '{結婚|けっこん}することになりました。',
         wrong: ['{結婚|けっこん}することになっています。', '{結婚|けっこん}することがあります。', '{結婚|けっこん}してばかりいます。'],
         why: 'A ことになりました szerény: mintha a körülmények hozták volna így.'
       },
-      { q: '„Japánban az autók a bal oldalon közlekednek." Mi hiányzik?', jp: '{日本|にほん}では、{車|くるま}は{左側|ひだりがわ}を{走|はし}ることに＿。', a: 'なっています', wrong: ['しています', 'なりました', 'あります'], why: 'Érvényben lévő szabály: ことになっています.' },
-      { q: 'Melyik „csak" fejezi ki, hogy valamiből túl sok van?', a: 'ばかり', wrong: ['だけ', 'しか', 'まで'], why: 'A ばかり sokallja: „folyton csak", „csupa".' },
-      { q: 'Melyik mondat helyes?', a: '{千円|せんえん}しか{持|も}っていません。', wrong: ['{千円|せんえん}しか{持|も}っています。', '{千円|せんえん}しかあります。', '{千円|せんえん}しか{持|も}ちます。'], why: 'A しか után mindig tagadó ige áll.' },
+      { point: 3, q: '„Japánban az autók a bal oldalon közlekednek." Mi hiányzik?', jp: '{日本|にほん}では、{車|くるま}は{左側|ひだりがわ}を{走|はし}ることに＿。', a: 'なっています', wrong: ['しています', 'なりました', 'あります'], why: 'Érvényben lévő szabály: ことになっています.' },
+      { point: 5, q: 'Melyik „csak" fejezi ki, hogy valamiből túl sok van?', a: 'ばかり', wrong: ['だけ', 'しか', 'まで'], why: 'A ばかり sokallja: „folyton csak", „csupa".' },
+      { point: 5, q: 'Melyik mondat helyes?', a: '{千円|せんえん}しか{持|も}っていません。', wrong: ['{千円|せんえん}しか{持|も}っています。', '{千円|せんえん}しかあります。', '{千円|せんえん}しか{持|も}ちます。'], why: 'A しか után mindig tagadó ige áll.' },
       {
-        q: 'Mit jelent: この{電車|でんしゃ}は{遅|おく}れることがあります。',
+        point: 6, q: 'Mit jelent: この{電車|でんしゃ}は{遅|おく}れることがあります。',
         a: 'Ez a vonat néha késik.',
         wrong: ['Ez a vonat már késett egyszer.', 'Ez a vonat mindig késik.', 'Ez a vonat soha nem késik.'],
         why: 'Szótári alak + ことがあります: „előfordul, hogy…".'
       },
-      { q: 'Melyik mondat illik egy pályázati indoklásba?', a: '{勉強|べんきょう}したいと{考|かんが}えている。', wrong: ['{勉強|べんきょう}したいんだよね。', '{勉強|べんきょう}したいなあ。', '{勉強|べんきょう}したいの。'], why: 'Az írott stílus rövid alakot használ, baráti mondatvégek nélkül.' }
+      { point: 8, q: 'Melyik mondat illik egy pályázati indoklásba?', a: '{勉強|べんきょう}したいと{考|かんが}えている。', wrong: ['{勉強|べんきょう}したいんだよね。', '{勉強|べんきょう}したいなあ。', '{勉強|べんきょう}したいの。'], why: 'Az írott stílus rövid alakot használ, baráti mondatvégek nélkül.' }
     ]
   },
 
@@ -13330,17 +13336,17 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Ez a torta finomnak látszik." Mi hiányzik?', jp: 'このケーキは＿です。', a: 'おいしそう', wrong: ['おいしいそう', 'おいしくそう', 'おいしさそう'], why: 'Látszat: az い lemarad, おいしそう. (Az おいしいそうです azt jelenti: azt hallottam, finom.)' },
-      { q: 'Mi az いい „…-nak látszik" alakja?', a: 'よさそう', wrong: ['いそう', 'いいそう', 'よそう'], why: 'Az いい rendhagyó: よさそう.' },
-      { q: '„Mindjárt leesik a csomag." Mi hiányzik?', jp: '{荷物|にもつ}が＿そうです。', a: '{落|お}ち', wrong: ['{落|お}ちる', '{落|お}ちて', '{落|お}ちた'], why: 'Ige ます-tő + そうです: {落|お}ちます → {落|お}ち.' },
-      { q: '„A gyerekek láthatóan élvezik a játékot." Mi hiányzik?', jp: '{子|こ}どもたちは{楽|たの}し＿{遊|あそ}んでいます。', a: 'そうに', wrong: ['そうな', 'そうで', 'そうだ'], why: 'Ige előtt: そうに.' },
-      { q: '„Olyan ember szeretnék lenni, mint anyám." Mi hiányzik?', jp: '{母|はは}＿{人|ひと}になりたいです。', a: 'のような', wrong: ['みたい', 'ような', 'そうな'], why: 'Főnév + のような + főnév.' },
-      { q: '„Ma olyan meleg van, mint nyáron." Mi hiányzik?', jp: '{今日|きょう}は{夏|なつ}＿{暑|あつ}いです。', a: 'みたいに', wrong: ['みたいな', 'そうに', 'ぐらいな'], why: 'Melléknév előtt: みたいに.' },
-      { q: '„Jó illat van." Mi hiányzik?', jp: 'いいにおい＿します。', a: 'が', wrong: ['を', 'に', 'で'], why: 'Érzékelés: 〜がします.' },
-      { q: 'Mit jelent: {変|へん}な{音|おと}がします。', a: 'Furcsa hangot hallok.', wrong: ['Furcsa hangot adok ki.', 'Furcsa a zene.', 'Nem hallok semmit.'], why: '{音|おと}がします: hang hallatszik.' },
-      { q: '„Annyira fájt, hogy sírni tudtam volna." Mi hiányzik?', jp: '{泣|な}きたい＿{痛|いた}かったです。', a: 'くらい', wrong: ['そう', 'みたい', 'ばかり'], why: 'Mérték: rövid alak + くらい.' },
+      { point: 1, q: '„Ez a torta finomnak látszik." Mi hiányzik?', jp: 'このケーキは＿です。', a: 'おいしそう', wrong: ['おいしいそう', 'おいしくそう', 'おいしさそう'], why: 'Látszat: az い lemarad, おいしそう. (Az おいしいそうです azt jelenti: azt hallottam, finom.)' },
+      { point: 1, q: 'Mi az いい „…-nak látszik" alakja?', a: 'よさそう', wrong: ['いそう', 'いいそう', 'よそう'], why: 'Az いい rendhagyó: よさそう.' },
+      { point: 2, q: '„Mindjárt leesik a csomag." Mi hiányzik?', jp: '{荷物|にもつ}が＿そうです。', a: '{落|お}ち', wrong: ['{落|お}ちる', '{落|お}ちて', '{落|お}ちた'], why: 'Ige ます-tő + そうです: {落|お}ちます → {落|お}ち.' },
+      { point: 3, q: '„A gyerekek láthatóan élvezik a játékot." Mi hiányzik?', jp: '{子|こ}どもたちは{楽|たの}し＿{遊|あそ}んでいます。', a: 'そうに', wrong: ['そうな', 'そうで', 'そうだ'], why: 'Ige előtt: そうに.' },
+      { point: 4, q: '„Olyan ember szeretnék lenni, mint anyám." Mi hiányzik?', jp: '{母|はは}＿{人|ひと}になりたいです。', a: 'のような', wrong: ['みたい', 'ような', 'そうな'], why: 'Főnév + のような + főnév.' },
+      { point: 4, q: '„Ma olyan meleg van, mint nyáron." Mi hiányzik?', jp: '{今日|きょう}は{夏|なつ}＿{暑|あつ}いです。', a: 'みたいに', wrong: ['みたいな', 'そうに', 'ぐらいな'], why: 'Melléknév előtt: みたいに.' },
+      { point: 6, q: '„Jó illat van." Mi hiányzik?', jp: 'いいにおい＿します。', a: 'が', wrong: ['を', 'に', 'で'], why: 'Érzékelés: 〜がします.' },
+      { point: 6, q: 'Mit jelent: {変|へん}な{音|おと}がします。', a: 'Furcsa hangot hallok.', wrong: ['Furcsa hangot adok ki.', 'Furcsa a zene.', 'Nem hallok semmit.'], why: '{音|おと}がします: hang hallatszik.' },
+      { point: 5, q: '„Annyira fájt, hogy sírni tudtam volna." Mi hiányzik?', jp: '{泣|な}きたい＿{痛|いた}かったです。', a: 'くらい', wrong: ['そう', 'みたい', 'ばかり'], why: 'Mérték: rövid alak + くらい.' },
       {
-        q: 'Mit jelent: この{映画|えいが}は{面白|おもしろ}くなさそうです。',
+        point: 1, q: 'Mit jelent: この{映画|えいが}は{面白|おもしろ}くなさそうです。',
         a: 'Ez a film nem tűnik érdekesnek.',
         wrong: [
           'Azt hallottam, ez a film nem érdekes.',
@@ -13349,16 +13355,16 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜くない → 〜くなさそう: nem látszik olyannak.'
       },
-      { q: 'Mi a ない „úgy néz ki, nincs" alakja?', a: 'なさそう', wrong: ['ないそう', 'なそう', 'なくそう'], why: 'Rendhagyó: ない → なさそう, いい → よさそう.' },
-      { q: 'Megkóstoltad az ételt, és finom. Mit mondasz?', a: 'おいしいです。', wrong: ['おいしそうです。', 'おいしいそうです。', 'おいしいようです。'], why: 'A そう csak a látszatra való; ha megkóstoltad, tényt közölsz.' },
-      { q: 'Mit jelent: かわいそうです。', a: 'Szegény, sajnálom.', wrong: ['Aranyosnak látszik.', 'Azt mondják, aranyos.', 'Nem aranyos.'], why: 'A かわいそう önálló szó: „szánalomra méltó".' },
-      { q: '„Nem úgy néz ki, hogy eláll az eső." Mi hiányzik?', jp: '{雨|あめ}はやみ＿。', a: 'そうにありません', wrong: ['ないそうです', 'ようにありません', 'らしくありません'], why: 'Az ige + そう tagadása: 〜そうにありません.' },
-      { q: '„Örömömben majdnem elsírtam magam." Mi hiányzik?', jp: 'うれしくて、{泣|な}き＿なりました。', a: 'そうに', wrong: ['そうな', 'そうで', 'ように'], why: '〜そうになりました: „kis híján…".' },
-      { q: 'Melyik mondat helyes?', a: '{夢|ゆめ}みたいな{話|はなし}ですね。', wrong: ['{夢|ゆめ}のみたいな{話|はなし}ですね。', '{夢|ゆめ}ような{話|はなし}ですね。', '{夢|ゆめ}みたいの{話|はなし}ですね。'], why: 'A みたい előtt nincs の; főnév előtt みたいな.' },
-      { q: '„Annyira elfáradtam, hogy fel sem bírtam állni." Mi hiányzik?', jp: '{立|た}てない＿{疲|つか}れました。', a: 'ぐらい', wrong: ['ごろ', 'だけ', 'しか'], why: 'Mérték: rövid alak + ぐらい — „annyira, hogy…".' },
-      { q: '„A konyhából curryillat jön." Mi hiányzik?', jp: '{台所|だいどころ}からカレーのにおい＿。', a: 'がします', wrong: ['をします', 'があります', 'になります'], why: 'Szag, íz, hang: 〜がします.' },
+      { point: 1, q: 'Mi a ない „úgy néz ki, nincs" alakja?', a: 'なさそう', wrong: ['ないそう', 'なそう', 'なくそう'], why: 'Rendhagyó: ない → なさそう, いい → よさそう.' },
+      { point: 1, q: 'Megkóstoltad az ételt, és finom. Mit mondasz?', a: 'おいしいです。', wrong: ['おいしそうです。', 'おいしいそうです。', 'おいしいようです。'], why: 'A そう csak a látszatra való; ha megkóstoltad, tényt közölsz.' },
+      { point: 1, q: 'Mit jelent: かわいそうです。', a: 'Szegény, sajnálom.', wrong: ['Aranyosnak látszik.', 'Azt mondják, aranyos.', 'Nem aranyos.'], why: 'A かわいそう önálló szó: „szánalomra méltó".' },
+      { point: 2, q: '„Nem úgy néz ki, hogy eláll az eső." Mi hiányzik?', jp: '{雨|あめ}はやみ＿。', a: 'そうにありません', wrong: ['ないそうです', 'ようにありません', 'らしくありません'], why: 'Az ige + そう tagadása: 〜そうにありません.' },
+      { point: 2, q: '„Örömömben majdnem elsírtam magam." Mi hiányzik?', jp: 'うれしくて、{泣|な}き＿なりました。', a: 'そうに', wrong: ['そうな', 'そうで', 'ように'], why: '〜そうになりました: „kis híján…".' },
+      { point: 4, q: 'Melyik mondat helyes?', a: '{夢|ゆめ}みたいな{話|はなし}ですね。', wrong: ['{夢|ゆめ}のみたいな{話|はなし}ですね。', '{夢|ゆめ}ような{話|はなし}ですね。', '{夢|ゆめ}みたいの{話|はなし}ですね。'], why: 'A みたい előtt nincs の; főnév előtt みたいな.' },
+      { point: 5, q: '„Annyira elfáradtam, hogy fel sem bírtam állni." Mi hiányzik?', jp: '{立|た}てない＿{疲|つか}れました。', a: 'ぐらい', wrong: ['ごろ', 'だけ', 'しか'], why: 'Mérték: rövid alak + ぐらい — „annyira, hogy…".' },
+      { point: 6, q: '„A konyhából curryillat jön." Mi hiányzik?', jp: '{台所|だいどころ}からカレーのにおい＿。', a: 'がします', wrong: ['をします', 'があります', 'になります'], why: 'Szag, íz, hang: 〜がします.' },
       {
-        q: 'Mit jelent: どこかで{会|あ}ったような{気|き}がします。',
+        point: 6, q: 'Mit jelent: どこかで{会|あ}ったような{気|き}がします。',
         a: 'Olyan érzésem van, mintha már találkoztunk volna.',
         wrong: [
           'Biztosan találkoztunk már valahol.',
@@ -13368,7 +13374,7 @@ const NIHONCORE_COURSE = [
         why: 'A {気|き}がします megérzést fejez ki: „úgy érzem".'
       },
       {
-        q: 'Japánban melyik edényt illik kézbe venni evés közben?',
+        point: 7, q: 'Japánban melyik edényt illik kézbe venni evés közben?',
         a: 'A rizses és a leveses csészét.',
         wrong: ['A nagy, lapos tányért.', 'Egyiket sem.', 'Csak a teáscsészét.'],
         why: 'A csészét a szájhoz emelve esznek; a nagy tányér az asztalon marad.'
@@ -13693,39 +13699,39 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Azt hallottam, holnap havazni fog." Mi hiányzik?', jp: 'あしたは{雪|ゆき}が＿そうです。', a: '{降|ふ}る', wrong: ['{降|ふ}り', '{降|ふ}って', '{降|ふ}ろう'], why: 'Hallomás: teljes rövid alak + そうです. ({降|ふ}りそうです = úgy néz ki, mindjárt esik.)' },
-      { q: '„Úgy hallom, jól van." Mi hiányzik?', jp: '{彼|かれ}は{元気|げんき}＿そうです。', a: 'だ', wrong: ['な', 'の', 'に'], why: 'な-melléknév + だそうです.' },
-      { q: 'Mit jelent: この{本|ほん}は{難|むずか}しいそうです。', a: 'Azt mondják, ez a könyv nehéz.', wrong: ['Ez a könyv nehéznek látszik.', 'Ez a könyv biztosan nehéz.', 'Ez a könyv nem nehéz.'], why: 'Teljes alak ({難|むずか}しい) + そうです: hallomás.' },
-      { q: 'Mit jelent: この{本|ほん}は{難|むずか}しそうです。', a: 'Ez a könyv nehéznek látszik.', wrong: ['Azt mondják, ez a könyv nehéz.', 'Ez a könyv nehéz volt.', 'Ez a könyv túl nehéz.'], why: 'い nélküli alak ({難|むずか}し) + そうです: látszat.' },
-      { q: '„Az időjárás-jelentés szerint holnap napos idő lesz." Mi hiányzik?', jp: '{天気|てんき}{予報|よほう}＿、あしたは{晴|は}れるそうです。', a: 'によると', wrong: ['によって', 'について', 'にくらべて'], why: 'A forrás: 〜によると.' },
-      { q: '„Úgy tudni, Tanaka felmond." Mi hiányzik?', jp: '{田中|たなか}さんは{会社|かいしゃ}をやめる＿です。', a: 'らしい', wrong: ['みたいな', 'そうな', 'ような'], why: 'Közvetett információból következtetés: らしいです.' },
+      { point: 1, q: '„Azt hallottam, holnap havazni fog." Mi hiányzik?', jp: 'あしたは{雪|ゆき}が＿そうです。', a: '{降|ふ}る', wrong: ['{降|ふ}り', '{降|ふ}って', '{降|ふ}ろう'], why: 'Hallomás: teljes rövid alak + そうです. ({降|ふ}りそうです = úgy néz ki, mindjárt esik.)' },
+      { point: 1, q: '„Úgy hallom, jól van." Mi hiányzik?', jp: '{彼|かれ}は{元気|げんき}＿そうです。', a: 'だ', wrong: ['な', 'の', 'に'], why: 'な-melléknév + だそうです.' },
+      { point: 2, q: 'Mit jelent: この{本|ほん}は{難|むずか}しいそうです。', a: 'Azt mondják, ez a könyv nehéz.', wrong: ['Ez a könyv nehéznek látszik.', 'Ez a könyv biztosan nehéz.', 'Ez a könyv nem nehéz.'], why: 'Teljes alak ({難|むずか}しい) + そうです: hallomás.' },
+      { point: 2, q: 'Mit jelent: この{本|ほん}は{難|むずか}しそうです。', a: 'Ez a könyv nehéznek látszik.', wrong: ['Azt mondják, ez a könyv nehéz.', 'Ez a könyv nehéz volt.', 'Ez a könyv túl nehéz.'], why: 'い nélküli alak ({難|むずか}し) + そうです: látszat.' },
+      { point: 3, q: '„Az időjárás-jelentés szerint holnap napos idő lesz." Mi hiányzik?', jp: '{天気|てんき}{予報|よほう}＿、あしたは{晴|は}れるそうです。', a: 'によると', wrong: ['によって', 'について', 'にくらべて'], why: 'A forrás: 〜によると.' },
+      { point: 4, q: '„Úgy tudni, Tanaka felmond." Mi hiányzik?', jp: '{田中|たなか}さんは{会社|かいしゃ}をやめる＿です。', a: 'らしい', wrong: ['みたいな', 'そうな', 'ような'], why: 'Közvetett információból következtetés: らしいです.' },
       {
-        q: 'Melyik mondat helyes: „Úgy tűnik, ők ketten testvérek."',
+        point: 4, q: 'Melyik mondat helyes: „Úgy tűnik, ők ketten testvérek."',
         a: 'あの{二人|ふたり}は{兄弟|きょうだい}らしいです。',
         wrong: ['あの{二人|ふたり}は{兄弟|きょうだい}だらしいです。', 'あの{二人|ふたり}は{兄弟|きょうだい}ならしいです。', 'あの{二人|ふたり}は{兄弟|きょうだい}のらしいです。'],
         why: 'Főnév után közvetlenül áll a らしいです.'
       },
-      { q: '„Anyám azt mondta, kicsit késik." Mi hiányzik?', jp: '{母|はは}は{少|すこ}し{遅|おく}れる＿{言|い}っていました。', a: 'と', wrong: ['を', 'に', 'が'], why: 'Az idéző と.' },
+      { point: 5, q: '„Anyám azt mondta, kicsit késik." Mi hiányzik?', jp: '{母|はは}は{少|すこ}し{遅|おく}れる＿{言|い}っていました。', a: 'と', wrong: ['を', 'に', 'が'], why: 'Az idéző と.' },
       {
-        q: 'Melyik mondatban adod tovább pontosan, amit hallottál?',
+        point: 1, q: 'Melyik mondatban adod tovább pontosan, amit hallottál?',
         a: '{田中|たなか}さんは{結婚|けっこん}するそうです。',
         wrong: ['{田中|たなか}さんは{結婚|けっこん}しそうです。', '{田中|たなか}さんは{結婚|けっこん}するでしょう。', '{田中|たなか}さんは{結婚|けっこん}するかもしれません。'],
         why: 'Rövid alak + そうです: hallomás. A többi a saját feltevésed.'
       },
-      { q: '„A hírek szerint nagy baleset történt." Mi hiányzik?', jp: 'ニュースによると、{大|おお}きい{事故|じこ}が＿そうです。', a: 'あった', wrong: ['あり', 'あって', 'ある'], why: 'Múlt idejű hallomás: あった + そうです.' },
-      { q: '„Azt hallottam, Jamada nem jön." Mi hiányzik?', jp: '{山田|やまだ}さんは＿そうです。', a: '{来|こ}ない', wrong: ['{来|こ}なさ', '{来|こ}なく', '{来|き}'], why: 'Hallomás: teljes rövid alak + そうです. A {来|こ}なさそうです látszat volna: „úgy néz ki, nem jön".' },
+      { point: 3, q: '„A hírek szerint nagy baleset történt." Mi hiányzik?', jp: 'ニュースによると、{大|おお}きい{事故|じこ}が＿そうです。', a: 'あった', wrong: ['あり', 'あって', 'ある'], why: 'Múlt idejű hallomás: あった + そうです.' },
+      { point: 1, q: '„Azt hallottam, Jamada nem jön." Mi hiányzik?', jp: '{山田|やまだ}さんは＿そうです。', a: '{来|こ}ない', wrong: ['{来|こ}なさ', '{来|こ}なく', '{来|き}'], why: 'Hallomás: teljes rövid alak + そうです. A {来|こ}なさそうです látszat volna: „úgy néz ki, nem jön".' },
       {
-        q: 'Melyik mondat helyes: „Azt mondják, tegnap esett."',
+        point: 1, q: 'Melyik mondat helyes: „Azt mondják, tegnap esett."',
         a: '{昨日|きのう}は{雨|あめ}が{降|ふ}ったそうです。',
         wrong: ['{昨日|きのう}は{雨|あめ}が{降|ふ}るそうでした。', '{昨日|きのう}は{雨|あめ}が{降|ふ}りそうでした。', '{昨日|きのう}は{雨|あめ}が{降|ふ}ったそうでした。'],
         why: 'A hallomás そうです-je nem ragozható; a múlt idő előtte áll.'
       },
-      { q: 'Mit jelent: {雨|あめ}が{降|ふ}りそうです。', a: 'Úgy néz ki, esni fog.', wrong: ['Azt mondják, esni fog.', 'Esett az eső.', 'Nem fog esni.'], why: 'ます-tő + そうです: látszat.' },
-      { q: '„Az orvos szerint egy hét alatt meggyógyul." Mi hiányzik?', jp: '{医者|いしゃ}の{話|はなし}＿、{一週間|いっしゅうかん}で{治|なお}るそうです。', a: 'では', wrong: ['には', 'でも', 'とは'], why: '〜の{話|はなし}では: „az ő elmondása szerint".' },
-      { q: 'Melyik mondatvég épül a saját megfigyelésedre?', a: '〜ようです', wrong: ['〜そうです (teljes mondat után)', '〜らしいです', '〜と{言|い}っていました'], why: 'A ようです: amit magad látsz, hallasz, abból következtetsz.' },
-      { q: '„Úgy tudni, ez a környék csendes." Mi hiányzik?', jp: 'この{辺|へん}は{静|しず}か＿です。', a: 'らしい', wrong: ['だらしい', 'ならしい', 'のらしい'], why: 'な-melléknév után a らしい közvetlenül áll.' },
+      { point: 2, q: 'Mit jelent: {雨|あめ}が{降|ふ}りそうです。', a: 'Úgy néz ki, esni fog.', wrong: ['Azt mondják, esni fog.', 'Esett az eső.', 'Nem fog esni.'], why: 'ます-tő + そうです: látszat.' },
+      { point: 3, q: '„Az orvos szerint egy hét alatt meggyógyul." Mi hiányzik?', jp: '{医者|いしゃ}の{話|はなし}＿、{一週間|いっしゅうかん}で{治|なお}るそうです。', a: 'では', wrong: ['には', 'でも', 'とは'], why: '〜の{話|はなし}では: „az ő elmondása szerint".' },
+      { point: 4, q: 'Melyik mondatvég épül a saját megfigyelésedre?', a: '〜ようです', wrong: ['〜そうです (teljes mondat után)', '〜らしいです', '〜と{言|い}っていました'], why: 'A ようです: amit magad látsz, hallasz, abból következtetsz.' },
+      { point: 4, q: '„Úgy tudni, ez a környék csendes." Mi hiányzik?', jp: 'この{辺|へん}は{静|しず}か＿です。', a: 'らしい', wrong: ['だらしい', 'ならしい', 'のらしい'], why: 'な-melléknév után a らしい közvetlenül áll.' },
       {
-        q: 'Mit jelent: {先生|せんせい}がよろしくと{言|い}っていました。',
+        point: 5, q: 'Mit jelent: {先生|せんせい}がよろしくと{言|い}っていました。',
         a: 'A tanár úr üdvözletét küldi.',
         wrong: [
           'A tanár úr azt mondta, minden rendben.',
@@ -13734,9 +13740,9 @@ const NIHONCORE_COURSE = [
         ],
         why: 'よろしくと{言|い}っていました: üdvözlet átadása.'
       },
-      { q: 'Mit kérdez először a 119 kezelője?', a: '{火事|かじ}ですか、{救急|きゅうきゅう}ですか。', wrong: ['お{名前|なまえ}は？', 'どこが{痛|いた}いですか。', '{保険証|ほけんしょう}はありますか。'], why: 'A 119 a tűzoltók és a mentők közös száma: előbb azt kell tisztázni, melyik kell.' },
+      { point: 6, q: 'Mit kérdez először a 119 kezelője?', a: '{火事|かじ}ですか、{救急|きゅうきゅう}ですか。', wrong: ['お{名前|なまえ}は？', 'どこが{痛|いた}いですか。', '{保険証|ほけんしょう}はありますか。'], why: 'A 119 a tűzoltók és a mentők közös száma: előbb azt kell tisztázni, melyik kell.' },
       { q: 'Mit mondasz a betegnek búcsúzáskor?', a: 'お{大事|だいじ}に。', wrong: ['お{疲|つか}れさま。', 'おめでとう。', 'いってらっしゃい。'], why: 'お{大事|だいじ}に: „vigyázzon magára, jobbulást".' },
-      { q: 'Barátok között hogy hangzik: あしたは{雨|あめ}だそうです。', a: 'あしたは{雨|あめ}だって。', wrong: ['あしたは{雨|あめ}かな。', 'あしたは{雨|あめ}なの？', 'あしたは{雨|あめ}だろう。'], why: 'A hallomás baráti alakja: 〜って.' }
+      { point: 1, q: 'Barátok között hogy hangzik: あしたは{雨|あめ}だそうです。', a: 'あしたは{雨|あめ}だって。', wrong: ['あしたは{雨|あめ}かな。', 'あしたは{雨|あめ}なの？', 'あしたは{雨|あめ}だろう。'], why: 'A hallomás baráti alakja: 〜って.' }
     ]
   },
 
@@ -14095,15 +14101,15 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Mondja meg, hogyan kell olvasni ezt a kanjit." Mi hiányzik?', jp: 'この{漢字|かんじ}の＿{方|かた}を{教|おし}えてください。', a: '{読|よ}み', wrong: ['{読|よ}む', '{読|よ}んで', '{読|よ}め'], why: 'ます-tő + {方|かた}: {読|よ}みます → {読|よ}み{方|かた}.' },
-      { q: '„Nem tudom, hogyan kell jegyet venni." Mi hiányzik?', jp: '{切符|きっぷ}＿{買|か}い{方|かた}がわかりません。', a: 'の', wrong: ['を', 'に', 'で'], why: 'A {買|か}い{方|かた} főnév, ezért a tárgy の-t kap.' },
-      { q: '„Cukor helyett mézet használok." Mi hiányzik?', jp: '{砂糖|さとう}＿、はちみつを{使|つか}います。', a: 'のかわりに', wrong: ['のままに', 'について', 'によると'], why: 'Főnév + のかわりに = helyett.' },
-      { q: '„Telefonálás helyett e-mailt küldtem." Mi hiányzik?', jp: '{電話|でんわ}する＿、メールを{送|おく}りました。', a: 'かわりに', wrong: ['のかわりに', 'まま', 'ために'], why: 'Ige szótári alakja után közvetlenül: かわりに.' },
-      { q: '„Az igazgató helyett én mondok köszöntőt." Mi hiányzik?', jp: '{社長|しゃちょう}＿、{私|わたし}がごあいさつします。', a: 'にかわって', wrong: ['について', 'によって', 'にくらべて'], why: 'Valaki képviseletében: 〜にかわって.' },
-      { q: '„Égve hagyott villannyal aludtam el." Mi hiányzik?', jp: '{電気|でんき}を＿まま、{寝|ね}てしまいました。', a: 'つけた', wrong: ['つける', 'つけて', 'つけ'], why: 'A まま előtt た-alak áll.' },
-      { q: '„Ez a zöldség nyersen is ehető." Mi hiányzik?', jp: 'この{野菜|やさい}は{生|なま}＿まま{食|た}べられます。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のまま.' },
+      { point: 1, q: '„Mondja meg, hogyan kell olvasni ezt a kanjit." Mi hiányzik?', jp: 'この{漢字|かんじ}の＿{方|かた}を{教|おし}えてください。', a: '{読|よ}み', wrong: ['{読|よ}む', '{読|よ}んで', '{読|よ}め'], why: 'ます-tő + {方|かた}: {読|よ}みます → {読|よ}み{方|かた}.' },
+      { point: 1, q: '„Nem tudom, hogyan kell jegyet venni." Mi hiányzik?', jp: '{切符|きっぷ}＿{買|か}い{方|かた}がわかりません。', a: 'の', wrong: ['を', 'に', 'で'], why: 'A {買|か}い{方|かた} főnév, ezért a tárgy の-t kap.' },
+      { point: 2, q: '„Cukor helyett mézet használok." Mi hiányzik?', jp: '{砂糖|さとう}＿、はちみつを{使|つか}います。', a: 'のかわりに', wrong: ['のままに', 'について', 'によると'], why: 'Főnév + のかわりに = helyett.' },
+      { point: 3, q: '„Telefonálás helyett e-mailt küldtem." Mi hiányzik?', jp: '{電話|でんわ}する＿、メールを{送|おく}りました。', a: 'かわりに', wrong: ['のかわりに', 'まま', 'ために'], why: 'Ige szótári alakja után közvetlenül: かわりに.' },
+      { point: 4, q: '„Az igazgató helyett én mondok köszöntőt." Mi hiányzik?', jp: '{社長|しゃちょう}＿、{私|わたし}がごあいさつします。', a: 'にかわって', wrong: ['について', 'によって', 'にくらべて'], why: 'Valaki képviseletében: 〜にかわって.' },
+      { point: 5, q: '„Égve hagyott villannyal aludtam el." Mi hiányzik?', jp: '{電気|でんき}を＿まま、{寝|ね}てしまいました。', a: 'つけた', wrong: ['つける', 'つけて', 'つけ'], why: 'A まま előtt た-alak áll.' },
+      { point: 5, q: '„Ez a zöldség nyersen is ehető." Mi hiányzik?', jp: 'この{野菜|やさい}は{生|なま}＿まま{食|た}べられます。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のまま.' },
       {
-        q: 'Mit jelent: {窓|まど}を{開|あ}けたまま、{出|で}かけました。',
+        point: 5, q: 'Mit jelent: {窓|まど}を{開|あ}けたまま、{出|で}かけました。',
         a: 'Nyitva hagyott ablakkal mentem el.',
         wrong: [
           'Kinyitottam az ablakot, miután hazajöttem.',
@@ -14113,7 +14119,7 @@ const NIHONCORE_COURSE = [
         why: '〜たまま: az állapot változatlan maradt.'
       },
       {
-        q: 'Mit jelent: {日本語|にほんご}を{教|おし}えてもらうかわりに、{英語|えいご}を{教|おし}えます。',
+        point: 3, q: 'Mit jelent: {日本語|にほんご}を{教|おし}えてもらうかわりに、{英語|えいご}を{教|おし}えます。',
         a: 'Cserébe azért, hogy japánra tanít, én angolra tanítom.',
         wrong: [
           'Japán helyett angolt tanulok.',
@@ -14122,13 +14128,13 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Ige + かわりに itt viszonzást jelent.'
       },
-      { q: '„Megtanultam használni a számítógépet." Mi hiányzik?', jp: 'パソコンの＿を{習|なら}いました。', a: '{使|つか}い{方|かた}', wrong: ['{使|つか}う{方|かた}', '{使|つか}って{方|かた}', '{使|つか}いまま'], why: 'ます-tő + {方|かた}.' },
-      { q: '„Kérem, mondja meg, hogyan jutok el az állomásra!" Mi hiányzik?', jp: '{駅|えき}＿{行|い}き{方|かた}を{教|おし}えてください。', a: 'への', wrong: ['を', 'にの', 'へ'], why: 'A へ megmarad, és の járul hozzá: {駅|えき}への{行|い}き{方|かた}.' },
-      { q: 'Hogy mondod: „a foglalás módja"?', a: '{予約|よやく}のし{方|かた}', wrong: ['{予約|よやく}する{方|かた}', '{予約|よやく}をし{方|かた}', '{予約|よやく}し{方|かた}の'], why: 'する-igéknél: főnév + のし{方|かた}.' },
-      { q: 'Mit jelent: その{言|い}い{方|かた}は{失礼|しつれい}ですよ。', a: 'Így mondani udvariatlan.', wrong: ['Az az ember udvariatlan.', 'Udvariatlanság megszólalni.', 'Kérem, mondja meg a nevét!'], why: 'A {言|い}い{方|かた}: „ahogyan valamit mondasz".' },
-      { q: '„Készpénz helyett kártyával fizettem." Mi hiányzik?', jp: '{現金|げんきん}＿、カードで{払|はら}いました。', a: 'の{代|か}わりに', wrong: ['{代|か}わりに', 'に{代|か}わりに', 'を{代|か}わって'], why: 'Főnév után: の{代|か}わりに.' },
+      { point: 1, q: '„Megtanultam használni a számítógépet." Mi hiányzik?', jp: 'パソコンの＿を{習|なら}いました。', a: '{使|つか}い{方|かた}', wrong: ['{使|つか}う{方|かた}', '{使|つか}って{方|かた}', '{使|つか}いまま'], why: 'ます-tő + {方|かた}.' },
+      { point: 1, q: '„Kérem, mondja meg, hogyan jutok el az állomásra!" Mi hiányzik?', jp: '{駅|えき}＿{行|い}き{方|かた}を{教|おし}えてください。', a: 'への', wrong: ['を', 'にの', 'へ'], why: 'A へ megmarad, és の járul hozzá: {駅|えき}への{行|い}き{方|かた}.' },
+      { point: 1, q: 'Hogy mondod: „a foglalás módja"?', a: '{予約|よやく}のし{方|かた}', wrong: ['{予約|よやく}する{方|かた}', '{予約|よやく}をし{方|かた}', '{予約|よやく}し{方|かた}の'], why: 'する-igéknél: főnév + のし{方|かた}.' },
+      { point: 1, q: 'Mit jelent: その{言|い}い{方|かた}は{失礼|しつれい}ですよ。', a: 'Így mondani udvariatlan.', wrong: ['Az az ember udvariatlan.', 'Udvariatlanság megszólalni.', 'Kérem, mondja meg a nevét!'], why: 'A {言|い}い{方|かた}: „ahogyan valamit mondasz".' },
+      { point: 2, q: '„Készpénz helyett kártyával fizettem." Mi hiányzik?', jp: '{現金|げんきん}＿、カードで{払|はら}いました。', a: 'の{代|か}わりに', wrong: ['{代|か}わりに', 'に{代|か}わりに', 'を{代|か}わって'], why: 'Főnév után: の{代|か}わりに.' },
       {
-        q: 'Mit jelent: この{部屋|へや}は{狭|せま}い{代|か}わりに、{家賃|やちん}が{安|やす}いです。',
+        point: 3, q: 'Mit jelent: この{部屋|へや}は{狭|せま}い{代|か}わりに、{家賃|やちん}が{安|やす}いです。',
         a: 'Ez a szoba kicsi, cserébe olcsó a bérleti díja.',
         wrong: [
           'Ez a szoba kicsi, ezért drága.',
@@ -14137,10 +14143,10 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Melléknév + {代|か}わりに: a hátrányt egy előny ellensúlyozza.'
       },
-      { q: 'Melyik kifejezés a hivatalosabb, ha valaki átveszi a másik szerepét?', a: '〜に{代|か}わって', wrong: ['〜の{代|か}わりに', '〜のまま', '〜について'], why: 'A に{代|か}わって választékos: szerepátvétel, képviselet.' },
-      { q: '„Ne egyél állva!" Mi hiányzik?', jp: '＿まま{食|た}べないでください。', a: '{立|た}った', wrong: ['{立|た}つ', '{立|た}って', '{立|た}ち'], why: 'A まま előtt た-alak áll.' },
+      { point: 4, q: 'Melyik kifejezés a hivatalosabb, ha valaki átveszi a másik szerepét?', a: '〜に{代|か}わって', wrong: ['〜の{代|か}わりに', '〜のまま', '〜について'], why: 'A に{代|か}わって választékos: szerepátvétel, képviselet.' },
+      { point: 5, q: '„Ne egyél állva!" Mi hiányzik?', jp: '＿まま{食|た}べないでください。', a: '{立|た}った', wrong: ['{立|た}つ', '{立|た}って', '{立|た}ち'], why: 'A まま előtt た-alak áll.' },
       {
-        q: 'Mit jelent: {宿題|しゅくだい}をしないまま、{学校|がっこう}へ{行|い}ってしまいました。',
+        point: 5, q: 'Mit jelent: {宿題|しゅくだい}をしないまま、{学校|がっこう}へ{行|い}ってしまいました。',
         a: 'Úgy mentem iskolába, hogy nem írtam meg a házit.',
         wrong: [
           'Megírtam a házit, és iskolába mentem.',
@@ -14150,12 +14156,12 @@ const NIHONCORE_COURSE = [
         why: 'ない-alak + まま: „anélkül, hogy…".'
       },
       {
-        q: 'Japán gépelésnél hogyan írod be a kis っ jelet a がっこう szóban?',
+        point: 7, q: 'Japán gépelésnél hogyan írod be a kis っ jelet a がっこう szóban?',
         a: 'A következő mássalhangzót kétszer ütöd le.',
         wrong: ['Szóközt ütsz a が után.', 'Nagybetűvel írod a k-t.', 'Kötőjelet ütsz a が után.'],
         why: 'A kis っ: a következő mássalhangzó megkettőzve.'
       },
-      { q: '„Az e-mail előnye, hogy gyors." Mi hiányzik?', jp: 'メールの＿は{速|はや}いところです。', a: '{長所|ちょうしょ}', wrong: ['{短所|たんしょ}', '{欠点|けってん}', '{反対|はんたい}'], why: '{長所|ちょうしょ} = előny, erősség; {短所|たんしょ} = hátrány.' }
+      { point: 6, q: '„Az e-mail előnye, hogy gyors." Mi hiányzik?', jp: 'メールの＿は{速|はや}いところです。', a: '{長所|ちょうしょ}', wrong: ['{短所|たんしょ}', '{欠点|けってん}', '{反対|はんたい}'], why: '{長所|ちょうしょ} = előny, erősség; {短所|たんしょ} = hátrány.' }
     ]
   },
 
@@ -14537,16 +14543,16 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'Mi a {書|か}きます szenvedő alakja?', a: '{書|か}かれます', wrong: ['{書|か}けます', '{書|か}きられます', '{書|か}かせます'], why: '1. csoport: か-tő + れます.' },
-      { q: 'Mi a {食|た}べます szenvedő alakja?', a: '{食|た}べられます', wrong: ['{食|た}べされます', '{食|た}べさせます', '{食|た}ばれます'], why: '2. csoport: る → られます.' },
-      { q: 'Mi a します szenvedő alakja?', a: 'されます', wrong: ['しられます', 'できます', 'させます'], why: 'A します szenvedő alakja rendhagyó: されます.' },
-      { q: '„A megbeszélést háromtól tartják." Mi hiányzik?', jp: '{会議|かいぎ}は{三時|さんじ}から＿。', a: '{行|おこな}われます', wrong: ['{行|おこな}えます', '{行|おこな}わせます', '{行|おこな}いられます'], why: '{行|おこな}う → {行|おこな}われます.' },
-      { q: '„Ezt a templomot ötszáz éve építették." Mi hiányzik?', jp: 'この{寺|てら}は{五百年前|ごひゃくねんまえ}に＿。', a: '{建|た}てられました', wrong: ['{建|た}ちられました', '{建|た}てさせました', '{建|た}てれました'], why: 'A {建|た}てる 2. csoportú: {建|た}てられました.' },
-      { q: '„Ezt a képet Picasso festette." Mi hiányzik?', jp: 'この{絵|え}はピカソ＿かかれました。', a: 'によって', wrong: ['について', 'にとって', 'にかけて'], why: 'Az alkotót szenvedő mondatban によって jelöli.' },
-      { q: '„Júniustól júliusig sok az eső." Mi hiányzik?', jp: '{六月|ろくがつ}から{七月|しちがつ}＿、{雨|あめ}が{多|おお}いです。', a: 'にかけて', wrong: ['によって', 'について', 'にくらべて'], why: 'Hozzávetőleges sáv: から〜にかけて.' },
-      { q: '„Nem iszunk egy teát vagy valamit?" Mi hiányzik?', jp: 'お{茶|ちゃ}＿{飲|の}みませんか。', a: 'でも', wrong: ['しか', 'だけ', 'ばかり'], why: 'Laza példa javaslatban: でも.' },
+      { point: 1, q: 'Mi a {書|か}きます szenvedő alakja?', a: '{書|か}かれます', wrong: ['{書|か}けます', '{書|か}きられます', '{書|か}かせます'], why: '1. csoport: か-tő + れます.' },
+      { point: 1, q: 'Mi a {食|た}べます szenvedő alakja?', a: '{食|た}べられます', wrong: ['{食|た}べされます', '{食|た}べさせます', '{食|た}ばれます'], why: '2. csoport: る → られます.' },
+      { point: 1, q: 'Mi a します szenvedő alakja?', a: 'されます', wrong: ['しられます', 'できます', 'させます'], why: 'A します szenvedő alakja rendhagyó: されます.' },
+      { point: 2, q: '„A megbeszélést háromtól tartják." Mi hiányzik?', jp: '{会議|かいぎ}は{三時|さんじ}から＿。', a: '{行|おこな}われます', wrong: ['{行|おこな}えます', '{行|おこな}わせます', '{行|おこな}いられます'], why: '{行|おこな}う → {行|おこな}われます.' },
+      { point: 2, q: '„Ezt a templomot ötszáz éve építették." Mi hiányzik?', jp: 'この{寺|てら}は{五百年前|ごひゃくねんまえ}に＿。', a: '{建|た}てられました', wrong: ['{建|た}ちられました', '{建|た}てさせました', '{建|た}てれました'], why: 'A {建|た}てる 2. csoportú: {建|た}てられました.' },
+      { point: 3, q: '„Ezt a képet Picasso festette." Mi hiányzik?', jp: 'この{絵|え}はピカソ＿かかれました。', a: 'によって', wrong: ['について', 'にとって', 'にかけて'], why: 'Az alkotót szenvedő mondatban によって jelöli.' },
+      { point: 4, q: '„Júniustól júliusig sok az eső." Mi hiányzik?', jp: '{六月|ろくがつ}から{七月|しちがつ}＿、{雨|あめ}が{多|おお}いです。', a: 'にかけて', wrong: ['によって', 'について', 'にくらべて'], why: 'Hozzávetőleges sáv: から〜にかけて.' },
+      { point: 5, q: '„Nem iszunk egy teát vagy valamit?" Mi hiányzik?', jp: 'お{茶|ちゃ}＿{飲|の}みませんか。', a: 'でも', wrong: ['しか', 'だけ', 'ばかり'], why: 'Laza példa javaslatban: でも.' },
       {
-        q: 'Mit jelent: この{問題|もんだい}は{子|こ}どもでもわかります。',
+        point: 5, q: 'Mit jelent: この{問題|もんだい}は{子|こ}どもでもわかります。',
         a: 'Ezt a feladatot még egy gyerek is érti.',
         wrong: [
           'Ezt a feladatot csak a gyerekek értik.',
@@ -14556,7 +14562,7 @@ const NIHONCORE_COURSE = [
         why: 'főnév + でも: még ő is.'
       },
       {
-        q: 'Mit jelent: この{本|ほん}は{世界中|せかいじゅう}で{読|よ}まれています。',
+        point: 1, q: 'Mit jelent: この{本|ほん}は{世界中|せかいじゅう}で{読|よ}まれています。',
         a: 'Ezt a könyvet világszerte olvassák.',
         wrong: [
           'Ezt a könyvet világszerte el lehet olvasni.',
@@ -14565,31 +14571,31 @@ const NIHONCORE_COURSE = [
         ],
         why: '{読|よ}まれています: szenvedő alak. (El lehet olvasni: {読|よ}めます.)'
       },
-      { q: 'Mi a {買|か}います szenvedő alakja?', a: '{買|か}われます', wrong: ['{買|か}えられます', '{買|か}あれます', '{買|か}いられます'], why: 'Az う végű igéknél わ + れます: {買|か}う → {買|か}われます.' },
-      { q: 'Mi a {来|き}ます szenvedő alakja?', a: 'こられます', wrong: ['きられます', 'くられます', 'こらせます'], why: 'Rendhagyó: くる → こられる.' },
+      { point: 1, q: 'Mi a {買|か}います szenvedő alakja?', a: '{買|か}われます', wrong: ['{買|か}えられます', '{買|か}あれます', '{買|か}いられます'], why: 'Az う végű igéknél わ + れます: {買|か}う → {買|か}われます.' },
+      { point: 1, q: 'Mi a {来|き}ます szenvedő alakja?', a: 'こられます', wrong: ['きられます', 'くられます', 'こらせます'], why: 'Rendhagyó: くる → こられる.' },
       {
-        q: 'Melyik két alak esik egybe a 2. csoportú igéknél?',
+        point: 1, q: 'Melyik két alak esik egybe a 2. csoportú igéknél?',
         a: 'A ható és a szenvedő alak.',
         wrong: ['A て-alak és a た-alak.', 'A szótári és a szándékos alak.', 'A ない-alak és a ば-alak.'],
         why: '{食|た}べられます: „meg tudja enni" vagy „megeszik" — a mondat dönti el.'
       },
-      { q: '„Angolul az egész világon beszélnek." Mi hiányzik?', jp: '{英語|えいご}は{世界中|せかいじゅう}で＿います。', a: '{話|はな}されて', wrong: ['{話|はな}して', '{話|はな}せて', '{話|はな}させて'], why: '{話|はな}す → {話|はな}される; folyamatos alakban {話|はな}されています.' },
+      { point: 1, q: '„Angolul az egész világon beszélnek." Mi hiányzik?', jp: '{英語|えいご}は{世界中|せかいじゅう}で＿います。', a: '{話|はな}されて', wrong: ['{話|はな}して', '{話|はな}せて', '{話|はな}させて'], why: '{話|はな}す → {話|はな}される; folyamatos alakban {話|はな}されています.' },
       {
-        q: 'Mit jelent: {東京|とうきょう}は{昔|むかし}「{江戸|えど}」と{呼|よ}ばれていました。',
+        point: 2, q: 'Mit jelent: {東京|とうきょう}は{昔|むかし}「{江戸|えど}」と{呼|よ}ばれていました。',
         a: 'Tokiót régen Edónak hívták.',
         wrong: ['Tokió régen felhívta Edót.', 'Edót régen Tokiónak hívták.', 'Tokióban régen sokan laktak.'],
         why: '〜と{呼|よ}ばれています: „úgy hívják".'
       },
       {
-        q: 'Miért によって áll ebben a mondatban: この{絵|え}はピカソによってかかれました。',
+        point: 3, q: 'Miért によって áll ebben a mondatban: この{絵|え}はピカソによってかかれました。',
         a: 'Mert alkotás létrehozóját a によって jelöli.',
         wrong: ['Mert a festmény élettelen.', 'Mert Picasso külföldi.', 'Mert a mondat múlt idejű.'],
         why: 'Az alkotás igéinél ({作|つく}る, {書|か}く, {建|た}てる…) a cselekvő によって-t kap.'
       },
-      { q: 'Melyik mondat helyes?', a: '{九時|くじ}から{五時|ごじ}まで{働|はたら}きます。', wrong: ['{九時|くじ}から{五時|ごじ}にかけて{働|はたら}きます。', '{九時|くじ}にかけて{五時|ごじ}まで{働|はたら}きます。', '{九時|くじ}まで{五時|ごじ}から{働|はたら}きます。'], why: 'Pontos kezdő- és végpontnál から〜まで áll.' },
-      { q: '„Ma estétől holnapig várhatóan erős szél fúj." Mi hiányzik?', jp: '{今夜|こんや}から{明日|あした}＿、{強|つよ}い{風|かぜ}が{吹|ふ}くでしょう。', a: 'にかけて', wrong: ['について', 'によって', 'にくらべて'], why: 'Hozzávetőleges, összefüggő időszak: から〜にかけて.' },
-      { q: 'Mit jelent: {何|なん}でも{食|た}べられます。', a: 'Bármit megeszem.', wrong: ['Semmit sem tudok megenni.', 'Mit lehet itt enni?', 'Valamit már ettem.'], why: 'Kérdőszó + でも: „bármi".' },
-      { q: 'Műsorvezetőként hogyan zárod le a programot?', a: 'これで{発表会|はっぴょうかい}を{終|お}わります。', wrong: ['ただ{今|いま}から{始|はじ}めます。', 'ご{質問|しつもん}がありましたら、どうぞ。', '{次|つぎ}の{発表|はっぴょう}に{移|うつ}ります。'], why: 'これで〜を{終|お}わります: „ezzel lezárom".' }
+      { point: 4, q: 'Melyik mondat helyes?', a: '{九時|くじ}から{五時|ごじ}まで{働|はたら}きます。', wrong: ['{九時|くじ}から{五時|ごじ}にかけて{働|はたら}きます。', '{九時|くじ}にかけて{五時|ごじ}まで{働|はたら}きます。', '{九時|くじ}まで{五時|ごじ}から{働|はたら}きます。'], why: 'Pontos kezdő- és végpontnál から〜まで áll.' },
+      { point: 4, q: '„Ma estétől holnapig várhatóan erős szél fúj." Mi hiányzik?', jp: '{今夜|こんや}から{明日|あした}＿、{強|つよ}い{風|かぜ}が{吹|ふ}くでしょう。', a: 'にかけて', wrong: ['について', 'によって', 'にくらべて'], why: 'Hozzávetőleges, összefüggő időszak: から〜にかけて.' },
+      { point: 5, q: 'Mit jelent: {何|なん}でも{食|た}べられます。', a: 'Bármit megeszem.', wrong: ['Semmit sem tudok megenni.', 'Mit lehet itt enni?', 'Valamit már ettem.'], why: 'Kérdőszó + でも: „bármi".' },
+      { point: 7, q: 'Műsorvezetőként hogyan zárod le a programot?', a: 'これで{発表会|はっぴょうかい}を{終|お}わります。', wrong: ['ただ{今|いま}から{始|はじ}めます。', 'ご{質問|しつもん}がありましたら、どうぞ。', '{次|つぎ}の{発表|はっぴょう}に{移|うつ}ります。'], why: 'これで〜を{終|お}わります: „ezzel lezárom".' }
     ]
   },
 
@@ -15010,22 +15016,22 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Megszidott apám." Mi hiányzik?', jp: '{父|ちち}＿しかられました。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Szenvedő mondatban a cselekvő に-t kap.' },
-      { q: '„A vonaton ellopták a pénztárcámat." Mi hiányzik?', jp: '{電車|でんしゃ}の{中|なか}で{財布|さいふ}＿{盗|ぬす}まれました。', a: 'を', wrong: ['に', 'で', 'へ'], why: 'Az alany én vagyok; a pénztárca megtartja az を-t.' },
+      { point: 1, q: '„Megszidott apám." Mi hiányzik?', jp: '{父|ちち}＿しかられました。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Szenvedő mondatban a cselekvő に-t kap.' },
+      { point: 2, q: '„A vonaton ellopták a pénztárcámat." Mi hiányzik?', jp: '{電車|でんしゃ}の{中|なか}で{財布|さいふ}＿{盗|ぬす}まれました。', a: 'を', wrong: ['に', 'で', 'へ'], why: 'Az alany én vagyok; a pénztárca megtartja az を-t.' },
       {
-        q: 'Melyik mondat jelenti: „Az öcsém megette a tortámat (és ez bosszant)."',
+        point: 2, q: 'Melyik mondat jelenti: „Az öcsém megette a tortámat (és ez bosszant)."',
         a: '{弟|おとうと}にケーキを{食|た}べられました。',
         wrong: ['{弟|おとうと}がケーキを{食|た}べられました。', '{弟|おとうと}にケーキを{食|た}べさせました。', '{弟|おとうと}にケーキを{食|た}べてもらいました。'],
         why: 'A kárt elszenvedő én vagyok az alany, az öcsém に-t kap.'
       },
-      { q: 'Mit jelent: {雨|あめ}に{降|ふ}られました。', a: 'Megáztam: rám esett az eső.', wrong: ['Elállt az eső.', 'Úgy néz ki, esni fog.', 'Azt hallottam, esik.'], why: 'Tárgyatlan ige szenvedő alakja: kellemetlenség ért.' },
-      { q: '„A barátom meghívott egy buliba." Mi hiányzik?', jp: '{友|とも}だちにパーティーに＿。', a: '{招待|しょうたい}されました', wrong: ['{招待|しょうたい}しました', '{招待|しょうたい}させました', '{招待|しょうたい}できました'], why: 'する → されます: engem hívtak meg.' },
-      { q: '„A tanárnak köszönhetően átmentem a vizsgán." Mi hiányzik?', jp: '{先生|せんせい}＿おかげで、{試験|しけん}に{合格|ごうかく}しました。', a: 'の', wrong: ['な', 'に', 'が'], why: 'Főnév + のおかげで.' },
-      { q: '„Hála a barátom segítségének, hamar végeztem." Mi hiányzik?', jp: '{友|とも}だちが{手伝|てつだ}ってくれた＿、{早|はや}く{終|お}わりました。', a: 'おかげで', wrong: ['のに', 'かわりに', 'まま'], why: 'Jó eredmény oka: 〜おかげで.' },
-      { q: 'Melyik szó jelenti: „végül"?', a: '{最後|さいご}に', wrong: ['まず', 'それから', '{最初|さいしょ}に'], why: 'まず = először · それから = aztán · {最後|さいご}に = végül.' },
-      { q: '„A mellettem álló rálépett a lábamra." Mi hiányzik?', jp: '{隣|となり}の{人|ひと}に{足|あし}を＿。', a: '{踏|ふ}まれました', wrong: ['{踏|ふ}みました', '{踏|ふ}めました', '{踏|ふ}ませました'], why: '{踏|ふ}む → {踏|ふ}まれます: velem történt.' },
+      { point: 3, q: 'Mit jelent: {雨|あめ}に{降|ふ}られました。', a: 'Megáztam: rám esett az eső.', wrong: ['Elállt az eső.', 'Úgy néz ki, esni fog.', 'Azt hallottam, esik.'], why: 'Tárgyatlan ige szenvedő alakja: kellemetlenség ért.' },
+      { point: 1, q: '„A barátom meghívott egy buliba." Mi hiányzik?', jp: '{友|とも}だちにパーティーに＿。', a: '{招待|しょうたい}されました', wrong: ['{招待|しょうたい}しました', '{招待|しょうたい}させました', '{招待|しょうたい}できました'], why: 'する → されます: engem hívtak meg.' },
+      { point: 6, q: '„A tanárnak köszönhetően átmentem a vizsgán." Mi hiányzik?', jp: '{先生|せんせい}＿おかげで、{試験|しけん}に{合格|ごうかく}しました。', a: 'の', wrong: ['な', 'に', 'が'], why: 'Főnév + のおかげで.' },
+      { point: 6, q: '„Hála a barátom segítségének, hamar végeztem." Mi hiányzik?', jp: '{友|とも}だちが{手伝|てつだ}ってくれた＿、{早|はや}く{終|お}わりました。', a: 'おかげで', wrong: ['のに', 'かわりに', 'まま'], why: 'Jó eredmény oka: 〜おかげで.' },
+      { point: 5, q: 'Melyik szó jelenti: „végül"?', a: '{最後|さいご}に', wrong: ['まず', 'それから', '{最初|さいしょ}に'], why: 'まず = először · それから = aztán · {最後|さいご}に = végül.' },
+      { point: 2, q: '„A mellettem álló rálépett a lábamra." Mi hiányzik?', jp: '{隣|となり}の{人|ひと}に{足|あし}を＿。', a: '{踏|ふ}まれました', wrong: ['{踏|ふ}みました', '{踏|ふ}めました', '{踏|ふ}ませました'], why: '{踏|ふ}む → {踏|ふ}まれます: velem történt.' },
       {
-        q: 'Mit jelent: {急|きゅう}に{友|とも}だちに{来|こ}られて、{困|こま}りました。',
+        point: 3, q: 'Mit jelent: {急|きゅう}に{友|とも}だちに{来|こ}られて、{困|こま}りました。',
         a: 'Váratlanul beállított a barátom, és bajban voltam.',
         wrong: [
           'A barátom nem tudott eljönni, és bajban voltam.',
@@ -15034,17 +15040,17 @@ const NIHONCORE_COURSE = [
         ],
         why: '{来|こ}られて: a jövetele nekem kellemetlen volt.'
       },
-      { q: 'Mi a ほめます szenvedő alakja?', a: 'ほめられます', wrong: ['ほまれます', 'ほめれます', 'ほめされます'], why: '2. csoport: る → られる.' },
-      { q: 'Mi a {踏|ふ}みます szenvedő alakja?', a: '{踏|ふ}まれます', wrong: ['{踏|ふ}められます', '{踏|ふ}みられます', '{踏|ふ}めます'], why: '1. csoport: む → まれる.' },
-      { q: '„Egy ismeretlen megkérdezte tőlem az utat." Mi hiányzik?', jp: '{知|し}らない{人|ひと}に{道|みち}を＿。', a: '{聞|き}かれました', wrong: ['{聞|き}きました', '{聞|き}こえました', '{聞|き}けました'], why: 'Engem kérdeztek: {聞|き}く → {聞|き}かれる.' },
+      { point: 1, q: 'Mi a ほめます szenvedő alakja?', a: 'ほめられます', wrong: ['ほまれます', 'ほめれます', 'ほめされます'], why: '2. csoport: る → られる.' },
+      { point: 2, q: 'Mi a {踏|ふ}みます szenvedő alakja?', a: '{踏|ふ}まれます', wrong: ['{踏|ふ}められます', '{踏|ふ}みられます', '{踏|ふ}めます'], why: '1. csoport: む → まれる.' },
+      { point: 1, q: '„Egy ismeretlen megkérdezte tőlem az utat." Mi hiányzik?', jp: '{知|し}らない{人|ひと}に{道|みち}を＿。', a: '{聞|き}かれました', wrong: ['{聞|き}きました', '{聞|き}こえました', '{聞|き}けました'], why: 'Engem kérdeztek: {聞|き}く → {聞|き}かれる.' },
       {
-        q: 'Melyik mondat természetes: „Megharapta a kezemet egy kutya."',
+        point: 2, q: 'Melyik mondat természetes: „Megharapta a kezemet egy kutya."',
         a: '{犬|いぬ}に{手|て}をかまれました。',
         wrong: ['{犬|いぬ}が{手|て}をかまれました。', '{私|わたし}の{手|て}が{犬|いぬ}をかまれました。', '{犬|いぬ}を{手|て}にかまれました。'],
         why: 'A tettes に, a testrész を; az alany én vagyok.'
       },
       {
-        q: 'Mit fejez ki: {隣|となり}の{人|ひと}に{騒|さわ}がれました。',
+        point: 3, q: 'Mit fejez ki: {隣|となり}の{人|ひと}に{騒|さわ}がれました。',
         a: 'Hogy a szomszéd zajongott, és ez engem zavart.',
         wrong: [
           'Hogy én zajongtam a szomszédnál.',
@@ -15054,21 +15060,21 @@ const NIHONCORE_COURSE = [
         why: 'Tárgyatlan ige szenvedő alakja: a kellemetlenség engem ért.'
       },
       {
-        q: 'Örültél, hogy eljött a barátod. Melyik mondat illik?',
+        point: 3, q: 'Örültél, hogy eljött a barátod. Melyik mondat illik?',
         a: '{友|とも}だちが{来|き}てくれました。',
         wrong: ['{友|とも}だちに{来|こ}られました。', '{友|とも}だちを{来|こ}られました。', '{友|とも}だちに{来|き}てあげました。'],
         why: 'A szenvedő alak kellemetlenséget jelez; az örömöt a てくれます.'
       },
       {
-        q: 'Hogyan jelented be: „A vonaton felejtettem a táskámat."',
+        point: 4, q: 'Hogyan jelented be: „A vonaton felejtettem a táskámat."',
         a: '{電車|でんしゃ}にかばんを{忘|わす}れてしまったんです。',
         wrong: ['{電車|でんしゃ}にかばんを{忘|わす}れておきました。', '{電車|でんしゃ}にかばんを{忘|わす}れてあります。', '{電車|でんしゃ}にかばんを{忘|わす}れてみました。'],
         why: 'A baj bejelentése: てしまいました + んです.'
       },
-      { q: 'Mit jelent: {交番|こうばん}に{行|い}くといいですよ。', a: 'Érdemes elmenni a rendőrőrsre.', wrong: ['El kell menned a rendőrőrsre.', 'Ha elmész a rendőrőrsre, baj lesz.', 'Nem szabad a rendőrőrsre menni.'], why: 'A 〜といいですよ szelíd tanács.' },
-      { q: 'Ki kérdezi így: どうしましたか。', a: 'Rendőr, orvos, ügyintéző — hivatalos helyen.', wrong: ['Barát a barátjától.', 'Gyerek a szüleitől.', 'Senki: ez nem helyes mondat.'], why: 'Hivatalos helyen どうしましたか; barátok között どうしたの？' },
+      { point: 7, q: 'Mit jelent: {交番|こうばん}に{行|い}くといいですよ。', a: 'Érdemes elmenni a rendőrőrsre.', wrong: ['El kell menned a rendőrőrsre.', 'Ha elmész a rendőrőrsre, baj lesz.', 'Nem szabad a rendőrőrsre menni.'], why: 'A 〜といいですよ szelíd tanács.' },
+      { point: 4, q: 'Ki kérdezi így: どうしましたか。', a: 'Rendőr, orvos, ügyintéző — hivatalos helyen.', wrong: ['Barát a barátjától.', 'Gyerek a szüleitől.', 'Senki: ez nem helyes mondat.'], why: 'Hivatalos helyen どうしましたか; barátok között どうしたの？' },
       {
-        q: 'Mi a {交番|こうばん}?',
+        point: 4, q: 'Mi a {交番|こうばん}?',
         a: 'Kis utcai rendőrőrs, ahol útbaigazítást is adnak.',
         wrong: ['Banki ügyfélszolgálat.', 'Vasúti jegypénztár.', 'Talált tárgyak boltja.'],
         why: 'A kóban a környék rendőrőrse: bejelentés, talált tárgy, útbaigazítás.'
@@ -15466,16 +15472,16 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Az igazgató úr már hazatért." (tiszteleti) Mi hiányzik?', jp: '{社長|しゃちょう}はもうお{帰|かえ}り＿。', a: 'になりました', wrong: ['しました', 'ください', 'にしました'], why: 'Tiszteleti forma: お + ます-tő + になります.' },
-      { q: 'Mi a {書|か}きます お〜になります alakja?', a: 'お{書|か}きになります', wrong: ['お{書|か}くになります', 'お{書|か}いてになります', 'ご{書|か}きになります'], why: 'お + ます-tő ({書|か}き) + になります.' },
-      { q: 'Melyik a {食|た}べます tiszteleti párja?', a: '{召|め}し{上|あ}がります', wrong: ['いただきます', 'いらっしゃいます', 'おっしゃいます'], why: '{召|め}し{上|あ}がります: a tisztelt személy eszik. (Az いただきます szerény: én eszem.)' },
-      { q: 'Melyik a {言|い}います tiszteleti párja?', a: 'おっしゃいます', wrong: ['いらっしゃいます', 'なさいます', '{召|め}し{上|あ}がります'], why: '{言|い}う → おっしゃいます.' },
-      { q: '„A tanár úr a dolgozószobájában van." Mi hiányzik?', jp: '{先生|せんせい}は{研究室|けんきゅうしつ}に＿。', a: 'いらっしゃいます', wrong: ['おります', 'あります', 'ございます'], why: 'いる tiszteleti párja: いらっしゃいます. (Az おります szerény.)' },
-      { q: '„Ha bármi van, kérem, értesítsen." Mi hiányzik?', jp: '{何|なに}かあれば、＿ください。', a: 'ご{連絡|れんらく}', wrong: ['お{連絡|れんらく}', '{連絡|れんらく}になり', 'ご{連絡|れんらく}して'], why: 'Kínai eredetű szóval: ご + főnév + ください.' },
-      { q: '„Tessék, amíg meleg." Mi hiányzik?', jp: '{熱|あつ}い＿、どうぞ。', a: 'うちに', wrong: ['までに', 'かわりに', 'ままに'], why: 'Amíg az állapot tart: 〜うちに.' },
-      { q: '„Felírom, mielőtt elfelejtem." Mi hiányzik?', jp: '＿うちに、メモしておきます。', a: '{忘|わす}れない', wrong: ['{忘|わす}れた', '{忘|わす}れて', '{忘|わす}れる'], why: 'Mielőtt megtörténne: ない-alak + うちに.' },
+      { point: 2, q: '„Az igazgató úr már hazatért." (tiszteleti) Mi hiányzik?', jp: '{社長|しゃちょう}はもうお{帰|かえ}り＿。', a: 'になりました', wrong: ['しました', 'ください', 'にしました'], why: 'Tiszteleti forma: お + ます-tő + になります.' },
+      { point: 2, q: 'Mi a {書|か}きます お〜になります alakja?', a: 'お{書|か}きになります', wrong: ['お{書|か}くになります', 'お{書|か}いてになります', 'ご{書|か}きになります'], why: 'お + ます-tő ({書|か}き) + になります.' },
+      { point: 3, q: 'Melyik a {食|た}べます tiszteleti párja?', a: '{召|め}し{上|あ}がります', wrong: ['いただきます', 'いらっしゃいます', 'おっしゃいます'], why: '{召|め}し{上|あ}がります: a tisztelt személy eszik. (Az いただきます szerény: én eszem.)' },
+      { point: 3, q: 'Melyik a {言|い}います tiszteleti párja?', a: 'おっしゃいます', wrong: ['いらっしゃいます', 'なさいます', '{召|め}し{上|あ}がります'], why: '{言|い}う → おっしゃいます.' },
+      { point: 3, q: '„A tanár úr a dolgozószobájában van." Mi hiányzik?', jp: '{先生|せんせい}は{研究室|けんきゅうしつ}に＿。', a: 'いらっしゃいます', wrong: ['おります', 'あります', 'ございます'], why: 'いる tiszteleti párja: いらっしゃいます. (Az おります szerény.)' },
+      { point: 4, q: '„Ha bármi van, kérem, értesítsen." Mi hiányzik?', jp: '{何|なに}かあれば、＿ください。', a: 'ご{連絡|れんらく}', wrong: ['お{連絡|れんらく}', '{連絡|れんらく}になり', 'ご{連絡|れんらく}して'], why: 'Kínai eredetű szóval: ご + főnév + ください.' },
+      { point: 6, q: '„Tessék, amíg meleg." Mi hiányzik?', jp: '{熱|あつ}い＿、どうぞ。', a: 'うちに', wrong: ['までに', 'かわりに', 'ままに'], why: 'Amíg az állapot tart: 〜うちに.' },
+      { point: 6, q: '„Felírom, mielőtt elfelejtem." Mi hiányzik?', jp: '＿うちに、メモしておきます。', a: '{忘|わす}れない', wrong: ['{忘|わす}れた', '{忘|わす}れて', '{忘|わす}れる'], why: 'Mielőtt megtörténne: ない-alak + うちに.' },
       {
-        q: 'Mit jelent: {部長|ぶちょう}はもう{帰|かえ}られました。',
+        point: 1, q: 'Mit jelent: {部長|ぶちょう}はもう{帰|かえ}られました。',
         a: 'Az osztályvezető úr már hazament (tisztelettel mondva).',
         wrong: [
           'Az osztályvezető haza tudott menni.',
@@ -15485,7 +15491,7 @@ const NIHONCORE_COURSE = [
         why: 'A szenvedő alak itt tiszteletet fejez ki.'
       },
       {
-        q: 'Kinek a cselekvésére használod a tiszteleti alakokat?',
+        point: 1, q: 'Kinek a cselekvésére használod a tiszteleti alakokat?',
         a: 'Másokéra, akiket tisztelsz: tanár, főnök, vendég.',
         wrong: [
           'A saját cselekvésedre.',
@@ -15494,31 +15500,31 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A tiszteleti nyelv a másikat emeli; magadra és a tieidre nem használod.'
       },
-      { q: 'Mi a {読|よ}みます tiszteleti alakja (れる-forma)?', a: '{読|よ}まれます', wrong: ['{読|よ}められます', 'お{読|よ}みします', '{読|よ}ませます'], why: '1. csoport: む → まれます — ugyanaz, mint a szenvedő alak.' },
-      { q: 'Melyik a {見|み}ます tiszteleti párja?', a: 'ご{覧|らん}になります', wrong: ['お{見|み}になります', '{拝見|はいけん}します', '{見|み}えます'], why: 'A {見|み}ます külön tiszteleti igéje: ご{覧|らん}になります.' },
-      { q: 'Melyik a します tiszteleti párja?', a: 'なさいます', wrong: ['いたします', 'いただきます', 'まいります'], why: 'します → なさいます (tiszteleti); az いたします szerény alak.' },
-      { q: 'Melyik a {知|し}っています tiszteleti párja?', a: 'ご{存知|ぞんじ}です', wrong: ['{存|ぞん}じております', 'お{知|し}りです', '{拝見|はいけん}しています'], why: '{知|し}っています → ご{存知|ぞんじ}です.' },
+      { point: 1, q: 'Mi a {読|よ}みます tiszteleti alakja (れる-forma)?', a: '{読|よ}まれます', wrong: ['{読|よ}められます', 'お{読|よ}みします', '{読|よ}ませます'], why: '1. csoport: む → まれます — ugyanaz, mint a szenvedő alak.' },
+      { point: 3, q: 'Melyik a {見|み}ます tiszteleti párja?', a: 'ご{覧|らん}になります', wrong: ['お{見|み}になります', '{拝見|はいけん}します', '{見|み}えます'], why: 'A {見|み}ます külön tiszteleti igéje: ご{覧|らん}になります.' },
+      { point: 3, q: 'Melyik a します tiszteleti párja?', a: 'なさいます', wrong: ['いたします', 'いただきます', 'まいります'], why: 'します → なさいます (tiszteleti); az いたします szerény alak.' },
+      { point: 3, q: 'Melyik a {知|し}っています tiszteleti párja?', a: 'ご{存知|ぞんじ}です', wrong: ['{存|ぞん}じております', 'お{知|し}りです', '{拝見|はいけん}しています'], why: '{知|し}っています → ご{存知|ぞんじ}です.' },
       {
-        q: 'Melyik mondat hibás?',
+        point: 3, q: 'Melyik mondat hibás?',
         a: '{私|わたし}は{三時|さんじ}にいらっしゃいます。',
         wrong: ['{先生|せんせい}は{三時|さんじ}にいらっしゃいます。', 'お{客様|きゃくさま}は{三時|さんじ}にいらっしゃいます。', '{社長|しゃちょう}は{三時|さんじ}にいらっしゃいます。'],
         why: 'Tiszteleti igét saját magadra soha nem használhatsz.'
       },
-      { q: '„Kérem, ide írja be a nevét." Mi hiányzik?', jp: 'こちらにお{名前|なまえ}を＿ください。', a: 'ご{記入|きにゅう}', wrong: ['お{記入|きにゅう}', 'ご{書|か}き', 'お{書|か}く'], why: 'Kínai eredetű főnév elé ご kerül: ご{記入|きにゅう}ください.' },
+      { point: 4, q: '„Kérem, ide írja be a nevét." Mi hiányzik?', jp: 'こちらにお{名前|なまえ}を＿ください。', a: 'ご{記入|きにゅう}', wrong: ['お{記入|きにゅう}', 'ご{書|か}き', 'お{書|か}く'], why: 'Kínai eredetű főnév elé ご kerül: ご{記入|きにゅう}ください.' },
       {
-        q: 'Mit jelent: {若|わか}いうちに、いろいろな{国|くに}へ{行|い}きたいです。',
+        point: 6, q: 'Mit jelent: {若|わか}いうちに、いろいろな{国|くに}へ{行|い}きたいです。',
         a: 'Amíg fiatal vagyok, szeretnék sok országba eljutni.',
         wrong: ['Fiatalon sok országban jártam.', 'Ha megöregszem, sokat utazom.', 'A fiatalok sokat utaznak.'],
         why: 'うちに: amíg az állapot tart.'
       },
-      { q: '„Menjünk haza, mielőtt besötétedik." Mi hiányzik?', jp: '{暗|くら}く＿うちに、{帰|かえ}りましょう。', a: 'ならない', wrong: ['なる', 'なった', 'なって'], why: 'ない-alak + うちに: „mielőtt megtörténne".' },
+      { point: 6, q: '„Menjünk haza, mielőtt besötétedik." Mi hiányzik?', jp: '{暗|くら}く＿うちに、{帰|かえ}りましょう。', a: 'ならない', wrong: ['なる', 'なった', 'なって'], why: 'ない-alak + うちに: „mielőtt megtörténne".' },
       {
-        q: 'Hogyan mutatkozol be udvariasan telefonon?',
+        point: 5, q: 'Hogyan mutatkozol be udvariasan telefonon?',
         a: 'もしもし、アンナと{申|もう}しますが…。',
         wrong: ['もしもし、アンナさんですが…。', 'もしもし、アンナとおっしゃいますが…。', 'もしもし、アンナでいらっしゃいますが…。'],
         why: 'Magadról a szerény {申|もう}します igével beszélsz; さん, おっしゃる, いらっしゃる csak másnak jár.'
       },
-      { q: '「{三時|さんじ}でよろしいですか。」「はい、けっこうです。」 — mit jelent itt a けっこうです?', a: 'Megfelel, rendben van.', wrong: ['Nem kérem.', 'Túl késő.', 'Nem tudom.'], why: 'はい、けっこうです = „megfelel". Elhárításként: いいえ、けっこうです.' }
+      { point: 7, q: '「{三時|さんじ}でよろしいですか。」「はい、けっこうです。」 — mit jelent itt a けっこうです?', a: 'Megfelel, rendben van.', wrong: ['Nem kérem.', 'Túl késő.', 'Nem tudom.'], why: 'はい、けっこうです = „megfelel". Elhárításként: いいえ、けっこうです.' }
     ]
   },
 
@@ -15935,27 +15941,27 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Viszem a csomagját." (szerényen) Mi hiányzik?', jp: 'お{荷物|にもつ}をお{持|も}ち＿。', a: 'します', wrong: ['になります', 'ください', 'でございます'], why: 'Szerény forma: お + ます-tő + します.' },
+      { point: 1, q: '„Viszem a csomagját." (szerényen) Mi hiányzik?', jp: 'お{荷物|にもつ}をお{持|も}ち＿。', a: 'します', wrong: ['になります', 'ください', 'でございます'], why: 'Szerény forma: お + ます-tő + します.' },
       {
-        q: 'Kinek a cselekvéséről szól az お〜します forma?',
+        point: 1, q: 'Kinek a cselekvéséről szól az お〜します forma?',
         a: 'A sajátomról, amit a másikért teszek.',
         wrong: ['A tisztelt személy cselekvéséről.', 'Bárki cselekvéséről.', 'Csak a családtagjaiméról.'],
         why: 'A szerény nyelv a beszélő cselekvését teszi lejjebb.'
       },
-      { q: 'Melyik a {言|い}います szerény párja?', a: '{申|もう}します', wrong: ['おっしゃいます', '{参|まい}ります', 'なさいます'], why: '{言|い}う → {申|もう}します (szerény) · おっしゃいます (tiszteleti).' },
-      { q: 'Melyik a {行|い}きます szerény párja?', a: '{参|まい}ります', wrong: ['いらっしゃいます', '{申|もう}します', 'おります'], why: '{行|い}く / {来|く}る → {参|まい}ります.' },
-      { q: '„Jól van a kedves családja?" Mi hiányzik?', jp: '＿{家族|かぞく}はお{元気|げんき}ですか。', a: 'ご', wrong: ['お', 'こ', 'を'], why: 'Kínai eredetű szó előtt: ご{家族|かぞく}.' },
-      { q: '„Ezzel a tollal könnyű írni." Mi hiányzik?', jp: 'このペンは＿やすいです。', a: '{書|か}き', wrong: ['{書|か}く', '{書|か}いて', '{書|か}け'], why: 'ます-tő + やすい.' },
-      { q: '„Ezt a kanjit nehéz megjegyezni." Mi hiányzik?', jp: 'この{漢字|かんじ}は{覚|おぼ}え＿です。', a: 'にくい', wrong: ['やすい', 'ばかり', 'らしい'], why: 'Nehéz megtenni: ます-tő + にくい.' },
-      { q: '„Tegnap túl sokat ettem." Mi hiányzik?', jp: 'きのうは＿すぎました。', a: '{食|た}べ', wrong: ['{食|た}べる', '{食|た}べて', '{食|た}べた'], why: 'ます-tő + すぎます.' },
-      { q: '„Ez a cipő túl nagy." Mi hiányzik?', jp: 'この{靴|くつ}は＿すぎます。', a: '{大|おお}き', wrong: ['{大|おお}きい', '{大|おお}きく', '{大|おお}きな'], why: 'い-melléknév: az い lemarad a すぎます előtt.' },
-      { q: 'Mit jelent: {田中|たなか}と{申|もう}します。', a: 'Tanaka vagyok (szerényen mondva).', wrong: ['Tanaka úr mondta.', 'Tanakát keresem.', 'Tanaka úr üzeni.'], why: '{申|もう}します: a {言|い}います szerény alakja; bemutatkozáskor használod.' },
-      { q: 'Melyik a {見|み}ます szerény párja?', a: '{拝見|はいけん}します', wrong: ['ご{覧|らん}になります', 'お{見|み}します', '{見|み}られます'], why: '{見|み}ます → {拝見|はいけん}します (szerény); ご{覧|らん}になります a tiszteleti párja.' },
-      { q: 'Melyik a います szerény párja?', a: 'おります', wrong: ['いらっしゃいます', 'ございます', 'まいります'], why: 'います → おります (szerény); いらっしゃいます a tiszteleti párja.' },
-      { q: 'Melyik a {会|あ}います szerény párja?', a: 'お{目|め}にかかります', wrong: ['お{会|あ}いになります', '{伺|うかが}います', '{拝見|はいけん}します'], why: '{会|あ}います → お{目|め}にかかります.' },
-      { q: '„Holnap meglátogatom a tanár urat." Mi hiányzik?', jp: 'あした、{先生|せんせい}のお{宅|たく}に＿。', a: '{伺|うかが}います', wrong: ['いらっしゃいます', 'おっしゃいます', 'ご{覧|らん}になります'], why: 'A saját látogatásodról szerényen: {伺|うかが}います.' },
+      { point: 2, q: 'Melyik a {言|い}います szerény párja?', a: '{申|もう}します', wrong: ['おっしゃいます', '{参|まい}ります', 'なさいます'], why: '{言|い}う → {申|もう}します (szerény) · おっしゃいます (tiszteleti).' },
+      { point: 2, q: 'Melyik a {行|い}きます szerény párja?', a: '{参|まい}ります', wrong: ['いらっしゃいます', '{申|もう}します', 'おります'], why: '{行|い}く / {来|く}る → {参|まい}ります.' },
+      { point: 4, q: '„Jól van a kedves családja?" Mi hiányzik?', jp: '＿{家族|かぞく}はお{元気|げんき}ですか。', a: 'ご', wrong: ['お', 'こ', 'を'], why: 'Kínai eredetű szó előtt: ご{家族|かぞく}.' },
+      { point: 5, q: '„Ezzel a tollal könnyű írni." Mi hiányzik?', jp: 'このペンは＿やすいです。', a: '{書|か}き', wrong: ['{書|か}く', '{書|か}いて', '{書|か}け'], why: 'ます-tő + やすい.' },
+      { point: 5, q: '„Ezt a kanjit nehéz megjegyezni." Mi hiányzik?', jp: 'この{漢字|かんじ}は{覚|おぼ}え＿です。', a: 'にくい', wrong: ['やすい', 'ばかり', 'らしい'], why: 'Nehéz megtenni: ます-tő + にくい.' },
+      { point: 6, q: '„Tegnap túl sokat ettem." Mi hiányzik?', jp: 'きのうは＿すぎました。', a: '{食|た}べ', wrong: ['{食|た}べる', '{食|た}べて', '{食|た}べた'], why: 'ます-tő + すぎます.' },
+      { point: 6, q: '„Ez a cipő túl nagy." Mi hiányzik?', jp: 'この{靴|くつ}は＿すぎます。', a: '{大|おお}き', wrong: ['{大|おお}きい', '{大|おお}きく', '{大|おお}きな'], why: 'い-melléknév: az い lemarad a すぎます előtt.' },
+      { point: 2, q: 'Mit jelent: {田中|たなか}と{申|もう}します。', a: 'Tanaka vagyok (szerényen mondva).', wrong: ['Tanaka úr mondta.', 'Tanakát keresem.', 'Tanaka úr üzeni.'], why: '{申|もう}します: a {言|い}います szerény alakja; bemutatkozáskor használod.' },
+      { point: 2, q: 'Melyik a {見|み}ます szerény párja?', a: '{拝見|はいけん}します', wrong: ['ご{覧|らん}になります', 'お{見|み}します', '{見|み}られます'], why: '{見|み}ます → {拝見|はいけん}します (szerény); ご{覧|らん}になります a tiszteleti párja.' },
+      { point: 2, q: 'Melyik a います szerény párja?', a: 'おります', wrong: ['いらっしゃいます', 'ございます', 'まいります'], why: 'います → おります (szerény); いらっしゃいます a tiszteleti párja.' },
+      { point: 2, q: 'Melyik a {会|あ}います szerény párja?', a: 'お{目|め}にかかります', wrong: ['お{会|あ}いになります', '{伺|うかが}います', '{拝見|はいけん}します'], why: '{会|あ}います → お{目|め}にかかります.' },
+      { point: 2, q: '„Holnap meglátogatom a tanár urat." Mi hiányzik?', jp: 'あした、{先生|せんせい}のお{宅|たく}に＿。', a: '{伺|うかが}います', wrong: ['いらっしゃいます', 'おっしゃいます', 'ご{覧|らん}になります'], why: 'A saját látogatásodról szerényen: {伺|うかが}います.' },
       {
-        q: 'Ügyfél telefonál, a főnöködet keresi, aki nincs bent. Mit mondasz?',
+        point: 3, q: 'Ügyfél telefonál, a főnöködet keresi, aki nincs bent. Mit mondasz?',
         a: '{田中|たなか}は{今|いま}、おりません。',
         wrong: [
           '{田中|たなか}{部長|ぶちょう}は{今|いま}、いらっしゃいません。',
@@ -15964,11 +15970,11 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Kívülállónak a saját főnöködről szerényen beszélsz: さん nélkül, おります igével.'
       },
-      { q: 'Melyik szó elé kerül ご?', a: '{家族|かぞく}', wrong: ['{名前|なまえ}', '{仕事|しごと}', '{手紙|てがみ}'], why: 'Kínai eredetű szó: ご{家族|かぞく}. A többi お-t kap.' },
-      { q: 'Melyik mondat hibás?', a: '{私|わたし}のお{名前|なまえ}は{田中|たなか}です。', wrong: ['お{名前|なまえ}は{何|なん}とおっしゃいますか。', 'ご{家族|かぞく}はお{元気|げんき}ですか。', 'お{茶|ちゃ}をどうぞ。'], why: 'A saját nevedre nem teszel tiszteleti előtagot.' },
-      { q: 'Mit jelent: このコップは{割|わ}れやすいです。', a: 'Ez a pohár törékeny.', wrong: ['Ezt a poharat könnyű használni.', 'Ezt a poharat nehéz eltörni.', 'Ez a pohár eltört.'], why: 'Tárgyatlan ige + やすい: „hajlamos rá" — könnyen eltörik.' },
-      { q: '„Túl nehéz a csomag, nem bírom el." Mi hiányzik?', jp: '{荷物|にもつ}が＿、{持|も}てません。', a: '{重|おも}すぎて', wrong: ['{重|おも}いすぎて', '{重|おも}くすぎて', '{重|おも}やすくて'], why: 'Az い lekopik: {重|おも}い → {重|おも}すぎる; て-alakban okot ad.' },
-      { q: 'Megdicsérik a japántudásodat. Mi a szokásos válasz?', a: 'いえいえ、まだまだです。', wrong: ['はい、{上手|じょうず}です。', '{当然|とうぜん}です。', 'お{上手|じょうず}ですね。'], why: 'A dicséretet szerényen elhárítod: „még messze nem megy jól".' }
+      { point: 4, q: 'Melyik szó elé kerül ご?', a: '{家族|かぞく}', wrong: ['{名前|なまえ}', '{仕事|しごと}', '{手紙|てがみ}'], why: 'Kínai eredetű szó: ご{家族|かぞく}. A többi お-t kap.' },
+      { point: 4, q: 'Melyik mondat hibás?', a: '{私|わたし}のお{名前|なまえ}は{田中|たなか}です。', wrong: ['お{名前|なまえ}は{何|なん}とおっしゃいますか。', 'ご{家族|かぞく}はお{元気|げんき}ですか。', 'お{茶|ちゃ}をどうぞ。'], why: 'A saját nevedre nem teszel tiszteleti előtagot.' },
+      { point: 5, q: 'Mit jelent: このコップは{割|わ}れやすいです。', a: 'Ez a pohár törékeny.', wrong: ['Ezt a poharat könnyű használni.', 'Ezt a poharat nehéz eltörni.', 'Ez a pohár eltört.'], why: 'Tárgyatlan ige + やすい: „hajlamos rá" — könnyen eltörik.' },
+      { point: 6, q: '„Túl nehéz a csomag, nem bírom el." Mi hiányzik?', jp: '{荷物|にもつ}が＿、{持|も}てません。', a: '{重|おも}すぎて', wrong: ['{重|おも}いすぎて', '{重|おも}くすぎて', '{重|おも}やすくて'], why: 'Az い lekopik: {重|おも}い → {重|おも}すぎる; て-alakban okot ad.' },
+      { point: 7, q: 'Megdicsérik a japántudásodat. Mi a szokásos válasz?', a: 'いえいえ、まだまだです。', wrong: ['はい、{上手|じょうず}です。', '{当然|とうぜん}です。', 'お{上手|じょうず}ですね。'], why: 'A dicséretet szerényen elhárítod: „még messze nem megy jól".' }
     ]
   },
 
@@ -16383,19 +16389,19 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Akármeddig várok, nem jön a busz." Mi hiányzik?', jp: '＿{待|ま}っても、バスが{来|き}ません。', a: 'いくら', wrong: ['いくつ', 'どれ', 'なんでも'], why: 'いくら〜ても = akármennyire is.' },
-      { q: '„Bármit eszem, finom." Mi hiányzik?', jp: '{何|なに}を＿、おいしいです。', a: '{食|た}べても', wrong: ['{食|た}べたら', '{食|た}べれば', '{食|た}べると'], why: 'Kérdőszó + て-alak + も.' },
-      { q: '„Jöjjön bármikor." Mi hiányzik?', jp: '＿{来|き}てください。', a: 'いつでも', wrong: ['いつも', 'いつか', 'いつまで'], why: 'いつでも = bármikor. (いつも = mindig.)' },
-      { q: '„Ezt bárki meg tudja csinálni." Mi hiányzik?', jp: 'これは＿できます。', a: 'だれでも', wrong: ['だれか', 'だれも', 'だれが'], why: 'だれでも = bárki.' },
-      { q: '„Múlt hónapban kezdtem zongorázni tanulni." Mi hiányzik?', jp: '{先月|せんげつ}からピアノを{習|なら}い＿。', a: '{始|はじ}めました', wrong: ['{終|お}わりました', '{続|つづ}けました', 'すぎました'], why: 'Elkezd: ます-tő + {始|はじ}めます.' },
-      { q: '„A baba hirtelen sírni kezdett." Mi hiányzik?', jp: '{赤|あか}ちゃんが{急|きゅう}に{泣|な}き＿。', a: '{出|だ}しました', wrong: ['{終|お}わりました', '{続|つづ}けました', 'やすいです'], why: 'Hirtelen kezdet: ます-tő + {出|だ}します.' },
-      { q: '„Ezt a könyvet már kiolvastam." Mi hiányzik?', jp: 'この{本|ほん}はもう＿{終|お}わりました。', a: '{読|よ}み', wrong: ['{読|よ}んで', '{読|よ}む', '{読|よ}んだ'], why: 'ます-tő + {終|お}わります.' },
-      { q: '„Három órán át gyalogoltam megállás nélkül." Mi hiányzik?', jp: '{三時間|さんじかん}も{歩|ある}き＿。', a: '{続|つづ}けました', wrong: ['{始|はじ}めました', '{出|だ}しました', '{終|お}わりました'], why: 'Folytat: ます-tő + {続|つづ}けます.' },
-      { q: 'Hogyan mondod: „Tanaka boldognak látszik."', a: '{田中|たなか}さんはうれしそうです。', wrong: ['{田中|たなか}さんはうれしいそうです。', '{田中|たなか}さんはうれしがりです。', '{田中|たなか}さんはうれしくそうです。'], why: 'Látszat: az い lemarad, うれしそうです. (Az うれしいそうです hallomás.)' },
-      { q: 'Mit jelent: {何|なん}でも{聞|き}いてください。', a: 'Bármit kérdezhet.', wrong: ['Mit kérdezett?', 'Ne kérdezzen semmit.', 'Kérdezzen valamit.'], why: '{何|なん}でも = bármit.' },
-      { q: '„Akárkit kérdeztem, senki sem tudta." Mi hiányzik?', jp: '＿{聞|き}いても、わかりませんでした。', a: 'だれに', wrong: ['だれも', 'だれでも', 'だれか'], why: 'Kérdőszó + partikula + ても: だれに{聞|き}いても.' },
+      { point: 1, q: '„Akármeddig várok, nem jön a busz." Mi hiányzik?', jp: '＿{待|ま}っても、バスが{来|き}ません。', a: 'いくら', wrong: ['いくつ', 'どれ', 'なんでも'], why: 'いくら〜ても = akármennyire is.' },
+      { point: 1, q: '„Bármit eszem, finom." Mi hiányzik?', jp: '{何|なに}を＿、おいしいです。', a: '{食|た}べても', wrong: ['{食|た}べたら', '{食|た}べれば', '{食|た}べると'], why: 'Kérdőszó + て-alak + も.' },
+      { point: 2, q: '„Jöjjön bármikor." Mi hiányzik?', jp: '＿{来|き}てください。', a: 'いつでも', wrong: ['いつも', 'いつか', 'いつまで'], why: 'いつでも = bármikor. (いつも = mindig.)' },
+      { point: 2, q: '„Ezt bárki meg tudja csinálni." Mi hiányzik?', jp: 'これは＿できます。', a: 'だれでも', wrong: ['だれか', 'だれも', 'だれが'], why: 'だれでも = bárki.' },
+      { point: 3, q: '„Múlt hónapban kezdtem zongorázni tanulni." Mi hiányzik?', jp: '{先月|せんげつ}からピアノを{習|なら}い＿。', a: '{始|はじ}めました', wrong: ['{終|お}わりました', '{続|つづ}けました', 'すぎました'], why: 'Elkezd: ます-tő + {始|はじ}めます.' },
+      { point: 4, q: '„A baba hirtelen sírni kezdett." Mi hiányzik?', jp: '{赤|あか}ちゃんが{急|きゅう}に{泣|な}き＿。', a: '{出|だ}しました', wrong: ['{終|お}わりました', '{続|つづ}けました', 'やすいです'], why: 'Hirtelen kezdet: ます-tő + {出|だ}します.' },
+      { point: 3, q: '„Ezt a könyvet már kiolvastam." Mi hiányzik?', jp: 'この{本|ほん}はもう＿{終|お}わりました。', a: '{読|よ}み', wrong: ['{読|よ}んで', '{読|よ}む', '{読|よ}んだ'], why: 'ます-tő + {終|お}わります.' },
+      { point: 5, q: '„Három órán át gyalogoltam megállás nélkül." Mi hiányzik?', jp: '{三時間|さんじかん}も{歩|ある}き＿。', a: '{続|つづ}けました', wrong: ['{始|はじ}めました', '{出|だ}しました', '{終|お}わりました'], why: 'Folytat: ます-tő + {続|つづ}けます.' },
+      { point: 6, q: 'Hogyan mondod: „Tanaka boldognak látszik."', a: '{田中|たなか}さんはうれしそうです。', wrong: ['{田中|たなか}さんはうれしいそうです。', '{田中|たなか}さんはうれしがりです。', '{田中|たなか}さんはうれしくそうです。'], why: 'Látszat: az い lemarad, うれしそうです. (Az うれしいそうです hallomás.)' },
+      { point: 2, q: 'Mit jelent: {何|なん}でも{聞|き}いてください。', a: 'Bármit kérdezhet.', wrong: ['Mit kérdezett?', 'Ne kérdezzen semmit.', 'Kérdezzen valamit.'], why: '{何|なん}でも = bármit.' },
+      { point: 1, q: '„Akárkit kérdeztem, senki sem tudta." Mi hiányzik?', jp: '＿{聞|き}いても、わかりませんでした。', a: 'だれに', wrong: ['だれも', 'だれでも', 'だれか'], why: 'Kérdőszó + partikula + ても: だれに{聞|き}いても.' },
       {
-        q: 'Mit jelent: どこへ{行|い}っても、{人|ひと}が{多|おお}いです。',
+        point: 1, q: 'Mit jelent: どこへ{行|い}っても、{人|ひと}が{多|おお}いです。',
         a: 'Bárhová megyek, sok az ember.',
         wrong: [
           'Sehová sem megyek, mert sok az ember.',
@@ -16404,12 +16410,12 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Kérdőszó + ても: „bárhová…, akkor is".'
       },
-      { q: 'Melyik mondat jelenti: „Semmit sem eszem."', a: '{何|なに}も{食|た}べません。', wrong: ['{何|なん}でも{食|た}べます。', '{何|なに}か{食|た}べます。', '{何|なに}を{食|た}べますか。'], why: 'Kérdőszó + も + tagadás: „semmi".' },
-      { q: 'Melyik mondat helyes?', a: '{雨|あめ}が{降|ふ}り{始|はじ}めました。', wrong: ['{雨|あめ}が{降|ふ}り{始|はじ}まりました。', '{雨|あめ}が{降|ふ}る{始|はじ}めました。', '{雨|あめ}が{降|ふ}って{始|はじ}めました。'], why: 'ます-tő + {始|はじ}める — tárgyatlan ige után is.' },
-      { q: '„Megírtam a beszámolót." Mi hiányzik?', jp: 'レポートを{書|か}き＿。', a: '{終|お}わりました', wrong: ['{出|だ}しました', '{続|つづ}けました', '{始|はじ}めました'], why: 'A befejezést a 〜{終|お}わります fejezi ki.' },
-      { q: 'Melyik összetett ige fejez ki hirtelen, váratlan kezdetet?', a: '〜{出|だ}します', wrong: ['〜{始|はじ}めます', '〜{続|つづ}けます', '〜{終|お}わります'], why: '{泣|な}き{出|だ}す, {笑|わら}い{出|だ}す: váratlanul kitör.' },
+      { point: 2, q: 'Melyik mondat jelenti: „Semmit sem eszem."', a: '{何|なに}も{食|た}べません。', wrong: ['{何|なん}でも{食|た}べます。', '{何|なに}か{食|た}べます。', '{何|なに}を{食|た}べますか。'], why: 'Kérdőszó + も + tagadás: „semmi".' },
+      { point: 3, q: 'Melyik mondat helyes?', a: '{雨|あめ}が{降|ふ}り{始|はじ}めました。', wrong: ['{雨|あめ}が{降|ふ}り{始|はじ}まりました。', '{雨|あめ}が{降|ふ}る{始|はじ}めました。', '{雨|あめ}が{降|ふ}って{始|はじ}めました。'], why: 'ます-tő + {始|はじ}める — tárgyatlan ige után is.' },
+      { point: 3, q: '„Megírtam a beszámolót." Mi hiányzik?', jp: 'レポートを{書|か}き＿。', a: '{終|お}わりました', wrong: ['{出|だ}しました', '{続|つづ}けました', '{始|はじ}めました'], why: 'A befejezést a 〜{終|お}わります fejezi ki.' },
+      { point: 4, q: 'Melyik összetett ige fejez ki hirtelen, váratlan kezdetet?', a: '〜{出|だ}します', wrong: ['〜{始|はじ}めます', '〜{続|つづ}けます', '〜{終|お}わります'], why: '{泣|な}き{出|だ}す, {笑|わら}い{出|だ}す: váratlanul kitör.' },
       {
-        q: 'Mit jelent: {世界|せかい}の{人口|じんこう}は{増|ふ}え{続|つづ}けています。',
+        point: 5, q: 'Mit jelent: {世界|せかい}の{人口|じんこう}は{増|ふ}え{続|つづ}けています。',
         a: 'A világ népessége folyamatosan nő.',
         wrong: [
           'A világ népessége nőni kezdett.',
@@ -16418,9 +16424,9 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜{続|つづ}けています: megszakítás nélkül tart, most is.'
       },
-      { q: 'Interjú közben témát váltasz. Mit mondasz?', a: '{話|はなし}は{変|か}わりますが…。', wrong: ['{質問|しつもん}は{以上|いじょう}です。', 'さっそくですが…。', '{話|はなし}は{戻|もど}りますが…。'], why: '{話|はなし}は{変|か}わりますが: „témát váltva".' },
-      { q: 'Hogyan zárod le az interjút?', a: '{質問|しつもん}は{以上|いじょう}です。ありがとうございました。', wrong: ['では、{最初|さいしょ}の{質問|しつもん}です。', 'たとえば、どういうことでしょうか。', '{今日|きょう}は〜について{伺|うかが}いたいと{思|おも}います。'], why: '{以上|いじょう}です: „ennyi volt".' },
-      { q: 'Melyik a leghivatalosabb köszönet?', a: '〜ていただき、{感謝|かんしゃ}しております。', wrong: ['〜てくれて、ありがとう。', '〜てくれて、{助|たす}かったよ。', '〜てもらって、うれしい。'], why: 'A szerény ていただき és a {感謝|かんしゃ}しております a legformálisabb.' }
+      { point: 7, q: 'Interjú közben témát váltasz. Mit mondasz?', a: '{話|はなし}は{変|か}わりますが…。', wrong: ['{質問|しつもん}は{以上|いじょう}です。', 'さっそくですが…。', '{話|はなし}は{戻|もど}りますが…。'], why: '{話|はなし}は{変|か}わりますが: „témát váltva".' },
+      { point: 7, q: 'Hogyan zárod le az interjút?', a: '{質問|しつもん}は{以上|いじょう}です。ありがとうございました。', wrong: ['では、{最初|さいしょ}の{質問|しつもん}です。', 'たとえば、どういうことでしょうか。', '{今日|きょう}は〜について{伺|うかが}いたいと{思|おも}います。'], why: '{以上|いじょう}です: „ennyi volt".' },
+      { point: 8, q: 'Melyik a leghivatalosabb köszönet?', a: '〜ていただき、{感謝|かんしゃ}しております。', wrong: ['〜てくれて、ありがとう。', '〜てくれて、{助|たす}かったよ。', '〜てもらって、うれしい。'], why: 'A szerény ていただき és a {感謝|かんしゃ}しております a legformálisabb.' }
     ]
   },
 
@@ -16747,15 +16753,15 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Mintha álom volna." Mi hiányzik?', jp: '＿{夢|ゆめ}のようです。', a: 'まるで', wrong: ['いくら', 'ぜひ', 'たしかに'], why: 'Hasonlat: まるで〜のようです.' },
-      { q: '„Úgy beszél japánul, mintha japán volna." Mi hiányzik?', jp: '{彼|かれ}はまるで{日本人|にほんじん}＿{日本語|にほんご}を{話|はな}します。', a: 'のように', wrong: ['のような', 'みたいな', 'そうに'], why: 'Ige előtt: のように.' },
-      { q: '„Egy egész órába telt az állomásig." Mi hiányzik?', jp: '{駅|えき}まで{一時間|いちじかん}＿かかりました。', a: 'も', wrong: ['しか', 'だけ', 'まで'], why: 'A mennyiség sok: szám + も.' },
-      { q: 'Mit jelent: {一人|ひとり}も{来|き}ませんでした。', a: 'Senki sem jött el.', wrong: ['Egy ember jött el.', 'Csak egy ember jött el.', 'Sokan eljöttek.'], why: '{一人|ひとり}も + tagadás = egy ember sem.' },
-      { q: '„Csak tíz percünk van." Mi hiányzik?', jp: '{時間|じかん}が{十分|じゅっぷん}＿ありません。', a: 'しか', wrong: ['だけ', 'まで', 'ばかり'], why: 'しか + tagadás: csak ennyi.' },
-      { q: '„Nincs más hátra, gyalogolni kell." Mi hiányzik?', jp: 'もう＿しかありません。', a: '{歩|ある}く', wrong: ['{歩|ある}いて', '{歩|ある}き', '{歩|ある}いた'], why: 'Szótári alak + しかありません.' },
-      { q: '„Nem hiába híres ez az étterem: nagyon finom." Mi hiányzik?', jp: '{有名|ゆうめい}な{店|みせ}＿、とてもおいしいです。', a: 'だけあって', wrong: ['のに', 'しかなくて', 'かわりに'], why: 'A várakozásnak megfelelő eredmény: 〜だけあって.' },
+      { point: 1, q: '„Mintha álom volna." Mi hiányzik?', jp: '＿{夢|ゆめ}のようです。', a: 'まるで', wrong: ['いくら', 'ぜひ', 'たしかに'], why: 'Hasonlat: まるで〜のようです.' },
+      { point: 1, q: '„Úgy beszél japánul, mintha japán volna." Mi hiányzik?', jp: '{彼|かれ}はまるで{日本人|にほんじん}＿{日本語|にほんご}を{話|はな}します。', a: 'のように', wrong: ['のような', 'みたいな', 'そうに'], why: 'Ige előtt: のように.' },
+      { point: 2, q: '„Egy egész órába telt az állomásig." Mi hiányzik?', jp: '{駅|えき}まで{一時間|いちじかん}＿かかりました。', a: 'も', wrong: ['しか', 'だけ', 'まで'], why: 'A mennyiség sok: szám + も.' },
+      { point: 2, q: 'Mit jelent: {一人|ひとり}も{来|き}ませんでした。', a: 'Senki sem jött el.', wrong: ['Egy ember jött el.', 'Csak egy ember jött el.', 'Sokan eljöttek.'], why: '{一人|ひとり}も + tagadás = egy ember sem.' },
+      { point: 3, q: '„Csak tíz percünk van." Mi hiányzik?', jp: '{時間|じかん}が{十分|じゅっぷん}＿ありません。', a: 'しか', wrong: ['だけ', 'まで', 'ばかり'], why: 'しか + tagadás: csak ennyi.' },
+      { point: 3, q: '„Nincs más hátra, gyalogolni kell." Mi hiányzik?', jp: 'もう＿しかありません。', a: '{歩|ある}く', wrong: ['{歩|ある}いて', '{歩|ある}き', '{歩|ある}いた'], why: 'Szótári alak + しかありません.' },
+      { point: 4, q: '„Nem hiába híres ez az étterem: nagyon finom." Mi hiányzik?', jp: '{有名|ゆうめい}な{店|みせ}＿、とてもおいしいです。', a: 'だけあって', wrong: ['のに', 'しかなくて', 'かわりに'], why: 'A várakozásnak megfelelő eredmény: 〜だけあって.' },
       {
-        q: 'Mit jelent: {高|たか}いだけあって、このカメラはきれいに{撮|と}れます。',
+        point: 4, q: 'Mit jelent: {高|たか}いだけあって、このカメラはきれいに{撮|と}れます。',
         a: 'Nem hiába drága: ez a gép szép képeket csinál.',
         wrong: [
           'Drága, pedig nem csinál szép képeket.',
@@ -16764,27 +16770,27 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜だけあって: megéri az árát.'
       },
-      { q: '„Mi az a macuri?" Mi hiányzik?', jp: '「{祭|まつ}り」＿{何|なん}ですか。', a: 'というのは', wrong: ['といっても', 'とか', 'として'], why: 'Ismeretlen szóra rákérdezés: 〜というのは{何|なん}ですか.' },
+      { point: 5, q: '„Mi az a macuri?" Mi hiányzik?', jp: '「{祭|まつ}り」＿{何|なん}ですか。', a: 'というのは', wrong: ['といっても', 'とか', 'として'], why: 'Ismeretlen szóra rákérdezés: 〜というのは{何|なん}ですか.' },
       {
-        q: 'Melyik mondat jelenti: „Nincs más választásom, magamnak kell megcsinálnom."',
+        point: 3, q: 'Melyik mondat jelenti: „Nincs más választásom, magamnak kell megcsinálnom."',
         a: '{自分|じぶん}でやるしかありません。',
         wrong: ['{自分|じぶん}でやるだけあります。', '{自分|じぶん}でやるかもしれません。', '{自分|じぶん}でやらなくてもいいです。'],
         why: 'Ige + しかありません: nincs más lehetőség.'
       },
-      { q: 'Hogy hangzik beszélt nyelven: まるで{兄弟|きょうだい}のようです。', a: 'まるで{兄弟|きょうだい}みたいです。', wrong: ['まるで{兄弟|きょうだい}のみたいです。', 'まるで{兄弟|きょうだい}そうです。', 'まるで{兄弟|きょうだい}らしいです。'], why: 'A みたい a よう beszélt megfelelője; előtte nincs の.' },
-      { q: '„Tegnap tíz órát is aludtam." Mi hiányzik?', jp: '{昨日|きのう}は{十時間|じゅうじかん}＿{寝|ね}ました。', a: 'も', wrong: ['しか', 'だけ', 'まで'], why: 'Mennyiség + も: a beszélő soknak érzi.' },
-      { q: 'Melyik mondat fejezi ki, hogy a beszélő kevésnek érzi a pénzt?', a: '{千円|せんえん}しかありません。', wrong: ['{千円|せんえん}もあります。', '{千円|せんえん}あります。', '{千円|せんえん}ぐらいあります。'], why: 'しか + tagadás: „csak ennyi" — kevés.' },
-      { q: 'Mit jelent: {何度|なんど}も{読|よ}みました。', a: 'Sokszor elolvastam.', wrong: ['Hányszor olvastad el?', 'Egyszer sem olvastam el.', 'Egyszer elolvastam.'], why: 'Kérdőszó + számláló + も: „sok".' },
-      { q: '„Nincs busz, taxival kell hazamennem." Mi hiányzik?', jp: 'バスがないので、タクシーで{帰|かえ}る＿。', a: 'しかありません', wrong: ['だけあります', 'ばかりです', 'ほどです'], why: 'Szótári alak + しかありません: nincs más választás.' },
+      { point: 1, q: 'Hogy hangzik beszélt nyelven: まるで{兄弟|きょうだい}のようです。', a: 'まるで{兄弟|きょうだい}みたいです。', wrong: ['まるで{兄弟|きょうだい}のみたいです。', 'まるで{兄弟|きょうだい}そうです。', 'まるで{兄弟|きょうだい}らしいです。'], why: 'A みたい a よう beszélt megfelelője; előtte nincs の.' },
+      { point: 2, q: '„Tegnap tíz órát is aludtam." Mi hiányzik?', jp: '{昨日|きのう}は{十時間|じゅうじかん}＿{寝|ね}ました。', a: 'も', wrong: ['しか', 'だけ', 'まで'], why: 'Mennyiség + も: a beszélő soknak érzi.' },
+      { point: 3, q: 'Melyik mondat fejezi ki, hogy a beszélő kevésnek érzi a pénzt?', a: '{千円|せんえん}しかありません。', wrong: ['{千円|せんえん}もあります。', '{千円|せんえん}あります。', '{千円|せんえん}ぐらいあります。'], why: 'しか + tagadás: „csak ennyi" — kevés.' },
+      { point: 2, q: 'Mit jelent: {何度|なんど}も{読|よ}みました。', a: 'Sokszor elolvastam.', wrong: ['Hányszor olvastad el?', 'Egyszer sem olvastam el.', 'Egyszer elolvastam.'], why: 'Kérdőszó + számláló + も: „sok".' },
+      { point: 3, q: '„Nincs busz, taxival kell hazamennem." Mi hiányzik?', jp: 'バスがないので、タクシーで{帰|かえ}る＿。', a: 'しかありません', wrong: ['だけあります', 'ばかりです', 'ほどです'], why: 'Szótári alak + しかありません: nincs más választás.' },
       {
-        q: 'Mit fejez ki a だけあって?',
+        point: 4, q: 'Mit fejez ki a だけあって?',
         a: 'Elismerést: az eredmény megfelel annak, amit várni lehetett.',
         wrong: ['Csalódást: az eredmény rosszabb a vártnál.', 'Tiltást.', 'Bizonytalan sejtést.'],
         why: '„Nem hiába…": a háttérből adódó jó eredmény.'
       },
-      { q: '„Látszik, hogy mindennap gyakorol: ügyes." Mi hiányzik?', jp: '{毎日|まいにち}{練習|れんしゅう}している＿、{上手|じょうず}ですね。', a: 'だけあって', wrong: ['のに', 'しか', 'ばかり'], why: 'Rövid alak + だけあって: elismerő ok.' },
+      { point: 4, q: '„Látszik, hogy mindennap gyakorol: ügyes." Mi hiányzik?', jp: '{毎日|まいにち}{練習|れんしゅう}している＿、{上手|じょうず}ですね。', a: 'だけあって', wrong: ['のに', 'しか', 'ばかり'], why: 'Rövid alak + だけあって: elismerő ok.' },
       {
-        q: 'Hogyan kérdezed meg egy szó japán megfelelőjét?',
+        point: 6, q: 'Hogyan kérdezed meg egy szó japán megfelelőjét?',
         a: '「ticket」は{日本語|にほんご}で{何|なん}と{言|い}いますか。',
         wrong: [
           '「ticket」は{日本語|にほんご}を{何|なに}が{言|い}いますか。',
@@ -16794,7 +16800,7 @@ const NIHONCORE_COURSE = [
         why: 'A nyelv で-t kap, az idézett szó と-t: 〜で{何|なん}と{言|い}いますか.'
       },
       {
-        q: 'Egy magyar szónak nincs japán megfelelője. Mit tehetsz?',
+        point: 6, q: 'Egy magyar szónak nincs japán megfelelője. Mit tehetsz?',
         a: 'カタカナで{書|か}くしかありません。',
         wrong: ['ひらがなで{書|か}いてはいけません。', '{漢字|かんじ}で{書|か}かなければなりません。', '{書|か}かないほうがいいです。'],
         why: 'Idegen szót katakanával írunk át, és mellé magyarázatot adunk.'
@@ -17133,21 +17139,21 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Számomra a család a legfontosabb." Mi hiányzik?', jp: '{私|わたし}＿、{家族|かぞく}がいちばん{大切|たいせつ}です。', a: 'にとって', wrong: ['について', 'によって', 'にくらべて'], why: 'Kinek a szempontjából: 〜にとって.' },
-      { q: '„A szülő szemében a gyerek mindig gyerek marad." Mi hiányzik?', jp: '{親|おや}＿、{子|こ}どもはいつまでも{子|こ}どもです。', a: 'から{見|み}ると', wrong: ['について', 'のかわりに', 'だけあって'], why: 'Nézőpont: 〜から{見|み}ると.' },
-      { q: '„Idén aztán tényleg el akarok menni Japánba." Mi hiányzik?', jp: '{今年|ことし}＿、{日本|にほん}へ{行|い}きたいです。', a: 'こそ', wrong: ['しか', 'ばかり', 'だけあって'], why: 'Erős kiemelés: 〜こそ.' },
-      { q: 'Mit jelent: こちらこそ、よろしくお{願|ねが}いします。', a: 'Részemről a megtiszteltetés (én kérem ugyanezt).', wrong: ['Erre tessék, kérem.', 'Ezt kérem.', 'Ne haragudjon.'], why: 'こちらこそ: „éppen én", viszonzásként.' },
-      { q: '„Egyetértek ezzel a véleménnyel." Mi hiányzik?', jp: '{私|わたし}はその{意見|いけん}＿{賛成|さんせい}です。', a: 'に', wrong: ['を', 'で', 'が'], why: 'Amivel egyetértesz: 〜に{賛成|さんせい}です.' },
-      { q: 'Melyik jelenti: „ellenzem"?', a: '{反対|はんたい}です', wrong: ['{賛成|さんせい}です', '{大切|たいせつ}です', '{不思議|ふしぎ}です'], why: '{賛成|さんせい} = egyetértés · {反対|はんたい} = ellenzés.' },
-      { q: '„Valóban praktikus, de vannak gondok is." Mi hiányzik?', jp: '＿{便利|べんり}ですが、{問題|もんだい}もあります。', a: 'たしかに', wrong: ['まるで', 'いくら', 'ぜんぜん'], why: 'Elismerés az ellenvetés előtt: たしかに〜が.' },
-      { q: 'Melyik a legtapintatosabb ellenvetés?', a: 'それは{少|すこ}し{違|ちが}うのではないでしょうか。', wrong: ['それは{違|ちが}います。', 'それは{違|ちが}うよ。', 'それはだめです。'], why: 'A 〜のではないでしょうか kérdéssé szelídíti az állítást.' },
-      { q: '„Éppen ezt a könyvet kerestem." Mi hiányzik?', jp: 'これ＿{私|わたし}が{探|さが}していた{本|ほん}です。', a: 'こそ', wrong: ['しか', 'でも', 'とか'], why: 'Kiemelés: これこそ.' },
-      { q: 'Mit jelent: {皆|みな}さんはどう{思|おも}いますか。', a: 'Önök mit gondolnak?', wrong: ['Önök mit csinálnak?', 'Önök hogy vannak?', 'Önök mit szeretnének?'], why: 'どう{思|おも}いますか = mi a véleménye?' },
-      { q: 'Melyik mondat helyes?', a: '{私|わたし}は{納豆|なっとう}が{嫌|きら}いです。', wrong: ['{私|わたし}にとって{納豆|なっとう}が{嫌|きら}いです。', '{私|わたし}について{納豆|なっとう}が{嫌|きら}いです。', '{私|わたし}によって{納豆|なっとう}が{嫌|きら}いです。'], why: 'A にとって után értékelés áll, nem érzés.' },
+      { point: 1, q: '„Számomra a család a legfontosabb." Mi hiányzik?', jp: '{私|わたし}＿、{家族|かぞく}がいちばん{大切|たいせつ}です。', a: 'にとって', wrong: ['について', 'によって', 'にくらべて'], why: 'Kinek a szempontjából: 〜にとって.' },
+      { point: 2, q: '„A szülő szemében a gyerek mindig gyerek marad." Mi hiányzik?', jp: '{親|おや}＿、{子|こ}どもはいつまでも{子|こ}どもです。', a: 'から{見|み}ると', wrong: ['について', 'のかわりに', 'だけあって'], why: 'Nézőpont: 〜から{見|み}ると.' },
+      { point: 3, q: '„Idén aztán tényleg el akarok menni Japánba." Mi hiányzik?', jp: '{今年|ことし}＿、{日本|にほん}へ{行|い}きたいです。', a: 'こそ', wrong: ['しか', 'ばかり', 'だけあって'], why: 'Erős kiemelés: 〜こそ.' },
+      { point: 3, q: 'Mit jelent: こちらこそ、よろしくお{願|ねが}いします。', a: 'Részemről a megtiszteltetés (én kérem ugyanezt).', wrong: ['Erre tessék, kérem.', 'Ezt kérem.', 'Ne haragudjon.'], why: 'こちらこそ: „éppen én", viszonzásként.' },
+      { point: 4, q: '„Egyetértek ezzel a véleménnyel." Mi hiányzik?', jp: '{私|わたし}はその{意見|いけん}＿{賛成|さんせい}です。', a: 'に', wrong: ['を', 'で', 'が'], why: 'Amivel egyetértesz: 〜に{賛成|さんせい}です.' },
+      { point: 4, q: 'Melyik jelenti: „ellenzem"?', a: '{反対|はんたい}です', wrong: ['{賛成|さんせい}です', '{大切|たいせつ}です', '{不思議|ふしぎ}です'], why: '{賛成|さんせい} = egyetértés · {反対|はんたい} = ellenzés.' },
+      { point: 4, q: '„Valóban praktikus, de vannak gondok is." Mi hiányzik?', jp: '＿{便利|べんり}ですが、{問題|もんだい}もあります。', a: 'たしかに', wrong: ['まるで', 'いくら', 'ぜんぜん'], why: 'Elismerés az ellenvetés előtt: たしかに〜が.' },
+      { point: 5, q: 'Melyik a legtapintatosabb ellenvetés?', a: 'それは{少|すこ}し{違|ちが}うのではないでしょうか。', wrong: ['それは{違|ちが}います。', 'それは{違|ちが}うよ。', 'それはだめです。'], why: 'A 〜のではないでしょうか kérdéssé szelídíti az állítást.' },
+      { point: 3, q: '„Éppen ezt a könyvet kerestem." Mi hiányzik?', jp: 'これ＿{私|わたし}が{探|さが}していた{本|ほん}です。', a: 'こそ', wrong: ['しか', 'でも', 'とか'], why: 'Kiemelés: これこそ.' },
+      { point: 5, q: 'Mit jelent: {皆|みな}さんはどう{思|おも}いますか。', a: 'Önök mit gondolnak?', wrong: ['Önök mit csinálnak?', 'Önök hogy vannak?', 'Önök mit szeretnének?'], why: 'どう{思|おも}いますか = mi a véleménye?' },
+      { point: 1, q: 'Melyik mondat helyes?', a: '{私|わたし}は{納豆|なっとう}が{嫌|きら}いです。', wrong: ['{私|わたし}にとって{納豆|なっとう}が{嫌|きら}いです。', '{私|わたし}について{納豆|なっとう}が{嫌|きら}いです。', '{私|わたし}によって{納豆|なっとう}が{嫌|きら}いです。'], why: 'A にとって után értékelés áll, nem érzés.' },
       { q: '„A szokások országonként mások." Mi hiányzik?', jp: '{習慣|しゅうかん}は{国|くに}＿{違|ちが}います。', a: 'によって', wrong: ['にとって', 'について', 'にかけて'], why: 'によって: „-tól függően".' },
       { q: '„A környezetvédelemről fogok beszélni." Mi hiányzik?', jp: '{環境|かんきょう}＿{話|はな}します。', a: 'について', wrong: ['にとって', 'によって', 'にかけて'], why: 'について: a beszéd témája.' },
       {
-        q: 'Mit jelent: この{結果|けっか}から{見|み}ると、{来年|らいねん}は{合格|ごうかく}できそうです。',
+        point: 2, q: 'Mit jelent: この{結果|けっか}から{見|み}ると、{来年|らいねん}は{合格|ごうかく}できそうです。',
         a: 'Ebből az eredményből ítélve jövőre sikerülhet a vizsga.',
         wrong: [
           'Ha megnézem az eredményt, jövőre vizsgázom.',
@@ -17156,17 +17162,17 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜から{見|み}ると: „valami alapján ítélve".'
       },
-      { q: '„Éppen azért mondom szigorúan, mert szeretem." Mi hiányzik?', jp: '{好|す}きだから＿、{厳|きび}しく{言|い}うんです。', a: 'こそ', wrong: ['だけ', 'しか', 'でも'], why: '〜からこそ: „éppen azért, mert".' },
-      { q: 'Hogyan kezdesz udvarias ellenvetést?', a: 'たしかにそうですが、…', wrong: ['それは{違|ちが}います。', '{反対|はんたい}！', 'いいえ、だめです。'], why: 'Az ellenvetés elismeréssel indul: „ez valóban így van, de…".' },
-      { q: 'Mit jelent: おっしゃるとおりです。', a: 'Úgy van, ahogy mondja.', wrong: ['Nem értem, amit mond.', 'Mondja még egyszer!', 'Ezt nem kellett volna mondania.'], why: 'Tiszteletteljes egyetértés: おっしゃる = {言|い}う.' },
+      { point: 3, q: '„Éppen azért mondom szigorúan, mert szeretem." Mi hiányzik?', jp: '{好|す}きだから＿、{厳|きび}しく{言|い}うんです。', a: 'こそ', wrong: ['だけ', 'しか', 'でも'], why: '〜からこそ: „éppen azért, mert".' },
+      { point: 4, q: 'Hogyan kezdesz udvarias ellenvetést?', a: 'たしかにそうですが、…', wrong: ['それは{違|ちが}います。', '{反対|はんたい}！', 'いいえ、だめです。'], why: 'Az ellenvetés elismeréssel indul: „ez valóban így van, de…".' },
+      { point: 4, q: 'Mit jelent: おっしゃるとおりです。', a: 'Úgy van, ahogy mondja.', wrong: ['Nem értem, amit mond.', 'Mondja még egyszer!', 'Ezt nem kellett volna mondania.'], why: 'Tiszteletteljes egyetértés: おっしゃる = {言|い}う.' },
       {
-        q: 'Nem jut eszedbe egy szó, pedig tanultad. Mit kérdezel?',
+        point: 6, q: 'Nem jut eszedbe egy szó, pedig tanultad. Mit kérdezel?',
         a: '{日本語|にほんご}で{何|なん}でしたっけ。',
         wrong: ['{日本語|にほんご}がわかりますか。', '{何|なん}と{言|い}いましたか。', '{日本語|にほんご}は{難|むずか}しいですか。'],
         why: 'A 〜でしたっけ: „hogy is volt?" — amit tudtál, de elfelejtettél.'
       },
-      { q: 'Mit jelent: {場合|ばあい}によります。', a: 'Attól függ.', wrong: ['Minden esetben.', 'Semmi esetre sem.', 'Ebben az esetben igen.'], why: '{場合|ばあい}による: „az esettől függ".' },
-      { q: 'Mit fejez ki a 〜のではないでしょうか?', a: 'Óvatos, kérdésbe csomagolt véleményt.', wrong: ['Erős tiltást.', 'Hallomást.', 'Befejezett cselekvést.'], why: 'Formája tagadó kérdés, jelentése szelíd állítás.' }
+      { point: 4, q: 'Mit jelent: {場合|ばあい}によります。', a: 'Attól függ.', wrong: ['Minden esetben.', 'Semmi esetre sem.', 'Ebben az esetben igen.'], why: '{場合|ばあい}による: „az esettől függ".' },
+      { point: 5, q: 'Mit fejez ki a 〜のではないでしょうか?', a: 'Óvatos, kérdésbe csomagolt véleményt.', wrong: ['Erős tiltást.', 'Hallomást.', 'Befejezett cselekvést.'], why: 'Formája tagadó kérdés, jelentése szelíd állítás.' }
     ]
   },
 
@@ -17578,36 +17584,36 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'Mi a {行|い}きます parancsoló alakja?', a: '{行|い}け', wrong: ['{行|い}こ', '{行|い}きろ', '{行|い}くな'], why: '1. csoport: く → け.' },
-      { q: 'Mi a {食|た}べます parancsoló alakja?', a: '{食|た}べろ', wrong: ['{食|た}べれ', '{食|た}べえ', '{食|た}べな'], why: '2. csoport: る → ろ.' },
-      { q: 'Mi a {来|き}ます parancsoló alakja?', a: 'こい', wrong: ['きろ', 'くろ', 'これ'], why: 'A {来|き}ます rendhagyó: こい.' },
-      { q: 'Mit jelent: ここに{入|はい}るな。', a: 'Ide belépni tilos!', wrong: ['Gyere be ide!', 'Itt be lehet menni.', 'Ide lépj be!'], why: 'Szótári alak + な: tiltás.' },
-      { q: '„Felírom, nehogy elfelejtsem." Mi hiányzik?', jp: '＿ように、メモします。', a: '{忘|わす}れない', wrong: ['{忘|わす}れる', '{忘|わす}れて', '{忘|わす}れた'], why: 'Nehogy: ない-alak + ように.' },
-      { q: '„Előre ültem, hogy jól lássak." Mi hiányzik?', jp: 'よく{見|み}える＿、{前|まえ}に{座|すわ}りました。', a: 'ように', wrong: ['ために', 'とおりに', 'ような'], why: 'A {見|み}える nem szándékos ige: ように (nem ために).' },
-      { q: '„Igyekszem minden nap zöldséget enni." Mi hiányzik?', jp: '{毎日|まいにち}{野菜|やさい}を{食|た}べる＿しています。', a: 'ように', wrong: ['とおりに', 'ような', 'ために'], why: 'Törekvés: 〜ようにしています.' },
-      { q: '„A leírás szerint raktam össze." Mi hiányzik?', jp: '{説明書|せつめいしょ}＿{作|つく}りました。', a: 'のとおりに', wrong: ['のかわりに', 'について', 'にとって'], why: 'Főnév + のとおりに: pontosan aszerint.' },
-      { q: '„Írja pontosan úgy, ahogy mondom." Mi hiányzik?', jp: '{私|わたし}が{言|い}う＿、{書|か}いてください。', a: 'とおりに', wrong: ['ために', 'かわりに', 'うちに'], why: 'Szótári alak + とおりに.' },
+      { point: 1, q: 'Mi a {行|い}きます parancsoló alakja?', a: '{行|い}け', wrong: ['{行|い}こ', '{行|い}きろ', '{行|い}くな'], why: '1. csoport: く → け.' },
+      { point: 1, q: 'Mi a {食|た}べます parancsoló alakja?', a: '{食|た}べろ', wrong: ['{食|た}べれ', '{食|た}べえ', '{食|た}べな'], why: '2. csoport: る → ろ.' },
+      { point: 1, q: 'Mi a {来|き}ます parancsoló alakja?', a: 'こい', wrong: ['きろ', 'くろ', 'これ'], why: 'A {来|き}ます rendhagyó: こい.' },
+      { point: 2, q: 'Mit jelent: ここに{入|はい}るな。', a: 'Ide belépni tilos!', wrong: ['Gyere be ide!', 'Itt be lehet menni.', 'Ide lépj be!'], why: 'Szótári alak + な: tiltás.' },
+      { point: 4, q: '„Felírom, nehogy elfelejtsem." Mi hiányzik?', jp: '＿ように、メモします。', a: '{忘|わす}れない', wrong: ['{忘|わす}れる', '{忘|わす}れて', '{忘|わす}れた'], why: 'Nehogy: ない-alak + ように.' },
+      { point: 4, q: '„Előre ültem, hogy jól lássak." Mi hiányzik?', jp: 'よく{見|み}える＿、{前|まえ}に{座|すわ}りました。', a: 'ように', wrong: ['ために', 'とおりに', 'ような'], why: 'A {見|み}える nem szándékos ige: ように (nem ために).' },
+      { point: 6, q: '„Igyekszem minden nap zöldséget enni." Mi hiányzik?', jp: '{毎日|まいにち}{野菜|やさい}を{食|た}べる＿しています。', a: 'ように', wrong: ['とおりに', 'ような', 'ために'], why: 'Törekvés: 〜ようにしています.' },
+      { point: 7, q: '„A leírás szerint raktam össze." Mi hiányzik?', jp: '{説明書|せつめいしょ}＿{作|つく}りました。', a: 'のとおりに', wrong: ['のかわりに', 'について', 'にとって'], why: 'Főnév + のとおりに: pontosan aszerint.' },
+      { point: 7, q: '„Írja pontosan úgy, ahogy mondom." Mi hiányzik?', jp: '{私|わたし}が{言|い}う＿、{書|か}いてください。', a: 'とおりに', wrong: ['ために', 'かわりに', 'うちに'], why: 'Szótári alak + とおりに.' },
       {
-        q: 'Hol találkozol leginkább a parancsoló alakkal?',
+        point: 1, q: 'Hol találkozol leginkább a parancsoló alakkal?',
         a: 'Táblákon, vészhelyzetben, sportban, szoros baráti beszédben.',
         wrong: ['Tanárral vagy főnökkel beszélve.', 'Boltban, az eladó szájából.', 'Hivatalos levélben.'],
         why: 'A parancsoló alak nagyon erős; udvarias helyzetben nem használható.'
       },
-      { q: 'Mi a {待|ま}ちます parancsoló alakja?', a: '{待|ま}て', wrong: ['{待|ま}ちろ', '{待|ま}てろ', '{待|ま}た'], why: '1. csoport: つ → て.' },
-      { q: 'Mi a します parancsoló alakja?', a: 'しろ', wrong: ['しれ', 'すれ', 'せろ'], why: 'Rendhagyó: する → しろ.' },
-      { q: 'Mit jelent: {頑張|がんば}れ！', a: 'Hajrá!', wrong: ['Állj meg!', 'Ne csináld!', 'Gyere ide!'], why: 'A {頑張|がんば}る parancsoló alakja: biztatás.' },
-      { q: 'Melyik mondat tiltás?', a: 'ここで{泳|およ}ぐな。', wrong: ['ここで{泳|およ}ぎな。', 'ここで{泳|およ}げ。', 'ここで{泳|およ}ごう。'], why: 'Szótári alak + な: tiltás.' },
-      { q: '„Gyakorolok, hogy jól menjen a japán." Mi hiányzik?', jp: '{日本語|にほんご}が{上手|じょうず}になる＿、{毎日|まいにち}{練習|れんしゅう}します。', a: 'ように', wrong: ['ために', 'とおりに', 'ような'], why: 'A なる nem akaratlagos ige: ように.' },
-      { q: '„Azért dolgozom, hogy pénzt gyűjtsek." Mi hiányzik?', jp: 'お{金|かね}をためる＿、アルバイトをしています。', a: 'ために', wrong: ['ように', 'とおりに', 'ようで'], why: 'A ためる akaratlagos ige, az alany ugyanaz: ために.' },
+      { point: 1, q: 'Mi a {待|ま}ちます parancsoló alakja?', a: '{待|ま}て', wrong: ['{待|ま}ちろ', '{待|ま}てろ', '{待|ま}た'], why: '1. csoport: つ → て.' },
+      { point: 1, q: 'Mi a します parancsoló alakja?', a: 'しろ', wrong: ['しれ', 'すれ', 'せろ'], why: 'Rendhagyó: する → しろ.' },
+      { point: 1, q: 'Mit jelent: {頑張|がんば}れ！', a: 'Hajrá!', wrong: ['Állj meg!', 'Ne csináld!', 'Gyere ide!'], why: 'A {頑張|がんば}る parancsoló alakja: biztatás.' },
+      { point: 2, q: 'Melyik mondat tiltás?', a: 'ここで{泳|およ}ぐな。', wrong: ['ここで{泳|およ}ぎな。', 'ここで{泳|およ}げ。', 'ここで{泳|およ}ごう。'], why: 'Szótári alak + な: tiltás.' },
+      { point: 5, q: '„Gyakorolok, hogy jól menjen a japán." Mi hiányzik?', jp: '{日本語|にほんご}が{上手|じょうず}になる＿、{毎日|まいにち}{練習|れんしゅう}します。', a: 'ように', wrong: ['ために', 'とおりに', 'ような'], why: 'A なる nem akaratlagos ige: ように.' },
+      { point: 5, q: '„Azért dolgozom, hogy pénzt gyűjtsek." Mi hiányzik?', jp: 'お{金|かね}をためる＿、アルバイトをしています。', a: 'ために', wrong: ['ように', 'とおりに', 'ようで'], why: 'A ためる akaratlagos ige, az alany ugyanaz: ために.' },
       {
-        q: 'Mit jelent: {甘|あま}いものを{食|た}べすぎないようにしています。',
+        point: 6, q: 'Mit jelent: {甘|あま}いものを{食|た}べすぎないようにしています。',
         a: 'Ügyelek rá, hogy ne egyek túl sok édességet.',
         wrong: ['Már nem eszem édességet.', 'Nem tudok édességet enni.', 'Megtiltották, hogy édességet egyek.'],
         why: '〜ようにしています: rendszeresen törekszem rá.'
       },
-      { q: 'Melyik mondat ír le változást (és nem törekvést)?', a: '{早|はや}く{起|お}きるようになりました。', wrong: ['{早|はや}く{起|お}きるようにしています。', '{早|はや}く{起|お}きるようにします。', '{早|はや}く{起|お}きるようにしてください。'], why: 'ようになりました: így alakult. ようにします: igyekszem.' },
-      { q: '„A vonat pontosan érkezett." Mi hiányzik?', jp: '{電車|でんしゃ}は{時間|じかん}＿{来|き}ました。', a: 'どおりに', wrong: ['とおりに', 'ように', 'ために'], why: 'Főnévvel összevonva: {時間|じかん}どおりに (vagy {時間|じかん}のとおりに).' },
-      { q: 'Érvelő szövegben mivel vezeted be az első okot?', a: '{第一|だいいち}に、〜からです。', wrong: ['{最後|さいご}に、〜でしょう。', 'ところで、〜ですか。', 'つまり、〜ですね。'], why: 'Az okok sorszámot kapnak, és から-val zárulnak.' }
+      { point: 8, q: 'Melyik mondat ír le változást (és nem törekvést)?', a: '{早|はや}く{起|お}きるようになりました。', wrong: ['{早|はや}く{起|お}きるようにしています。', '{早|はや}く{起|お}きるようにします。', '{早|はや}く{起|お}きるようにしてください。'], why: 'ようになりました: így alakult. ようにします: igyekszem.' },
+      { point: 7, q: '„A vonat pontosan érkezett." Mi hiányzik?', jp: '{電車|でんしゃ}は{時間|じかん}＿{来|き}ました。', a: 'どおりに', wrong: ['とおりに', 'ように', 'ために'], why: 'Főnévvel összevonva: {時間|じかん}どおりに (vagy {時間|じかん}のとおりに).' },
+      { point: 9, q: 'Érvelő szövegben mivel vezeted be az első okot?', a: '{第一|だいいち}に、〜からです。', wrong: ['{最後|さいご}に、〜でしょう。', 'ところで、〜ですか。', 'つまり、〜ですね。'], why: 'Az okok sorszámot kapnak, és から-val zárulnak.' }
     ]
   },
 
@@ -18000,13 +18006,13 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Az ígéretet be kell tartani." Mi hiányzik?', jp: '{約束|やくそく}は{守|まも}る＿です。', a: 'べき', wrong: ['まま', 'ばかり', 'ところ'], why: 'Ami helyes: szótári alak + べきです.' },
-      { q: '„Nem illik másokról rosszat mondani." Mi hiányzik?', jp: '{人|ひと}の{悪口|わるくち}を{言|い}う＿。', a: 'べきではありません', wrong: ['べきません', 'べくないです', 'べきないです'], why: 'A tagadás: べきではありません.' },
-      { q: '„Reggeli nélkül mentem iskolába." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿、{学校|がっこう}へ{行|い}きました。', a: '{食|た}べずに', wrong: ['{食|た}べなくて', '{食|た}べないに', '{食|た}べずで'], why: 'Anélkül, hogy: ない → ずに.' },
-      { q: 'Mi a します 〜ずに alakja?', a: 'せずに', wrong: ['しずに', 'さずに', 'すずに'], why: 'A する rendhagyó: せずに.' },
-      { q: 'Mi a {言|い}います 〜ずに alakja?', a: '{言|い}わずに', wrong: ['{言|い}いずに', '{言|い}うずに', '{言|い}あずに'], why: 'A ない-alak tövéből: {言|い}わない → {言|い}わずに.' },
+      { point: 1, q: '„Az ígéretet be kell tartani." Mi hiányzik?', jp: '{約束|やくそく}は{守|まも}る＿です。', a: 'べき', wrong: ['まま', 'ばかり', 'ところ'], why: 'Ami helyes: szótári alak + べきです.' },
+      { point: 2, q: '„Nem illik másokról rosszat mondani." Mi hiányzik?', jp: '{人|ひと}の{悪口|わるくち}を{言|い}う＿。', a: 'べきではありません', wrong: ['べきません', 'べくないです', 'べきないです'], why: 'A tagadás: べきではありません.' },
+      { point: 3, q: '„Reggeli nélkül mentem iskolába." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿、{学校|がっこう}へ{行|い}きました。', a: '{食|た}べずに', wrong: ['{食|た}べなくて', '{食|た}べないに', '{食|た}べずで'], why: 'Anélkül, hogy: ない → ずに.' },
+      { point: 3, q: 'Mi a します 〜ずに alakja?', a: 'せずに', wrong: ['しずに', 'さずに', 'すずに'], why: 'A する rendhagyó: せずに.' },
+      { point: 3, q: 'Mi a {言|い}います 〜ずに alakja?', a: '{言|い}わずに', wrong: ['{言|い}いずに', '{言|い}うずに', '{言|い}あずに'], why: 'A ない-alak tövéből: {言|い}わない → {言|い}わずに.' },
       {
-        q: 'Mit jelent: {辞書|じしょ}を{使|つか}わずに、{読|よ}んでみてください。',
+        point: 3, q: 'Mit jelent: {辞書|じしょ}を{使|つか}わずに、{読|よ}んでみてください。',
         a: 'Próbálja meg szótár nélkül elolvasni.',
         wrong: [
           'Használjon szótárt az olvasáshoz.',
@@ -18015,20 +18021,20 @@ const NIHONCORE_COURSE = [
         ],
         why: '{使|つか}わずに = anélkül, hogy használná.'
       },
-      { q: '„Az állomás körül sok az üzlet." Mi hiányzik?', jp: '{駅|えき}＿、{店|みせ}がたくさんあります。', a: 'を{中心|ちゅうしん}に', wrong: ['について', 'にとって', 'だけあって'], why: 'Ami köré rendeződik: 〜を{中心|ちゅうしん}に.' },
+      { point: 5, q: '„Az állomás körül sok az üzlet." Mi hiányzik?', jp: '{駅|えき}＿、{店|みせ}がたくさんあります。', a: 'を{中心|ちゅうしん}に', wrong: ['について', 'にとって', 'だけあって'], why: 'Ami köré rendeződik: 〜を{中心|ちゅうしん}に.' },
       {
-        q: 'Melyik fejezi ki a beszélő véleményét arról, mi a helyes?',
+        point: 1, q: 'Melyik fejezi ki a beszélő véleményét arról, mi a helyes?',
         a: '{約束|やくそく}は{守|まも}るべきです。',
         wrong: ['{約束|やくそく}は{守|まも}ることになっています。', '{約束|やくそく}は{守|まも}るそうです。', '{約束|やくそく}は{守|まも}るようです。'],
         why: 'べきです: vélemény. ことになっています: szabály. そうです: hallomás.'
       },
-      { q: '„Most a városomról fogok beszélni." Mi hiányzik?', jp: 'これから、{私|わたし}の{町|まち}＿{話|はな}します。', a: 'について', wrong: ['にとって', 'によって', 'として'], why: 'A téma: 〜について.' },
-      { q: 'Mivel zárod le a beszédedet?', a: '{以上|いじょう}です。', wrong: ['まず、…', '{次|つぎ}に、…', 'これから、…'], why: '{以上|いじょう}です = ennyi volt, befejeztem.' },
-      { q: '„Korábban kellett volna elkezdenem." Mi hiányzik?', jp: 'もっと{早|はや}く{始|はじ}める＿。', a: 'べきでした', wrong: ['べきです', 'べきではありません', 'べきでしょう'], why: 'Múlt időben: megbánás — kellett volna.' },
-      { q: 'Melyik mondat helyes?', a: 'うそを{言|い}うべきではありません。', wrong: ['うそを{言|い}わないべきです。', 'うそを{言|い}うべくないです。', 'うそを{言|い}いべきではありません。'], why: 'Szótári alak + べきではありません; a tagadás a べき után áll.' },
-      { q: 'Mi a {来|き}ます 〜ずに alakja?', a: 'こずに', wrong: ['きずに', 'くずに', 'こなずに'], why: 'Rendhagyó: こない → こずに.' },
+      { point: 6, q: '„Most a városomról fogok beszélni." Mi hiányzik?', jp: 'これから、{私|わたし}の{町|まち}＿{話|はな}します。', a: 'について', wrong: ['にとって', 'によって', 'として'], why: 'A téma: 〜について.' },
+      { point: 6, q: 'Mivel zárod le a beszédedet?', a: '{以上|いじょう}です。', wrong: ['まず、…', '{次|つぎ}に、…', 'これから、…'], why: '{以上|いじょう}です = ennyi volt, befejeztem.' },
+      { point: 1, q: '„Korábban kellett volna elkezdenem." Mi hiányzik?', jp: 'もっと{早|はや}く{始|はじ}める＿。', a: 'べきでした', wrong: ['べきです', 'べきではありません', 'べきでしょう'], why: 'Múlt időben: megbánás — kellett volna.' },
+      { point: 2, q: 'Melyik mondat helyes?', a: 'うそを{言|い}うべきではありません。', wrong: ['うそを{言|い}わないべきです。', 'うそを{言|い}うべくないです。', 'うそを{言|い}いべきではありません。'], why: 'Szótári alak + べきではありません; a tagadás a べき után áll.' },
+      { point: 3, q: 'Mi a {来|き}ます 〜ずに alakja?', a: 'こずに', wrong: ['きずに', 'くずに', 'こなずに'], why: 'Rendhagyó: こない → こずに.' },
       {
-        q: 'Mit jelent: {昨日|きのう}は{寝|ね}ずに{準備|じゅんび}しました。',
+        point: 3, q: 'Mit jelent: {昨日|きのう}は{寝|ね}ずに{準備|じゅんび}しました。',
         a: 'Tegnap alvás nélkül készültem.',
         wrong: [
           'Tegnap lefekvés előtt készültem.',
@@ -18037,17 +18043,17 @@ const NIHONCORE_COURSE = [
         ],
         why: '{寝|ね}ずに: anélkül, hogy aludtam volna.'
       },
-      { q: 'Mit jelent: {仕事|しごと}{中心|ちゅうしん}の{生活|せいかつ}', a: 'munkaközpontú élet', wrong: ['munka utáni élet', 'munka nélküli élet', 'élet a munkahely közelében'], why: 'Főnév + {中心|ちゅうしん}の + főnév: ami köré minden rendeződik.' },
-      { q: 'A beszédben melyik szó vezeti be a megoldásodat („ezért hát…")?', a: 'そこで', wrong: ['ところで', 'それに', 'たとえば'], why: 'そこで: egy helyzetre adott lépés. ところで témát vált, それに hozzátesz, たとえば példát hoz.' },
-      { q: 'Mit jelez a mondat elején a このように?', a: 'Összefoglalja az addig mondottakat.', wrong: ['Új példát hoz.', 'Ellentétet vezet be.', 'Lezárja a beszédet.'], why: 'このように: „mint láttuk, így tehát".' },
-      { q: 'Melyik a legszelídebb megfogalmazás?', a: '{大切|たいせつ}にするべきではないでしょうか。', wrong: ['{大切|たいせつ}にするべきです。', '{大切|たいせつ}にするべきだ。', '{大切|たいせつ}にしろ。'], why: 'A kérdéssé formált 〜べきではないでしょうか a hallgatóra bízza az ítéletet.' },
+      { point: 5, q: 'Mit jelent: {仕事|しごと}{中心|ちゅうしん}の{生活|せいかつ}', a: 'munkaközpontú élet', wrong: ['munka utáni élet', 'munka nélküli élet', 'élet a munkahely közelében'], why: 'Főnév + {中心|ちゅうしん}の + főnév: ami köré minden rendeződik.' },
+      { point: 7, q: 'A beszédben melyik szó vezeti be a megoldásodat („ezért hát…")?', a: 'そこで', wrong: ['ところで', 'それに', 'たとえば'], why: 'そこで: egy helyzetre adott lépés. ところで témát vált, それに hozzátesz, たとえば példát hoz.' },
+      { point: 7, q: 'Mit jelez a mondat elején a このように?', a: 'Összefoglalja az addig mondottakat.', wrong: ['Új példát hoz.', 'Ellentétet vezet be.', 'Lezárja a beszédet.'], why: 'このように: „mint láttuk, így tehát".' },
+      { point: 1, q: 'Melyik a legszelídebb megfogalmazás?', a: '{大切|たいせつ}にするべきではないでしょうか。', wrong: ['{大切|たいせつ}にするべきです。', '{大切|たいせつ}にするべきだ。', '{大切|たいせつ}にしろ。'], why: 'A kérdéssé formált 〜べきではないでしょうか a hallgatóra bízza az ítéletet.' },
       {
-        q: 'Mit jelent: {思|おも}わず{笑|わら}ってしまいました。',
+        point: 3, q: 'Mit jelent: {思|おも}わず{笑|わら}ってしまいました。',
         a: 'Akaratlanul is elnevettem magam.',
         wrong: ['Nem gondoltam, hogy nevetni fogok.', 'Gondolkodás nélkül kinevettem.', 'Azt hittem, nevetni fog.'],
         why: '{思|おも}わず: önálló szóvá vált ず-alak — akaratlanul.'
       },
-      { q: 'A beszéd öt lépése közül melyik az első?', a: 'エピソード', wrong: ['{結論|けつろん}', '{解決方法|かいけつほうほう}', '{問題点|もんだいてん}'], why: 'A beszéd horoggal kezd: történettel, kérdéssel vagy számmal.' }
+      { point: 6, q: 'A beszéd öt lépése közül melyik az első?', a: 'エピソード', wrong: ['{結論|けつろん}', '{解決方法|かいけつほうほう}', '{問題点|もんだいてん}'], why: 'A beszéd horoggal kezd: történettel, kérdéssel vagy számmal.' }
     ]
   },
 
@@ -18415,16 +18421,16 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Éppen indulni készültem, amikor megszólalt a telefon." Mi hiányzik?', jp: '＿としたとき、{電話|でんわ}が{鳴|な}りました。', a: '{出|で}かけよう', wrong: ['{出|で}かける', '{出|で}かけて', '{出|で}かけろ'], why: 'Szándékos alak + とします: éppen készülök rá.' },
-      { q: 'Mi a {書|か}きます műveltető alakja?', a: '{書|か}かせます', wrong: ['{書|か}かれます', '{書|か}けさせます', '{書|か}きさせます'], why: '1. csoport: か-tő + せます.' },
-      { q: 'Mi a {食|た}べます műveltető alakja?', a: '{食|た}べさせます', wrong: ['{食|た}べられます', '{食|た}べせます', '{食|た}ばせます'], why: '2. csoport: る → させます.' },
-      { q: 'Mi a します műveltető alakja?', a: 'させます', wrong: ['されます', 'しさせます', 'せます'], why: 'A します műveltető alakja させます.' },
-      { q: '„A tanár fogalmazást íratott a diákokkal." Mi hiányzik?', jp: '{先生|せんせい}は{学生|がくせい}＿{作文|さくぶん}を{書|か}かせました。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Ha az igének van tárgya (を), a cselekvésre késztetett személy に-t kap.' },
-      { q: '„A húgom fél a kutyáktól." Mi hiányzik?', jp: '{妹|いもうと}は{犬|いぬ}を＿。', a: '{怖|こわ}がります', wrong: ['{怖|こわ}いです', '{怖|こわ}くなります', '{怖|こわ}そうです'], why: 'Más ember érzése: 〜がります, を-val.' },
-      { q: '„Az öcsém Japánba szeretne menni." Mi hiányzik?', jp: '{弟|おとうと}は{日本|にほん}へ＿います。', a: '{行|い}きたがって', wrong: ['{行|い}きたくて', '{行|い}きたいで', '{行|い}こうがって'], why: 'Más ember vágya: 〜たがっています.' },
-      { q: 'Hogyan mondod helyesen: „Az öcsém tortát szeretne."', a: '{弟|おとうと}はケーキをほしがっています。', wrong: ['{弟|おとうと}はケーキをほしいます。', '{弟|おとうと}はケーキがほしがりです。', '{弟|おとうと}はケーキにほしがっています。'], why: 'ほしい → ほしがっています, a kívánt dolog を-t kap.' },
+      { point: 1, q: '„Éppen indulni készültem, amikor megszólalt a telefon." Mi hiányzik?', jp: '＿としたとき、{電話|でんわ}が{鳴|な}りました。', a: '{出|で}かけよう', wrong: ['{出|で}かける', '{出|で}かけて', '{出|で}かけろ'], why: 'Szándékos alak + とします: éppen készülök rá.' },
+      { point: 2, q: 'Mi a {書|か}きます műveltető alakja?', a: '{書|か}かせます', wrong: ['{書|か}かれます', '{書|か}けさせます', '{書|か}きさせます'], why: '1. csoport: か-tő + せます.' },
+      { point: 2, q: 'Mi a {食|た}べます műveltető alakja?', a: '{食|た}べさせます', wrong: ['{食|た}べられます', '{食|た}べせます', '{食|た}ばせます'], why: '2. csoport: る → させます.' },
+      { point: 2, q: 'Mi a します műveltető alakja?', a: 'させます', wrong: ['されます', 'しさせます', 'せます'], why: 'A します műveltető alakja させます.' },
+      { point: 2, q: '„A tanár fogalmazást íratott a diákokkal." Mi hiányzik?', jp: '{先生|せんせい}は{学生|がくせい}＿{作文|さくぶん}を{書|か}かせました。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Ha az igének van tárgya (を), a cselekvésre késztetett személy に-t kap.' },
+      { point: 4, q: '„A húgom fél a kutyáktól." Mi hiányzik?', jp: '{妹|いもうと}は{犬|いぬ}を＿。', a: '{怖|こわ}がります', wrong: ['{怖|こわ}いです', '{怖|こわ}くなります', '{怖|こわ}そうです'], why: 'Más ember érzése: 〜がります, を-val.' },
+      { point: 5, q: '„Az öcsém Japánba szeretne menni." Mi hiányzik?', jp: '{弟|おとうと}は{日本|にほん}へ＿います。', a: '{行|い}きたがって', wrong: ['{行|い}きたくて', '{行|い}きたいで', '{行|い}こうがって'], why: 'Más ember vágya: 〜たがっています.' },
+      { point: 4, q: 'Hogyan mondod helyesen: „Az öcsém tortát szeretne."', a: '{弟|おとうと}はケーキをほしがっています。', wrong: ['{弟|おとうと}はケーキをほしいます。', '{弟|おとうと}はケーキがほしがりです。', '{弟|おとうと}はケーキにほしがっています。'], why: 'ほしい → ほしがっています, a kívánt dolog を-t kap.' },
       {
-        q: 'Mit jelent: {窓|まど}を{開|あ}けようとしましたが、{開|あ}きませんでした。',
+        point: 1, q: 'Mit jelent: {窓|まど}を{開|あ}けようとしましたが、{開|あ}きませんでした。',
         a: 'Megpróbáltam kinyitni az ablakot, de nem nyílt.',
         wrong: [
           'Kinyitottam az ablakot, de becsukódott.',
@@ -18434,21 +18440,21 @@ const NIHONCORE_COURSE = [
         why: '〜ようとしました: megpróbáltam, de nem sikerült.'
       },
       {
-        q: '„Az osztályvezető Tanakával készíttette el az anyagot." Mi hiányzik?',
+        point: 3, q: '„Az osztályvezető Tanakával készíttette el az anyagot." Mi hiányzik?',
         jp: '{部長|ぶちょう}は{田中|たなか}さんに{資料|しりょう}を＿。',
         a: '{作|つく}らせました',
         wrong: ['{作|つく}られました', '{作|つく}りました', '{作|つく}れました'],
         why: '{作|つく}る → {作|つく}らせます: mással csináltatja.'
       },
-      { q: 'Mi a {読|よ}みます műveltető alakja?', a: '{読|よ}ませます', wrong: ['{読|よ}まれます', '{読|よ}めます', '{読|よ}みさせます'], why: '1. csoport: a-hangú tő + せます.' },
-      { q: 'Mi a {来|き}ます műveltető alakja?', a: 'こさせます', wrong: ['きさせます', 'くさせます', 'こらせます'], why: 'Rendhagyó: くる → こさせる.' },
-      { q: 'Mi a {買|か}います műveltető alakja?', a: '{買|か}わせます', wrong: ['{買|か}あせます', '{買|か}いせます', '{買|か}えさせます'], why: 'Az う-ra végződő igék töve わ-ra vált.' },
-      { q: '„Az öcsém nem hajlandó zöldséget enni." Mi hiányzik?', jp: '{弟|おとうと}は{野菜|やさい}を＿。', a: '{食|た}べようとしません', wrong: ['{食|た}べてみません', '{食|た}べたがっています', '{食|た}べさせません'], why: '〜ようとしません: esze ágában sincs megtenni.' },
-      { q: 'Melyik mondat jelenti: „felpróbáltam (és fel is vettem)"?', a: '{着|き}てみました。', wrong: ['{着|き}ようとしました。', '{着|き}させました。', '{着|き}たがりました。'], why: '〜てみます: megteszed, hogy lásd, milyen.' },
-      { q: 'Melyik mondat hibás?', a: '{私|わたし}は{新|あたら}しい{靴|くつ}をほしがっています。', wrong: ['{私|わたし}は{新|あたら}しい{靴|くつ}がほしいです。', '{弟|おとうと}は{新|あたら}しい{靴|くつ}をほしがっています。', '{弟|おとうと}は{新|あたら}しい{靴|くつ}がほしいと{言|い}っています。'], why: 'A 〜がる magadra nem mondható.' },
-      { q: 'Mit jelent: {私|わたし}は{寒|さむ}がりです。', a: 'Fázós vagyok.', wrong: ['Most éppen fázom.', 'Úgy látom, fázol.', 'Hideg van nálam.'], why: 'A 〜がり főnév a hajlamot nevezi meg.' },
+      { point: 2, q: 'Mi a {読|よ}みます műveltető alakja?', a: '{読|よ}ませます', wrong: ['{読|よ}まれます', '{読|よ}めます', '{読|よ}みさせます'], why: '1. csoport: a-hangú tő + せます.' },
+      { point: 2, q: 'Mi a {来|き}ます műveltető alakja?', a: 'こさせます', wrong: ['きさせます', 'くさせます', 'こらせます'], why: 'Rendhagyó: くる → こさせる.' },
+      { point: 2, q: 'Mi a {買|か}います műveltető alakja?', a: '{買|か}わせます', wrong: ['{買|か}あせます', '{買|か}いせます', '{買|か}えさせます'], why: 'Az う-ra végződő igék töve わ-ra vált.' },
+      { point: 1, q: '„Az öcsém nem hajlandó zöldséget enni." Mi hiányzik?', jp: '{弟|おとうと}は{野菜|やさい}を＿。', a: '{食|た}べようとしません', wrong: ['{食|た}べてみません', '{食|た}べたがっています', '{食|た}べさせません'], why: '〜ようとしません: esze ágában sincs megtenni.' },
+      { point: 1, q: 'Melyik mondat jelenti: „felpróbáltam (és fel is vettem)"?', a: '{着|き}てみました。', wrong: ['{着|き}ようとしました。', '{着|き}させました。', '{着|き}たがりました。'], why: '〜てみます: megteszed, hogy lásd, milyen.' },
+      { point: 4, q: 'Melyik mondat hibás?', a: '{私|わたし}は{新|あたら}しい{靴|くつ}をほしがっています。', wrong: ['{私|わたし}は{新|あたら}しい{靴|くつ}がほしいです。', '{弟|おとうと}は{新|あたら}しい{靴|くつ}をほしがっています。', '{弟|おとうと}は{新|あたら}しい{靴|くつ}がほしいと{言|い}っています。'], why: 'A 〜がる magadra nem mondható.' },
+      { point: 4, q: 'Mit jelent: {私|わたし}は{寒|さむ}がりです。', a: 'Fázós vagyok.', wrong: ['Most éppen fázom.', 'Úgy látom, fázol.', 'Hideg van nálam.'], why: 'A 〜がり főnév a hajlamot nevezi meg.' },
       {
-        q: 'A tanárod megírta neked az ajánlólevelet, mert megkérted. Melyik a helyes?',
+        point: 3, q: 'A tanárod megírta neked az ajánlólevelet, mert megkérted. Melyik a helyes?',
         a: '{先生|せんせい}に{推薦状|すいせんじょう}を{書|か}いていただきました。',
         wrong: [
           '{先生|せんせい}に{推薦状|すいせんじょう}を{書|か}かせました。',
@@ -18457,8 +18463,8 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A műveltető csak felülről lefelé használható.'
       },
-      { q: 'Mit jelent: {母|はは}は{私|わたし}にゲームをさせません。', a: 'Anyám nem enged játszani.', wrong: ['Anyám nem játszik velem.', 'Anyám játszani küld.', 'Anyámmal nem lehet játszani.'], why: 'A tagadó műveltető: nem engedi.' },
-      { q: 'Hogyan mondod: „Nem úgy gondoltam."?', a: 'そんなつもりではありませんでした。', wrong: ['そんなはずではありませんでした。', 'そんなことはありませんでした。', 'そんなようではありませんでした。'], why: 'つもり: szándék.' }
+      { point: 3, q: 'Mit jelent: {母|はは}は{私|わたし}にゲームをさせません。', a: 'Anyám nem enged játszani.', wrong: ['Anyám nem játszik velem.', 'Anyám játszani küld.', 'Anyámmal nem lehet játszani.'], why: 'A tagadó műveltető: nem engedi.' },
+      { point: 6, q: 'Hogyan mondod: „Nem úgy gondoltam."?', a: 'そんなつもりではありませんでした。', wrong: ['そんなはずではありませんでした。', 'そんなことはありませんでした。', 'そんなようではありませんでした。'], why: 'つもり: szándék.' }
     ]
   },
 
@@ -18861,13 +18867,13 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Kelj fel gyorsan!" (szülő a gyereknek) Mi hiányzik?', jp: '{早|はや}く{起|お}き＿。', a: 'なさい', wrong: ['ください', 'なら', 'ながら'], why: 'Utasítás felülről: ます-tő + なさい.' },
-      { q: '„Megnevettettem mindenkit." Mi hiányzik?', jp: 'みんな＿{笑|わら}わせました。', a: 'を', wrong: ['に', 'が', 'で'], why: 'Érzést kiváltó műveltetőnél az érintett を-t kap.' },
-      { q: '„Hadd fizessek én!" Mi hiányzik?', jp: '{私|わたし}に{払|はら}わ＿ください。', a: 'せて', wrong: ['れて', 'して', 'させられて'], why: '{払|はら}う → {払|はら}わせる → {払|はら}わせてください.' },
-      { q: '„Hadd gondolkodjam egy kicsit." Mi hiányzik?', jp: '{少|すこ}し＿ください。', a: '{考|かんが}えさせて', wrong: ['{考|かんが}えて', '{考|かんが}えられて', '{考|かんが}えせて'], why: 'A {考|かんが}える 2. csoportú: {考|かんが}えさせて.' },
-      { q: 'Melyik a legudvariasabb engedélykérés?', a: '{使|つか}わせていただけませんか。', wrong: ['{使|つか}ってもいい？', '{使|つか}わせて。', '{使|つか}いたいです。'], why: '〜させていただけませんか: a legtiszteletteljesebb forma.' },
+      { point: 1, q: '„Kelj fel gyorsan!" (szülő a gyereknek) Mi hiányzik?', jp: '{早|はや}く{起|お}き＿。', a: 'なさい', wrong: ['ください', 'なら', 'ながら'], why: 'Utasítás felülről: ます-tő + なさい.' },
+      { point: 3, q: '„Megnevettettem mindenkit." Mi hiányzik?', jp: 'みんな＿{笑|わら}わせました。', a: 'を', wrong: ['に', 'が', 'で'], why: 'Érzést kiváltó műveltetőnél az érintett を-t kap.' },
+      { point: 4, q: '„Hadd fizessek én!" Mi hiányzik?', jp: '{私|わたし}に{払|はら}わ＿ください。', a: 'せて', wrong: ['れて', 'して', 'させられて'], why: '{払|はら}う → {払|はら}わせる → {払|はら}わせてください.' },
+      { point: 4, q: '„Hadd gondolkodjam egy kicsit." Mi hiányzik?', jp: '{少|すこ}し＿ください。', a: '{考|かんが}えさせて', wrong: ['{考|かんが}えて', '{考|かんが}えられて', '{考|かんが}えせて'], why: 'A {考|かんが}える 2. csoportú: {考|かんが}えさせて.' },
+      { point: 5, q: 'Melyik a legudvariasabb engedélykérés?', a: '{使|つか}わせていただけませんか。', wrong: ['{使|つか}ってもいい？', '{使|つか}わせて。', '{使|つか}いたいです。'], why: '〜させていただけませんか: a legtiszteletteljesebb forma.' },
       {
-        q: 'Mit jelent: {父|ちち}は{私|わたし}を{留学|りゅうがく}させてくれました。',
+        point: 7, q: 'Mit jelent: {父|ちち}は{私|わたし}を{留学|りゅうがく}させてくれました。',
         a: 'Apám megengedte, hogy külföldön tanuljak.',
         wrong: [
           'Apám külföldön tanult helyettem.',
@@ -18877,29 +18883,29 @@ const NIHONCORE_COURSE = [
         why: '〜させてくれました: megengedte nekem, és hálás vagyok érte.'
       },
       {
-        q: 'Mit jelent: それでは、{始|はじ}めさせていただきます。',
+        point: 5, q: 'Mit jelent: それでは、{始|はじ}めさせていただきます。',
         a: 'Akkor, ha megengedik, elkezdem.',
         wrong: ['Akkor kérem, kezdjék el.', 'Akkor el kellett kezdenem.', 'Akkor megengedem, hogy elkezdjék.'],
         why: '〜させていただきます: udvarias bejelentés a saját cselekvésemről.'
       },
-      { q: '„Anyám elküldte az öcsémet vásárolni." Mi hiányzik?', jp: '{母|はは}は{弟|おとうと}を{買|か}い{物|もの}に＿。', a: '{行|い}かせました', wrong: ['{行|い}かれました', '{行|い}けました', '{行|い}きさせました'], why: '{行|い}く → {行|い}かせます.' },
-      { q: 'Ki mondja leginkább: {宿題|しゅくだい}をしなさい。', a: 'Szülő a gyerekének.', wrong: ['Diák a tanárának.', 'Eladó a vásárlónak.', 'Beosztott a főnökének.'], why: 'A なさい felülről lefelé irányuló utasítás.' },
-      { q: '„Megharagítottam a barátomat." Mi hiányzik?', jp: '{友|とも}だちを＿しまいました。', a: '{怒|おこ}らせて', wrong: ['{怒|おこ}られて', '{怒|おこ}って', '{怒|おこ}れて'], why: '{怒|おこ}る → {怒|おこ}らせる: kiváltottam belőle.' },
-      { q: 'Mi a {食|た}べます 〜なさい alakja?', a: '{食|た}べなさい', wrong: ['{食|た}べるなさい', '{食|た}べてなさい', '{食|た}べろなさい'], why: 'ます-tő + なさい.' },
-      { q: '„A tanár felállította a diákot." Mi hiányzik?', jp: '{先生|せんせい}は{学生|がくせい}＿{立|た}たせました。', a: 'を', wrong: ['に', 'が', 'で'], why: 'Tárgyatlan igénél a személy を-t kap.' },
-      { q: 'Mit jelent szó szerint: お{待|ま}たせしました。', a: 'Megvárakoztattam önt.', wrong: ['Vártam önre.', 'Várjon, kérem!', 'Nem kell várnia.'], why: 'A {待|ま}たせる a {待|ま}つ műveltető alakja.' },
-      { q: 'Te szeretnél fényképezni. Mit mondasz?', a: '{写真|しゃしん}を{撮|と}らせてください。', wrong: ['{写真|しゃしん}を{撮|と}ってください。', '{写真|しゃしん}を{撮|と}られてください。', '{写真|しゃしん}を{撮|と}りなさい。'], why: '〜させてください: engedje, hogy én tegyem.' },
-      { q: 'Melyik alak helyes?', a: '{読|よ}ませていただきます。', wrong: ['{読|よ}まさせていただきます。', '{読|よ}みさせていただきます。', '{読|よ}められていただきます。'], why: 'Az 1. csoportú igénél a műveltető 〜せる: {読|よ}ませる.' },
-      { q: 'Mit jelent a bolt ajtaján: {本日|ほんじつ}は{休|やす}ませていただきます。', a: 'Ma zárva tartunk.', wrong: ['Ma pihenhet nálunk.', 'Ma engedélyt kérünk.', 'Ma nyitva vagyunk.'], why: '〜させていただきます: udvarias bejelentés.' },
-      { q: 'A barátod gépét szeretnéd használni. Melyik illik?', a: '{悪|わる}いけど、{使|つか}わせてくれない？', wrong: ['{申|もう}し{訳|わけ}ありませんが、{使|つか}わせていただけませんか。', '{使|つか}いなさい。', '{使|つか}わせろ。'], why: 'Barátnak: {悪|わる}いけど + 〜させてくれない？' },
+      { point: 2, q: '„Anyám elküldte az öcsémet vásárolni." Mi hiányzik?', jp: '{母|はは}は{弟|おとうと}を{買|か}い{物|もの}に＿。', a: '{行|い}かせました', wrong: ['{行|い}かれました', '{行|い}けました', '{行|い}きさせました'], why: '{行|い}く → {行|い}かせます.' },
+      { point: 1, q: 'Ki mondja leginkább: {宿題|しゅくだい}をしなさい。', a: 'Szülő a gyerekének.', wrong: ['Diák a tanárának.', 'Eladó a vásárlónak.', 'Beosztott a főnökének.'], why: 'A なさい felülről lefelé irányuló utasítás.' },
+      { point: 3, q: '„Megharagítottam a barátomat." Mi hiányzik?', jp: '{友|とも}だちを＿しまいました。', a: '{怒|おこ}らせて', wrong: ['{怒|おこ}られて', '{怒|おこ}って', '{怒|おこ}れて'], why: '{怒|おこ}る → {怒|おこ}らせる: kiváltottam belőle.' },
+      { point: 1, q: 'Mi a {食|た}べます 〜なさい alakja?', a: '{食|た}べなさい', wrong: ['{食|た}べるなさい', '{食|た}べてなさい', '{食|た}べろなさい'], why: 'ます-tő + なさい.' },
+      { point: 2, q: '„A tanár felállította a diákot." Mi hiányzik?', jp: '{先生|せんせい}は{学生|がくせい}＿{立|た}たせました。', a: 'を', wrong: ['に', 'が', 'で'], why: 'Tárgyatlan igénél a személy を-t kap.' },
+      { point: 2, q: 'Mit jelent szó szerint: お{待|ま}たせしました。', a: 'Megvárakoztattam önt.', wrong: ['Vártam önre.', 'Várjon, kérem!', 'Nem kell várnia.'], why: 'A {待|ま}たせる a {待|ま}つ műveltető alakja.' },
+      { point: 4, q: 'Te szeretnél fényképezni. Mit mondasz?', a: '{写真|しゃしん}を{撮|と}らせてください。', wrong: ['{写真|しゃしん}を{撮|と}ってください。', '{写真|しゃしん}を{撮|と}られてください。', '{写真|しゃしん}を{撮|と}りなさい。'], why: '〜させてください: engedje, hogy én tegyem.' },
+      { point: 5, q: 'Melyik alak helyes?', a: '{読|よ}ませていただきます。', wrong: ['{読|よ}まさせていただきます。', '{読|よ}みさせていただきます。', '{読|よ}められていただきます。'], why: 'Az 1. csoportú igénél a műveltető 〜せる: {読|よ}ませる.' },
+      { point: 5, q: 'Mit jelent a bolt ajtaján: {本日|ほんじつ}は{休|やす}ませていただきます。', a: 'Ma zárva tartunk.', wrong: ['Ma pihenhet nálunk.', 'Ma engedélyt kérünk.', 'Ma nyitva vagyunk.'], why: '〜させていただきます: udvarias bejelentés.' },
+      { point: 6, q: 'A barátod gépét szeretnéd használni. Melyik illik?', a: '{悪|わる}いけど、{使|つか}わせてくれない？', wrong: ['{申|もう}し{訳|わけ}ありませんが、{使|つか}わせていただけませんか。', '{使|つか}いなさい。', '{使|つか}わせろ。'], why: 'Barátnak: {悪|わる}いけど + 〜させてくれない？' },
       {
-        q: 'Mit jelez beszélgetés közben az ereszkedő hanglejtésű そうですか。?',
+        point: 8, q: 'Mit jelez beszélgetés közben az ereszkedő hanglejtésű そうですか。?',
         a: 'Tudomásul vettem, értem.',
         wrong: ['Nem hiszem el.', 'Teljesen egyetértek.', 'Kérlek, ismételd meg!'],
         why: 'Az あいづち azt jelzi, hogy figyelsz — nem azt, hogy egyetértesz.'
       },
       {
-        q: 'Mit jelent: {両親|りょうしん}は{一人|ひとり}で{旅行|りょこう}させてくれません。',
+        point: 7, q: 'Mit jelent: {両親|りょうしん}は{一人|ひとり}で{旅行|りょこう}させてくれません。',
         a: 'A szüleim nem engednek egyedül utazni.',
         wrong: [
           'A szüleim nem utaznak egyedül.',
@@ -18908,7 +18914,7 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜させてくれません: nem engedi (pedig szeretném).'
       },
-      { q: 'Melyik köszönés őrzi a 〜なさい alakot?', a: 'おやすみなさい', wrong: ['おはようございます', 'こんにちは', 'さようなら'], why: 'おやすみなさい: szó szerint „pihenj!".' }
+      { point: 1, q: 'Melyik köszönés őrzi a 〜なさい alakot?', a: 'おやすみなさい', wrong: ['おはようございます', 'こんにちは', 'さようなら'], why: 'おやすみなさい: szó szerint „pihenj!".' }
     ]
   },
 
@@ -19275,19 +19281,19 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: 'Mi a {食|た}べます műveltető-szenvedő alakja?', a: '{食|た}べさせられます', wrong: ['{食|た}べられさせます', '{食|た}べさせます', '{食|た}べらせます'], why: '{食|た}べさせる + られます.' },
-      { q: 'Mi a {待|ま}ちます rövid műveltető-szenvedő alakja?', a: '{待|ま}たされます', wrong: ['{待|ま}たせます', '{待|ま}たれます', '{待|ま}ちされます'], why: '{待|ま}たせられます → {待|ま}たされます.' },
-      { q: 'Mi a します műveltető-szenvedő alakja?', a: 'させられます', wrong: ['されます', 'させます', 'しられます'], why: 'させる + られます = させられます.' },
-      { q: '„Egy egész órát várakoztattak az állomáson." Mi hiányzik?', jp: '{駅|えき}で{一時間|いちじかん}も＿。', a: '{待|ま}たされました', wrong: ['{待|ま}たせました', '{待|ま}ちました', '{待|ま}てました'], why: 'Velem történt, akaratom ellenére: {待|ま}たされました.' },
-      { q: '„Anyám kitakaríttatta velem a szobát." Mi hiányzik?', jp: '{私|わたし}は{母|はは}＿{部屋|へや}を{掃除|そうじ}させられました。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Aki rákényszerít, に-t kap.' },
+      { point: 1, q: 'Mi a {食|た}べます műveltető-szenvedő alakja?', a: '{食|た}べさせられます', wrong: ['{食|た}べられさせます', '{食|た}べさせます', '{食|た}べらせます'], why: '{食|た}べさせる + られます.' },
+      { point: 2, q: 'Mi a {待|ま}ちます rövid műveltető-szenvedő alakja?', a: '{待|ま}たされます', wrong: ['{待|ま}たせます', '{待|ま}たれます', '{待|ま}ちされます'], why: '{待|ま}たせられます → {待|ま}たされます.' },
+      { point: 1, q: 'Mi a します műveltető-szenvedő alakja?', a: 'させられます', wrong: ['されます', 'させます', 'しられます'], why: 'させる + られます = させられます.' },
+      { point: 2, q: '„Egy egész órát várakoztattak az állomáson." Mi hiányzik?', jp: '{駅|えき}で{一時間|いちじかん}も＿。', a: '{待|ま}たされました', wrong: ['{待|ま}たせました', '{待|ま}ちました', '{待|ま}てました'], why: 'Velem történt, akaratom ellenére: {待|ま}たされました.' },
+      { point: 3, q: '„Anyám kitakaríttatta velem a szobát." Mi hiányzik?', jp: '{私|わたし}は{母|はは}＿{部屋|へや}を{掃除|そうじ}させられました。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Aki rákényszerít, に-t kap.' },
       {
-        q: 'Ki takarított? {私|わたし}は{母|はは}に{部屋|へや}を{掃除|そうじ}させられました。',
+        point: 3, q: 'Ki takarított? {私|わたし}は{母|はは}に{部屋|へや}を{掃除|そうじ}させられました。',
         a: 'Én, mert anyám rám parancsolt.',
         wrong: ['Anyám, mert megkértem rá.', 'Anyám, mert ő akarta.', 'Senki, a szoba koszos maradt.'],
         why: 'Az alany ({私|わたし}) végzi a cselekvést, kelletlenül.'
       },
       {
-        q: 'Mit jelent: {先輩|せんぱい}にお{酒|さけ}を{飲|の}まされました。',
+        point: 2, q: 'Mit jelent: {先輩|せんぱい}にお{酒|さけ}を{飲|の}まされました。',
         a: 'Az idősebb kolléga megitatott, pedig nem akartam inni.',
         wrong: [
           'Megitattam az idősebb kollégát.',
@@ -19297,7 +19303,7 @@ const NIHONCORE_COURSE = [
         why: '{飲|の}まされました: velem itatták.'
       },
       {
-        q: 'Melyik sorrend helyes: „olvasok · olvastatok valakivel · velem olvastatnak"?',
+        point: 4, q: 'Melyik sorrend helyes: „olvasok · olvastatok valakivel · velem olvastatnak"?',
         a: '{読|よ}みます · {読|よ}ませます · {読|よ}まされます',
         wrong: [
           '{読|よ}みます · {読|よ}まれます · {読|よ}ませます',
@@ -19307,7 +19313,7 @@ const NIHONCORE_COURSE = [
         why: 'Alap · műveltető (せます) · műveltető-szenvedő (されます).'
       },
       {
-        q: 'Mit jelent: この{本|ほん}にはいろいろ{考|かんが}えさせられました。',
+        point: 5, q: 'Mit jelent: この{本|ほん}にはいろいろ{考|かんが}えさせられました。',
         a: 'Ez a könyv sok mindenen elgondolkodtatott.',
         wrong: [
           'Ezt a könyvet kötelező volt elolvasnom.',
@@ -19316,20 +19322,20 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Gondolatot jelentő igével: akaratlanul is hatott rám.'
       },
-      { q: '„Azért tanulok japánul, mert Japánban szeretnék dolgozni." Mi hiányzik?', jp: '{日本語|にほんご}を{勉強|べんきょう}しているのは、{日本|にほん}で{働|はたら}きたい＿です。', a: 'から', wrong: ['ので', 'ために', 'のに'], why: '〜のは、…からです: az ok a mondat végén.' },
-      { q: 'Mi a {書|か}きます rövid műveltető-szenvedő alakja?', a: '{書|か}かされます', wrong: ['{書|か}かれます', '{書|か}かせます', '{書|か}けされます'], why: '{書|か}かせられます → {書|か}かされます.' },
-      { q: 'Mi a {来|き}ます műveltető-szenvedő alakja?', a: 'こさせられます', wrong: ['こされます', 'きさせられます', 'こられます'], why: 'くる → こさせる → こさせられる.' },
-      { q: 'Melyik igének nincs rövid műveltető-szenvedő alakja?', a: '{話|はな}す', wrong: ['{待|ま}つ', '{行|い}く', '{飲|の}む'], why: 'A す-re végződő igéknél csak a teljes alak él: {話|はな}させられる.' },
-      { q: '„Az iskolában egyenruhát hordatnak velünk." Mi hiányzik?', jp: '{学校|がっこう}で{制服|せいふく}を＿。', a: '{着|き}させられます', wrong: ['{着|き}させます', '{着|き}られます', '{着|き}せます'], why: '2. csoport: {着|き}る → {着|き}させる → {着|き}させられる.' },
-      { q: 'Ki vitte a csomagot? {私|わたし}は{友|とも}だちに{荷物|にもつ}を{持|も}たされました。', a: 'Én, pedig nem akartam.', wrong: ['A barátom, mert megkértem.', 'A barátom, mert ő akarta.', 'Ketten együtt.'], why: 'Az alany az, aki kénytelen megtenni.' },
+      { point: 7, q: '„Azért tanulok japánul, mert Japánban szeretnék dolgozni." Mi hiányzik?', jp: '{日本語|にほんご}を{勉強|べんきょう}しているのは、{日本|にほん}で{働|はたら}きたい＿です。', a: 'から', wrong: ['ので', 'ために', 'のに'], why: '〜のは、…からです: az ok a mondat végén.' },
+      { point: 2, q: 'Mi a {書|か}きます rövid műveltető-szenvedő alakja?', a: '{書|か}かされます', wrong: ['{書|か}かれます', '{書|か}かせます', '{書|か}けされます'], why: '{書|か}かせられます → {書|か}かされます.' },
+      { point: 1, q: 'Mi a {来|き}ます műveltető-szenvedő alakja?', a: 'こさせられます', wrong: ['こされます', 'きさせられます', 'こられます'], why: 'くる → こさせる → こさせられる.' },
+      { point: 2, q: 'Melyik igének nincs rövid műveltető-szenvedő alakja?', a: '{話|はな}す', wrong: ['{待|ま}つ', '{行|い}く', '{飲|の}む'], why: 'A す-re végződő igéknél csak a teljes alak él: {話|はな}させられる.' },
+      { point: 1, q: '„Az iskolában egyenruhát hordatnak velünk." Mi hiányzik?', jp: '{学校|がっこう}で{制服|せいふく}を＿。', a: '{着|き}させられます', wrong: ['{着|き}させます', '{着|き}られます', '{着|き}せます'], why: '2. csoport: {着|き}る → {着|き}させる → {着|き}させられる.' },
+      { point: 2, q: 'Ki vitte a csomagot? {私|わたし}は{友|とも}だちに{荷物|にもつ}を{持|も}たされました。', a: 'Én, pedig nem akartam.', wrong: ['A barátom, mert megkértem.', 'A barátom, mert ő akarta.', 'Ketten együtt.'], why: 'Az alany az, aki kénytelen megtenni.' },
       {
-        q: 'Szívesen mentél külföldre tanulni, és a szüleid elengedtek. Melyik illik?',
+        point: 4, q: 'Szívesen mentél külföldre tanulni, és a szüleid elengedtek. Melyik illik?',
         a: '{留学|りゅうがく}に{行|い}かせてもらいました。',
         wrong: ['{留学|りゅうがく}に{行|い}かされました。', '{留学|りゅうがく}に{行|い}かせました。', '{留学|りゅうがく}に{行|い}かれました。'],
         why: 'Amit szívesen tettél: 〜させてもらいました.'
       },
       {
-        q: 'Mit jelent: この{映画|えいが}には{何度|なんど}も{泣|な}かされました。',
+        point: 5, q: 'Mit jelent: この{映画|えいが}には{何度|なんど}も{泣|な}かされました。',
         a: 'Ez a film többször is megríkatott.',
         wrong: [
           'Ezt a filmet sírva kellett megnéznem.',
@@ -19338,10 +19344,10 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Érzelmi igével nincs kényszer: önkéntelen hatás.'
       },
-      { q: '„Angolul olvasni jól tudok." Mi hiányzik?', jp: '{英語|えいご}は、{読|よ}む＿{得意|とくい}です。', a: 'のは', wrong: ['ことを', 'とは', 'ので'], why: 'Ige + の: főnevesítés; utána は.' },
-      { q: 'Mit jelent: {日常会話|にちじょうかいわ}なら、できます。', a: 'A hétköznapi társalgás megy.', wrong: ['Mindennap beszélgetek.', 'Csak naponta egyszer megy.', 'Folyékonyan beszélek.'], why: '〜なら: „ami azt illeti" — ezen a szinten megy.' },
+      { point: 6, q: '„Angolul olvasni jól tudok." Mi hiányzik?', jp: '{英語|えいご}は、{読|よ}む＿{得意|とくい}です。', a: 'のは', wrong: ['ことを', 'とは', 'ので'], why: 'Ige + の: főnevesítés; utána は.' },
+      { point: 6, q: 'Mit jelent: {日常会話|にちじょうかいわ}なら、できます。', a: 'A hétköznapi társalgás megy.', wrong: ['Mindennap beszélgetek.', 'Csak naponta egyszer megy.', 'Folyékonyan beszélek.'], why: '〜なら: „ami azt illeti" — ezen a szinten megy.' },
       {
-        q: 'Melyik mondat szól a tanár szemszögéből?',
+        point: 4, q: 'Melyik mondat szól a tanár szemszögéből?',
         a: '{先生|せんせい}は{学生|がくせい}に{本|ほん}を{読|よ}ませました。',
         wrong: [
           '{学生|がくせい}は{先生|せんせい}に{本|ほん}を{読|よ}まされました。',
@@ -19757,14 +19763,14 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Egy utazás hatására kezdtem japánul tanulni." Mi hiányzik?', jp: '{旅行|りょこう}＿、{日本語|にほんご}の{勉強|べんきょう}を{始|はじ}めました。', a: 'をきっかけに', wrong: ['のせいで', 'として', 'について'], why: 'Ami elindította: 〜をきっかけに.' },
-      { q: '„Az eső miatt elmaradt a meccs." Mi hiányzik?', jp: '{雨|あめ}＿、{試合|しあい}が{中止|ちゅうし}になりました。', a: 'のせいで', wrong: ['のおかげで', 'をきっかけに', 'として'], why: 'Rossz eredmény oka: 〜のせいで.' },
-      { q: 'Melyik mondat fejez ki hálát?', a: '{先生|せんせい}のおかげで{合格|ごうかく}しました。', wrong: ['{先生|せんせい}のせいで{合格|ごうかく}しました。', '{先生|せんせい}として{合格|ごうかく}しました。', '{先生|せんせい}をきっかけに{合格|ごうかく}しました。'], why: 'おかげで: jó eredmény, köszönet.' },
-      { q: '„Minél hamarabb, annál jobb." Mi hiányzik?', jp: '{早|はや}ければ＿ほどいいです。', a: '{早|はや}い', wrong: ['{早|はや}く', '{早|はや}ければ', '{早|はや}さ'], why: 'ば-alak + szótári alak + ほど.' },
-      { q: '„Minél többet tanulja az ember, annál érdekesebb." Mi hiányzik?', jp: '{勉強|べんきょう}＿するほど、{面白|おもしろ}くなります。', a: 'すれば', wrong: ['したら', 'すると', 'しても'], why: 'A する ば-alakja: すれば.' },
-      { q: '„Cserediákként jöttem Japánba." Mi hiányzik?', jp: '{留学生|りゅうがくせい}＿{日本|にほん}へ{来|き}ました。', a: 'として', wrong: ['にとって', 'について', 'のせいで'], why: 'Szerep, minőség: 〜として.' },
+      { point: 1, q: '„Egy utazás hatására kezdtem japánul tanulni." Mi hiányzik?', jp: '{旅行|りょこう}＿、{日本語|にほんご}の{勉強|べんきょう}を{始|はじ}めました。', a: 'をきっかけに', wrong: ['のせいで', 'として', 'について'], why: 'Ami elindította: 〜をきっかけに.' },
+      { point: 2, q: '„Az eső miatt elmaradt a meccs." Mi hiányzik?', jp: '{雨|あめ}＿、{試合|しあい}が{中止|ちゅうし}になりました。', a: 'のせいで', wrong: ['のおかげで', 'をきっかけに', 'として'], why: 'Rossz eredmény oka: 〜のせいで.' },
+      { point: 2, q: 'Melyik mondat fejez ki hálát?', a: '{先生|せんせい}のおかげで{合格|ごうかく}しました。', wrong: ['{先生|せんせい}のせいで{合格|ごうかく}しました。', '{先生|せんせい}として{合格|ごうかく}しました。', '{先生|せんせい}をきっかけに{合格|ごうかく}しました。'], why: 'おかげで: jó eredmény, köszönet.' },
+      { point: 3, q: '„Minél hamarabb, annál jobb." Mi hiányzik?', jp: '{早|はや}ければ＿ほどいいです。', a: '{早|はや}い', wrong: ['{早|はや}く', '{早|はや}ければ', '{早|はや}さ'], why: 'ば-alak + szótári alak + ほど.' },
+      { point: 3, q: '„Minél többet tanulja az ember, annál érdekesebb." Mi hiányzik?', jp: '{勉強|べんきょう}＿するほど、{面白|おもしろ}くなります。', a: 'すれば', wrong: ['したら', 'すると', 'しても'], why: 'A する ば-alakja: すれば.' },
+      { point: 4, q: '„Cserediákként jöttem Japánba." Mi hiányzik?', jp: '{留学生|りゅうがくせい}＿{日本|にほん}へ{来|き}ました。', a: 'として', wrong: ['にとって', 'について', 'のせいで'], why: 'Szerep, minőség: 〜として.' },
       {
-        q: 'Mit jelent: {考|かんが}えれば{考|かんが}えるほど、わからなくなります。',
+        point: 3, q: 'Mit jelent: {考|かんが}えれば{考|かんが}えるほど、わからなくなります。',
         a: 'Minél többet gondolkodom rajta, annál kevésbé értem.',
         wrong: [
           'Ha gondolkodom rajta, megértem.',
@@ -19774,17 +19780,17 @@ const NIHONCORE_COURSE = [
         why: '〜ば〜ほど: minél…, annál….'
       },
       {
-        q: 'Mit jelent: いろいろお{世話|せわ}になりました。',
+        point: 5, q: 'Mit jelent: いろいろお{世話|せわ}になりました。',
         a: 'Köszönök mindent, amit értem tettek.',
         wrong: ['Sok mindenben segítettem.', 'Elnézést a sok gondért, amit okoztak.', 'Sok dolgom volt.'],
         why: 'お{世話|せわ}になりました: a másik törődését köszönöd meg.'
       },
-      { q: '„Mivel elaludtam, lekéstem a vonatot." Mi hiányzik?', jp: '{寝坊|ねぼう}した＿、{電車|でんしゃ}に{乗|の}り{遅|おく}れました。', a: 'せいで', wrong: ['おかげで', 'として', 'ほど'], why: 'Rossz eredmény oka ige után: 〜せいで.' },
-      { q: '„Köszönöm, hogy olyan kedvesen tanított." Mi hiányzik?', jp: '{親切|しんせつ}に{教|おし}えて＿、ありがとうございました。', a: 'くださって', wrong: ['あげて', 'さしあげて', 'おいて'], why: 'Amit a tisztelt személy értem tett: 〜てくださって.' },
-      { q: '„A gyerekem születése indított arra, hogy megtanuljak főzni." Mi hiányzik?', jp: '{子|こ}どもが{生|う}まれた＿をきっかけに、{料理|りょうり}を{習|なら}い{始|はじ}めました。', a: 'の', wrong: ['と', 'に', 'で'], why: 'Ige た-alakja + の + をきっかけに.' },
-      { q: 'Mit jelent: {人|ひと}のせいにしないでください。', a: 'Ne fogja másra!', wrong: ['Ne csinálja mások helyett!', 'Ne legyen tekintettel másokra!', 'Ne mások kedvéért tegye!'], why: '〜のせいにする: másra hárítja a hibát.' },
+      { point: 2, q: '„Mivel elaludtam, lekéstem a vonatot." Mi hiányzik?', jp: '{寝坊|ねぼう}した＿、{電車|でんしゃ}に{乗|の}り{遅|おく}れました。', a: 'せいで', wrong: ['おかげで', 'として', 'ほど'], why: 'Rossz eredmény oka ige után: 〜せいで.' },
+      { point: 5, q: '„Köszönöm, hogy olyan kedvesen tanított." Mi hiányzik?', jp: '{親切|しんせつ}に{教|おし}えて＿、ありがとうございました。', a: 'くださって', wrong: ['あげて', 'さしあげて', 'おいて'], why: 'Amit a tisztelt személy értem tett: 〜てくださって.' },
+      { point: 1, q: '„A gyerekem születése indított arra, hogy megtanuljak főzni." Mi hiányzik?', jp: '{子|こ}どもが{生|う}まれた＿をきっかけに、{料理|りょうり}を{習|なら}い{始|はじ}めました。', a: 'の', wrong: ['と', 'に', 'で'], why: 'Ige た-alakja + の + をきっかけに.' },
+      { point: 2, q: 'Mit jelent: {人|ひと}のせいにしないでください。', a: 'Ne fogja másra!', wrong: ['Ne csinálja mások helyett!', 'Ne legyen tekintettel másokra!', 'Ne mások kedvéért tegye!'], why: '〜のせいにする: másra hárítja a hibát.' },
       {
-        q: 'Mit jelent: {疲|つか}れているせいか、{頭|あたま}が{痛|いた}いです。',
+        point: 2, q: 'Mit jelent: {疲|つか}れているせいか、{頭|あたま}が{痛|いた}いです。',
         a: 'Talán a fáradtság miatt fáj a fejem.',
         wrong: [
           'Mivel fáj a fejem, fáradt vagyok.',
@@ -19793,18 +19799,18 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜せいか: bizonytalan ok — „talán amiatt".'
       },
-      { q: '„Minél csendesebb a szoba, annál jobban lehet aludni." Mi hiányzik?', jp: '{部屋|へや}は{静|しず}か＿{静|しず}かなほど、よく{眠|ねむ}れます。', a: 'なら', wrong: ['ければ', 'れば', 'だと'], why: 'な-melléknév: 〜なら〜なほど.' },
-      { q: '„Minél könnyebb a csomag, annál kényelmesebb." Mi hiányzik?', jp: '{荷物|にもつ}は＿{軽|かる}いほど{楽|らく}です。', a: '{軽|かる}ければ', wrong: ['{軽|かる}いければ', '{軽|かる}なら', '{軽|かる}くば'], why: 'い-melléknév: い → ければ.' },
-      { q: 'Mit jelent: {初心者|しょしんしゃ}としては、とても{上手|じょうず}です。', a: 'Kezdőhöz képest nagyon ügyes.', wrong: ['Kezdőként nagyon ügyetlen.', 'Olyan ügyes, mint egy kezdő.', 'A kezdők nagyon ügyesek.'], why: '〜としては: viszonyítási alap.' },
+      { point: 3, q: '„Minél csendesebb a szoba, annál jobban lehet aludni." Mi hiányzik?', jp: '{部屋|へや}は{静|しず}か＿{静|しず}かなほど、よく{眠|ねむ}れます。', a: 'なら', wrong: ['ければ', 'れば', 'だと'], why: 'な-melléknév: 〜なら〜なほど.' },
+      { point: 3, q: '„Minél könnyebb a csomag, annál kényelmesebb." Mi hiányzik?', jp: '{荷物|にもつ}は＿{軽|かる}いほど{楽|らく}です。', a: '{軽|かる}ければ', wrong: ['{軽|かる}いければ', '{軽|かる}なら', '{軽|かる}くば'], why: 'い-melléknév: い → ければ.' },
+      { point: 4, q: 'Mit jelent: {初心者|しょしんしゃ}としては、とても{上手|じょうず}です。', a: 'Kezdőhöz képest nagyon ügyes.', wrong: ['Kezdőként nagyon ügyetlen.', 'Olyan ügyes, mint egy kezdő.', 'A kezdők nagyon ügyesek.'], why: '〜としては: viszonyítási alap.' },
       {
-        q: 'Egy külföldi úgy beszél japánul, mint egy japán. Melyik helyes?',
+        point: 4, q: 'Egy külföldi úgy beszél japánul, mint egy japán. Melyik helyes?',
         a: '{日本人|にほんじん}のように{話|はな}します。',
         wrong: ['{日本人|にほんじん}として{話|はな}します。', '{日本人|にほんじん}にとって{話|はな}します。', '{日本人|にほんじん}によって{話|はな}します。'],
         why: 'Hasonlat: のように. A として valódi minőséget jelöl.'
       },
-      { q: 'Mikor mondod: お{世話|せわ}になります。', a: 'Érkezéskor, előre megköszönve a gondoskodást.', wrong: ['Búcsúzáskor, visszatekintve.', 'Bocsánatkéréskor.', 'Ajándék átadásakor.'], why: 'Búcsúzáskor a múlt idő kell: お{世話|せわ}になりました.' },
-      { q: 'Melyik pár tartozik össze egy udvarias levélben?', a: '{拝啓|はいけい} … {敬具|けいぐ}', wrong: ['{拝啓|はいけい} … {草々|そうそう}', '{前略|ぜんりゃく} … {敬具|けいぐ}', '{敬具|けいぐ} … {拝啓|はいけい}'], why: 'A {拝啓|はいけい} nyit, a {敬具|けいぐ} zár.' },
-      { q: 'A búcsúbeszédben mivel nevezed meg a fordulópontot?', a: '〜をきっかけに', wrong: ['〜のせいで', '〜として', '〜ば〜ほど'], why: 'きっかけ: az az esemény, amely elindította a változást.' }
+      { point: 5, q: 'Mikor mondod: お{世話|せわ}になります。', a: 'Érkezéskor, előre megköszönve a gondoskodást.', wrong: ['Búcsúzáskor, visszatekintve.', 'Bocsánatkéréskor.', 'Ajándék átadásakor.'], why: 'Búcsúzáskor a múlt idő kell: お{世話|せわ}になりました.' },
+      { point: 7, q: 'Melyik pár tartozik össze egy udvarias levélben?', a: '{拝啓|はいけい} … {敬具|けいぐ}', wrong: ['{拝啓|はいけい} … {草々|そうそう}', '{前略|ぜんりゃく} … {敬具|けいぐ}', '{敬具|けいぐ} … {拝啓|はいけい}'], why: 'A {拝啓|はいけい} nyit, a {敬具|けいぐ} zár.' },
+      { point: 1, q: 'A búcsúbeszédben mivel nevezed meg a fordulópontot?', a: '〜をきっかけに', wrong: ['〜のせいで', '〜として', '〜ば〜ほど'], why: 'きっかけ: az az esemény, amely elindította a változást.' }
     ]
   },
 
@@ -20151,36 +20157,36 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Drága, de megveszem." Mi hiányzik?', jp: '{高|たか}い＿、{買|か}います。', a: 'けど', wrong: ['から', 'ので', 'だから'], why: 'Mondaton belüli ellentét: けど.' },
-      { q: 'Melyik kötőszó illik írott, hivatalos szövegbe („azonban")?', a: 'しかし', wrong: ['でも', 'けど', 'それから'], why: 'A しかし írott, hivatalos; a でも és a けど beszélt nyelvi.' },
-      { q: '„Megreggeliztem. Aztán iskolába mentem." Mi hiányzik?', jp: '{朝|あさ}ごはんを{食|た}べました。＿、{学校|がっこう}へ{行|い}きました。', a: 'それから', wrong: ['しかし', 'でも', 'それでも'], why: 'Időbeli sorrend: それから.' },
-      { q: '„Esik az eső. Ezért viszek esernyőt." Mi hiányzik?', jp: '{雨|あめ}が{降|ふ}っています。＿、{傘|かさ}を{持|も}っていきます。', a: 'だから', wrong: ['しかし', 'それでも', 'けれども'], why: 'Következmény: だから.' },
-      { q: '„Fáradt vagyok. Mégis futok." Mi hiányzik?', jp: '{疲|つか}れています。＿、{走|はし}ります。', a: 'それでも', wrong: ['だから', 'それで', 'そして'], why: 'A körülmények ellenére: それでも.' },
-      { q: 'Mit jelent: {便利|べんり}です。しかし、{値段|ねだん}が{高|たか}いです。', a: 'Praktikus. Az ára azonban magas.', wrong: ['Praktikus, ezért drága.', 'Praktikus és olcsó.', 'Nem praktikus, de olcsó.'], why: 'しかし = azonban.' },
-      { q: 'Hol áll a でも?', a: 'Új mondat elején, az előzőre visszautalva.', wrong: ['A mondat végén.', 'Mindig az ige után.', 'Csak kérdésben.'], why: 'A でも mondatkezdő; mondaton belül けど vagy が áll.' },
-      { q: '„Ez a szoba tágas. És világos is." Mi hiányzik?', jp: 'この{部屋|へや}は{広|ひろ}いです。＿、{明|あか}るいです。', a: 'そして', wrong: ['しかし', 'それでも', 'でも'], why: 'Hozzátoldás: そして.' },
-      { q: 'Melyik a けど udvariasabb párja?', a: 'けれども', wrong: ['でも', 'だから', 'それから'], why: 'けど → けれども: ugyanaz, udvariasabban.' },
-      { q: '„Tegnap nem aludtam. Ezért ma nagyon álmos vagyok." Mi hiányzik?', jp: '{昨日|きのう}は{寝|ね}ませんでした。＿、{今日|きょう}はとても{眠|ねむ}いです。', a: 'それで', wrong: ['それでも', 'しかし', 'けど'], why: 'Semleges következmény: それで.' },
-      { q: '„Ez a hely csendes, de sötét." Mi hiányzik?', jp: 'この{店|みせ}は{静|しず}か＿、{暗|くら}いです。', a: 'だけど', wrong: ['けど', 'でも', 'しかし'], why: 'な-melléknév után だ + けど; a でも és a しかし csak mondat elején állhat.' },
-      { q: 'Melyik mondat helyes?', a: '{高|たか}いです。でも、{買|か}います。', wrong: ['{高|たか}いでも、{買|か}います。', '{高|たか}いしかし、{買|か}います。', 'でも{高|たか}い、{買|か}います。'], why: 'A でも új mondatot kezd.' },
-      { q: '„Olcsó. Ráadásul finom is." Mi hiányzik?', jp: '{安|やす}いです。＿、おいしいです。', a: 'それに', wrong: ['それで', 'それでも', 'ところで'], why: 'それに: ugyanolyan irányú állítást tesz hozzá.' },
-      { q: 'Melyik kötőszó vált témát („apropó")?', a: 'ところで', wrong: ['たとえば', 'それから', 'だから'], why: 'ところで: más témára térsz át.' },
-      { q: '„Kávét kér? Vagy inkább teát?" Mi hiányzik?', jp: 'コーヒーがいいですか。＿、{紅茶|こうちゃ}がいいですか。', a: 'それとも', wrong: ['それでも', 'それに', 'それで'], why: 'それとも: két kérdés között választást kínál.' },
-      { q: '„Hideg van. Ezért csukja be az ablakot!" Mi illik ide?', jp: '{寒|さむ}いです。＿、{窓|まど}を{閉|し}めてください。', a: 'ですから', wrong: ['それで', 'それでも', 'それから'], why: 'Kérés előtt だから / ですから áll; a それで után nem állhat kérés.' },
-      { q: 'Mit jelent beszélgetésben: それから？', a: 'És aztán?', wrong: ['Ezért?', 'Például?', 'De miért?'], why: 'Így biztatod a másikat, hogy folytassa.' },
+      { point: 1, q: '„Drága, de megveszem." Mi hiányzik?', jp: '{高|たか}い＿、{買|か}います。', a: 'けど', wrong: ['から', 'ので', 'だから'], why: 'Mondaton belüli ellentét: けど.' },
+      { point: 3, q: 'Melyik kötőszó illik írott, hivatalos szövegbe („azonban")?', a: 'しかし', wrong: ['でも', 'けど', 'それから'], why: 'A しかし írott, hivatalos; a でも és a けど beszélt nyelvi.' },
+      { point: 4, q: '„Megreggeliztem. Aztán iskolába mentem." Mi hiányzik?', jp: '{朝|あさ}ごはんを{食|た}べました。＿、{学校|がっこう}へ{行|い}きました。', a: 'それから', wrong: ['しかし', 'でも', 'それでも'], why: 'Időbeli sorrend: それから.' },
+      { point: 5, q: '„Esik az eső. Ezért viszek esernyőt." Mi hiányzik?', jp: '{雨|あめ}が{降|ふ}っています。＿、{傘|かさ}を{持|も}っていきます。', a: 'だから', wrong: ['しかし', 'それでも', 'けれども'], why: 'Következmény: だから.' },
+      { point: 6, q: '„Fáradt vagyok. Mégis futok." Mi hiányzik?', jp: '{疲|つか}れています。＿、{走|はし}ります。', a: 'それでも', wrong: ['だから', 'それで', 'そして'], why: 'A körülmények ellenére: それでも.' },
+      { point: 3, q: 'Mit jelent: {便利|べんり}です。しかし、{値段|ねだん}が{高|たか}いです。', a: 'Praktikus. Az ára azonban magas.', wrong: ['Praktikus, ezért drága.', 'Praktikus és olcsó.', 'Nem praktikus, de olcsó.'], why: 'しかし = azonban.' },
+      { point: 2, q: 'Hol áll a でも?', a: 'Új mondat elején, az előzőre visszautalva.', wrong: ['A mondat végén.', 'Mindig az ige után.', 'Csak kérdésben.'], why: 'A でも mondatkezdő; mondaton belül けど vagy が áll.' },
+      { point: 4, q: '„Ez a szoba tágas. És világos is." Mi hiányzik?', jp: 'この{部屋|へや}は{広|ひろ}いです。＿、{明|あか}るいです。', a: 'そして', wrong: ['しかし', 'それでも', 'でも'], why: 'Hozzátoldás: そして.' },
+      { point: 1, q: 'Melyik a けど udvariasabb párja?', a: 'けれども', wrong: ['でも', 'だから', 'それから'], why: 'けど → けれども: ugyanaz, udvariasabban.' },
+      { point: 5, q: '„Tegnap nem aludtam. Ezért ma nagyon álmos vagyok." Mi hiányzik?', jp: '{昨日|きのう}は{寝|ね}ませんでした。＿、{今日|きょう}はとても{眠|ねむ}いです。', a: 'それで', wrong: ['それでも', 'しかし', 'けど'], why: 'Semleges következmény: それで.' },
+      { point: 1, q: '„Ez a hely csendes, de sötét." Mi hiányzik?', jp: 'この{店|みせ}は{静|しず}か＿、{暗|くら}いです。', a: 'だけど', wrong: ['けど', 'でも', 'しかし'], why: 'な-melléknév után だ + けど; a でも és a しかし csak mondat elején állhat.' },
+      { point: 2, q: 'Melyik mondat helyes?', a: '{高|たか}いです。でも、{買|か}います。', wrong: ['{高|たか}いでも、{買|か}います。', '{高|たか}いしかし、{買|か}います。', 'でも{高|たか}い、{買|か}います。'], why: 'A でも új mondatot kezd.' },
+      { point: 7, q: '„Olcsó. Ráadásul finom is." Mi hiányzik?', jp: '{安|やす}いです。＿、おいしいです。', a: 'それに', wrong: ['それで', 'それでも', 'ところで'], why: 'それに: ugyanolyan irányú állítást tesz hozzá.' },
+      { point: 7, q: 'Melyik kötőszó vált témát („apropó")?', a: 'ところで', wrong: ['たとえば', 'それから', 'だから'], why: 'ところで: más témára térsz át.' },
+      { point: 7, q: '„Kávét kér? Vagy inkább teát?" Mi hiányzik?', jp: 'コーヒーがいいですか。＿、{紅茶|こうちゃ}がいいですか。', a: 'それとも', wrong: ['それでも', 'それに', 'それで'], why: 'それとも: két kérdés között választást kínál.' },
+      { point: 5, q: '„Hideg van. Ezért csukja be az ablakot!" Mi illik ide?', jp: '{寒|さむ}いです。＿、{窓|まど}を{閉|し}めてください。', a: 'ですから', wrong: ['それで', 'それでも', 'それから'], why: 'Kérés előtt だから / ですから áll; a それで után nem állhat kérés.' },
+      { point: 4, q: 'Mit jelent beszélgetésben: それから？', a: 'És aztán?', wrong: ['Ezért?', 'Például?', 'De miért?'], why: 'Így biztatod a másikat, hogy folytassa.' },
       {
-        q: 'Hivatalos levelet írsz: „Drága, de megveszem." Melyik illik?',
+        point: 1, q: 'Hivatalos levelet írsz: „Drága, de megveszem." Melyik illik?',
         a: '{高|たか}いですが、{買|か}います。',
         wrong: ['{高|たか}いけど、{買|か}う。', '{高|たか}いでも、{買|か}います。', '{高|たか}いから、{買|か}います。'],
         why: 'Írásban, udvarias stílusban a mondaton belüli „de": 〜が.'
       },
       {
-        q: 'Mit sejtet a befejezetlen mondat: ちょっと{難|むずか}しいですけど…。',
+        point: 1, q: 'Mit sejtet a befejezetlen mondat: ちょっと{難|むずか}しいですけど…。',
         a: 'Udvarias elutasítást vagy kételyt.',
         wrong: ['Lelkes beleegyezést.', 'Dühös tiltakozást.', 'Kérdést az időpontról.'],
         why: 'A けど után elhallgatott rész többnyire a kellemetlen következmény.'
       },
-      { q: '„Szeretem a japán ételeket. Például a szusit." Mi hiányzik?', jp: '{日本|にほん}の{食|た}べ{物|もの}が{好|す}きです。＿、すしです。', a: 'たとえば', wrong: ['ところで', 'それとも', 'それで'], why: 'たとえば: példát hoz az előző állításhoz.' }
+      { point: 7, q: '„Szeretem a japán ételeket. Például a szusit." Mi hiányzik?', jp: '{日本|にほん}の{食|た}べ{物|もの}が{好|す}きです。＿、すしです。', a: 'たとえば', wrong: ['ところで', 'それとも', 'それで'], why: 'たとえば: példát hoz az előző állításhoz.' }
     ]
   },
 
@@ -20511,25 +20517,25 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Szép időnk van, ugye?" Mi hiányzik?', jp: 'いい{天気|てんき}です＿。', a: 'ね', wrong: ['よ', 'かい', 'なあ'], why: 'Egyetértést vársz: ね.' },
-      { q: '„Megjött a vonat!" (a másik nem vette észre) Mi hiányzik?', jp: '{電車|でんしゃ}が{来|き}ました＿。', a: 'よ', wrong: ['ね', 'かな', 'かい'], why: 'Új információ a másiknak: よ.' },
-      { q: 'Mit fejez ki: {寒|さむ}いなあ。', a: 'Felkiáltást, amit magadnak mondasz: de hideg van!', wrong: ['Kérdést: hideg van?', 'Figyelmeztetést a másiknak.', 'Tiltást.'], why: 'A なあ a saját érzés kimondása.' },
-      { q: '„Vajon holnap szép idő lesz?" Mi hiányzik?', jp: 'あしたは{晴|は}れる＿。', a: 'かな', wrong: ['よ', 'ね', 'じゃないか'], why: 'Töprengés: かな.' },
-      { q: 'Ki mondja leginkább: {元気|げんき}かい。', a: 'Idősebb férfi fiatalabbnak, barátságosan.', wrong: ['Diák a tanárának.', 'Eladó a vásárlónak.', 'Hivatalos levélben írják.'], why: 'A かい meleg, de bizalmas kérdőforma.' },
-      { q: 'Mit jelent: {約束|やくそく}したじゃないか。', a: 'Hiszen megígérted!', wrong: ['Nem ígérted meg?', 'Ne ígérd meg!', 'Megígéred?'], why: 'A じゃないか emlékeztet, szemrehányást tesz.' },
-      { q: 'Mikor használsz よ-t?', a: 'Amikor olyat mondasz, amit a másik szerinted nem tud.', wrong: ['Amikor egyetértést vársz.', 'Amikor magadban töprengsz.', 'Amikor kérdezel.'], why: 'よ: új információ, figyelmeztetés.' },
-      { q: 'Mikor használsz ね-t?', a: 'Amikor egyetértést, megerősítést vársz.', wrong: ['Amikor új információt közölsz.', 'Amikor parancsolsz.', 'Amikor tiltasz.'], why: 'ね: közös tudás, egyetértés.' },
-      { q: '„Bárcsak elmehetnék Japánba!" Mi hiányzik?', jp: '{日本|にほん}へ{行|い}きたい＿。', a: 'なあ', wrong: ['かい', 'だい', 'じゃないか'], why: 'Vágy, sóhaj: なあ.' },
-      { q: 'Melyik a かな nőies, ritkább párja?', a: 'かしら', wrong: ['かい', 'だい', 'なあ'], why: 'かしら: ugyanaz a töprengés, nőies stílusban.' },
-      { q: '„Holnap szünet van, ugye? (úgy tudom)" Mi hiányzik?', jp: '{明日|あした}は{休|やす}みです＿。', a: 'よね', wrong: ['よ', 'かな', 'なあ'], why: 'よね: úgy tudod, és megerősítést kérsz.' },
-      { q: 'Melyik mondat hibás bemutatkozáskor?', a: '{私|わたし}はアンナですね。', wrong: ['{私|わたし}はアンナです。', 'アンナです。よろしくお{願|ねが}いします。', 'アンナと{言|い}います。'], why: 'A ね közös tudásra épít; a nevedet a másik még nem tudja.' },
-      { q: '„Vajon holnap esni fog?" Melyik helyes?', a: '{明日|あした}は{雨|あめ}かな。', wrong: ['{明日|あした}は{雨|あめ}だかな。', '{明日|あした}は{雨|あめ}ですかな。', '{明日|あした}は{雨|あめ}なあ。'], why: 'Főnév után nincs だ a かな előtt.' },
-      { q: '„Ma szabadnapos vagy?" (baráti) Mi hiányzik?', jp: '{今日|きょう}は{休|やす}み＿？', a: 'なの', wrong: ['の', 'だの', 'かの'], why: 'Főnév után な + の.' },
-      { q: 'Mit jelent: どうかな。', a: 'Hát, nem is tudom.', wrong: ['Hogy vagy?', 'Mi történt?', 'Hogyan kell?'], why: 'Szelíd kétely — sokszor burkolt „nem".' },
-      { q: 'Ki mondja leginkább: {危|あぶ}ないぞ。', a: 'Férfi, erős figyelmeztetésként.', wrong: ['Bolti eladó a vevőnek.', 'Diák a tanárának.', 'Bemondó a híradóban.'], why: 'A ぞ erős, férfias nyomaték.' },
-      { q: 'Mit fejez ki: あ、アンナさんじゃないですか。', a: 'Meglepett ráismerést: „hiszen ez Anna!"', wrong: ['Tagadást: „ez nem Anna."', 'Kérdést: „hol van Anna?"', 'Szemrehányást Annának.'], why: 'A じゃないですか itt rácsodálkozás, nem tagadás.' },
+      { point: 1, q: '„Szép időnk van, ugye?" Mi hiányzik?', jp: 'いい{天気|てんき}です＿。', a: 'ね', wrong: ['よ', 'かい', 'なあ'], why: 'Egyetértést vársz: ね.' },
+      { point: 2, q: '„Megjött a vonat!" (a másik nem vette észre) Mi hiányzik?', jp: '{電車|でんしゃ}が{来|き}ました＿。', a: 'よ', wrong: ['ね', 'かな', 'かい'], why: 'Új információ a másiknak: よ.' },
+      { point: 4, q: 'Mit fejez ki: {寒|さむ}いなあ。', a: 'Felkiáltást, amit magadnak mondasz: de hideg van!', wrong: ['Kérdést: hideg van?', 'Figyelmeztetést a másiknak.', 'Tiltást.'], why: 'A なあ a saját érzés kimondása.' },
+      { point: 5, q: '„Vajon holnap szép idő lesz?" Mi hiányzik?', jp: 'あしたは{晴|は}れる＿。', a: 'かな', wrong: ['よ', 'ね', 'じゃないか'], why: 'Töprengés: かな.' },
+      { point: 6, q: 'Ki mondja leginkább: {元気|げんき}かい。', a: 'Idősebb férfi fiatalabbnak, barátságosan.', wrong: ['Diák a tanárának.', 'Eladó a vásárlónak.', 'Hivatalos levélben írják.'], why: 'A かい meleg, de bizalmas kérdőforma.' },
+      { point: 7, q: 'Mit jelent: {約束|やくそく}したじゃないか。', a: 'Hiszen megígérted!', wrong: ['Nem ígérted meg?', 'Ne ígérd meg!', 'Megígéred?'], why: 'A じゃないか emlékeztet, szemrehányást tesz.' },
+      { point: 2, q: 'Mikor használsz よ-t?', a: 'Amikor olyat mondasz, amit a másik szerinted nem tud.', wrong: ['Amikor egyetértést vársz.', 'Amikor magadban töprengsz.', 'Amikor kérdezel.'], why: 'よ: új információ, figyelmeztetés.' },
+      { point: 1, q: 'Mikor használsz ね-t?', a: 'Amikor egyetértést, megerősítést vársz.', wrong: ['Amikor új információt közölsz.', 'Amikor parancsolsz.', 'Amikor tiltasz.'], why: 'ね: közös tudás, egyetértés.' },
+      { point: 4, q: '„Bárcsak elmehetnék Japánba!" Mi hiányzik?', jp: '{日本|にほん}へ{行|い}きたい＿。', a: 'なあ', wrong: ['かい', 'だい', 'じゃないか'], why: 'Vágy, sóhaj: なあ.' },
+      { point: 5, q: 'Melyik a かな nőies, ritkább párja?', a: 'かしら', wrong: ['かい', 'だい', 'なあ'], why: 'かしら: ugyanaz a töprengés, nőies stílusban.' },
+      { point: 3, q: '„Holnap szünet van, ugye? (úgy tudom)" Mi hiányzik?', jp: '{明日|あした}は{休|やす}みです＿。', a: 'よね', wrong: ['よ', 'かな', 'なあ'], why: 'よね: úgy tudod, és megerősítést kérsz.' },
+      { point: 1, q: 'Melyik mondat hibás bemutatkozáskor?', a: '{私|わたし}はアンナですね。', wrong: ['{私|わたし}はアンナです。', 'アンナです。よろしくお{願|ねが}いします。', 'アンナと{言|い}います。'], why: 'A ね közös tudásra épít; a nevedet a másik még nem tudja.' },
+      { point: 5, q: '„Vajon holnap esni fog?" Melyik helyes?', a: '{明日|あした}は{雨|あめ}かな。', wrong: ['{明日|あした}は{雨|あめ}だかな。', '{明日|あした}は{雨|あめ}ですかな。', '{明日|あした}は{雨|あめ}なあ。'], why: 'Főnév után nincs だ a かな előtt.' },
+      { point: 8, q: '„Ma szabadnapos vagy?" (baráti) Mi hiányzik?', jp: '{今日|きょう}は{休|やす}み＿？', a: 'なの', wrong: ['の', 'だの', 'かの'], why: 'Főnév után な + の.' },
+      { point: 5, q: 'Mit jelent: どうかな。', a: 'Hát, nem is tudom.', wrong: ['Hogy vagy?', 'Mi történt?', 'Hogyan kell?'], why: 'Szelíd kétely — sokszor burkolt „nem".' },
+      { point: 9, q: 'Ki mondja leginkább: {危|あぶ}ないぞ。', a: 'Férfi, erős figyelmeztetésként.', wrong: ['Bolti eladó a vevőnek.', 'Diák a tanárának.', 'Bemondó a híradóban.'], why: 'A ぞ erős, férfias nyomaték.' },
+      { point: 7, q: 'Mit fejez ki: あ、アンナさんじゃないですか。', a: 'Meglepett ráismerést: „hiszen ez Anna!"', wrong: ['Tagadást: „ez nem Anna."', 'Kérdést: „hol van Anna?"', 'Szemrehányást Annának.'], why: 'A じゃないですか itt rácsodálkozás, nem tagadás.' },
       {
-        q: 'A barátod nem tudja, hogy a vonat nem megy Kiotóba. Mit mondasz?',
+        point: 2, q: 'A barátod nem tudja, hogy a vonat nem megy Kiotóba. Mit mondasz?',
         a: 'その{電車|でんしゃ}は{京都|きょうと}へ{行|い}かないよ。',
         wrong: [
           'その{電車|でんしゃ}は{京都|きょうと}へ{行|い}かないね。',
@@ -20538,8 +20544,8 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Új információ a másiknak: よ.'
       },
-      { q: 'Mit felelsz erre: {暑|あつ}いですね。', a: 'そうですね。', wrong: ['いいえ、{暑|あつ}いです。', 'はい、どうぞ。', 'どういたしまして。'], why: 'A ね egyetértést vár: そうですね.' },
-      { q: 'Melyik mondat magadnak szóló sóhaj?', a: 'おなかがすいたなあ。', wrong: ['おなかがすきましたか。', 'おなかがすいたよ。', 'おなかがすいたの？'], why: 'A なあ nem a másiknak szól: hangosan gondolkodsz.' }
+      { point: 1, q: 'Mit felelsz erre: {暑|あつ}いですね。', a: 'そうですね。', wrong: ['いいえ、{暑|あつ}いです。', 'はい、どうぞ。', 'どういたしまして。'], why: 'A ね egyetértést vár: そうですね.' },
+      { point: 4, q: 'Melyik mondat magadnak szóló sóhaj?', a: 'おなかがすいたなあ。', wrong: ['おなかがすきましたか。', 'おなかがすいたよ。', 'おなかがすいたの？'], why: 'A なあ nem a másiknak szól: hangosan gondolkodsz.' }
     ]
   },
 
@@ -20941,31 +20947,31 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Most már haza kell mennem." Mi hiányzik?', jp: 'もう{帰|かえ}ら＿いけません。', a: 'なくては', wrong: ['なくても', 'ないで', 'なくて'], why: 'Kell: なくては + いけません.' },
-      { q: 'Minek a rövid alakja: {行|い}かなくちゃ', a: '{行|い}かなくては(いけない)', wrong: ['{行|い}かなくてもいい', '{行|い}かないでください', '{行|い}ってはいけない'], why: 'なくては → なくちゃ.' },
-      { q: 'Mit jelent: {早|はや}く{起|お}きなきゃ。', a: 'Korán kell kelnem.', wrong: ['Nem kell korán kelnem.', 'Nem szabad korán kelnem.', 'Korán keltem.'], why: 'なきゃ = なければ(ならない): kell.' },
-      { q: 'Minek a rövid alakja: {食|た}べちゃいけません', a: '{食|た}べてはいけません', wrong: ['{食|た}べてしまいます', '{食|た}べなくてはいけません', '{食|た}べてもいいです'], why: 'ては → ちゃ.' },
-      { q: 'Minek a rövid alakja: {食|た}べちゃった', a: '{食|た}べてしまった', wrong: ['{食|た}べてはいけない', '{食|た}べていた', '{食|た}べなくちゃ'], why: 'てしまった → ちゃった.' },
-      { q: 'Mi a {飲|の}んでしまった beszélt alakja?', a: '{飲|の}んじゃった', wrong: ['{飲|の}んちゃった', '{飲|の}みちゃった', '{飲|の}んでた'], why: 'でしまった → じゃった.' },
-      { q: 'Minek a rövid alakja: {読|よ}んでる', a: '{読|よ}んでいる', wrong: ['{読|よ}んでくる', '{読|よ}んである', '{読|よ}んでおく'], why: 'ている → てる.' },
-      { q: 'Mit jelent: {田中|たなか}さんは{来|こ}ないって。', a: 'Tanaka azt mondta, nem jön.', wrong: ['Tanaka nem jöhet.', 'Tanaka ne jöjjön!', 'Tanaka vajon jön?'], why: 'A mondat végi って = と{言|い}っていました.' },
+      { point: 1, q: '„Most már haza kell mennem." Mi hiányzik?', jp: 'もう{帰|かえ}ら＿いけません。', a: 'なくては', wrong: ['なくても', 'ないで', 'なくて'], why: 'Kell: なくては + いけません.' },
+      { point: 2, q: 'Minek a rövid alakja: {行|い}かなくちゃ', a: '{行|い}かなくては(いけない)', wrong: ['{行|い}かなくてもいい', '{行|い}かないでください', '{行|い}ってはいけない'], why: 'なくては → なくちゃ.' },
+      { point: 2, q: 'Mit jelent: {早|はや}く{起|お}きなきゃ。', a: 'Korán kell kelnem.', wrong: ['Nem kell korán kelnem.', 'Nem szabad korán kelnem.', 'Korán keltem.'], why: 'なきゃ = なければ(ならない): kell.' },
+      { point: 3, q: 'Minek a rövid alakja: {食|た}べちゃいけません', a: '{食|た}べてはいけません', wrong: ['{食|た}べてしまいます', '{食|た}べなくてはいけません', '{食|た}べてもいいです'], why: 'ては → ちゃ.' },
+      { point: 4, q: 'Minek a rövid alakja: {食|た}べちゃった', a: '{食|た}べてしまった', wrong: ['{食|た}べてはいけない', '{食|た}べていた', '{食|た}べなくちゃ'], why: 'てしまった → ちゃった.' },
+      { point: 4, q: 'Mi a {飲|の}んでしまった beszélt alakja?', a: '{飲|の}んじゃった', wrong: ['{飲|の}んちゃった', '{飲|の}みちゃった', '{飲|の}んでた'], why: 'でしまった → じゃった.' },
+      { point: 5, q: 'Minek a rövid alakja: {読|よ}んでる', a: '{読|よ}んでいる', wrong: ['{読|よ}んでくる', '{読|よ}んである', '{読|よ}んでおく'], why: 'ている → てる.' },
+      { point: 7, q: 'Mit jelent: {田中|たなか}さんは{来|こ}ないって。', a: 'Tanaka azt mondta, nem jön.', wrong: ['Tanaka nem jöhet.', 'Tanaka ne jöjjön!', 'Tanaka vajon jön?'], why: 'A mondat végi って = と{言|い}っていました.' },
       {
-        q: 'Hol használod ezeket a rövid alakokat?',
+        point: 9, q: 'Hol használod ezeket a rövid alakokat?',
         a: 'Barátok, család között, kötetlen beszédben.',
         wrong: ['Hivatalos levélben.', 'Tanárral, főnökkel beszélve.', 'Vizsgadolgozatban.'],
         why: 'A rövidítések bizalmas stílusúak; udvarias helyzetben a teljes alak kell.'
       },
-      { q: '„Itt nem szabad játszani!" (baráti) Mi hiányzik?', jp: 'ここで＿いけないよ。', a: '{遊|あそ}んじゃ', wrong: ['{遊|あそ}んちゃ', '{遊|あそ}びちゃ', '{遊|あそ}んで'], why: '{遊|あそ}んでは → {遊|あそ}んじゃ.' },
-      { q: 'Minek a rövid alakja: もう{寝|ね}ないと。', a: '{寝|ね}ないといけない', wrong: ['{寝|ね}ないでください', '{寝|ね}ないと{思|おも}う', '{寝|ね}ないほうがいい'], why: 'A 〜ないと után az いけない marad el: „kell".' },
-      { q: 'Mi a {読|よ}んではいけない beszélt alakja?', a: '{読|よ}んじゃいけない', wrong: ['{読|よ}んちゃいけない', '{読|よ}みちゃいけない', '{読|よ}んでちゃいけない'], why: 'では → じゃ.' },
-      { q: 'Minek a rövid alakja: {買|か}っとく', a: '{買|か}っておく', wrong: ['{買|か}っている', '{買|か}ってしまう', '{買|か}ってくる'], why: 'ておく → とく.' },
-      { q: 'Mit jelent: バスが{行|い}っちゃった。', a: 'Elment a busz (sajnos).', wrong: ['Elmegyek busszal.', 'A busz még nem ment el.', 'Busszal kell mennem.'], why: '{行|い}ってしまった → {行|い}っちゃった.' },
-      { q: 'Mi a まだ{食|た}べていない beszélt alakja?', a: 'まだ{食|た}べてない', wrong: ['まだ{食|た}べちゃない', 'まだ{食|た}べとない', 'まだ{食|た}べなきゃ'], why: 'ていない → てない: az い kiesik.' },
-      { q: 'Mit helyettesít a って: {日本語|にほんご}って{面白|おもしろ}いね。', a: 'A は témajelölőt.', wrong: ['Az idéző と-t.', 'A を tárgyjelölőt.', 'A の birtokjelölőt.'], why: 'Itt a って témát emel ki.' },
-      { q: 'Minek a beszélt alakja: わかんない', a: 'わからない', wrong: ['わかれない', 'わかりたい', 'わかっていない'], why: 'A ら hang ん-re rövidül.' },
-      { q: 'Állásinterjún vagy. Melyik illik?', a: '{毎日|まいにち}{練習|れんしゅう}しなければなりません。', wrong: ['{毎日|まいにち}{練習|れんしゅう}しなきゃ。', '{毎日|まいにち}{練習|れんしゅう}しなくちゃ。', '{毎日|まいにち}{練習|れんしゅう}しないと。'], why: 'Hivatalos helyzetben a teljes alak a helyes.' },
+      { point: 3, q: '„Itt nem szabad játszani!" (baráti) Mi hiányzik?', jp: 'ここで＿いけないよ。', a: '{遊|あそ}んじゃ', wrong: ['{遊|あそ}んちゃ', '{遊|あそ}びちゃ', '{遊|あそ}んで'], why: '{遊|あそ}んでは → {遊|あそ}んじゃ.' },
+      { point: 2, q: 'Minek a rövid alakja: もう{寝|ね}ないと。', a: '{寝|ね}ないといけない', wrong: ['{寝|ね}ないでください', '{寝|ね}ないと{思|おも}う', '{寝|ね}ないほうがいい'], why: 'A 〜ないと után az いけない marad el: „kell".' },
+      { point: 3, q: 'Mi a {読|よ}んではいけない beszélt alakja?', a: '{読|よ}んじゃいけない', wrong: ['{読|よ}んちゃいけない', '{読|よ}みちゃいけない', '{読|よ}んでちゃいけない'], why: 'では → じゃ.' },
+      { point: 6, q: 'Minek a rövid alakja: {買|か}っとく', a: '{買|か}っておく', wrong: ['{買|か}っている', '{買|か}ってしまう', '{買|か}ってくる'], why: 'ておく → とく.' },
+      { point: 4, q: 'Mit jelent: バスが{行|い}っちゃった。', a: 'Elment a busz (sajnos).', wrong: ['Elmegyek busszal.', 'A busz még nem ment el.', 'Busszal kell mennem.'], why: '{行|い}ってしまった → {行|い}っちゃった.' },
+      { point: 5, q: 'Mi a まだ{食|た}べていない beszélt alakja?', a: 'まだ{食|た}べてない', wrong: ['まだ{食|た}べちゃない', 'まだ{食|た}べとない', 'まだ{食|た}べなきゃ'], why: 'ていない → てない: az い kiesik.' },
+      { point: 7, q: 'Mit helyettesít a って: {日本語|にほんご}って{面白|おもしろ}いね。', a: 'A は témajelölőt.', wrong: ['Az idéző と-t.', 'A を tárgyjelölőt.', 'A の birtokjelölőt.'], why: 'Itt a って témát emel ki.' },
+      { point: 8, q: 'Minek a beszélt alakja: わかんない', a: 'わからない', wrong: ['わかれない', 'わかりたい', 'わかっていない'], why: 'A ら hang ん-re rövidül.' },
+      { point: 9, q: 'Állásinterjún vagy. Melyik illik?', a: '{毎日|まいにち}{練習|れんしゅう}しなければなりません。', wrong: ['{毎日|まいにち}{練習|れんしゅう}しなきゃ。', '{毎日|まいにち}{練習|れんしゅう}しなくちゃ。', '{毎日|まいにち}{練習|れんしゅう}しないと。'], why: 'Hivatalos helyzetben a teljes alak a helyes.' },
       {
-        q: 'Mit jelent: {先生|せんせい}が{明日|あした}テストをするって。',
+        point: 7, q: 'Mit jelent: {先生|せんせい}が{明日|あした}テストをするって。',
         a: 'A tanár azt mondta, holnap dolgozat lesz.',
         wrong: [
           'A tanár holnap dolgozatot ír.',
@@ -20974,7 +20980,7 @@ const NIHONCORE_COURSE = [
         ],
         why: 'A mondat végi って: „azt mondta, hogy…".'
       },
-      { q: 'Melyik rövid alak megszokott udvarias beszédben is?', a: '{待|ま}ってます', wrong: ['{行|い}かなきゃ', '{来|こ}ないって', 'わかんない'], why: 'A 〜てます udvarias beszélgetésben is elfogadott.' }
+      { point: 5, q: 'Melyik rövid alak megszokott udvarias beszédben is?', a: '{待|ま}ってます', wrong: ['{行|い}かなきゃ', '{来|こ}ないって', 'わかんない'], why: 'A 〜てます udvarias beszélgetésben is elfogadott.' }
     ]
   },
 
@@ -21327,16 +21333,16 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Reggeli nélkül mentem el." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿、{出|で}かけました。', a: '{食|た}べないで', wrong: ['{食|た}べなくて', '{食|た}べないと', '{食|た}べなければ'], why: 'Anélkül, hogy: ない-alak + で.' },
-      { q: '„Hogyan jutok el az állomásra?" Mi hiányzik?', jp: '{駅|えき}まで＿{行|い}きますか。', a: 'どうやって', wrong: ['どうして', 'どんな', 'どのくらい'], why: 'A módra kérdez: どうやって.' },
-      { q: 'Mit kérdez a どうして?', a: 'Az okot: miért?', wrong: ['A módot: hogyan?', 'A helyet: hol?', 'Az időt: mikor?'], why: 'どうして = miért · どうやって = hogyan.' },
-      { q: '„A nővérem ügyesen főz." Mi hiányzik?', jp: '{姉|あね}は{料理|りょうり}を{作|つく}る＿が{上手|じょうず}です。', a: 'の', wrong: ['を', 'に', 'と'], why: 'A の főnevesíti az igét a が{上手|じょうず}です előtt.' },
-      { q: '„Rosszul énekelek." Mi hiányzik?', jp: '{私|わたし}は{歌|うた}を{歌|うた}うのが＿です。', a: '{下手|へた}', wrong: ['{上手|じょうず}', '{好|す}き', '{便利|べんり}'], why: '{下手|へた} = ügyetlen, rosszul megy.' },
-      { q: '„Hétvégén többnyire otthon vagyok." Mi hiányzik?', jp: '{週末|しゅうまつ}は＿{家|うち}にいます。', a: 'たいてい', wrong: ['ぜんぜん', 'あまり', 'たまに'], why: 'たいてい = többnyire.' },
-      { q: 'Melyik jelenti: „néha-néha, ritkán"?', a: 'たまに', wrong: ['いつも', 'たいてい', 'よく'], why: 'たまに: ritkábban, mint a ときどき.' },
-      { q: '„A jövő szombat megfelel?" Mi hiányzik?', jp: '{来週|らいしゅう}の{土曜日|どようび}は＿。', a: 'どうですか', wrong: ['どうしてですか', 'どうやってですか', 'どこですか'], why: 'Javaslat: 〜はどうですか.' },
+      { point: 1, q: '„Reggeli nélkül mentem el." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿、{出|で}かけました。', a: '{食|た}べないで', wrong: ['{食|た}べなくて', '{食|た}べないと', '{食|た}べなければ'], why: 'Anélkül, hogy: ない-alak + で.' },
+      { point: 2, q: '„Hogyan jutok el az állomásra?" Mi hiányzik?', jp: '{駅|えき}まで＿{行|い}きますか。', a: 'どうやって', wrong: ['どうして', 'どんな', 'どのくらい'], why: 'A módra kérdez: どうやって.' },
+      { point: 3, q: 'Mit kérdez a どうして?', a: 'Az okot: miért?', wrong: ['A módot: hogyan?', 'A helyet: hol?', 'Az időt: mikor?'], why: 'どうして = miért · どうやって = hogyan.' },
+      { point: 4, q: '„A nővérem ügyesen főz." Mi hiányzik?', jp: '{姉|あね}は{料理|りょうり}を{作|つく}る＿が{上手|じょうず}です。', a: 'の', wrong: ['を', 'に', 'と'], why: 'A の főnevesíti az igét a が{上手|じょうず}です előtt.' },
+      { point: 4, q: '„Rosszul énekelek." Mi hiányzik?', jp: '{私|わたし}は{歌|うた}を{歌|うた}うのが＿です。', a: '{下手|へた}', wrong: ['{上手|じょうず}', '{好|す}き', '{便利|べんり}'], why: '{下手|へた} = ügyetlen, rosszul megy.' },
+      { point: 6, q: '„Hétvégén többnyire otthon vagyok." Mi hiányzik?', jp: '{週末|しゅうまつ}は＿{家|うち}にいます。', a: 'たいてい', wrong: ['ぜんぜん', 'あまり', 'たまに'], why: 'たいてい = többnyire.' },
+      { point: 6, q: 'Melyik jelenti: „néha-néha, ritkán"?', a: 'たまに', wrong: ['いつも', 'たいてい', 'よく'], why: 'たまに: ritkábban, mint a ときどき.' },
+      { point: 8, q: '„A jövő szombat megfelel?" Mi hiányzik?', jp: '{来週|らいしゅう}の{土曜日|どようび}は＿。', a: 'どうですか', wrong: ['どうしてですか', 'どうやってですか', 'どこですか'], why: 'Javaslat: 〜はどうですか.' },
       {
-        q: 'Mit jelent: バスに{乗|の}らないで、{歩|ある}いて{行|い}きます。',
+        point: 1, q: 'Mit jelent: バスに{乗|の}らないで、{歩|ある}いて{行|い}きます。',
         a: 'Nem busszal megyek, hanem gyalog.',
         wrong: [
           'Busszal megyek, mert nem szeretek gyalogolni.',
@@ -21345,10 +21351,10 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜ないで: az egyik helyett a másikat teszem.'
       },
-      { q: 'Melyik szó mellett áll mindig tagadó ige?', a: 'ぜんぜん', wrong: ['いつも', 'たいてい', 'よく'], why: 'ぜんぜん + tagadás = egyáltalán nem.' },
-      { q: '„Cukor nélkül iszom a kávét." Mi hiányzik?', jp: '{砂糖|さとう}を＿、コーヒーを{飲|の}みます。', a: '{入|い}れないで', wrong: ['{入|い}れなくて', '{入|い}れないと', '{入|い}れなくても'], why: 'Mód („anélkül"): 〜ないで.' },
+      { point: 6, q: 'Melyik szó mellett áll mindig tagadó ige?', a: 'ぜんぜん', wrong: ['いつも', 'たいてい', 'よく'], why: 'ぜんぜん + tagadás = egyáltalán nem.' },
+      { point: 1, q: '„Cukor nélkül iszom a kávét." Mi hiányzik?', jp: '{砂糖|さとう}を＿、コーヒーを{飲|の}みます。', a: '{入|い}れないで', wrong: ['{入|い}れなくて', '{入|い}れないと', '{入|い}れなくても'], why: 'Mód („anélkül"): 〜ないで.' },
       {
-        q: '„Sajnálom, hogy a barátom nem jött el." Melyik helyes?',
+        point: 1, q: '„Sajnálom, hogy a barátom nem jött el." Melyik helyes?',
         a: '{友|とも}だちが{来|こ}なくて、{残念|ざんねん}です。',
         wrong: [
           '{友|とも}だちが{来|こ}ないで、{残念|ざんねん}です。',
@@ -21357,19 +21363,19 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Ok és érzés előtt なくて áll.'
       },
-      { q: 'Mire kérdez a どんな?', a: 'Fajtára, tulajdonságra (főnév előtt).', wrong: ['Okra.', 'Módra, eljárásra.', 'Időpontra.'], why: 'どんな + főnév: „milyen…?"' },
-      { q: '„Szeretek olvasni." Mi hiányzik?', jp: '{本|ほん}を{読|よ}む＿{好|す}きです。', a: 'のが', wrong: ['が', 'のを', 'ことに'], why: 'Az igét a の teszi főnévvé; utána が.' },
-      { q: '„Hetente kétszer járok edzőterembe." Mi hiányzik?', jp: '{週|しゅう}＿{二回|にかい}、ジムへ{行|い}きます。', a: 'に', wrong: ['で', 'を', 'は'], why: 'Időszak + に + szám + {回|かい}.' },
-      { q: 'Magadról mondod, hogy jól úszol. Melyik illik?', a: '{泳|およ}ぐのが{得意|とくい}です。', wrong: ['{泳|およ}ぐのが{上手|じょうず}です。', '{泳|およ}ぐのが{下手|へた}です。', '{泳|およ}ぐのが{苦手|にがて}です。'], why: 'Magadról a {上手|じょうず} dicsekvés; a {得意|とくい} illik.' },
-      { q: 'Mit jelent: {映画館|えいがかん}へはめったに{行|い}きません。', a: 'Moziba ritkán járok.', wrong: ['Moziba soha nem járok.', 'Moziba gyakran járok.', 'Moziba mindig járok.'], why: 'めったに + tagadás: ritkán.' },
-      { q: 'Vendégnek kínálsz teát, nagyon udvariasan. Mit mondasz?', a: 'お{茶|ちゃ}はいかがですか。', wrong: ['お{茶|ちゃ}はどう？', 'お{茶|ちゃ}はどうやって？', 'お{茶|ちゃ}はどうして？'], why: 'A legudvariasabb kínálás: 〜はいかがですか.' },
+      { point: 3, q: 'Mire kérdez a どんな?', a: 'Fajtára, tulajdonságra (főnév előtt).', wrong: ['Okra.', 'Módra, eljárásra.', 'Időpontra.'], why: 'どんな + főnév: „milyen…?"' },
+      { point: 5, q: '„Szeretek olvasni." Mi hiányzik?', jp: '{本|ほん}を{読|よ}む＿{好|す}きです。', a: 'のが', wrong: ['が', 'のを', 'ことに'], why: 'Az igét a の teszi főnévvé; utána が.' },
+      { point: 7, q: '„Hetente kétszer járok edzőterembe." Mi hiányzik?', jp: '{週|しゅう}＿{二回|にかい}、ジムへ{行|い}きます。', a: 'に', wrong: ['で', 'を', 'は'], why: 'Időszak + に + szám + {回|かい}.' },
+      { point: 4, q: 'Magadról mondod, hogy jól úszol. Melyik illik?', a: '{泳|およ}ぐのが{得意|とくい}です。', wrong: ['{泳|およ}ぐのが{上手|じょうず}です。', '{泳|およ}ぐのが{下手|へた}です。', '{泳|およ}ぐのが{苦手|にがて}です。'], why: 'Magadról a {上手|じょうず} dicsekvés; a {得意|とくい} illik.' },
+      { point: 6, q: 'Mit jelent: {映画館|えいがかん}へはめったに{行|い}きません。', a: 'Moziba ritkán járok.', wrong: ['Moziba soha nem járok.', 'Moziba gyakran járok.', 'Moziba mindig járok.'], why: 'めったに + tagadás: ritkán.' },
+      { point: 8, q: 'Vendégnek kínálsz teát, nagyon udvariasan. Mit mondasz?', a: 'お{茶|ちゃ}はいかがですか。', wrong: ['お{茶|ちゃ}はどう？', 'お{茶|ちゃ}はどうやって？', 'お{茶|ちゃ}はどうして？'], why: 'A legudvariasabb kínálás: 〜はいかがですか.' },
       {
-        q: 'Mit jelent a válasz: {日曜日|にちようび}はちょっと…。',
+        point: 8, q: 'Mit jelent a válasz: {日曜日|にちようび}はちょっと…。',
         a: 'A vasárnap nem jó nekem.',
         wrong: ['A vasárnap egy kicsit jó.', 'Vasárnap ráérek egy kicsit.', 'Vasárnap csak rövid ideig tart.'],
         why: 'A ちょっと… szelíd, ki nem mondott elutasítás.'
       },
-      { q: 'Melyik sorrend halad a leggyakoribbtól a legritkábbig?', a: 'いつも → よく → ときどき → たまに', wrong: ['たまに → ときどき → よく → いつも', 'よく → いつも → たまに → ときどき', 'いつも → たまに → よく → ときどき'], why: 'mindig → gyakran → néha → néha-néha.' }
+      { point: 6, q: 'Melyik sorrend halad a leggyakoribbtól a legritkábbig?', a: 'いつも → よく → ときどき → たまに', wrong: ['たまに → ときどき → よく → いつも', 'よく → いつも → たまに → ときどき', 'いつも → たまに → よく → ときどき'], why: 'mindig → gyakran → néha → néha-néha.' }
     ]
   },
 
@@ -21698,9 +21704,9 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Amíg nem voltam otthon, megjött a csomag." Mi hiányzik?', jp: '{留守|るす}の＿、{荷物|にもつ}が{届|とど}きました。', a: '{間|あいだ}に', wrong: ['{間|あいだ}', 'ごろ', 'おきに'], why: 'Egyszeri esemény az időszakon belül: {間|あいだ}に.' },
+      { point: 2, q: '„Amíg nem voltam otthon, megjött a csomag." Mi hiányzik?', jp: '{留守|るす}の＿、{荷物|にもつ}が{届|とど}きました。', a: '{間|あいだ}に', wrong: ['{間|あいだ}', 'ごろ', 'おきに'], why: 'Egyszeri esemény az időszakon belül: {間|あいだ}に.' },
       {
-        q: 'Melyik mondat jelenti: „végig, az egész idő alatt"?',
+        point: 1, q: 'Melyik mondat jelenti: „végig, az egész idő alatt"?',
         a: '{授業|じゅぎょう}の{間|あいだ}、ずっと{眠|ねむ}かったです。',
         wrong: [
           '{授業|じゅぎょう}の{間|あいだ}に、{電話|でんわ}が{鳴|な}りました。',
@@ -21709,23 +21715,23 @@ const NIHONCORE_COURSE = [
         ],
         why: 'に nélkül a {間|あいだ} a teljes időszakra vonatkozik.'
       },
-      { q: '„Nemrég jöttem Japánba." Mi hiányzik?', jp: '{日本|にほん}に＿ばかりです。', a: '{来|き}た', wrong: ['{来|く}る', '{来|き}て', '{来|こ}ない'], why: 'A ばかり előtt た-alak áll.' },
+      { point: 4, q: '„Nemrég jöttem Japánba." Mi hiányzik?', jp: '{日本|にほん}に＿ばかりです。', a: '{来|き}た', wrong: ['{来|く}る', '{来|き}て', '{来|こ}ない'], why: 'A ばかり előtt た-alak áll.' },
       {
-        q: '„Ezt a cipőt csak múlt héten vettem." Mi hiányzik?',
+        point: 4, q: '„Ezt a cipőt csak múlt héten vettem." Mi hiányzik?',
         jp: 'この{靴|くつ}は{先週|せんしゅう}{買|か}った＿です。',
         a: 'ばかり',
         wrong: ['ところ', 'あいだ', 'おき'],
         why: 'Egy hét távlatából is „nemrég": 〜たばかり. A 〜たところ csak a közvetlenül előtte történtre jó.'
       },
-      { q: '„Amikor megszólalt a telefon, éppen zuhanyoztam." Mi hiányzik?', jp: '{電話|でんわ}が{鳴|な}ったとき、シャワーを＿。', a: '{浴|あ}びていました', wrong: ['{浴|あ}びます', '{浴|あ}びておきます', '{浴|あ}びましょう'], why: 'Múltbeli folyamat: 〜ていました.' },
-      { q: '„Három óra körül érek haza." Mi hiányzik?', jp: '{三時|さんじ}＿{帰|かえ}ります。', a: 'ごろ', wrong: ['おきに', 'ばかり', 'あいだ'], why: 'Hozzávetőleges időpont: ごろ.' },
-      { q: '„A busz tízpercenként jön." Mi hiányzik?', jp: 'バスは{十分|じゅっぷん}＿{来|き}ます。', a: 'おきに', wrong: ['ごろ', 'ばかり', 'までに'], why: 'Szabályos időköz: おきに.' },
-      { q: '„Végre elkészültem a leckével." Mi hiányzik?', jp: '＿{宿題|しゅくだい}が{終|お}わりました。', a: 'やっと', wrong: ['{急|きゅう}に', 'ずっと', 'たまに'], why: 'やっと = végre, nagy nehezen.' },
-      { q: 'Mit jelent: {急|きゅう}に{雨|あめ}が{降|ふ}ってきました。', a: 'Hirtelen eleredt az eső.', wrong: ['Végre elállt az eső.', 'Az imént esett az eső.', 'Egész nap esett az eső.'], why: '{急|きゅう}に = hirtelen.' },
-      { q: 'Mit jelent: {去年|きょねん}は{大阪|おおさか}に{住|す}んでいました。', a: 'Tavaly Oszakában laktam.', wrong: ['Tavaly óta Oszakában lakom.', 'Jövőre Oszakában fogok lakni.', 'Tavaly Oszakába látogattam.'], why: '〜ていました: múltbeli tartós állapot.' },
-      { q: '„Egye meg, amíg meleg!" Mi hiányzik?', jp: '{熱|あつ}い＿、{食|た}べてください。', a: 'うちに', wrong: ['あいだ', 'ばかり', 'ごろ'], why: 'うちに: amíg az állapot tart — mielőtt megváltozna.' },
+      { point: 5, q: '„Amikor megszólalt a telefon, éppen zuhanyoztam." Mi hiányzik?', jp: '{電話|でんわ}が{鳴|な}ったとき、シャワーを＿。', a: '{浴|あ}びていました', wrong: ['{浴|あ}びます', '{浴|あ}びておきます', '{浴|あ}びましょう'], why: 'Múltbeli folyamat: 〜ていました.' },
+      { point: 6, q: '„Három óra körül érek haza." Mi hiányzik?', jp: '{三時|さんじ}＿{帰|かえ}ります。', a: 'ごろ', wrong: ['おきに', 'ばかり', 'あいだ'], why: 'Hozzávetőleges időpont: ごろ.' },
+      { point: 6, q: '„A busz tízpercenként jön." Mi hiányzik?', jp: 'バスは{十分|じゅっぷん}＿{来|き}ます。', a: 'おきに', wrong: ['ごろ', 'ばかり', 'までに'], why: 'Szabályos időköz: おきに.' },
+      { point: 7, q: '„Végre elkészültem a leckével." Mi hiányzik?', jp: '＿{宿題|しゅくだい}が{終|お}わりました。', a: 'やっと', wrong: ['{急|きゅう}に', 'ずっと', 'たまに'], why: 'やっと = végre, nagy nehezen.' },
+      { point: 7, q: 'Mit jelent: {急|きゅう}に{雨|あめ}が{降|ふ}ってきました。', a: 'Hirtelen eleredt az eső.', wrong: ['Végre elállt az eső.', 'Az imént esett az eső.', 'Egész nap esett az eső.'], why: '{急|きゅう}に = hirtelen.' },
+      { point: 5, q: 'Mit jelent: {去年|きょねん}は{大阪|おおさか}に{住|す}んでいました。', a: 'Tavaly Oszakában laktam.', wrong: ['Tavaly óta Oszakában lakom.', 'Jövőre Oszakában fogok lakni.', 'Tavaly Oszakába látogattam.'], why: '〜ていました: múltbeli tartós állapot.' },
+      { point: 3, q: '„Egye meg, amíg meleg!" Mi hiányzik?', jp: '{熱|あつ}い＿、{食|た}べてください。', a: 'うちに', wrong: ['あいだ', 'ばかり', 'ごろ'], why: 'うちに: amíg az állapot tart — mielőtt megváltozna.' },
       {
-        q: '„A nyári szünetben végig otthon voltam." Melyik helyes?',
+        point: 1, q: '„A nyári szünetben végig otthon voltam." Melyik helyes?',
         a: '{夏休|なつやす}みの{間|あいだ}、ずっと{家|うち}にいました。',
         wrong: [
           '{夏休|なつやす}みの{間|あいだ}に、ずっと{家|うち}にいました。',
@@ -21735,7 +21741,7 @@ const NIHONCORE_COURSE = [
         why: 'Végig tartó állapot: {間|あいだ}, に nélkül.'
       },
       {
-        q: 'Mit jelent: {買|か}ったばかりの{傘|かさ}をなくしました。',
+        point: 4, q: 'Mit jelent: {買|か}ったばかりの{傘|かさ}をなくしました。',
         a: 'Elvesztettem az esernyőt, amit csak most vettem.',
         wrong: [
           'Csak esernyőt vettem, és elvesztettem.',
@@ -21744,18 +21750,18 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜たばかりの + főnév: amit nemrég…'
       },
-      { q: '„Körülbelül három órát aludtam." Mi hiányzik?', jp: '{三時間|さんじかん}＿{寝|ね}ました。', a: 'ぐらい', wrong: ['ごろ', 'おきに', 'ばかり'], why: 'Időtartamra ぐらい; a ごろ időpontra való.' },
-      { q: 'Mit jelent: {一日|いちにち}おきに{走|はし}っています。', a: 'Minden második nap futok.', wrong: ['Mindennap futok.', 'Naponta egyszer futok.', 'Egy napig futottam.'], why: 'Napnál az おきに egy kihagyásával értendő.' },
-      { q: '„Felírom, mielőtt elfelejteném." Mi hiányzik?', jp: '＿うちに、メモしておきます。', a: '{忘|わす}れない', wrong: ['{忘|わす}れる', '{忘|わす}れた', '{忘|わす}れて'], why: '〜ないうちに: mielőtt még…' },
-      { q: 'Melyik mondat jelenti: „éppen ettem (amikor…)"?', a: '{食|た}べていました。', wrong: ['{食|た}べました。', '{食|た}べたばかりです。', '{食|た}べるところです。'], why: '〜ていました: a múltban éppen zajlott.' },
-      { q: 'Mit jelent: そろそろ{帰|かえ}りましょう。', a: 'Lassan induljunk haza!', wrong: ['Azonnal menjünk haza!', 'Végre hazaértünk.', 'Hirtelen hazamentünk.'], why: 'そろそろ: lassan ideje.' },
+      { point: 6, q: '„Körülbelül három órát aludtam." Mi hiányzik?', jp: '{三時間|さんじかん}＿{寝|ね}ました。', a: 'ぐらい', wrong: ['ごろ', 'おきに', 'ばかり'], why: 'Időtartamra ぐらい; a ごろ időpontra való.' },
+      { point: 6, q: 'Mit jelent: {一日|いちにち}おきに{走|はし}っています。', a: 'Minden második nap futok.', wrong: ['Mindennap futok.', 'Naponta egyszer futok.', 'Egy napig futottam.'], why: 'Napnál az おきに egy kihagyásával értendő.' },
+      { point: 3, q: '„Felírom, mielőtt elfelejteném." Mi hiányzik?', jp: '＿うちに、メモしておきます。', a: '{忘|わす}れない', wrong: ['{忘|わす}れる', '{忘|わす}れた', '{忘|わす}れて'], why: '〜ないうちに: mielőtt még…' },
+      { point: 5, q: 'Melyik mondat jelenti: „éppen ettem (amikor…)"?', a: '{食|た}べていました。', wrong: ['{食|た}べました。', '{食|た}べたばかりです。', '{食|た}べるところです。'], why: '〜ていました: a múltban éppen zajlott.' },
+      { point: 7, q: 'Mit jelent: そろそろ{帰|かえ}りましょう。', a: 'Lassan induljunk haza!', wrong: ['Azonnal menjünk haza!', 'Végre hazaértünk.', 'Hirtelen hazamentünk.'], why: 'そろそろ: lassan ideje.' },
       {
-        q: 'Mit jelent: とうとう{最後|さいご}の{日|ひ}になりました。',
+        point: 7, q: 'Mit jelent: とうとう{最後|さいご}の{日|ひ}になりました。',
         a: 'Végül csak eljött az utolsó nap.',
         wrong: ['Hirtelen eljött az utolsó nap.', 'Mindjárt itt az utolsó nap.', 'Az imént volt az utolsó nap.'],
         why: 'とうとう: végül csak — jó és rossz kimenetelre is.'
       },
-      { q: '„Olimpia négyévente van." Mi hiányzik?', jp: 'オリンピックは{四年|よねん}＿あります。', a: 'ごとに', wrong: ['ごろに', 'うちに', 'ばかりに'], why: 'ごとに: minden egyes …-ként.' }
+      { point: 6, q: '„Olimpia négyévente van." Mi hiányzik?', jp: 'オリンピックは{四年|よねん}＿あります。', a: 'ごとに', wrong: ['ごろに', 'うちに', 'ばかりに'], why: 'ごとに: minden egyes …-ként.' }
     ]
   },
 
@@ -22097,32 +22103,32 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Szeretném, ha anyám hamar meggyógyulna." Mi hiányzik?', jp: '{母|はは}に{早|はや}く{元気|げんき}になって＿です。', a: 'ほしい', wrong: ['たい', 'あげたい', 'みたい'], why: 'Mástól szeretném: て-alak + ほしい.' },
+      { point: 1, q: '„Szeretném, ha anyám hamar meggyógyulna." Mi hiányzik?', jp: '{母|はは}に{早|はや}く{元気|げんき}になって＿です。', a: 'ほしい', wrong: ['たい', 'あげたい', 'みたい'], why: 'Mástól szeretném: て-alak + ほしい.' },
       {
-        q: 'Kinek a cselekvéséről szól a 〜てほしい?',
+        point: 1, q: 'Kinek a cselekvéséről szól a 〜てほしい?',
         a: 'Másnak a cselekvéséről: szeretném, ha ő megtenné.',
         wrong: ['A saját cselekvésemről.', 'Arról, amit kénytelen vagyok megtenni.', 'Arról, amit tilos megtenni.'],
         why: '〜たい: én szeretném megtenni. 〜てほしい: szeretném, ha más megtenné.'
       },
-      { q: '„Szeretném, ha itt nem dohányoznál." Mi hiányzik?', jp: 'ここでたばこを＿ほしいです。', a: '{吸|す}わないで', wrong: ['{吸|す}って', '{吸|す}わなくて', '{吸|す}わない'], why: 'Tagadva: 〜ないでほしい.' },
-      { q: '„Mi lenne, ha pihennél egy kicsit?" Mi hiányzik?', jp: '{少|すこ}し＿どうですか。', a: '{休|やす}んだら', wrong: ['{休|やす}んで', '{休|やす}むと', '{休|やす}んだり'], why: 'Tanács: た-alak + らどうですか.' },
-      { q: '„Hol vegyek jegyet?" Mi hiányzik?', jp: 'どこで{切符|きっぷ}を{買|か}ったら＿。', a: 'いいですか', wrong: ['どうですか', 'ほしいですか', 'よかったですか'], why: 'Tanácskérés: kérdőszó + たらいいですか.' },
-      { q: 'Mit jelent: どうしたらいいですか。', a: 'Mit tegyek?', wrong: ['Mi történt?', 'Hogy vagy?', 'Mit csináltál?'], why: 'どうしたらいいですか: útmutatást kérsz.' },
-      { q: '„De jó, hogy odaértem!" Mi hiányzik?', jp: '{間|ま}に{合|あ}って＿です。', a: 'よかった', wrong: ['ほしい', 'ばかり', 'ください'], why: 'Megkönnyebbülés: て-alak + よかったです.' },
-      { q: '„A terv szerint jövő hónapban Japánba megyek." Mi hiányzik?', jp: '{来月|らいげつ}{日本|にほん}へ{行|い}く＿です。', a: '{予定|よてい}', wrong: ['ばかり', 'まま', 'ほしい'], why: 'Rögzített terv: szótári alak + {予定|よてい}です.' },
-      { q: '„Feltétlenül gyere el hozzánk!" Mi hiányzik?', jp: '＿{遊|あそ}びに{来|き}てください。', a: 'ぜひ', wrong: ['やっと', 'さっき', 'たいてい'], why: 'A kérést a ぜひ nyomatékosítja.' },
-      { q: 'Mit jelent: きっと{大丈夫|だいじょうぶ}ですよ。', a: 'Biztosan minden rendben lesz.', wrong: ['Talán rendben lesz.', 'Sajnos nincs rendben.', 'Végre rendben van.'], why: 'きっと = egész biztosan.' },
-      { q: '„Szeretném, ha a barátom eljönne." Melyik helyes?', a: '{友|とも}だちに{来|き}てほしいです。', wrong: ['{友|とも}だちが{来|き}たいです。', '{友|とも}だちに{来|き}たいです。', '{友|とも}だちを{来|き}てほしいです。'], why: 'Akitől a cselekvést várod: に + 〜てほしい.' },
-      { q: '„Bárcsak jönne már a tavasz!" Mi hiányzik?', jp: '{早|はや}く{春|はる}＿{来|き}てほしいです。', a: 'が', wrong: ['に', 'を', 'で'], why: 'Ha nem személytől, hanem eseménytől várod: が.' },
-      { q: 'Mit jelent: そんなことを{言|い}ってほしくないです。', a: 'Nem szeretném, ha ilyet mondanál.', wrong: ['Nem akarok ilyet mondani.', 'Szeretném, ha ezt mondanád.', 'Ilyet nem szabad mondani.'], why: '〜てほしくない: nem szeretném, ha megtennéd.' },
-      { q: 'Melyik a legszelídebb tanács?', a: '{休|やす}んだらどうですか。', wrong: ['{休|やす}んだほうがいいです。', '{休|やす}むべきです。', '{休|やす}みなさい。'], why: 'A 〜たらどうですか a döntést a másikra hagyja.' },
-      { q: '„Bárcsak korábban keltem volna!" Mi hiányzik?', jp: 'もっと{早|はや}く＿よかった。', a: '{起|お}きれば', wrong: ['{起|お}きて', '{起|お}きなくて', '{起|お}きるのが'], why: '〜ばよかった: megbánás — nem tettem meg.' },
-      { q: 'Mit jelent: {傘|かさ}を{持|も}ってきてよかった。', a: 'De jó, hogy hoztam esernyőt!', wrong: ['Bárcsak hoztam volna esernyőt!', 'Jó lenne esernyőt hozni.', 'Hozzak esernyőt?'], why: '〜てよかった: megtettem, és örülök neki.' },
-      { q: '„Remélem, holnap szép idő lesz." Mi hiányzik?', jp: '{明日|あした}、{晴|は}れる＿。', a: 'といいですね', wrong: ['といいですよ', 'てよかったです', 'たらどうですか'], why: '〜といいですね: jókívánság, remény.' },
-      { q: 'Melyik fejez ki másokkal egyeztetett, rögzített tervet?', a: '{行|い}く{予定|よてい}です。', wrong: ['{行|い}くつもりです。', '{行|い}きたいです。', '{行|い}くでしょう。'], why: 'A {予定|よてい} naptárba írt terv; a つもり csak szándék.' },
-      { q: 'Melyik mondat hibás?', a: 'ぜひ{来|こ}ないでください。', wrong: ['ぜひ{来|き}てください。', 'ぜひ{行|い}きたいです。', '{絶対|ぜったい}に{来|こ}ないでください。'], why: 'A ぜひ tagadó kérésben nem használható.' },
+      { point: 1, q: '„Szeretném, ha itt nem dohányoznál." Mi hiányzik?', jp: 'ここでたばこを＿ほしいです。', a: '{吸|す}わないで', wrong: ['{吸|す}って', '{吸|す}わなくて', '{吸|す}わない'], why: 'Tagadva: 〜ないでほしい.' },
+      { point: 2, q: '„Mi lenne, ha pihennél egy kicsit?" Mi hiányzik?', jp: '{少|すこ}し＿どうですか。', a: '{休|やす}んだら', wrong: ['{休|やす}んで', '{休|やす}むと', '{休|やす}んだり'], why: 'Tanács: た-alak + らどうですか.' },
+      { point: 3, q: '„Hol vegyek jegyet?" Mi hiányzik?', jp: 'どこで{切符|きっぷ}を{買|か}ったら＿。', a: 'いいですか', wrong: ['どうですか', 'ほしいですか', 'よかったですか'], why: 'Tanácskérés: kérdőszó + たらいいですか.' },
+      { point: 3, q: 'Mit jelent: どうしたらいいですか。', a: 'Mit tegyek?', wrong: ['Mi történt?', 'Hogy vagy?', 'Mit csináltál?'], why: 'どうしたらいいですか: útmutatást kérsz.' },
+      { point: 4, q: '„De jó, hogy odaértem!" Mi hiányzik?', jp: '{間|ま}に{合|あ}って＿です。', a: 'よかった', wrong: ['ほしい', 'ばかり', 'ください'], why: 'Megkönnyebbülés: て-alak + よかったです.' },
+      { point: 6, q: '„A terv szerint jövő hónapban Japánba megyek." Mi hiányzik?', jp: '{来月|らいげつ}{日本|にほん}へ{行|い}く＿です。', a: '{予定|よてい}', wrong: ['ばかり', 'まま', 'ほしい'], why: 'Rögzített terv: szótári alak + {予定|よてい}です.' },
+      { point: 7, q: '„Feltétlenül gyere el hozzánk!" Mi hiányzik?', jp: '＿{遊|あそ}びに{来|き}てください。', a: 'ぜひ', wrong: ['やっと', 'さっき', 'たいてい'], why: 'A kérést a ぜひ nyomatékosítja.' },
+      { point: 7, q: 'Mit jelent: きっと{大丈夫|だいじょうぶ}ですよ。', a: 'Biztosan minden rendben lesz.', wrong: ['Talán rendben lesz.', 'Sajnos nincs rendben.', 'Végre rendben van.'], why: 'きっと = egész biztosan.' },
+      { point: 1, q: '„Szeretném, ha a barátom eljönne." Melyik helyes?', a: '{友|とも}だちに{来|き}てほしいです。', wrong: ['{友|とも}だちが{来|き}たいです。', '{友|とも}だちに{来|き}たいです。', '{友|とも}だちを{来|き}てほしいです。'], why: 'Akitől a cselekvést várod: に + 〜てほしい.' },
+      { point: 1, q: '„Bárcsak jönne már a tavasz!" Mi hiányzik?', jp: '{早|はや}く{春|はる}＿{来|き}てほしいです。', a: 'が', wrong: ['に', 'を', 'で'], why: 'Ha nem személytől, hanem eseménytől várod: が.' },
+      { point: 1, q: 'Mit jelent: そんなことを{言|い}ってほしくないです。', a: 'Nem szeretném, ha ilyet mondanál.', wrong: ['Nem akarok ilyet mondani.', 'Szeretném, ha ezt mondanád.', 'Ilyet nem szabad mondani.'], why: '〜てほしくない: nem szeretném, ha megtennéd.' },
+      { point: 2, q: 'Melyik a legszelídebb tanács?', a: '{休|やす}んだらどうですか。', wrong: ['{休|やす}んだほうがいいです。', '{休|やす}むべきです。', '{休|やす}みなさい。'], why: 'A 〜たらどうですか a döntést a másikra hagyja.' },
+      { point: 4, q: '„Bárcsak korábban keltem volna!" Mi hiányzik?', jp: 'もっと{早|はや}く＿よかった。', a: '{起|お}きれば', wrong: ['{起|お}きて', '{起|お}きなくて', '{起|お}きるのが'], why: '〜ばよかった: megbánás — nem tettem meg.' },
+      { point: 4, q: 'Mit jelent: {傘|かさ}を{持|も}ってきてよかった。', a: 'De jó, hogy hoztam esernyőt!', wrong: ['Bárcsak hoztam volna esernyőt!', 'Jó lenne esernyőt hozni.', 'Hozzak esernyőt?'], why: '〜てよかった: megtettem, és örülök neki.' },
+      { point: 5, q: '„Remélem, holnap szép idő lesz." Mi hiányzik?', jp: '{明日|あした}、{晴|は}れる＿。', a: 'といいですね', wrong: ['といいですよ', 'てよかったです', 'たらどうですか'], why: '〜といいですね: jókívánság, remény.' },
+      { point: 6, q: 'Melyik fejez ki másokkal egyeztetett, rögzített tervet?', a: '{行|い}く{予定|よてい}です。', wrong: ['{行|い}くつもりです。', '{行|い}きたいです。', '{行|い}くでしょう。'], why: 'A {予定|よてい} naptárba írt terv; a つもり csak szándék.' },
+      { point: 7, q: 'Melyik mondat hibás?', a: 'ぜひ{来|こ}ないでください。', wrong: ['ぜひ{来|き}てください。', 'ぜひ{行|い}きたいです。', '{絶対|ぜったい}に{来|こ}ないでください。'], why: 'A ぜひ tagadó kérésben nem használható.' },
       {
-        q: 'Mit jelent: {来月|らいげつ}から{大阪|おおさか}で{働|はたら}くことになりました。',
+        point: 6, q: 'Mit jelent: {来月|らいげつ}から{大阪|おおさか}で{働|はたら}くことになりました。',
         a: 'Úgy alakult, hogy jövő hónaptól Oszakában dolgozom.',
         wrong: [
           'Elhatároztam, hogy jövő hónaptól Oszakában dolgozom.',
@@ -22467,17 +22473,17 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Kizárt, hogy ő ilyet mondjon." Mi hiányzik?', jp: '{彼|かれ}がそんなことを{言|い}う＿。', a: 'はずがありません', wrong: ['はずです', 'かもしれません', 'ことがあります'], why: 'Lehetetlennek tartom: 〜はずがありません.' },
-      { q: 'Mi a 〜はずです ellentéte („kizárt")?', a: 'はずがありません', wrong: ['はずでした', 'はずですか', 'はずになります'], why: 'はずです: elvileg úgy van. はずがありません: kizárt.' },
-      { q: '„Az az ember diáknak látszik." Mi hiányzik?', jp: 'あの{人|ひと}は{学生|がくせい}＿{見|み}えます。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Főnév + に{見|み}えます.' },
-      { q: '„Ebben a ruhában fiatalabbnak látszol." Mi hiányzik?', jp: 'この{服|ふく}を{着|き}ると、＿{見|み}えます。', a: '{若|わか}く', wrong: ['{若|わか}い', '{若|わか}いに', '{若|わか}に'], why: 'い-melléknév: い → く + {見|み}えます.' },
-      { q: '„Észrevettem a hibát." Mi hiányzik?', jp: '{間違|まちが}い＿{気|き}がつきました。', a: 'に', wrong: ['を', 'で', 'へ'], why: 'Amit észreveszel: 〜に{気|き}がつきます.' },
-      { q: '„Csak nem akar jönni a busz." Mi hiányzik?', jp: 'バスが＿{来|き}ません。', a: 'なかなか', wrong: ['さすが', 'やっと', 'ぜひ'], why: 'なかなか + tagadás: sehogy sem.' },
-      { q: 'Mit jelent: そんなに{高|たか}くないです。', a: 'Nem olyan drága.', wrong: ['Nagyon drága.', 'Ingyen van.', 'Túl drága.'], why: 'そんなに + tagadás = nem annyira.' },
-      { q: 'Mit fejez ki: さすが{先生|せんせい}ですね。', a: 'Elismerést: megfelel annak, amit tőle várni lehet.', wrong: ['Csalódást: többet vártál tőle.', 'Kételyt: nem hiszed, hogy tanár.', 'Kérdést: tanár-e.'], why: 'A さすが dicséret.' },
-      { q: '„Sehogy sem tudom megjegyezni a kanjikat." Mi hiányzik?', jp: '{漢字|かんじ}がなかなか＿。', a: '{覚|おぼ}えられません', wrong: ['{覚|おぼ}えられます', '{覚|おぼ}えます', '{覚|おぼ}えました'], why: 'Ebben a jelentésben a なかなか tagadó igével áll.' },
+      { point: 1, q: '„Kizárt, hogy ő ilyet mondjon." Mi hiányzik?', jp: '{彼|かれ}がそんなことを{言|い}う＿。', a: 'はずがありません', wrong: ['はずです', 'かもしれません', 'ことがあります'], why: 'Lehetetlennek tartom: 〜はずがありません.' },
+      { point: 1, q: 'Mi a 〜はずです ellentéte („kizárt")?', a: 'はずがありません', wrong: ['はずでした', 'はずですか', 'はずになります'], why: 'はずです: elvileg úgy van. はずがありません: kizárt.' },
+      { point: 2, q: '„Az az ember diáknak látszik." Mi hiányzik?', jp: 'あの{人|ひと}は{学生|がくせい}＿{見|み}えます。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Főnév + に{見|み}えます.' },
+      { point: 2, q: '„Ebben a ruhában fiatalabbnak látszol." Mi hiányzik?', jp: 'この{服|ふく}を{着|き}ると、＿{見|み}えます。', a: '{若|わか}く', wrong: ['{若|わか}い', '{若|わか}いに', '{若|わか}に'], why: 'い-melléknév: い → く + {見|み}えます.' },
+      { point: 3, q: '„Észrevettem a hibát." Mi hiányzik?', jp: '{間違|まちが}い＿{気|き}がつきました。', a: 'に', wrong: ['を', 'で', 'へ'], why: 'Amit észreveszel: 〜に{気|き}がつきます.' },
+      { point: 5, q: '„Csak nem akar jönni a busz." Mi hiányzik?', jp: 'バスが＿{来|き}ません。', a: 'なかなか', wrong: ['さすが', 'やっと', 'ぜひ'], why: 'なかなか + tagadás: sehogy sem.' },
+      { point: 6, q: 'Mit jelent: そんなに{高|たか}くないです。', a: 'Nem olyan drága.', wrong: ['Nagyon drága.', 'Ingyen van.', 'Túl drága.'], why: 'そんなに + tagadás = nem annyira.' },
+      { point: 7, q: 'Mit fejez ki: さすが{先生|せんせい}ですね。', a: 'Elismerést: megfelel annak, amit tőle várni lehet.', wrong: ['Csalódást: többet vártál tőle.', 'Kételyt: nem hiszed, hogy tanár.', 'Kérdést: tanár-e.'], why: 'A さすが dicséret.' },
+      { point: 5, q: '„Sehogy sem tudom megjegyezni a kanjikat." Mi hiányzik?', jp: '{漢字|かんじ}がなかなか＿。', a: '{覚|おぼ}えられません', wrong: ['{覚|おぼ}えられます', '{覚|おぼ}えます', '{覚|おぼ}えました'], why: 'Ebben a jelentésben a なかなか tagadó igével áll.' },
       {
-        q: 'Mit jelent: {元気|げんき}に{見|み}えますが、{実|じつ}は{病気|びょうき}です。',
+        point: 2, q: 'Mit jelent: {元気|げんき}に{見|み}えますが、{実|じつ}は{病気|びょうき}です。',
         a: 'Egészségesnek látszik, de valójában beteg.',
         wrong: [
           'Beteg volt, de már egészséges.',
@@ -22486,9 +22492,9 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜に{見|み}えます: annak látszik; {実|じつ}は: valójában.'
       },
-      { q: '„A kulcsot elvileg ráfordítottam." Mi hiányzik?', jp: '{鍵|かぎ}はかけた＿。', a: 'はずです', wrong: ['はずがありません', 'ように{見|み}えます', '{気|き}がつきます'], why: '〜はずです: elvileg így van.' },
+      { point: 1, q: '„A kulcsot elvileg ráfordítottam." Mi hiányzik?', jp: '{鍵|かぎ}はかけた＿。', a: 'はずです', wrong: ['はずがありません', 'ように{見|み}えます', '{気|き}がつきます'], why: '〜はずです: elvileg így van.' },
       {
-        q: 'Mit jelent: {電車|でんしゃ}は{十時|じゅうじ}に{着|つ}くはずでした。',
+        point: 1, q: 'Mit jelent: {電車|でんしゃ}は{十時|じゅうじ}に{着|つ}くはずでした。',
         a: 'A vonatnak tízkor kellett volna megérkeznie (de nem úgy lett).',
         wrong: [
           'A vonat biztosan tízkor érkezik.',
@@ -22497,10 +22503,10 @@ const NIHONCORE_COURSE = [
         ],
         why: '〜はずでした: úgy volt, hogy… — de másképp alakult.'
       },
-      { q: '„Fiatalnak látszik." Melyik helyes?', a: '{若|わか}く{見|み}えます。', wrong: ['{若|わか}いに{見|み}えます。', '{若|わか}いと{見|み}えます。', '{若|わか}くに{見|み}えます。'], why: 'い-melléknév: い → く + {見|み}えます.' },
-      { q: '„Ma fáradtnak látszik." Mi hiányzik?', jp: '{今日|きょう}は{疲|つか}れている＿{見|み}えますね。', a: 'ように', wrong: ['そうに', 'のに', 'はずに'], why: 'Ige után: 〜ように{見|み}えます.' },
+      { point: 2, q: '„Fiatalnak látszik." Melyik helyes?', a: '{若|わか}く{見|み}えます。', wrong: ['{若|わか}いに{見|み}えます。', '{若|わか}いと{見|み}えます。', '{若|わか}くに{見|み}えます。'], why: 'い-melléknév: い → く + {見|み}えます.' },
+      { point: 2, q: '„Ma fáradtnak látszik." Mi hiányzik?', jp: '{今日|きょう}は{疲|つか}れている＿{見|み}えますね。', a: 'ように', wrong: ['そうに', 'のに', 'はずに'], why: 'Ige után: 〜ように{見|み}えます.' },
       {
-        q: 'Mit jelent: {試験|しけん}の{結果|けっか}が{気|き}になります。',
+        point: 4, q: 'Mit jelent: {試験|しけん}の{結果|けっか}が{気|き}になります。',
         a: 'Foglalkoztat a vizsga eredménye.',
         wrong: [
           'Észrevettem a vizsga eredményét.',
@@ -22509,9 +22515,9 @@ const NIHONCORE_COURSE = [
         ],
         why: '{気|き}になる: nem hagy nyugodni.'
       },
-      { q: '„Megtetszett ez a hely." Mi hiányzik?', jp: 'この{店|みせ}が{気|き}に＿。', a: '{入|い}りました', wrong: ['なりました', 'しました', 'つきました'], why: '{気|き}に{入|い}る: megtetszik.' },
+      { point: 4, q: '„Megtetszett ez a hely." Mi hiányzik?', jp: 'この{店|みせ}が{気|き}に＿。', a: '{入|い}りました', wrong: ['なりました', 'しました', 'つきました'], why: '{気|き}に{入|い}る: megtetszik.' },
       {
-        q: 'Mit jelent: この{店|みせ}のラーメンはなかなかおいしいです。',
+        point: 5, q: 'Mit jelent: この{店|みせ}のラーメンはなかなかおいしいです。',
         a: 'Ennek a helynek a rámenje egész finom.',
         wrong: [
           'Ennek a helynek a rámenje sehogy sem finom.',
@@ -22520,9 +22526,9 @@ const NIHONCORE_COURSE = [
         ],
         why: 'Állító mondatban a なかなか: „meglehetősen".'
       },
-      { q: 'Mit jelent: やっぱり{行|い}きません。', a: 'Mégsem megyek.', wrong: ['Biztosan nem megyek.', 'Kizárt, hogy menjek.', 'Sehogy sem tudok menni.'], why: 'やっぱり itt: meggondoltam magam.' },
-      { q: 'Mit fejez ki: まさか！', a: 'Hitetlenkedést: „az nem lehet!"', wrong: ['Elismerést: „ez igen!"', 'Megkönnyebbülést: „de jó!"', 'Beletörődést: „mindegy."'], why: 'まさか: ezt álmodban sem gondoltad volna.' },
-      { q: 'Mit jelent: さすがの{先生|せんせい}も、わかりませんでした。', a: 'Még a tanár sem tudta.', wrong: ['A tanár persze tudta.', 'Csak a tanár tudta.', 'A tanár biztosan tudni fogja.'], why: 'さすがの〜も: „még a … is" — akitől nem várnád.' }
+      { point: 8, q: 'Mit jelent: やっぱり{行|い}きません。', a: 'Mégsem megyek.', wrong: ['Biztosan nem megyek.', 'Kizárt, hogy menjek.', 'Sehogy sem tudok menni.'], why: 'やっぱり itt: meggondoltam magam.' },
+      { point: 8, q: 'Mit fejez ki: まさか！', a: 'Hitetlenkedést: „az nem lehet!"', wrong: ['Elismerést: „ez igen!"', 'Megkönnyebbülést: „de jó!"', 'Beletörődést: „mindegy."'], why: 'まさか: ezt álmodban sem gondoltad volna.' },
+      { point: 7, q: 'Mit jelent: さすがの{先生|せんせい}も、わかりませんでした。', a: 'Még a tanár sem tudta.', wrong: ['A tanár persze tudta.', 'Csak a tanár tudta.', 'A tanár biztosan tudni fogja.'], why: 'さすがの〜も: „még a … is" — akitől nem várnád.' }
     ]
   },
 
@@ -22897,37 +22903,37 @@ const NIHONCORE_COURSE = [
       }
     ],
     quiz: [
-      { q: '„Az utazáshoz útlevél kell." Mi hiányzik?', jp: '{旅行|りょこう}にはパスポートが＿です。', a: '{必要|ひつよう}', wrong: ['{場合|ばあい}', '{予定|よてい}', '{上手|じょうず}'], why: '〜が{必要|ひつよう}です = szükség van rá.' },
-      { q: '„Nem szükséges sietni." Mi hiányzik?', jp: '{急|いそ}ぐ{必要|ひつよう}＿ありません。', a: 'は', wrong: ['を', 'に', 'で'], why: 'Tagadva: 〜{必要|ひつよう}はありません.' },
-      { q: '„Ha késne, kérem, szóljon." Mi hiányzik?', jp: '{遅|おく}れる＿、{連絡|れんらく}してください。', a: '{場合|ばあい}は', wrong: ['だけで', 'のに', 'などは'], why: 'Abban az esetben: 〜{場合|ばあい}は.' },
-      { q: '„Eső esetén elmarad." Mi hiányzik?', jp: '{雨|あめ}＿{場合|ばあい}は、{中止|ちゅうし}します。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: の{場合|ばあい}は.' },
-      { q: '„Fekete vagy kék tollal írjon." Mi hiányzik?', jp: '{黒|くろ}＿{青|あお}のペンで{書|か}いてください。', a: 'または', wrong: ['など', 'だけで', 'しかし'], why: 'Írott stílusú „vagy": または.' },
-      { q: '„Húsz percbe telik eljutni az állomásra." Mi hiányzik?', jp: '{駅|えき}へ{行|い}く＿{二十分|にじゅっぷん}かかります。', a: 'のに', wrong: ['ので', 'など', 'ばかり'], why: 'Cél a かかります előtt: szótári alak + のに.' },
-      { q: 'Mit jelent: {名前|なまえ}を{書|か}くだけでいいです。', a: 'Elég csak a nevet odaírni.', wrong: ['A nevet nem kell odaírni.', 'Csak a nevet nem szabad odaírni.', 'A nevet is oda kell írni, meg mást is.'], why: '〜だけでいいです: ennyi elég.' },
-      { q: '„Ebben a cipőben nehéz járni." Mi hiányzik?', jp: 'この{靴|くつ}は{歩|ある}き＿です。', a: 'づらい', wrong: ['やすい', 'がり', 'すぎ'], why: 'Nehéz megtenni: ます-tő + づらい.' },
-      { q: 'Mit jelent: {妹|いもうと}は{寒|さむ}がりです。', a: 'A húgom fázós.', wrong: ['A húgom most fázik.', 'A húgom szereti a hideget.', 'A húgom megfázott.'], why: '〜がり: az a fajta ember, aki hajlamos rá.' },
-      { q: '„Azt mondják, a japán nehéz nyelv." Mi hiányzik?', jp: '{日本語|にほんご}は{難|むずか}しいと＿。', a: '{言|い}われています', wrong: ['{言|い}わせています', '{聞|き}かれています', '{言|い}いたがっています'], why: 'Általános vélekedés: 〜と{言|い}われています.' },
-      { q: '„Útlevél kell." Melyik helyes?', a: 'パスポートが{必要|ひつよう}です。', wrong: ['パスポートを{必要|ひつよう}です。', 'パスポートに{必要|ひつよう}です。', 'パスポートが{必要|ひつよう}します。'], why: 'A {必要|ひつよう} melléknév: ami szükséges, が-t kap.' },
-      { q: '„Megyek megvenni, ami az utazáshoz kell." Mi hiányzik?', jp: '{旅行|りょこう}に{必要|ひつよう}＿ものを{買|か}いに{行|い}きます。', a: 'な', wrong: ['の', 'に', 'だ'], why: 'な-melléknév főnév előtt: {必要|ひつよう}な.' },
+      { point: 1, q: '„Az utazáshoz útlevél kell." Mi hiányzik?', jp: '{旅行|りょこう}にはパスポートが＿です。', a: '{必要|ひつよう}', wrong: ['{場合|ばあい}', '{予定|よてい}', '{上手|じょうず}'], why: '〜が{必要|ひつよう}です = szükség van rá.' },
+      { point: 1, q: '„Nem szükséges sietni." Mi hiányzik?', jp: '{急|いそ}ぐ{必要|ひつよう}＿ありません。', a: 'は', wrong: ['を', 'に', 'で'], why: 'Tagadva: 〜{必要|ひつよう}はありません.' },
+      { point: 2, q: '„Ha késne, kérem, szóljon." Mi hiányzik?', jp: '{遅|おく}れる＿、{連絡|れんらく}してください。', a: '{場合|ばあい}は', wrong: ['だけで', 'のに', 'などは'], why: 'Abban az esetben: 〜{場合|ばあい}は.' },
+      { point: 2, q: '„Eső esetén elmarad." Mi hiányzik?', jp: '{雨|あめ}＿{場合|ばあい}は、{中止|ちゅうし}します。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: の{場合|ばあい}は.' },
+      { point: 3, q: '„Fekete vagy kék tollal írjon." Mi hiányzik?', jp: '{黒|くろ}＿{青|あお}のペンで{書|か}いてください。', a: 'または', wrong: ['など', 'だけで', 'しかし'], why: 'Írott stílusú „vagy": または.' },
+      { point: 4, q: '„Húsz percbe telik eljutni az állomásra." Mi hiányzik?', jp: '{駅|えき}へ{行|い}く＿{二十分|にじゅっぷん}かかります。', a: 'のに', wrong: ['ので', 'など', 'ばかり'], why: 'Cél a かかります előtt: szótári alak + のに.' },
+      { point: 5, q: 'Mit jelent: {名前|なまえ}を{書|か}くだけでいいです。', a: 'Elég csak a nevet odaírni.', wrong: ['A nevet nem kell odaírni.', 'Csak a nevet nem szabad odaírni.', 'A nevet is oda kell írni, meg mást is.'], why: '〜だけでいいです: ennyi elég.' },
+      { point: 6, q: '„Ebben a cipőben nehéz járni." Mi hiányzik?', jp: 'この{靴|くつ}は{歩|ある}き＿です。', a: 'づらい', wrong: ['やすい', 'がり', 'すぎ'], why: 'Nehéz megtenni: ます-tő + づらい.' },
+      { point: 6, q: 'Mit jelent: {妹|いもうと}は{寒|さむ}がりです。', a: 'A húgom fázós.', wrong: ['A húgom most fázik.', 'A húgom szereti a hideget.', 'A húgom megfázott.'], why: '〜がり: az a fajta ember, aki hajlamos rá.' },
+      { point: 7, q: '„Azt mondják, a japán nehéz nyelv." Mi hiányzik?', jp: '{日本語|にほんご}は{難|むずか}しいと＿。', a: '{言|い}われています', wrong: ['{言|い}わせています', '{聞|き}かれています', '{言|い}いたがっています'], why: 'Általános vélekedés: 〜と{言|い}われています.' },
+      { point: 1, q: '„Útlevél kell." Melyik helyes?', a: 'パスポートが{必要|ひつよう}です。', wrong: ['パスポートを{必要|ひつよう}です。', 'パスポートに{必要|ひつよう}です。', 'パスポートが{必要|ひつよう}します。'], why: 'A {必要|ひつよう} melléknév: ami szükséges, が-t kap.' },
+      { point: 1, q: '„Megyek megvenni, ami az utazáshoz kell." Mi hiányzik?', jp: '{旅行|りょこう}に{必要|ひつよう}＿ものを{買|か}いに{行|い}きます。', a: 'な', wrong: ['の', 'に', 'だ'], why: 'な-melléknév főnév előtt: {必要|ひつよう}な.' },
       {
-        q: '„Ha eltévedne, kérdezzen a rendőrőrsön!" Mi hiányzik?',
+        point: 2, q: '„Ha eltévedne, kérdezzen a rendőrőrsön!" Mi hiányzik?',
         jp: '{道|みち}に＿{場合|ばあい}は、{交番|こうばん}で{聞|き}いてください。',
         a: '{迷|まよ}った',
         wrong: ['{迷|まよ}って', '{迷|まよ}いの', '{迷|まよ}うの'],
         why: 'Ige rövid alakja + {場合|ばあい}; a た-alak: „ha megtörtént".'
       },
-      { q: 'Mit jelent: {場合|ばあい}によります。', a: 'Attól függ.', wrong: ['Abban az esetben.', 'Minden esetben.', 'Semmi esetre sem.'], why: '〜によります: „…-tól függ".' },
-      { q: 'Barátnak mondod: „takarítok, mosok, ilyesmi". Mi hiányzik (kétszer ugyanaz)?', jp: '{掃除|そうじ}＿{洗濯|せんたく}＿をします。', a: 'とか', wrong: ['または', 'それとも', 'だけで'], why: 'Beszélt felsorolás: A とか B とか.' },
+      { point: 2, q: 'Mit jelent: {場合|ばあい}によります。', a: 'Attól függ.', wrong: ['Abban az esetben.', 'Minden esetben.', 'Semmi esetre sem.'], why: '〜によります: „…-tól függ".' },
+      { point: 3, q: 'Barátnak mondod: „takarítok, mosok, ilyesmi". Mi hiányzik (kétszer ugyanaz)?', jp: '{掃除|そうじ}＿{洗濯|せんたく}＿をします。', a: 'とか', wrong: ['または', 'それとも', 'だけで'], why: 'Beszélt felsorolás: A とか B とか.' },
       {
-        q: 'Melyik mondatban jelöl a のに célt?',
+        point: 4, q: 'Melyik mondatban jelöl a のに célt?',
         a: 'この{辞書|じしょ}は{漢字|かんじ}を{調|しら}べるのにいいです。',
         wrong: ['{薬|くすり}を{飲|の}んだのに、まだ{熱|ねつ}があります。', '{勉強|べんきょう}したのに、できませんでした。', '{約束|やくそく}したのに、{来|き}ませんでした。'],
         why: 'Cél: のに + いい / {便利|べんり} / {使|つか}う. A másik három „pedig".'
       },
-      { q: '„Csak olvasással nem lehet megjegyezni." Mi hiányzik?', jp: '{読|よ}む＿{覚|おぼ}えられません。', a: 'だけでは', wrong: ['だけで', 'のに', 'などは'], why: '〜だけでは + tagadás: csak ennyivel nem…' },
-      { q: 'Melyik jelenti: „ezzel a tollal könnyű írni"?', a: 'このペンは{書|か}きやすいです。', wrong: ['このペンは{書|か}きにくいです。', 'このペンは{書|か}きづらいです。', 'このペンは{書|か}きたがりです。'], why: '〜やすい: könnyű megtenni.' },
+      { point: 5, q: '„Csak olvasással nem lehet megjegyezni." Mi hiányzik?', jp: '{読|よ}む＿{覚|おぼ}えられません。', a: 'だけでは', wrong: ['だけで', 'のに', 'などは'], why: '〜だけでは + tagadás: csak ennyivel nem…' },
+      { point: 6, q: 'Melyik jelenti: „ezzel a tollal könnyű írni"?', a: 'このペンは{書|か}きやすいです。', wrong: ['このペンは{書|か}きにくいです。', 'このペンは{書|か}きづらいです。', 'このペンは{書|か}きたがりです。'], why: '〜やすい: könnyű megtenni.' },
       {
-        q: '„Azt hallottam, ez a város biztonságos." Melyik helyes?',
+        point: 7, q: '„Azt hallottam, ez a város biztonságos." Melyik helyes?',
         a: 'この{町|まち}は{安全|あんぜん}だと{聞|き}きました。',
         wrong: [
           'この{町|まち}は{安全|あんぜん}と{聞|き}きました。',
@@ -22936,7 +22942,7 @@ const NIHONCORE_COURSE = [
         ],
         why: 'な-melléknév után だ kell a と elé.'
       },
-      { q: 'Mit jelöl a 〜によると?', a: 'A hír forrását: „… szerint".', wrong: ['Az okot: „… miatt".', 'A célt: „… érdekében".', 'Az eszközt: „… segítségével".'], why: 'Forrás + によると、…そうです.' }
+      { point: 8, q: 'Mit jelöl a 〜によると?', a: 'A hír forrását: „… szerint".', wrong: ['Az okot: „… miatt".', 'A célt: „… érdekében".', 'Az eszközt: „… segítségével".'], why: 'Forrás + によると、…そうです.' }
     ]
   }
 ];
