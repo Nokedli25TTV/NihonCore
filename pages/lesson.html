@@ -5,7 +5,7 @@
   <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <!-- A lecke lépésenként halad: a felső fejléc helyén a lépés-sáv áll (kirajzolás előtt, hogy ne villanjon a fejléc) -->
-  <script>document.documentElement.classList.add("lesson-steps");</script>
+  <script>if(!/[?&]review=1/.test(location.search))document.documentElement.classList.add("lesson-steps");</script>
   <meta name="theme-color" content="#E9EDF6" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />

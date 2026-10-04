@@ -2536,6 +2536,21 @@ const NihonCoreSRS = (function () {
     return { due, seen, unseen };
   }
 
+  // Egy scope összesítője a tárolt állapotból: hány elem van, hány esedékes, mikor jön a következő.
+  function dueInfo(prefix) {
+    const all = loadAll();
+    const now = Date.now();
+    let total = 0, due = 0, nextTs = 0;
+    Object.keys(all).forEach(k => {
+      if (prefix && !k.startsWith(prefix)) return;
+      total++;
+      const t = all[k].nextDueTs || 0;
+      if (t <= now) due++;
+      else if (!nextTs || t < nextTs) nextTs = t;
+    });
+    return { total: total, due: due, nextTs: nextTs };
+  }
+
   function aggregateBoxes(prefix) {
     const all = loadAll();
     const boxes = INTERVALS_DAYS.map(() => 0);
@@ -2560,7 +2575,7 @@ const NihonCoreSRS = (function () {
   function clearAll() { try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
 
   return {
-    recordReview, getItemState, getStateBatch, getDueItems,
+    recordReview, getItemState, getStateBatch, getDueItems, dueInfo,
     aggregateBoxes, resetItem, clearScope, clearAll,
     INTERVALS_DAYS, MAX_BOX
   };
@@ -2591,6 +2606,29 @@ function initLanding() {
   const ARROW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
 
   // ── Felső blokk: szintválasztó (első alkalom) vagy „Folytatás" ──
+  // „Mai ismétlés": a leckék kérdései az ismétlés-ütemezőből (NihonCoreSRS, 'lesson:' scope).
+  //   Esedékes kérdésnél kiemelt kártya; ha nincs, csendes sor a következő időponttal.
+  function reviewCardHtml(v) {
+    if (!window.NihonCoreSRS || !NihonCoreSRS.dueInfo) return '';
+    const info = NihonCoreSRS.dueInfo('lesson:');
+    const anyLesson = v.rows.some(r => r.done && r.step.module === 'lesson' && r.step.mode !== 'listen');
+    if (!info.total && !anyLesson) return '';
+    const days = info.nextTs ? Math.max(1, Math.ceil((info.nextTs - Date.now()) / 86400000)) : 0;
+    const title = info.due ? 'Mai ismétlés' : 'Ismétlés';
+    const desc = info.due ? info.due + ' kérdés vár a korábbi leckékből'
+      : info.total ? 'Ma nincs esedékes kérdés. A következő ' + (days <= 1 ? 'holnap' : days + ' nap múlva') + ' jön.'
+      : 'Kérdések az eddig elvégzett leckékből';
+    return `
+      <a class="path-step-link review-card${info.due ? ' is-due' : ''}" href="pages/lesson.html?review=1">
+        <span class="path-glyph" lang="ja">復</span>
+        <span class="path-step-body">
+          <span class="path-step-title">${title}</span>
+          <span class="path-step-desc">${desc}</span>
+        </span>
+        <span class="path-step-end"><span class="path-state${info.due ? ' path-state-next' : ''}">${info.due ? 'Indítás' : 'Megnézem'}</span></span>
+      </a>`;
+  }
+
   function renderHomeTop() {
     const top = document.getElementById('homeTop');
     if (!top || !Path) return;
@@ -2643,7 +2681,7 @@ function initLanding() {
             </div>
           </div>
           <a class="btn btn-primary btn-lg" href="pages/modules.html">Szabad gyakorlás</a>
-        </div>`;
+        </div>${reviewCardHtml(v)}`;
       return;
     }
 
@@ -2666,7 +2704,7 @@ function initLanding() {
           <span class="continue-count">${v.doneCount} / ${v.total} lépés kész</span>
         </div>
         <button class="continue-jump" type="button">Mutasd a térképen</button>
-      </div>`;
+      </div>${reviewCardHtml(v)}`;
     // A térkép hosszú: a gomb a következő lépés csomópontjához görget.
     top.querySelector('.continue-jump').addEventListener('click', () => {
       const node = document.querySelector('.path-node.is-next');
@@ -15621,7 +15659,7 @@ function initStatsPage() {
     cloze: 'Kiegészítés', translate: 'Fordítás', pro: 'Pro hallás',
     free: 'Szabad fordítás',
     reverse: 'Fordítva', typing: 'Beírás', match: 'Párosító',
-    check: 'Ellenőrzés', listen: 'Hallás utáni kör',
+    check: 'Ellenőrzés', listen: 'Hallás utáni kör', review: 'Ismétlés',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
@@ -16556,7 +16594,8 @@ function initStatsPage() {
 
   // V5 P3b — Ismert SRS-scope-ok listája. Jövőbeli modulok ide kerülnek.
   const SRS_SCOPES = [
-    { prefix: 'grammar:', label: 'Nyelvtani minták' }
+    { prefix: 'grammar:', label: 'Nyelvtani minták' },
+    { prefix: 'lesson:', label: 'A leckék kérdései' }
     // pl. jövőbeli: { prefix: 'listening:', label: '🔊 Hallás' }
   ];
 
@@ -17400,7 +17439,28 @@ function initLessonPage() {
   const course = (typeof NIHONCORE_COURSE !== 'undefined') ? NIHONCORE_COURSE : [];
   let id = null;
   try { id = new URLSearchParams(window.location.search).get('id'); } catch (e) {}
-  const lesson = course.find(l => l.id === id);
+  // Ismétlő mód (lesson.html?review=1): nincs lecke, a kör a korábbi leckék esedékes kérdéseiből áll.
+  let isReview = false;
+  try { isReview = new URLSearchParams(window.location.search).get('review') === '1'; } catch (e) {}
+  const lesson = isReview
+    ? { id: 'review', review: true, no: '', badge: '復', kicker: 'Ismétlés', label: 'Ismétlés', title: 'Mai ismétlés',
+        lead: 'A korábbi leckék kérdései térnek vissza, egyre ritkábban: amit tudsz, az 1, 3, 7, 14, majd 30 nap múlva jön újra; amit elrontasz, az rögtön.',
+        cando: [], points: [], quiz: [], ownOnly: true }
+    : course.find(l => l.id === id);
+  if (isReview) document.documentElement.classList.remove('lesson-steps');
+
+  // Ismétlés-ütemezés: a leckék saját kérdései a közös ütemezőbe (NihonCoreSRS) kerülnek.
+  const SRS_PREFIX = 'lesson:';
+  const srsOf = new Map();                                 // kérdés → { id, lesson }
+  course.forEach(l => (l.quiz || []).forEach((q, qi) => srsOf.set(q, { id: SRS_PREFIX + l.id + ':' + qi, lesson: l })));
+  // jó válasz csak akkor lépteti előre, ha a kérdés már esedékes volt (egy napon belüli újrázás nem „tanulás")
+  function srsMark(q, ok) {
+    const src = srsOf.get(q);
+    if (!src || !window.NihonCoreSRS) return;
+    const st = NihonCoreSRS.getItemState(src.id);
+    if (ok && st && (st.nextDueTs || 0) > Date.now()) return;
+    NihonCoreSRS.recordReview(src.id, ok ? 1 : 0);
+  }
   const hero = document.getElementById('lessonHero');
   const content = document.getElementById('lessonContent');
   const runtime = document.getElementById('lessonRuntime');
@@ -17426,6 +17486,10 @@ function initLessonPage() {
   document.getElementById('lessonTitle').textContent = lesson.title;
   document.getElementById('lessonLead').textContent = lesson.lead;
   document.getElementById('lessonCando').innerHTML = lesson.cando.map(c => '<li>' + esc(c) + '</li>').join('');
+  if (lesson.review) {
+    const tag = document.querySelector('#lessonHero .badge-group');
+    if (tag) tag.textContent = 'Időzített ismétlés';
+  }
   if (window.NihonCoreRound && NihonCoreRound.refresh) NihonCoreRound.refresh();   // modul-név a fejlécbe
 
   /* ── A2) A lecke gyakorló lépései a tanulási útról ─ */
@@ -17744,6 +17808,7 @@ function initLessonPage() {
     const buttons = sec.querySelectorAll('.cj-option');
     const right = options.indexOf(q.a);
     const done = (ok, dontKnow) => {
+      srsMark(q, ok);
       sec.querySelectorAll('.cj-option, .dont-know-btn').forEach(b => { b.disabled = true; });
       if (!ok) buttons[right].classList.add('reveal-correct');
       const fb = sec.querySelector('.lp-quick-fb');
@@ -17980,8 +18045,9 @@ function initLessonPage() {
   }
 
   function startQuiz(kind) {
-    run.kind = kind === 'listen' ? 'listen' : 'check';
-    run.cards = run.kind === 'listen' ? buildListenRound() : buildRound();
+    run.kind = kind === 'listen' ? 'listen' : kind === 'review' ? 'review' : 'check';
+    run.cards = run.kind === 'listen' ? buildListenRound() : run.kind === 'review' ? buildReviewRound() : buildRound();
+    if (!run.cards.length) return;
     run.idx = 0; run.score = 0; run.streak = 0; run.results = []; run.startTs = Date.now(); run.inLesson = false;
     NihonCoreRound.begin(function () {
       return { module: 'lesson', mode: run.kind, results: run.results, score: run.score, startTs: run.startTs };
@@ -18019,7 +18085,7 @@ function initLessonPage() {
     document.getElementById('lqCard').innerHTML = `
       <div class="cj-prompt">
         <div class="cj-prompt-eyebrow">
-          <span class="cj-pe-group">${esc(lessonLabel)}</span><span class="cj-pe-dot">·</span>${q.listen ? 'Hallás' : 'Ellenőrzés'}
+          <span class="cj-pe-group">${esc(lesson.review && srsOf.get(q) ? (srsOf.get(q).lesson.label || srsOf.get(q).lesson.no + '. lecke') : lessonLabel)}</span><span class="cj-pe-dot">·</span>${q.listen ? 'Hallás' : lesson.review ? 'Ismétlés' : 'Ellenőrzés'}
         </div>
         <div class="lq-question">${ruby(q.q)}</div>
         ${q.jp ? `<div class="lq-jp" lang="ja">${ruby(q.jp)}</div>` : ''}
@@ -18064,7 +18130,9 @@ function initLessonPage() {
   function finalize(card, ok, info) {
     run.submitted = true;
     if (ok) { run.score += 10; run.streak++; } else { run.streak = 0; }
-    run.results.push({ q: lesson.id + ':' + (card.q.listen ? 'listen' : card.q.gen ? 'gen' : lesson.quiz.indexOf(card.q)), correct: ok,
+    if (!card.q.listen && !card.q.gen) srsMark(card.q, ok);
+    run.results.push({ q: lesson.review && srsOf.get(card.q) ? srsOf.get(card.q).id
+                         : lesson.id + ':' + (card.q.listen ? 'listen' : card.q.gen ? 'gen' : lesson.quiz.indexOf(card.q)), correct: ok,
                        errorCode: ok ? null : (info.dontKnow ? 'dont_know' : 'wrong_choice') });
     document.getElementById('lqScore').textContent = run.score;
     document.getElementById('lqStreak').textContent = `${run.streak} 🔥`;
@@ -18108,6 +18176,7 @@ function initLessonPage() {
 
   function showSummary() {
     NihonCoreStats.recordSession({ module: 'lesson', mode: run.kind, results: run.results, score: run.score, startTs: run.startTs });
+    if (run.kind === 'review') { showReviewSummary(); return; }
     const listen = run.kind === 'listen';
     if (listen && window.NihonCoreAudio) NihonCoreAudio.stop();
     const total = run.results.length;
@@ -18157,6 +18226,7 @@ function initLessonPage() {
     hero.classList.remove('hidden');          // → a kör-őr elmenti a részeredményt
     content.classList.remove('hidden');
     runtime.classList.add('hidden');
+    if (lesson.review) renderReview();        // az ismétlő mód nyitólapja a friss számokkal
     window.scrollTo({ top: 0 });
   }
 
@@ -18167,7 +18237,89 @@ function initLessonPage() {
     backToLesson();
   });
 
-  renderLesson();
+  /* ── D) Ismétlő mód ─────────────────────────────── */
+  //   Az esedékes kérdések (a legrégebben esedékes elöl); ha nincs elég, a már elvégzett
+  //   leckék még nem látott kérdéseivel telik fel a kör.
+  function reviewPool() {
+    const now = Date.now();
+    const due = [], fresh = [];
+    const doneLessons = {};
+    if (Path) Path.view().rows.forEach(r => {
+      const m = r.done && r.step.module === 'lesson' && r.step.mode !== 'listen' && /[?&]id=(\w+)/.exec(r.step.href || '');
+      if (m) doneLessons[m[1]] = true;
+    });
+    srsOf.forEach((src, q) => {
+      const st = window.NihonCoreSRS ? NihonCoreSRS.getItemState(src.id) : null;
+      if (st) { if ((st.nextDueTs || 0) <= now) due.push({ q: q, ts: st.nextDueTs || 0 }); }
+      else if (doneLessons[src.lesson.id]) fresh.push(q);
+    });
+    due.sort((a, b) => a.ts - b.ts);
+    return { due: due.map(x => x.q), fresh: fresh };
+  }
+  function buildReviewRound() {
+    const pool = reviewPool();
+    const qs = pool.due.slice(0, ROUND).concat(shuffle(pool.fresh)).slice(0, ROUND);
+    return shuffle(qs).map(q => ({ q: q, options: shuffle([q.a].concat(q.wrong)) }));
+  }
+  function renderReview() {
+    const pool = reviewPool();
+    const info = window.NihonCoreSRS ? NihonCoreSRS.dueInfo(SRS_PREFIX) : { total: 0, due: 0, nextTs: 0 };
+    const n = Math.min(ROUND, pool.due.length + pool.fresh.length);
+    const days = info.nextTs ? Math.max(1, Math.ceil((info.nextTs - Date.now()) / 86400000)) : 0;
+    const head = pool.due.length ? pool.due.length + ' kérdés vár'
+      : n ? 'Ma nincs esedékes kérdés' : 'Még nincs mit ismételni';
+    const sub = pool.due.length
+      ? 'Egy kör ' + ROUND + ' kérdés, a legrégebben esedékesekkel kezdve.' + (pool.due.length > ROUND ? ' A többi a következő körben jön.' : '')
+      : n ? (days ? 'A következő ' + (days <= 1 ? 'holnap' : days + ' nap múlva') + ' esedékes. ' : '') + 'Addig új kérdéseket kaphatsz az elvégzett leckékből.'
+          : 'Az ismétlés az elvégzett leckék kérdéseiből áll. Előbb csinálj végig egy leckét az ellenőrző körével együtt.';
+    content.innerHTML = `
+      <section class="lp-check glass-panel-heavy" id="lpCheck">
+        <h2 class="lp-check-title">${head}</h2>
+        <p class="lp-check-sub">${sub}</p>
+        <div class="rv-chips">
+          <span class="rv-chip"><b>${pool.due.length}</b> esedékes</span>
+          <span class="rv-chip"><b>${pool.fresh.length}</b> még nem látott</span>
+          <span class="rv-chip"><b>${info.total}</b> ütemezve</span>
+        </div>
+        <div class="lp-check-actions">
+          ${n ? '<button class="btn btn-primary btn-lg" id="lqStart" type="button">' + (pool.due.length ? 'Ismétlés indítása' : 'Új kérdések') + '</button>'
+              : '<a class="btn btn-primary btn-lg" href="../index.html#path">A tanulási útra</a>'}
+        </div>
+      </section>`;
+    const start = document.getElementById('lqStart');
+    if (start) start.addEventListener('click', () => startQuiz('review'));
+  }
+  function showReviewSummary() {
+    const total = run.results.length;
+    const correct = run.results.filter(r => r.correct).length;
+    const left = reviewPool().due.length;
+    document.getElementById('lqCard').innerHTML = '';
+    const fb = document.getElementById('lqFeedback');
+    fb.classList.add('hidden'); fb.innerHTML = '';
+    document.getElementById('lqFill').style.width = '100%';
+    const sEl = document.getElementById('lqSummary');
+    sEl.classList.remove('hidden');
+    sEl.innerHTML = `
+      <div class="summary-icon">${correct === total ? '🏆' : '🎯'}</div>
+      <h3>${left ? 'Még ' + left + ' kérdés vár' : 'Megvan a mai ismétlés'}</h3>
+      <div class="summary-score">${correct} / ${total}</div>
+      <p class="lq-summary-note">${left
+        ? 'Amit elrontottál, rögtön visszajön; a többi kérdés a maga idejében tér vissza.'
+        : 'Amit most tudtál, az néhány nap múlva jön újra. Mehet a következő lecke.'}</p>
+      <div class="kana-summary-actions">
+        ${left ? '<button class="btn btn-primary" id="lqAgain" type="button">Még egy kör</button><a class="btn btn-outline" href="../index.html">Kezdőlap</a>'
+               : '<a class="btn btn-primary" href="../index.html">Tovább a tanulási úton</a><button class="btn btn-ghost" id="lqBack" type="button">Vissza</button>'}
+      </div>`;
+    const again = document.getElementById('lqAgain');
+    if (again) again.addEventListener('click', () => startQuiz('review'));
+    const back = document.getElementById('lqBack');
+    if (back) back.addEventListener('click', backToLesson);
+    if (correct === total && total >= 5 && window.NihonCoreMotion && NihonCoreMotion.celebrate) {
+      try { NihonCoreMotion.celebrate({ title: 'Hibátlan!', sub: total + ' / ' + total }); } catch (e) {}
+    }
+  }
+
+  if (lesson.review) renderReview(); else renderLesson();
   window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, buildListenRound, practiceRows, steps, showLap,
     quickMatches: () => (quickMap || (quickMap = buildQuickMap())).map(l => l.length) };
 }

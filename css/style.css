@@ -8273,6 +8273,24 @@ html.lesson-steps body.round-active .nc-tabbar { display: none; }
   .lp-quick { padding: 30px 28px 24px; }
 }
 
+/* ── Ismétlés ──────────────────────────────────────────
+   Időzített ismétlés a leckék kérdéseiből (lesson.html?review=1) és a
+   kezdőlapi kártyája a „Folytatás" alatt (app.js: reviewCardHtml). */
+.rv-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin: 0 0 18px; }
+.rv-chip {
+  padding: 6px 12px; border-radius: 999px;
+  background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+  font-size: var(--fs-xs); font-weight: 600; color: var(--sumi-soft);
+}
+.rv-chip b { font-weight: 800; color: var(--sumi); }
+.home-top .review-card { margin-top: -6px; }
+.review-card .path-glyph { font-family: var(--font-jp); }
+.review-card.is-due { border-color: rgb(var(--gold-rgb) / 0.75); }
+.review-card.is-due .path-glyph { background: var(--gold-trad); color: var(--sumi); }
+html.theme-sumi .review-card.is-due .path-glyph { color: #171C2E; }
+.review-card:not(.is-due) { box-shadow: none; }
+@media (min-width: 600px) { .home-top .review-card { margin-top: -12px; } }
+
 /* ════════════════════════════════════════════════════════
    SZÖVEG-ERŐSÍTÉS (user-visszajelzés: a kérdések és a magyarázatok
    szövege „vékony és csúnya" volt)
