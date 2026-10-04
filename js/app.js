@@ -17406,6 +17406,7 @@ function initLessonPage() {
   const runtime = document.getElementById('lessonRuntime');
 
   if (!lesson) {
+    document.documentElement.classList.remove('lesson-steps');
     hero.classList.add('hidden');
     content.innerHTML = `
       <div class="stats-empty glass-panel">
@@ -17472,14 +17473,6 @@ function initLessonPage() {
 
   /* ── B) Nyelvtani pontok ───────────────────────── */
   function renderLesson() {
-    const tocSec = (cond, href, label) => cond ? `<a href="${href}" class="lp-toc-link lp-toc-sec">${label}</a>` : '';
-    const toc = tocSec(lesson.dialogue, '#lpDialogue', 'Párbeszéd') +
-      lesson.points.map((p, i) =>
-      `<a href="#p${i + 1}" class="lp-toc-link"><span class="lp-toc-no">${i + 1}</span><span lang="ja">${ruby(p.title)}</span></a>`).join('') +
-      tocSec(lesson.phrases && lesson.phrases.length, '#lpPhrases', 'Kifejezések') +
-      tocSec(lesson.words && lesson.words.length, '#lpWords', 'Szavak') +
-      tocSec(lesson.culture && lesson.culture.length, '#lpCulture', 'Jó tudni') +
-      '<a href="#lpCheck" class="lp-toc-link lp-toc-go">Ellenőrzés és gyakorlás</a>';
     // meghallgatható sor (példa, párbeszéd, kifejezés): a hang a data-say-ből megy
     const sayRow = (e, extra) => `
             <li class="lp-ex${extra && extra.who ? ' lp-ex-line' : ''}">
@@ -17531,7 +17524,8 @@ function initLessonPage() {
               </div>`).join('')}
           </div>` : ''}
         ${p.tip ? `<div class="lp-tip"><strong>Figyelj:</strong> ${rubyHtml(p.tip)}</div>` : ''}
-      </section>`).join('');
+      </section>
+      <section class="lp-quick glass-panel-heavy" id="q${i + 1}" data-point="${i}"></section>`).join('');
 
     // A lecke elején: miről szól, és egy rövid párbeszéd, amelyben a lecke nyelvtana élőben látszik
     const introHtml = lesson.intro && lesson.intro.length ? `
@@ -17599,7 +17593,6 @@ function initLessonPage() {
       </section>` : '';
 
     content.innerHTML = `
-      <nav class="lp-toc" aria-label="A lecke pontjai">${toc}</nav>
       ${introHtml}
       ${dialogueHtml}
       ${points}
@@ -17630,18 +17623,12 @@ function initLessonPage() {
     content.querySelectorAll('.lp-table-wrap').forEach(w => {
       if (w.scrollWidth > w.clientWidth + 4) w.parentNode.classList.add('is-wide');
     });
+    initSteps();
+    // az összefoglaló sorai a megfelelő pont lapjára visznek
     content.querySelectorAll('.lp-glance-row').forEach(a => a.addEventListener('click', ev => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (!target) return;
       ev.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }));
-    // oldalon belüli ugrás a lebegő fejléc alá
-    content.querySelectorAll('.lp-toc-link').forEach(a => a.addEventListener('click', ev => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (!target) return;
-      ev.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const i = steps.laps.findIndex(l => l.kind === 'lap' && l.els[0].id === a.getAttribute('href').slice(1));
+      if (i >= 0) showLap(i);
     }));
     document.getElementById('lqStart').addEventListener('click', () => startQuiz('check'));
     if (!canListen) return;
@@ -17658,9 +17645,273 @@ function initLessonPage() {
       const a = document.getElementById('lqStart'), b = document.getElementById('lqListen');
       a.classList.replace('btn-primary', 'btn-outline'); b.classList.replace('btn-outline', 'btn-primary');
       b.parentNode.insertBefore(b, a);
-      const check = document.getElementById('lpCheck');
-      if (check) setTimeout(() => check.scrollIntoView({ block: 'center' }), 60);
     }
+  }
+
+  /* ── B2) Lépések: a lecke lapokra bontva ──────── */
+  //   Egy rész = egy lap; a nyelvtani pontok után egy-egy gyors kérdés áll.
+  //   Fent a lépés-sáv (✕ · folyamatosan töltődő csík · Tartalom), lent a gombsor
+  //   (menü · Vissza · Következő). A menü-gomb hozza elő a fül-sávot.
+  //   A stílusa: style.css LECKE-OLDAL blokk, „Lépések" rész.
+  const POS_KEY = 'nihoncore_lesson_pos_v1';              // eszköz-helyi: leckénként az utolsó lap
+  const root = document.documentElement;
+  const steps = { laps: [], cur: 0, mains: 0 };
+  const quickDone = {};                                    // pont → megválaszolta-e (erre a megnyitásra)
+  const plainText = s => String(s || '').replace(RB, '$1').replace(/<[^>]+>/g, '');
+  let wantListenLap = false;                               // a tanulási út hallás-lépése (…&round=listen)
+
+  // A gyors kérdés: a lecke saját kérdései közül az, amelyik a ponthoz tartozik
+  // (a japán szöveg egyezése alapján); ha nincs ilyen, a pont egyik példamondatából készül.
+  let quickMap = null;
+  function buildQuickMap() {
+    const JP = /[぀-ヿ一-鿿]+/g;
+    const jpRuns = s => (plainText(s).match(JP) || []);
+    const pointJp = lesson.points.map(p => {
+      const parts = [p.title, p.pattern, p.body, p.tip].concat(p.more || [], p.notes || []);
+      p.examples.forEach(e => parts.push(e.jp));
+      (p.mistakes || []).forEach(m => parts.push(m.good, m.bad));
+      (p.tables || []).forEach(t => t.rows.forEach(r => r.forEach(c => parts.push(c))));
+      return jpRuns(parts.join(' ')).join(' ');
+    });
+    const pointWords = lesson.points.map(p => plainText([p.title, p.sub, p.pattern, p.body].concat(p.more || [],
+      p.examples.map(e => e.romaji + ' ' + e.hu), (p.tables || []).map(t => t.rows.map(r => r.join(' ')).join(' '))).join(' ')).toLowerCase());
+    // a leghosszabb közös japán szövegdarab hossza
+    const common = (runs, text) => {
+      let best = 0;
+      runs.forEach(r => {
+        for (let len = Math.min(r.length, 24); len > best && len >= 2; len--) {
+          for (let i = 0; i + len <= r.length; i++) {
+            if (text.indexOf(r.substr(i, len)) >= 0) { best = len; break; }
+          }
+        }
+      });
+      return best;
+    };
+    const map = lesson.points.map(() => []);
+    lesson.quiz.forEach(q => {
+      const filled = q.jp ? plainText(q.jp).replace(/＿/g, plainText(q.a)) : '';
+      const runs = jpRuns([filled, q.a, q.q].join(' '));
+      let bestP = -1, bestS = 0;
+      lesson.points.forEach((p, pi) => {
+        let s = common(runs, pointJp[pi]);
+        if (s < 3 && lesson.ownOnly) {                    // az előkészítő leckénél a szavak egyezése dönt
+          const words = plainText(q.q + ' ' + q.a).toLowerCase().match(/[a-záéíóöőúüűāīūēō]{4,}/g) || [];
+          s = words.filter(w => pointWords[pi].indexOf(w) >= 0).length >= 2 ? 3 : 0;
+        }
+        if (s > bestS) { bestS = s; bestP = pi; }
+      });
+      if (bestP >= 0 && bestS >= 3) map[bestP].push({ q: q, score: bestS });
+    });
+    map.forEach(list => list.sort((a, b) => b.score - a.score));
+    return map;
+  }
+  function quickFor(pi) {
+    if (!quickMap) quickMap = buildQuickMap();
+    const list = quickMap[pi];
+    if (list.length) {
+      const top = list.filter(x => x.score >= Math.max(3, list[0].score * 0.6)).slice(0, 3);
+      return top[Math.floor(Math.random() * top.length)].q;
+    }
+    if (lesson.ownOnly) return null;
+    const mine = shuffle(allExamples.filter(x => x.point === pi));
+    for (let k = 0; k < mine.length; k++) {
+      const wrong = pickOthers(mine[k], 'hu');
+      if (wrong.length === 3) return { q: 'Mit jelent ez a mondat?', jp: mine[k].ex.jp, a: mine[k].ex.hu, wrong: wrong, why: 'Így olvasod: ' + mine[k].ex.romaji };
+    }
+    return null;
+  }
+  function hasQuick(pi) {
+    if (lesson.ownOnly) { if (!quickMap) quickMap = buildQuickMap(); return quickMap[pi].length > 0; }
+    return lesson.points[pi].examples.length > 0 && allExamples.length >= 4;
+  }
+  function renderQuick(pi) {
+    const sec = document.getElementById('q' + (pi + 1));
+    if (!sec || sec.dataset.ready) return;
+    const q = quickFor(pi);
+    if (!q) { quickDone[pi] = true; sec.innerHTML = '<p class="lp-body">Ehhez a ponthoz most nincs kérdés: mehetsz tovább.</p>'; sec.dataset.ready = '1'; return; }
+    const options = shuffle([q.a].concat(q.wrong));
+    const long = options.some(o => reading(o).length > 9);
+    sec.dataset.ready = '1';
+    sec.innerHTML = `
+      <div class="lp-quick-eyebrow">Gyors kérdés<span class="cj-pe-dot">·</span><span lang="ja">${ruby(lesson.points[pi].title)}</span></div>
+      <div class="lq-question">${ruby(q.q)}</div>
+      ${q.jp ? `<div class="lq-jp" lang="ja">${ruby(q.jp)}</div>` : ''}
+      <div class="cj-options lq-options${long ? ' lq-options-long' : ''}">
+        ${options.map((o, i) => `<button class="cj-option" type="button" data-idx="${i}">${optHtml(o)}</button>`).join('')}
+      </div>
+      <button class="dont-know-btn" type="button">Nem tudom</button>
+      <div class="lp-quick-fb hidden" aria-live="polite"></div>`;
+    const buttons = sec.querySelectorAll('.cj-option');
+    const right = options.indexOf(q.a);
+    const done = (ok, dontKnow) => {
+      sec.querySelectorAll('.cj-option, .dont-know-btn').forEach(b => { b.disabled = true; });
+      if (!ok) buttons[right].classList.add('reveal-correct');
+      const fb = sec.querySelector('.lp-quick-fb');
+      fb.className = 'lp-quick-fb ' + (ok ? 'is-ok' : dontKnow ? 'is-reveal' : 'is-miss');
+      fb.innerHTML = `<div class="lp-quick-fb-title">${ok ? 'Így van' : dontKnow ? 'Ez a helyes válasz' : 'Nézzük meg együtt'}</div>
+        <div class="lp-quick-fb-why">${ruby(q.why)}</div>`;
+      quickDone[pi] = true;
+      updateStepBar();
+      const next = document.getElementById('lsNext');
+      if (next) try { next.focus({ preventScroll: true }); } catch (e) {}
+    };
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      if (quickDone[pi]) return;
+      const ok = options[parseInt(btn.dataset.idx, 10)] === q.a;
+      btn.classList.add(ok ? 'correct' : 'wrong');
+      done(ok, false);
+    }));
+    sec.querySelector('.dont-know-btn').addEventListener('click', () => { if (!quickDone[pi]) done(false, true); });
+  }
+
+  function closeLayers() {
+    root.classList.remove('ls-sheet-open', 'ls-nav-open');
+    const a = document.getElementById('lsTocBtn'), b = document.getElementById('lsNavBtn');
+    if (a) a.setAttribute('aria-expanded', 'false');
+    if (b) b.setAttribute('aria-expanded', 'false');
+  }
+
+  function updateStepBar() {
+    const lap = steps.laps[steps.cur];
+    if (!lap) return;
+    const last = steps.cur === steps.laps.length - 1;
+    const pct = Math.round(((steps.cur + 1) / steps.laps.length) * 100);
+    const fill = document.getElementById('lsFill'), track = document.getElementById('lsTrack');
+    if (fill) fill.style.width = pct + '%';
+    if (track) track.setAttribute('aria-valuenow', String(pct));
+    document.getElementById('lsCount').textContent = lap.no + ' / ' + steps.mains;
+    document.getElementById('lsName').innerHTML = lap.kind === 'quick' ? 'Gyors kérdés' : lap.nameHtml;
+    const back = document.getElementById('lsBack'), next = document.getElementById('lsNext');
+    back.classList.toggle('hidden', steps.cur === 0);
+    next.textContent = steps.cur === 0 ? 'Kezdjük' : last ? (wantListenLap ? 'Hallás utáni kör' : 'Ellenőrző kör') : 'Következő';
+    next.disabled = lap.kind === 'quick' && !quickDone[lap.point];
+    document.querySelectorAll('#lsList .ls-item').forEach(b => {
+      const i = parseInt(b.dataset.lap, 10);
+      const here = steps.laps[steps.cur].no === steps.laps[i].no;
+      b.classList.toggle('is-here', here);
+      b.classList.toggle('is-seen', !here && i < steps.cur);
+      if (here) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+    });
+  }
+
+  function showLap(i, quiet) {
+    i = Math.max(0, Math.min(steps.laps.length - 1, i));
+    if (window.NihonCoreAudio) try { NihonCoreAudio.stop(); } catch (e) {}
+    closeLayers();
+    steps.cur = i;
+    const lap = steps.laps[i];
+    steps.laps.forEach(l => l.els.forEach(el => { el.classList.add('ls-off'); el.classList.remove('ls-in'); }));
+    if (lap.kind === 'quick') renderQuick(lap.point);
+    lap.els.forEach(el => { el.classList.remove('ls-off'); if (!quiet) el.classList.add('ls-in'); });
+    updateStepBar();
+    try {
+      const pos = JSON.parse(localStorage.getItem(POS_KEY) || '{}');
+      pos[lesson.id] = i;
+      localStorage.setItem(POS_KEY, JSON.stringify(pos));
+    } catch (e) {}
+    window.scrollTo(0, 0);
+    // széles tábla: a jelzés csak látható lapon mérhető
+    lap.els.forEach(el => el.querySelectorAll('.lp-table-wrap').forEach(w => {
+      if (w.scrollWidth > w.clientWidth + 4) w.parentNode.classList.add('is-wide');
+    }));
+  }
+  function nextLap() {
+    const lap = steps.laps[steps.cur];
+    if (lap.kind === 'quick' && !quickDone[lap.point]) return;
+    if (steps.cur >= steps.laps.length - 1) { startQuiz(wantListenLap ? 'listen' : 'check'); return; }
+    showLap(steps.cur + 1);
+  }
+
+  function initSteps() {
+    try { wantListenLap = canListen && new URLSearchParams(window.location.search).get('round') === 'listen'; } catch (e) {}
+    const sec = sel => content.querySelector(sel);
+    const laps = [];
+    let no = 0;
+    const add = (els, nameHtml, sub, glyph, extra) => {
+      els = els.filter(Boolean);
+      if (!els.length) return;
+      no++;
+      laps.push(Object.assign({ kind: 'lap', no: no, els: els, nameHtml: nameHtml, sub: sub, glyph: glyph }, extra || {}));
+    };
+    add([hero, sec('#lpIntro')], 'Áttekintés', 'miről szól a lecke', String(lesson.badge || lesson.no));
+    add([sec('#lpDialogue')], 'Párbeszéd', lesson.dialogue ? esc(lesson.dialogue.title || '') : '', '話');
+    lesson.points.forEach((p, pi) => {
+      add([sec('#p' + (pi + 1))], '<span lang="ja">' + ruby(p.title) + '</span>', ruby(p.sub), String(pi + 1), { point: pi });
+      const q = sec('#q' + (pi + 1));
+      if (q && hasQuick(pi)) laps.push({ kind: 'quick', no: no, els: [q], point: pi });
+      else if (q) q.classList.add('ls-off');
+    });
+    add([sec('#lpPhrases')], 'Hasznos kifejezések', (lesson.phrases || []).length + ' fordulat', '句');
+    add([sec('#lpWords')], 'Szavak a leckéhez', (lesson.words || []).reduce((n, g) => n + g.items.length, 0) + ' szó', '語');
+    add([sec('#lpCulture')], 'Jó tudni Japánról', (lesson.culture || []).length + ' tudnivaló', '文');
+    add([sec('#lpGlance')], 'A lecke egy pillantásra', 'összefoglaló', '要');
+    add([sec('#lpCheck'), sec('#lpPractice')], 'Ellenőrzés és gyakorlás', ROUND + ' kérdés, aztán feladatok', '✓');
+    steps.laps = laps;
+    steps.mains = no;
+
+    // Tartalom-lap: a fő lapok listája (a gyors kérdések a pontjukhoz tartoznak)
+    const list = document.getElementById('lsList');
+    list.innerHTML = laps.map((l, i) => l.kind !== 'lap' ? '' : `
+      <li><button class="ls-item" type="button" data-lap="${i}">
+        <span class="ls-item-glyph" lang="ja" aria-hidden="true">${esc(l.glyph)}</span>
+        <span class="ls-item-text"><span class="ls-item-name">${l.nameHtml}</span>${l.sub ? `<span class="ls-item-sub">${l.sub}</span>` : ''}</span>
+      </button></li>`).join('');
+    if (list.dataset.bound) { showLap(Math.min(steps.cur, laps.length - 1), true); return; }
+    list.dataset.bound = '1';
+    list.addEventListener('click', e => {
+      const b = e.target.closest('.ls-item');
+      if (b) showLap(parseInt(b.dataset.lap, 10));
+    });
+    // a segítők (romaji / magyar / hang) a Tartalom-lap aljára kerülnek
+    const foot = document.getElementById('lsSheetFoot'), helpers = document.getElementById('helpersBar');
+    if (foot && helpers) foot.insertBefore(helpers, foot.firstChild);
+    document.getElementById('lsTheme').addEventListener('click', () => { if (window.NihonCoreTheme) NihonCoreTheme.toggle(); });
+
+    document.getElementById('lsNext').addEventListener('click', nextLap);
+    document.getElementById('lsBack').addEventListener('click', () => showLap(steps.cur - 1));
+    const tocBtn = document.getElementById('lsTocBtn'), navBtn = document.getElementById('lsNavBtn');
+    tocBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = !root.classList.contains('ls-sheet-open');
+      closeLayers();
+      root.classList.toggle('ls-sheet-open', open);
+      tocBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (open) { const here = list.querySelector('.is-here'); if (here) here.scrollIntoView({ block: 'nearest' }); }
+    });
+    navBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = !root.classList.contains('ls-nav-open');
+      closeLayers();
+      root.classList.toggle('ls-nav-open', open);
+      navBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.getElementById('lsScrim').addEventListener('click', closeLayers);
+    document.addEventListener('click', e => {
+      if (root.classList.contains('ls-nav-open') && !e.target.closest('.nc-tabbar')) closeLayers();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (window.NihonCoreRound && NihonCoreRound.isActive && NihonCoreRound.isActive()) return;
+      if (!content.offsetParent) return;                   // kör vagy összesítő látszik
+      const t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      if (e.key === 'Escape') { closeLayers(); return; }
+      if (e.key === 'ArrowRight') { e.preventDefault(); nextLap(); return; }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); showLap(steps.cur - 1); return; }
+      const lap = steps.laps[steps.cur];
+      if (lap && lap.kind === 'quick' && /^[1-4]$/.test(e.key)) {
+        const opts = lap.els[0].querySelectorAll('.cj-option:not(:disabled)');
+        const pick = lap.els[0].querySelectorAll('.cj-option')[parseInt(e.key, 10) - 1];
+        if (opts.length && pick && !pick.disabled) { e.preventDefault(); pick.click(); }
+      }
+    });
+
+    // hol tartottál: a mentett lapon folytatod (a kör lapjáról elölről indul)
+    let start = 0;
+    try { start = parseInt((JSON.parse(localStorage.getItem(POS_KEY) || '{}'))[lesson.id], 10) || 0; } catch (e) {}
+    if (start >= laps.length - 1) start = 0;
+    if (wantListenLap) start = laps.length - 1;
+    showLap(start, true);
   }
 
   /* ── C) Ellenőrző kör ──────────────────────────── */
@@ -17735,6 +17986,7 @@ function initLessonPage() {
     NihonCoreRound.begin(function () {
       return { module: 'lesson', mode: run.kind, results: run.results, score: run.score, startTs: run.startTs };
     });
+    closeLayers();
     hero.classList.add('hidden');
     content.classList.add('hidden');
     runtime.classList.remove('hidden');
@@ -17916,7 +18168,8 @@ function initLessonPage() {
   });
 
   renderLesson();
-  window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, buildListenRound, practiceRows };
+  window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, buildListenRound, practiceRows, steps, showLap,
+    quickMatches: () => (quickMap || (quickMap = buildQuickMap())).map(l => l.length) };
 }
 
 

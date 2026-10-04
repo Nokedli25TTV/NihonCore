@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <script>(function(){try{var t=localStorage.getItem("nihoncore_theme");if(t==="sumi")document.documentElement.classList.add("theme-sumi");}catch(e){}})();</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <!-- A lecke lépésenként halad: a felső fejléc helyén a lépés-sáv áll (kirajzolás előtt, hogy ne villanjon a fejléc) -->
+  <script>document.documentElement.classList.add("lesson-steps");</script>
   <meta name="theme-color" content="#E9EDF6" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -38,6 +40,37 @@
       </div>
     </div>
   </header>
+
+  <!-- LÉPÉS-SÁV (fent): kilépés · haladás-csík · tartalom. A lecke lapokra bontva halad (app.js: initLessonPage → lépések). -->
+  <div class="ls-top" id="lsTop">
+    <a class="ls-x" href="../index.html#path" title="Kilépés a leckéből" aria-label="Kilépés a leckéből">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </a>
+    <div class="ls-prog">
+      <div class="ls-track" id="lsTrack" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-label="Haladás a leckében"><div class="ls-fill" id="lsFill"></div></div>
+      <div class="ls-where"><span class="ls-count" id="lsCount"></span><span class="ls-name" id="lsName"></span></div>
+    </div>
+    <button class="ls-toc-btn" id="lsTocBtn" type="button" aria-expanded="false" aria-controls="lsSheet" aria-label="A lecke lapjai">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6h.01M4 12h.01M4 18h.01"/></svg>
+      <span>Tartalom</span>
+    </button>
+  </div>
+  <div class="ls-scrim" id="lsScrim"></div>
+  <aside class="ls-sheet" id="lsSheet" aria-label="A lecke lapjai">
+    <ol class="ls-list" id="lsList"></ol>
+    <div class="ls-sheet-foot" id="lsSheetFoot">
+      <button class="ls-theme" id="lsTheme" type="button">Világos / sötét téma</button>
+    </div>
+  </aside>
+
+  <!-- ALSÓ SÁV: menü-gomb (előhozza a fül-sávot) · Vissza · Következő -->
+  <div class="ls-bar" id="lsBar">
+    <button class="ls-nav-btn" id="lsNavBtn" type="button" aria-expanded="false" aria-label="Menü: Kezdőlap, Modulok, Statisztika, Fiók">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+    </button>
+    <button class="btn btn-outline ls-back" id="lsBack" type="button">Vissza</button>
+    <button class="btn btn-primary ls-next" id="lsNext" type="button">Következő</button>
+  </div>
 
   <!-- A lecke szövege a js/data/course.js-ből jön (app.js: initLessonPage), a ?id= paraméter szerint. -->
   <main class="module-main lesson-main" id="lessonMain">

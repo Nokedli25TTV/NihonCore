@@ -8098,6 +8098,181 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
   .lp-check, .lp-practice { padding: 32px 28px; }
 }
 
+/* ── Lépések: a lecke lapokra bontva ──
+   (user-kérés: ne egy hosszú oldalt kelljen végiggörgetni.) Egy rész = egy lap.
+   Fent a lépés-sáv a fejléc helyén: ✕ · egyetlen, folyamatosan töltődő csík · Tartalom.
+   Lent a gombsor: menü-gomb (előhozza a fül-sávot) · Vissza · Következő.
+   Kör közben mindkettő eltűnik, és a szokásos fejléc + kör-sáv látszik.
+   Rögzített rétegek, de elmosás nélkül (tömör felület). Rajzolja: app.js → initLessonPage (initSteps). */
+html.lesson-steps body:not(.round-active) .header { visibility: hidden; }
+/* a fül-sáv „Fiók" füle a fejléc fiók-menüjét nyitja: az a rejtett fejléc mellett is jelenjen meg */
+html.lesson-steps body:not(.round-active) .header .nc-user-menu:not([hidden]) { visibility: visible; }
+html.lesson-steps .glass-footer { display: none; }
+html.lesson-steps .lesson-main { min-height: 100vh; min-height: 100dvh; padding-top: calc(var(--header-h) + 14px); padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)); }
+html.lesson-steps body.round-active .lesson-main { padding-bottom: 32px; }
+body.round-active .ls-top, body.round-active .ls-bar, html:not(.lesson-steps) .ls-top, html:not(.lesson-steps) .ls-bar { display: none; }
+.ls-off { display: none !important; }
+html.lesson-steps .lp-point, html.lesson-steps .lp-check { animation: none; }
+html.lesson-steps .lesson-hero { margin-bottom: 14px; }
+
+/* fent: a lépés-sáv */
+.ls-top {
+  position: fixed; z-index: 133;
+  top: calc(var(--nav-gap) + env(safe-area-inset-top, 0px));
+  left: var(--nav-gap); right: var(--nav-gap);
+  max-width: 760px; margin: 0 auto;
+  height: var(--nav-h);
+  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px;
+  padding: 0 8px;
+  border-radius: 20px;
+  background: rgb(var(--glass-rgb) / 0.97);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-lg);
+}
+html.theme-sumi .ls-top, html.theme-sumi .ls-bar, html.theme-sumi .ls-sheet { background: #1B2038; }
+.ls-x, .ls-toc-btn, .ls-nav-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  min-width: var(--touch); height: var(--touch); padding: 0; border-radius: 14px;
+  font: inherit; font-size: var(--fs-sm); font-weight: 700;
+  color: var(--sumi-soft); background: rgb(var(--tint-rgb) / 0.06); border: 0; cursor: pointer;
+  transition: background-color var(--t-base), color var(--t-base), transform var(--t-fast);
+}
+.ls-x:hover, .ls-toc-btn:hover, .ls-nav-btn:hover { color: var(--sumi); background: rgb(var(--tint-rgb) / 0.11); }
+.ls-x:active, .ls-toc-btn:active, .ls-nav-btn:active { transform: scale(0.95); }
+.ls-x:focus-visible, .ls-toc-btn:focus-visible, .ls-nav-btn:focus-visible, .ls-item:focus-visible, .ls-theme:focus-visible {
+  outline: 3px solid rgb(var(--brand-rgb) / 0.55); outline-offset: 2px;
+}
+.ls-toc-btn span { display: none; }
+.ls-prog { min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.ls-track { height: 10px; border-radius: 999px; background: rgb(var(--tint-rgb) / 0.12); overflow: hidden; }
+.ls-fill {
+  width: 0; height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand-fill-top), var(--accent));
+  transition: width 520ms var(--ease-out);
+}
+.ls-where { display: flex; align-items: baseline; gap: 8px; min-width: 0; font-size: var(--fs-2xs); line-height: 1.2; }
+.ls-count { flex: none; font-weight: 800; color: var(--sumi); font-variant-numeric: tabular-nums; }
+.ls-name { min-width: 0; font-weight: 700; color: var(--sumi-soft); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ls-name rt { display: none; }
+
+/* a Tartalom-lap: a lecke lapjai + a segítők */
+.ls-scrim {
+  position: fixed; inset: 0; z-index: 131;
+  background: rgb(var(--shade-rgb) / 0.40);
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--t-slow), visibility 0s linear 220ms;
+}
+html.ls-sheet-open .ls-scrim { opacity: 1; visibility: visible; transition: opacity var(--t-slow); }
+.ls-sheet {
+  position: fixed; z-index: 132;
+  top: calc(var(--header-h) + 8px); left: var(--nav-gap); right: var(--nav-gap);
+  max-width: 760px; margin: 0 auto;
+  max-height: calc(100vh - var(--header-h) - 28px); max-height: calc(100dvh - var(--header-h) - 28px);
+  display: flex; flex-direction: column;
+  border-radius: var(--radius-lg);
+  background: rgb(var(--glass-rgb) / 0.985);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 2px 6px rgb(var(--shade-rgb) / 0.10), 0 22px 48px rgb(var(--shade-rgb) / 0.24);
+  opacity: 0; visibility: hidden; transform: translateY(-8px);
+  transition: opacity var(--t-base), transform var(--t-slow), visibility 0s linear 220ms;
+}
+html.ls-sheet-open .ls-sheet { opacity: 1; visibility: visible; transform: none; transition: opacity var(--t-base), transform var(--t-slow); }
+.ls-list { list-style: none; margin: 0; padding: 8px; overflow-y: auto; overscroll-behavior: contain; }
+.ls-item {
+  width: 100%; min-height: 52px; display: flex; align-items: center; gap: 12px;
+  padding: 7px 10px; border-radius: 14px;
+  font: inherit; text-align: left; color: inherit; background: none; border: 0; cursor: pointer;
+}
+.ls-item:hover { background: rgb(var(--tint-rgb) / 0.06); }
+.ls-item-glyph {
+  flex: none; width: 36px; height: 36px; border-radius: 12px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-family: var(--font-jp); font-size: var(--fs-sm); font-weight: 700;
+  color: var(--sumi-soft); background: rgb(var(--tint-rgb) / 0.07);
+}
+.ls-item-text { min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.ls-item-name { font-size: var(--fs-sm); font-weight: 700; line-height: 1.3; color: var(--sumi); }
+.ls-item-name rt { display: none; }
+.ls-item-sub { font-size: var(--fs-2xs); color: var(--sumi-soft); line-height: 1.35; }
+.ls-item-sub rt { display: none; }
+.ls-item.is-seen .ls-item-glyph { color: var(--ok-deep); background: var(--ok-soft); }
+.ls-item.is-here { background: rgb(var(--brand-rgb) / 0.10); }
+.ls-item.is-here .ls-item-glyph { color: var(--on-accent); background: var(--accent); }
+.ls-item.is-here .ls-item-name { color: var(--brand-deep); font-weight: 800; }
+.ls-sheet-foot {
+  flex: none; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 10px 12px 12px; border-top: 1px solid rgb(var(--tint-rgb) / 0.09);
+}
+.ls-sheet-foot .helpers-bar { margin: 0; padding: 0; background: none; border: 0; box-shadow: none; }
+.ls-theme {
+  min-height: var(--touch); padding: 0 14px; border-radius: 12px;
+  font: inherit; font-size: var(--fs-xs); font-weight: 700; color: var(--brand-deep);
+  background: none; border: 0; cursor: pointer;
+}
+.ls-theme:hover { background: rgb(var(--brand-rgb) / 0.08); }
+
+/* lent: a gombsor */
+.ls-bar {
+  position: fixed; z-index: 96;
+  left: var(--nav-gap); right: var(--nav-gap);
+  bottom: calc(var(--nav-gap) + env(safe-area-inset-bottom, 0px));
+  max-width: 760px; margin: 0 auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px;
+  border-radius: 22px;
+  background: rgb(var(--glass-rgb) / 0.97);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow-lg);
+}
+.ls-bar .btn { min-height: 50px; }
+.ls-nav-btn { flex: none; width: 50px; height: 50px; border-radius: 16px; }
+html.ls-nav-open .ls-nav-btn { color: var(--brand-deep); background: var(--brand-soft); }
+.ls-back { flex: none; }
+.ls-next { flex: 1; min-width: 0; }
+.ls-next:disabled { opacity: 0.45; cursor: default; box-shadow: none; }
+/* a fül-sáv a menü-gombra jön elő, a gombsor fölött */
+html.lesson-steps .nc-tabbar {
+  display: grid; z-index: 96;
+  bottom: calc(var(--nav-gap) + 76px + env(safe-area-inset-bottom, 0px));
+  opacity: 0; visibility: hidden; transform: translateY(14px); pointer-events: none;
+  transition: opacity var(--t-base), transform 240ms var(--ease-out), visibility 0s linear 240ms;
+}
+html.lesson-steps.ls-nav-open .nc-tabbar { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition: opacity var(--t-base), transform 240ms var(--ease-out); }
+html.lesson-steps body.round-active .nc-tabbar { display: none; }
+
+/* a gyors kérdés lapja */
+.lp-quick { padding: 22px 16px 18px; border-radius: var(--radius-xl); }
+.lp-quick-eyebrow {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: center; gap: 6px; margin-bottom: 14px;
+  font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-ink);
+}
+.lp-quick-eyebrow [lang="ja"] { letter-spacing: 0; text-transform: none; color: var(--sumi-soft); font-size: var(--fs-xs); }
+.lp-quick-eyebrow rt { display: none; }
+.lp-quick .cj-options { margin-top: 18px; }
+.lp-quick .dont-know-btn { display: block; margin: 12px auto 0; }
+.lp-quick .dont-know-btn:disabled { display: none; }
+.lp-quick-fb { margin-top: 14px; padding: 14px 16px; border-radius: var(--radius-md); background: rgb(var(--tint-rgb) / 0.06); }
+.lp-quick-fb.is-ok { background: var(--ok-soft); }
+.lp-quick-fb.is-miss { background: rgb(var(--verm-rgb) / 0.09); }
+.lp-quick-fb.is-reveal { background: rgb(var(--amber-rgb) / 0.12); }
+.lp-quick-fb-title { font-size: var(--fs-sm); font-weight: 800; color: var(--sumi); }
+.lp-quick-fb.is-ok .lp-quick-fb-title { color: var(--ok-deep); }
+.lp-quick-fb-why { margin-top: 4px; font-size: var(--fs-base); line-height: 1.6; color: var(--sumi); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .ls-in { animation: ls-lap-in 260ms var(--ease-out) backwards; }
+}
+@keyframes ls-lap-in { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .ls-fill, .ls-sheet, .ls-scrim, html.lesson-steps .nc-tabbar { transition: none; }
+}
+@media (min-width: 600px) {
+  .ls-top { padding: 0 10px; gap: 14px; }
+  .ls-toc-btn { padding: 0 14px 0 12px; }
+  .ls-toc-btn span { display: inline; }
+  .lp-quick { padding: 30px 28px 24px; }
+}
+
 /* ════════════════════════════════════════════════════════
    SZÖVEG-ERŐSÍTÉS (user-visszajelzés: a kérdések és a magyarázatok
    szövege „vékony és csúnya" volt)
