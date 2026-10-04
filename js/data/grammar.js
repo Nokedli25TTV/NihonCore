@@ -1633,6 +1633,685 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
         tokens: ['どうぞ', 'おはいりください', '。'] }
     ],
     contrasts: ['te_kudasai']
+  },
+
+  /* ── l17 ── */
+  {
+    id: 'toki', label: '〜とき', jlpt: 'N4', category: 'sequence', lesson: 'l17',
+    summary: 'Időpont megadása főnévvel, melléknévvel: „amikor…".',
+    structure: 'főnév の とき · い-melléknév + とき · な-melléknév + な とき',
+    explanation: 'A とき főnév („idő"), ezért úgy kapcsolódik hozzá minden, mint egy főnévhez: 子どものとき, 暇なとき, 若いとき.',
+    examples: [
+      { jp: '<ruby>子<rt>こ</rt></ruby>どものとき、よく<ruby>川<rt>かわ</rt></ruby>で<ruby>泳<rt>およ</rt></ruby>ぎました。',
+        kana: 'こどものとき、よくかわでおよぎました。', romaji: 'kodomo no toki, yoku kawa de oyogimashita.', hu: 'Gyerekkoromban gyakran úsztam a folyóban.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どもの___BLANK___、よく<ruby>川<rt>かわ</rt></ruby>で<ruby>泳<rt>およ</rt></ruby>ぎました。', clozeAnswer: 'とき',
+        tokens: ['こどものとき', '、', 'よく', 'かわで', 'およぎました', '。'] },
+      { jp: '<ruby>暇<rt>ひま</rt></ruby>なとき、<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。',
+        kana: 'ひまなとき、ほんをよみます。', romaji: 'hima na toki, hon o yomimasu.', hu: 'Amikor ráérek, olvasok.',
+        cloze: '<ruby>暇<rt>ひま</rt></ruby>な___BLANK___、<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。', clozeAnswer: 'とき',
+        tokens: ['ひまなとき', '、', 'ほんを', 'よみます', '。'] }
+    ],
+    contrasts: ['ru_toki_ta_toki']
+  },
+  {
+    id: 'ru_toki_ta_toki', label: '〜るとき・〜たとき', jlpt: 'N4', category: 'sequence', lesson: 'l17',
+    summary: '„Amikor" igével: előtte (る) vagy utána (た).',
+    structure: 'ige szótári alakja + とき (előtte) · た-alak + とき (utána)',
+    explanation: 'A とき előtti igealak azt mutatja, hogy a főmondat cselekvése előbb (szótári alak) vagy később (た-alak) történik-e.',
+    examples: [
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くとき、かばんを<ruby>買<rt>か</rt></ruby>いました。',
+        kana: 'にほんへいくとき、かばんをかいました。', romaji: 'nihon e iku toki, kaban o kaimashita.', hu: 'Mielőtt Japánba indultam, vettem egy táskát.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く___BLANK___、かばんを<ruby>買<rt>か</rt></ruby>いました。', clozeAnswer: 'とき',
+        tokens: ['にほんへ', 'いくとき', '、', 'かばんを', 'かいました', '。'] },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ったとき、かばんを<ruby>買<rt>か</rt></ruby>いました。',
+        kana: 'にほんへいったとき、かばんをかいました。', romaji: 'nihon e itta toki, kaban o kaimashita.', hu: 'Amikor Japánban jártam, vettem egy táskát.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>っ___BLANK___、かばんを<ruby>買<rt>か</rt></ruby>いました。', clozeAnswer: 'たとき',
+        tokens: ['にほんへ', 'いったとき', '、', 'かばんを', 'かいました', '。'] }
+    ],
+    contrasts: ['toki', 'mae_ni', 'ta_ato_de', 'tara']
+  },
+  {
+    id: 'de_joining', label: 'A は B で、C は D です', jlpt: 'N4', category: 'basic', lesson: 'l17',
+    summary: 'Két állítás egy mondatban: a です helyén で áll.',
+    structure: 'főnév / な-melléknév + で、 …',
+    explanation: 'A です て-alakja で: ezzel két főnévi vagy な-melléknévi állítmányú mondatot fűzöl össze.',
+    examples: [
+      { jp: '<ruby>兄<rt>あに</rt></ruby>は<ruby>会社員<rt>かいしゃいん</rt></ruby>で、<ruby>姉<rt>あね</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>です。',
+        kana: 'あにはかいしゃいんで、あねはがくせいです。', romaji: 'ani wa kaishain de, ane wa gakusei desu.', hu: 'A bátyám irodai dolgozó, a nővérem diák.',
+        cloze: '<ruby>兄<rt>あに</rt></ruby>は<ruby>会社員<rt>かいしゃいん</rt></ruby>___BLANK___、<ruby>姉<rt>あね</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>です。', clozeAnswer: 'で',
+        tokens: ['あには', 'かいしゃいんで', '、', 'あねは', 'がくせいです', '。'] },
+      { jp: 'これは<ruby>日本<rt>にほん</rt></ruby>のお<ruby>茶<rt>ちゃ</rt></ruby>で、それは<ruby>中国<rt>ちゅうごく</rt></ruby>のお<ruby>茶<rt>ちゃ</rt></ruby>です。',
+        kana: 'これはにほんのおちゃで、それはちゅうごくのおちゃです。', romaji: 'kore wa nihon no ocha de, sore wa chuugoku no ocha desu.', hu: 'Ez japán tea, az pedig kínai.',
+        cloze: 'これは<ruby>日本<rt>にほん</rt></ruby>のお<ruby>茶<rt>ちゃ</rt></ruby>___BLANK___、それは<ruby>中国<rt>ちゅうごく</rt></ruby>のお<ruby>茶<rt>ちゃ</rt></ruby>です。', clozeAnswer: 'で',
+        tokens: ['これは', 'にほんのおちゃで', '、', 'それは', 'ちゅうごくのおちゃです', '。'] }
+    ],
+    contrasts: ['kute_de', 'wa_ga_contrast']
+  },
+
+  /* ── l18 ── */
+  {
+    id: 'kamoshirenai', label: '〜かもしれません', jlpt: 'N4', category: 'guess', lesson: 'l18',
+    summary: 'Bizonytalan feltevés: „lehet, hogy…".',
+    structure: 'rövid alak + かもしれません (な-melléknév / főnév közvetlenül)',
+    explanation: 'Kisebb valószínűség, mint a でしょう: talán igen, talán nem. Beszédben: 〜かも.',
+    examples: [
+      { jp: '<ruby>明日<rt>あした</rt></ruby>は<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るかもしれません。',
+        kana: 'あしたはゆきがふるかもしれません。', romaji: 'ashita wa yuki ga furu kamoshiremasen.', hu: 'Lehet, hogy holnap havazni fog.',
+        cloze: '<ruby>明日<rt>あした</rt></ruby>は<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>る___BLANK___。', clozeAnswer: 'かもしれません',
+        tokens: ['あしたは', 'ゆきが', 'ふるかもしれません', '。'] },
+      { jp: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>かもしれません。',
+        kana: 'あのひとはせんせいかもしれません。', romaji: 'ano hito wa sensei kamoshiremasen.', hu: 'Lehet, hogy az az ember tanár.',
+        cloze: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>___BLANK___。', clozeAnswer: 'かもしれません',
+        tokens: ['あの', 'ひとは', 'せんせいかもしれません', '。'] }
+    ],
+    contrasts: ['deshou']
+  },
+  {
+    id: 'ku_naru', label: '〜くなります・〜になります', jlpt: 'N4', category: 'change', lesson: 'l18',
+    summary: 'Magától változik: „valamilyenné válik".',
+    structure: 'い → くなります · な-melléknév / főnév + になります',
+    explanation: 'Változást ír le, amely magától megy végbe. Ha valaki szándékosan változtat: 〜くします / 〜にします.',
+    examples: [
+      { jp: '<ruby>最近<rt>さいきん</rt></ruby><ruby>寒<rt>さむ</rt></ruby>くなりましたね。',
+        kana: 'さいきんさむくなりましたね。', romaji: 'saikin samuku narimashita ne.', hu: 'Mostanában hidegebb lett, ugye?',
+        cloze: '<ruby>最近<rt>さいきん</rt></ruby><ruby>寒<rt>さむ</rt></ruby>___BLANK___ね。', clozeAnswer: 'くなりました',
+        tokens: ['さいきん', 'さむくなりましたね', '。'] },
+      { jp: '<ruby>息子<rt>むすこ</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>になりました。',
+        kana: 'むすこはいしゃになりました。', romaji: 'musuko wa isha ni narimashita.', hu: 'A fiamból orvos lett.',
+        cloze: '<ruby>息子<rt>むすこ</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>___BLANK___。', clozeAnswer: 'になりました',
+        tokens: ['むすこは', 'いしゃになりました', '。'] }
+    ],
+    contrasts: ['ku_suru', 'you_ni_naru']
+  },
+  {
+    id: 'ku_ni_adverb', label: '〜く・〜に + ige', jlpt: 'N4', category: 'description', lesson: 'l18',
+    summary: 'Melléknévből határozó: „hogyan teszem".',
+    structure: 'い → く + ige · な-melléknév + に + ige',
+    explanation: 'A melléknév határozóként az igét jellemzi: 早く起きます, 静かに話します.',
+    examples: [
+      { jp: '<ruby>今朝<rt>けさ</rt></ruby>は<ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きました。',
+        kana: 'けさははやくおきました。', romaji: 'kesa wa hayaku okimashita.', hu: 'Ma reggel korán keltem.',
+        cloze: '<ruby>今朝<rt>けさ</rt></ruby>は<ruby>早<rt>はや</rt></ruby>___BLANK___<ruby>起<rt>お</rt></ruby>きました。', clozeAnswer: 'く',
+        tokens: ['けさは', 'はやく', 'おきました', '。'] },
+      { jp: 'もう<ruby>少<rt>すこ</rt></ruby>し<ruby>静<rt>しず</rt></ruby>かにしてください。',
+        kana: 'もうすこししずかにしてください。', romaji: 'mou sukoshi shizuka ni shite kudasai.', hu: 'Legyen szíves egy kicsit csendesebben!',
+        cloze: 'もう<ruby>少<rt>すこ</rt></ruby>し<ruby>静<rt>しず</rt></ruby>か___BLANK___してください。', clozeAnswer: 'に',
+        tokens: ['もう', 'すこし', 'しずかに', 'してください', '。'] }
+    ],
+    contrasts: ['ku_naru', 'adj_noun']
+  },
+  {
+    id: 'koto_ni_suru', label: '〜ことにします', jlpt: 'N4', category: 'intention', lesson: 'l18',
+    summary: 'Saját elhatározás: „úgy döntök, hogy…".',
+    structure: 'ige szótári / ない-alakja + ことにします',
+    explanation: 'A beszélő maga dönt. Ha a körülmények döntenek helyetted: 〜ことになります.',
+    examples: [
+      { jp: '<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>ることにしました。',
+        kana: 'まいあさはしることにしました。', romaji: 'maiasa hashiru koto ni shimashita.', hu: 'Úgy döntöttem, hogy minden reggel futok.',
+        cloze: '<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>る___BLANK___。', clozeAnswer: 'ことにしました',
+        tokens: ['まいあさ', 'はしることにしました', '。'] },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>出<rt>で</rt></ruby>かけないことにします。',
+        kana: 'きょうはでかけないことにします。', romaji: 'kyou wa dekakenai koto ni shimasu.', hu: 'Úgy döntök, hogy ma nem megyek el itthonról.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>出<rt>で</rt></ruby>かけない___BLANK___。', clozeAnswer: 'ことにします',
+        tokens: ['きょうは', 'でかけないことにします', '。'] }
+    ],
+    contrasts: ['tsumori', 'ni_shimasu']
+  },
+  {
+    id: 'sashiagemasu', label: 'さしあげます', jlpt: 'N4', category: 'giving', lesson: 'l18',
+    summary: 'Adok egy tisztelt embernek.',
+    structure: 'tisztelt személy に + dolog を さしあげます',
+    explanation: 'Az あげます szerény párja: tanárnak, főnöknek, vendégnek adsz. Saját családtagodnak nem mondjuk.',
+    examples: [
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>に<ruby>花<rt>はな</rt></ruby>をさしあげました。',
+        kana: 'せんせいにはなをさしあげました。', romaji: 'sensei ni hana o sashiagemashita.', hu: 'Virágot adtam a tanár úrnak.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>に<ruby>花<rt>はな</rt></ruby>を___BLANK___。', clozeAnswer: 'さしあげました',
+        tokens: ['せんせいに', 'はなを', 'さしあげました', '。'] },
+      { jp: 'お<ruby>客<rt>きゃく</rt></ruby>さんにお<ruby>茶<rt>ちゃ</rt></ruby>をさしあげます。',
+        kana: 'おきゃくさんにおちゃをさしあげます。', romaji: 'okyaku-san ni ocha o sashiagemasu.', hu: 'Teát adok a vendégnek.',
+        cloze: 'お<ruby>客<rt>きゃく</rt></ruby>さんにお<ruby>茶<rt>ちゃ</rt></ruby>を___BLANK___。', clozeAnswer: 'さしあげます',
+        tokens: ['おきゃくさんに', 'おちゃを', 'さしあげます', '。'] }
+    ],
+    contrasts: ['agemasu', 'itadakimasu']
+  },
+  {
+    id: 'itadakimasu', label: 'いただきます・くださいます', jlpt: 'N4', category: 'giving', lesson: 'l18',
+    summary: 'Tisztelt embertől kapok.',
+    structure: 'tisztelt személy に いただきます · tisztelt személy が くださいます',
+    explanation: 'A もらいます szerény párja いただきます, a くれます tiszteletteljes párja くださいます. Ugyanazt mondják két szemszögből.',
+    examples: [
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>をいただきました。',
+        kana: 'せんせいにほんをいただきました。', romaji: 'sensei ni hon o itadakimashita.', hu: 'Könyvet kaptam a tanár úrtól.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を___BLANK___。', clozeAnswer: 'いただきました',
+        tokens: ['せんせいに', 'ほんを', 'いただきました', '。'] },
+      { jp: '<ruby>社長<rt>しゃちょう</rt></ruby>がお<ruby>土産<rt>みやげ</rt></ruby>をくださいました。',
+        kana: 'しゃちょうがおみやげをくださいました。', romaji: 'shachou ga omiyage o kudasaimashita.', hu: 'Az igazgató úr ajándékot adott nekem.',
+        cloze: '<ruby>社長<rt>しゃちょう</rt></ruby>がお<ruby>土産<rt>みやげ</rt></ruby>を___BLANK___。', clozeAnswer: 'くださいました',
+        tokens: ['しゃちょうが', 'おみやげを', 'くださいました', '。'] }
+    ],
+    contrasts: ['moraimasu', 'kuremasu', 'sashiagemasu']
+  },
+
+  /* ── l19 ── */
+  {
+    id: 'te_iku_way', label: '〜ていきます (mód)', jlpt: 'N4', category: 'sequence', lesson: 'l19',
+    summary: 'Hogyan mész: gyalog, valamit vive, valamit megtéve.',
+    structure: 'ige て-alakja + いきます / きます',
+    explanation: 'Az első ige megmondja, hogyan vagy mit csinálva indulsz el: 歩いていきます, 持っていきます, 食べていきます.',
+    examples: [
+      { jp: '<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>いていきます。',
+        kana: 'えきまであるいていきます。', romaji: 'eki made aruite ikimasu.', hu: 'Az állomásig gyalog megyek.',
+        cloze: '<ruby>駅<rt>えき</rt></ruby>まで<ruby>歩<rt>ある</rt></ruby>い___BLANK___。', clozeAnswer: 'ていきます',
+        tokens: ['えきまで', 'あるいていきます', '。'] },
+      { jp: '<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていきます。',
+        kana: 'かさをもっていきます。', romaji: 'kasa o motte ikimasu.', hu: 'Viszek esernyőt.',
+        cloze: '<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っ___BLANK___。', clozeAnswer: 'ていきます',
+        tokens: ['かさを', 'もっていきます', '。'] }
+    ],
+    contrasts: ['te_kuru_go', 'de_means']
+  },
+  {
+    id: 'wo_route', label: '〜を (útvonal)', jlpt: 'N4', category: 'particle', lesson: 'l19',
+    summary: 'Útvonal vagy elhagyott hely: „valamin át, valamiről le".',
+    structure: 'hely を + mozgást jelentő ige',
+    explanation: 'A を azt a helyet is jelöli, amelyen áthaladsz (橋を渡ります), vagy amelyet elhagysz (電車を降ります).',
+    examples: [
+      { jp: 'この<ruby>橋<rt>はし</rt></ruby>を<ruby>渡<rt>わた</rt></ruby>ります。',
+        kana: 'このはしをわたります。', romaji: 'kono hashi o watarimasu.', hu: 'Átmegyek ezen a hídon.',
+        cloze: 'この<ruby>橋<rt>はし</rt></ruby>___BLANK___<ruby>渡<rt>わた</rt></ruby>ります。', clozeAnswer: 'を',
+        tokens: ['この', 'はしを', 'わたります', '。'] },
+      { jp: '<ruby>次<rt>つぎ</rt></ruby>の<ruby>駅<rt>えき</rt></ruby>で<ruby>電車<rt>でんしゃ</rt></ruby>を<ruby>降<rt>お</rt></ruby>ります。',
+        kana: 'つぎのえきででんしゃをおります。', romaji: 'tsugi no eki de densha o orimasu.', hu: 'A következő állomáson szállok le a vonatról.',
+        cloze: '<ruby>次<rt>つぎ</rt></ruby>の<ruby>駅<rt>えき</rt></ruby>で<ruby>電車<rt>でんしゃ</rt></ruby>___BLANK___<ruby>降<rt>お</rt></ruby>ります。', clozeAnswer: 'を',
+        tokens: ['つぎのえきで', 'でんしゃを', 'おります', '。'] }
+    ],
+    contrasts: ['wo_object', 'de_place']
+  },
+  {
+    id: 'dake', label: '〜だけ', jlpt: 'N4', category: 'degree', lesson: 'l19',
+    summary: 'Korlátozás állító mondatban: „csak".',
+    structure: 'főnév + だけ',
+    explanation: 'A だけ semleges korlátozás, állító igével. Ha kevésnek érzed: 〜しか + tagadás.',
+    examples: [
+      { jp: '<ruby>一<rt>ひと</rt></ruby>つだけ<ruby>買<rt>か</rt></ruby>いました。',
+        kana: 'ひとつだけかいました。', romaji: 'hitotsu dake kaimashita.', hu: 'Csak egyet vettem.',
+        cloze: '<ruby>一<rt>ひと</rt></ruby>つ___BLANK___<ruby>買<rt>か</rt></ruby>いました。', clozeAnswer: 'だけ',
+        tokens: ['ひとつだけ', 'かいました', '。'] },
+      { jp: '<ruby>日曜日<rt>にちようび</rt></ruby>だけ<ruby>休<rt>やす</rt></ruby>みます。',
+        kana: 'にちようびだけやすみます。', romaji: 'nichiyoubi dake yasumimasu.', hu: 'Csak vasárnap pihenek.',
+        cloze: '<ruby>日曜日<rt>にちようび</rt></ruby>___BLANK___<ruby>休<rt>やす</rt></ruby>みます。', clozeAnswer: 'だけ',
+        tokens: ['にちようびだけ', 'やすみます', '。'] }
+    ],
+    contrasts: ['shika_nai']
+  },
+  {
+    id: 'shika_nai', label: '〜しか + 〜ません', jlpt: 'N4', category: 'degree', lesson: 'l19',
+    summary: '„Csak" kevesellve: mindig tagadó igével.',
+    structure: 'főnév + しか + tagadó ige',
+    explanation: 'A しか azt érzékelteti, hogy kevés: „csak ennyi, több nincs". Az ige alakja tagadó, a jelentés mégis állító.',
+    examples: [
+      { jp: '<ruby>百円<rt>ひゃくえん</rt></ruby>しかありません。',
+        kana: 'ひゃくえんしかありません。', romaji: 'hyakuen shika arimasen.', hu: 'Csak száz jenem van.',
+        cloze: '<ruby>百円<rt>ひゃくえん</rt></ruby>___BLANK___ありません。', clozeAnswer: 'しか',
+        tokens: ['ひゃくえんしか', 'ありません', '。'] },
+      { jp: '<ruby>朝<rt>あさ</rt></ruby>はコーヒーしか<ruby>飲<rt>の</rt></ruby>みません。',
+        kana: 'あさはコーヒーしかのみません。', romaji: 'asa wa koohii shika nomimasen.', hu: 'Reggel csak kávét iszom.',
+        cloze: '<ruby>朝<rt>あさ</rt></ruby>はコーヒー___BLANK___<ruby>飲<rt>の</rt></ruby>みません。', clozeAnswer: 'しか',
+        tokens: ['あさは', 'コーヒーしか', 'のみません', '。'] }
+    ],
+    contrasts: ['dake', 'amari_masen']
+  },
+
+  /* ── l20 ── */
+  {
+    id: 'te_iru_result', label: '〜ています (eredmény)', jlpt: 'N4', category: 'state', lesson: 'l20',
+    summary: 'Egy változás megmaradt eredménye: „nyitva van, ég".',
+    structure: 'tárgyatlan ige て-alakja + います',
+    explanation: 'Tárgyatlan igével a 〜ています azt az állapotot írja le, amely a változás után megmaradt: 開いています, 消えています.',
+    examples: [
+      { jp: '<ruby>窓<rt>まど</rt></ruby>が<ruby>開<rt>あ</rt></ruby>いています。',
+        kana: 'まどがあいています。', romaji: 'mado ga aite imasu.', hu: 'Nyitva van az ablak.',
+        cloze: '<ruby>窓<rt>まど</rt></ruby>が<ruby>開<rt>あ</rt></ruby>い___BLANK___。', clozeAnswer: 'ています',
+        tokens: ['まどが', 'あいています', '。'] },
+      { jp: '<ruby>電気<rt>でんき</rt></ruby>がついています。',
+        kana: 'でんきがついています。', romaji: 'denki ga tsuite imasu.', hu: 'Ég a villany.',
+        cloze: '<ruby>電気<rt>でんき</rt></ruby>がつい___BLANK___。', clozeAnswer: 'ています',
+        tokens: ['でんきが', 'ついています', '。'] }
+    ],
+    contrasts: ['te_aru', 'te_iru_progress']
+  },
+  {
+    id: 'ka_ka', label: 'A か B か', jlpt: 'N4', category: 'connective', lesson: 'l20',
+    summary: 'Választási lehetőség: „vagy… vagy…".',
+    structure: 'A か B (か)',
+    explanation: 'A か két lehetőséget kínál fel. Mondatba ágyazva: 行くか行かないか (megyek-e vagy sem).',
+    examples: [
+      { jp: 'コーヒーか<ruby>紅茶<rt>こうちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。',
+        kana: 'コーヒーかこうちゃをのみます。', romaji: 'koohii ka koucha o nomimasu.', hu: 'Kávét vagy teát iszom.',
+        cloze: 'コーヒー___BLANK___<ruby>紅茶<rt>こうちゃ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みます。', clozeAnswer: 'か',
+        tokens: ['コーヒーか', 'こうちゃを', 'のみます', '。'] },
+      { jp: '<ruby>土曜日<rt>どようび</rt></ruby>か<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょう。',
+        kana: 'どようびかにちようびにいきましょう。', romaji: 'doyoubi ka nichiyoubi ni ikimashou.', hu: 'Menjünk szombaton vagy vasárnap!',
+        cloze: '<ruby>土曜日<rt>どようび</rt></ruby>___BLANK___<ruby>日曜日<rt>にちようび</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょう。', clozeAnswer: 'か',
+        tokens: ['どようびか', 'にちようびに', 'いきましょう', '。'] }
+    ],
+    contrasts: ['to_ya', 'ka_question']
+  },
+  {
+    id: 'ni_tsukau', label: '〜に 使います', jlpt: 'N4', category: 'reason', lesson: 'l20',
+    summary: 'Rendeltetés: „mire való, mire használom".',
+    structure: 'főnév に / ige szótári alakja + のに + 使います',
+    explanation: 'A に megmondja, mire szolgál valami. Igével: 切るのに使います.',
+    examples: [
+      { jp: 'これは<ruby>料理<rt>りょうり</rt></ruby>に<ruby>使<rt>つか</rt></ruby>います。',
+        kana: 'これはりょうりにつかいます。', romaji: 'kore wa ryouri ni tsukaimasu.', hu: 'Ezt főzéshez használom.',
+        cloze: 'これは<ruby>料理<rt>りょうり</rt></ruby>___BLANK___<ruby>使<rt>つか</rt></ruby>います。', clozeAnswer: 'に',
+        tokens: ['これは', 'りょうりに', 'つかいます', '。'] },
+      { jp: 'このはさみは<ruby>紙<rt>かみ</rt></ruby>を<ruby>切<rt>き</rt></ruby>るのに<ruby>使<rt>つか</rt></ruby>います。',
+        kana: 'このはさみはかみをきるのにつかいます。', romaji: 'kono hasami wa kami o kiru no ni tsukaimasu.', hu: 'Ezt az ollót papírvágásra használom.',
+        cloze: 'このはさみは<ruby>紙<rt>かみ</rt></ruby>を<ruby>切<rt>き</rt></ruby>る___BLANK___<ruby>使<rt>つか</rt></ruby>います。', clozeAnswer: 'のに',
+        tokens: ['この', 'はさみは', 'かみを', 'きるのに', 'つかいます', '。'] }
+    ],
+    contrasts: ['ni_iku_purpose']
+  },
+  {
+    id: 'de_total', label: '〜で (összesen)', jlpt: 'N4', category: 'particle', lesson: 'l20',
+    summary: 'Mennyiségi keret: „ennyiért, ennyien, ennyi idő alatt".',
+    structure: 'mennyiség + で',
+    explanation: 'A で a keretet adja meg: 三つで五百円 (három darab 500 jen), 一人で (egyedül), 一時間で (egy óra alatt).',
+    examples: [
+      { jp: 'りんごは<ruby>三<rt>みっ</rt></ruby>つで<ruby>五百円<rt>ごひゃくえん</rt></ruby>です。',
+        kana: 'りんごはみっつでごひゃくえんです。', romaji: 'ringo wa mittsu de gohyakuen desu.', hu: 'Az alma három darab ötszáz jen.',
+        cloze: 'りんごは<ruby>三<rt>みっ</rt></ruby>つ___BLANK___<ruby>五百円<rt>ごひゃくえん</rt></ruby>です。', clozeAnswer: 'で',
+        tokens: ['りんごは', 'みっつで', 'ごひゃくえんです', '。'] },
+      { jp: '<ruby>一時間<rt>いちじかん</rt></ruby>で<ruby>終<rt>お</rt></ruby>わります。',
+        kana: 'いちじかんでおわります。', romaji: 'ichijikan de owarimasu.', hu: 'Egy óra alatt végzek.',
+        cloze: '<ruby>一時間<rt>いちじかん</rt></ruby>___BLANK___<ruby>終<rt>お</rt></ruby>わります。', clozeAnswer: 'で',
+        tokens: ['いちじかんで', 'おわります', '。'] }
+    ],
+    contrasts: ['de_means', 'de_place']
+  },
+  {
+    id: 'to_iu', label: '〜という', jlpt: 'N4', category: 'quotation', lesson: 'l20',
+    summary: 'Megnevezés főnév előtt: „… nevű, … című".',
+    structure: 'név + という + főnév',
+    explanation: 'Olyan dolgot nevezel meg, amelyet a másik talán nem ismer.',
+    examples: [
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>という<ruby>人<rt>ひと</rt></ruby>から<ruby>電話<rt>でんわ</rt></ruby>がありました。',
+        kana: 'たなかというひとからでんわがありました。', romaji: 'tanaka to iu hito kara denwa ga arimashita.', hu: 'Egy Tanaka nevű ember telefonált.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>___BLANK___<ruby>人<rt>ひと</rt></ruby>から<ruby>電話<rt>でんわ</rt></ruby>がありました。', clozeAnswer: 'という',
+        tokens: ['たなかという', 'ひとから', 'でんわが', 'ありました', '。'] },
+      { jp: '「さくら」という<ruby>店<rt>みせ</rt></ruby>を<ruby>知<rt>し</rt></ruby>っていますか。',
+        kana: '「さくら」というみせをしっていますか。', romaji: 'sakura to iu mise o shitte imasu ka.', hu: 'Ismered a Szakura nevű boltot?',
+        cloze: '「さくら」___BLANK___<ruby>店<rt>みせ</rt></ruby>を<ruby>知<rt>し</rt></ruby>っていますか。', clozeAnswer: 'という',
+        tokens: ['「さくら」という', 'みせを', 'しっていますか', '。'] }
+    ],
+    contrasts: ['to_iimasu']
+  },
+
+  /* ── l21 ── */
+  {
+    id: 'ku_suru', label: '〜くします・〜にします', jlpt: 'N4', category: 'change', lesson: 'l21',
+    summary: 'Szándékos változtatás: „valamilyenné teszem".',
+    structure: 'い → くします · な-melléknév / főnév + にします',
+    explanation: 'Valaki tudatosan megváltoztat valamit. Ha magától változik: 〜くなります / 〜になります.',
+    examples: [
+      { jp: '<ruby>部屋<rt>へや</rt></ruby>を<ruby>明<rt>あか</rt></ruby>るくします。',
+        kana: 'へやをあかるくします。', romaji: 'heya o akaruku shimasu.', hu: 'Világosabbá teszem a szobát.',
+        cloze: '<ruby>部屋<rt>へや</rt></ruby>を<ruby>明<rt>あか</rt></ruby>る___BLANK___。', clozeAnswer: 'くします',
+        tokens: ['へやを', 'あかるくします', '。'] },
+      { jp: '<ruby>音<rt>おと</rt></ruby>を<ruby>小<rt>ちい</rt></ruby>さくしてください。',
+        kana: 'おとをちいさくしてください。', romaji: 'oto o chiisaku shite kudasai.', hu: 'Kérem, halkítsa le!',
+        cloze: '<ruby>音<rt>おと</rt></ruby>を<ruby>小<rt>ちい</rt></ruby>さ___BLANK___ください。', clozeAnswer: 'くして',
+        tokens: ['おとを', 'ちいさくしてください', '。'] }
+    ],
+    contrasts: ['ku_naru', 'ni_shimasu']
+  },
+  {
+    id: 'te_aru', label: '〜てあります', jlpt: 'N4', category: 'state', lesson: 'l21',
+    summary: 'Szándékos előkészítés eredménye: „el van készítve".',
+    structure: 'tárgy が + tárgyas ige て-alakja + あります',
+    explanation: 'Valaki szándékosan megtette, és az eredménye most látható. A 〜ています (tárgyatlan igével) csak az állapotot közli.',
+    examples: [
+      { jp: '<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>にメモが<ruby>置<rt>お</rt></ruby>いてあります。',
+        kana: 'つくえのうえにメモがおいてあります。', romaji: 'tsukue no ue ni memo ga oite arimasu.', hu: 'Az asztalra ki van téve egy cetli.',
+        cloze: '<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>にメモが<ruby>置<rt>お</rt></ruby>い___BLANK___。', clozeAnswer: 'てあります',
+        tokens: ['つくえのうえに', 'メモが', 'おいてあります', '。'] },
+      { jp: '<ruby>窓<rt>まど</rt></ruby>が<ruby>開<rt>あ</rt></ruby>けてあります。',
+        kana: 'まどがあけてあります。', romaji: 'mado ga akete arimasu.', hu: 'Az ablak ki van nyitva (valaki kinyitotta).',
+        cloze: '<ruby>窓<rt>まど</rt></ruby>が<ruby>開<rt>あ</rt></ruby>け___BLANK___。', clozeAnswer: 'てあります',
+        tokens: ['まどが', 'あけてあります', '。'] }
+    ],
+    contrasts: ['te_iru_result', 'te_oku']
+  },
+  {
+    id: 'to_iimasu', label: '〜といいます', jlpt: 'N4', category: 'quotation', lesson: 'l21',
+    summary: 'Megnevezés: „úgy hívják, úgy mondják".',
+    structure: 'A は B と いいます',
+    explanation: 'Megmondod valaminek a nevét, vagy azt, hogyan mondják egy nyelven.',
+    examples: [
+      { jp: 'これは<ruby>日本語<rt>にほんご</rt></ruby>で「はし」といいます。',
+        kana: 'これはにほんごで「はし」といいます。', romaji: 'kore wa nihongo de hashi to iimasu.', hu: 'Ezt japánul „hasi"-nak mondják.',
+        cloze: 'これは<ruby>日本語<rt>にほんご</rt></ruby>で「はし」___BLANK___いいます。', clozeAnswer: 'と',
+        tokens: ['これは', 'にほんごで', '「はし」と', 'いいます', '。'] },
+      { jp: '<ruby>私<rt>わたし</rt></ruby>はアンナといいます。',
+        kana: 'わたしはアンナといいます。', romaji: 'watashi wa anna to iimasu.', hu: 'Annának hívnak.',
+        cloze: '<ruby>私<rt>わたし</rt></ruby>はアンナ___BLANK___。', clozeAnswer: 'といいます',
+        tokens: ['わたしは', 'アンナといいます', '。'] }
+    ],
+    contrasts: ['to_iu', 'to_iimashita']
+  },
+  {
+    id: 'to_iimashita', label: '〜といいました', jlpt: 'N4', category: 'quotation', lesson: 'l21',
+    summary: 'Idézés: „azt mondta, hogy…".',
+    structure: 'rövid alakú mondat + と いいました',
+    explanation: 'Más szavait adod vissza: az idézett rész rövid alakban áll, utána と.',
+    examples: [
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>明日<rt>あした</rt></ruby><ruby>来<rt>く</rt></ruby>ると<ruby>言<rt>い</rt></ruby>いました。',
+        kana: 'たなかさんはあしたくるといいました。', romaji: 'tanaka-san wa ashita kuru to iimashita.', hu: 'Tanaka azt mondta, hogy holnap jön.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>明日<rt>あした</rt></ruby><ruby>来<rt>く</rt></ruby>る___BLANK___<ruby>言<rt>い</rt></ruby>いました。', clozeAnswer: 'と',
+        tokens: ['たなかさんは', 'あした', 'くると', 'いいました', '。'] },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>試験<rt>しけん</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しくないと<ruby>言<rt>い</rt></ruby>いました。',
+        kana: 'せんせいはしけんはむずかしくないといいました。', romaji: 'sensei wa shiken wa muzukashikunai to iimashita.', hu: 'A tanár azt mondta, hogy a vizsga nem nehéz.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>試験<rt>しけん</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しくない___BLANK___。', clozeAnswer: 'といいました',
+        tokens: ['せんせいは', 'しけんは', 'むずかしくない', 'といいました', '。'] }
+    ],
+    contrasts: ['to_omou', 'to_iimasu', 'sou_da_hearsay']
+  },
+  {
+    id: 'tte', label: '〜って', jlpt: 'N4', category: 'spoken', lesson: 'l21',
+    summary: 'A と beszélt változata: idéz vagy rákérdez.',
+    structure: 'mondat + って · szó + って + 何？',
+    explanation: 'A って a と, a という és a というのは beszélt, baráti alakja.',
+    examples: [
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>来<rt>こ</rt></ruby>ないって<ruby>言<rt>い</rt></ruby>っていたよ。',
+        kana: 'たなかさんはこないっていっていたよ。', romaji: 'tanaka-san wa konai tte itte ita yo.', hu: 'Tanaka azt mondta, hogy nem jön.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>来<rt>こ</rt></ruby>ない___BLANK___<ruby>言<rt>い</rt></ruby>っていたよ。', clozeAnswer: 'って',
+        tokens: ['たなかさんは', 'こないって', 'いっていたよ', '。'] },
+      { jp: '「おにぎり」って<ruby>何<rt>なに</rt></ruby>？',
+        kana: '「おにぎり」ってなに？', romaji: 'onigiri tte nani?', hu: 'Mi az az „onigiri"?',
+        cloze: '「おにぎり」___BLANK___<ruby>何<rt>なに</rt></ruby>？', clozeAnswer: 'って',
+        tokens: ['「おにぎり」って', 'なに', '？'] }
+    ],
+    contrasts: ['to_iimashita', 'plain_style']
+  },
+
+  /* ── l22 ── */
+  {
+    id: 'te_ageru', label: '〜てあげます', jlpt: 'N4', category: 'giving', lesson: 'l22',
+    summary: 'Megteszek valamit valakinek, szívességből.',
+    structure: 'ige て-alakja + あげます',
+    explanation: 'A beszélő tesz szívességet másnak. Fölényesnek hangozhat: tisztelt embernek inkább お〜しましょうか.',
+    examples: [
+      { jp: '<ruby>友<rt>とも</rt></ruby>だちに<ruby>傘<rt>かさ</rt></ruby>を<ruby>貸<rt>か</rt></ruby>してあげました。',
+        kana: 'ともだちにかさをかしてあげました。', romaji: 'tomodachi ni kasa o kashite agemashita.', hu: 'Kölcsönadtam az esernyőmet a barátomnak.',
+        cloze: '<ruby>友<rt>とも</rt></ruby>だちに<ruby>傘<rt>かさ</rt></ruby>を<ruby>貸<rt>か</rt></ruby>し___BLANK___。', clozeAnswer: 'てあげました',
+        tokens: ['ともだちに', 'かさを', 'かしてあげました', '。'] },
+      { jp: '<ruby>妹<rt>いもうと</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んであげます。',
+        kana: 'いもうとにほんをよんであげます。', romaji: 'imouto ni hon o yonde agemasu.', hu: 'Felolvasok a húgomnak.',
+        cloze: '<ruby>妹<rt>いもうと</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>ん___BLANK___。', clozeAnswer: 'であげます',
+        tokens: ['いもうとに', 'ほんを', 'よんであげます', '。'] }
+    ],
+    contrasts: ['te_kureru', 'te_morau', 'agemasu']
+  },
+  {
+    id: 'te_kureru', label: '〜てくれます', jlpt: 'N4', category: 'giving', lesson: 'l22',
+    summary: 'Valaki megtesz valamit nekem.',
+    structure: 'személy が + ige て-alakja + くれます',
+    explanation: 'Más tesz szívességet a beszélőnek: a mondat hálát sugall.',
+    examples: [
+      { jp: '<ruby>兄<rt>あに</rt></ruby>が<ruby>自転車<rt>じてんしゃ</rt></ruby>を<ruby>直<rt>なお</rt></ruby>してくれました。',
+        kana: 'あにがじてんしゃをなおしてくれました。', romaji: 'ani ga jitensha o naoshite kuremashita.', hu: 'A bátyám megjavította nekem a biciklit.',
+        cloze: '<ruby>兄<rt>あに</rt></ruby>が<ruby>自転車<rt>じてんしゃ</rt></ruby>を<ruby>直<rt>なお</rt></ruby>し___BLANK___。', clozeAnswer: 'てくれました',
+        tokens: ['あにが', 'じてんしゃを', 'なおしてくれました', '。'] },
+      { jp: '<ruby>友<rt>とも</rt></ruby>だちが<ruby>駅<rt>えき</rt></ruby>まで<ruby>送<rt>おく</rt></ruby>ってくれました。',
+        kana: 'ともだちがえきまでおくってくれました。', romaji: 'tomodachi ga eki made okutte kuremashita.', hu: 'A barátom elkísért az állomásig.',
+        cloze: '<ruby>友<rt>とも</rt></ruby>だちが<ruby>駅<rt>えき</rt></ruby>まで<ruby>送<rt>おく</rt></ruby>っ___BLANK___。', clozeAnswer: 'てくれました',
+        tokens: ['ともだちが', 'えきまで', 'おくってくれました', '。'] }
+    ],
+    contrasts: ['te_ageru', 'te_morau', 'kuremasu']
+  },
+  {
+    id: 'te_morau', label: '〜てもらいます', jlpt: 'N4', category: 'giving', lesson: 'l22',
+    summary: 'Megkérek valakit, és megteszi nekem.',
+    structure: 'személy に + ige て-alakja + もらいます',
+    explanation: 'A beszélő az alany: ő kapja a szívességet, többnyire kérésre.',
+    examples: [
+      { jp: '<ruby>友<rt>とも</rt></ruby>だちに<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってもらいました。',
+        kana: 'ともだちにしゃしんをとってもらいました。', romaji: 'tomodachi ni shashin o totte moraimashita.', hu: 'Megkértem a barátomat, hogy fényképezzen le.',
+        cloze: '<ruby>友<rt>とも</rt></ruby>だちに<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>っ___BLANK___。', clozeAnswer: 'てもらいました',
+        tokens: ['ともだちに', 'しゃしんを', 'とってもらいました', '。'] },
+      { jp: '<ruby>姉<rt>あね</rt></ruby>に<ruby>宿題<rt>しゅくだい</rt></ruby>を<ruby>手伝<rt>てつだ</rt></ruby>ってもらいます。',
+        kana: 'あねにしゅくだいをてつだってもらいます。', romaji: 'ane ni shukudai o tetsudatte moraimasu.', hu: 'A nővérem segít nekem a leckében.',
+        cloze: '<ruby>姉<rt>あね</rt></ruby>に<ruby>宿題<rt>しゅくだい</rt></ruby>を<ruby>手伝<rt>てつだ</rt></ruby>っ___BLANK___。', clozeAnswer: 'てもらいます',
+        tokens: ['あねに', 'しゅくだいを', 'てつだってもらいます', '。'] }
+    ],
+    contrasts: ['te_ageru', 'te_kureru', 'moraimasu']
+  },
+  {
+    id: 'te_kurete_arigatou', label: '〜てくれて、ありがとう', jlpt: 'N4', category: 'giving', lesson: 'l22',
+    summary: 'Köszönet egy szívességért: „köszönöm, hogy…".',
+    structure: 'ige て-alakja + くれて、ありがとう',
+    explanation: 'A köszönet oka て-alakban áll. Udvariasan: 〜てくださって、ありがとうございます.',
+    examples: [
+      { jp: '<ruby>手伝<rt>てつだ</rt></ruby>ってくれて、ありがとう。',
+        kana: 'てつだってくれて、ありがとう。', romaji: 'tetsudatte kurete, arigatou.', hu: 'Köszi, hogy segítettél.',
+        cloze: '<ruby>手伝<rt>てつだ</rt></ruby>っ___BLANK___、ありがとう。', clozeAnswer: 'てくれて',
+        tokens: ['てつだってくれて', '、', 'ありがとう', '。'] },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>来<rt>き</rt></ruby>てくれて、ありがとう。',
+        kana: 'きょうはきてくれて、ありがとう。', romaji: 'kyou wa kite kurete, arigatou.', hu: 'Köszi, hogy ma eljöttél.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>来<rt>き</rt></ruby>___BLANK___、ありがとう。', clozeAnswer: 'てくれて',
+        tokens: ['きょうは', 'きてくれて', '、', 'ありがとう', '。'] }
+    ],
+    contrasts: ['te_kureru', 'te_reason']
+  },
+  {
+    id: 'te_oku', label: '〜ておきます', jlpt: 'N4', category: 'state', lesson: 'l22',
+    summary: 'Előkészület: előre megteszem, vagy úgy hagyom.',
+    structure: 'ige て-alakja + おきます',
+    explanation: 'Valamit előre megcsinálsz egy későbbi célra, vagy szándékosan úgy hagyod. Beszédben: 〜とく.',
+    examples: [
+      { jp: '<ruby>旅行<rt>りょこう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>切符<rt>きっぷ</rt></ruby>を<ruby>買<rt>か</rt></ruby>っておきます。',
+        kana: 'りょこうのまえにきっぷをかっておきます。', romaji: 'ryokou no mae ni kippu o katte okimasu.', hu: 'Az utazás előtt megveszem a jegyet.',
+        cloze: '<ruby>旅行<rt>りょこう</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>切符<rt>きっぷ</rt></ruby>を<ruby>買<rt>か</rt></ruby>っ___BLANK___。', clozeAnswer: 'ておきます',
+        tokens: ['りょこうのまえに', 'きっぷを', 'かっておきます', '。'] },
+      { jp: '<ruby>窓<rt>まど</rt></ruby>は<ruby>開<rt>あ</rt></ruby>けておいてください。',
+        kana: 'まどはあけておいてください。', romaji: 'mado wa akete oite kudasai.', hu: 'Az ablakot hagyja nyitva, kérem!',
+        cloze: '<ruby>窓<rt>まど</rt></ruby>は<ruby>開<rt>あ</rt></ruby>け___BLANK___ください。', clozeAnswer: 'ておいて',
+        tokens: ['まどは', 'あけておいてください', '。'] }
+    ],
+    contrasts: ['te_aru', 'te_shimau']
+  },
+
+  /* ── l23 ── */
+  {
+    id: 'te_itadaku', label: '〜ていただきます・〜てくださいます', jlpt: 'N4', category: 'honorific', lesson: 'l23',
+    summary: 'Tisztelt ember tesz szívességet nekem.',
+    structure: 'személy に 〜ていただきます · személy が 〜てくださいます',
+    explanation: 'A 〜てもらいます és a 〜てくれます tiszteletteljes párja: tanárról, főnökről, vendégről.',
+    examples: [
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>に<ruby>作文<rt>さくぶん</rt></ruby>を<ruby>見<rt>み</rt></ruby>ていただきました。',
+        kana: 'せんせいにさくぶんをみていただきました。', romaji: 'sensei ni sakubun o mite itadakimashita.', hu: 'A tanár úr megnézte a fogalmazásomat.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>に<ruby>作文<rt>さくぶん</rt></ruby>を<ruby>見<rt>み</rt></ruby>___BLANK___。', clozeAnswer: 'ていただきました',
+        tokens: ['せんせいに', 'さくぶんを', 'みていただきました', '。'] },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>が<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてくださいました。',
+        kana: 'せんせいがかんじをおしえてくださいました。', romaji: 'sensei ga kanji o oshiete kudasaimashita.', hu: 'A tanár úr megtanította nekem a kanjikat.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>が<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>教<rt>おし</rt></ruby>え___BLANK___。', clozeAnswer: 'てくださいました',
+        tokens: ['せんせいが', 'かんじを', 'おしえてくださいました', '。'] }
+    ],
+    contrasts: ['te_morau', 'te_kureru']
+  },
+  {
+    id: 'te_kuremasenka', label: '〜てくれませんか', jlpt: 'N4', category: 'request', lesson: 'l23',
+    summary: 'Baráti, udvarias kérés: „megtennéd?"',
+    structure: 'ige て-alakja + くれませんか',
+    explanation: 'Közvetlenebb a 〜てください-nál: kérdés formájában kérsz. Barátnak: 〜てくれない？',
+    examples: [
+      { jp: 'ちょっと<ruby>手伝<rt>てつだ</rt></ruby>ってくれませんか。',
+        kana: 'ちょっとてつだってくれませんか。', romaji: 'chotto tetsudatte kuremasen ka.', hu: 'Segítenél egy kicsit?',
+        cloze: 'ちょっと<ruby>手伝<rt>てつだ</rt></ruby>っ___BLANK___。', clozeAnswer: 'てくれませんか',
+        tokens: ['ちょっと', 'てつだってくれませんか', '。'] },
+      { jp: '<ruby>塩<rt>しお</rt></ruby>を<ruby>取<rt>と</rt></ruby>ってくれませんか。',
+        kana: 'しおをとってくれませんか。', romaji: 'shio o totte kuremasen ka.', hu: 'Ideadnád a sót?',
+        cloze: '<ruby>塩<rt>しお</rt></ruby>を<ruby>取<rt>と</rt></ruby>っ___BLANK___。', clozeAnswer: 'てくれませんか',
+        tokens: ['しおを', 'とってくれませんか', '。'] }
+    ],
+    contrasts: ['te_kudasai', 'te_itadakemasenka']
+  },
+  {
+    id: 'te_itadakemasenka', label: '〜ていただけませんか', jlpt: 'N4', category: 'request', lesson: 'l23',
+    summary: 'Nagyon udvarias kérés: „megtenné, kérem?"',
+    structure: 'ige て-alakja + いただけませんか',
+    explanation: 'A legudvariasabb kérés: tanárnak, idegennek, hivatalos helyzetben. Előtte gyakran: すみませんが….',
+    examples: [
+      { jp: 'もう<ruby>一度<rt>いちど</rt></ruby><ruby>説明<rt>せつめい</rt></ruby>していただけませんか。',
+        kana: 'もういちどせつめいしていただけませんか。', romaji: 'mou ichido setsumei shite itadakemasen ka.', hu: 'Elmagyarázná még egyszer, kérem?',
+        cloze: 'もう<ruby>一度<rt>いちど</rt></ruby><ruby>説明<rt>せつめい</rt></ruby>し___BLANK___。', clozeAnswer: 'ていただけませんか',
+        tokens: ['もういちど', 'せつめい', 'していただけませんか', '。'] },
+      { jp: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>っていただけませんか。',
+        kana: 'しゃしんをとっていただけませんか。', romaji: 'shashin o totte itadakemasen ka.', hu: 'Lefényképezne, kérem?',
+        cloze: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>っ___BLANK___。', clozeAnswer: 'ていただけませんか',
+        tokens: ['しゃしんを', 'とっていただけませんか', '。'] }
+    ],
+    contrasts: ['te_kuremasenka', 'o_kudasai']
+  },
+  {
+    id: 'no_nominalizer', label: '〜の (igéből főnév)', jlpt: 'N4', category: 'nominal', lesson: 'l23',
+    summary: 'Cselekvés mint dolog: „szeretek úszni, nehéz írni".',
+    structure: 'ige szótári alakja + の + が / は',
+    explanation: 'A の főnévvé teszi az igét: 泳ぐのが好きです. Tetszés, nehézség, érzékelés előtt ez a természetes.',
+    examples: [
+      { jp: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>るのが<ruby>好<rt>す</rt></ruby>きです。',
+        kana: 'えいがをみるのがすきです。', romaji: 'eiga o miru no ga suki desu.', hu: 'Szeretek filmet nézni.',
+        cloze: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>る___BLANK___が<ruby>好<rt>す</rt></ruby>きです。', clozeAnswer: 'の',
+        tokens: ['えいがを', 'みるのが', 'すきです', '。'] },
+      { jp: '<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>書<rt>か</rt></ruby>くのは<ruby>難<rt>むずか</rt></ruby>しいです。',
+        kana: 'かんじをかくのはむずかしいです。', romaji: 'kanji o kaku no wa muzukashii desu.', hu: 'Kanjit írni nehéz.',
+        cloze: '<ruby>漢字<rt>かんじ</rt></ruby>を<ruby>書<rt>か</rt></ruby>く___BLANK___は<ruby>難<rt>むずか</rt></ruby>しいです。', clozeAnswer: 'の',
+        tokens: ['かんじを', 'かくのは', 'むずかしいです', '。'] }
+    ],
+    contrasts: ['koto_desu', 'no_pronoun']
+  },
+  {
+    id: 'mada_mou', label: 'まだ〜ます・もう〜ません', jlpt: 'N4', category: 'state', lesson: 'l23',
+    summary: '„Még mindig" és „már nem".',
+    structure: 'まだ + állító alak · もう + tagadó alak',
+    explanation: 'A まだ állító igével azt jelenti: még tart. A もう tagadóval: már nincs így.',
+    examples: [
+      { jp: '<ruby>雨<rt>あめ</rt></ruby>はまだ<ruby>降<rt>ふ</rt></ruby>っています。',
+        kana: 'あめはまだふっています。', romaji: 'ame wa mada futte imasu.', hu: 'Még mindig esik.',
+        cloze: '<ruby>雨<rt>あめ</rt></ruby>は___BLANK___<ruby>降<rt>ふ</rt></ruby>っています。', clozeAnswer: 'まだ',
+        tokens: ['あめは', 'まだ', 'ふっています', '。'] },
+      { jp: 'お<ruby>金<rt>かね</rt></ruby>はもうありません。',
+        kana: 'おかねはもうありません。', romaji: 'okane wa mou arimasen.', hu: 'Már nincs pénzem.',
+        cloze: 'お<ruby>金<rt>かね</rt></ruby>は___BLANK___ありません。', clozeAnswer: 'もう',
+        tokens: ['おかねは', 'もう', 'ありません', '。'] }
+    ],
+    contrasts: ['mou_mada']
+  },
+  {
+    id: 'de_kara_tsukuru', label: '〜で・〜から つくります', jlpt: 'N4', category: 'particle', lesson: 'l23',
+    summary: 'Miből készül: látható anyag (で) vagy átalakult alapanyag (から).',
+    structure: 'anyag で / から + つくります',
+    explanation: 'Ha az anyag felismerhető marad (fa, papír): で. Ha átalakul (szőlő → bor): から.',
+    examples: [
+      { jp: 'このいすは<ruby>木<rt>き</rt></ruby>で<ruby>作<rt>つく</rt></ruby>ります。',
+        kana: 'このいすはきでつくります。', romaji: 'kono isu wa ki de tsukurimasu.', hu: 'Ezt a széket fából készítik.',
+        cloze: 'このいすは<ruby>木<rt>き</rt></ruby>___BLANK___<ruby>作<rt>つく</rt></ruby>ります。', clozeAnswer: 'で',
+        tokens: ['この', 'いすは', 'きで', 'つくります', '。'] },
+      { jp: 'ワインはぶどうから<ruby>作<rt>つく</rt></ruby>ります。',
+        kana: 'ワインはぶどうからつくります。', romaji: 'wain wa budou kara tsukurimasu.', hu: 'A bort szőlőből készítik.',
+        cloze: 'ワインはぶどう___BLANK___<ruby>作<rt>つく</rt></ruby>ります。', clozeAnswer: 'から',
+        tokens: ['ワインは', 'ぶどうから', 'つくります', '。'] }
+    ],
+    contrasts: ['de_means', 'kara_made']
+  },
+
+  /* ── l24 ── */
+  {
+    id: 'te_kuru_go', label: '〜てきます (oda és vissza)', jlpt: 'N4', category: 'sequence', lesson: 'l24',
+    summary: 'Elmegyek, megteszem, és visszajövök.',
+    structure: 'ige て-alakja + きます',
+    explanation: 'A cselekvés után a beszélő visszatér oda, ahol most van: 買ってきます, 行ってきます.',
+    examples: [
+      { jp: 'ちょっと<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>を<ruby>買<rt>か</rt></ruby>ってきます。',
+        kana: 'ちょっとのみものをかってきます。', romaji: 'chotto nomimono o katte kimasu.', hu: 'Elugrom innivalóért.',
+        cloze: 'ちょっと<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>を<ruby>買<rt>か</rt></ruby>っ___BLANK___。', clozeAnswer: 'てきます',
+        tokens: ['ちょっと', 'のみものを', 'かってきます', '。'] },
+      { jp: '<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ってきます。',
+        kana: 'ゆうびんきょくへいってきます。', romaji: 'yuubinkyoku e itte kimasu.', hu: 'Elmegyek a postára, és jövök.',
+        cloze: '<ruby>郵便局<rt>ゆうびんきょく</rt></ruby>へ<ruby>行<rt>い</rt></ruby>っ___BLANK___。', clozeAnswer: 'てきます',
+        tokens: ['ゆうびんきょくへ', 'いってきます', '。'] }
+    ],
+    contrasts: ['te_iku_way']
+  },
+  {
+    id: 'te_kita_change', label: '〜てきました (változás)', jlpt: 'N4', category: 'change', lesson: 'l24',
+    summary: 'Változás a múltból mostanáig: „kezd…, egyre inkább".',
+    structure: 'változást jelentő ige て-alakja + きました',
+    explanation: 'A beszélő felé „érkező" változás: eddig fokozatosan így alakult.',
+    examples: [
+      { jp: '<ruby>寒<rt>さむ</rt></ruby>くなってきました。',
+        kana: 'さむくなってきました。', romaji: 'samuku natte kimashita.', hu: 'Kezd hideg lenni.',
+        cloze: '<ruby>寒<rt>さむ</rt></ruby>くなっ___BLANK___。', clozeAnswer: 'てきました',
+        tokens: ['さむく', 'なってきました', '。'] },
+      { jp: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>しわかってきました。',
+        kana: 'にほんごがすこしわかってきました。', romaji: 'nihongo ga sukoshi wakatte kimashita.', hu: 'Kezdem egy kicsit érteni a japánt.',
+        cloze: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>しわかっ___BLANK___。', clozeAnswer: 'てきました',
+        tokens: ['にほんごが', 'すこし', 'わかってきました', '。'] }
+    ],
+    contrasts: ['te_iku_change', 'ku_naru']
+  },
+  {
+    id: 'te_iku_change', label: '〜ていきます (változás)', jlpt: 'N4', category: 'change', lesson: 'l24',
+    summary: 'Változás mostantól a jövő felé: „ezután is, tovább".',
+    structure: 'változást jelentő ige て-alakja + いきます',
+    explanation: 'A beszélőtől „távolodó" változás: mostantól így folytatódik.',
+    examples: [
+      { jp: 'これから<ruby>人口<rt>じんこう</rt></ruby>は<ruby>減<rt>へ</rt></ruby>っていきます。',
+        kana: 'これからじんこうはへっていきます。', romaji: 'kore kara jinkou wa hette ikimasu.', hu: 'Ezután a népesség csökkenni fog.',
+        cloze: 'これから<ruby>人口<rt>じんこう</rt></ruby>は<ruby>減<rt>へ</rt></ruby>っ___BLANK___。', clozeAnswer: 'ていきます',
+        tokens: ['これから', 'じんこうは', 'へっていきます', '。'] },
+      { jp: 'これからも<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>していきます。',
+        kana: 'これからもにほんごをべんきょうしていきます。', romaji: 'kore kara mo nihongo o benkyou shite ikimasu.', hu: 'Ezután is tovább tanulom a japánt.',
+        cloze: 'これからも<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>し___BLANK___。', clozeAnswer: 'ていきます',
+        tokens: ['これからも', 'にほんごを', 'べんきょう', 'していきます', '。'] }
+    ],
+    contrasts: ['te_kita_change', 'te_iku_way']
+  },
+  {
+    id: 'dake_de_naku', label: '〜だけでなく、〜も', jlpt: 'N4', category: 'connective', lesson: 'l24',
+    summary: 'Bővítés: „nemcsak…, hanem… is".',
+    structure: 'A だけでなく、B も',
+    explanation: 'Az első elemhez hozzátesz egy másodikat; a második も-t kap.',
+    examples: [
+      { jp: '<ruby>英語<rt>えいご</rt></ruby>だけでなく、<ruby>日本語<rt>にほんご</rt></ruby>も<ruby>話<rt>はな</rt></ruby>せます。',
+        kana: 'えいごだけでなく、にほんごもはなせます。', romaji: 'eigo dake de naku, nihongo mo hanasemasu.', hu: 'Nemcsak angolul, hanem japánul is tudok.',
+        cloze: '<ruby>英語<rt>えいご</rt></ruby>___BLANK___、<ruby>日本語<rt>にほんご</rt></ruby>も<ruby>話<rt>はな</rt></ruby>せます。', clozeAnswer: 'だけでなく',
+        tokens: ['えいごだけでなく', '、', 'にほんごも', 'はなせます', '。'] },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもだけでなく、<ruby>大人<rt>おとな</rt></ruby>も<ruby>楽<rt>たの</rt></ruby>しめます。',
+        kana: 'こどもだけでなく、おとなもたのしめます。', romaji: 'kodomo dake de naku, otona mo tanoshimemasu.', hu: 'Nemcsak a gyerekek, a felnőttek is élvezhetik.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>ども___BLANK___、<ruby>大人<rt>おとな</rt></ruby>も<ruby>楽<rt>たの</rt></ruby>しめます。', clozeAnswer: 'だけでなく',
+        tokens: ['こどもだけでなく', '、', 'おとなも', 'たのしめます', '。'] }
+    ],
+    contrasts: ['dake', 'mo_mo']
+  },
+  {
+    id: 'okage_de', label: '〜のおかげで', jlpt: 'N4', category: 'reason', lesson: 'l24',
+    summary: 'Hála: „…-nak köszönhetően" (jó eredmény).',
+    structure: 'főnév の おかげで · rövid alak + おかげで',
+    explanation: 'Jó eredmény okát nevezi meg, hálával. Rossz eredménynél: 〜のせいで.',
+    examples: [
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>のおかげで、<ruby>合格<rt>ごうかく</rt></ruby>しました。',
+        kana: 'せんせいのおかげで、ごうかくしました。', romaji: 'sensei no okage de, goukaku shimashita.', hu: 'A tanár úrnak köszönhetően sikerült a vizsgám.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>の___BLANK___、<ruby>合格<rt>ごうかく</rt></ruby>しました。', clozeAnswer: 'おかげで',
+        tokens: ['せんせいのおかげで', '、', 'ごうかくしました', '。'] },
+      { jp: '<ruby>友<rt>とも</rt></ruby>だちのおかげで、<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れました。',
+        kana: 'ともだちのおかげで、にほんのせいかつになれました。', romaji: 'tomodachi no okage de, nihon no seikatsu ni naremashita.', hu: 'A barátaimnak köszönhetően megszoktam a japán életet.',
+        cloze: '<ruby>友<rt>とも</rt></ruby>だちの___BLANK___、<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れました。', clozeAnswer: 'おかげで',
+        tokens: ['ともだちのおかげで', '、', 'にほんのせいかつに', 'なれました', '。'] }
+    ],
+    contrasts: ['kara_reason', 'node']
   }
   /* @feltöltés:vég */
 ];
