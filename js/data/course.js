@@ -49,24 +49,72 @@ const NIHONCORE_COURSE = [
   /* ── Előkészítő lecke: az írás és a kiejtés ───────── */
   {
     id: 'l0', no: 0, book: 'Előkészítő',
-    badge: 'あ', kicker: 'Előkészítő', label: 'Előkészítő lecke', ownOnly: true,
+    badge: 'あ',
+    kicker: 'Előkészítő',
+    label: 'Előkészítő lecke',
+    ownOnly: true,
     title: 'Az írás és a kiejtés',
-    lead: 'Mielőtt belevágsz: milyen írásjegyekkel ír a japán, és hogyan olvasd ki magyar füllel a latin betűs átírást, amit az app mindenütt mutat.',
+    lead: 'Mielőtt belevágsz: milyen írásjegyekkel ír a japán, hogyan épül fel a szótagtábla, és hogyan olvasd ki magyar füllel a latin betűs átírást, amelyet az app mindenütt mutat.',
     cando: [
       'Tudod, mire való a hiragana, a katakana és a kanji.',
       'Helyesen ejted ki a latin betűs átírást.',
-      'Felismered a hosszú hangot és a kettőzött mássalhangzót.'
+      'Felismered a hosszú hangot, a kettőzött mássalhangzót és az összetett szótagot.',
+      'Érted, miért más a japán ritmusa és dallama, mint a magyaré.'
     ],
+    intro: [
+      'A japán nyelv kiejtése a magyar anyanyelvűnek könnyű: kevés a hang, és szinte mindegyik megvan a magyarban is. Az írás viszont egészen más világ — három írásrendszer él egymás mellett, és egyetlen mondatban is váltakoznak. Ez a lecke megmutatja, mi mire való, hogy ne ijedj meg az első japán mondattól.',
+      'Amíg a kanát meg nem tanulod, a <b>latin betűs átírás</b> (rómadzsi) segít. Ez azonban az angol helyesírást követi, ezért néhány betűt másképp kell kiolvasni, mint magyarul: az s „sz", az sh „s", a j „dzs". Ha ezt a néhány szabályt megjegyzed, minden japán szót helyesen fogsz kiejteni.',
+      'A lecke második fele azokról a hangtani sajátságokról szól, amelyek a jelentést is megváltoztatják: a hosszú magánhangzóról, a kettőzött mássalhangzóról, az ん hangról — és arról, hogy a japán beszéd nem hangsúlyra, hanem egyenletes <b>ütemekre</b> és <b>dallamra</b> épül.'
+    ],
+    dialogue: {
+      title: 'Az első szavak',
+      scene: 'Hallgasd meg soronként, és figyeld meg a hangokat. A mondatok jelentését az 1. leckében tanulod meg — itt csak a kiejtés a fontos.',
+      lines: [
+        { who: 'Anna', jp: 'こんにちは。', romaji: 'Konnichiwa.', hu: 'Jó napot!' },
+        { who: 'Jui', jp: 'こんにちは。はじめまして。', romaji: 'Konnichiwa. Hajimemashite.', hu: 'Jó napot! Örvendek.' },
+        { who: 'Anna', jp: 'はじめまして。アンナです。', romaji: 'Hajimemashite. Anna desu.', hu: 'Örvendek. Anna vagyok.' },
+        { who: 'Jui', jp: 'ジュイです。どうぞ よろしく。', romaji: 'Jui desu. Dōzo yoroshiku.', hu: 'Jui vagyok. Örülök, hogy megismerhetlek.' },
+        { who: 'Anna', jp: 'よろしく おねがいします。', romaji: 'Yoroshiku onegai shimasu.', hu: 'Részemről a szerencse.' }
+      ],
+      notes: [
+        '<b>Konnichiwa</b>: a ch „cs", a w lágy „v"; a két n hosszan hangzik: „kon-ni-csi-va". A szó végén は áll, mégis „wa"-nak ejtjük.',
+        '<b>Hajimemashite</b>: a j „dzs", az sh „s"; a „shi" i-je alig hallatszik: „hadzsimemaste".',
+        '<b>desu</b>: a szó végi u elnyelődik: „desz".',
+        '<b>Dōzo yoroshiku</b>: az ō hosszú „ó"; az y „j"; a „shi" i-je itt is elnyelődik: „dózo jorosku".',
+        '<b>Onegai shimasu</b>: „onegai simasz". A g mindig g, soha nem „dzs".',
+        'Az <b>アンナ</b> katakanával áll, mert idegen név.'
+      ]
+    },
     points: [
       {
         title: 'Három írás egy mondatban', sub: 'hiragana, katakana, kanji',
         pattern: 'ひらがな · カタカナ · {漢字|かんじ}',
         body: 'A japán három írást használ egyszerre. A <b>hiragana</b> gömbölyű szótagírás: ezzel írják a végződéseket, a partikulákat és sok japán szót. A <b>katakana</b> szögletes szótagírás: jövevényszavak és idegen nevek. A <b>kanji</b> kínai eredetű fogalomjel: a szavak jelentéses részét írja. A latin betűs átírás neve <b>rómadzsi</b>; az app segítségként mutatja, a tetején ki is kapcsolhatod.',
+        more: [
+          'A <b>hiragana</b> és a <b>katakana</b> szótagírás: minden jel egy szótagot jelöl, és mindkettő ugyanazt a 46 alapszótagot tudja leírni — csak más alakkal. Együtt <b>kana</b> a nevük.',
+          'A <b>kanji</b> nem hangot, hanem jelentést ír: a {山|やま} jel azt jelenti: „hegy". Egy kanjinak többféle olvasata lehet, attól függően, milyen szóban áll.',
+          'A <b>rómadzsi</b> a japánoknak nem a mindennapi írás része: állomásneveken, márkaneveken, számítógépes bevitelnél találkoznak vele. Tanulóként mankó — érdemes minél előbb letenni.'
+        ],
+        tables: [
+          {
+            caption: 'A négy írás',
+            head: ['Írás', 'Milyen?', 'Mire való?', 'Példa'],
+            rows: [
+              ['hiragana', 'gömbölyű szótagírás', 'végződések, partikulák, japán szavak', 'たべます'],
+              ['katakana', 'szögletes szótagírás', 'jövevényszavak, idegen nevek', 'テレビ'],
+              ['kanji', 'jelentést hordozó jel', 'a szavak jelentéses része', '{山|やま}'],
+              ['rómadzsi', 'latin betű', 'segítség, feliratok', 'yama']
+            ]
+          }
+        ],
         examples: [
           { jp: 'わたしは テレビを {見|み}ます。', romaji: 'Watashi wa terebi o mimasu.', hu: 'Tévét nézek.' },
           { jp: 'すし', romaji: 'sushi', hu: 'szusi (hiraganával)' },
           { jp: 'コーヒー', romaji: 'kōhī', hu: 'kávé (katakanával)' },
-          { jp: '{山|やま}', romaji: 'yama', hu: 'hegy (kanjival)' }
+          { jp: '{山|やま}', romaji: 'yama', hu: 'hegy (kanjival)' },
+          { jp: 'ハンガリー', romaji: 'Hangarī', hu: 'Magyarország (katakanával: idegen név)' },
+          { jp: '{日本|にほん}', romaji: 'Nihon', hu: 'Japán (kanjival)' },
+          { jp: '{食|た}べます', romaji: 'tabemasu', hu: 'eszik (kanji és hiragana együtt)' }
         ],
         tip: 'Az első mondatban mindhárom írás szerepel: わたしは … を … ます hiragana, テレビ katakana, {見|み} kanji.'
       },
@@ -74,95 +122,402 @@ const NIHONCORE_COURSE = [
         title: 'A rómadzsi kiejtése', sub: 'magyar füllel',
         pattern: 's = sz · sh = s · ch = cs · j = dzs · ts = c · y = j · w = v · z = z',
         body: 'Az átírás az angol helyesírást követi (ez a Hepburn-átírás), ezért néhány betűt másképp kell kiolvasni, mint magyarul. A legfontosabb: az <b>s</b> mindig „sz", az <b>sh</b> „s", a <b>ch</b> „cs", a <b>j</b> „dzs", a <b>ts</b> „c", az <b>y</b> „j". A <b>w</b> lágy, ajakkal képzett v; az <b>r</b> rövid, egyet pördülő hang; az <b>f</b> (csak a „fu" szótagban) ajakkal fújt h.',
+        more: [
+          'Két átírási rendszer létezik. A <b>Hepburn-átírás</b> az angol kiejtéshez igazodik (shi, chi, tsu, fu): ezt látod az állomásneveken, és ezt használja az app. A japán iskolákban tanított másik rendszer a szótagtábla logikáját követi (si, ti, tu, hu).',
+          'A magyar szövegekben a japán szavakat <b>magyarosan</b> szokás átírni: szusi, Tokió, Fudzsi. Az app a japán sor alatt a Hepburn-átírást mutatja, a magyar fordításban a magyaros alakot.',
+          'A <b>g</b> mindig g (gohan), soha nem „dzs". A <b>h</b> a „hi" szótagban lágyabb, a német „ich" hangjához hasonló.'
+        ],
+        tables: [
+          {
+            caption: 'Az átírás betűi magyar füllel',
+            head: ['Átírás', 'Ejtsd', 'Példa'],
+            rows: [
+              ['s', 'sz', 'sushi → „szusi"'],
+              ['sh', 's', 'sashimi → „szasimi"'],
+              ['ch', 'cs', 'ocha → „ocsa"'],
+              ['j', 'dzs', 'jūdō → „dzsúdó"'],
+              ['ts', 'c', 'tsunami → „cunami"'],
+              ['z', 'z', 'zasshi → „zassi"'],
+              ['y', 'j', 'yama → „jama"'],
+              ['w', 'lágy v', 'wasabi → „vaszabi"'],
+              ['f', 'ajakkal fújt h', 'Fuji → „fudzsi"'],
+              ['r', 'egyet pördülő r', 'rāmen → „rámen"'],
+              ['g', 'g', 'gohan → „gohan"']
+            ]
+          }
+        ],
         examples: [
           { jp: 'さしみ', romaji: 'sashimi', hu: 'szasimi: nyers halszeletek' },
           { jp: 'おちゃ', romaji: 'ocha', hu: 'tea' },
           { jp: 'ふじさん', romaji: 'Fujisan', hu: 'a Fudzsi-hegy' },
           { jp: 'つなみ', romaji: 'tsunami', hu: 'szökőár' },
-          { jp: 'わさび', romaji: 'wasabi', hu: 'vaszabi: japán torma' }
+          { jp: 'わさび', romaji: 'wasabi', hu: 'vaszabi: japán torma' },
+          { jp: 'やさい', romaji: 'yasai', hu: 'zöldség' },
+          { jp: 'ぎんこう', romaji: 'ginkō', hu: 'bank' },
+          { jp: 'ひと', romaji: 'hito', hu: 'ember' }
+        ],
+        mistakes: [
+          { bad: 'sushi → „susi"', good: 'sushi → „szusi"', why: 'Az s mindig „sz"; a magyar „s" hangot az sh jelöli.' },
+          { bad: 'Fuji → „fuji"', good: 'Fuji → „fudzsi"', why: 'A j mindig „dzs", soha nem a magyar „j".' }
         ]
       },
       {
         title: 'Az öt magánhangzó', sub: 'a, i, u, e, o',
         pattern: 'あ a · い i · う u · え e · お o',
         body: 'Csak öt magánhangzó van, mind rövid és tiszta. Az <b>a</b> rövid „á" (nem a magyar „a"); az <b>e</b> rövid, nyílt e; az <b>u</b> ajakkerekítés nélkül, lazán ejtett u. Kettőshangzó nincs: az „ai", „ie" két külön szótag.',
+        more: [
+          'A szótár és a szótagtábla sorrendje: <b>a – i – u – e – o</b>. Ezt érdemes megjegyezni, mert minden táblázat így épül fel.',
+          'A szótagtábla minden sora egy mássalhangzó és az öt magánhangzó párosítása: ka – ki – ku – ke – ko. Három szótag kilóg a sorból: a „si" helyén <b>shi</b>, a „ti" helyén <b>chi</b>, a „tu" helyén <b>tsu</b> áll; a „hu" pedig <b>fu</b>.',
+          'Minden kana egy <b>ütem</b> (mora), és az ütemek egyforma hosszúak: あおい = a-o-i, három ütem.'
+        ],
+        tables: [
+          {
+            caption: 'A szótagtábla első sorai',
+            head: ['', 'a', 'i', 'u', 'e', 'o'],
+            rows: [
+              ['—', 'あ a', 'い i', 'う u', 'え e', 'お o'],
+              ['k', 'か ka', 'き ki', 'く ku', 'け ke', 'こ ko'],
+              ['s', 'さ sa', 'し <b>shi</b>', 'す su', 'せ se', 'そ so'],
+              ['t', 'た ta', 'ち <b>chi</b>', 'つ <b>tsu</b>', 'て te', 'と to'],
+              ['n', 'な na', 'に ni', 'ぬ nu', 'ね ne', 'の no'],
+              ['h', 'は ha', 'ひ hi', 'ふ <b>fu</b>', 'へ he', 'ほ ho']
+            ]
+          }
+        ],
         examples: [
           { jp: 'あおい', romaji: 'aoi', hu: 'kék' },
           { jp: 'いいえ', romaji: 'iie', hu: 'nem' },
-          { jp: 'えき', romaji: 'eki', hu: 'állomás' }
+          { jp: 'えき', romaji: 'eki', hu: 'állomás' },
+          { jp: 'いえ', romaji: 'ie', hu: 'ház' },
+          { jp: 'かお', romaji: 'kao', hu: 'arc' },
+          { jp: 'あい', romaji: 'ai', hu: 'szeretet' }
+        ]
+      },
+      {
+        title: '゛ és ゜', sub: 'két vessző, egy karika: a zöngés hangok',
+        pattern: 'か → が · さ → ざ · た → だ · は → ば · は → ぱ',
+        body: 'A kana-jelek jobb felső sarkára tett két kis vessző (゛) a hang <b>zöngés párját</b> adja: k → g, s → z, t → d, h → b. A kis karika (゜) csak a h-sor jelein áll, és <b>p</b>-t csinál belőlük.',
+        more: [
+          'Így a 46 alapjelből további 25 lesz — új alakot nem kell tanulnod, csak a két jelet.',
+          'Három szótag itt is szabálytalan: じ = <b>ji</b> („dzsi"), ぢ = ji, づ = zu.',
+          'Katakanában ugyanígy: カ → ガ, ハ → バ → パ.'
+        ],
+        tables: [
+          {
+            caption: 'Zöngétlen és zöngés sorok',
+            head: ['Alap', 'Két vesszővel', 'Karikával'],
+            rows: [
+              ['か ka', 'が ga', '—'],
+              ['さ sa', 'ざ za', '—'],
+              ['し shi', 'じ ji', '—'],
+              ['た ta', 'だ da', '—'],
+              ['は ha', 'ば ba', 'ぱ pa'],
+              ['ひ hi', 'び bi', 'ぴ pi']
+            ]
+          }
+        ],
+        examples: [
+          { jp: 'かぎ', romaji: 'kagi', hu: 'kulcs' },
+          { jp: 'でんわ', romaji: 'denwa', hu: 'telefon' },
+          { jp: 'ばんごはん', romaji: 'bangohan', hu: 'vacsora' },
+          { jp: 'えんぴつ', romaji: 'enpitsu', hu: 'ceruza' },
+          { jp: 'ピザ', romaji: 'piza', hu: 'pizza' }
+        ]
+      },
+      {
+        title: 'きゃ・しゅ・ちょ', sub: 'összetett szótagok kis ゃ, ゅ, ょ jellel',
+        pattern: 'き + ゃ = きゃ (kya) · し + ゅ = しゅ (shu) · ち + ょ = ちょ (cho)',
+        body: 'Az i-végű szótagok (き, し, ち, に, ひ, み, り…) után kisméretű ゃ, ゅ vagy ょ állhat. A kettő <b>egyetlen szótaggá</b> olvad össze: ki + ya nem „kija", hanem „kja".',
+        more: [
+          'Az átírásban: kya, kyu, kyo · sha, shu, sho · cha, chu, cho · nya, nyu, nyo · hya, rya… Az sh, ch, j után nincs y: しゃ = sha („sa"), じゃ = ja („dzsa").',
+          'A méret számít: a nagy や külön szótag. びょういん (byō-in) kórház, びよういん (bi-yō-in) fodrászat.',
+          'Az összetett szótag is egy ütem; ha hosszú (きょう = kyō), akkor kettő.'
+        ],
+        tables: [
+          {
+            caption: 'A leggyakoribb összetett szótagok',
+            head: ['', 'ゃ', 'ゅ', 'ょ'],
+            rows: [
+              ['き', 'きゃ kya', 'きゅ kyu', 'きょ kyo'],
+              ['し', 'しゃ sha', 'しゅ shu', 'しょ sho'],
+              ['ち', 'ちゃ cha', 'ちゅ chu', 'ちょ cho'],
+              ['に', 'にゃ nya', 'にゅ nyu', 'にょ nyo'],
+              ['り', 'りゃ rya', 'りゅ ryu', 'りょ ryo']
+            ]
+          }
+        ],
+        examples: [
+          { jp: 'きょう', romaji: 'kyō', hu: 'ma' },
+          { jp: 'しゃしん', romaji: 'shashin', hu: 'fénykép' },
+          { jp: 'ちょっと', romaji: 'chotto', hu: 'egy kicsit' },
+          { jp: 'びょういん', romaji: 'byōin', hu: 'kórház' },
+          { jp: 'びよういん', romaji: 'biyōin', hu: 'fodrászat' }
+        ],
+        mistakes: [
+          { bad: 'Kyōto → „Ki-jó-tó"', good: 'Kyōto → „Kjóto"', why: 'A きょ egyetlen szótag; a szó végi o rövid.' }
         ]
       },
       {
         title: 'Hosszú hangok', sub: 'ā, ī, ū, ē, ō',
         pattern: 'rövid ↔ hosszú: más szó',
         body: 'A magánhangzó hossza megkülönbözteti a szavakat, ahogy a magyarban is (kor ↔ kór). A rómadzsiban a hosszú hangot felülvonás jelöli: ō, ū. Katakanában a hosszúság jele a vízszintes vonal: ー.',
+        more: [
+          'Hiraganával a hosszú hangot egy második magánhangzó-jel írja: ā = ああ, ī = いい, ū = うう.',
+          'Két hosszú hang írása eltér a kiejtéstől: a hosszú <b>ō</b>-t többnyire <b>おう</b>-val írják (がっこう = gakkō), a hosszú <b>ē</b>-t <b>えい</b>-vel (せんせい = sensei, ejtsd: „szenszé").',
+          'A hosszú hang <b>két ütem</b>: とうきょう = to-o-kyo-o, négy ütem.'
+        ],
+        tables: [
+          {
+            caption: 'A hosszú hangok írása',
+            head: ['Hang', 'Hiraganával', 'Példa'],
+            rows: [
+              ['ā', 'ああ', 'おかあさん (anya)'],
+              ['ī', 'いい', 'おにいさん (báty)'],
+              ['ū', 'うう', 'くうき (levegő)'],
+              ['ē', 'えい / ええ', 'せんせい (tanár)'],
+              ['ō', 'おう / おお', 'がっこう (iskola)']
+            ]
+          }
+        ],
         examples: [
           { jp: 'おばさん', romaji: 'obasan', hu: 'néni' },
           { jp: 'おばあさん', romaji: 'obāsan', hu: 'nagymama' },
           { jp: 'ビール', romaji: 'bīru', hu: 'sör' },
-          { jp: 'とうきょう', romaji: 'Tōkyō', hu: 'Tokió' }
+          { jp: 'とうきょう', romaji: 'Tōkyō', hu: 'Tokió' },
+          { jp: 'せんせい', romaji: 'sensei', hu: 'tanár' },
+          { jp: 'おかあさん', romaji: 'okāsan', hu: 'anya, anyuka' },
+          { jp: 'くうき', romaji: 'kūki', hu: 'levegő' }
+        ],
+        mistakes: [
+          { bad: 'Tōkyō → „Tokjo"', good: 'Tōkyō → „Tókjó"', why: 'A felülvonásos magánhangzó hosszú, és ez a jelentést is megváltoztathatja.' }
         ]
       },
       {
         title: 'Kis っ és ん', sub: 'kettőzés és orrhang',
         pattern: 'っ + mássalhangzó = kettőzve · ん = n',
         body: 'A kisméretű <b>っ</b> nem külön hang: azt jelzi, hogy az utána álló mássalhangzót hosszan, megkettőzve ejted (kitte, zasshi). Az <b>ん</b> az egyetlen mássalhangzó, amely önálló szótagot alkot.',
+        more: [
+          'A kis っ <b>egy ütemnyi szünet</b>: きって = ki-(szünet)-te, három ütem; a きて csak kettő.',
+          'Az <b>ん</b> kiejtése a következő hanghoz igazodik: p, b, m előtt „m" (さんぽ → „szampo"); k, g előtt a torokban képzett orrhang (げんき); a szó végén lágy, orrhangú n.',
+          'Az átírásban az n után néha aposztróf áll, hogy ne olvasd egybe a következő magánhangzóval: きんえん = kin\'en (tilos a dohányzás) ↔ きねん = kinen (emlék).'
+        ],
         examples: [
           { jp: 'きって', romaji: 'kitte', hu: 'bélyeg' },
           { jp: 'きて', romaji: 'kite', hu: 'gyere' },
           { jp: 'ざっし', romaji: 'zasshi', hu: 'magazin' },
-          { jp: 'にほん', romaji: 'Nihon', hu: 'Japán' }
+          { jp: 'にほん', romaji: 'Nihon', hu: 'Japán' },
+          { jp: 'さんぽ', romaji: 'sanpo', hu: 'séta' },
+          { jp: 'しんぶん', romaji: 'shinbun', hu: 'újság' },
+          { jp: 'きんえん', romaji: 'kin\'en', hu: 'tilos a dohányzás' },
+          { jp: 'きねん', romaji: 'kinen', hu: 'emlék, évforduló' },
+          { jp: 'いっしょ', romaji: 'issho', hu: 'együtt' }
         ]
       },
       {
         title: 'Elnyelt u és i', sub: 'desu = „desz"',
         pattern: 'です → „desz" · ます → „masz" · した → „sta"',
         body: 'Zöngétlen mássalhangzók (k, s, t, h, p) között és a szó végén az <b>u</b> és az <b>i</b> gyakran alig hallatszik. Ezért hangzik a です „desz"-nek, a 〜ます „masz"-nak. Leírni mindig kell, kiejteni nem.',
+        more: [
+          'Az elnyelés akkor történik, ha az i vagy az u <b>két zöngétlen mássalhangzó között</b> áll (k, s, sh, t, ch, ts, h, f, p), vagy ilyen hang után a szó végén.',
+          'További példák: すき → „szki", した → „sta", ひと → „hto", くつ → „kcu", がくせい → „gakszé".',
+          'Ha mégis kiejted, az sem hiba: érthető marad, csak kissé betűzőnek hat.'
+        ],
         examples: [
           { jp: 'がくせいです。', romaji: 'Gakusei desu.', hu: 'Diák vagyok.' },
           { jp: 'いきます。', romaji: 'Ikimasu.', hu: 'Megyek.' },
-          { jp: 'すきです。', romaji: 'Suki desu.', hu: 'Szeretem.' }
+          { jp: 'すきです。', romaji: 'Suki desu.', hu: 'Szeretem.' },
+          { jp: 'くつ', romaji: 'kutsu', hu: 'cipő' },
+          { jp: 'あした', romaji: 'ashita', hu: 'holnap' },
+          { jp: 'しつれいします。', romaji: 'Shitsurei shimasu.', hu: 'Elnézést a zavarásért!' }
         ]
       },
       {
         title: 'は, へ, を partikulaként', sub: 'másképp ejtjük',
         pattern: 'は = wa · へ = e · を = o',
         body: 'Három jelet másképp ejtünk, amikor partikula (a szó szerepét jelölő kis szó): a <b>は</b> ilyenkor „wa", a <b>へ</b> „e", az <b>を</b> „o". Szó belsejében a szokott módon olvasod őket (ha, he).',
+        more: [
+          'A kivétel oka történeti: a partikulák megőrizték a régi helyesírást, miközben a kiejtésük megváltozott.',
+          'Ezért áll は a こんにちは és a こんばんは végén is: eredetileg partikula volt egy hosszabb köszönésben.',
+          'Az <b>を</b> jelet ma kizárólag partikulaként használják: szó belsejében nem fordul elő.',
+          'Az átírás a kiejtést követi: a partikulákat wa, e, o alakban látod.'
+        ],
+        tables: [
+          {
+            caption: 'Három jel, két olvasat',
+            head: ['Jel', 'Szóban', 'Partikulaként'],
+            rows: [
+              ['は', 'ha — はな (virág)', 'wa — わたしは'],
+              ['へ', 'he — へや (szoba)', 'e — がっこうへ'],
+              ['を', '—', 'o — みずを']
+            ]
+          }
+        ],
         examples: [
           { jp: 'これは ほんです。', romaji: 'Kore wa hon desu.', hu: 'Ez könyv.' },
           { jp: 'がっこうへ いきます。', romaji: 'Gakkō e ikimasu.', hu: 'Iskolába megyek.' },
-          { jp: 'みずを のみます。', romaji: 'Mizu o nomimasu.', hu: 'Vizet iszom.' }
+          { jp: 'みずを のみます。', romaji: 'Mizu o nomimasu.', hu: 'Vizet iszom.' },
+          { jp: 'こんばんは。', romaji: 'Konbanwa.', hu: 'Jó estét!' },
+          { jp: 'わたしは アンナです。', romaji: 'Watashi wa Anna desu.', hu: 'Anna vagyok.' },
+          { jp: 'どこへ いきますか。', romaji: 'Doko e ikimasu ka.', hu: 'Hová mész?' },
+          { jp: 'はは', romaji: 'haha', hu: 'anya (itt mindkét は „ha")' }
+        ]
+      },
+      {
+        title: 'Ütem és dallam', sub: 'miért hangzik másképp a japán?',
+        pattern: 'minden kana egy ütem · a szót a hangmagasság különbözteti meg',
+        body: 'A magyarban a szó első szótagja hangsúlyos. A japánban nincs ilyen hangsúly: a szótagok egyenletesen, egyforma erővel követik egymást, mint a metronóm ütései. Ami változik, az a <b>hangmagasság</b>: egy-egy szótag magasabban vagy mélyebben hangzik.',
+        more: [
+          'Az egység az <b>ütem</b> (mora): minden kana egy ütem, a hosszú magánhangzó kettő, a kis っ és az ん külön ütem. にほん = ni-ho-n: három ütem.',
+          'A dallam néha szavakat különböztet meg: az はし lehet „pálcika" vagy „híd", az あめ „eső" vagy „cukorka" — a magasság dönti el. A helyzetből azonban szinte mindig kiderül, melyikről van szó.',
+          'A dallam tájanként más: Tokióban és Oszakában sok szó éppen fordítva hangzik. Kezdőként elég, ha <b>egyenletesen</b>, magyaros első szótagi hangsúly nélkül beszélsz, és utánzod, amit hallasz.'
+        ],
+        examples: [
+          { jp: 'はし', romaji: 'hashi', hu: 'pálcika — vagy híd: a dallam dönti el' },
+          { jp: 'あめ', romaji: 'ame', hu: 'eső — vagy cukorka: a dallam dönti el' },
+          { jp: 'おおさか', romaji: 'Ōsaka', hu: 'Oszaka (négy ütem: o-o-sa-ka)' },
+          { jp: 'がっこう', romaji: 'gakkō', hu: 'iskola (négy ütem: ga-k-ko-o)' }
+        ],
+        tip: 'Hallgasd meg a példákat többször, és mondd utánuk hangosan: a fül és a száj együtt tanul.'
+      }
+    ],
+    phrases: [
+      { jp: 'おはよう ございます。', romaji: 'Ohayō gozaimasu.', hu: 'Jó reggelt kívánok!', note: 'Ejtsd: „ohajó gozaimasz".' },
+      { jp: 'こんにちは。', romaji: 'Konnichiwa.', hu: 'Jó napot kívánok!', note: 'Ejtsd: „konnicsiva".' },
+      { jp: 'ありがとう ございます。', romaji: 'Arigatō gozaimasu.', hu: 'Köszönöm szépen.', note: 'Ejtsd: „arigató gozaimasz".' },
+      { jp: 'すみません。', romaji: 'Sumimasen.', hu: 'Elnézést!', note: 'Ejtsd: „szumimaszen".' },
+      { jp: 'はい。', romaji: 'Hai.', hu: 'Igen.', note: 'Ejtsd: „hai" — az a rövid á.' },
+      { jp: 'さようなら。', romaji: 'Sayōnara.', hu: 'Viszontlátásra!', note: 'Ejtsd: „szajónara".' },
+      { jp: 'おやすみなさい。', romaji: 'Oyasuminasai.', hu: 'Jó éjszakát!', note: 'Ejtsd: „ojaszuminaszai".' },
+      { jp: 'どうぞ。', romaji: 'Dōzo.', hu: 'Tessék!', note: 'Ejtsd: „dózo".' },
+      { jp: 'おねがいします。', romaji: 'Onegai shimasu.', hu: 'Kérem szépen.', note: 'Ejtsd: „onegai simasz".' },
+      { jp: 'わかりました。', romaji: 'Wakarimashita.', hu: 'Értettem.', note: 'Ejtsd: „vakarimasta".' }
+    ],
+    words: [
+      {
+        title: 'Japán szavak, amelyeket már ismersz',
+        note: 'Koppints rájuk, és hallgasd meg, hogyan hangzanak eredetiben.',
+        items: [
+          { jp: 'すし', romaji: 'sushi', hu: 'szusi' },
+          { jp: 'からて', romaji: 'karate', hu: 'karate' },
+          { jp: 'じゅうどう', romaji: 'jūdō', hu: 'cselgáncs („dzsúdó")' },
+          { jp: 'きもの', romaji: 'kimono', hu: 'kimonó' },
+          { jp: 'まんが', romaji: 'manga', hu: 'manga' },
+          { jp: 'アニメ', romaji: 'anime', hu: 'anime' },
+          { jp: 'さむらい', romaji: 'samurai', hu: 'szamuráj' },
+          { jp: 'にんじゃ', romaji: 'ninja', hu: 'nindzsa' },
+          { jp: 'おりがみ', romaji: 'origami', hu: 'origami' },
+          { jp: 'カラオケ', romaji: 'karaoke', hu: 'karaoke' },
+          { jp: 'ラーメン', romaji: 'rāmen', hu: 'rámen' },
+          { jp: 'えもじ', romaji: 'emoji', hu: 'emodzsi' }
+        ]
+      },
+      {
+        title: 'Rövid vagy hosszú? — más szó',
+        note: 'Hallgasd meg párban: csak a magánhangzó hossza különbözik.',
+        items: [
+          { jp: 'おじさん', romaji: 'ojisan', hu: 'bácsi' },
+          { jp: 'おじいさん', romaji: 'ojiisan', hu: 'nagypapa' },
+          { jp: 'ゆき', romaji: 'yuki', hu: 'hó' },
+          { jp: 'ゆうき', romaji: 'yūki', hu: 'bátorság' },
+          { jp: 'ビル', romaji: 'biru', hu: 'épület, toronyház' },
+          { jp: 'え', romaji: 'e', hu: 'kép' },
+          { jp: 'ええ', romaji: 'ē', hu: 'igen (kötetlenül)' }
+        ]
+      },
+      {
+        title: 'Egy vagy két mássalhangzó? — más szó',
+        note: 'A kis っ egy ütemnyi szünet a mássalhangzó előtt.',
+        items: [
+          { jp: 'おと', romaji: 'oto', hu: 'hang, zaj' },
+          { jp: 'おっと', romaji: 'otto', hu: 'férj' },
+          { jp: 'さか', romaji: 'saka', hu: 'lejtő' },
+          { jp: 'さっか', romaji: 'sakka', hu: 'író' },
+          { jp: 'かこ', romaji: 'kako', hu: 'múlt' },
+          { jp: 'かっこ', romaji: 'kakko', hu: 'zárójel' },
+          { jp: 'いた', romaji: 'ita', hu: 'ott volt' },
+          { jp: 'いった', romaji: 'itta', hu: 'elment' }
         ]
       }
     ],
+    culture: [
+      {
+        title: 'Függőlegesen és vízszintesen',
+        text: 'A japán szöveg kétféleképp szedhető. A hagyományos irány <b>függőleges</b>: a sorok fentről lefelé futnak, az oszlopok jobbról balra követik egymást — így készülnek a regények, az újságok, a mangák. Az ilyen könyvet „hátulról" kell kinyitni. A <b>vízszintes</b>, balról jobbra haladó írás a tankönyvekben, a weboldalakon, az üzenetekben szokásos. Mindkettő helyes; a jelek ugyanazok.'
+      },
+      {
+        title: 'Hány kanji van?',
+        text: 'Több tízezer kanji létezik, de a mindennapi élethez jóval kevesebb kell: a hivatalos lista 2136 jelet tartalmaz — ennyivel el lehet olvasni egy újságot. A japán gyerekek az általános iskola hat éve alatt valamivel több mint ezret tanulnak meg. A nehezebb jelek fölé gyakran apró hiraganával odaírják az olvasatot: ez a <b>furigana</b>. Az app is ezt használja: a kanji fölött mindig ott a kiejtés.'
+      },
+      {
+        title: 'Miért nincs szóköz?',
+        text: 'A japán írás nem használ szóközt: a szavak egymás után állnak. Mégsem folyik össze a szöveg, mert a három írás váltakozása jelzi a határokat: a kanji a szó jelentéses eleje, az utána álló hiragana a végződés vagy a partikula, a katakana pedig idegen szó. Az első leckékben, amíg csak kanát olvasol, az app szóközökkel segít — később ezek elmaradnak.'
+      },
+      {
+        title: 'Írásjelek',
+        text: 'A japán pont kis karika: <b>。</b> A vessző balra dőlő vonás: <b>、</b> Az idézőjel szögletes: <b>「 」</b> A kérdőjel a hagyományos írásban nem kötelező — a kérdést a mondat végi か jelzi —, de üzenetekben, mangákban gyakori. A katakanával írt idegen nevek tagjait középre tett pont választja el: アンナ・コバーチ.'
+      }
+    ],
     quiz: [
-      { q: 'Melyik írással írják a jövevényszavakat és az idegen neveket?', a: 'Katakanával', wrong: ['Hiraganával', 'Kanjival', 'Latin betűvel'],
-        why: 'A katakana a jövevényszavak és az idegen nevek írása: テレビ, コーヒー.' },
-      { q: 'Mire való leginkább a hiragana?', a: 'A végződések, a partikulák és sok japán szó leírására.',
+      { q: 'Melyik írással írják a jövevényszavakat és az idegen neveket?', a: 'Katakanával', wrong: ['Hiraganával', 'Kanjival', 'Latin betűvel'], why: 'A katakana a jövevényszavak és az idegen nevek írása: テレビ, コーヒー.' },
+      {
+        q: 'Mire való leginkább a hiragana?',
+        a: 'A végződések, a partikulák és sok japán szó leírására.',
         wrong: ['Csak idegen szavak leírására.', 'Csak számok leírására.', 'Csak nevek leírására.'],
-        why: 'A hiragana a japán írás alapja: ezzel bármi leírható.' },
-      { q: 'Mi a kanji?', a: 'Kínai eredetű fogalomjel: a szavak jelentéses részét írja.',
+        why: 'A hiragana a japán írás alapja: ezzel bármi leírható.'
+      },
+      {
+        q: 'Mi a kanji?',
+        a: 'Kínai eredetű fogalomjel: a szavak jelentéses részét írja.',
         wrong: ['A latin betűs átírás neve.', 'A hosszú magánhangzó jele.', 'A katakana másik neve.'],
-        why: 'A kanji jelentést hordoz; a latin betűs átírás neve rómadzsi.' },
-      { q: 'Hogyan ejted magyarul: sashimi?', a: 'szasimi', wrong: ['sasimi', 'szaszimi', 'saszimi'],
-        why: 'Az s mindig „sz", az sh pedig „s".' },
-      { q: 'Hogyan ejted magyarul: ocha?', a: 'ocsa', wrong: ['oha', 'okha', 'occa'],
-        why: 'A ch a magyar „cs".' },
-      { q: 'Hogyan ejted a j betűt az átírásban (például: Fuji)?', a: 'dzs', wrong: ['j', 'zs', 'h'],
-        why: 'A j a magyar „dzs": Fuji = „fudzsi".' },
-      { q: 'Hogyan ejted magyarul: tsunami?', a: 'cunami', wrong: ['csunami', 'tunami', 'szunami'],
-        why: 'A ts a magyar „c".' },
-      { q: 'Mit jelöl a felülvonás (például: Tōkyō, kōhī)?', a: 'Hosszú magánhangzót.', wrong: ['Hangsúlyt.', 'Kettőzött mássalhangzót.', 'Néma hangot.'],
-        why: 'ō = hosszú o, ī = hosszú i.' },
-      { q: 'Melyik szó jelenti: „nagymama"?', a: 'obāsan', wrong: ['obasan', 'ōbasan', 'obassan'],
-        why: 'Az obasan „néni"; a hosszú ā-val ejtett obāsan „nagymama".' },
-      { q: 'Mit jelöl a kis っ (például: kitte)?', a: 'A következő mássalhangzót megkettőzve ejted.',
-        wrong: ['A magánhangzó megnyúlik.', 'A szó véget ér.', 'A szótag néma.'],
-        why: 'きって = kitte: hosszú, kettőzött t.' },
-      { q: 'Hogyan ejted a は jelet, amikor partikula?', a: 'wa', wrong: ['ha', 'ba', 'pa'],
-        why: 'Partikulaként は = wa; szó belsejében ha.' },
-      { q: 'Hogyan hangzik a mondat végi です?', a: 'desz', wrong: ['deszu, hangsúlyos u-val', 'desu, magyar s-sel', 'dec'],
-        why: 'A szó végi u alig hallatszik: „desz".' }
+        why: 'A kanji jelentést hordoz; a latin betűs átírás neve rómadzsi.'
+      },
+      { q: 'Hogyan ejted magyarul: sashimi?', a: 'szasimi', wrong: ['sasimi', 'szaszimi', 'saszimi'], why: 'Az s mindig „sz", az sh pedig „s".' },
+      { q: 'Hogyan ejted magyarul: ocha?', a: 'ocsa', wrong: ['oha', 'okha', 'occa'], why: 'A ch a magyar „cs".' },
+      { q: 'Hogyan ejted a j betűt az átírásban (például: Fuji)?', a: 'dzs', wrong: ['j', 'zs', 'h'], why: 'A j a magyar „dzs": Fuji = „fudzsi".' },
+      { q: 'Hogyan ejted magyarul: tsunami?', a: 'cunami', wrong: ['csunami', 'tunami', 'szunami'], why: 'A ts a magyar „c".' },
+      { q: 'Mit jelöl a felülvonás (például: Tōkyō, kōhī)?', a: 'Hosszú magánhangzót.', wrong: ['Hangsúlyt.', 'Kettőzött mássalhangzót.', 'Néma hangot.'], why: 'ō = hosszú o, ī = hosszú i.' },
+      { q: 'Melyik szó jelenti: „nagymama"?', a: 'obāsan', wrong: ['obasan', 'ōbasan', 'obassan'], why: 'Az obasan „néni"; a hosszú ā-val ejtett obāsan „nagymama".' },
+      { q: 'Mit jelöl a kis っ (például: kitte)?', a: 'A következő mássalhangzót megkettőzve ejted.', wrong: ['A magánhangzó megnyúlik.', 'A szó véget ér.', 'A szótag néma.'], why: 'きって = kitte: hosszú, kettőzött t.' },
+      { q: 'Hogyan ejted a は jelet, amikor partikula?', a: 'wa', wrong: ['ha', 'ba', 'pa'], why: 'Partikulaként は = wa; szó belsejében ha.' },
+      { q: 'Hogyan hangzik a mondat végi です?', a: 'desz', wrong: ['deszu, hangsúlyos u-val', 'desu, magyar s-sel', 'dec'], why: 'A szó végi u alig hallatszik: „desz".' },
+      { q: 'Hogyan ejted magyarul: jūdō?', a: 'dzsúdó', wrong: ['júdó', 'zsúdó', 'dzsudo'], why: 'A j „dzs"; a felülvonásos magánhangzó hosszú.' },
+      {
+        q: 'Melyik átírást használja az app a japán sorok alatt?',
+        a: 'A Hepburn-átírást (shi, chi, tsu).',
+        wrong: [
+          'A magyaros átírást (si, csi, cu).',
+          'A japán iskolai átírást (si, ti, tu).',
+          'Semmilyet: csak kana látszik.'
+        ],
+        why: 'A Hepburn-átírás az angol kiejtéshez igazodik; ezt látod az állomásneveken is.'
+      },
+      { q: 'Mit jelöl a két kis vessző (゛) a jel jobb felső sarkán?', a: 'A hang zöngés párját: ka → ga.', wrong: ['Hosszú magánhangzót.', 'Kettőzött mássalhangzót.', 'A szó végét.'], why: 'か → が, さ → ざ, た → だ, は → ば.' },
+      { q: 'Hogyan ejted: kyō („ma")?', a: '„kjó" — egyetlen szótagként', wrong: ['„ki-jó" — két szótagban', '„kó"', '„csó"'], why: 'A きょ összetett szótag: a kis ょ egybeolvad az előző jellel.' },
+      { q: 'Hány ütemből áll: にほん (ni-ho-n)?', a: 'Háromból.', wrong: ['Kettőből.', 'Négyből.', 'Egyből.'], why: 'Minden kana egy ütem — az ん is.' },
+      { q: 'Hogyan írják hiraganával legtöbbször a hosszú ō hangot?', a: 'お-sor + う (például: がっこう)', wrong: ['お-sor + っ', 'お-sor + ん', 'お-sor + を'], why: 'Az おう írásképet hosszú ō-nak ejtjük.' },
+      { q: 'Hogyan ejted az ん hangot ebben: さんぽ (sanpo)?', a: 'm-nek: „szampo"', wrong: ['egyáltalán nem ejted', 'külön „nu" szótagnak', 'hosszú „nn"-nek'], why: 'P, b, m előtt az ん „m"-nek hangzik.' },
+      {
+        q: 'Mi a különbség: びょういん ↔ びよういん?',
+        a: 'Az első kórház (byō-in), a második fodrászat (bi-yō-in).',
+        wrong: [
+          'Ugyanaz a szó kétféle írással.',
+          'Az első fodrászat, a második kórház.',
+          'Csak a hanglejtésük különbözik, a jelentésük nem.'
+        ],
+        why: 'A kis ょ egybeolvad az előző jellel; a nagy よ külön szótag.'
+      },
+      {
+        q: 'Hogyan olvasod a függőlegesen szedett japán könyvet?',
+        a: 'Fentről lefelé, az oszlopokat jobbról balra.',
+        wrong: ['Fentről lefelé, az oszlopokat balról jobbra.', 'Lentről felfelé.', 'Balról jobbra, soronként.'],
+        why: 'A hagyományos japán szedés jobbról balra halad.'
+      },
+      {
+        q: 'Miért は-val írják a こんにちは végét, ha „wa"-nak ejtjük?',
+        a: 'Mert eredetileg partikula volt.',
+        wrong: ['Mert hosszú magánhangzó.', 'Mert katakanás szó.', 'Mert kis っ áll előtte.'],
+        why: 'A partikula は kiejtése „wa", az írása megőrizte a régi alakot.'
+      }
     ]
   },
 
