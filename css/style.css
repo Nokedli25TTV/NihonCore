@@ -7577,6 +7577,83 @@ html.theme-sumi .ptoc, html.theme-sumi .ptoc-toggle { background: #1B2038; }
   .ptoc, .ptoc.is-open, .ptoc-scrim, .ptoc-scrim.is-open, .ptoc-toggle { transition: none; }
 }
 
+/* ── Összecsukható fejezetek ──
+   A térkép hosszú: alapból csak az a fejezet nyitott, ahol tartasz, és az utána következő
+   kettő; a többi egy sor. A fejezet fejléce az egész szélességében kapcsoló.
+   (app.js: renderPath, foldMapUnit) */
+.path-unit-head { grid-template-columns: 1fr auto auto; cursor: pointer; }
+.path-unit-head:hover { border-color: rgb(var(--brand-rgb) / 0.45); }
+.path-unit-fold {
+  grid-column: 3; grid-row: 1 / span 3;
+  width: var(--touch); height: var(--touch); margin: -6px -8px -6px -6px;
+  display: flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: none; color: var(--sumi-soft); cursor: pointer;
+}
+.path-unit-fold svg { transition: transform var(--t-base); }
+.path-unit:not(.is-folded) .path-unit-fold svg { transform: rotate(180deg); }
+.path-unit-fold:focus-visible { outline: 2px solid var(--brand); outline-offset: -4px; }
+.path-map[hidden] { display: none; }
+.path-unit.is-folded .path-unit-head { margin: 0; padding-top: 10px; padding-bottom: 10px; box-shadow: none; animation: none; }
+.path-unit.is-folded .path-unit-sub { display: none; }
+.path-unit.is-folded .path-unit-title { font-size: var(--fs-base); }
+.path-unit.is-folded:not(.is-complete) .path-unit-title { color: var(--sumi-soft); }
+.path-unit + .path-unit.is-folded { margin-top: 8px; }
+.path-unit.is-folded + .path-unit:not(.is-folded) { margin-top: 0; }
+.path-tools { display: flex; justify-content: center; margin: 0 0 6px; }
+.path-fold-all {
+  min-height: var(--touch); padding: 0 12px;
+  font: inherit; font-size: var(--fs-sm); font-weight: 700; color: var(--brand-deep);
+  background: none; border: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+.path-fold-all:active { transform: translateY(1px); }
+
+/* ── Napi cél és sorozat: a „Folytatás" kártya alsó sora (app.js: dayStripHtml) ──
+   A kártya telített felület: a színek itt fehérből indulnak, mindkét témában. */
+.continue-day {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 12px;
+  margin-top: 2px; padding-top: 12px; border-top: 1px solid rgb(255 255 255 / 0.20);
+}
+.day-goal {
+  display: flex; align-items: center; gap: 10px; min-height: var(--touch); padding: 0 8px 0 0;
+  font: inherit; text-align: left; color: #FCFCFF; background: none; border: 0; cursor: pointer;
+  border-radius: var(--radius-sm);
+}
+.day-goal:active { transform: scale(0.98); }
+.day-ring { flex: 0 0 auto; }
+.day-ring circle { fill: none; stroke-width: 4; }
+.day-ring-bg { stroke: rgb(255 255 255 / 0.24); }
+.day-ring-fg {
+  stroke: #FCFCFF; stroke-linecap: round;
+  transform: rotate(-90deg); transform-origin: 18px 18px;
+  transition: stroke-dashoffset 600ms var(--ease-out);
+}
+.day-ring-check { fill: none; stroke: #FCFCFF; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.day-goal-text { display: flex; flex-direction: column; line-height: 1.25; }
+.day-goal-title { font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: rgb(255 255 255 / 0.84); }
+.day-goal-num { font-size: var(--fs-base); font-weight: 800; font-variant-numeric: tabular-nums; }
+.day-streak {
+  display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px;
+  font-size: var(--fs-sm); font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap;
+  color: #FCFCFF; background: rgb(255 255 255 / 0.16);
+}
+/* a sorozat él, de ma még nem volt gyakorlás: halványabb, keretes */
+.day-streak.is-wait { background: none; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.32); color: rgb(255 255 255 / 0.88); }
+.day-pick { flex: 1 0 100%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.day-pick[hidden] { display: none; }
+.day-pick-label { grid-column: 1 / -1; font-size: var(--fs-xs); font-weight: 700; color: rgb(255 255 255 / 0.84); }
+.day-pick-btn {
+  min-height: 52px; padding: 6px 4px; border-radius: var(--radius-sm);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px;
+  font: inherit; font-size: var(--fs-sm); font-weight: 800; color: #FCFCFF; cursor: pointer;
+  background: rgb(255 255 255 / 0.12); border: 1px solid rgb(255 255 255 / 0.24);
+}
+.day-pick-btn span { font-size: var(--fs-2xs); font-weight: 600; color: rgb(255 255 255 / 0.82); }
+.day-pick-btn.is-on, .day-pick-btn.is-on span { color: var(--accent); }
+.day-pick-btn.is-on { background: #FCFCFF; border-color: transparent; }
+html.theme-sumi .day-pick-btn.is-on, html.theme-sumi .day-pick-btn.is-on span { color: #2A4BD0; }
+.day-pick-btn:active { transform: scale(0.97); }
+.day-goal:focus-visible, .day-pick-btn:focus-visible { outline: 2px solid #FCFCFF; outline-offset: 2px; }
+
 
 /* ════════════════════════════════════════════════════════
    STATISZTIKA — műszerfal (pages/stats.html)
@@ -8102,15 +8179,15 @@ body.helpers-no-hu .lp-ex-hu { display: none; }
    (user-kérés: ne egy hosszú oldalt kelljen végiggörgetni.) Egy rész = egy lap.
    Fent a lépés-sáv a fejléc helyén: ✕ · egyetlen, folyamatosan töltődő csík · Tartalom.
    Lent a gombsor: menü-gomb (előhozza a fül-sávot) · Vissza · Következő.
-   Kör közben mindkettő eltűnik, és a szokásos fejléc + kör-sáv látszik.
+   A kör-nézetben (kör + összesítő: html.ls-round) mindkettő eltűnik, és a szokásos fejléc + kör-sáv látszik.
    Rögzített rétegek, de elmosás nélkül (tömör felület). Rajzolja: app.js → initLessonPage (initSteps). */
-html.lesson-steps body:not(.round-active) .header { visibility: hidden; }
+html.lesson-steps:not(.ls-round) .header { visibility: hidden; }
 /* a fül-sáv „Fiók" füle a fejléc fiók-menüjét nyitja: az a rejtett fejléc mellett is jelenjen meg */
-html.lesson-steps body:not(.round-active) .header .nc-user-menu:not([hidden]) { visibility: visible; }
+html.lesson-steps:not(.ls-round) .header .nc-user-menu:not([hidden]) { visibility: visible; }
 html.lesson-steps .glass-footer { display: none; }
 html.lesson-steps .lesson-main { min-height: 100vh; min-height: 100dvh; padding-top: calc(var(--header-h) + 14px); padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px)); }
-html.lesson-steps body.round-active .lesson-main { padding-bottom: 32px; }
-body.round-active .ls-top, body.round-active .ls-bar, html:not(.lesson-steps) .ls-top, html:not(.lesson-steps) .ls-bar { display: none; }
+html.lesson-steps.ls-round .lesson-main { padding-bottom: 32px; }
+html.ls-round .ls-top, html.ls-round .ls-bar, html:not(.lesson-steps) .ls-top, html:not(.lesson-steps) .ls-bar { display: none; }
 .ls-off { display: none !important; }
 html.lesson-steps .lp-point, html.lesson-steps .lp-check { animation: none; }
 html.lesson-steps .lesson-hero { margin-bottom: 14px; }
@@ -8238,7 +8315,7 @@ html.lesson-steps .nc-tabbar {
   transition: opacity var(--t-base), transform 240ms var(--ease-out), visibility 0s linear 240ms;
 }
 html.lesson-steps.ls-nav-open .nc-tabbar { opacity: 1; visibility: visible; transform: none; pointer-events: auto; transition: opacity var(--t-base), transform 240ms var(--ease-out); }
-html.lesson-steps body.round-active .nc-tabbar { display: none; }
+html.lesson-steps.ls-round .nc-tabbar { display: none; }
 
 /* a gyors kérdés lapja */
 .lp-quick { padding: 22px 16px 18px; border-radius: var(--radius-xl); }
@@ -8290,6 +8367,38 @@ html.lesson-steps body.round-active .nc-tabbar { display: none; }
 html.theme-sumi .review-card.is-due .path-glyph { color: #171C2E; }
 .review-card:not(.is-due) { box-shadow: none; }
 @media (min-width: 600px) { .home-top .review-card { margin-top: -12px; } }
+
+/* ── Példák lapja: a nyelvtani pont második lapja (app.js: renderLesson) ── */
+.lp-point-ex .lp-pattern { margin-bottom: 0; font-size: var(--fs-sm); }
+.ls-name-of { font-weight: 600; color: var(--sumi-soft); }
+.ls-name-of::before { content: " · "; white-space: pre; }
+/* a párbeszéd megjegyzései saját lapon: a lista maga a lap tartalma, nem beágyazott doboz */
+.lp-notes-plain { margin-top: 4px; padding: 0; background: none; border: 0; }
+.lp-notes-plain ul { gap: 12px; }
+
+/* ── Párbeszéd: lejátszás végig, „csak japánul" (app.js: initDialogue) ── */
+.lp-dlg-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.lp-dlg-play { min-height: var(--touch); padding: 0 16px 0 12px; gap: 8px; font-size: var(--fs-sm); }
+.lp-dlg-ico { display: inline-flex; }
+.lp-dlg-play.is-on { color: var(--on-accent); background: var(--accent); border-color: transparent; }
+.lp-dlg-toggle {
+  display: inline-flex; align-items: center; gap: 8px; min-height: var(--touch); padding: 0 14px;
+  border-radius: 999px; cursor: pointer; font: inherit; font-size: var(--fs-sm); font-weight: 700;
+  color: var(--sumi-soft); background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+  transition: color var(--t-base), background-color var(--t-base), border-color var(--t-base);
+}
+.lp-dlg-toggle:active { transform: scale(0.97); }
+.lp-dlg-dot { width: 8px; height: 8px; border-radius: 50%; background: rgb(var(--tint-rgb) / 0.28); }
+.lp-dlg-toggle[aria-pressed="true"] { color: var(--brand-deep); background: var(--brand-soft); border-color: rgb(var(--brand-rgb) / 0.45); }
+.lp-dlg-toggle[aria-pressed="true"] .lp-dlg-dot { background: var(--brand); }
+.lp-dlg-hint { display: none; margin-top: 8px; font-size: var(--fs-sm); line-height: 1.5; color: var(--sumi-soft); }
+.lp-dialogue.is-jp-only .lp-dlg-hint, .lp-dlg-hint.is-alert { display: block; }
+.lp-dialogue.is-jp-only .lp-ex:not(.is-peek) .lp-ex-romaji,
+.lp-dialogue.is-jp-only .lp-ex:not(.is-peek) .lp-ex-hu,
+.lp-dialogue.is-jp-only .lp-ex:not(.is-peek) .lp-ex-note { display: none; }
+.lp-dialogue.is-jp-only .lp-ex-text { cursor: pointer; }
+.lp-ex { transition: border-color var(--t-base), background-color var(--t-base); }
+.lp-ex.is-current { border-color: rgb(var(--brand-rgb) / 0.55); background: var(--brand-soft); }
 
 /* ════════════════════════════════════════════════════════
    SZÖVEG-ERŐSÍTÉS (user-visszajelzés: a kérdések és a magyarázatok

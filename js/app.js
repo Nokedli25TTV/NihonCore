@@ -2083,6 +2083,7 @@ const NihonCoreAudio = (function () {
       if (ja) u.voice = ja;
       u.rate = Math.max(0.5, Math.min(1.2, options.speed || 1.0));
       u.onerror = function () { if (typeof options.onError === 'function') options.onError(); };
+      if (typeof options.onEnd === 'function') u.onend = function () { options.onEnd(); };
       window.speechSynthesis.cancel();
       window.speechSynthesis.speak(u);
       return true;
@@ -2099,6 +2100,7 @@ const NihonCoreAudio = (function () {
 
   // Lejátszás. Promise-t ad vissza; hiba esetén onError() hívódik
   // (de a Promise nem dob — a hívó UI-ja nem törik el).
+  // options.onEnd: a hang végén hívódik — így több szöveg egymás után játszható le (pl. párbeszéd).
   function play(text, options) {
     options = options || {};
     stop();
@@ -2120,6 +2122,10 @@ const NihonCoreAudio = (function () {
       if (typeof options.onError === 'function') options.onError();
     };
     audio.addEventListener('error', onErr, { once: true });
+    // az elem gyorsítótárazott: egy korábbi, félbeszakított lejátszás „vége" figyelője ne maradjon rajta
+    if (audio._ncEnd) audio.removeEventListener('ended', audio._ncEnd);
+    audio._ncEnd = typeof options.onEnd === 'function' ? function () { options.onEnd(); } : null;
+    if (audio._ncEnd) audio.addEventListener('ended', audio._ncEnd, { once: true });
 
     const p = audio.play();
     if (p && typeof p.catch === 'function') {
@@ -2444,7 +2450,42 @@ const NihonCoreStats = (function () {
     });
   }
 
-  return { recordSession, getSessions, getDailyAggregates, clearSessions };
+  // A mai nap összesítője és a sorozat — a kezdőlap napi célja és a statisztika is ebből számol.
+  const dayKeyOf = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  function getToday() {
+    const key = dayKeyOf(new Date());
+    const today = load().filter(s => dayKeyOf(new Date(s.ts)) === key);
+    const Q = today.reduce((a, s) => a + (s.questionCount || 0), 0);
+    const C = today.reduce((a, s) => a + (s.correctCount || 0), 0);
+    return {
+      rounds: today.length, questions: Q, correct: C,
+      accuracy: Q > 0 ? Math.round(C / Q * 100) : 0,
+      durationMs: today.reduce((a, s) => a + (s.durationMs || 0), 0)
+    };
+  }
+  // Egymást követő naptári napok. A sorozat él, ha tegnap volt gyakorlás (today: ma volt-e már).
+  // A napok léptetése naptár szerint megy (nem 24 órával), így az óraátállítás nem szakítja meg.
+  function getStreak() {
+    const set = {};
+    load().forEach(s => { set[dayKeyOf(new Date(s.ts))] = true; });
+    const keys = Object.keys(set).sort();
+    if (!keys.length) return { current: 0, longest: 0, today: false };
+    const prevDay = d => { const p = new Date(d); p.setDate(p.getDate() - 1); return p; };
+    let longest = 0, run = 0;
+    keys.forEach(k => {
+      const d = new Date(k + 'T12:00:00');
+      run = set[dayKeyOf(prevDay(d))] ? run + 1 : 1;
+      if (run > longest) longest = run;
+    });
+    let cursor = new Date(); cursor.setHours(12, 0, 0, 0);
+    const today = !!set[dayKeyOf(cursor)];
+    if (!today) cursor = prevDay(cursor);
+    let current = 0;
+    while (set[dayKeyOf(cursor)]) { current++; cursor = prevDay(cursor); }
+    return { current: current, longest: longest, today: today };
+  }
+
+  return { recordSession, getSessions, getDailyAggregates, clearSessions, getToday, getStreak };
 })();
 
 
@@ -2629,6 +2670,66 @@ function initLanding() {
       </a>`;
   }
 
+  // ── Napi cél és sorozat: a „Folytatás" kártya alsó sora ──
+  //   A cél a naponta megválaszolt kérdések száma (a körök és a leckék gyors kérdései, a
+  //   statisztika mai napjából); a sorozat az egymást követő gyakorló napok száma.
+  //   A célra koppintva három fokozat közül lehet választani.
+  const GOAL_KEY = 'nihoncore_goal_v1';                    // eszköz-helyi: { daily }
+  const GOALS = [{ n: 10, label: 'Könnyed' }, { n: 20, label: 'Rendes' }, { n: 40, label: 'Komoly' }];
+  let goalOpen = false;
+  function dailyGoal() {
+    try {
+      const g = JSON.parse(localStorage.getItem(GOAL_KEY) || '{}');
+      if (GOALS.some(x => x.n === g.daily)) return g.daily;
+    } catch (e) {}
+    return 20;
+  }
+  function dayStripHtml() {
+    if (!window.NihonCoreStats || !NihonCoreStats.getToday) return '';
+    const goal = dailyGoal();
+    const t = NihonCoreStats.getToday(), s = NihonCoreStats.getStreak();
+    const met = t.questions >= goal;
+    const R = 15, C = 2 * Math.PI * R;
+    const off = C * (1 - Math.min(1, t.questions / goal));
+    const streakLabel = s.current + ' napos sorozat' + (s.current && !s.today ? ', ma még nem gyakoroltál' : '');
+    return `
+        <div class="continue-day${met ? ' is-met' : ''}">
+          <button class="day-goal" id="dayGoalBtn" type="button" aria-expanded="${goalOpen ? 'true' : 'false'}" aria-controls="dayGoalPick"
+                  aria-label="${met ? 'Megvan a mai cél' : 'Mai cél'}: ${t.questions} / ${goal} kérdés. A cél módosítása">
+            <svg class="day-ring" viewBox="0 0 36 36" width="40" height="40" aria-hidden="true" focusable="false">
+              <circle class="day-ring-bg" cx="18" cy="18" r="${R}"/>
+              <circle class="day-ring-fg" cx="18" cy="18" r="${R}" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/>
+              ${met ? '<path class="day-ring-check" d="m12.5 18.4 3.7 3.7 7.3-7.6"/>' : ''}
+            </svg>
+            <span class="day-goal-text">
+              <span class="day-goal-title">${met ? 'Megvan a mai cél' : 'Mai cél'}</span>
+              <span class="day-goal-num">${t.questions} / ${goal} kérdés</span>
+            </span>
+          </button>
+          ${s.current ? `<span class="day-streak${s.today ? '' : ' is-wait'}" role="img" aria-label="${streakLabel}"><span aria-hidden="true">🔥</span>${s.current} nap</span>` : ''}
+          <div class="day-pick" id="dayGoalPick"${goalOpen ? '' : ' hidden'}>
+            <span class="day-pick-label">Napi cél: hány kérdésre válaszolsz egy nap?</span>
+            ${GOALS.map(g => `<button class="day-pick-btn${g.n === goal ? ' is-on' : ''}" type="button" data-goal="${g.n}" aria-pressed="${g.n === goal ? 'true' : 'false'}">${g.label}<span>${g.n} kérdés</span></button>`).join('')}
+          </div>
+        </div>`;
+  }
+  function bindDayStrip(top) {
+    const btn = top.querySelector('#dayGoalBtn'), pick = top.querySelector('#dayGoalPick');
+    if (!btn || !pick) return;
+    btn.addEventListener('click', () => {
+      goalOpen = !goalOpen;
+      pick.hidden = !goalOpen;
+      btn.setAttribute('aria-expanded', goalOpen ? 'true' : 'false');
+    });
+    pick.querySelectorAll('.day-pick-btn').forEach(b => b.addEventListener('click', () => {
+      try { localStorage.setItem(GOAL_KEY, JSON.stringify({ daily: parseInt(b.dataset.goal, 10) })); } catch (e) {}
+      goalOpen = false;
+      renderHomeTop();
+      const again = document.getElementById('dayGoalBtn');
+      if (again) try { again.focus(); } catch (e) {}
+    }));
+  }
+
   function renderHomeTop() {
     const top = document.getElementById('homeTop');
     if (!top || !Path) return;
@@ -2681,7 +2782,9 @@ function initLanding() {
             </div>
           </div>
           <a class="btn btn-primary btn-lg" href="pages/modules.html">Szabad gyakorlás</a>
+          ${dayStripHtml()}
         </div>${reviewCardHtml(v)}`;
+      bindDayStrip(top);
       return;
     }
 
@@ -2704,11 +2807,16 @@ function initLanding() {
           <span class="continue-count">${v.doneCount} / ${v.total} lépés kész</span>
         </div>
         <button class="continue-jump" type="button">Mutasd a térképen</button>
+        ${dayStripHtml()}
       </div>${reviewCardHtml(v)}`;
-    // A térkép hosszú: a gomb a következő lépés csomópontjához görget.
+    bindDayStrip(top);
+    // A térkép hosszú: a gomb a következő lépés csomópontjához görget (ha a fejezete csukva van, kinyitja).
     top.querySelector('.continue-jump').addEventListener('click', () => {
       const node = document.querySelector('.path-node.is-next');
-      if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (!node) return;
+      const unit = node.closest('.path-unit');
+      if (unit && unit.classList.contains('is-folded')) foldMapUnit(unit, true, true);
+      node.scrollIntoView({ behavior: scrollMode(), block: 'center' });
     });
   }
 
@@ -2722,6 +2830,33 @@ function initLanding() {
   const mapGeom = () => wide.matches ? { row: 150, disc: 80, top: 22 } : { row: 140, disc: 72, top: 22 };
   const SEEN_KEY = 'nihoncore_path_seen_v1';               // a „most lett kész" effekthez: mit láttunk már késznek
   let openPop = null;
+
+  // Összecsukható fejezetek: a térkép hosszú, ezért alapból csak az a fejezet nyitott, ahol
+  // tartasz, és az utána következő kettő; a többi egy sor. A fejezet fejléce a kapcsoló.
+  const MAP_KEY = 'nihoncore_map_open';                    // munkamenet: amit kézzel kinyitottál / becsuktál
+  const MAP_AHEAD = 2;
+  let mapFold = {};
+  try { mapFold = JSON.parse(sessionStorage.getItem(MAP_KEY) || '{}') || {}; } catch (e) {}
+  const saveMapFold = () => { try { sessionStorage.setItem(MAP_KEY, JSON.stringify(mapFold)); } catch (e) {} };
+  function updateFoldAll() {
+    const b = document.getElementById('pathFoldAll');
+    if (!b) return;
+    const anyFolded = !!document.querySelector('#pathList .path-unit.is-folded');
+    b.textContent = anyFolded ? 'Minden fejezet kinyitása' : 'Vissza a rövid nézethez';
+    b.dataset.mode = anyFolded ? 'open' : 'auto';
+  }
+  function foldMapUnit(unit, open, remember) {
+    if (!unit) return;
+    if (!open && openPop && unit.contains(openPop.btn)) closePop();
+    unit.classList.toggle('is-folded', !open);
+    const map = unit.querySelector('.path-map'), b = unit.querySelector('.path-unit-fold');
+    if (map) map.hidden = !open;
+    if (b) {
+      b.setAttribute('aria-expanded', open ? 'true' : 'false');
+      b.setAttribute('aria-label', b.dataset.title + ': a lépések ' + (open ? 'elrejtése' : 'megjelenítése'));
+    }
+    if (remember) { mapFold[unit.dataset.unit] = open; saveMapFold(); updateFoldAll(); }
+  }
 
   function closePop() {
     if (!openPop) return;
@@ -2801,13 +2936,22 @@ function initLanding() {
     const fresh = Array.isArray(seen) ? doneIds.filter(id => seen.indexOf(id) < 0) : [];
     try { localStorage.setItem(SEEN_KEY, JSON.stringify(doneIds)); } catch (e) {}
 
+    // melyik fejezet nyitott: ahol tartasz + a következő MAP_AHEAD; ha az út kész, mind csukva
+    const nextId = v.next && v.level ? v.next.step.id : null;
+    const nextUnit = nextId ? units.findIndex(u => u.rows.some(r => r.step.id === nextId)) : -1;
+    const cur = nextUnit >= 0 ? nextUnit : (v.next ? 0 : -99);
+
     const g = mapGeom();
     const cy = i => i * g.row + g.top + g.disc / 2;
     let gi = 0;                                           // csomópont-sorszám az egész úton (a kanyar folytonos)
     list.innerHTML = units.map((u, ui) => {
+      const uid = u.unit.id || ('u' + ui);
       const live = u.rows.filter(r => !r.skipped);
       const done = live.filter(r => r.done).length;
       const complete = live.length > 0 && done === live.length;
+      // a frissen kész lépés fejezete ezen a megnyitáson még nyitva marad (hogy látsszon az animáció)
+      const hasFresh = u.rows.some(r => fresh.indexOf(r.step.id) >= 0);
+      const open = (uid in mapFold) ? !!mapFold[uid] : (hasFresh || (ui >= cur && ui <= cur + MAP_AHEAD));
       const xs = u.rows.map((r, i) => WAVE[(gi + i) % WAVE.length]);
       const segs = u.rows.slice(0, -1).map((r, i) => {
         const bothDone = r.done && u.rows[i + 1].done;
@@ -2840,19 +2984,30 @@ function initLanding() {
       }).join('');
       gi += u.rows.length;
       return `
-        <li class="path-unit${complete ? ' is-complete' : ''}" data-unit="${esc(u.unit.id || ('u' + ui))}">
+        <li class="path-unit${complete ? ' is-complete' : ''}${open ? '' : ' is-folded'}" data-unit="${esc(uid)}">
           <div class="path-unit-head">
             <span class="path-unit-no">${esc(u.unit.kicker || ((ui + 1) + '. fejezet'))}</span>
             <h3 class="path-unit-title">${esc(u.unit.title)}</h3>
             ${u.unit.sub ? '<span class="path-unit-sub">' + esc(u.unit.sub) + '</span>' : ''}
             <span class="path-unit-count" aria-label="${done} / ${live.length} lépés kész">${live.length ? done + ' / ' + live.length : '–'}</span>
+            <button class="path-unit-fold" type="button" aria-expanded="${open ? 'true' : 'false'}" aria-controls="pathMap${ui}"
+                    data-title="${esc(u.unit.title)}" aria-label="${esc(u.unit.title)}: a lépések ${open ? 'elrejtése' : 'megjelenítése'}">${FOLD}</button>
           </div>
-          <ol class="path-map">
+          <ol class="path-map" id="pathMap${ui}"${open ? '' : ' hidden'}>
             <svg class="path-map-line" viewBox="-180 0 360 ${h}" width="360" height="${h}" aria-hidden="true" focusable="false">${segs}</svg>
             ${nodes}
           </ol>
         </li>`;
     }).join('');
+
+    // a fejezet fejléce az egész szélességében kapcsoló (a nyíl a billentyűzetes vezérlő)
+    list.querySelectorAll('.path-unit-head').forEach(head => head.addEventListener('click', e => {
+      e.stopPropagation();
+      const unit = head.closest('.path-unit');
+      closePop();
+      foldMapUnit(unit, unit.classList.contains('is-folded'), true);
+    }));
+    updateFoldAll();
 
     list.querySelectorAll('.path-node-btn').forEach(btn => btn.addEventListener('click', e => {
       e.stopPropagation();
@@ -2877,6 +3032,15 @@ function initLanding() {
   });
   // a töréspont átlépésekor a térkép geometriája változik
   if (wide.addEventListener) wide.addEventListener('change', () => renderPath());
+  // „Minden fejezet kinyitása" ↔ „Vissza a rövid nézethez" (az utóbbi törli a kézi állapotot)
+  const foldAllBtn = document.getElementById('pathFoldAll');
+  if (foldAllBtn) foldAllBtn.addEventListener('click', () => {
+    if (foldAllBtn.dataset.mode === 'open') {
+      document.querySelectorAll('#pathList .path-unit').forEach(u => { mapFold[u.dataset.unit] = true; });
+    } else mapFold = {};
+    saveMapFold();
+    renderPath();
+  });
 
   // ── A tanulási út tartalomjegyzéke ──
   //   Ugyanazokból a fejezetekből épül, mint a térkép (renderPath hívja). Asztali gépen
@@ -3045,6 +3209,7 @@ function initLanding() {
     if (!unit) return;
     closePop();
     if (!tocDock.matches) setTocOpen(false);
+    if (unit.classList.contains('is-folded')) foldMapUnit(unit, true, true);   // a csukott fejezet kinyílik
     const header = document.getElementById('header');
     const y = unit.getBoundingClientRect().top + window.scrollY - (header ? header.getBoundingClientRect().bottom : 0) - 4;
     window.scrollTo({ top: Math.max(0, y), behavior: scrollMode() });
@@ -3056,6 +3221,8 @@ function initLanding() {
     closePop();
     if (!tocDock.matches) setTocOpen(false);
     const node = btn.closest('.path-node');
+    const unit = node.closest('.path-unit');
+    if (unit && unit.classList.contains('is-folded')) foldMapUnit(unit, true, true);
     node.scrollIntoView({ behavior: scrollMode(), block: 'center' });
     locate(node);
     try { btn.focus({ preventScroll: true }); } catch (e) {}
@@ -15659,7 +15826,7 @@ function initStatsPage() {
     cloze: 'Kiegészítés', translate: 'Fordítás', pro: 'Pro hallás',
     free: 'Szabad fordítás',
     reverse: 'Fordítva', typing: 'Beírás', match: 'Párosító',
-    check: 'Ellenőrzés', listen: 'Hallás utáni kör', review: 'Ismétlés',
+    check: 'Ellenőrzés', listen: 'Hallás utáni kör', review: 'Ismétlés', retry: 'Hibák újra', quick: 'Gyors kérdések',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
@@ -15828,35 +15995,10 @@ function initStatsPage() {
   }
 
   // Egymást követő naptári napok streakje
-  function computeStreak() {
-    const days = NihonCoreStats.getDailyAggregates();
-    if (days.length === 0) return { current: 0, longest: 0 };
-    const set = {};
-    days.forEach(d => { set[d.date] = true; });
-    let longest = 0, run = 0, prev = null;
-    days.forEach(d => {
-      const t = new Date(d.date + 'T00:00:00').getTime();
-      run = (prev !== null && t - prev === DAY_MS) ? run + 1 : 1;
-      if (run > longest) longest = run;
-      prev = t;
-    });
-    let current = 0, cursor = startOfDay(Date.now());
-    if (!set[dayKey(cursor)]) cursor -= DAY_MS;        // a streak él, ha tegnap volt
-    while (set[dayKey(cursor)]) { current++; cursor -= DAY_MS; }
-    return { current: current, longest: longest };
-  }
+  //   (a számítás a NihonCoreStats-ban van: a kezdőlap napi célja ugyanebből dolgozik)
+  function computeStreak() { return NihonCoreStats.getStreak(); }
 
-  function todayStats() {
-    const todayKey = dayKey(Date.now());
-    const today = NihonCoreStats.getSessions().filter(s => dayKey(s.ts) === todayKey);
-    const Q = today.reduce((a, s) => a + (s.questionCount || 0), 0);
-    const C = today.reduce((a, s) => a + (s.correctCount || 0), 0);
-    return {
-      rounds: today.length, questions: Q, correct: C,
-      accuracy: Q > 0 ? Math.round(C / Q * 100) : 0,
-      durationMs: today.reduce((a, s) => a + (s.durationMs || 0), 0)
-    };
-  }
+  function todayStats() { return NihonCoreStats.getToday(); }
 
   // Heatmap — az elmúlt egy év (53 hét × 7 nap), hétfő-kezdő hetek, GitHub-szerű elrendezés.
   //   level 0–4: a napi kérdésszám a legaktívabb naphoz mérve.
@@ -17435,6 +17577,7 @@ function initLessonPage() {
   const hasJp = s => /[぀-ヿ一-鿿]/.test(s);
   const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
   const PLAY = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+  const STOP = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2.5"/></svg>';
 
   const course = (typeof NIHONCORE_COURSE !== 'undefined') ? NIHONCORE_COURSE : [];
   let id = null;
@@ -17558,6 +17701,8 @@ function initLessonPage() {
           </table></div>
         </figure>`;
 
+    // Egy pont két lap: előbb a szabály (minta, magyarázat, táblák, jó tudni),
+    // utána a példák (példamondatok, gyakori hibák) — így egy lap egy-másfél képernyő.
     const points = lesson.points.map((p, i) => `
       <section class="lp-point glass-panel" id="p${i + 1}">
         <div class="lp-point-head">
@@ -17569,14 +17714,22 @@ function initLessonPage() {
         <p class="lp-body">${rubyHtml(p.body)}</p>
         ${(p.more || []).map(m => `<p class="lp-body lp-more">${rubyHtml(m)}</p>`).join('')}
         ${(p.tables || []).map(tableHtml).join('')}
-        <ul class="lp-examples">
-          ${p.examples.map(e => sayRow(e)).join('')}
-        </ul>
         ${p.notes && p.notes.length ? `
           <div class="lp-notes">
             <div class="lp-block-title">Jó tudni</div>
             <ul>${p.notes.map(n => `<li>${rubyHtml(n)}</li>`).join('')}</ul>
           </div>` : ''}
+      </section>
+      <section class="lp-point lp-point-ex glass-panel" id="p${i + 1}x">
+        <div class="lp-point-head">
+          <span class="lp-point-no">${i + 1}</span>
+          <h2 class="lp-point-title">Példák</h2>
+          <span class="lp-point-sub" lang="ja">${ruby(p.title)}</span>
+        </div>
+        <div class="lp-pattern" lang="ja">${ruby(p.pattern)}</div>
+        <ul class="lp-examples">
+          ${p.examples.map(e => sayRow(e)).join('')}
+        </ul>
         ${p.mistakes && p.mistakes.length ? `
           <div class="lp-mistakes">
             <div class="lp-block-title">Gyakori hiba</div>
@@ -17602,13 +17755,24 @@ function initLessonPage() {
       <section class="lp-dialogue glass-panel" id="lpDialogue">
         <h2 class="lp-sec-title">Párbeszéd<span class="lp-sec-sub">${esc(dlg.title || '')}</span></h2>
         ${dlg.scene ? `<p class="lp-body lp-scene">${rubyHtml(dlg.scene)}</p>` : ''}
-        <ul class="lp-examples">${dlg.lines.map(l => sayRow(l, { who: l.who })).join('')}</ul>
-        ${dlg.notes && dlg.notes.length ? `
-          <div class="lp-notes">
-            <div class="lp-block-title">Amit a párbeszédből érdemes megjegyezni</div>
-            <ul>${dlg.notes.map(n => `<li>${rubyHtml(n)}</li>`).join('')}</ul>
-          </div>` : ''}
-      </section>` : '';
+        <div class="lp-dlg-tools">
+          <button class="btn btn-outline lp-dlg-play" id="lpDlgPlay" type="button" aria-pressed="false">
+            <span class="lp-dlg-ico" aria-hidden="true">${PLAY}</span><span class="lp-dlg-play-text">Lejátszás végig</span>
+          </button>
+          <button class="lp-dlg-toggle" id="lpDlgJp" type="button" aria-pressed="false">
+            <span class="lp-dlg-dot" aria-hidden="true"></span>Csak japánul
+          </button>
+        </div>
+        <p class="lp-dlg-hint" id="lpDlgHint" aria-live="polite">Koppints egy sorra, ha kell az átírás és a fordítás.</p>
+        <ul class="lp-examples" id="lpDlgLines">${dlg.lines.map(l => sayRow(l, { who: l.who })).join('')}</ul>
+      </section>
+      ${dlg.notes && dlg.notes.length ? `
+      <section class="lp-dialogue lp-dialogue-notes glass-panel" id="lpDialogueNotes">
+        <h2 class="lp-sec-title">A párbeszédből<span class="lp-sec-sub">amit érdemes megjegyezni</span></h2>
+        <div class="lp-notes lp-notes-plain">
+          <ul>${dlg.notes.map(n => `<li>${rubyHtml(n)}</li>`).join('')}</ul>
+        </div>
+      </section>` : ''}` : '';
 
     // A lecke végén: kifejezések, szavak, kulturális tudnivalók, összefoglaló
     const phrasesHtml = lesson.phrases && lesson.phrases.length ? `
@@ -17677,6 +17841,7 @@ function initLessonPage() {
 
     content.querySelectorAll('[data-say]').forEach(btn => btn.addEventListener('click', () => {
       if (!window.NihonCoreAudio) return;
+      stopDialogue();                                      // egy sor meghallgatása leállítja a végigjátszást
       content.querySelectorAll('.is-playing').forEach(b => b.classList.remove('is-playing'));
       btn.classList.add('is-playing');
       const done = () => btn.classList.remove('is-playing');
@@ -17687,6 +17852,7 @@ function initLessonPage() {
     content.querySelectorAll('.lp-table-wrap').forEach(w => {
       if (w.scrollWidth > w.clientWidth + 4) w.parentNode.classList.add('is-wide');
     });
+    initDialogue();
     initSteps();
     // az összefoglaló sorai a megfelelő pont lapjára visznek
     content.querySelectorAll('.lp-glance-row').forEach(a => a.addEventListener('click', ev => {
@@ -17712,8 +17878,99 @@ function initLessonPage() {
     }
   }
 
+  /* ── B1) Párbeszéd: lejátszás végig, „csak japánul" ─ */
+  //   A sorok egymás után szólalnak meg: a hang végén lép tovább, és ha a hang
+  //   vége nem jelez, időre. „Csak japánul": az átírás és a fordítás rejtve,
+  //   egy sorra koppintva az a sor megmutatja.
+  const DLG_JP_KEY = 'nihoncore_dlg_jponly';               // eszköz-helyi beállítás
+  const dlgRun = { token: 0, playing: false, timer: 0 };
+  function dlgButton(on) {
+    const btn = document.getElementById('lpDlgPlay');
+    if (!btn) return;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.classList.toggle('is-on', on);
+    btn.querySelector('.lp-dlg-play-text').textContent = on ? 'Leállítás' : 'Lejátszás végig';
+    btn.querySelector('.lp-dlg-ico').innerHTML = on ? STOP : PLAY;
+  }
+  function stopDialogue() {
+    const was = dlgRun.playing;
+    dlgRun.token++; dlgRun.playing = false;
+    clearTimeout(dlgRun.timer);
+    if (!was) return;
+    dlgButton(false);
+    content.querySelectorAll('#lpDlgLines .is-current').forEach(li => li.classList.remove('is-current'));
+    content.querySelectorAll('#lpDlgLines .is-playing').forEach(b => b.classList.remove('is-playing'));
+  }
+  function playDialogue() {
+    const lines = Array.prototype.slice.call(content.querySelectorAll('#lpDlgLines .lp-ex'));
+    if (!lines.length || !window.NihonCoreAudio) return;
+    stopDialogue();
+    const my = ++dlgRun.token;
+    dlgRun.playing = true;
+    dlgButton(true);
+    const hint = document.getElementById('lpDlgHint');
+    if (hint) { hint.textContent = 'Koppints egy sorra, ha kell az átírás és a fordítás.'; hint.classList.remove('is-alert'); }
+    const smooth = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let silent = 0;                                        // egymás utáni néma sorok
+    const step = k => {
+      if (my !== dlgRun.token) return;
+      lines.forEach(li => li.classList.remove('is-current'));
+      if (k >= lines.length) { stopDialogue(); return; }
+      const li = lines[k], b = li.querySelector('.lp-ex-play');
+      li.classList.add('is-current');
+      b.classList.add('is-playing');
+      // a sor maradjon a lépés-sáv és az alsó gombsor között
+      const r = li.getBoundingClientRect();
+      if (r.top < 84 || r.bottom > window.innerHeight - 110) li.scrollIntoView({ block: 'center', behavior: smooth ? 'smooth' : 'auto' });
+      let moved = false;
+      const next = (wait, failed) => {
+        if (moved || my !== dlgRun.token) return;
+        moved = true;
+        clearTimeout(dlgRun.timer);
+        b.classList.remove('is-playing');
+        silent = failed ? silent + 1 : 0;
+        if (silent >= 2) {                                 // nincs hang: nem pörgetjük végig némán
+          stopDialogue();
+          if (hint) { hint.textContent = 'A hang most nem érhető el. A sorokat így is elolvashatod.'; hint.classList.add('is-alert'); }
+          return;
+        }
+        dlgRun.timer = setTimeout(() => step(k + 1), wait);
+      };
+      const text = b.dataset.say;
+      dlgRun.timer = setTimeout(() => next(0, false), 2600 + text.length * 320);   // ha a hang vége nem jelez
+      try { NihonCoreAudio.play(text, { speed: 0.9, onEnd: () => next(450, false), onError: () => next(700, true) }); }
+      catch (err) { next(700, true); }
+    };
+    step(0);
+  }
+  function initDialogue() {
+    const sec = document.getElementById('lpDialogue');
+    const jpBtn = document.getElementById('lpDlgJp'), playBtn = document.getElementById('lpDlgPlay');
+    if (!sec || !jpBtn || !playBtn) return;
+    const setJp = on => {
+      sec.classList.toggle('is-jp-only', on);
+      jpBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      if (!on) sec.querySelectorAll('.is-peek').forEach(li => li.classList.remove('is-peek'));
+    };
+    let on = false;
+    try { on = localStorage.getItem(DLG_JP_KEY) === '1'; } catch (e) {}
+    setJp(on);
+    jpBtn.addEventListener('click', () => {
+      const v = !sec.classList.contains('is-jp-only');
+      setJp(v);
+      try { localStorage.setItem(DLG_JP_KEY, v ? '1' : '0'); } catch (e) {}
+    });
+    sec.querySelectorAll('#lpDlgLines .lp-ex-text').forEach(t => t.addEventListener('click', () => {
+      if (sec.classList.contains('is-jp-only')) t.parentNode.classList.toggle('is-peek');
+    }));
+    playBtn.addEventListener('click', () => {
+      if (dlgRun.playing) { stopDialogue(); NihonCoreAudio.stop(); } else playDialogue();
+    });
+  }
+
   /* ── B2) Lépések: a lecke lapokra bontva ──────── */
-  //   Egy rész = egy lap; a nyelvtani pontok után egy-egy gyors kérdés áll.
+  //   Egy rész = egy lap; egy nyelvtani pont két lap (szabály, aztán példák),
+  //   utána egy gyors kérdés áll.
   //   Fent a lépés-sáv (✕ · folyamatosan töltődő csík · Tartalom), lent a gombsor
   //   (menü · Vissza · Következő). A menü-gomb hozza elő a fül-sávot.
   //   A stílusa: style.css LECKE-OLDAL blokk, „Lépések" rész.
@@ -17809,6 +18066,8 @@ function initLessonPage() {
     const right = options.indexOf(q.a);
     const done = (ok, dontKnow) => {
       srsMark(q, ok);
+      if (!quickLog.length) quickStart = Date.now();
+      quickLog.push({ q: (srsOf.get(q) || {}).id || lesson.id + ':quick', correct: ok, errorCode: ok ? null : (dontKnow ? 'dont_know' : 'wrong_choice') });
       sec.querySelectorAll('.cj-option, .dont-know-btn').forEach(b => { b.disabled = true; });
       if (!ok) buttons[right].classList.add('reveal-correct');
       const fb = sec.querySelector('.lp-quick-fb');
@@ -17828,6 +18087,21 @@ function initLessonPage() {
     }));
     sec.querySelector('.dont-know-btn').addEventListener('click', () => { if (!quickDone[pi]) done(false, true); });
   }
+
+  // A gyors kérdések válaszai egy rövid körként mennek a statisztikába, így a napi cél
+  // a lecke olvasását is számolja. Mentés: kör indításakor és az oldal elhagyásakor.
+  const quickLog = [];
+  let quickStart = 0;
+  function flushQuick() {
+    if (!quickLog.length) return;
+    const results = quickLog.splice(0, quickLog.length);
+    NihonCoreStats.recordSession({ module: 'lesson', mode: 'quick', results: results,
+      score: results.filter(r => r.correct).length * 10,
+      startTs: Math.max(quickStart, Date.now() - results.length * 90000),   // kérdésenként legfeljebb másfél perc számít
+      skipPath: true });
+  }
+  window.addEventListener('pagehide', flushQuick);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushQuick(); });
 
   function closeLayers() {
     root.classList.remove('ls-sheet-open', 'ls-nav-open');
@@ -17861,6 +18135,7 @@ function initLessonPage() {
 
   function showLap(i, quiet) {
     i = Math.max(0, Math.min(steps.laps.length - 1, i));
+    stopDialogue();
     if (window.NihonCoreAudio) try { NihonCoreAudio.stop(); } catch (e) {}
     closeLayers();
     steps.cur = i;
@@ -17900,8 +18175,14 @@ function initLessonPage() {
     };
     add([hero, sec('#lpIntro')], 'Áttekintés', 'miről szól a lecke', String(lesson.badge || lesson.no));
     add([sec('#lpDialogue')], 'Párbeszéd', lesson.dialogue ? esc(lesson.dialogue.title || '') : '', '話');
+    // a párbeszéd megjegyzései külön lapon (a Tartalom-lapon a párbeszédhez tartoznak)
+    const dlgNotes = sec('#lpDialogueNotes');
+    if (dlgNotes) laps.push({ kind: 'part', no: no, els: [dlgNotes], nameHtml: 'Párbeszéd<span class="ls-name-of">megjegyzések</span>' });
     lesson.points.forEach((p, pi) => {
       add([sec('#p' + (pi + 1))], '<span lang="ja">' + ruby(p.title) + '</span>', ruby(p.sub), String(pi + 1), { point: pi });
+      // a pont második lapja: a példák (a Tartalom-lapon a ponthoz tartozik, nem külön sor)
+      const ex = sec('#p' + (pi + 1) + 'x');
+      if (ex) laps.push({ kind: 'part', no: no, els: [ex], point: pi, nameHtml: 'Példák<span class="ls-name-of" lang="ja">' + ruby(p.title) + '</span>' });
       const q = sec('#q' + (pi + 1));
       if (q && hasQuick(pi)) laps.push({ kind: 'quick', no: no, els: [q], point: pi });
       else if (q) q.classList.add('ls-off');
@@ -18044,15 +18325,22 @@ function initLessonPage() {
     if (el) el.classList.remove('hidden');
   }
 
-  function startQuiz(kind) {
+  // retryCards: „Hibáim újra" — az előző kör elrontott kártyái jönnek vissza (a kör fajtája marad).
+  function startQuiz(kind, retryCards) {
+    stopDialogue();
+    flushQuick();
+    const retry = Array.isArray(retryCards) && retryCards.length > 0;
     run.kind = kind === 'listen' ? 'listen' : kind === 'review' ? 'review' : 'check';
-    run.cards = run.kind === 'listen' ? buildListenRound() : run.kind === 'review' ? buildReviewRound() : buildRound();
+    run.cards = retry ? shuffle(retryCards).map(c => ({ q: c.q, options: shuffle(c.options) }))
+      : run.kind === 'listen' ? buildListenRound() : run.kind === 'review' ? buildReviewRound() : buildRound();
     if (!run.cards.length) return;
+    run.retry = retry;
     run.idx = 0; run.score = 0; run.streak = 0; run.results = []; run.startTs = Date.now(); run.inLesson = false;
     NihonCoreRound.begin(function () {
-      return { module: 'lesson', mode: run.kind, results: run.results, score: run.score, startTs: run.startTs };
+      return { module: 'lesson', mode: run.retry ? 'retry' : run.kind, results: run.results, score: run.score, startTs: run.startTs, skipPath: run.retry };
     });
     closeLayers();
+    root.classList.add('ls-round');                      // kör-nézet (a kör és az összesítője): a lépés-sáv és a gombsor rejtve
     hero.classList.add('hidden');
     content.classList.add('hidden');
     runtime.classList.remove('hidden');
@@ -18174,48 +18462,68 @@ function initLessonPage() {
     NihonCoreRound.scrollToRound();
   }
 
+  // Összesítő. „Hibáim újra": az elrontott kérdések rövid körben térnek vissza; ez a kör a
+  // statisztikába 'retry' néven megy, és a tanulási út lépését nem dönti el (skipPath) —
+  // a lépéshez továbbra is egy teljes, legalább 60%-os kör kell.
   function showSummary() {
-    NihonCoreStats.recordSession({ module: 'lesson', mode: run.kind, results: run.results, score: run.score, startTs: run.startTs });
+    const retry = !!run.retry;
+    NihonCoreStats.recordSession({ module: 'lesson', mode: retry ? 'retry' : run.kind, results: run.results, score: run.score,
+      startTs: run.startTs, skipPath: retry });
     if (run.kind === 'review') { showReviewSummary(); return; }
     const listen = run.kind === 'listen';
     if (listen && window.NihonCoreAudio) NihonCoreAudio.stop();
     const total = run.results.length;
     const correct = run.results.filter(r => r.correct).length;
     const pct = total ? Math.round((correct / total) * 100) : 0;
-    const passed = pct >= 60;
+    if (!retry) run.base = { passed: pct >= 60 };          // a teljes kör eredménye: ettől függ, merre visz tovább a gomb
+    const passed = run.base ? run.base.passed : pct >= 60;
+    const missed = run.cards.filter((c, i) => run.results[i] && !run.results[i].correct);
+    run.missed = missed;
     const nextPractice = practiceRows().find(r => !r.done);
     document.getElementById('lqCard').innerHTML = '';
     const fb = document.getElementById('lqFeedback');
     fb.classList.add('hidden'); fb.innerHTML = '';
     document.getElementById('lqFill').style.width = '100%';
+
+    // a továbbvivő gomb: sikeres teljes kör után a gyakorlás, különben egy új teljes kör
+    const main = missed.length ? 'btn-outline' : 'btn-primary';
+    const forward = passed
+      ? (nextPractice
+          ? (nextPractice.step.module === 'lesson'
+              ? '<button class="btn ' + main + '" id="lqGoListen" type="button">Gyakorlás: ' + esc(nextPractice.step.title) + '</button>'
+              : '<a class="btn ' + main + '" href="' + Path.stepHref(nextPractice.step, false) + '">Gyakorlás: ' + esc(nextPractice.step.title) + '</a>')
+          : '<a class="btn ' + main + '" href="../index.html#path">Tovább az úton</a>')
+      : '<button class="btn ' + main + '" id="lqAgain" type="button">Új kör</button>';
+    const title = retry
+      ? (missed.length ? 'Még ' + missed.length + ' kérdés nem megy' : 'Kijavítottad a hibáidat')
+      : !passed ? 'Még egy kör, és megvan' : listen ? 'Megvan a hallás utáni kör' : 'Megvan a lecke';
+    const note = missed.length
+      ? (passed ? 'Amit elrontottál, most rögtön átveheted újra — vagy mehetsz tovább.'
+                : 'Előbb vedd át újra, amit elrontottál, aztán jöhet egy új kör: a lépéshez 60% kell.')
+      : retry ? (passed ? 'Minden kérdés megvan. Mehetsz tovább.' : 'Minden kérdés megvan. Most jöhet egy új, teljes kör: a lépéshez 60% kell.')
+      : nextPractice ? 'Most jöhet a gyakorlás: a lecke anyaga feladatokban.'
+      : 'A lecke minden gyakorlása megvan. Mehet a következő lecke.';
     const sEl = document.getElementById('lqSummary');
     sEl.classList.remove('hidden');
     sEl.innerHTML = `
       <div class="summary-icon">${pct === 100 ? '🏆' : passed ? '🎯' : '🌱'}</div>
-      <h3>${!passed ? 'Még egy kör, és megvan' : listen ? 'Megvan a hallás utáni kör' : 'Megvan a lecke'}</h3>
+      <h3>${title}</h3>
       <div class="summary-score">${correct} / ${total}</div>
-      <p class="lq-summary-note">${!passed
-        ? (listen ? 'Hallgasd meg újra a példákat a leckében, aztán próbáld meg ismét.' : 'Nézd át újra a pontokat, amik bizonytalanok, aztán próbáld meg ismét.')
-        : nextPractice ? 'Most jöhet a gyakorlás: a lecke anyaga feladatokban.'
-        : 'A lecke minden gyakorlása megvan. Mehet a következő lecke.'}</p>
+      <p class="lq-summary-note">${note}</p>
       <div class="kana-summary-actions">
-        ${passed
-          ? `${nextPractice
-               ? (nextPractice.step.module === 'lesson'
-                   ? '<button class="btn btn-primary" id="lqGoListen" type="button">Gyakorlás: ' + esc(nextPractice.step.title) + '</button>'
-                   : '<a class="btn btn-primary" href="' + Path.stepHref(nextPractice.step, false) + '">Gyakorlás: ' + esc(nextPractice.step.title) + '</a>')
-               : '<a class="btn btn-primary" href="../index.html#path">Tovább az úton</a>'}
-             <button class="btn btn-outline" id="lqAgain" type="button">Még egy kör</button>
-             <button class="btn btn-ghost" id="lqBack" type="button">Vissza a leckéhez</button>`
-          : `<button class="btn btn-primary" id="lqBack" type="button">Vissza a leckéhez</button>
-             <button class="btn btn-outline" id="lqAgain" type="button">Újra</button>`}
+        ${missed.length ? '<button class="btn btn-primary" id="lqRetry" type="button">Hibáim újra (' + missed.length + ')</button>' : ''}
+        ${forward}
+        ${passed && !missed.length && !retry ? '<button class="btn btn-outline" id="lqAgain" type="button">Még egy kör</button>' : ''}
+        <button class="btn btn-ghost" id="lqBack" type="button">Vissza a leckéhez</button>
       </div>`;
     document.getElementById('lqBack').addEventListener('click', backToLesson);
+    const retryBtn = document.getElementById('lqRetry');
+    if (retryBtn) retryBtn.addEventListener('click', () => startQuiz(run.kind, run.missed));
     const again = document.getElementById('lqAgain');
     if (again) again.addEventListener('click', () => startQuiz(run.kind));
     const goListen = document.getElementById('lqGoListen');
     if (goListen) goListen.addEventListener('click', () => startQuiz('listen'));
-    if (pct === 100 && window.NihonCoreMotion && NihonCoreMotion.celebrate) {
+    if (pct === 100 && !retry && window.NihonCoreMotion && NihonCoreMotion.celebrate) {
       try { NihonCoreMotion.celebrate({ title: 'Hibátlan!', sub: `${total} / ${total}` }); } catch (e) {}
     }
   }
@@ -18223,6 +18531,7 @@ function initLessonPage() {
   function backToLesson() {
     if (window.NihonCoreAudio) NihonCoreAudio.stop();
     run.inLesson = true; run.cards = [];
+    root.classList.remove('ls-round');
     hero.classList.remove('hidden');          // → a kör-őr elmenti a részeredményt
     content.classList.remove('hidden');
     runtime.classList.add('hidden');
@@ -18321,6 +18630,7 @@ function initLessonPage() {
 
   if (lesson.review) renderReview(); else renderLesson();
   window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, buildListenRound, practiceRows, steps, showLap,
+    playDialogue, stopDialogue, dlgRun, flushQuick,
     quickMatches: () => (quickMap || (quickMap = buildQuickMap())).map(l => l.length) };
 }
 
