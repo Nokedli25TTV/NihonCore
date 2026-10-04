@@ -13485,6 +13485,21 @@ function initGrammarPage() {
       const p = rest.splice(Math.floor(Math.random() * rest.length), 1)[0];
       if (p && !seen.has(p.id)) { distractors.push(p); seen.add(p.id); }
     }
+    // 4) Szűk készletnél (a tanulási út egy leckéjének 2–4 mintája) a hiányzó elterelők a teljes
+    //    mintakészletből jönnek: előbb az ellenpárok, aztán az azonos kategória, az azonos szint, végül bármi.
+    if (distractors.length < 3) {
+      const wider = NIHONCORE_GRAMMAR_PATTERNS.filter(p => !seen.has(p.id));
+      const draw = list => {
+        while (distractors.length < 3 && list.length > 0) {
+          const p = list.splice(Math.floor(Math.random() * list.length), 1)[0];
+          if (!seen.has(p.id)) { distractors.push(p); seen.add(p.id); }
+        }
+      };
+      draw(wider.filter(p => (correctPattern.contrasts || []).indexOf(p.id) >= 0));
+      draw(wider.filter(p => p.category === correctPattern.category));
+      draw(wider.filter(p => p.jlpt === correctPattern.jlpt));
+      draw(wider.slice());
+    }
 
     const all = [
       { pattern: correctPattern, isCorrect: true },
@@ -14198,7 +14213,10 @@ function initGrammarPage() {
       drillRunState.hintLevel++;
       let html = disp.innerHTML;
       if (drillRunState.hintLevel === 1) {
-        html += `<div class="cj-hint-line"><em>Kategória:</em> ${categoryLabel(card.pattern.category)} — ${card.pattern.summary}</div>`;
+        // a felismerő kártyán az összefoglaló maga a helyes válasz: ott csak a kategória a tipp
+        html += card.kind === 'recognition'
+          ? `<div class="cj-hint-line"><em>Kategória:</em> ${categoryLabel(card.pattern.category)}</div>`
+          : `<div class="cj-hint-line"><em>Kategória:</em> ${categoryLabel(card.pattern.category)} — ${card.pattern.summary}</div>`;
       } else {
         if (card.kind === 'cloze') {
           const ans = card.example.clozeAnswer || '';
@@ -14216,6 +14234,16 @@ function initGrammarPage() {
 
   /* ── F.1) Recognition ─────────────────────────── */
 
+  // A mondatban kiemeli a minta helyét (ami a kiegészítős feladat hiánya). Egy mondatban több szerkezet
+  // is van (は, です, を…): a kiemelés mondja meg, melyikre kérdezünk rá.
+  function grmHighlight(ex) {
+    const parts = String(ex.cloze || '').split('___BLANK___');
+    const jp = String(ex.jp || '');
+    if (parts.length !== 2 || jp.indexOf(parts[0]) !== 0 || jp.length < parts[0].length + parts[1].length ||
+        jp.slice(jp.length - parts[1].length) !== parts[1]) return jp;
+    return parts[0] + '<span class="grm-hl">' + jp.slice(parts[0].length, jp.length - parts[1].length) + '</span>' + parts[1];
+  }
+
   function renderGrmRecognitionCard(card) {
     const ex = card.example;
     const optionsHtml = card.options.map((opt, i) => `
@@ -14230,9 +14258,9 @@ function initGrammarPage() {
         <div class="cj-prompt-eyebrow">
           <span class="dt-cat-tag grm-jlpt-tag">JLPT ${card.pattern.jlpt}</span>
         </div>
-        <div class="grm-sentence">${ex.jp}</div>
+        <div class="grm-sentence">${grmHighlight(ex)}</div>
         <div class="grm-sentence-romaji">${escapeGrmHtml(ex.romaji)}</div>
-        <div class="kana-task">Mit fejez ki ez a mondat?</div>
+        <div class="kana-task">Mit fejez ki a kiemelt rész?</div>
       </div>
       ${renderGrmHintBar(card)}
       <div class="cj-options grm-options">${optionsHtml}</div>

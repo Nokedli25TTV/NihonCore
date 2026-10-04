@@ -4573,6 +4573,12 @@ body.helpers-no-hu     .pp-tok-hu     { display: none !important; }
   letter-spacing: 0.5px;
 }
 .grm-sentence ruby { ruby-position: over; }
+/* a minta helye a mondatban (felismerő kártya: „Mit fejez ki a kiemelt rész?") */
+.grm-hl {
+  padding: 0 4px; border-radius: var(--radius-sm);
+  color: var(--brand-deep); background: var(--brand-soft);
+  box-shadow: inset 0 -2px 0 rgb(var(--brand-rgb) / 0.45);
+}
 .grm-sentence rt {
   font-family: var(--font-jp);
   font-size: 0.55em;
