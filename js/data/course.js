@@ -10947,121 +10947,512 @@ const NIHONCORE_COURSE = [
 
   /* ── 29. lecke ────────────────────────────────────── */
   {
-    id: 'l29', no: 29, book: 'Dekiru 2',
-    title: 'Új félév',
-    lead: 'Megmondod, hol tartasz egy cselekvésben, átadod, amit más kért vagy üzent, és megnevezed, miről van szó.',
+    id: 'l29', no: 29, book: 'Dekiru 2', title: 'Új félév',
+    lead: 'Megmondod, hol tartasz egy cselekvésben, továbbadod, amit más kért vagy üzent, visszakérdezel, hogy jól értetted-e, megnevezed, miről van szó, és megtanulod, hogyan kérj udvariasan valami nehezen teljesíthetőt.',
     cando: [
       'Megfogalmazol egy kényes, nehezen teljesíthető kérést.',
       'Változtatást kérsz egy már megbeszélt programban.',
-      'Átadsz egy üzenetet vagy utasítást.'
+      'Átadsz egy üzenetet vagy utasítást, és megerősíted, hogy jól értetted.',
+      'Használod az órán szükséges kifejezéseket.'
     ],
+    intro: [
+      'Új félév kezdődik: órarendet kell egyeztetni, időpontot módosítani, üzenetet átadni. A lecke első eszköze a <b>ところ</b>: megmutatja, hol tartasz egy cselekvésben — közvetlenül előtte, a közepén, vagy épp most végeztél. Egyetlen szó, három igealakkal.',
+      'A második téma az <b>üzenetközvetítés</b>. Ha valaki kér vagy utasít, és ezt tovább kell adnod, a kérés tartalmát <b>〜ように</b> vezeti be: „mondd meg neki, hogy hívjon fel". Ha pedig biztos akarsz lenni benne, hogy jól értettél valamit, a <b>〜ということですね</b> fordulattal kérdezel vissza: „tehát akkor…, ugye?".',
+      'A lecke helyzete egy <b>kényes kérés</b>: a tanárodtól kell kérned valamit, ami neki kényelmetlen. Japánul ennek megvan a rendje — megszólítás, a téma megjelölése (<b>〜について</b>), a háttér, és csak a végén a kérés. Aki ezt megtanulja, az a munkahelyen és a hivatalban is boldogul.'
+    ],
+    dialogue: {
+      title: 'Áttehetném a tesztet?',
+      scene: 'Anna a kiotói hetek alatt nyelviskolába is jár. A pénteki tesztet szeretné máskor megírni; a tanárnőjéhez fordul, aki közben üzenetet is rábíz.',
+      lines: [
+        { who: 'Anna', jp: '{先生|せんせい}、{今|いま}、ちょっとよろしいでしょうか。', romaji: 'Sensei, ima, chotto yoroshii deshō ka.', hu: 'Tanárnő, van most egy perce?' },
+        { who: 'Tanárnő', jp: 'はい、どうぞ。ちょうど{授業|じゅぎょう}の{準備|じゅんび}が{終|お}わったところです。', romaji: 'Hai, dōzo. Chōdo jugyō no junbi ga owatta tokoro desu.', hu: 'Igen, tessék. Épp most végeztem az órai előkészülettel.' },
+        { who: 'Anna', jp: '{金曜日|きんようび}のテストについて、ご{相談|そうだん}があるんですが…。', romaji: 'Kin\'yōbi no tesuto ni tsuite, go-sōdan ga aru n desu ga…', hu: 'A pénteki teszttel kapcsolatban szeretnék kérni valamit…' },
+        { who: 'Tanárnő', jp: 'はい。{何|なん}でしょう。', romaji: 'Hai. Nan deshō.', hu: 'Igen. Miről van szó?' },
+        {
+          who: 'Anna',
+          jp: 'じつは、{金曜日|きんようび}の{午前|ごぜん}に、{高校|こうこう}でハンガリーについて{発表|はっぴょう}する{約束|やくそく}があるんです。',
+          romaji: 'Jitsu wa, kin\'yōbi no gozen ni, kōkō de Hangarī ni tsuite happyō suru yakusoku ga aru n desu.',
+          hu: 'Az a helyzet, hogy péntek délelőttre megígértem: előadást tartok Magyarországról egy gimnáziumban.'
+        },
+        { who: 'Anna', jp: 'それで、テストを{別|べつ}の{日|ひ}に{受|う}けたいんですが、よろしいでしょうか。', romaji: 'Sore de, tesuto o betsu no hi ni uketai n desu ga, yoroshii deshō ka.', hu: 'Ezért szeretném máskor megírni a tesztet, ha lehetséges.' },
+        { who: 'Tanárnő', jp: 'うーん、それは{困|こま}りましたね…。{木曜日|もくようび}の{午後|ごご}はどうですか。', romaji: 'Ūn, sore wa komarimashita ne… Mokuyōbi no gogo wa dō desu ka.', hu: 'Hm, ez gond… A csütörtök délután megfelelne?' },
+        { who: 'Anna', jp: '{木曜日|もくようび}の{午後|ごご}なら、{大丈夫|だいじょうぶ}です。', romaji: 'Mokuyōbi no gogo nara, daijōbu desu.', hu: 'A csütörtök délután jó.' },
+        {
+          who: 'Tanárnő',
+          jp: 'つまり、{木曜日|もくようび}にテストを{受|う}けて、{金曜日|きんようび}は{休|やす}むということですね。',
+          romaji: 'Tsumari, mokuyōbi ni tesuto o ukete, kin\'yōbi wa yasumu to iu koto desu ne.',
+          hu: 'Vagyis csütörtökön megírja a tesztet, pénteken pedig hiányzik, ugye?'
+        },
+        { who: 'Anna', jp: 'はい、そうです。{無理|むり}を{言|い}って、すみません。', romaji: 'Hai, sō desu. Muri o itte, sumimasen.', hu: 'Igen. Elnézést, hogy ilyet kérek.' },
+        {
+          who: 'Tanárnő',
+          jp: 'いいですよ。それから、マリアさんに{会|あ}ったら、{宿題|しゅくだい}を{出|だ}すように{言|い}ってくれますか。',
+          romaji: 'Ii desu yo. Sore kara, Maria-san ni attara, shukudai o dasu yō ni itte kuremasu ka.',
+          hu: 'Rendben van. És ha találkozik Mariával, megmondaná neki, hogy adja be a házit?'
+        },
+        {
+          who: 'Anna',
+          jp: 'わかりました。{伝|つた}えておきます。マリアさん、{先生|せんせい}が、{宿題|しゅくだい}を{出|だ}すように{言|い}っていたよ。',
+          romaji: 'Wakarimashita. Tsutaete okimasu. Maria-san, sensei ga, shukudai o dasu yō ni itte ita yo.',
+          hu: 'Rendben, átadom. — Maria, a tanárnő üzeni, hogy add be a házit.'
+        },
+        { who: 'Maria', jp: 'あ、{今|いま}、{書|か}いているところなの。あと{十分|じゅっぷん}で{終|お}わるよ。', romaji: 'A, ima, kaite iru tokoro na no. Ato juppun de owaru yo.', hu: 'Jaj, épp most írom. Tíz perc, és kész.' }
+      ],
+      notes: [
+        'A <b>{今|いま}、よろしいでしょうか</b> a kérés előszobája: előbb azt kérdezed meg, ráér-e a másik. A よろしい az いい udvarias párja, a でしょうか pedig puhább a ですか-nál.',
+        'Két ところ: <b>{終|お}わったところ</b> (épp most ért véget) és <b>{書|か}いているところ</b> (épp most írom).',
+        'A <b>〜について、ご{相談|そうだん}があるんですが…</b> megnevezi a témát, és félbehagyja a mondatot: a tanár így maga kérdezhet rá.',
+        'A <b>じつは</b> („az a helyzet, hogy…") jelzi: most jön a valódi ok. Utána a <b>それで</b> („ezért") vezeti be a kérést.',
+        'A <b>それは{困|こま}りましたね</b> nem elutasítás: a tanár jelzi, hogy a kérés nehéz, és megoldást keres.',
+        'A <b>〜ということですね</b> visszakérdezés: a tanár a saját szavaival összefoglalja, miben egyeztek meg.',
+        'Az üzenet kétszer hangzik el: a kérésben <b>{出|だ}すように{言|い}ってくれますか</b>, az átadásban <b>{出|だ}すように{言|い}っていたよ</b>.'
+      ]
+    },
     points: [
       {
         title: '〜るところです', sub: 'éppen készülök…',
         pattern: 'szótári alak + ところです',
         body: 'A <b>ところ</b> („pont, mozzanat") megmutatja, hol tartasz egy cselekvésben. Szótári alakkal: közvetlenül előtte állsz.',
+        more: [
+          'A ところ eredetileg „hely". Itt időbeli pontot jelent: a cselekvés melyik <b>szakaszánál</b> tartasz. Az előtte álló igealak dönti el: szótári alak (előtte), ている (közben), た-alak (utána).',
+          'Szótári alakkal azt mondod: a cselekvés <b>mindjárt kezdődik</b>. Gyakori kísérői: これから, {今|いま}から, ちょうど.',
+          'Múlt időben (〜るところでした) kétfélét jelenthet: „épp azon voltam, hogy…", vagy — もう{少|すこ}しで kíséretében — „kis híján…".'
+        ],
+        tables: [
+          {
+            caption: 'A ところ három állása',
+            head: ['Mikor?', 'Alak', 'Jelentés'],
+            rows: [
+              ['előtte', 'たべ<b>る</b> ところです', 'mindjárt eszem'],
+              ['közben', 'たべ<b>ている</b> ところです', 'éppen eszem'],
+              ['utána', 'たべ<b>た</b> ところです', 'épp most ettem']
+            ]
+          }
+        ],
         examples: [
           { jp: 'これから{出|で}かけるところです。', romaji: 'Kore kara dekakeru tokoro desu.', hu: 'Éppen indulni készülök.' },
           { jp: '{今|いま}から{昼|ひる}ごはんを{食|た}べるところです。', romaji: 'Ima kara hirugohan o taberu tokoro desu.', hu: 'Éppen ebédelni készülök.' },
-          { jp: 'ちょうど{電話|でんわ}するところでした。', romaji: 'Chōdo denwa suru tokoro deshita.', hu: 'Épp telefonálni akartam.' }
+          { jp: 'ちょうど{電話|でんわ}するところでした。', romaji: 'Chōdo denwa suru tokoro deshita.', hu: 'Épp telefonálni akartam.' },
+          { jp: '{今|いま}、{家|いえ}を{出|で}るところです。', romaji: 'Ima, ie o deru tokoro desu.', hu: 'Épp most indulok otthonról.' },
+          { jp: 'もう{少|すこ}しで{電車|でんしゃ}に{乗|の}り{遅|おく}れるところでした。', romaji: 'Mō sukoshi de densha ni noriokureru tokoro deshita.', hu: 'Kis híján lekéstem a vonatot.' }
+        ],
+        mistakes: [
+          { bad: 'これから{出|で}かけたところです。', good: 'これから{出|で}かけるところです。', why: 'A これから a jövőre mutat: szótári alak kell elé.' }
         ]
       },
       {
         title: '〜ているところです', sub: 'éppen csinálom',
         pattern: 'ige て-alak + いるところです',
         body: 'A cselekvés közepén tartasz. A sima 〜ています-nál erősebben hangsúlyozza: <i>ebben a pillanatban</i>.',
+        more: [
+          'A 〜ています egyszerűen közli, hogy valami folyamatban van. A <b>〜ているところです</b> hozzáteszi: „éppen ennél a szakasznál tartok". Ezért jó válasz arra, hogy „kész vagy már?", és jó mentség is: „épp csinálom".',
+          'Magyarázó hangon 〜ているところなんです; barátok között 〜ているところなの / なんだ.',
+          'Csak akaratlagos cselekvésre való. Állapotra ({知|し}っている, {住|す}んでいる) és természeti jelenségre nem mondjuk.'
+        ],
         examples: [
           { jp: '{今|いま}、{資料|しりょう}を{作|つく}っているところです。', romaji: 'Ima, shiryō o tsukutte iru tokoro desu.', hu: 'Éppen az anyagot készítem.' },
           { jp: '{今|いま}、{調|しら}べているところです。', romaji: 'Ima, shirabete iru tokoro desu.', hu: 'Éppen utánanézek.' },
-          { jp: '{先生|せんせい}と{話|はな}しているところです。', romaji: 'Sensei to hanashite iru tokoro desu.', hu: 'Éppen a tanárral beszélek.' }
+          { jp: '{先生|せんせい}と{話|はな}しているところです。', romaji: 'Sensei to hanashite iru tokoro desu.', hu: 'Éppen a tanárral beszélek.' },
+          { jp: '{今|いま}、{考|かんが}えているところですから、ちょっと{待|ま}ってください。', romaji: 'Ima, kangaete iru tokoro desu kara, chotto matte kudasai.', hu: 'Épp gondolkodom, várjon egy kicsit.' },
+          { jp: '{今|いま}、そちらに{向|む}かっているところです。', romaji: 'Ima, sochira ni mukatte iru tokoro desu.', hu: 'Éppen úton vagyok önökhöz.' },
+          { jp: 'ご{飯|はん}を{作|つく}っているところなので、あとで{電話|でんわ}します。', romaji: 'Gohan o tsukutte iru tokoro na node, ato de denwa shimasu.', hu: 'Épp főzök, úgyhogy később visszahívlak.' }
+        ],
+        mistakes: [
+          { bad: '{雨|あめ}が{降|ふ}っているところです。', good: '{雨|あめ}が{降|ふ}っています。', why: 'A ところ az ember cselekvésének szakaszát jelöli; természeti jelenségre a sima ています való.' }
         ]
       },
       {
         title: '〜たところです', sub: 'éppen most…',
         pattern: 'た-alak + ところです',
         body: 'A cselekvés ebben a pillanatban fejeződött be. Gyakran áll vele a <b>たった{今|いま}</b> („épp az imént").',
+        more: [
+          'A た-alak + ところ azt mondja: a cselekvés <b>ebben a pillanatban</b> zárult le. Gyakori kísérői: たった{今|いま} („épp az imént"), ちょうど{今|いま}, さっき.',
+          'Rokona a <b>〜たばかりです</b> („nemrég…"). A különbség: a たところ tényleg percekről szól; a たばかり azt fejezi ki, hogy a beszélő <b>frissnek érzi</b> a dolgot — akár hetek múltán is ({先月|せんげつ}{日本|にほん}に{来|き}たばかりです).'
+        ],
         examples: [
           { jp: 'たった{今|いま}{着|つ}いたところです。', romaji: 'Tatta ima tsuita tokoro desu.', hu: 'Éppen most érkeztem.' },
           { jp: '{授業|じゅぎょう}が{終|お}わったところです。', romaji: 'Jugyō ga owatta tokoro desu.', hu: 'Éppen most ért véget az óra.' },
-          { jp: '{今|いま}{起|お}きたところです。', romaji: 'Ima okita tokoro desu.', hu: 'Most keltem fel.' }
+          { jp: '{今|いま}{起|お}きたところです。', romaji: 'Ima okita tokoro desu.', hu: 'Most keltem fel.' },
+          { jp: 'ちょうど{今|いま}、パンが{焼|や}けたところです。', romaji: 'Chōdo ima, pan ga yaketa tokoro desu.', hu: 'Épp most sült meg a kenyér.' },
+          { jp: 'さっき{帰|かえ}ってきたところです。', romaji: 'Sakki kaette kita tokoro desu.', hu: 'Az előbb értem haza.' },
+          { jp: 'バスは{二分前|にふんまえ}に{出|で}たところです。', romaji: 'Basu wa nifun mae ni deta tokoro desu.', hu: 'A busz két perce ment el.' }
+        ],
+        notes: [
+          'Telefonban hasznos hármas: {今|いま}から{出|で}るところです (mindjárt indulok) · {今|いま}、{向|む}かっているところです (úton vagyok) · {今|いま}、{着|つ}いたところです (most értem oda).'
         ]
       },
       {
         title: '〜ようにいいます', sub: 'megmondja, hogy tegye',
         pattern: 'szótári alak / ない-alak + ように + {言|い}います',
         body: 'Kérést, utasítást adsz tovább a saját szavaiddal: „azt mondta, hogy tegyem / ne tegyem". A {言|い}います helyén állhat {伝|つた}えます (átad), {頼|たの}みます (megkér) is.',
+        more: [
+          'Ha valaki kér vagy utasít, és te ezt továbbadod, két utad van. <b>Szó szerint</b>: 「{静|しず}かにしてください」と{言|い}いました. Vagy <b>tartalom szerint</b>: a kérés igéje szótári (vagy ない-) alakba kerül, utána ように áll: {静|しず}かにする<b>ように</b>{言|い}いました.',
+          'A ように után nemcsak {言|い}います állhat: {伝|つた}えます (átadja), {頼|たの}みます (megkéri), {注意|ちゅうい}します (figyelmezteti).',
+          'Így bízol üzenetet valakire: 〜ように{言|い}ってください / {伝|つた}えてください. A szokásos válasz: <b>{伝|つた}えておきます</b> („átadom").',
+          'A と állítást idéz; a ように kérést, utasítást. A különbség a magyarban is megvan: „azt mondta, <i>jön</i>" — „azt mondta, <i>jöjjek</i>".'
+        ],
+        tables: [
+          {
+            caption: 'Kérésből üzenet',
+            head: ['Elhangzott', 'Továbbadva'],
+            rows: [
+              ['「でんわして ください」', 'でんわ<b>する ように</b> いいました'],
+              ['「おくれないで ください」', 'おくれ<b>ない ように</b> いいました'],
+              ['「あした きます」 (állítás)', 'あした くる<b>と</b> いいました']
+            ]
+          }
+        ],
         examples: [
           { jp: '{先生|せんせい}は{学生|がくせい}に{静|しず}かにするように{言|い}いました。', romaji: 'Sensei wa gakusei ni shizuka ni suru yō ni iimashita.', hu: 'A tanár azt mondta a diákoknak, hogy legyenek csendben.' },
           { jp: '{医者|いしゃ}はお{酒|さけ}を{飲|の}まないように{言|い}いました。', romaji: 'Isha wa osake o nomanai yō ni iimashita.', hu: 'Az orvos azt mondta, ne igyak alkoholt.' },
-          { jp: '{田中|たなか}さんに{三時|さんじ}に{来|く}るように{伝|つた}えてください。', romaji: 'Tanaka-san ni sanji ni kuru yō ni tsutaete kudasai.', hu: 'Kérem, mondja meg Tanakának, hogy háromra jöjjön.' }
+          { jp: '{田中|たなか}さんに{三時|さんじ}に{来|く}るように{伝|つた}えてください。', romaji: 'Tanaka-san ni sanji ni kuru yō ni tsutaete kudasai.', hu: 'Kérem, mondja meg Tanakának, hogy háromra jöjjön.' },
+          { jp: '{母|はは}は{弟|おとうと}に、ゲームをやめるように{言|い}いました。', romaji: 'Haha wa otōto ni, gēmu o yameru yō ni iimashita.', hu: 'Anyám azt mondta az öcsémnek, hogy hagyja abba a játékot.' },
+          { jp: 'みんなに、{遅|おく}れないように{伝|つた}えておきます。', romaji: 'Minna ni, okurenai yō ni tsutaete okimasu.', hu: 'Megmondom mindenkinek, hogy ne késsenek.' },
+          { jp: '{友|とも}だちに、{写真|しゃしん}を{送|おく}るように{頼|たの}みました。', romaji: 'Tomodachi ni, shashin o okuru yō ni tanomimashita.', hu: 'Megkértem a barátomat, hogy küldje el a fényképeket.' }
+        ],
+        mistakes: [
+          { bad: '{先生|せんせい}は{静|しず}かにすると{言|い}いました。', good: '{先生|せんせい}は{静|しず}かにするように{言|い}いました。', why: 'A と állítást idéz („azt mondta, csendben lesz"). Kérés, utasítás tartalmát ように vezeti be.' },
+          { bad: '{三時|さんじ}に{来|き}ますように{言|い}いました。', good: '{三時|さんじ}に{来|く}るように{言|い}いました。', why: 'A ように előtt rövid alak áll.' }
         ]
       },
       {
         title: '〜ということです', sub: 'úgy tudom, azt üzeni',
         pattern: 'rövid alak + ということです',
         body: 'Mástól kapott információt adsz tovább, tárgyilagosan. Főnév és な-melléknév után <b>だ</b> kell elé.',
+        more: [
+          'A ということです két helyzetben hasznos. Az első a <b>hír továbbadása</b>: mástól tudod, és pontosan, tárgyilagosan adod tovább — hivatalos hangú, bemondásban, levélben, munkahelyen gyakori.',
+          'A második az <b>értelmezés</b>: a saját szavaiddal összefoglalod, amit hallottál, és a végére ね-t teszel — <b>〜ということですね</b> („tehát akkor…, ugye?"). Így ellenőrzöd, hogy jól értetted-e. Gyakran つまり („vagyis") vezeti be.',
+          'Ugyanezzel magyarázod meg egy szó vagy kifejezés jelentését: A <b>というのは</b> B <b>ということです</b> („A azt jelenti, hogy B").'
+        ],
+        tables: [
+          {
+            caption: 'A ということです három arca',
+            head: ['Mire való?', 'Példa', 'Jelentés'],
+            rows: [
+              ['hír továbbadása', 'あしたは やすみだ<b>ということです</b>。', 'Úgy tudom, holnap szünet lesz.'],
+              ['visszakérdezés', 'あしたは こない<b>ということですね</b>。', 'Tehát holnap nem jön, ugye?'],
+              ['jelentés', '「むりょう」<b>というのは</b>、ただ<b>ということです</b>。', 'A „murjó" azt jelenti: ingyen.']
+            ]
+          }
+        ],
         examples: [
           { jp: 'あしたの{授業|じゅぎょう}は{休|やす}みだということです。', romaji: 'Ashita no jugyō wa yasumi da to iu koto desu.', hu: 'Úgy tudom, a holnapi óra elmarad.' },
           { jp: '{田中|たなか}さんは{少|すこ}し{遅|おく}れるということです。', romaji: 'Tanaka-san wa sukoshi okureru to iu koto desu.', hu: 'Tanaka azt üzeni, kicsit késik.' },
-          { jp: '{試験|しけん}は{来週|らいしゅう}だということです。', romaji: 'Shiken wa raishū da to iu koto desu.', hu: 'A vizsga állítólag jövő héten lesz.' }
+          { jp: '{試験|しけん}は{来週|らいしゅう}だということです。', romaji: 'Shiken wa raishū da to iu koto desu.', hu: 'A vizsga állítólag jövő héten lesz.' },
+          { jp: 'つまり、{間|ま}に{合|あ}わないということですね。', romaji: 'Tsumari, ma ni awanai to iu koto desu ne.', hu: 'Vagyis nem készül el időre, ugye?' },
+          { jp: '「{無料|むりょう}」というのは、お{金|かね}がいらないということです。', romaji: '"Muryō" to iu no wa, o-kane ga iranai to iu koto desu.', hu: 'Az „ingyenes" azt jelenti, hogy nem kell fizetni.' },
+          { jp: '{係|かかり}の{人|ひと}の{話|はなし}では、{今日|きょう}はもう{入|はい}れないということです。', romaji: 'Kakari no hito no hanashi de wa, kyō wa mō hairenai to iu koto desu.', hu: 'A személyzet szerint ma már nem lehet bemenni.' }
+        ],
+        notes: ['Barátok között rövidebben: 〜ってこと？ („szóval…?").'],
+        mistakes: [
+          { bad: 'あしたは{休|やす}みということです。', good: 'あしたは{休|やす}みだということです。', why: 'Főnév és な-melléknév után だ kell a という elé.' }
         ]
       },
       {
         title: '〜について', sub: '-ról, -ről',
         pattern: 'főnév + について',
         body: 'A beszéd, gondolkodás, kutatás témáját jelöli: „valamivel kapcsolatban".',
+        more: [
+          'A について a gondolkodás és a beszéd <b>témáját</b> jelöli. Jellemző igéi: {話|はな}します, {聞|き}きます, {考|かんが}えます, {調|しら}べます, {書|か}きます, {説明|せつめい}します, {相談|そうだん}します.',
+          'Főnév előtt の-val kapcsolódik: {日本|にほん}の{文化|ぶんか}<b>についての</b>{本|ほん} („könyv a japán kultúráról"). Tagmondat után こと közbeiktatásával: {休|やす}んだ<b>ことについて</b>….',
+          'Beszédben gyakran a lazább <b>〜のことで</b> áll a helyén, főleg ha kérést vezetsz be: {来週|らいしゅう}の{予定|よてい}のことで、ちょっと….'
+        ],
         examples: [
           { jp: '{日本|にほん}の{文化|ぶんか}について{話|はな}します。', romaji: 'Nihon no bunka ni tsuite hanashimasu.', hu: 'A japán kultúráról beszélek.' },
           { jp: 'この{問題|もんだい}について、どう{思|おも}いますか。', romaji: 'Kono mondai ni tsuite, dō omoimasu ka.', hu: 'Mit gondolsz erről a kérdésről?' },
-          { jp: '{留学|りゅうがく}について{先生|せんせい}に{相談|そうだん}しました。', romaji: 'Ryūgaku ni tsuite sensei ni sōdan shimashita.', hu: 'A külföldi tanulásról tanácsot kértem a tanártól.' }
+          { jp: '{留学|りゅうがく}について{先生|せんせい}に{相談|そうだん}しました。', romaji: 'Ryūgaku ni tsuite sensei ni sōdan shimashita.', hu: 'A külföldi tanulásról tanácsot kértem a tanártól.' },
+          { jp: 'この{町|まち}の{歴史|れきし}について{調|しら}べています。', romaji: 'Kono machi no rekishi ni tsuite shirabete imasu.', hu: 'Ennek a városnak a történetét kutatom.' },
+          { jp: '{日本|にほん}の{学校|がっこう}についての{本|ほん}を{読|よ}みました。', romaji: 'Nihon no gakkō ni tsuite no hon o yomimashita.', hu: 'Olvastam egy könyvet a japán iskolákról.' },
+          { jp: '{来週|らいしゅう}の{予定|よてい}のことで、ちょっとお{話|はなし}があります。', romaji: 'Raishū no yotei no koto de, chotto o-hanashi ga arimasu.', hu: 'A jövő heti programmal kapcsolatban szeretnék beszélni önnel.' }
+        ],
+        mistakes: [
+          { bad: '{日本|にほん}の{文化|ぶんか}について{本|ほん}', good: '{日本|にほん}の{文化|ぶんか}についての{本|ほん}', why: 'Ha a について főnevet jelöl meg, の kell közéjük.' }
+        ]
+      },
+      {
+        title: '〜たいんですが、よろしいでしょうか', sub: 'hogyan kérj nehezen teljesíthető dolgot?',
+        pattern: '{今|いま}、よろしいでしょうか → 〜について… → じつは… → 〜たいんですが…',
+        body: 'A kényes kérést a japán nem mondja ki azonnal. Lépésről lépésre közelít hozzá, és a másiknak minden lépésnél módja van jelezni, ha valami nehéz.',
+        more: [
+          'Az öt lépés: <b>megszólítás</b> (ráér-e a másik) → a <b>téma</b> megnevezése, félbehagyott mondattal → a <b>háttér</b>, az ok (じつは…) → maga a <b>kérés</b>, engedélykérő formában → <b>köszönet és bocsánatkérés</b> a fáradságért.',
+          'Ha a másik tétovázik, ne erősködj: ajánlj más időpontot, más megoldást. A <b>ご{都合|つごう}はいかがですか</b> („megfelelne önnek?") ilyenkor a kulcsmondat.'
+        ],
+        tables: [
+          {
+            caption: 'A kényes kérés öt lépése',
+            head: ['Lépés', 'Mondat'],
+            rows: [
+              ['megszólítás', 'いま、よろしいでしょうか。'],
+              ['téma', '〜に ついて、ごそうだんが あるんですが…。'],
+              ['háttér', 'じつは、〜んです。'],
+              ['kérés', '〜たいんですが、よろしいでしょうか。'],
+              ['lezárás', 'むりを いって、すみません。']
+            ]
+          }
+        ],
+        examples: [
+          { jp: '{今|いま}、お{時間|じかん}よろしいでしょうか。', romaji: 'Ima, o-jikan yoroshii deshō ka.', hu: 'Lenne most rám ideje?' },
+          { jp: 'じつは、お{願|ねが}いしたいことがあるんですが…。', romaji: 'Jitsu wa, onegai shitai koto ga aru n desu ga…', hu: 'Az a helyzet, hogy lenne egy kérésem…' },
+          { jp: 'あしたの{授業|じゅぎょう}を{休|やす}みたいんですが、よろしいでしょうか。', romaji: 'Ashita no jugyō o yasumitai n desu ga, yoroshii deshō ka.', hu: 'Szeretnék hiányozni a holnapi óráról, ha lehetséges.' },
+          { jp: '{来週|らいしゅう}のご{都合|つごう}はいかがですか。', romaji: 'Raishū no go-tsugō wa ikaga desu ka.', hu: 'A jövő hét megfelelne önnek?' },
+          { jp: '{無理|むり}を{言|い}って、すみません。', romaji: 'Muri o itte, sumimasen.', hu: 'Elnézést, hogy ilyet kérek.' }
+        ],
+        notes: ['A választ figyeld: いいですよ = rendben. それはちょっと… vagy それは{困|こま}りましたね = nehéz lesz.'],
+        tip: 'Soha ne a kéréssel kezdd. Előbb a téma, aztán az ok, a kérés csak a végén jön.'
+      }
+    ],
+    phrases: [
+      { jp: '{質問|しつもん}があります。', romaji: 'Shitsumon ga arimasu.', hu: 'Kérdezni szeretnék.' },
+      { jp: 'これはどういう{意味|いみ}ですか。', romaji: 'Kore wa dō iu imi desu ka.', hu: 'Ez mit jelent?' },
+      { jp: 'この{漢字|かんじ}はどう{読|よ}みますか。', romaji: 'Kono kanji wa dō yomimasu ka.', hu: 'Hogyan kell olvasni ezt a kanjit?' },
+      { jp: 'もう{一度|いちど}お{願|ねが}いします。', romaji: 'Mō ichido onegai shimasu.', hu: 'Még egyszer, legyen szíves!' },
+      { jp: '{教科書|きょうかしょ}を{忘|わす}れてしまったんですが…。', romaji: 'Kyōkasho o wasurete shimatta n desu ga…', hu: 'Otthon felejtettem a tankönyvemet…' },
+      { jp: '{今日|きょう}の{宿題|しゅくだい}は{何|なん}ですか。', romaji: 'Kyō no shukudai wa nan desu ka.', hu: 'Mi a mai házi feladat?' },
+      { jp: '{来週|らいしゅう}、{少|すこ}し{遅|おく}れるかもしれないんですが…。', romaji: 'Raishū, sukoshi okureru kamo shirenai n desu ga…', hu: 'Jövő héten lehet, hogy kicsit késni fogok…' },
+      { jp: '{昨日|きのう}{休|やす}んだので、プリントをいただけますか。', romaji: 'Kinō yasunda node, purinto o itadakemasu ka.', hu: 'Tegnap hiányoztam; megkaphatnám a kiosztott anyagot?' },
+      { jp: 'しかたがないですね。', romaji: 'Shikata ga nai desu ne.', hu: 'Nincs mit tenni.', note: 'Így fogadod el, amin nem lehet változtatni.' },
+      { jp: 'では、{失礼|しつれい}します。', romaji: 'Dewa, shitsurei shimasu.', hu: 'Akkor nem is zavarok tovább.', note: 'Távozáskor, tanári szobából, irodából kilépve.' }
+    ],
+    words: [
+      {
+        title: 'Az iskolában',
+        items: [
+          { jp: '{新学期|しんがっき}', romaji: 'shingakki', hu: 'új félév' },
+          { jp: '{時間割|じかんわり}', romaji: 'jikanwari', hu: 'órarend' },
+          { jp: '{講義|こうぎ}', romaji: 'kōgi', hu: 'előadás (egyetemi)' },
+          { jp: '{宿題|しゅくだい}', romaji: 'shukudai', hu: 'házi feladat' },
+          { jp: '{出席|しゅっせき}', romaji: 'shusseki', hu: 'jelenlét' },
+          { jp: '{欠席|けっせき}', romaji: 'kesseki', hu: 'hiányzás' },
+          { jp: '{遅刻|ちこく}', romaji: 'chikoku', hu: 'késés' },
+          { jp: '{締|し}め{切|き}り', romaji: 'shimekiri', hu: 'határidő' },
+          { jp: '{研究室|けんきゅうしつ}', romaji: 'kenkyūshitsu', hu: 'tanári (tanszéki) szoba' },
+          { jp: '{事務所|じむしょ}', romaji: 'jimusho', hu: 'iroda' }
+        ]
+      },
+      {
+        title: 'Emberek az iskolában',
+        items: [
+          { jp: '{先輩|せんぱい}', romaji: 'senpai', hu: 'felsőbb éves, rangidős' },
+          { jp: '{後輩|こうはい}', romaji: 'kōhai', hu: 'alsóbb éves' },
+          { jp: '{同級生|どうきゅうせい}', romaji: 'dōkyūsei', hu: 'évfolyamtárs' },
+          { jp: '{担任|たんにん}の{先生|せんせい}', romaji: 'tannin no sensei', hu: 'osztályfőnök' },
+          { jp: '{部長|ぶちょう}', romaji: 'buchō', hu: 'a klub vezetője' }
+        ]
+      },
+      {
+        title: 'Egyeztetés',
+        items: [
+          { jp: '{都合|つごう}', romaji: 'tsugō', hu: 'alkalmasság (megfelel-e az időpont)' },
+          { jp: '{予定|よてい}', romaji: 'yotei', hu: 'program, terv' },
+          { jp: '{相談|そうだん}', romaji: 'sōdan', hu: 'megbeszélés, tanácskérés' },
+          { jp: '{変更|へんこう}', romaji: 'henkō', hu: 'változtatás' },
+          { jp: '{無理|むり}', romaji: 'muri', hu: 'lehetetlen; túlzott kérés' },
+          { jp: 'じつは', romaji: 'jitsu wa', hu: 'az a helyzet, hogy…' },
+          { jp: 'それで', romaji: 'sore de', hu: 'ezért, emiatt' },
+          { jp: 'つまり', romaji: 'tsumari', hu: 'vagyis, tehát' },
+          { jp: 'ちょうど', romaji: 'chōdo', hu: 'éppen, pont' },
+          { jp: 'たった{今|いま}', romaji: 'tatta ima', hu: 'épp az imént' }
         ]
       }
     ],
+    culture: [
+      {
+        title: 'Rangidősek és fiatalabbak',
+        text: 'A japán iskolában, klubban, munkahelyen mindenki tudja, ki a <b>{先輩|せんぱい}</b> (aki korábban kezdett) és ki a <b>{後輩|こうはい}</b> (aki később). Egyetlen év különbség is számít: a fiatalabb udvarias alakban beszél, az idősebbet {先輩|せんぱい}-nak szólítja, és tőle kér tanácsot; a rangidős cserébe segít, tanít, felelősséget vállal érte. A viszony gyakran egy életre megmarad.'
+      },
+      {
+        title: 'Megbeszélni, nem bejelenteni',
+        text: 'Ha változtatnod kell valamin, ami másokat is érint, nem <b>közlöd</b>, hanem <b>megbeszéled</b>: ご{相談|そうだん}があるんですが…. A japán munkahelyek alapszabálya a „hó-ren-szó" — jelenteni, értesíteni, megbeszélni. Aki egyedül dönt, és csak utólag szól, azt udvariatlannak tartják, akkor is, ha a döntése jó volt.'
+      },
+      {
+        title: 'A tekintet és a csend',
+        text: 'Bocsánatkéréskor, kényes kérésnél a japánok ritkán néznek hosszan a másik szemébe: a lesütött tekintet tiszteletet jelez, a merev szemkontaktus kihívónak hat. A csendnek is jelentése van: az elnyújtott うーん, a それはちょっと… vagy a それは{困|こま}りましたね mind azt üzeni, hogy a kérés nehéz. Ilyenkor nem erősködni kell, hanem más megoldást ajánlani.'
+      },
+      {
+        title: 'Új osztály minden tavasszal',
+        text: 'A japán iskolákban a tanév <b>áprilisban</b> kezdődik, és sok helyen egy-két évente újraosztják az osztályokat. A kihirdetés napja nagy izgalom: ki kivel kerül össze, ki lesz az osztályfőnök? A gyerekek így sokkal több társukat ismerik meg — cserébe a barátoktól időnként el kell válni.'
+      }
+    ],
     quiz: [
-      { q: '„Éppen indulni készülök." Mi hiányzik?', jp: 'これから＿ところです。', a: '{出|で}かける', wrong: ['{出|で}かけた', '{出|で}かけている', '{出|で}かけて'],
-        why: 'Közvetlenül előtte: szótári alak + ところです.' },
-      { q: '„Éppen most érkeztem." Mi hiányzik?', jp: 'たった{今|いま}＿ところです。', a: '{着|つ}いた', wrong: ['{着|つ}く', '{着|つ}いている', '{着|つ}いて'],
-        why: 'Épp befejeződött: た-alak + ところです.' },
-      { q: '„Éppen az anyagot készítem." Mi hiányzik?', jp: '{今|いま}、{資料|しりょう}を＿ところです。', a: '{作|つく}っている', wrong: ['{作|つく}った', '{作|つく}り', '{作|つく}って'],
-        why: 'A cselekvés közepén: 〜ているところです.' },
-      { q: 'Mit jelent: {今|いま}{起|お}きたところです。', a: 'Most keltem fel.', wrong: ['Mindjárt felkelek.', 'Még alszom.', 'Fel kell kelnem.'],
-        why: 'た-alak + ところ: épp az imént történt.' },
-      { q: '„Az orvos azt mondta, ne igyak alkoholt." Mi hiányzik?', jp: '{医者|いしゃ}はお{酒|さけ}を＿ように{言|い}いました。', a: '{飲|の}まない', wrong: ['{飲|の}まなくて', '{飲|の}みません', '{飲|の}んで'],
-        why: 'Tiltó utasítás átadva: ない-alak + ように{言|い}います.' },
-      { q: '„Mondja meg Tanakának, hogy háromra jöjjön." Mi hiányzik?', jp: '{田中|たなか}さんに{三時|さんじ}に{来|く}る＿{伝|つた}えてください。', a: 'ように', wrong: ['ことに', 'ために', 'ところに'],
-        why: 'Utasítás továbbadása: szótári alak + ように.' },
-      { q: '„A japán kultúráról beszélek." Mi hiányzik?', jp: '{日本|にほん}の{文化|ぶんか}＿{話|はな}します。', a: 'について', wrong: ['にとって', 'によって', 'として'],
-        why: 'A téma: 〜について.' },
-      { q: 'Mit jelent: {田中|たなか}さんは{少|すこ}し{遅|おく}れるということです。', a: 'Tanaka azt üzeni, kicsit késik.',
+      { q: '„Éppen indulni készülök." Mi hiányzik?', jp: 'これから＿ところです。', a: '{出|で}かける', wrong: ['{出|で}かけた', '{出|で}かけている', '{出|で}かけて'], why: 'Közvetlenül előtte: szótári alak + ところです.' },
+      { q: '„Éppen most érkeztem." Mi hiányzik?', jp: 'たった{今|いま}＿ところです。', a: '{着|つ}いた', wrong: ['{着|つ}く', '{着|つ}いている', '{着|つ}いて'], why: 'Épp befejeződött: た-alak + ところです.' },
+      { q: '„Éppen az anyagot készítem." Mi hiányzik?', jp: '{今|いま}、{資料|しりょう}を＿ところです。', a: '{作|つく}っている', wrong: ['{作|つく}った', '{作|つく}り', '{作|つく}って'], why: 'A cselekvés közepén: 〜ているところです.' },
+      { q: 'Mit jelent: {今|いま}{起|お}きたところです。', a: 'Most keltem fel.', wrong: ['Mindjárt felkelek.', 'Még alszom.', 'Fel kell kelnem.'], why: 'た-alak + ところ: épp az imént történt.' },
+      { q: '„Az orvos azt mondta, ne igyak alkoholt." Mi hiányzik?', jp: '{医者|いしゃ}はお{酒|さけ}を＿ように{言|い}いました。', a: '{飲|の}まない', wrong: ['{飲|の}まなくて', '{飲|の}みません', '{飲|の}んで'], why: 'Tiltó utasítás átadva: ない-alak + ように{言|い}います.' },
+      { q: '„Mondja meg Tanakának, hogy háromra jöjjön." Mi hiányzik?', jp: '{田中|たなか}さんに{三時|さんじ}に{来|く}る＿{伝|つた}えてください。', a: 'ように', wrong: ['ことに', 'ために', 'ところに'], why: 'Utasítás továbbadása: szótári alak + ように.' },
+      { q: '„A japán kultúráról beszélek." Mi hiányzik?', jp: '{日本|にほん}の{文化|ぶんか}＿{話|はな}します。', a: 'について', wrong: ['にとって', 'によって', 'として'], why: 'A téma: 〜について.' },
+      {
+        q: 'Mit jelent: {田中|たなか}さんは{少|すこ}し{遅|おく}れるということです。',
+        a: 'Tanaka azt üzeni, kicsit késik.',
         wrong: ['Tanaka mindig késik.', 'Tanakának nem szabad késnie.', 'Tanaka éppen most késett el.'],
-        why: '〜ということです: mástól kapott információ továbbadása.' },
-      { q: '„Úgy tudom, a holnapi óra elmarad." Mi hiányzik?', jp: 'あしたの{授業|じゅぎょう}は{休|やす}み＿ということです。', a: 'だ', wrong: ['な', 'の', 'で'],
-        why: 'Főnév után だ kell a という elé.' },
-      { q: 'Melyik mondat jelenti: „Épp telefonálni akartam."', a: 'ちょうど{電話|でんわ}するところでした。',
+        why: '〜ということです: mástól kapott információ továbbadása.'
+      },
+      { q: '„Úgy tudom, a holnapi óra elmarad." Mi hiányzik?', jp: 'あしたの{授業|じゅぎょう}は{休|やす}み＿ということです。', a: 'だ', wrong: ['な', 'の', 'で'], why: 'Főnév után だ kell a という elé.' },
+      {
+        q: 'Melyik mondat jelenti: „Épp telefonálni akartam."',
+        a: 'ちょうど{電話|でんわ}するところでした。',
         wrong: ['ちょうど{電話|でんわ}したところでした。', 'ちょうど{電話|でんわ}しているところです。', 'ちょうど{電話|でんわ}したことがあります。'],
-        why: 'Szótári alak + ところでした: épp azon voltam, hogy megtegyem.' }
+        why: 'Szótári alak + ところでした: épp azon voltam, hogy megtegyem.'
+      },
+      {
+        q: 'Melyik mondat jelenti: „Kis híján lekéstem a vonatot"?',
+        a: 'もう{少|すこ}しで{電車|でんしゃ}に{乗|の}り{遅|おく}れるところでした。',
+        wrong: [
+          '{電車|でんしゃ}に{乗|の}り{遅|おく}れたところです。',
+          '{電車|でんしゃ}に{乗|の}り{遅|おく}れているところです。',
+          '{電車|でんしゃ}に{乗|の}り{遅|おく}れました。'
+        ],
+        why: 'A szótári alak + ところでした: „már épp azon voltam" — de nem történt meg.'
+      },
+      {
+        q: 'Megkérdezik: „Kész a házi?" Azt feleled: „Épp most írom." Melyik a jó mondat?',
+        a: '{今|いま}、{書|か}いているところです。',
+        wrong: ['{今|いま}、{書|か}くところです。', '{今|いま}、{書|か}いたところです。', '{今|いま}、{書|か}きますところです。'],
+        why: 'A cselekvés közepén tartasz: ている + ところ.'
+      },
+      { q: '„A busz két perce ment el." Mi hiányzik?', jp: 'バスは{二分前|にふんまえ}に＿ところです。', a: '{出|で}た', wrong: ['{出|で}る', '{出|で}ている', '{出|で}て'], why: 'Épp most fejeződött be: た-alak + ところ.' },
+      {
+        q: 'A tanár azt mondta: 「{宿題|しゅくだい}を{出|だ}してください」. Hogyan adod tovább?',
+        a: '{先生|せんせい}は{宿題|しゅくだい}を{出|だ}すように{言|い}いました。',
+        wrong: [
+          '{先生|せんせい}は{宿題|しゅくだい}を{出|だ}すと{言|い}いました。',
+          '{先生|せんせい}は{宿題|しゅくだい}を{出|だ}してように{言|い}いました。',
+          '{先生|せんせい}は{宿題|しゅくだい}を{出|だ}しますように{言|い}いました。'
+        ],
+        why: 'Kérés tartalma: szótári alak + ように.'
+      },
+      { q: 'Megkérnek, hogy adj át egy üzenetet. Mit felelsz?', a: 'わかりました。{伝|つた}えておきます。', wrong: ['しかたがないですね。', 'よろしいでしょうか。', 'じつは、ちょっと…。'], why: 'A {伝|つた}えておきます: „átadom" (előre elintézem).' },
+      {
+        q: 'Mit jelent: つまり、{間|ま}に{合|あ}わないということですね。',
+        a: 'Vagyis nem készül el időre, ugye?',
+        wrong: ['Úgy hallottam, időre elkészül.', 'Kérem, készüljön el időre!', 'Nem tudom, elkészül-e időre.'],
+        why: 'A 〜ということですね visszakérdezés: a saját szavaiddal foglalod össze, amit hallottál.'
+      },
+      { q: '„Könyv a japán kultúráról." Mi hiányzik?', jp: '{日本|にほん}の{文化|ぶんか}について＿{本|ほん}', a: 'の', wrong: ['な', 'に', 'を'], why: 'Főnév előtt: についての.' },
+      {
+        q: 'Hogyan szólítod meg udvariasan a tanárodat, mielőtt kérsz valamit?',
+        a: '{先生|せんせい}、{今|いま}、よろしいでしょうか。',
+        wrong: ['{先生|せんせい}、ちょっと{待|ま}って。', '{先生|せんせい}、{聞|き}いて。', '{先生|せんせい}、{何|なに}をしているの？'],
+        why: 'Előbb megkérdezed, ráér-e: よろしいでしょうか.'
+      },
+      {
+        q: 'Mit jelez a じつは a mondat elején?',
+        a: 'Hogy most következik a valódi ok, a lényeg.',
+        wrong: ['Hogy a beszélő viccel.', 'Hogy a mondat kérdés.', 'Hogy a beszélő hallomásból tud valamit.'],
+        why: 'じつは = „az a helyzet, hogy…": a háttér, az ok bevezetése.'
+      },
+      { q: 'Mit jelent: しかたがないですね。', a: 'Nincs mit tenni.', wrong: ['Semmi gond.', 'Nem értem.', 'Az teljesen lehetetlen.'], why: 'Így fogadod el, amin nem lehet változtatni.' }
     ]
   },
 
   /* ── 30. lecke ────────────────────────────────────── */
   {
-    id: 'l30', no: 30, book: 'Dekiru 2',
-    title: 'Közös munka',
-    lead: 'Kifejezed a csalódottságodat, megmondod, mi nem kötelező és mi fér bele, és megtanulod a によって két használatát.',
+    id: 'l30', no: 30, book: 'Dekiru 2', title: 'Közös munka',
+    lead: 'Kifejezed, hogy valami nem úgy alakult, ahogy várni lehetett, megmondod, mi nem kötelező és mi fér bele, elmondod, mi mitől függ, felkérsz valakit egy feladatra, és tapintatosan véleményt mondasz más munkájáról.',
     cando: [
       'Felkérsz valakit egy feladatra, és válaszolsz egy felkérésre.',
-      'Megbeszéled másokkal a közös munka részleteit.',
-      'Írsz a saját kultúrádról.'
+      'Határidőt és feltételeket egyeztetsz.',
+      'Tapintatosan véleményt mondasz más munkájáról, és javítást javasolsz.',
+      'Írsz a saját kultúrádról, és elmondod, mi mitől függ.'
     ],
+    intro: [
+      'Ebben a leckében másokkal dolgozol együtt: felkérnek egy feladatra, határidőt egyeztettek, átnézitek egymás munkáját. Az első nyelvi eszköz a <b>〜のに</b>: „pedig", „mégis". Nem semleges „de": mindig benne van a beszélő érzése — meglepetés, bosszúság, sajnálkozás —, hogy a dolog nem úgy alakult, ahogy várni lehetett.',
+      'A második téma az <b>engedékenység</b>: mi nem kötelező, mi fér bele. A 〜なくてもいいです és a 〜てもいいです tapintatos párja a <b>〜なくてもかまいません</b> és a <b>〜てもかまいません</b>: „részemről nem gond". Határidőről, feltételekről egyezkedve ezek a kulcsmondatok.',
+      'Végül a <b>〜によって</b>: „-tól függően", „-nként". Ezzel mondod el, hogy valami országonként, emberenként, vidékenként más — vagyis ezzel tudsz árnyaltan írni a saját kultúrádról. A lecke végén két beszélgetési mintát is kapsz: hogyan fogadj el egy felkérést, és hogyan mondj véleményt más munkájáról.'
+    ],
+    dialogue: {
+      title: 'Plakát az egyetemi fesztiválra',
+      scene: 'Ken az egyetemi fesztiválra készül, ahol a világ konyháit mutatják be. Megkéri Annát, hogy készítsen plakátot a magyar ételekről; néhány nap múlva együtt nézik át.',
+      lines: [
+        {
+          who: 'Ken',
+          jp: 'アンナさん、ちょっとお{願|ねが}いがあるんだけど…。{来週|らいしゅう}の{大学祭|だいがくさい}で、{世界|せかい}の{料理|りょうり}を{紹介|しょうかい}するんだ。',
+          romaji: 'Anna-san, chotto onegai ga aru n da kedo… Raishū no daigakusai de, sekai no ryōri o shōkai suru n da.',
+          hu: 'Anna, lenne egy kérésem… A jövő heti egyetemi fesztiválon a világ konyháit mutatjuk be.'
+        },
+        { who: 'Ken', jp: 'ハンガリー{料理|りょうり}のポスターを{作|つく}ってもらえない？', romaji: 'Hangarī ryōri no posutā o tsukutte moraenai?', hu: 'Csinálnál egy plakátot a magyar konyháról?' },
+        { who: 'Anna', jp: 'えっ、ポスター？{私|わたし}には、ちょっと…。{絵|え}が{下手|へた}だし。', romaji: 'E, posutā? Watashi ni wa, chotto… E ga heta da shi.', hu: 'Plakátot? Hát, az nekem egy kicsit… Rajzolni sem tudok.' },
+        {
+          who: 'Ken',
+          jp: 'アンナさんなら{大丈夫|だいじょうぶ}だよ。{絵|え}はかかなくてもかまわないよ。{写真|しゃしん}でもいいし。',
+          romaji: 'Anna-san nara daijōbu da yo. E wa kakanakute mo kamawanai yo. Shashin demo ii shi.',
+          hu: 'Neked menni fog. Rajzolni nem muszáj: a fénykép is jó.'
+        },
+        {
+          who: 'Anna',
+          jp: 'そう？じゃあ、やってみる。でも、{日本語|にほんご}をチェックしてもらえたら、{安心|あんしん}なんだけど…。',
+          romaji: 'Sō? Jā, yatte miru. Demo, Nihongo o chekku shite moraetara, anshin na n da kedo…',
+          hu: 'Tényleg? Akkor megpróbálom. De megnyugtatna, ha valaki átnézné a japán szöveget…'
+        },
+        { who: 'Ken', jp: 'もちろん。{締|し}め{切|き}りは{金曜日|きんようび}なんだけど、{大丈夫|だいじょうぶ}？', romaji: 'Mochiron. Shimekiri wa kin\'yōbi na n da kedo, daijōbu?', hu: 'Persze. A határidő péntek. Belefér?' },
+        { who: 'Anna', jp: '{金曜日|きんようび}はちょっと…。{木曜日|もくようび}までテストの{勉強|べんきょう}があるの。', romaji: 'Kin\'yōbi wa chotto… Mokuyōbi made tesuto no benkyō ga aru no.', hu: 'A péntek egy kicsit… Csütörtökig a tesztre tanulok.' },
+        {
+          who: 'Ken',
+          jp: 'じゃあ、{金曜日|きんようび}じゃなくてもかまわないよ。{日曜日|にちようび}までなら、{間|ま}に{合|あ}うから。',
+          romaji: 'Jā, kin\'yōbi ja nakute mo kamawanai yo. Nichiyōbi made nara, ma ni au kara.',
+          hu: 'Akkor nem kell péntekre. Ha vasárnapig megvan, még belefér.'
+        },
+        {
+          who: 'Anna',
+          jp: 'できたよ。ハンガリーの{料理|りょうり}は{地方|ちほう}によって{違|ちが}うから、{三|みっ}つ{選|えら}んだの。',
+          romaji: 'Dekita yo. Hangarī no ryōri wa chihō ni yotte chigau kara, mittsu eranda no.',
+          hu: 'Kész! A magyar konyha vidékenként más, ezért hármat választottam.'
+        },
+        { who: 'Ken', jp: 'もうできたの？{日曜日|にちようび}でもよかったのに。ありがとう！', romaji: 'Mō dekita no? Nichiyōbi demo yokatta noni. Arigatō!', hu: 'Már kész? Pedig ráért volna vasárnapig. Köszi!' },
+        { who: 'Anna', jp: '{変|へん}なところがあったら、{教|おし}えてね。', romaji: 'Hen na tokoro ga attara, oshiete ne.', hu: 'Ha valahol furcsa, szólj!' },
+        {
+          who: 'Ken',
+          jp: '{一|ひと}つだけ。「{辛|から}いのに、おいしい」より「{辛|から}くて、おいしい」のほうが{自然|しぜん}だと{思|おも}う。',
+          romaji: 'Hitotsu dake. "Karai noni, oishii" yori "karakute, oishii" no hō ga shizen da to omou.',
+          hu: 'Csak egy dolog. A „csípős, mégis finom" helyett természetesebb a „csípős és finom".'
+        },
+        { who: 'Anna', jp: 'なるほど。ここは「のに」を{使|つか}わなくてもいいんだね。', romaji: 'Naruhodo. Koko wa "noni" o tsukawanakute mo ii n da ne.', hu: 'Ja, értem. Ide akkor nem kell a „noni".' }
+      ],
+      notes: [
+        'A felkérés a 〜てもらえない？ alakkal hangzik el — ez a 〜てもらえませんか baráti változata. Előtte Ken bevezeti: <b>お{願|ねが}いがあるんだけど…</b>.',
+        'Anna először szabadkozik: <b>{私|わたし}には、ちょっと…</b>. Ken biztatja (<b>アンナさんなら{大丈夫|だいじょうぶ}</b>), és könnyít: <b>かかなくてもかまわない</b>.',
+        'Anna a feltételét kívánságként mondja: <b>チェックしてもらえたら、{安心|あんしん}なんだけど…</b> — „megnyugtatna, ha…".',
+        'A <b>{金曜日|きんようび}はちょっと…</b> udvarias nem; Ken azonnal enged: <b>{金曜日|きんようび}じゃなくてもかまわない</b>.',
+        'A <b>{日曜日|にちようび}でもよかったのに</b> itt nem szemrehányás, hanem hálás meglepetés: „pedig ráért volna".',
+        'Ken javítása a のに lényegére tanít: a „csípős, <i>mégis</i> finom" azt sugallná, hogy a csípős ételtől nem várnánk, hogy finom legyen.'
+      ]
+    },
     points: [
       {
         title: '〜のに', sub: 'pedig, mégis',
         pattern: 'rövid alak + のに · főnév / な-melléknév + なのに',
         body: 'Azt fejezi ki, hogy az eredmény más lett, mint amit vártál: meglepetés, csalódás, bosszúság van benne. Ezért utána nem állhat kérés, javaslat vagy szándék.',
+        more: [
+          'A のに rövid alak után áll. Főnév és な-melléknév után <b>なのに</b> lesz belőle: {日曜日|にちようび}なのに, {便利|べんり}なのに.',
+          'Az első fele mindig <b>tény</b>, a második az, ami ehhez képest váratlan. A beszélő érzése adja a jelentését: csodálkozás, bosszúság, szemrehányás, sajnálkozás — vagy bocsánatkérés (お{忙|いそが}しいのに、すみません).',
+          'A <b>〜ても</b> („akkor is, ha…") feltételezés; a <b>〜のに</b> megtörtént dolog. {薬|くすり}を{飲|の}んでも…: „akkor sem, ha beveszem". {薬|くすり}を{飲|の}んだのに…: „bevettem, mégsem".',
+          'A mondat végén sajnálkozást fejez ki: <b>〜ばよかったのに</b> („bárcsak… volna"), <b>〜でもよかったのに</b> („ráért volna…").'
+        ],
+        tables: [
+          {
+            caption: 'Mi áll a のに előtt?',
+            head: ['Szófaj', 'Példa'],
+            rows: [
+              ['ige', 'べんきょうした<b>のに</b>'],
+              ['い-melléknév', 'たかい<b>のに</b>'],
+              ['な-melléknév', 'べんり<b>なのに</b>'],
+              ['főnév', 'にちようび<b>なのに</b>']
+            ]
+          }
+        ],
         examples: [
           { jp: '{薬|くすり}を{飲|の}んだのに、{熱|ねつ}が{下|さ}がりません。', romaji: 'Kusuri o nonda noni, netsu ga sagarimasen.', hu: 'Bevettem a gyógyszert, mégsem megy le a lázam.' },
           { jp: '{約束|やくそく}したのに、{彼|かれ}は{来|き}ませんでした。', romaji: 'Yakusoku shita noni, kare wa kimasen deshita.', hu: 'Megígérte, mégsem jött el.' },
-          { jp: '{日曜日|にちようび}なのに、{働|はたら}かなければなりません。', romaji: 'Nichiyōbi na noni, hatarakanakereba narimasen.', hu: 'Vasárnap van, mégis dolgoznom kell.' }
+          { jp: '{日曜日|にちようび}なのに、{働|はたら}かなければなりません。', romaji: 'Nichiyōbi na noni, hatarakanakereba narimasen.', hu: 'Vasárnap van, mégis dolgoznom kell.' },
+          { jp: '{駅|えき}から{近|ちか}いのに、この{店|みせ}はいつも{空|す}いています。', romaji: 'Eki kara chikai noni, kono mise wa itsumo suite imasu.', hu: 'Közel van az állomáshoz, mégis mindig üres ez a bolt.' },
+          { jp: '{一生懸命|いっしょうけんめい}{練習|れんしゅう}したのに、{負|ま}けてしまいました。', romaji: 'Isshōkenmei renshū shita noni, makete shimaimashita.', hu: 'Keményen edzettünk, mégis kikaptunk.' },
+          { jp: 'お{忙|いそが}しいのに、{来|き}てくださってありがとうございます。', romaji: 'O-isogashii noni, kite kudasatte arigatō gozaimasu.', hu: 'Köszönöm, hogy eljött, pedig sok a dolga.' },
+          { jp: '{言|い}ってくれればよかったのに。', romaji: 'Itte kurereba yokatta noni.', hu: 'Bárcsak szóltál volna!' },
+          { jp: 'あしたでもよかったのに。', romaji: 'Ashita demo yokatta noni.', hu: 'Ráért volna holnap is.' }
+        ],
+        mistakes: [
+          { bad: '{日曜日|にちようび}だのに、{働|はたら}きます。', good: '{日曜日|にちようび}なのに、{働|はたら}きます。', why: 'A だ a のに előtt な-ra vált.' },
+          { bad: '{雨|あめ}が{降|ふ}っているのに、{傘|かさ}を{持|も}っていってください。', good: '{雨|あめ}が{降|ふ}っているので、{傘|かさ}を{持|も}っていってください。', why: 'A のに után nem állhat kérés; itt ok áll, nem ellentét: ので.' }
         ],
         tip: 'A が és a けれど semleges „de". A のに érzelmet hordoz: nem így kellett volna lennie.'
       },
@@ -11069,187 +11460,867 @@ const NIHONCORE_COURSE = [
         title: '〜なくてもかまいません', sub: 'nem baj, ha nem…',
         pattern: 'ない-alak: ない → なくてもかまいません',
         body: 'A 〜なくてもいいです udvariasabb, tapintatosabb párja: „részemről rendben van, ha nem teszed meg".',
+        more: [
+          'A かまいません szó szerint: „nem bánom, nem zavar". A 〜なくてもいいです azt közli, hogy valami nem kötelező; a <b>〜なくてもかまいません</b> azt is hozzáteszi: részemről rendben van. Barátok között: かまわない.',
+          'Képzése: a ない-alak ない-ja なくて-ra vált, utána も. Főnév és な-melléknév: <b>〜じゃなくても</b>. い-melléknév: 〜くなくても.',
+          'Javaslatként puhítva: <b>〜なくてもいいんじゃないですか</b> („szerintem nem kell").'
+        ],
+        tables: [
+          {
+            caption: 'Kell — nem kell',
+            head: ['', 'Alak', 'Jelentés'],
+            rows: [
+              ['kötelező', 'かかなければ なりません', 'meg kell írni'],
+              ['nem kötelező', 'かかなくても いいです', 'nem kell megírni'],
+              ['nem gond', 'かかなくても かまいません', 'nem baj, ha nem írja meg'],
+              ['főnévvel', 'きょうじゃなくても かまいません', 'nem baj, ha nem ma']
+            ]
+          }
+        ],
         examples: [
           { jp: '{名前|なまえ}は{書|か}かなくてもかまいません。', romaji: 'Namae wa kakanakute mo kamaimasen.', hu: 'Nem baj, ha nem írja oda a nevét.' },
           { jp: '{全部|ぜんぶ}{覚|おぼ}えなくてもかまいません。', romaji: 'Zenbu oboenakute mo kamaimasen.', hu: 'Nem kell mindet megjegyezni.' },
-          { jp: '{無理|むり}に{来|こ}なくてもかまいませんよ。', romaji: 'Muri ni konakute mo kamaimasen yo.', hu: 'Nem kell mindenáron eljönnie.' }
+          { jp: '{無理|むり}に{来|こ}なくてもかまいませんよ。', romaji: 'Muri ni konakute mo kamaimasen yo.', hu: 'Nem kell mindenáron eljönnie.' },
+          { jp: '{返事|へんじ}は{今日|きょう}じゃなくてもかまいません。', romaji: 'Henji wa kyō ja nakute mo kamaimasen.', hu: 'Nem baj, ha nem ma válaszol.' },
+          { jp: '{時間|じかん}がありますから、{急|いそ}がなくてもいいですよ。', romaji: 'Jikan ga arimasu kara, isoganakute mo ii desu yo.', hu: 'Van időnk, nem kell sietni.' },
+          { jp: '{上手|じょうず}じゃなくてもかまいません。', romaji: 'Jōzu ja nakute mo kamaimasen.', hu: 'Nem baj, ha nem megy jól.' },
+          { jp: 'この{漢字|かんじ}は{覚|おぼ}えなくてもいいんじゃないですか。', romaji: 'Kono kanji wa oboenakute mo ii n ja nai desu ka.', hu: 'Szerintem ezt a kanjit nem kell megtanulni.' }
+        ],
+        mistakes: [
+          { bad: '{名前|なまえ}は{書|か}かないてもかまいません。', good: '{名前|なまえ}は{書|か}かなくてもかまいません。', why: 'A ない て-alakja なくて: {書|か}かなくても.' }
         ]
       },
       {
         title: '〜てもかまいません', sub: 'nem baj, ha…',
         pattern: 'ige て-alak + もかまいません',
         body: 'Az engedély udvarias formája; a 〜てもいいです párja. Kérdésként tapintatos engedélykérés.',
+        more: [
+          'Az engedélynek három hangneme van: 〜てもいい？ (barátnak), 〜てもいいですか (udvariasan), <b>〜てもかまいませんか</b> (tapintatosan: „nem zavarja, ha…?").',
+          'Ige mellett て-alak + も; い-melléknévnél 〜くても; főnévnél és な-melléknévnél <b>〜でも</b>: {鉛筆|えんぴつ}でもかまいません („ceruza is jó").',
+          'Két lehetőséget ajánlva: A でも B でもかまいません („akár A, akár B").'
+        ],
+        tables: [
+          {
+            caption: 'Engedélykérés három hangnemben',
+            head: ['Kinek?', 'Mondat'],
+            rows: [
+              ['barátnak', 'すわっても いい？'],
+              ['udvariasan', 'すわっても いいですか。'],
+              ['tapintatosan', 'すわっても かまいませんか。']
+            ]
+          }
+        ],
         examples: [
           { jp: 'ここに{座|すわ}ってもかまいませんか。', romaji: 'Koko ni suwatte mo kamaimasen ka.', hu: 'Nem baj, ha ideülök?' },
           { jp: '{鉛筆|えんぴつ}で{書|か}いてもかまいません。', romaji: 'Enpitsu de kaite mo kamaimasen.', hu: 'Ceruzával is írhatja.' },
-          { jp: '{少|すこ}し{遅|おく}れてもかまいません。', romaji: 'Sukoshi okurete mo kamaimasen.', hu: 'Nem baj, ha kicsit késik.' }
-        ]
+          { jp: '{少|すこ}し{遅|おく}れてもかまいません。', romaji: 'Sukoshi okurete mo kamaimasen.', hu: 'Nem baj, ha kicsit késik.' },
+          { jp: '{辞書|じしょ}を{使|つか}ってもかまいません。', romaji: 'Jisho o tsukatte mo kamaimasen.', hu: 'Szótárt is használhat.' },
+          { jp: '{少|すこ}し{高|たか}くてもかまいません。', romaji: 'Sukoshi takakute mo kamaimasen.', hu: 'Nem baj, ha kicsit drága.' },
+          { jp: '{日本語|にほんご}でも{英語|えいご}でもかまいません。', romaji: 'Nihongo demo Eigo demo kamaimasen.', hu: 'Lehet japánul is, angolul is.' },
+          { jp: '{写真|しゃしん}を{撮|と}ってもかまいませんか。', romaji: 'Shashin o totte mo kamaimasen ka.', hu: 'Nem baj, ha fényképezek?' }
+        ],
+        notes: ['Ha a válasz nem: すみません、それはちょっと… — a nyílt „nem szabad" (だめです) csak szabályoknál hangzik el.']
       },
       {
         title: '〜によって (különbség)', sub: '…-tól függően, …-nként',
         pattern: 'főnév + によって + {違|ちが}います / {変|か}わります',
         body: 'Azt mondja meg, mi szerint tér el valami: országonként, emberenként, naponta más.',
+        more: [
+          'A によって azt nevezi meg, <b>mi szerint</b> tér el valami. Utána a különbséget kifejező szavak állnak: {違|ちが}います, {変|か}わります, いろいろです, さまざまです.',
+          'A <b>〜によっては</b> egy esetet emel ki a sok közül: „van olyan…, aki / ahol…". Rendszerint 〜もいます / 〜もあります zárja.',
+          'Ne keverd: <b>について</b> = „-ról" (téma); <b>によって</b> = „-tól függően".'
+        ],
         examples: [
           { jp: '{国|くに}によって{習慣|しゅうかん}が{違|ちが}います。', romaji: 'Kuni ni yotte shūkan ga chigaimasu.', hu: 'Országonként mások a szokások.' },
           { jp: '{人|ひと}によって{考|かんが}え{方|かた}が{違|ちが}います。', romaji: 'Hito ni yotte kangaekata ga chigaimasu.', hu: 'Emberenként más a gondolkodásmód.' },
-          { jp: '{日|ひ}によって{値段|ねだん}が{変|か}わります。', romaji: 'Hi ni yotte nedan ga kawarimasu.', hu: 'Naptól függően változik az ár.' }
+          { jp: '{日|ひ}によって{値段|ねだん}が{変|か}わります。', romaji: 'Hi ni yotte nedan ga kawarimasu.', hu: 'Naptól függően változik az ár.' },
+          { jp: '{店|みせ}によって{値段|ねだん}が{違|ちが}います。', romaji: 'Mise ni yotte nedan ga chigaimasu.', hu: 'Boltonként más az ár.' },
+          { jp: '{季節|きせつ}によって、{景色|けしき}が{変|か}わります。', romaji: 'Kisetsu ni yotte, keshiki ga kawarimasu.', hu: 'Évszakonként változik a táj.' },
+          { jp: '{人|ひと}によっては、{朝|あさ}ごはんを{食|た}べない{人|ひと}もいます。', romaji: 'Hito ni yotte wa, asagohan o tabenai hito mo imasu.', hu: 'Van, aki nem reggelizik.' },
+          { jp: '{方言|ほうげん}は{地方|ちほう}によっていろいろです。', romaji: 'Hōgen wa chihō ni yotte iroiro desu.', hu: 'A nyelvjárások vidékenként különböznek.' }
+        ],
+        mistakes: [
+          { bad: '{国|くに}について{習慣|しゅうかん}が{違|ちが}います。', good: '{国|くに}によって{習慣|しゅうかん}が{違|ちが}います。', why: 'について = „-ról"; a különbség alapját によって jelöli.' }
         ]
       },
       {
         title: '〜によって (eszköz, ok)', sub: 'révén, által, miatt',
         pattern: 'főnév + によって',
         body: 'Ugyanez a szerkezet eszközt vagy okot is jelöl, főleg írott, tárgyilagos stílusban: „valami révén", „valami következtében".',
+        more: [
+          'Ugyanez a szerkezet <b>eszközt</b> („valami révén, útján") és <b>okot</b> („valami következtében") is jelöl. Hangneme tárgyilagos, írott: hírekben, tanulmányban, hivatalos szövegben gyakori. Beszédben többnyire a で áll a helyén.',
+          'Később, a szenvedő mondatoknál egy negyedik szerepével is találkozol: a cselekvőt jelöli („…által"; 36. lecke).'
+        ],
+        tables: [
+          {
+            caption: 'A によって három jelentése',
+            head: ['Jelentés', 'Példa', 'Magyarul'],
+            rows: [
+              ['különbség', 'くに<b>によって</b> ちがいます', 'országonként más'],
+              ['eszköz', 'はなしあい<b>によって</b> きめます', 'megbeszélés útján dönt'],
+              ['ok', 'たいふう<b>によって</b> とまりました', 'a tájfun miatt állt le']
+            ]
+          }
+        ],
         examples: [
           { jp: 'インターネットによって{世界|せかい}が{近|ちか}くなりました。', romaji: 'Intānetto ni yotte sekai ga chikaku narimashita.', hu: 'Az internet révén közelebb került a világ.' },
           { jp: '{話|はな}し{合|あ}いによって{決|き}めましょう。', romaji: 'Hanashiai ni yotte kimemashō.', hu: 'Döntsük el megbeszélés útján.' },
-          { jp: '{台風|たいふう}によって{電車|でんしゃ}が{止|と}まりました。', romaji: 'Taifū ni yotte densha ga tomarimashita.', hu: 'A tájfun miatt leállt a vonat.' }
+          { jp: '{台風|たいふう}によって{電車|でんしゃ}が{止|と}まりました。', romaji: 'Taifū ni yotte densha ga tomarimashita.', hu: 'A tájfun miatt leállt a vonat.' },
+          { jp: '{練習|れんしゅう}によって、だれでも{上手|じょうず}になります。', romaji: 'Renshū ni yotte, dare demo jōzu ni narimasu.', hu: 'Gyakorlással bárki ügyes lesz.' },
+          { jp: '{事故|じこ}によって{道|みち}が{込|こ}んでいます。', romaji: 'Jiko ni yotte michi ga konde imasu.', hu: 'Baleset miatt torlódik a forgalom.' }
+        ]
+      },
+      {
+        title: '〜てもらえませんか', sub: 'felkérés egy feladatra — és a válasz',
+        pattern: '〜てもらえませんか → {私|わたし}には、ちょっと… → 〜さんなら{大丈夫|だいじょうぶ}ですよ',
+        body: 'Ha valakit egy feladatra kérsz fel, a japán beszélgetésnek megszokott menete van: kérés, szabadkozás, biztatás, elfogadás. A szabadkozás itt nem elutasítás, hanem szerénység.',
+        more: [
+          'A <b>felkérés</b>: 〜てもらえませんか, barátnak 〜てもらえない？ Előtte bevezetés: お{願|ねが}いがあるんですが….',
+          'A <b>szabadkozás</b>: {私|わたし}には、ちょっと… („ez nekem egy kicsit…"). A felkérő <b>biztat</b>: 〜さんなら{大丈夫|だいじょうぶ}ですよ („önnek menni fog"), és könnyít a feltételeken.',
+          'Az <b>elfogadás</b>: じゃあ、やってみます / がんばります. Ha feltételed van, kívánságként mondod: 〜てもらえたら、{安心|あんしん}なんですが… („megnyugtatna, ha…").',
+          'A <b>határidő</b>: {締|し}め{切|き}りは〜なんですが、{大丈夫|だいじょうぶ}ですか → 〜はちょっと… → では、〜じゃなくてもかまいません.'
+        ],
+        examples: [
+          { jp: 'スピーチをしてもらえませんか。', romaji: 'Supīchi o shite moraemasen ka.', hu: 'Tartana egy beszédet?' },
+          { jp: '{私|わたし}には、ちょっと{難|むずか}しいと{思|おも}いますが…。', romaji: 'Watashi ni wa, chotto muzukashii to omoimasu ga…', hu: 'Azt hiszem, ez nekem egy kicsit nehéz…' },
+          { jp: '{山田|やまだ}さんなら{大丈夫|だいじょうぶ}ですよ。', romaji: 'Yamada-san nara daijōbu desu yo.', hu: 'Önnek menni fog, Jamada.' },
+          { jp: 'じゃあ、やってみます。', romaji: 'Jā, yatte mimasu.', hu: 'Akkor megpróbálom.' },
+          { jp: '{手伝|てつだ}ってもらえたら、{安心|あんしん}なんですが…。', romaji: 'Tetsudatte moraetara, anshin na n desu ga…', hu: 'Megnyugtatna, ha segítene valaki…' }
+        ],
+        notes: [
+          'Ha tényleg nem tudod vállalni, okot is mondasz, és bocsánatot kérsz: {今月|こんげつ}は{試験|しけん}があって…。すみません.'
+        ],
+        tip: 'A szabadkozás után jön a biztatás — és csak utána az igen.'
+      },
+      {
+        title: '〜のほうが{自然|しぜん}だと{思|おも}います', sub: 'hogyan mondj véleményt más munkájáról?',
+        pattern: '{一|ひと}つだけ… · 〜のほうがいいと{思|おも}います · なるほど。でも…',
+        body: 'Ha más munkájáról mondasz véleményt, előbb megköszönöd, aztán egy-egy pontot emelsz ki — és azt is véleményként, nem ítéletként.',
+        more: [
+          'A <b>kritika</b> kicsinek mutatja magát: {一|ひと}つだけ{気|き}になりました („csak egy dolog tűnt fel"). A <b>javítás</b> összehasonlít: 〜のほうが{自然|しぜん}だと{思|おも}います („így természetesebb volna").',
+          'A <b>javaslat</b> feltételes vagy kérdő formájú: 〜たほうが、おもしろいと{思|おも}います; 〜なくてもいいんじゃないですか.',
+          'Ha <b>nem értesz egyet</b>, előbb elismered a másik szempontját — なるほど („értem") —, és csak utána mondod a magadét: でも、やはり〜と{思|おも}います.'
+        ],
+        examples: [
+          { jp: '{一|ひと}つだけ{気|き}になりました。', romaji: 'Hitotsu dake ki ni narimashita.', hu: 'Csak egy dolog tűnt fel.' },
+          { jp: '{意味|いみ}はわかりますが、こちらのほうが{自然|しぜん}だと{思|おも}います。', romaji: 'Imi wa wakarimasu ga, kochira no hō ga shizen da to omoimasu.', hu: 'Érthető, de szerintem így természetesebb.' },
+          { jp: '{写真|しゃしん}があったほうが、おもしろいと{思|おも}います。', romaji: 'Shashin ga atta hō ga, omoshiroi to omoimasu.', hu: 'Szerintem érdekesebb volna fényképpel.' },
+          { jp: 'なるほど。でも、やはり{説明|せつめい}も{必要|ひつよう}だと{思|おも}います。', romaji: 'Naruhodo. Demo, yahari setsumei mo hitsuyō da to omoimasu.', hu: 'Értem. De szerintem azért magyarázat is kell.' },
+          { jp: '{変|へん}なところがあったら、{教|おし}えてください。', romaji: 'Hen na tokoro ga attara, oshiete kudasai.', hu: 'Ha valahol furcsa, szóljon!' }
+        ],
+        notes: [
+          'A <b>{気|き}になります</b> annyit tesz: „feltűnik, szöget üt a fejembe" — sokkal szelídebb, mint azt mondani, hogy valami hibás.'
         ]
       }
     ],
+    phrases: [
+      { jp: '{突然|とつぜん}すみません。', romaji: 'Totsuzen sumimasen.', hu: 'Elnézést, hogy így váratlanul megszólítom.' },
+      { jp: 'お{願|ねが}いしたいことがあるんですが…。', romaji: 'Onegai shitai koto ga aru n desu ga…', hu: 'Lenne egy kérésem…' },
+      { jp: '{私|わたし}には、ちょっと…。', romaji: 'Watashi ni wa, chotto…', hu: 'Ez nekem egy kicsit…', note: 'Szabadkozás: szerényen jelzed, hogy a feladat nehéznek tűnik.' },
+      { jp: '{締|し}め{切|き}りはいつですか。', romaji: 'Shimekiri wa itsu desu ka.', hu: 'Mikor van a határidő?' },
+      { jp: 'いつでも{連絡|れんらく}してください。', romaji: 'Itsu demo renraku shite kudasai.', hu: 'Bármikor keressen nyugodtan!' },
+      { jp: 'お{忙|いそが}しいのに、すみません。', romaji: 'O-isogashii noni, sumimasen.', hu: 'Elnézést, hogy zavarom, amikor ennyi a dolga.' },
+      { jp: 'なるほど。', romaji: 'Naruhodo.', hu: 'Ja, értem!' },
+      { jp: 'いえいえ。', romaji: 'Ie ie.', hu: 'Ugyan, szóra sem érdemes.' },
+      { jp: '{今日|きょう}はハンガリーの{料理|りょうり}について{紹介|しょうかい}します。', romaji: 'Kyō wa Hangarī no ryōri ni tsuite shōkai shimasu.', hu: 'Ma a magyar konyhát mutatom be.' },
+      { jp: 'よろしくお{願|ねが}いします。', romaji: 'Yoroshiku onegai shimasu.', hu: 'Előre is köszönöm.', note: 'Közös munka elején mindkét fél mondja.' }
+    ],
+    words: [
+      {
+        title: 'Közös munka',
+        items: [
+          { jp: '{記事|きじ}', romaji: 'kiji', hu: 'cikk' },
+          { jp: '{原稿|げんこう}', romaji: 'genkō', hu: 'kézirat' },
+          { jp: '{締|し}め{切|き}り', romaji: 'shimekiri', hu: 'határidő' },
+          { jp: '{説明|せつめい}', romaji: 'setsumei', hu: 'magyarázat' },
+          { jp: '{感想|かんそう}', romaji: 'kansō', hu: 'benyomás, személyes vélemény' },
+          { jp: '{意見|いけん}', romaji: 'iken', hu: 'vélemény' },
+          { jp: 'チェックします', romaji: 'chekku shimasu', hu: 'átnéz, ellenőriz' },
+          { jp: '{直|なお}します', romaji: 'naoshimasu', hu: 'kijavít' },
+          { jp: '{連絡|れんらく}します', romaji: 'renraku shimasu', hu: 'értesít, jelentkezik' },
+          { jp: '{安心|あんしん}します', romaji: 'anshin shimasu', hu: 'megnyugszik' }
+        ]
+      },
+      {
+        title: 'A kultúráról',
+        items: [
+          { jp: '{文化|ぶんか}', romaji: 'bunka', hu: 'kultúra' },
+          { jp: '{習慣|しゅうかん}', romaji: 'shūkan', hu: 'szokás' },
+          { jp: '{伝統的|でんとうてき}な', romaji: 'dentōteki na', hu: 'hagyományos' },
+          { jp: '{行事|ぎょうじ}', romaji: 'gyōji', hu: 'ünnep, rendezvény' },
+          { jp: '{民族衣装|みんぞくいしょう}', romaji: 'minzoku ishō', hu: 'népviselet' },
+          { jp: '{地方|ちほう}', romaji: 'chihō', hu: 'vidék, régió' },
+          { jp: '{特徴|とくちょう}', romaji: 'tokuchō', hu: 'jellegzetesség' },
+          { jp: '{現在|げんざい}', romaji: 'genzai', hu: 'jelenleg' },
+          { jp: '{昔|むかし}', romaji: 'mukashi', hu: 'régen' }
+        ]
+      },
+      {
+        title: 'Az írás kötőszavai',
+        items: [
+          { jp: 'たとえば', romaji: 'tatoeba', hu: 'például' },
+          { jp: 'その{中|なか}でも', romaji: 'sono naka demo', hu: 'azok közül is' },
+          { jp: 'だんだん', romaji: 'dandan', hu: 'fokozatosan' },
+          { jp: 'ほとんど', romaji: 'hotondo', hu: 'szinte teljesen' },
+          { jp: 'やはり', romaji: 'yahari', hu: 'mégis; ahogy várható' },
+          { jp: 'できれば', romaji: 'dekireba', hu: 'ha lehet' }
+        ]
+      }
+    ],
+    culture: [
+      {
+        title: 'Szabadkozni illik',
+        text: 'Ha egy japánt megdicsérnek vagy felkérnek valamire, először többnyire <b>szabadkozik</b>: „nekem ez nem megy", „még messze nem tudok jól". Ez nem hamis szerénység, hanem udvariasság: aki rögtön igent mond, az magabiztosabbnak mutatja magát, mint illik. A felkérő biztat, a felkért másodszorra elfogadja — és onnantól mindent megtesz, hogy jól sikerüljön.'
+      },
+      {
+        title: 'Nyers tojás a rizsen',
+        text: 'A japán reggeli egyik kedvence a forró rizsre ütött <b>nyers tojás</b>, szójaszósszal; a vékonyra szelt, főtt marhahúst is nyers tojásba mártják. Ez azért lehetséges, mert a boltban árult tojást nyers fogyasztásra szánják, és szigorúan ellenőrzik. A külföldi először meghökken — a japán vendég pedig azon, hogy másutt ezt nem merik megenni. Szokások dolgában minden „attól függ": {国|くに}によって{違|ちが}います.'
+      },
+      {
+        title: 'Az orrfújás',
+        text: 'Japánban illetlenség mások előtt hangosan <b>orrot fújni</b>, különösen étkezés közben. Aki náthás, inkább szipog, vagy félrevonul; cserébe maszkot visel, hogy ne fertőzzön. A magyar szemnek a szipogás a zavaró, a japánnak a zsebkendő — jó példa arra, hogy az udvariasság kultúránként mást jelent.'
+      },
+      {
+        title: 'A vacsora a főétkezés',
+        text: 'A japán családban a nap legfontosabb étkezése a <b>vacsora</b>: rizs, leves és több kisebb fogás, minden este frissen főzve. A hideg vacsora — szendvics, felvágott — egy japánnak hiányérzetet kelt. A hagyományos terítés elve: egy leves, három fogás, mellé rizs.'
+      }
+    ],
     quiz: [
-      { q: '„Bevettem a gyógyszert, mégsem megy le a lázam." Mi hiányzik?', jp: '{薬|くすり}を{飲|の}んだ＿、{熱|ねつ}が{下|さ}がりません。', a: 'のに', wrong: ['ので', 'から', 'なら'],
-        why: 'A várttal ellentétes eredmény: のに.' },
-      { q: '„Vasárnap van, mégis dolgoznom kell." Mi hiányzik?', jp: '{日曜日|にちようび}＿のに、{働|はたら}かなければなりません。', a: 'な', wrong: ['だ', 'の', 'で'],
-        why: 'Főnév után: なのに.' },
-      { q: 'Mit jelent: {約束|やくそく}したのに、{彼|かれ}は{来|き}ませんでした。', a: 'Megígérte, mégsem jött el.',
+      { q: '„Bevettem a gyógyszert, mégsem megy le a lázam." Mi hiányzik?', jp: '{薬|くすり}を{飲|の}んだ＿、{熱|ねつ}が{下|さ}がりません。', a: 'のに', wrong: ['ので', 'から', 'なら'], why: 'A várttal ellentétes eredmény: のに.' },
+      { q: '„Vasárnap van, mégis dolgoznom kell." Mi hiányzik?', jp: '{日曜日|にちようび}＿のに、{働|はたら}かなければなりません。', a: 'な', wrong: ['だ', 'の', 'で'], why: 'Főnév után: なのに.' },
+      {
+        q: 'Mit jelent: {約束|やくそく}したのに、{彼|かれ}は{来|き}ませんでした。',
+        a: 'Megígérte, mégsem jött el.',
         wrong: ['Megígérte, ezért eljött.', 'Ha megígéri, eljön.', 'Nem ígérte meg, ezért nem jött el.'],
-        why: 'A のに csalódást fejez ki: pedig megígérte.' },
-      { q: '„Nem baj, ha nem írja oda a nevét." Mi hiányzik?', jp: '{名前|なまえ}は{書|か}か＿かまいません。', a: 'なくても', wrong: ['なければ', 'なくては', 'ないと'],
-        why: 'Nem kötelező: 〜なくてもかまいません.' },
-      { q: '„Nem baj, ha ideülök?" Mi hiányzik?', jp: 'ここに＿かまいませんか。', a: '{座|すわ}っても', wrong: ['{座|すわ}っては', '{座|すわ}ると', '{座|すわ}れば'],
-        why: 'Engedély: て-alak + もかまいません.' },
-      { q: '„Országonként mások a szokások." Mi hiányzik?', jp: '{国|くに}＿{習慣|しゅうかん}が{違|ちが}います。', a: 'によって', wrong: ['について', 'にとって', 'として'],
-        why: 'Mi szerint különbözik: 〜によって.' },
-      { q: 'Mit jelent: {日|ひ}によって{値段|ねだん}が{変|か}わります。', a: 'Naptól függően változik az ár.',
-        wrong: ['Minden nap ugyanannyi az ár.', 'Ma megváltozott az ár.', 'Az árról naponta beszélünk.'],
-        why: '〜によって{変|か}わります: aszerint változik.' },
-      { q: '„Az internet révén közelebb került a világ." Mi hiányzik?', jp: 'インターネット＿{世界|せかい}が{近|ちか}くなりました。', a: 'によって', wrong: ['について', 'のに', 'までに'],
-        why: 'Eszköz, ok: 〜によって.' },
-      { q: 'Melyik mondat helyes? (A のに után nem állhat kérés, javaslat vagy szándék.)', a: '{勉強|べんきょう}したのに、{試験|しけん}に{落|お}ちました。',
-        wrong: ['{寒|さむ}いのに、{窓|まど}を{閉|し}めてください。', '{暇|ひま}なのに、{遊|あそ}びに{行|い}きましょう。', '{雨|あめ}なのに、{傘|かさ}を{持|も}っていくつもりです。'],
-        why: 'A のに tényt állít szembe egy váratlan ténnyel.' },
-      { q: '„Nem baj, ha kicsit késik." Mi hiányzik?', jp: '{少|すこ}し{遅|おく}れても＿。', a: 'かまいません', wrong: ['いけません', 'なりません', 'ちがいません'],
-        why: '〜てもかまいません: megengedett.' }
+        why: 'A のに csalódást fejez ki: pedig megígérte.'
+      },
+      { q: '„Nem baj, ha nem írja oda a nevét." Mi hiányzik?', jp: '{名前|なまえ}は{書|か}か＿かまいません。', a: 'なくても', wrong: ['なければ', 'なくては', 'ないと'], why: 'Nem kötelező: 〜なくてもかまいません.' },
+      { q: '„Nem baj, ha ideülök?" Mi hiányzik?', jp: 'ここに＿かまいませんか。', a: '{座|すわ}っても', wrong: ['{座|すわ}っては', '{座|すわ}ると', '{座|すわ}れば'], why: 'Engedély: て-alak + もかまいません.' },
+      { q: '„Országonként mások a szokások." Mi hiányzik?', jp: '{国|くに}＿{習慣|しゅうかん}が{違|ちが}います。', a: 'によって', wrong: ['について', 'にとって', 'として'], why: 'Mi szerint különbözik: 〜によって.' },
+      { q: 'Mit jelent: {日|ひ}によって{値段|ねだん}が{変|か}わります。', a: 'Naptól függően változik az ár.', wrong: ['Minden nap ugyanannyi az ár.', 'Ma megváltozott az ár.', 'Az árról naponta beszélünk.'], why: '〜によって{変|か}わります: aszerint változik.' },
+      { q: '„Az internet révén közelebb került a világ." Mi hiányzik?', jp: 'インターネット＿{世界|せかい}が{近|ちか}くなりました。', a: 'によって', wrong: ['について', 'のに', 'までに'], why: 'Eszköz, ok: 〜によって.' },
+      {
+        q: 'Melyik mondat helyes? (A のに után nem állhat kérés, javaslat vagy szándék.)',
+        a: '{勉強|べんきょう}したのに、{試験|しけん}に{落|お}ちました。',
+        wrong: [
+          '{寒|さむ}いのに、{窓|まど}を{閉|し}めてください。',
+          '{暇|ひま}なのに、{遊|あそ}びに{行|い}きましょう。',
+          '{雨|あめ}なのに、{傘|かさ}を{持|も}っていくつもりです。'
+        ],
+        why: 'A のに tényt állít szembe egy váratlan ténnyel.'
+      },
+      { q: '„Nem baj, ha kicsit késik." Mi hiányzik?', jp: '{少|すこ}し{遅|おく}れても＿。', a: 'かまいません', wrong: ['いけません', 'なりません', 'ちがいません'], why: '〜てもかまいません: megengedett.' },
+      { q: 'Melyik mondat helyes?', a: '{日曜日|にちようび}なのに、{学校|がっこう}へ{行|い}きます。', wrong: ['{日曜日|にちようび}だのに、{学校|がっこう}へ{行|い}きます。', '{日曜日|にちようび}のに、{学校|がっこう}へ{行|い}きます。', '{日曜日|にちようび}でのに、{学校|がっこう}へ{行|い}きます。'], why: 'Főnév után なのに áll.' },
+      { q: 'Mit jelent: {言|い}ってくれればよかったのに。', a: 'Bárcsak szóltál volna!', wrong: ['Jó, hogy szóltál.', 'Kérlek, szólj majd!', 'Nem kellett volna szólnod.'], why: 'A 〜ばよかったのに sajnálkozás: nem történt meg, pedig jó lett volna.' },
+      {
+        q: 'Melyik mondat fejez ki megtörtént tényt és csalódást?',
+        a: '{薬|くすり}を{飲|の}んだのに、{治|なお}りません。',
+        wrong: ['{薬|くすり}を{飲|の}んでも、{治|なお}りません。', '{薬|くすり}を{飲|の}めば、{治|なお}ります。', '{薬|くすり}を{飲|の}んだら、{治|なお}ります。'],
+        why: 'A のに előtt tény áll: bevettem — mégsem gyógyultam meg.'
+      },
+      { q: '„Nem baj, ha nem ma válaszol." Mi hiányzik?', jp: '{返事|へんじ}は{今日|きょう}＿かまいません。', a: 'じゃなくても', wrong: ['なくても', 'じゃないても', 'くなくても'], why: 'Főnév után: じゃなくても.' },
+      { q: '„Nem kell megírni." Melyik mondat jelenti ezt?', a: '{書|か}かなくてもいいです。', wrong: ['{書|か}いてはいけません。', '{書|か}かなければなりません。', '{書|か}いてもいいです。'], why: '〜なくてもいいです: nem kötelező.' },
+      { q: '„Lehet japánul is, angolul is." Mi hiányzik?', jp: '{日本語|にほんご}でも{英語|えいご}でも＿。', a: 'かまいません', wrong: ['かまいます', 'なりません', 'いけません'], why: 'A かまいません („nem gond") mindig tagadó alakban áll.' },
+      { q: '„Van, aki nem reggelizik." Mi hiányzik?', jp: '{人|ひと}＿、{朝|あさ}ごはんを{食|た}べない{人|ひと}もいます。', a: 'によっては', wrong: ['については', 'にとっては', 'によると'], why: 'A によっては egy esetet emel ki a sok közül: „van, aki…".' },
+      {
+        q: 'Felkérnek valamire, és azt feleled: {私|わたし}には、ちょっと…。 Mit fejezel ki?',
+        a: 'Szabadkozol: a feladat nehéznek tűnik.',
+        wrong: [
+          'Kérsz belőle egy keveset.',
+          'Azt kéred, várjanak egy kicsit.',
+          'Azt mondod, neked is van egy kevés.'
+        ],
+        why: 'Félbehagyott mondat: szerény szabadkozás.'
+      },
+      { q: 'Hogyan biztatod azt, aki szabadkozik?', a: '{山田|やまだ}さんなら{大丈夫|だいじょうぶ}ですよ。', wrong: ['しかたがないですね。', 'それは{困|こま}りましたね。', '{無理|むり}に{決|き}まっています。'], why: '〜さんなら{大丈夫|だいじょうぶ}: „önnek menni fog".' },
+      {
+        q: 'Miért furcsa ez a mondat: {辛|から}いのに、おいしいです。',
+        a: 'Mert a のに azt sugallja: a csípős ételtől nem várnánk, hogy finom.',
+        wrong: [
+          'Mert a のに után nem állhat melléknév.',
+          'Mert い-melléknév nem állhat a のに előtt.',
+          'Mert a mondatból hiányzik az ige.'
+        ],
+        why: 'A のに váratlan ellentétet fejez ki; semleges összekapcsolásra て-alak való.'
+      }
     ]
   },
 
   /* ── 31. lecke ────────────────────────────────────── */
   {
-    id: 'l31', no: 31, book: 'Dekiru 2',
-    title: 'Útbaigazítás',
-    lead: 'Elmagyarázod, merre kell menni, összehasonlítasz, elmondod, mit látsz és hallasz, és a megfigyeléseidből következtetsz.',
+    id: 'l31', no: 31, book: 'Dekiru 2', title: 'Útbaigazítás',
+    lead: 'Útbaigazítást kérsz és adsz, elmondod, mit látsz és hallasz, a megfigyeléseidből következtetsz, összehasonlítasz, megmondod, mi változott — és megismered a kanszai nyelvjárást.',
     cando: [
-      'Útbaigazítást kérsz és adsz.',
+      'Útbaigazítást kérsz és adsz, és megerősíted, hogy jól értetted.',
       'Elmondod, mit látsz és hallasz, és mire következtetsz belőle.',
-      'Beszélsz a nyelvjárásokról.'
+      'Elmondod, mit tudsz már megtenni, amit régen nem.',
+      'Felismered a kanszai nyelvjárás fontosabb szavait, és rákérdezel, ha nem értesz valamit.'
     ],
+    intro: [
+      'Eltévedtél egy japán városban — vagy éppen te magyarázod el valakinek az utat. Ehhez a negyedik feltételes alak kell, a <b>〜と</b>: „ha itt befordul, ott lesz". A と azt fejezi ki, ami magától, mindig bekövetkezik: az útvonalat, a gép működését, a természet rendjét.',
+      'Az útbaigazításhoz az is kell, hogy elmondd, mi <b>látszik</b> és mi <b>hallatszik</b>. A {見|み}えます és a {聞|き}こえます nem azt jelenti, hogy megnézel vagy meghallgatsz valamit, hanem hogy az magától a szemed elé, a füledbe jut. Amit pedig a jelekből kikövetkeztetsz, azt a <b>〜ようです</b> („úgy tűnik") fejezi ki.',
+      'A lecke a kanszai vidéken játszódik: Oszakában, Kiotóban másképp beszélnek, mint Tokióban. Megtanulod felismerni a legfontosabb különbségeket, összehasonlítani (<b>〜に{比|くら}べて</b>), és elmondani, mi változott — mit tudsz már, amit régen nem (<b>〜ようになりました</b>).'
+    ],
+    dialogue: {
+      title: 'Merre van az oszakai vár?',
+      scene: 'Anna egyedül kirándul Oszakába. Egy idős nénitől kérdezi meg az utat, aki először nyelvjárásban felel.',
+      lines: [
+        { who: 'Anna', jp: 'すみません、{大阪城|おおさかじょう}へ{行|い}きたいんですが、この{道|みち}でいいですか。', romaji: 'Sumimasen, Ōsaka-jō e ikitai n desu ga, kono michi de ii desu ka.', hu: 'Elnézést, az oszakai várhoz szeretnék menni. Jó úton járok?' },
+        { who: 'Néni', jp: '{大阪城|おおさかじょう}？{歩|ある}いて{行|い}くんやったら、ちょっと{遠|とお}いで。', romaji: 'Ōsaka-jō? Aruite iku n yattara, chotto tōi de.', hu: 'A várhoz? Ha gyalog megy, kicsit messze van ám.' },
+        { who: 'Anna', jp: 'え？すみません、もう{一度|いちど}お{願|ねが}いします。', romaji: 'E? Sumimasen, mō ichido onegai shimasu.', hu: 'Tessék? Elnézést, megismételné?' },
+        {
+          who: 'Néni',
+          jp: 'あ、ごめんな。{歩|ある}いて{行|い}くなら、ちょっと{遠|とお}いですよ。{二十分|にじゅっぷん}ぐらいかかります。',
+          romaji: 'A, gomen na. Aruite iku nara, chotto tōi desu yo. Nijuppun gurai kakarimasu.',
+          hu: 'Ja, bocsánat. Ha gyalog megy, egy kicsit messze van. Úgy húsz perc.'
+        },
+        { who: 'Anna', jp: '{大丈夫|だいじょうぶ}です。{歩|ある}いて{行|い}きます。', romaji: 'Daijōbu desu. Aruite ikimasu.', hu: 'Nem baj, gyalog megyek.' },
+        {
+          who: 'Néni',
+          jp: 'ほな、この{道|みち}をまっすぐ{行|い}くと、{大|おお}きい{交差点|こうさてん}があります。そこを{右|みぎ}に{曲|ま}がると、お{城|しろ}が{見|み}えてきますよ。',
+          romaji: 'Hona, kono michi o massugu iku to, ōkii kōsaten ga arimasu. Soko o migi ni magaru to, o-shiro ga miete kimasu yo.',
+          hu: 'Akkor hát: ha egyenesen megy ezen az úton, lesz egy nagy kereszteződés. Ott jobbra fordul, és már látszani fog a vár.'
+        },
+        { who: 'Anna', jp: '{交差点|こうさてん}を{右|みぎ}ですね。{何|なに}か{目印|めじるし}はありますか。', romaji: 'Kōsaten o migi desu ne. Nani ka mejirushi wa arimasu ka.', hu: 'Tehát a kereszteződésnél jobbra. Van valami, amiről megismerem?' },
+        { who: 'Néni', jp: '{角|かど}に{大|おお}きい{本屋|ほんや}があるから、すぐわかるわ。', romaji: 'Kado ni ōkii hon\'ya ga aru kara, sugu wakaru wa.', hu: 'A sarkon van egy nagy könyvesbolt, rögtön megismeri.' },
+        { who: 'Anna', jp: 'わかりました。ご{親切|しんせつ}に、ありがとうございます。', romaji: 'Wakarimashita. Go-shinsetsu ni, arigatō gozaimasu.', hu: 'Értem. Köszönöm a kedvességét!' },
+        { who: 'Néni', jp: 'かまへん、かまへん。{日本語|にほんご}、{上手|じょうず}やなあ。', romaji: 'Kamahen, kamahen. Nihongo, jōzu ya nā.', hu: 'Ugyan, semmiség. De jól beszél japánul!' },
+        { who: 'Anna', jp: 'いいえ、まだまだです。あの、「かまへん」はどういう{意味|いみ}ですか。', romaji: 'Iie, mada mada desu. Ano, "kamahen" wa dō iu imi desu ka.', hu: 'Ó, dehogy, még messze nem. Elnézést, mit jelent a „kamahen"?' },
+        {
+          who: 'Néni',
+          jp: '「かまわない」っていうこと。{大阪|おおさか}では「〜ない」を「〜へん」って{言|い}うねん。',
+          romaji: '"Kamawanai" tte iu koto. Ōsaka de wa "~nai" o "~hen" tte iu nen.',
+          hu: 'Azt, hogy „kamavanai": nem tesz semmit. Oszakában a „-nai" helyett „-hen"-t mondunk.'
+        },
+        { who: 'Anna', jp: 'そうですか。{東京|とうきょう}のことばに{比|くら}べて、やわらかく{聞|き}こえますね。', romaji: 'Sō desu ka. Tōkyō no kotoba ni kurabete, yawarakaku kikoemasu ne.', hu: 'Értem. A tokiói beszédhez képest lágyabban hangzik.' }
+      ],
+      notes: [
+        'A néni első mondata nyelvjárás: <b>やったら</b> = だったら, a mondatvégi <b>で</b> = よ. Amikor látja, hogy Anna nem érti, köznyelvre vált.',
+        'Anna két jó stratégiát használ: megismételteti a mondatot (<b>もう{一度|いちど}お{願|ねが}いします</b>), és rákérdez az ismeretlen szóra (<b>〜はどういう{意味|いみ}ですか</b>).',
+        'Az útbaigazítás két と-ra épül: <b>{行|い}くと、…があります</b> (ha megy, ott lesz), <b>{曲|ま}がると、…が{見|み}えてきます</b> (ha befordul, előtűnik).',
+        'Anna megerősítésül megismétli a lényeget: <b>{交差点|こうさてん}を{右|みぎ}ですね</b>. Aztán ismertetőjelet kér: <b>{目印|めじるし}</b>.',
+        'További kanszai szavak a párbeszédben: <b>ほな</b> = じゃあ, <b>かまへん</b> = かまわない, <b>{上手|じょうず}やなあ</b> = {上手|じょうず}だなあ, <b>{言|い}うねん</b> = {言|い}うんだ.',
+        'A dicséretre a szerény válasz: <b>まだまだです</b> („még messze nem megy jól").'
+      ]
+    },
     points: [
       {
         title: '〜と', sub: 'ha… (mindig így van)',
         pattern: 'szótári alak + と、…',
         body: 'Törvényszerű, mindig bekövetkező eredmény: útbaigazítás, gépek működése, természeti jelenségek. Utána nem állhat kérés, javaslat vagy szándék.',
+        more: [
+          'A と előtt mindig <b>jelen idejű</b> rövid alak áll, akkor is, ha a mondat a múltról szól: {行|い}くと, {行|い}かないと, {寒|さむ}いと, {学生|がくせい}だと.',
+          'Azt fejezi ki, ami az első dolgot <b>magától, szükségszerűen</b> követi: természeti törvény, gép működése, útvonal, megszokás. Magyarul gyakran „amikor", „valahányszor".',
+          'Ezért a と után nem állhat akarat: kérés, meghívás, szándék, engedély. Ilyenkor たら kell.',
+          'A <b>〜ないと</b> figyelmeztet: „ha nem…, (baj lesz)". Beszédben a folytatás el is marad: もう{行|い}かないと… („mennem kell").'
+        ],
+        tables: [
+          {
+            caption: 'A négy feltételes alak',
+            head: ['Alak', 'Mit fejez ki?', 'Példa'],
+            rows: [
+              ['と', 'magától, mindig bekövetkezik', 'はるに なる<b>と</b>、さくらが さきます。'],
+              ['ば', 'általános feltétel', 'ボタンを おせ<b>ば</b>、あきます。'],
+              ['たら', 'egy konkrét eset, sorrend', 'えきに つい<b>たら</b>、でんわします。'],
+              ['なら', 'a másik szavára: tanács', 'いく<b>なら</b>、あきが いいです。']
+            ]
+          }
+        ],
         examples: [
           { jp: 'まっすぐ{行|い}くと、{右|みぎ}に{銀行|ぎんこう}があります。', romaji: 'Massugu iku to, migi ni ginkō ga arimasu.', hu: 'Ha egyenesen megy, jobbra lesz egy bank.' },
           { jp: '{春|はる}になると、{暖|あたた}かくなります。', romaji: 'Haru ni naru to, atatakaku narimasu.', hu: 'Tavasszal felmelegszik az idő.' },
-          { jp: 'お{金|かね}を{入|い}れると、{切符|きっぷ}が{出|で}ます。', romaji: 'Okane o ireru to, kippu ga demasu.', hu: 'Ha bedobja a pénzt, kijön a jegy.' }
+          { jp: 'お{金|かね}を{入|い}れると、{切符|きっぷ}が{出|で}ます。', romaji: 'Okane o ireru to, kippu ga demasu.', hu: 'Ha bedobja a pénzt, kijön a jegy.' },
+          { jp: 'この{角|かど}を{左|ひだり}に{曲|ま}がると、{駅|えき}が{見|み}えます。', romaji: 'Kono kado o hidari ni magaru to, eki ga miemasu.', hu: 'Ha ezen a sarkon balra fordul, meglátja az állomást.' },
+          { jp: '{急|いそ}がないと、{遅|おく}れますよ。', romaji: 'Isoganai to, okuremasu yo.', hu: 'Ha nem sietsz, elkésel.' },
+          { jp: '{毎日|まいにち}{使|つか}わないと、{忘|わす}れてしまいます。', romaji: 'Mainichi tsukawanai to, wasurete shimaimasu.', hu: 'Ha nem használod mindennap, elfelejted.' },
+          { jp: '{雨|あめ}の{日|ひ}になると、{頭|あたま}が{痛|いた}くなります。', romaji: 'Ame no hi ni naru to, atama ga itaku narimasu.', hu: 'Esős napokon megfájdul a fejem.' },
+          { jp: '{子|こ}どもだと、{半額|はんがく}です。', romaji: 'Kodomo da to, hangaku desu.', hu: 'Gyerekeknek félárú.' }
+        ],
+        mistakes: [
+          { bad: '{駅|えき}に{着|つ}くと、{電話|でんわ}してください。', good: '{駅|えき}に{着|つ}いたら、{電話|でんわ}してください。', why: 'A と után nem állhat kérés: az a beszélő akaratát fejezi ki.' },
+          { bad: '{春|はる}になったと、{暖|あたた}かくなりました。', good: '{春|はる}になると、{暖|あたた}かくなりました。', why: 'A と előtt mindig jelen idejű alak áll.' }
         ]
+      },
+      {
+        title: 'Útbaigazítás', sub: 'merre menjek? — így mondd el',
+        pattern: '〜を{右|みぎ}に{曲|ま}がると、〜があります / 〜が{見|み}えます',
+        body: 'Az útbaigazítás a と alak legtermészetesebb terepe: „ha itt befordul, ott lesz". A hely, amelyen áthaladsz, <b>を</b>-t kap; amit meglátsz, <b>が</b>-t.',
+        more: [
+          'A mozgás igéi を-val állnak (19. lecke): {道|みち}<b>を</b>まっすぐ{行|い}きます, {角|かど}<b>を</b>{曲|ま}がります, {橋|はし}<b>を</b>{渡|わた}ります, {公園|こうえん}<b>を</b>{通|とお}ります.',
+          'A sarkokat, lámpákat számolod: {一|ひと}つ{目|め}の{角|かど} (az első sarok), {二|ふた}つ{目|め}の{信号|しんごう} (a második lámpa). A helyzetet a {右手|みぎて}に, {左手|ひだりて}に, {正面|しょうめん}に szavak adják meg.',
+          'Ha te kérdezel: 〜へ{行|い}きたいんですが…. Ha megkaptad a választ, ismételd meg a lényeget ね-vel — {二|ふた}つ{目|め}の{角|かど}を{左|ひだり}ですね —, és kérj ismertetőjelet: {何|なに}か{目印|めじるし}はありますか.'
+        ],
+        tables: [
+          {
+            caption: 'Az útbaigazítás építőkövei',
+            head: ['Japánul', 'Magyarul'],
+            rows: [
+              ['まっすぐ いきます', 'egyenesen megy'],
+              ['かど<b>を</b> みぎに まがります', 'a sarkon jobbra fordul'],
+              ['しんごう<b>を</b> わたります', 'átmegy a lámpánál'],
+              ['はし<b>を</b> わたります', 'átmegy a hídon'],
+              ['ふたつめの かど', 'a második sarok'],
+              ['つきあたり', 'az utca vége'],
+              ['みぎてに / ひだりてに', 'jobb / bal kéz felől'],
+              ['しょうめんに', 'szemközt']
+            ]
+          }
+        ],
+        examples: [
+          { jp: 'すみません、{郵便局|ゆうびんきょく}へ{行|い}きたいんですが…。', romaji: 'Sumimasen, yūbinkyoku e ikitai n desu ga…', hu: 'Elnézést, a postára szeretnék menni…' },
+          { jp: '{二|ふた}つ{目|め}の{角|かど}を{左|ひだり}に{曲|ま}がってください。', romaji: 'Futatsume no kado o hidari ni magatte kudasai.', hu: 'A második sarkon forduljon balra!' },
+          { jp: '{橋|はし}を{渡|わた}ると、{右手|みぎて}に{公園|こうえん}があります。', romaji: 'Hashi o wataru to, migite ni kōen ga arimasu.', hu: 'Ha átmegy a hídon, jobb kéz felől lesz egy park.' },
+          { jp: 'この{道|みち}の{突|つ}き{当|あ}たりに{病院|びょういん}があります。', romaji: 'Kono michi no tsukiatari ni byōin ga arimasu.', hu: 'Ennek az utcának a végén van a kórház.' },
+          { jp: 'ここから{歩|ある}いて{何分|なんぷん}ぐらいですか。', romaji: 'Koko kara aruite nanpun gurai desu ka.', hu: 'Innen gyalog hány perc?' }
+        ],
+        mistakes: [
+          { bad: '{橋|はし}に{渡|わた}ります。', good: '{橋|はし}を{渡|わた}ります。', why: 'A hely, amelyen áthaladsz, を-t kap.' }
+        ],
+        tip: 'Jó útbaigazítás = irány + と + amit meglátsz: {曲|ま}がると、〜が{見|み}えます。'
       },
       {
         title: '〜にくらべて', sub: '-hoz képest',
         pattern: 'főnév + にくらべて',
         body: 'Viszonyítási alapot ad: „ahhoz képest". A より-nál leíróbb, tárgyilagosabb.',
+        more: [
+          'A {比|くら}べる azt jelenti: „összehasonlít". A <b>〜に{比|くら}べて</b> megadja a viszonyítási alapot, és utána leírás következik: mi több, mi kevesebb, mi lett más.',
+          'A より rövid, hétköznapi összehasonlítás (A は B より{高|たか}い). A に{比|くら}べて tárgyilagosabb, és gyakran <b>változásról</b> beszél: {去年|きょねん}に{比|くら}べて, {昔|むかし}に{比|くら}べて, {以前|いぜん}に{比|くら}べて.',
+          'Ugyanígy használható a 〜と{比|くら}べて is.'
+        ],
         examples: [
           { jp: '{東京|とうきょう}にくらべて、この{町|まち}は{静|しず}かです。', romaji: 'Tōkyō ni kurabete, kono machi wa shizuka desu.', hu: 'Tokióhoz képest ez a város csendes.' },
           { jp: '{去年|きょねん}にくらべて、{今年|ことし}は{暑|あつ}いです。', romaji: 'Kyonen ni kurabete, kotoshi wa atsui desu.', hu: 'A tavalyihoz képest idén meleg van.' },
-          { jp: '{兄|あに}にくらべて、{私|わたし}は{背|せ}が{低|ひく}いです。', romaji: 'Ani ni kurabete, watashi wa se ga hikui desu.', hu: 'A bátyámhoz képest alacsony vagyok.' }
+          { jp: '{兄|あに}にくらべて、{私|わたし}は{背|せ}が{低|ひく}いです。', romaji: 'Ani ni kurabete, watashi wa se ga hikui desu.', hu: 'A bátyámhoz képest alacsony vagyok.' },
+          { jp: '{十年前|じゅうねんまえ}に{比|くら}べて、{物価|ぶっか}が{高|たか}くなりました。', romaji: 'Jūnen mae ni kurabete, bukka ga takaku narimashita.', hu: 'Tíz évvel ezelőtthöz képest drágább lett az élet.' },
+          { jp: '{都会|とかい}に{比|くら}べて、{田舎|いなか}は{空気|くうき}がきれいです。', romaji: 'Tokai ni kurabete, inaka wa kūki ga kirei desu.', hu: 'A nagyvároshoz képest vidéken tiszta a levegő.' },
+          { jp: '{日本語|にほんご}は{英語|えいご}に{比|くら}べて、{発音|はつおん}が{簡単|かんたん}だと{思|おも}います。', romaji: 'Nihongo wa Eigo ni kurabete, hatsuon ga kantan da to omoimasu.', hu: 'Szerintem a japán kiejtése az angolhoz képest könnyű.' }
         ]
       },
       {
         title: 'みえます・きこえます', sub: 'látszik, hallatszik',
         pattern: 'A が {見|み}えます / {聞|き}こえます',
         body: 'Amit szándék nélkül, magától érzékelsz: a szemed elé kerül, a füledbe jut. Amit érzékelsz, <b>が</b>-t kap. (A {見|み}られます azt jelenti: van rá lehetőség, hogy megnézd.)',
+        more: [
+          'A {見|み}えます és a {聞|き}こえます <b>önálló igék</b>, nem a {見|み}ます és a {聞|き}きます ható alakjai. Azt jelentik: valami a szemed elé kerül, a füledbe jut — akár akarod, akár nem.',
+          'A szabályos ható alak ({見|み}られます, {聞|き}けます) mást mond: megvan a <b>lehetőséged</b> rá, hogy megnézd, meghallgasd — ha odamész, ha bekapcsolod.',
+          'Amit érzékelsz, <b>が</b>-t kap; ahonnan érzékeled, から-t; ahol megjelenik, に-t: {正面|しょうめん}に{山|やま}が{見|み}えます.',
+          'Melléknévvel azt jelentik: „valamilyennek látszik, hangzik": {若|わか}く{見|み}えます, {学生|がくせい}に{見|み}えます, やわらかく{聞|き}こえます.'
+        ],
+        tables: [
+          {
+            caption: 'Látszik — megnézhető',
+            head: ['Ige', 'Mit jelent?', 'Példa'],
+            rows: [
+              ['みえます', 'magától a szemed elé kerül', 'ここから うみが みえます。'],
+              ['みられます', 'megvan rá a lehetőség', 'ここで ふるい えいがが みられます。'],
+              ['きこえます', 'magától a füledbe jut', 'とりの こえが きこえます。'],
+              ['きけます', 'megvan rá a lehetőség', 'ここで にほんの おんがくが きけます。']
+            ]
+          }
+        ],
         examples: [
           { jp: '{窓|まど}から{海|うみ}が{見|み}えます。', romaji: 'Mado kara umi ga miemasu.', hu: 'Az ablakból látszik a tenger.' },
           { jp: '{隣|となり}の{部屋|へや}から{音楽|おんがく}が{聞|き}こえます。', romaji: 'Tonari no heya kara ongaku ga kikoemasu.', hu: 'A szomszéd szobából zene hallatszik.' },
-          { jp: '{字|じ}が{小|ちい}さくて、よく{見|み}えません。', romaji: 'Ji ga chiisakute, yoku miemasen.', hu: 'Kicsik a betűk, nem látom jól.' }
+          { jp: '{字|じ}が{小|ちい}さくて、よく{見|み}えません。', romaji: 'Ji ga chiisakute, yoku miemasen.', hu: 'Kicsik a betűk, nem látom jól.' },
+          { jp: '{電話|でんわ}の{声|こえ}が{小|ちい}さくて、よく{聞|き}こえません。', romaji: 'Denwa no koe ga chiisakute, yoku kikoemasen.', hu: 'Halk a hang a telefonban, nem hallom jól.' },
+          { jp: '{田中|たなか}さんは{若|わか}く{見|み}えます。', romaji: 'Tanaka-san wa wakaku miemasu.', hu: 'Tanaka fiatalnak látszik.' },
+          { jp: 'この{美術館|びじゅつかん}では、{有名|ゆうめい}な{絵|え}が{見|み}られます。', romaji: 'Kono bijutsukan de wa, yūmei na e ga miraremasu.', hu: 'Ebben a múzeumban híres képeket lehet megnézni.' },
+          { jp: '{遠|とお}くから{祭|まつ}りの{音|おと}が{聞|き}こえてきました。', romaji: 'Tōku kara matsuri no oto ga kikoete kimashita.', hu: 'Messziről odahallatszott az ünnep zaja.' }
+        ],
+        mistakes: [
+          { bad: '{窓|まど}から{海|うみ}を{見|み}えます。', good: '{窓|まど}から{海|うみ}が{見|み}えます。', why: 'Amit érzékelsz, が-t kap: nem te cselekszel, a dolog látszik.' }
         ]
       },
       {
         title: '〜ようです', sub: 'úgy tűnik',
         pattern: 'rövid alak + ようです · főnév + のようです · な-melléknév + なようです',
         body: 'A saját megfigyelésedből (amit látsz, hallasz, érzel) vonsz le következtetést. Óvatos, tárgyilagos megfogalmazás.',
+        more: [
+          'A ようです akkor jó, ha <b>jelekből következtetsz</b>: hallasz egy hangot, érzel egy illatot, látsz valamit, és ebből gondolsz valamit. Nem vagy biztos benne, de van alapod.',
+          'Úgy kapcsolódik, mint egy főnév: ige és い-melléknév rövid alakja után közvetlenül, な-melléknév után な, főnév után の közbeiktatásával. Maga な-melléknévként ragozódik: 〜ような, 〜ように, 〜ようなので.',
+          'Kellemetlen dolgot is szelídít: {間違|まちが}っています helyett {間違|まちが}っている<b>ようです</b> („úgy tűnik, téves"). Így jelzel udvariasan hibát vagy panaszt.',
+          'Barátok között a <b>みたい</b> áll a helyén: {留守|るす}みたい (főnév után の nélkül).'
+        ],
+        tables: [
+          {
+            caption: 'Mi áll a ようです előtt?',
+            head: ['Szófaj', 'Példa', 'Jelentés'],
+            rows: [
+              ['ige', 'きた ようです', 'úgy tűnik, megjött'],
+              ['い-melléknév', 'さむい ようです', 'úgy tűnik, hideg van'],
+              ['な-melléknév', 'ひま<b>な</b> ようです', 'úgy tűnik, ráér'],
+              ['főnév', 'るす<b>の</b> ようです', 'úgy tűnik, nincs otthon']
+            ]
+          }
+        ],
         examples: [
           { jp: '{田中|たなか}さんは{留守|るす}のようです。', romaji: 'Tanaka-san wa rusu no yō desu.', hu: 'Úgy tűnik, Tanaka nincs otthon.' },
           { jp: '{外|そと}は{寒|さむ}いようです。', romaji: 'Soto wa samui yō desu.', hu: 'Úgy tűnik, kint hideg van.' },
-          { jp: 'だれか{来|き}たようです。', romaji: 'Dareka kita yō desu.', hu: 'Úgy tűnik, jött valaki.' }
+          { jp: 'だれか{来|き}たようです。', romaji: 'Dareka kita yō desu.', hu: 'Úgy tűnik, jött valaki.' },
+          { jp: '{電気|でんき}が{消|き}えています。もう{寝|ね}たようです。', romaji: 'Denki ga kiete imasu. Mō neta yō desu.', hu: 'Le van kapcsolva a villany. Úgy tűnik, már lefeküdt.' },
+          { jp: 'どうも{風邪|かぜ}を{引|ひ}いたようです。', romaji: 'Dōmo kaze o hiita yō desu.', hu: 'Úgy tűnik, megfáztam.' },
+          { jp: 'この{計算|けいさん}は{間違|まちが}っているようですが…。', romaji: 'Kono keisan wa machigatte iru yō desu ga…', hu: 'Úgy tűnik, ez a számítás hibás…' },
+          { jp: '{鍵|かぎ}をなくしてしまったようなんです。', romaji: 'Kagi o nakushite shimatta yō na n desu.', hu: 'Úgy tűnik, elvesztettem a kulcsomat.' },
+          { jp: '{留守|るす}みたいですね。', romaji: 'Rusu mitai desu ne.', hu: 'Úgy néz ki, nincs otthon.' }
+        ],
+        notes: [
+          'A <b>どうも</b> („valahogy úgy") a ようです gyakori kísérője.',
+          'A でしょう puszta feltevés; a ようです megfigyelésre épül.'
+        ],
+        mistakes: [
+          { bad: '{図書館|としょかん}は{静|しず}かようです。', good: '{図書館|としょかん}は{静|しず}かなようです。', why: 'な-melléknév után な áll a よう előtt.' }
         ]
       },
       {
         title: '〜ようになります', sub: 'már tudok…, rászoktam',
         pattern: 'szótári alak / ható alak + ようになります · 〜なくなります',
         body: 'Fokozatos változás: valami, ami korábban nem volt, mostanra képesség vagy szokás lett. A tagadó párja: <b>〜なくなります</b> („már nem…").',
+        more: [
+          'A ようになります <b>változást</b> ír le: korábban nem volt így, mostanra így lett. Két fő használata van.',
+          '<b>Képesség</b>: ható alak + ようになります — „megtanultam", „már megy". <b>Szokás, helyzet</b>: szótári alak + ようになります — „rászoktam", „mostanában már…".',
+          'Kívánságként: 〜ようになりたいです („szeretném megtanulni"). Tagadó párja: <b>〜なくなります</b> („már nem…").',
+          'A 〜ことができます az állapotot közli (tudok); a 〜ようになりました a változást (megtanultam).'
+        ],
+        tables: [
+          {
+            caption: 'Előtte — utána',
+            head: ['', 'Régen', 'Most'],
+            rows: [
+              ['képesség', 'はなせませんでした', 'はなせる<b>ように なりました</b>'],
+              ['szokás', 'はしりませんでした', 'はしる<b>ように なりました</b>'],
+              ['megszűnés', 'テレビを みました', 'テレビを み<b>なく なりました</b>']
+            ]
+          }
+        ],
         examples: [
           { jp: '{日本語|にほんご}が{話|はな}せるようになりました。', romaji: 'Nihongo ga hanaseru yō ni narimashita.', hu: 'Már tudok japánul beszélni.' },
           { jp: '{毎朝|まいあさ}{走|はし}るようになりました。', romaji: 'Maiasa hashiru yō ni narimashita.', hu: 'Rászoktam, hogy minden reggel fussak.' },
-          { jp: '{最近|さいきん}、テレビを{見|み}なくなりました。', romaji: 'Saikin, terebi o minaku narimashita.', hu: 'Mostanában már nem nézek tévét.' }
+          { jp: '{最近|さいきん}、テレビを{見|み}なくなりました。', romaji: 'Saikin, terebi o minaku narimashita.', hu: 'Mostanában már nem nézek tévét.' },
+          { jp: '{漢字|かんじ}が{三百|さんびゃく}ぐらい{読|よ}めるようになりました。', romaji: 'Kanji ga sanbyaku gurai yomeru yō ni narimashita.', hu: 'Már vagy háromszáz kanjit el tudok olvasni.' },
+          { jp: '{日本|にほん}に{来|き}てから、{魚|さかな}をよく{食|た}べるようになりました。', romaji: 'Nihon ni kite kara, sakana o yoku taberu yō ni narimashita.', hu: 'Mióta Japánban vagyok, gyakran eszem halat.' },
+          { jp: '{早|はや}く{泳|およ}げるようになりたいです。', romaji: 'Hayaku oyogeru yō ni naritai desu.', hu: 'Szeretnék mielőbb megtanulni úszni.' },
+          { jp: 'インターネットで{切符|きっぷ}が{買|か}えるようになりました。', romaji: 'Intānetto de kippu ga kaeru yō ni narimashita.', hu: 'Már az interneten is lehet jegyet venni.' }
+        ],
+        mistakes: [
+          { bad: '{日本語|にほんご}が{話|はな}せるになりました。', good: '{日本語|にほんご}が{話|はな}せるようになりました。', why: 'Ige és なります közé ように kell; a 〜くなります / 〜になります csak melléknévvel és főnévvel áll.' }
+        ]
+      },
+      {
+        title: '{関西弁|かんさいべん}', sub: 'így beszélnek Oszakában és Kiotóban',
+        pattern: '〜ない → 〜へん · だ → や · いい → ええ',
+        body: 'Japánban sok nyelvjárás él; a legismertebb a kanszai vidéké. Használnod nem kell, de felismerned érdemes: a tévében, humoristáktól, és Kanszaiban az utcán mindenütt ezt hallod.',
+        more: [
+          'A legfeltűnőbb különbségek: a tagadás <b>〜へん</b> ({食|た}べへん = {食|た}べない), a だ helyén <b>や</b> áll ({本当|ほんとう}や), a mondatvégi よ helyén <b>で</b> vagy <b>わ</b>, az んだ helyén <b>ねん</b>.',
+          'Néhány szó egészen más, mint a köznyelvben; ezeket a táblázatban találod.',
+          'Ha nem értesz valamit, kérdezz rá: 「〜」はどういう{意味|いみ}ですか. A legtöbben azonnal átváltanak a köznyelvre.'
+        ],
+        tables: [
+          {
+            caption: 'Kanszai — köznyelv',
+            head: ['Kanszai', 'Köznyelv', 'Jelentés'],
+            rows: [
+              ['あかん', 'だめだ', 'nem jó, nem megy'],
+              ['おおきに', 'ありがとう', 'köszönöm'],
+              ['ほんま', 'ほんとう', 'tényleg'],
+              ['ええ', 'いい', 'jó'],
+              ['なんぼ', 'いくら', 'mennyibe kerül'],
+              ['ちゃう', 'ちがう', 'nem úgy van'],
+              ['めっちゃ', 'とても', 'nagyon'],
+              ['たべへん', 'たべない', 'nem eszik'],
+              ['かまへん', 'かまわない', 'nem gond'],
+              ['〜や', '〜だ', '(állítás)']
+            ]
+          }
+        ],
+        examples: [
+          { jp: 'これ、なんぼ？', romaji: 'Kore, nanbo?', hu: 'Ez mennyibe kerül? (kanszai)' },
+          { jp: 'ほんまにおおきに。', romaji: 'Honma ni ōkini.', hu: 'Igazán köszönöm. (kanszai)' },
+          { jp: 'それはあかんわ。', romaji: 'Sore wa akan wa.', hu: 'Az nem lesz jó. (kanszai)' },
+          { jp: '{今日|きょう}は{行|い}かへん。', romaji: 'Kyō wa ikahen.', hu: 'Ma nem megyek. (kanszai)' },
+          { jp: 'めっちゃおいしいで。', romaji: 'Metcha oishii de.', hu: 'Nagyon finom ám! (kanszai)' }
+        ],
+        notes: [
+          'A köznyelv neve {共通語|きょうつうご}; a nyelvjárásé {方言|ほうげん}. A nyelvjárások neve 〜{弁|べん}-re végződik: {関西弁|かんさいべん}, {大阪弁|おおさかべん}, {京都弁|きょうとべん}.'
+        ],
+        tip: 'Elég felismerned. Ha beszélni szeretnéd, előbb hallgasd sokat: a hanglejtése is más.'
+      }
+    ],
+    phrases: [
+      { jp: 'この{道|みち}でいいですか。', romaji: 'Kono michi de ii desu ka.', hu: 'Jó úton járok?' },
+      { jp: 'どうやって{行|い}けばいいですか。', romaji: 'Dō yatte ikeba ii desu ka.', hu: 'Hogyan jutok oda?' },
+      { jp: '{何|なに}か{目印|めじるし}はありますか。', romaji: 'Nani ka mejirushi wa arimasu ka.', hu: 'Van valami, amiről megismerem?' },
+      { jp: 'この{地図|ちず}で{教|おし}えていただけませんか。', romaji: 'Kono chizu de oshiete itadakemasen ka.', hu: 'Megmutatná ezen a térképen?' },
+      { jp: '{道|みち}に{迷|まよ}ってしまいました。', romaji: 'Michi ni mayotte shimaimashita.', hu: 'Eltévedtem.' },
+      { jp: 'すみません、よく{聞|き}こえませんでした。', romaji: 'Sumimasen, yoku kikoemasen deshita.', hu: 'Elnézést, nem hallottam jól.' },
+      { jp: 'ご{親切|しんせつ}に、ありがとうございます。', romaji: 'Go-shinsetsu ni, arigatō gozaimasu.', hu: 'Köszönöm a kedvességét!' },
+      { jp: '{助|たす}かりました。', romaji: 'Tasukarimashita.', hu: 'Sokat segített.' },
+      { jp: 'まだまだです。', romaji: 'Mada mada desu.', hu: 'Még messze nem megy jól.', note: 'Szerény válasz a dicséretre.' },
+      { jp: '{気|き}をつけて。', romaji: 'Ki o tsukete.', hu: 'Vigyázzon magára!' }
+    ],
+    words: [
+      {
+        title: 'Az utcán',
+        items: [
+          { jp: '{交差点|こうさてん}', romaji: 'kōsaten', hu: 'kereszteződés' },
+          { jp: '{信号|しんごう}', romaji: 'shingō', hu: 'jelzőlámpa' },
+          { jp: '{角|かど}', romaji: 'kado', hu: 'sarok' },
+          { jp: '{橋|はし}', romaji: 'hashi', hu: 'híd' },
+          { jp: '{横断歩道|おうだんほどう}', romaji: 'ōdan hodō', hu: 'gyalogátkelő' },
+          { jp: '{突|つ}き{当|あ}たり', romaji: 'tsukiatari', hu: 'az utca vége' },
+          { jp: '{商店街|しょうてんがい}', romaji: 'shōtengai', hu: 'bevásárlóutca' },
+          { jp: '{地下道|ちかどう}', romaji: 'chikadō', hu: 'aluljáró' },
+          { jp: '{目印|めじるし}', romaji: 'mejirushi', hu: 'ismertetőjel, tájékozódási pont' },
+          { jp: '{正面|しょうめん}', romaji: 'shōmen', hu: 'szemközt' },
+          { jp: '{右手|みぎて}・{左手|ひだりて}', romaji: 'migite, hidarite', hu: 'jobb kéz felől, bal kéz felől', say: 'みぎて、ひだりて' }
+        ]
+      },
+      {
+        title: 'Közlekedés',
+        items: [
+          { jp: '{普通|ふつう}', romaji: 'futsū', hu: 'személyvonat' },
+          { jp: '{急行|きゅうこう}', romaji: 'kyūkō', hu: 'gyorsvonat' },
+          { jp: '{特急|とっきゅう}', romaji: 'tokkyū', hu: 'expressz' },
+          { jp: '{停留所|ていりゅうじょ}', romaji: 'teiryūjo', hu: 'megálló (busz, villamos)' },
+          { jp: '{終点|しゅうてん}', romaji: 'shūten', hu: 'végállomás' },
+          { jp: '{乗|の}り{場|ば}', romaji: 'noriba', hu: 'beszállóhely, állomás (taxi, busz)' }
+        ]
+      },
+      {
+        title: 'A mozgás igéi',
+        note: 'Az útvonal mindegyiknél を-t kap.',
+        items: [
+          { jp: '{曲|ま}がります', romaji: 'magarimasu', hu: 'befordul' },
+          { jp: '{渡|わた}ります', romaji: 'watarimasu', hu: 'átkel' },
+          { jp: '{通|とお}ります', romaji: 'tōrimasu', hu: 'áthalad' },
+          { jp: '{抜|ぬ}けます', romaji: 'nukemasu', hu: 'átjut a túloldalra' },
+          { jp: '{上|あ}がります', romaji: 'agarimasu', hu: 'felmegy' },
+          { jp: '{下|お}ります', romaji: 'orimasu', hu: 'lemegy' },
+          { jp: '{迷|まよ}います', romaji: 'mayoimasu', hu: 'eltéved; tétovázik' },
+          { jp: '{比|くら}べます', romaji: 'kurabemasu', hu: 'összehasonlít' }
         ]
       }
     ],
+    culture: [
+      {
+        title: 'Cím utcanév nélkül',
+        text: 'A japán városok legtöbb utcájának <b>nincs neve</b>. A cím nem utcából és házszámból áll, hanem egyre kisebb területekből: kerület, körzet, tömb, épület. Egy ismeretlen címet ezért még a helybeliek is nehezen találnak meg — innen a rajzolt térképek, a <b>{目印|めじるし}</b> (feltűnő épület, bolt) fontossága, és az, hogy az útbaigazítás mindig azt mondja meg, mit fogsz <i>látni</i>. Ha eltévedtél, a sarki rendőrőrsön szívesen segítenek.'
+      },
+      {
+        title: 'Kanszai és Kantó',
+        text: 'Japán két nagy vidéke a <b>Kantó</b> (Tokió környéke) és a <b>Kanszai</b> (Oszaka, Kiotó, Kóbe, Nara). Kanszai volt évszázadokig az ország közepe: itt álltak a régi fővárosok. A két vidék ma is különbözik: más a nyelvjárás, más az ételek ízesítése, más a humor — a japán humoristák nagy része kanszai nyelvjárásban beszél. Ezért hallja egész Japán nap mint nap a tévében.'
+      },
+      {
+        title: 'Nyelvjárás és köznyelv',
+        text: 'Az iskolában, a hírekben, hivatalos helyzetben mindenki a <b>köznyelvet</b> ({共通語|きょうつうご}) használja; a nyelvjárás az otthon, a barátok, a szülőföld nyelve. A japánok melegnek, személyesnek érzik: aki a saját nyelvjárásában szólal meg, az közelebb engedi magához a másikat. Külföldiként a köznyelv a biztos választás — de ha megtanulsz egy-két helyi szót, örülni fognak neki.'
+      },
+      {
+        title: 'A tea útja',
+        text: 'A tea neve a világ nyelveiben két alakban él, mert Kínából két úton terjedt el. A szárazföldi úton az északi kínai <b>cha</b> jutott tovább: innen a japán お{茶|ちゃ}, az orosz, a török, a hindi szó. A tengeri úton a holland hajósok egy déli kínai nyelvjárás <b>te</b> alakját vitték Európába: ebből lett az angol tea, a német Tee — és a magyar tea is.'
+      }
+    ],
     quiz: [
-      { q: '„Ha egyenesen megy, jobbra lesz egy bank." Mi hiányzik?', jp: 'まっすぐ{行|い}く＿、{右|みぎ}に{銀行|ぎんこう}があります。', a: 'と', wrong: ['ば', 'たら', 'のに'],
-        why: 'Útbaigazítás, törvényszerű eredmény: szótári alak + と.' },
-      { q: 'Melyik mondat helyes? (A と után nem állhat kérés, javaslat vagy szándék.)', a: '{春|はる}になると、{暖|あたた}かくなります。',
+      { q: '„Ha egyenesen megy, jobbra lesz egy bank." Mi hiányzik?', jp: 'まっすぐ{行|い}く＿、{右|みぎ}に{銀行|ぎんこう}があります。', a: 'と', wrong: ['ば', 'たら', 'のに'], why: 'Útbaigazítás, törvényszerű eredmény: szótári alak + と.' },
+      {
+        q: 'Melyik mondat helyes? (A と után nem állhat kérés, javaslat vagy szándék.)',
+        a: '{春|はる}になると、{暖|あたた}かくなります。',
         wrong: ['{春|はる}になると、{旅行|りょこう}しましょう。', '{春|はる}になると、{遊|あそ}びに{来|き}てください。', '{春|はる}になると、{日本|にほん}へ{行|い}きたいです。'],
-        why: 'A と után magától bekövetkező eredmény áll.' },
-      { q: '„Tokióhoz képest ez a város csendes." Mi hiányzik?', jp: '{東京|とうきょう}＿、この{町|まち}は{静|しず}かです。', a: 'にくらべて', wrong: ['について', 'によって', 'にとって'],
-        why: 'Viszonyítás: 〜にくらべて.' },
-      { q: '„Az ablakból látszik a tenger." Mi hiányzik?', jp: '{窓|まど}から{海|うみ}＿{見|み}えます。', a: 'が', wrong: ['を', 'に', 'で'],
-        why: 'A {見|み}えます mellett az, ami látszik, が-t kap.' },
-      { q: 'Mit jelent: {字|じ}が{小|ちい}さくて、よく{見|み}えません。', a: 'Kicsik a betűk, nem látom jól.',
-        wrong: ['Kicsik a betűk, nem nézem meg.', 'Kicsik a betűk, nem szabad megnézni.', 'Kicsik a betűk, nem akarom látni.'],
-        why: '{見|み}えません: nem látszik (a szándékomtól függetlenül).' },
-      { q: '„Úgy tűnik, Tanaka nincs otthon." Mi hiányzik?', jp: '{田中|たなか}さんは{留守|るす}＿ようです。', a: 'の', wrong: ['な', 'だ', 'に'],
-        why: 'Főnév után: のようです.' },
-      { q: '„Úgy tűnik, jött valaki." Mi hiányzik?', jp: 'だれか＿ようです。', a: '{来|き}た', wrong: ['{来|き}ます', '{来|き}て', '{来|き}たの'],
-        why: 'A ようです előtt rövid alak áll.' },
-      { q: '„Már tudok japánul beszélni." Mi hiányzik?', jp: '{日本語|にほんご}が{話|はな}せる＿なりました。', a: 'ように', wrong: ['ことに', 'ために', 'そうに'],
-        why: 'Fokozatos változás: 〜ようになりました.' },
-      { q: '„Mostanában már nem nézek tévét." Mi hiányzik?', jp: '{最近|さいきん}、テレビを＿なりました。', a: '{見|み}なく', wrong: ['{見|み}ない', '{見|み}なくて', '{見|み}ず'],
-        why: 'A tagadó változás: ない → なくなりました.' },
-      { q: '„A szomszéd szobából zene hallatszik." Mi hiányzik?', jp: '{隣|となり}の{部屋|へや}から{音楽|おんがく}が＿。', a: '{聞|き}こえます', wrong: ['{聞|き}きます', '{聞|き}かれます', '{聞|き}いています'],
-        why: 'Magától hallatszik: {聞|き}こえます.' }
+        why: 'A と után magától bekövetkező eredmény áll.'
+      },
+      { q: '„Tokióhoz képest ez a város csendes." Mi hiányzik?', jp: '{東京|とうきょう}＿、この{町|まち}は{静|しず}かです。', a: 'にくらべて', wrong: ['について', 'によって', 'にとって'], why: 'Viszonyítás: 〜にくらべて.' },
+      { q: '„Az ablakból látszik a tenger." Mi hiányzik?', jp: '{窓|まど}から{海|うみ}＿{見|み}えます。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {見|み}えます mellett az, ami látszik, が-t kap.' },
+      {
+        q: 'Mit jelent: {字|じ}が{小|ちい}さくて、よく{見|み}えません。',
+        a: 'Kicsik a betűk, nem látom jól.',
+        wrong: [
+          'Kicsik a betűk, nem nézem meg.',
+          'Kicsik a betűk, nem szabad megnézni.',
+          'Kicsik a betűk, nem akarom látni.'
+        ],
+        why: '{見|み}えません: nem látszik (a szándékomtól függetlenül).'
+      },
+      { q: '„Úgy tűnik, Tanaka nincs otthon." Mi hiányzik?', jp: '{田中|たなか}さんは{留守|るす}＿ようです。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のようです.' },
+      { q: '„Úgy tűnik, jött valaki." Mi hiányzik?', jp: 'だれか＿ようです。', a: '{来|き}た', wrong: ['{来|き}ます', '{来|き}て', '{来|き}たの'], why: 'A ようです előtt rövid alak áll.' },
+      { q: '„Már tudok japánul beszélni." Mi hiányzik?', jp: '{日本語|にほんご}が{話|はな}せる＿なりました。', a: 'ように', wrong: ['ことに', 'ために', 'そうに'], why: 'Fokozatos változás: 〜ようになりました.' },
+      { q: '„Mostanában már nem nézek tévét." Mi hiányzik?', jp: '{最近|さいきん}、テレビを＿なりました。', a: '{見|み}なく', wrong: ['{見|み}ない', '{見|み}なくて', '{見|み}ず'], why: 'A tagadó változás: ない → なくなりました.' },
+      { q: '„A szomszéd szobából zene hallatszik." Mi hiányzik?', jp: '{隣|となり}の{部屋|へや}から{音楽|おんがく}が＿。', a: '{聞|き}こえます', wrong: ['{聞|き}きます', '{聞|き}かれます', '{聞|き}いています'], why: 'Magától hallatszik: {聞|き}こえます.' },
+      { q: '„Ha nem sietsz, elkésel." Mi hiányzik?', jp: '{急|いそ}が＿、{遅|おく}れますよ。', a: 'ないと', wrong: ['なくと', 'ないば', 'なかったと'], why: 'A と előtt jelen idejű rövid alak áll: {急|いそ}がないと.' },
+      { q: '„A második sarkon forduljon balra!" Mi hiányzik?', jp: '{二|ふた}つ{目|め}の{角|かど}＿{左|ひだり}に{曲|ま}がってください。', a: 'を', wrong: ['に', 'が', 'へ'], why: 'A hely, amelyen áthaladsz, を-t kap.' },
+      { q: 'Mit jelent: {突|つ}き{当|あ}たり', a: 'az utca vége', wrong: ['kereszteződés', 'gyalogátkelő', 'sarok'], why: 'A {突|つ}き{当|あ}たり az a pont, ahol az út véget ér, és csak jobbra-balra lehet menni.' },
+      { q: '„Halk a hang, nem hallom jól." Mi hiányzik?', jp: '{声|こえ}が{小|ちい}さくて、よく＿。', a: '{聞|き}こえません', wrong: ['{聞|き}きません', '{聞|き}かれません', '{聞|き}こえます'], why: 'Ami magától nem jut a füledbe: {聞|き}こえません.' },
+      {
+        q: 'Melyik mondat szól lehetőségről (és nem arról, ami magától látszik)?',
+        a: 'この{美術館|びじゅつかん}では、{有名|ゆうめい}な{絵|え}が{見|み}られます。',
+        wrong: ['{窓|まど}から{山|やま}が{見|み}えます。', '{遠|とお}くに{海|うみ}が{見|み}えます。', '{暗|くら}くて、{何|なに}も{見|み}えません。'],
+        why: 'A {見|み}られます ható alak: megvan a lehetőség, hogy megnézd.'
+      },
+      {
+        q: 'Mit jelent: {田中|たなか}さんは{若|わか}く{見|み}えます。',
+        a: 'Tanaka fiatalnak látszik.',
+        wrong: ['Tanaka fiatalokat lát.', 'Tanaka fiatalon jól látott.', 'Tanakát fiatalok nézik.'],
+        why: 'Melléknév く-alakja + {見|み}えます: „valamilyennek látszik".'
+      },
+      { q: '„Le van kapcsolva a villany. Úgy tűnik, már lefeküdt." Mi hiányzik?', jp: '{電気|でんき}が{消|き}えています。もう{寝|ね}た＿。', a: 'ようです', wrong: ['のようです', 'なようです', 'ようにです'], why: 'Ige rövid alakja után közvetlenül áll a ようです.' },
+      { q: '„Mióta Japánban vagyok, gyakran eszem halat." Mi hiányzik?', jp: '{日本|にほん}に{来|き}てから、{魚|さかな}をよく{食|た}べる＿。', a: 'ようになりました', wrong: ['になりました', 'くなりました', 'そうになりました'], why: 'Szokás változása: szótári alak + ようになりました.' },
+      { q: 'Kanszai nyelvjárásban mit jelent: おおきに', a: 'Köszönöm.', wrong: ['Nagyon.', 'Elnézést.', 'Viszlát.'], why: 'おおきに = ありがとう.' },
+      { q: 'Kanszai nyelvjárásban hogy mondják: {食|た}べない', a: '{食|た}べへん', wrong: ['{食|た}べや', '{食|た}べねん', '{食|た}べわ'], why: 'A kanszai tagadás: 〜へん.' }
     ]
   },
 
   /* ── 32. lecke ────────────────────────────────────── */
   {
-    id: 'l32', no: 32, book: 'Dekiru 2',
-    title: 'Külföldi tanulmányok',
-    lead: 'Megengedő feltételt fejezel ki, megkülönbözteted a saját döntést a szabálytól, és megmondod, mi a célod vagy mi az oka valaminek.',
+    id: 'l32', no: 32, book: 'Dekiru 2', title: 'Külföldi tanulmányok',
+    lead: 'Megengedő feltételt fejezel ki („akkor is, ha…"), megkülönbözteted a saját döntést a szabálytól, elmondod, mi fordul elő néha, megnevezed a célodat, és megismered az írott, tárgyilagos stílust.',
     cando: [
-      'Kiemeled egy szöveg lényeges információit.',
-      'Kérdéseket teszel fel egy programról.',
-      'Megfogalmazod, mit vársz a külföldi tanulmányoktól.'
+      'Érdeklődsz egy programról: feltételek, vizsga, határidő.',
+      'Kiemeled egy tájékoztató lényeges információit.',
+      'Megkülönbözteted, mit döntöttél el te, és mit ír elő a szabály.',
+      'Megfogalmazod, miért szeretnél külföldön tanulni.'
     ],
+    intro: [
+      'Külföldön tanulni: ehhez tájékozódni kell, jelentkezni, vizsgázni — és meg kell érteni a szabályokat. A lecke első eszköze a <b>〜ても</b>: „akkor is, ha…". Ez a たら tükörképe: ott a feltétel teljesülése megváltoztatja az eredményt, itt nem.',
+      'A szabályok nyelve a <b>こと</b> köré épül. <b>〜ことになりました</b>: „úgy alakult, hogy…" — a döntés nem tőlem függött. <b>〜ことになっています</b>: „ez a szabály". <b>〜ことがあります</b>: „előfordul, hogy…". Három hasonló alak, három különböző jelentés; a lecke segít szétválasztani őket.',
+      'Megtanulod a „csak" harmadik változatát, a sokalló <b>ばかり</b>-t, és a célt kifejező <b>〜ために</b>-t. A lecke végén pedig az <b>írott stílussal</b> ismerkedsz meg: a pályázatot, a fogalmazást a japán nem です / ます alakban írja.'
+    ],
+    dialogue: {
+      title: 'Az egyetem nemzetközi irodájában',
+      scene: 'Anna szeretne egy évre visszajönni Japánba tanulni. Jui egyetemének nemzetközi irodájában érdeklődik a külföldi diákoknak szóló programról.',
+      lines: [
+        {
+          who: 'Anna',
+          jp: 'すみません、こちらの{大学|だいがく}の{留学|りゅうがく}プログラムについて、お{聞|き}きしたいことがあるんですが…。',
+          romaji: 'Sumimasen, kochira no daigaku no ryūgaku puroguramu ni tsuite, o-kiki shitai koto ga aru n desu ga…',
+          hu: 'Elnézést, az egyetem külföldi diákoknak szóló programjáról szeretnék érdeklődni…'
+        },
+        { who: 'Ügyintéző', jp: 'はい、どうぞ。{一年間|いちねんかん}の{日本語|にほんご}プログラムですね。', romaji: 'Hai, dōzo. Ichinenkan no Nihongo puroguramu desu ne.', hu: 'Tessék. Az egyéves japán nyelvi programról van szó, ugye?' },
+        { who: 'Anna', jp: 'はい。{日本語|にほんご}がまだ{上手|じょうず}じゃなくても、{申|もう}し{込|こ}めますか。', romaji: 'Hai. Nihongo ga mada jōzu ja nakute mo, mōshikomemasu ka.', hu: 'Igen. Akkor is jelentkezhetek, ha még nem beszélek jól japánul?' },
+        {
+          who: 'Ügyintéző',
+          jp: 'はい、{初級|しょきゅう}でも{申|もう}し{込|こ}めますよ。ただ、{申|もう}し{込|こ}む{前|まえ}に、{日本語|にほんご}の{試験|しけん}を{受|う}けることになっています。',
+          romaji: 'Hai, shokyū demo mōshikomemasu yo. Tada, mōshikomu mae ni, Nihongo no shiken o ukeru koto ni natte imasu.',
+          hu: 'Igen, kezdő szinten is lehet. Csak jelentkezés előtt japán nyelvi tesztet kell írni: ez a szabály.'
+        },
+        { who: 'Anna', jp: '{試験|しけん}に{合格|ごうかく}したら、すぐ{入学|にゅうがく}できますか。', romaji: 'Shiken ni gōkaku shitara, sugu nyūgaku dekimasu ka.', hu: 'Ha átmegyek a teszten, rögtön felvesznek?' },
+        {
+          who: 'Ügyintéző',
+          jp: 'いいえ。{試験|しけん}に{合格|ごうかく}しても、そのあと{面接|めんせつ}があります。{最後|さいご}に、{大学|だいがく}が{合格者|ごうかくしゃ}を{決|き}めることになります。',
+          romaji: 'Iie. Shiken ni gōkaku shite mo, sono ato mensetsu ga arimasu. Saigo ni, daigaku ga gōkakusha o kimeru koto ni narimasu.',
+          hu: 'Nem. Ha a teszt sikerül is, utána még van egy interjú. Végül az egyetem dönt a felvettekről.'
+        },
+        { who: 'Anna', jp: 'そうですか。{奨学金|しょうがくきん}はありますか。', romaji: 'Sō desu ka. Shōgakukin wa arimasu ka.', hu: 'Értem. Van ösztöndíj?' },
+        {
+          who: 'Ügyintéző',
+          jp: '{成績|せいせき}がいい{学生|がくせい}は、{奨学金|しょうがくきん}がもらえることがあります。でも、{全員|ぜんいん}ではありません。',
+          romaji: 'Seiseki ga ii gakusei wa, shōgakukin ga moraeru koto ga arimasu. Demo, zen\'in dewa arimasen.',
+          hu: 'Előfordul, hogy a jó eredményű diákok ösztöndíjat kapnak. De nem mindenki.'
+        },
+        { who: 'Anna', jp: '{授業|じゅぎょう}は{日本語|にほんご}ばかりですか。', romaji: 'Jugyō wa Nihongo bakari desu ka.', hu: 'Csupa japánóra van?' },
+        {
+          who: 'Ügyintéző',
+          jp: 'いいえ、{日本語|にほんご}だけじゃありません。{日本|にほん}の{文化|ぶんか}を{知|し}るために、{茶道|さどう}や{書道|しょどう}の{授業|じゅぎょう}もあります。',
+          romaji: 'Iie, Nihongo dake ja arimasen. Nihon no bunka o shiru tame ni, sadō ya shodō no jugyō mo arimasu.',
+          hu: 'Nem, nem csak japán. Hogy megismerjék a japán kultúrát, teaszertartás- és kalligráfiaóra is van.'
+        },
+        { who: 'Anna', jp: '{締|し}め{切|き}りはいつですか。', romaji: 'Shimekiri wa itsu desu ka.', hu: 'Mikor van a határidő?' },
+        {
+          who: 'Ügyintéző',
+          jp: '{十一月末|じゅういちがつまつ}です。{書類|しょるい}は{郵便|ゆうびん}で{送|おく}っても、メールで{送|おく}ってもかまいません。',
+          romaji: 'Jūichigatsu-matsu desu. Shorui wa yūbin de okutte mo, mēru de okutte mo kamaimasen.',
+          hu: 'November végén. A papírokat postán is, e-mailben is beküldheti.'
+        },
+        {
+          who: 'Anna',
+          jp: 'よくわかりました。ご{説明|せつめい}、ありがとうございました。{将来|しょうらい}のために、{頑張|がんば}ります。',
+          romaji: 'Yoku wakarimashita. Go-setsumei, arigatō gozaimashita. Shōrai no tame ni, ganbarimasu.',
+          hu: 'Mindent értek. Köszönöm a tájékoztatást. A jövőmért mindent megteszek.'
+        }
+      ],
+      notes: [
+        'Az <b>お{聞|き}きしたいことがあるんですが…</b> szerény érdeklődés hivatalban, irodában: „szeretnék megkérdezni valamit".',
+        'Három ても: <b>{上手|じょうず}じゃなくても</b> (akkor is, ha nem megy jól), <b>{初級|しょきゅう}でも</b> (kezdőként is), <b>{合格|ごうかく}しても</b> (ha sikerül is).',
+        'A szabályt az ügyintéző nem parancsként mondja, hanem leírja: <b>{受|う}けることになっています</b>. A döntésről pedig: <b>{決|き}めることになります</b> — nem ő dönt, hanem az egyetem.',
+        'A <b>もらえることがあります</b> óvatos: „előfordul, hogy kapnak" — nem ígéret.',
+        'Anna azt kérdezi: <b>{日本語|にほんご}ばかりですか</b> („csupa japán?"); a válasz a semleges だけ-vel felel: <b>{日本語|にほんご}だけじゃありません</b>.',
+        'Két ために: <b>{知|し}るために</b> (cél: hogy megismerjék) és <b>{将来|しょうらい}のために</b> (valaminek az érdekében).'
+      ]
+    },
     points: [
       {
         title: '〜ても', sub: 'akkor is, ha…',
         pattern: 'ige て-alak + も · い → くても · főnév / な-melléknév + でも',
         body: 'A feltétel teljesül, az eredmény mégsem változik. Kérdőszóval (<b>いくら</b>, どんなに) azt jelenti: „akárhogy is".',
+        more: [
+          'A ても a て-alakból készül: ige {行|い}って<b>も</b>, tagadva {行|い}かなくて<b>も</b>; い-melléknév {高|たか}くて<b>も</b>; な-melléknév és főnév <b>でも</b> ({便利|べんり}でも, {雨|あめ}でも).',
+          'Azt fejezi ki, hogy a feltétel <b>nem számít</b>: az eredmény így is, úgy is ugyanaz. A magyarban: „akkor is, ha…", „ha… is", „hiába".',
+          'Főnév után a でも azt is jelentheti: „még … is": {子|こ}どもでもわかります („egy gyerek is megérti").',
+          'Kérdőszóval — いくら, どんなに, いつ, だれが — azt jelenti: „akárhogy, akármikor, akárki"; erről a 40. leckében tanulsz többet.'
+        ],
+        tables: [
+          {
+            caption: 'たら és ても',
+            head: ['Mondat', 'Jelentés'],
+            rows: [
+              ['あめが ふっ<b>たら</b>、いきません。', 'Ha esik, nem megyek.'],
+              ['あめが ふっ<b>ても</b>、いきます。', 'Akkor is megyek, ha esik.']
+            ]
+          },
+          {
+            caption: 'A ても képzése',
+            head: ['Szófaj', 'Állító', 'Tagadó'],
+            rows: [
+              ['ige', 'いって<b>も</b>', 'いかなくて<b>も</b>'],
+              ['い-melléknév', 'たかくて<b>も</b>', 'たかくなくて<b>も</b>'],
+              ['な-melléknév', 'べんり<b>でも</b>', 'べんりじゃなくて<b>も</b>'],
+              ['főnév', 'あめ<b>でも</b>', 'あめじゃなくて<b>も</b>']
+            ]
+          }
+        ],
         examples: [
           { jp: '{雨|あめ}が{降|ふ}っても、{試合|しあい}はあります。', romaji: 'Ame ga futte mo, shiai wa arimasu.', hu: 'Akkor is lesz meccs, ha esik.' },
           { jp: '{高|たか}くても、{買|か}います。', romaji: 'Takakute mo, kaimasu.', hu: 'Akkor is megveszem, ha drága.' },
-          { jp: 'いくら{説明|せつめい}しても、わかってくれません。', romaji: 'Ikura setsumei shite mo, wakatte kuremasen.', hu: 'Akárhogy magyarázom, nem érti meg.' }
+          { jp: 'いくら{説明|せつめい}しても、わかってくれません。', romaji: 'Ikura setsumei shite mo, wakatte kuremasen.', hu: 'Akárhogy magyarázom, nem érti meg.' },
+          { jp: '{時間|じかん}がなくても、{朝|あさ}ごはんは{食|た}べます。', romaji: 'Jikan ga nakute mo, asagohan wa tabemasu.', hu: 'Akkor is reggelizem, ha nincs időm.' },
+          { jp: '{便利|べんり}でも、{高|たか}いものは{買|か}いません。', romaji: 'Benri demo, takai mono wa kaimasen.', hu: 'Ha praktikus is, drága dolgot nem veszek.' },
+          { jp: 'この{問題|もんだい}は{子|こ}どもでもわかります。', romaji: 'Kono mondai wa kodomo demo wakarimasu.', hu: 'Ezt a feladatot egy gyerek is megérti.' },
+          { jp: '{薬|くすり}を{飲|の}んでも、{熱|ねつ}が{下|さ}がりません。', romaji: 'Kusuri o nonde mo, netsu ga sagarimasen.', hu: 'Hiába veszem be a gyógyszert, nem megy le a lázam.' },
+          { jp: '{大変|たいへん}でも、{最後|さいご}までやります。', romaji: 'Taihen demo, saigo made yarimasu.', hu: 'Ha nehéz is, végigcsinálom.' }
+        ],
+        mistakes: [
+          { bad: '{高|たか}いても、{買|か}います。', good: '{高|たか}くても、{買|か}います。', why: 'Az い-melléknév て-alakja 〜くて: {高|たか}くても.' },
+          { bad: '{雨|あめ}ても、{行|い}きます。', good: '{雨|あめ}でも、{行|い}きます。', why: 'Főnév és な-melléknév után でも áll.' }
         ]
       },
       {
         title: '〜ことになります', sub: 'úgy alakult, hogy…',
         pattern: 'szótári alak / ない-alak + ことになりました',
         body: 'A döntést nem te hoztad: a körülmények, mások vagy egy szervezet döntött így. Ezért udvarias, szerény akkor is, ha valójában te döntöttél.',
+        more: [
+          'A こと + なる azt mondja: a dolog „úgy lett", <b>rajtam kívül álló okból</b>. A cég, az iskola, a csoport, a körülmények döntöttek.',
+          'Ezért szerény bejelentésnek is jó, akkor is, ha a döntés a tiéd volt: {結婚|けっこん}することになりました („összeházasodunk") — mintha a sors hozta volna így.',
+          'Jelen időben a következményt mondja ki: „akkor az lesz, hogy…". Tagadva: 〜ないことになりました („úgy döntöttek, hogy nem…").'
+        ],
+        tables: [
+          {
+            caption: 'Ki döntött?',
+            head: ['Alak', 'Ki döntött?', 'Példa'],
+            rows: [
+              ['〜ことに します', 'én, most', 'あしたから はしることに します。'],
+              ['〜ことに しています', 'én: ez a saját szokásom', 'まいあさ はしることに しています。'],
+              ['〜ことに なりました', 'mások, a körülmények', 'てんきんすることに なりました。'],
+              ['〜ことに なっています', 'szabály, megállapodás', 'くつを ぬぐことに なっています。']
+            ]
+          }
+        ],
         examples: [
           { jp: '{来月|らいげつ}、{大阪|おおさか}へ{転勤|てんきん}することになりました。', romaji: 'Raigetsu, Ōsaka e tenkin suru koto ni narimashita.', hu: 'Úgy alakult, hogy jövő hónapban Oszakába helyeznek.' },
           { jp: '{会議|かいぎ}は{来週|らいしゅう}{行|おこな}うことになりました。', romaji: 'Kaigi wa raishū okonau koto ni narimashita.', hu: 'Úgy döntöttek, hogy a megbeszélést jövő héten tartják.' },
-          { jp: '{私|わたし}が{発表|はっぴょう}することになりました。', romaji: 'Watashi ga happyō suru koto ni narimashita.', hu: 'Úgy alakult, hogy én tartom az előadást.' }
+          { jp: '{私|わたし}が{発表|はっぴょう}することになりました。', romaji: 'Watashi ga happyō suru koto ni narimashita.', hu: 'Úgy alakult, hogy én tartom az előadást.' },
+          { jp: '{四月|しがつ}から{東京|とうきょう}の{大学|だいがく}で{勉強|べんきょう}することになりました。', romaji: 'Shigatsu kara Tōkyō no daigaku de benkyō suru koto ni narimashita.', hu: 'Úgy alakult, hogy áprilistól egy tokiói egyetemen tanulok.' },
+          { jp: '{私|わたし}たち、{結婚|けっこん}することになりました。', romaji: 'Watashitachi, kekkon suru koto ni narimashita.', hu: 'Összeházasodunk.' },
+          { jp: '{今年|ことし}の{旅行|りょこう}は{行|い}かないことになりました。', romaji: 'Kotoshi no ryokō wa ikanai koto ni narimashita.', hu: 'Úgy döntöttek, hogy az idei kirándulás elmarad.' },
+          { jp: '{毎朝|まいあさ}{三十分|さんじゅっぷん}{歩|ある}くことにしています。', romaji: 'Maiasa sanjuppun aruku koto ni shite imasu.', hu: 'Szokásommá tettem, hogy minden reggel fél órát sétálok.' }
+        ],
+        mistakes: [
+          { bad: '{会社|かいしゃ}の{命令|めいれい}で{転勤|てんきん}することにしました。', good: '{会社|かいしゃ}の{命令|めいれい}で{転勤|てんきん}することになりました。', why: 'Ha nem te döntöttél, なりました kell; a しました a saját elhatározásod.' }
         ],
         tip: 'ことにします: én döntök. ことになります: a döntés rajtam kívül született.'
       },
@@ -11257,30 +12328,102 @@ const NIHONCORE_COURSE = [
         title: '〜ことになっています', sub: 'ez a szabály, így szokás',
         pattern: 'szótári alak / ない-alak + ことになっています',
         body: 'Érvényben lévő szabályt, szokást vagy rögzített menetrendet ír le.',
+        more: [
+          'A ことになっています <b>érvényben lévő</b> szabályt, szokást, megállapodást, menetrendet ír le. Nem parancs, hanem leírás: „így van megállapítva".',
+          'Ezért udvariasabb, mint a 〜なければなりません vagy a 〜てはいけません: aki mondja, nem a saját akaratát közli, hanem a rendet ismerteti.',
+          'Tiltó szabály: 〜てはいけないことになっています, vagy 〜ないことになっています. Rákérdezve: 〜ことになっていますか („ez a szabály?").'
+        ],
         examples: [
           { jp: '{教室|きょうしつ}では{日本語|にほんご}で{話|はな}すことになっています。', romaji: 'Kyōshitsu de wa nihongo de hanasu koto ni natte imasu.', hu: 'A teremben japánul kell beszélni: ez a szabály.' },
           { jp: 'ここでは{靴|くつ}を{脱|ぬ}ぐことになっています。', romaji: 'Koko de wa kutsu o nugu koto ni natte imasu.', hu: 'Itt le kell venni a cipőt.' },
-          { jp: '{毎週|まいしゅう}{月曜日|げつようび}に{会議|かいぎ}をすることになっています。', romaji: 'Maishū getsuyōbi ni kaigi o suru koto ni natte imasu.', hu: 'Hétfőnként megbeszélést tartunk: így van rögzítve.' }
+          { jp: '{毎週|まいしゅう}{月曜日|げつようび}に{会議|かいぎ}をすることになっています。', romaji: 'Maishū getsuyōbi ni kaigi o suru koto ni natte imasu.', hu: 'Hétfőnként megbeszélést tartunk: így van rögzítve.' },
+          { jp: '{図書館|としょかん}では、{静|しず}かにすることになっています。', romaji: 'Toshokan de wa, shizuka ni suru koto ni natte imasu.', hu: 'A könyvtárban csendben kell lenni.' },
+          { jp: 'この{公園|こうえん}では、{犬|いぬ}を{放|はな}してはいけないことになっています。', romaji: 'Kono kōen de wa, inu o hanashite wa ikenai koto ni natte imasu.', hu: 'Ebben a parkban tilos elengedni a kutyát.' },
+          { jp: '{申|もう}し{込|こ}みは{月末|げつまつ}までにすることになっています。', romaji: 'Mōshikomi wa getsumatsu made ni suru koto ni natte imasu.', hu: 'A jelentkezést a hónap végéig kell leadni.' },
+          { jp: '{日本|にほん}では、{車|くるま}は{左側|ひだりがわ}を{走|はし}ることになっています。', romaji: 'Nihon de wa, kuruma wa hidarigawa o hashiru koto ni natte imasu.', hu: 'Japánban az autók a bal oldalon közlekednek.' }
+        ],
+        notes: [
+          'Megbeszélt programra is jó: {三時|さんじ}に{駅|えき}で{会|あ}うことになっています („úgy beszéltük meg, hogy háromkor találkozunk az állomáson").'
         ]
       },
       {
         title: 'főnév + ばかり', sub: 'folyton csak, csupa',
         pattern: 'főnév + ばかり',
         body: 'Azt fejezi ki, hogy valamiből túl sok van, vagy valaki egyfolytában ugyanazt csinálja; rendszerint rosszallás van benne.',
+        more: [
+          'A ばかり a főnév után áll, és azt fejezi ki: <b>csupa az, folyton csak az</b> — több, mint kellene. Rendszerint rosszallás, panasz van benne.',
+          'Igével a て-alak után áll: <b>〜てばかりいます</b> („egyfolytában csak…"): {寝|ね}てばかりいます.',
+          'A tárgy を-ja és az alany が-ja a ばかり mellől elmarad: ゲームばかりしています.',
+          'Ne keverd a 〜たばかり szerkezettel (た-alak után): az azt jelenti, „épp most, nemrég".'
+        ],
         examples: [
           { jp: '{弟|おとうと}はゲームばかりしています。', romaji: 'Otōto wa gēmu bakari shite imasu.', hu: 'Az öcsém folyton csak játszik.' },
           { jp: '{毎日|まいにち}{雨|あめ}ばかりです。', romaji: 'Mainichi ame bakari desu.', hu: 'Mindennap csak esik.' },
-          { jp: '{肉|にく}ばかり{食|た}べないでください。', romaji: 'Niku bakari tabenaide kudasai.', hu: 'Ne csak húst egyél!' }
+          { jp: '{肉|にく}ばかり{食|た}べないでください。', romaji: 'Niku bakari tabenaide kudasai.', hu: 'Ne csak húst egyél!' },
+          { jp: '{妹|いもうと}は{甘|あま}いものばかり{食|た}べています。', romaji: 'Imōto wa amai mono bakari tabete imasu.', hu: 'A húgom folyton csak édességet eszik.' },
+          { jp: 'この{店|みせ}のお{客|きゃく}さんは{若|わか}い{人|ひと}ばかりです。', romaji: 'Kono mise no o-kyaku-san wa wakai hito bakari desu.', hu: 'Ennek a boltnak a vevői csupa fiatalok.' },
+          { jp: '{兄|あに}は{寝|ね}てばかりいます。', romaji: 'Ani wa nete bakari imasu.', hu: 'A bátyám egyfolytában csak alszik.' },
+          { jp: '{失敗|しっぱい}ばかりで、{恥|は}ずかしいです。', romaji: 'Shippai bakari de, hazukashii desu.', hu: 'Csak hibázom, szégyellem magam.' }
+        ]
+      },
+      {
+        title: 'ばかり・だけ・しか', sub: 'háromféle „csak"',
+        pattern: 'A だけ · A しか + tagadás · A ばかり',
+        body: 'A magyar „csak" mögött a japánban három szó áll. A <b>だけ</b> tárgyilagosan határt szab. A <b>しか</b> tagadással áll, és kevesli. A <b>ばかり</b> sokallja: „folyton csak", „csupa".',
+        more: [
+          'A だけ és a しか a 19. leckéből ismerős: ugyanazt a tényt mondják, csak a しか hozzáteszi, hogy ez kevés — és mindig tagadó igével áll.',
+          'A <b>ばかり</b> más természetű: nem határt szab, hanem azt mondja, hogy valamiből túl sok van, vagy valami folyton ismétlődik. Jellemzően 〜ています alakú ige követi.'
+        ],
+        tables: [
+          {
+            caption: 'Háromféle „csak"',
+            head: ['Szó', 'Mit érzékeltet?', 'Példa'],
+            rows: [
+              ['だけ', 'ennyi — se több, se kevesebb', 'やさい<b>だけ</b> たべます。'],
+              ['しか + tagadás', 'csak ennyi — kevés', 'やさい<b>しか</b> たべません。'],
+              ['ばかり', 'folyton csak — sok', 'やさい<b>ばかり</b> たべています。']
+            ]
+          }
+        ],
+        examples: [
+          { jp: '{千円|せんえん}だけ{持|も}っています。', romaji: 'Sen\'en dake motte imasu.', hu: 'Pontosan ezer jen van nálam.' },
+          { jp: '{千円|せんえん}しか{持|も}っていません。', romaji: 'Sen\'en shika motte imasen.', hu: 'Csak ezer jen van nálam.' },
+          { jp: '{最近|さいきん}、{残業|ざんぎょう}ばかりです。', romaji: 'Saikin, zangyō bakari desu.', hu: 'Mostanában folyton csak túlórázom.' },
+          { jp: '{休|やす}みは{日曜日|にちようび}だけです。', romaji: 'Yasumi wa nichiyōbi dake desu.', hu: 'Csak vasárnap vagyok szabad.' }
+        ],
+        mistakes: [
+          { bad: '{野菜|やさい}しか{食|た}べます。', good: '{野菜|やさい}しか{食|た}べません。', why: 'A しか után mindig tagadó ige áll.' }
         ]
       },
       {
         title: '〜ことがあります', sub: 'előfordul, hogy…',
         pattern: 'szótári alak / ない-alak + ことがあります',
         body: 'Szótári vagy ない-alakkal azt jelenti: időnként megesik. Ne keverd a た-alakos párjával, amely élettapasztalatot jelent.',
+        more: [
+          'A こと + あります kétféle igealakkal áll, és a jelentése ettől függ. <b>Szótári vagy ない-alakkal</b>: időnként megesik. <b>た-alakkal</b> (16. lecke): életedben legalább egyszer megtörtént.',
+          'Gyakori kísérői: ときどき („néha"), たまに („ritkán, olykor"). A <b>〜こともあります</b> azt jelenti: „az is előfordul".',
+          'Nem a gyakori, megszokott dolgokra való (azokra よく〜ます), hanem arra, ami <b>nem mindig, de megesik</b>.'
+        ],
+        tables: [
+          {
+            caption: 'ことがあります: négy mondat',
+            head: ['Alak', 'Jelentés'],
+            rows: [
+              ['いく ことが あります', 'előfordul, hogy megyek'],
+              ['いかない ことが あります', 'előfordul, hogy nem megyek'],
+              ['いった ことが あります', 'voltam már ott'],
+              ['いった ことが ありません', 'még sosem voltam ott']
+            ]
+          }
+        ],
         examples: [
           { jp: '{朝|あさ}ごはんを{食|た}べないことがあります。', romaji: 'Asagohan o tabenai koto ga arimasu.', hu: 'Előfordul, hogy nem reggelizem.' },
           { jp: 'ときどき{道|みち}に{迷|まよ}うことがあります。', romaji: 'Tokidoki michi ni mayou koto ga arimasu.', hu: 'Néha előfordul, hogy eltévedek.' },
-          { jp: '{忙|いそが}しくて、{昼|ひる}ごはんを{食|た}べられないことがあります。', romaji: 'Isogashikute, hirugohan o taberarenai koto ga arimasu.', hu: 'Előfordul, hogy a sok munka miatt nem tudok ebédelni.' }
+          { jp: '{忙|いそが}しくて、{昼|ひる}ごはんを{食|た}べられないことがあります。', romaji: 'Isogashikute, hirugohan o taberarenai koto ga arimasu.', hu: 'Előfordul, hogy a sok munka miatt nem tudok ebédelni.' },
+          { jp: '{忙|いそが}しいときは、{徹夜|てつや}することもあります。', romaji: 'Isogashii toki wa, tetsuya suru koto mo arimasu.', hu: 'Ha sok a dolgom, az is előfordul, hogy átvirrasztom az éjszakát.' },
+          { jp: 'たまに{自分|じぶん}で{料理|りょうり}をすることがあります。', romaji: 'Tama ni jibun de ryōri o suru koto ga arimasu.', hu: 'Néha magam főzök.' },
+          { jp: 'この{電車|でんしゃ}は{遅|おく}れることがあります。', romaji: 'Kono densha wa okureru koto ga arimasu.', hu: 'Ez a vonat néha késik.' },
+          { jp: '{日本語|にほんご}で{夢|ゆめ}を{見|み}ることがあります。', romaji: 'Nihongo de yume o miru koto ga arimasu.', hu: 'Előfordul, hogy japánul álmodom.' }
         ],
         tip: '{行|い}くことがあります = néha megyek. {行|い}ったことがあります = voltam már ott.'
       },
@@ -11288,36 +12431,188 @@ const NIHONCORE_COURSE = [
         title: '〜ために', sub: 'azért, hogy · miatt',
         pattern: 'szótári alak + ために · főnév + のために',
         body: 'Két jelentése van. <b>Cél:</b> szándékos cselekvés szótári alakja után („azért, hogy"). <b>Ok:</b> főnév vagy múlt idő után („miatt"), tárgyilagos stílusban.',
+        more: [
+          'A <b>cél</b> ために-je akaratlagos ige szótári alakja után áll, és mindkét tagmondat alanya ugyanaz: {留学|りゅうがく}する<b>ために</b>、{貯金|ちょきん}しています. Főnév után の-val kapcsolódik: {健康|けんこう}<b>のために</b>.',
+          'Ha az ige ható alakú, tagadó, vagy nem az akaratodtól függ, a ために helyén <b>ように</b> áll: {話|はな}せる<b>ように</b>、{練習|れんしゅう}します; {忘|わす}れない<b>ように</b>、メモします (43. lecke).',
+          'Főnév + のために azt is jelenti: „valakinek a javára, kedvéért": {家族|かぞく}のために.',
+          'Az <b>ok</b> ために-je hivatalos, írott hangú; közleményekben a に el is marad: {雨|あめ}のため、{中止|ちゅうし}です.'
+        ],
+        tables: [
+          {
+            caption: 'A ために három használata',
+            head: ['Mire való?', 'Példa', 'Jelentés'],
+            rows: [
+              ['cél (ige)', 'りゅうがくする<b>ために</b>、ちょきんしています。', 'Azért gyűjtök, hogy külföldön tanulhassak.'],
+              ['cél, javára (főnév)', 'けんこう<b>のために</b>、あるいています。', 'Az egészségemért gyalogolok.'],
+              ['ok (hivatalos)', 'あめ<b>のため</b>、ちゅうしです。', 'Eső miatt elmarad.']
+            ]
+          }
+        ],
         examples: [
           { jp: '{日本|にほん}で{働|はたら}くために、{日本語|にほんご}を{勉強|べんきょう}しています。', romaji: 'Nihon de hataraku tame ni, nihongo o benkyō shite imasu.', hu: 'Azért tanulok japánul, hogy Japánban dolgozhassak.' },
           { jp: '{家族|かぞく}のために{働|はたら}きます。', romaji: 'Kazoku no tame ni hatarakimasu.', hu: 'A családomért dolgozom.' },
-          { jp: '{事故|じこ}のために、{電車|でんしゃ}が{遅|おく}れています。', romaji: 'Jiko no tame ni, densha ga okurete imasu.', hu: 'Baleset miatt késik a vonat.' }
+          { jp: '{事故|じこ}のために、{電車|でんしゃ}が{遅|おく}れています。', romaji: 'Jiko no tame ni, densha ga okurete imasu.', hu: 'Baleset miatt késik a vonat.' },
+          { jp: '{留学|りゅうがく}するために、{貯金|ちょきん}しています。', romaji: 'Ryūgaku suru tame ni, chokin shite imasu.', hu: 'Azért gyűjtök, hogy külföldön tanulhassak.' },
+          { jp: '{健康|けんこう}のために、たばこをやめました。', romaji: 'Kenkō no tame ni, tabako o yamemashita.', hu: 'Az egészségem érdekében leszoktam a dohányzásról.' },
+          { jp: '{何|なん}のために{日本語|にほんご}を{勉強|べんきょう}していますか。', romaji: 'Nan no tame ni Nihongo o benkyō shite imasu ka.', hu: 'Mi célból tanulsz japánul?' },
+          { jp: '{子|こ}どもたちのために{絵本|えほん}を{書|か}いています。', romaji: 'Kodomo-tachi no tame ni ehon o kaite imasu.', hu: 'Gyerekeknek írok képeskönyvet.' },
+          { jp: '{大雪|おおゆき}のため、{授業|じゅぎょう}は{休|やす}みです。', romaji: 'Ōyuki no tame, jugyō wa yasumi desu.', hu: 'A nagy havazás miatt elmaradnak az órák.' }
+        ],
+        mistakes: [
+          { bad: '{日本語|にほんご}が{話|はな}せるために、{練習|れんしゅう}します。', good: '{日本語|にほんご}が{話|はな}せるように、{練習|れんしゅう}します。', why: 'Ható alak előtt ように áll; a ために akaratlagos igéhez való.' }
+        ]
+      },
+      {
+        title: '〜だ・〜である', sub: 'az írott, tárgyilagos stílus',
+        pattern: '〜と{思|おも}っている · 〜がある · 〜である',
+        body: 'Fogalmazásban, pályázatban, újságcikkben, tanulmányban a japán nem です / ます alakot használ, hanem a <b>rövid alakot</b>. Ez itt nem bizalmas, hanem tárgyilagos hang. A です helyén だ, vagy a választékosabb <b>である</b> áll.',
+        more: [
+          'Ugyanaz a rövid alak, mint a baráti beszédben — de a baráti mondatvégek (よ, ね, の, って) nélkül, teljes partikulákkal, gondosan megszerkesztett mondatokban.',
+          'A két stílust nem keverjük: egy szövegen belül vagy mindenhol です / ます áll, vagy mindenhol rövid alak.',
+          'Levél, e-mail, üzenet: です / ます. Napló, jegyzet, fogalmazás, pályázati indoklás, cikk: rövid alak. A kötőszavak is választékosabbak: でも helyett <b>しかし</b>, それから helyett <b>また</b>, だから helyett <b>そのため</b>.'
+        ],
+        tables: [
+          {
+            caption: 'Udvarias beszéd — írott stílus',
+            head: ['です / ます', 'Írott'],
+            rows: [
+              ['べんきょうしたいと おもっています', 'べんきょうしたいと おもっている'],
+              ['もんだいが あります', 'もんだいが ある'],
+              ['たいせつです', 'たいせつだ / たいせつである'],
+              ['がくせいでは ありません', 'がくせいでは ない'],
+              ['ききました', 'きいた']
+            ]
+          }
+        ],
+        examples: [
+          { jp: '{私|わたし}は{日本|にほん}の{大学|だいがく}で{日本語教育|にほんごきょういく}を{勉強|べんきょう}したいと{思|おも}っている。', romaji: 'Watashi wa Nihon no daigaku de Nihongo kyōiku o benkyō shitai to omotte iru.', hu: 'Japán egyetemen szeretnék japánnyelv-oktatást tanulni.' },
+          { jp: 'ハンガリーでは、{日本語|にほんご}を{学|まな}ぶ{人|ひと}が{増|ふ}えている。', romaji: 'Hangarī de wa, Nihongo o manabu hito ga fuete iru.', hu: 'Magyarországon egyre többen tanulnak japánul.' },
+          { jp: 'しかし、{日本語|にほんご}の{先生|せんせい}はまだ{少|すく}ない。', romaji: 'Shikashi, Nihongo no sensei wa mada sukunai.', hu: 'Japántanárból azonban még kevés van.' },
+          { jp: '{卒業後|そつぎょうご}は、ハンガリーで{日本語|にほんご}を{教|おし}えたいと{考|かんが}えている。', romaji: 'Sotsugyōgo wa, Hangarī de Nihongo o oshietai to kangaete iru.', hu: 'A diploma után Magyarországon szeretnék japánt tanítani.' },
+          { jp: '{言葉|ことば}は{文化|ぶんか}を{知|し}るための{道具|どうぐ}である。', romaji: 'Kotoba wa bunka o shiru tame no dōgu de aru.', hu: 'A nyelv a kultúra megismerésének eszköze.' }
+        ],
+        notes: [
+          'Az öt példamondat egymás után olvasva egy rövid pályázati indoklás: mit szeretnék, mi a helyzet, mi a gond, mi a tervem.'
+        ],
+        tip: 'Pályázatot, fogalmazást rövid alakban írj — de a kísérőlevelet です / ます alakban.'
+      }
+    ],
+    phrases: [
+      { jp: 'ちょっとお{聞|き}きしたいことがあるんですが…。', romaji: 'Chotto o-kiki shitai koto ga aru n desu ga…', hu: 'Szeretnék megkérdezni valamit…' },
+      { jp: '{申|もう}し{込|こ}みはいつまでですか。', romaji: 'Mōshikomi wa itsu made desu ka.', hu: 'Meddig lehet jelentkezni?' },
+      { jp: '{何|なに}が{必要|ひつよう}ですか。', romaji: 'Nani ga hitsuyō desu ka.', hu: 'Mire van szükség?' },
+      { jp: '{書類|しょるい}はどこに{出|だ}せばいいですか。', romaji: 'Shorui wa doko ni daseba ii desu ka.', hu: 'Hová kell beadni a papírokat?' },
+      { jp: '{試験|しけん}の{科目|かもく}を{教|おし}えてください。', romaji: 'Shiken no kamoku o oshiete kudasai.', hu: 'Kérem, mondja meg, milyen tárgyakból lesz vizsga!' },
+      { jp: '{結果|けっか}はいつわかりますか。', romaji: 'Kekka wa itsu wakarimasu ka.', hu: 'Mikor derül ki az eredmény?' },
+      { jp: 'この{漢字|かんじ}は{何|なん}と{読|よ}みますか。', romaji: 'Kono kanji wa nan to yomimasu ka.', hu: 'Hogyan olvassuk ezt a kanjit?' },
+      { jp: 'また{質問|しつもん}してもいいですか。', romaji: 'Mata shitsumon shite mo ii desu ka.', hu: 'Kérdezhetek majd még?' },
+      { jp: 'よくわかりました。', romaji: 'Yoku wakarimashita.', hu: 'Mindent értek.' },
+      { jp: '{頑張|がんば}ります。', romaji: 'Ganbarimasu.', hu: 'Igyekezni fogok!' }
+    ],
+    words: [
+      {
+        title: 'Jelentkezés és vizsga',
+        items: [
+          { jp: '{申|もう}し{込|こ}みます', romaji: 'mōshikomimasu', hu: 'jelentkezik' },
+          { jp: '{書類|しょるい}', romaji: 'shorui', hu: 'iratok, papírok' },
+          { jp: '{締|し}め{切|き}り', romaji: 'shimekiri', hu: 'határidő' },
+          { jp: '{筆記試験|ひっきしけん}', romaji: 'hikki shiken', hu: 'írásbeli vizsga' },
+          { jp: '{面接|めんせつ}', romaji: 'mensetsu', hu: 'interjú, szóbeli' },
+          { jp: '{合格|ごうかく}', romaji: 'gōkaku', hu: 'sikeres vizsga' },
+          { jp: '{不合格|ふごうかく}', romaji: 'fugōkaku', hu: 'sikertelen vizsga' },
+          { jp: '{結果|けっか}', romaji: 'kekka', hu: 'eredmény' },
+          { jp: '{成績|せいせき}', romaji: 'seiseki', hu: 'tanulmányi eredmény' },
+          { jp: '{奨学金|しょうがくきん}', romaji: 'shōgakukin', hu: 'ösztöndíj' },
+          { jp: '{推薦|すいせん}', romaji: 'suisen', hu: 'ajánlás' }
+        ]
+      },
+      {
+        title: 'Egyetem',
+        items: [
+          { jp: '{留学生|りゅうがくせい}', romaji: 'ryūgakusei', hu: 'külföldi diák' },
+          { jp: '{学部|がくぶ}', romaji: 'gakubu', hu: 'kar; alapképzés' },
+          { jp: '{大学院|だいがくいん}', romaji: 'daigakuin', hu: 'mester- és doktori képzés' },
+          { jp: '{専攻|せんこう}', romaji: 'senkō', hu: 'szak, szakterület' },
+          { jp: '{科目|かもく}', romaji: 'kamoku', hu: 'tantárgy' },
+          { jp: '{寮|りょう}', romaji: 'ryō', hu: 'kollégium' },
+          { jp: '{大使館|たいしかん}', romaji: 'taishikan', hu: 'nagykövetség' },
+          { jp: '{初級|しょきゅう}', romaji: 'shokyū', hu: 'kezdő szint' }
+        ]
+      },
+      {
+        title: 'Számolás',
+        note: 'Így olvasod fel a műveleteket: 1 + 1 = いち {足|た}す いち は….',
+        items: [
+          { jp: '{足|た}します', romaji: 'tashimasu', hu: 'összead (+)' },
+          { jp: '{引|ひ}きます', romaji: 'hikimasu', hu: 'kivon (−)' },
+          { jp: 'かけます', romaji: 'kakemasu', hu: 'szoroz (×)' },
+          { jp: '{割|わ}ります', romaji: 'warimasu', hu: 'oszt (÷)' }
         ]
       }
     ],
+    culture: [
+      {
+        title: 'Tanulni Japánban',
+        text: 'Japánban külföldiként többféleképp lehet tanulni: nyelviskolában, cserediákként, vagy állami ösztöndíjjal. Az ösztöndíjakra jellemzően a <b>nagykövetségen</b> keresztül lehet jelentkezni: írásbeli vizsga, interjú, majd a japán oktatási minisztérium döntése következik. A felvettek az egyetem előtt gyakran egy évig csak japánul tanulnak. A nyelvtudást a nemzetközi nyelvvizsga öt szintje méri, az N5-től (kezdő) az N1-ig.'
+      },
+      {
+        title: 'A kanji nélkülözhetetlen',
+        text: 'Aki hosszabb időt tölt Japánban, hamar megérzi: a mindennapokhoz <b>olvasni kell</b>. Az utcai feliratok, a használati utasítások, az űrlapok, a hivatalos levelek szinte csak japánul érhetők el, és az írott szöveg tele van kanjival. Minden megtanult írásjegy megtérül: aki olvas, az egyedül is elboldogul a hivatalban, a boltban, az állomáson.'
+      },
+      {
+        title: 'A szabály „úgy van"',
+        text: 'A japán szabályok ritkán parancsolnak. A tábla, a tájékoztató, az ügyintéző azt mondja: <b>〜ことになっています</b> — „úgy van megállapítva, hogy…". A szabály így nem valakinek az akarata, hanem a közösség rendje, amelyhez mindenki igazodik. A hegyi túrázók szabálya például így szól: a szemetet mindenki hazaviszi — a hegyről csak fényképet szabad elvinni, és csak emléket szabad otthagyni.'
+      },
+      {
+        title: 'Elnéptelenedő vidék',
+        text: 'Japánban is gond, hogy a fiatalok a nagyvárosokba költöznek: sok faluban szinte csak idősek maradtak, iskolák zárnak be, házak állnak üresen. Válaszul a települések <b>újjáélesztő mozgalmakat</b> indítanak: felélesztik a hagyományos ünnepeket, helyi termékeket népszerűsítenek, városi vendégeket hívnak a földekre dolgozni. A jelenség Magyarországon is ismerős — jó téma egy pályázati esszéhez.'
+      }
+    ],
     quiz: [
-      { q: '„Akkor is lesz meccs, ha esik." Mi hiányzik?', jp: '{雨|あめ}が＿、{試合|しあい}はあります。', a: '{降|ふ}っても', wrong: ['{降|ふ}ったら', '{降|ふ}れば', '{降|ふ}ると'],
-        why: 'Megengedő feltétel: て-alak + も.' },
-      { q: '„Akkor is megveszem, ha drága." Mi hiányzik?', jp: '＿、{買|か}います。', a: '{高|たか}くても', wrong: ['{高|たか}いても', '{高|たか}でも', '{高|たか}ければ'],
-        why: 'い-melléknév: い → くても.' },
-      { q: '„Úgy alakult, hogy Oszakába helyeznek." Mi hiányzik?', jp: '{大阪|おおさか}へ{転勤|てんきん}する＿なりました。', a: 'ことに', wrong: ['ものに', 'ために', 'ばかり'],
-        why: 'Külső döntés: 〜ことになりました.' },
-      { q: 'Mit jelent: {私|わたし}が{発表|はっぴょう}することになりました。', a: 'Úgy alakult, hogy én tartom az előadást (mások döntöttek így).',
-        wrong: ['Úgy döntöttem, hogy én tartom az előadást.', 'Már megtartottam az előadást.', 'Lehet, hogy én tartom az előadást.'],
-        why: 'ことになりました: a döntés nem az enyém volt.' },
-      { q: '„Itt le kell venni a cipőt (ez a szabály)." Mi hiányzik?', jp: 'ここでは{靴|くつ}を{脱|ぬ}ぐことに＿。', a: 'なっています', wrong: ['なりません', 'あります', 'います'],
-        why: 'Érvényes szabály: 〜ことになっています.' },
-      { q: '„Az öcsém folyton csak játszik." Mi hiányzik?', jp: '{弟|おとうと}はゲーム＿しています。', a: 'ばかり', wrong: ['しか', 'までに', 'について'],
-        why: 'Folyton csak ez: főnév + ばかり.' },
-      { q: '„Előfordul, hogy nem reggelizem." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿ことがあります。', a: '{食|た}べない', wrong: ['{食|た}べなくて', '{食|た}べません', '{食|た}べず'],
-        why: 'Időnként megesik: ない-alak + ことがあります.' },
-      { q: 'Mit jelent: ときどき{道|みち}に{迷|まよ}うことがあります。', a: 'Néha előfordul, hogy eltévedek.',
-        wrong: ['Egyszer már eltévedtem.', 'Soha nem tévedek el.', 'Mindig eltévedek.'],
-        why: 'Szótári alak + ことがあります: időnként megesik.' },
-      { q: '„Azért tanulok japánul, hogy Japánban dolgozhassak." Mi hiányzik?', jp: '{日本|にほん}で{働|はたら}く＿、{日本語|にほんご}を{勉強|べんきょう}しています。', a: 'ために', wrong: ['ても', 'ばかり', 'ことに'],
-        why: 'Cél: szótári alak + ために.' },
-      { q: '„Baleset miatt késik a vonat." Mi hiányzik?', jp: '{事故|じこ}＿ために、{電車|でんしゃ}が{遅|おく}れています。', a: 'の', wrong: ['な', 'に', 'を'],
-        why: 'Főnév után: のために.' }
+      { q: '„Akkor is lesz meccs, ha esik." Mi hiányzik?', jp: '{雨|あめ}が＿、{試合|しあい}はあります。', a: '{降|ふ}っても', wrong: ['{降|ふ}ったら', '{降|ふ}れば', '{降|ふ}ると'], why: 'Megengedő feltétel: て-alak + も.' },
+      { q: '„Akkor is megveszem, ha drága." Mi hiányzik?', jp: '＿、{買|か}います。', a: '{高|たか}くても', wrong: ['{高|たか}いても', '{高|たか}でも', '{高|たか}ければ'], why: 'い-melléknév: い → くても.' },
+      { q: '„Úgy alakult, hogy Oszakába helyeznek." Mi hiányzik?', jp: '{大阪|おおさか}へ{転勤|てんきん}する＿なりました。', a: 'ことに', wrong: ['ものに', 'ために', 'ばかり'], why: 'Külső döntés: 〜ことになりました.' },
+      {
+        q: 'Mit jelent: {私|わたし}が{発表|はっぴょう}することになりました。',
+        a: 'Úgy alakult, hogy én tartom az előadást (mások döntöttek így).',
+        wrong: [
+          'Úgy döntöttem, hogy én tartom az előadást.',
+          'Már megtartottam az előadást.',
+          'Lehet, hogy én tartom az előadást.'
+        ],
+        why: 'ことになりました: a döntés nem az enyém volt.'
+      },
+      { q: '„Itt le kell venni a cipőt (ez a szabály)." Mi hiányzik?', jp: 'ここでは{靴|くつ}を{脱|ぬ}ぐことに＿。', a: 'なっています', wrong: ['なりません', 'あります', 'います'], why: 'Érvényes szabály: 〜ことになっています.' },
+      { q: '„Az öcsém folyton csak játszik." Mi hiányzik?', jp: '{弟|おとうと}はゲーム＿しています。', a: 'ばかり', wrong: ['しか', 'までに', 'について'], why: 'Folyton csak ez: főnév + ばかり.' },
+      { q: '„Előfordul, hogy nem reggelizem." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿ことがあります。', a: '{食|た}べない', wrong: ['{食|た}べなくて', '{食|た}べません', '{食|た}べず'], why: 'Időnként megesik: ない-alak + ことがあります.' },
+      { q: 'Mit jelent: ときどき{道|みち}に{迷|まよ}うことがあります。', a: 'Néha előfordul, hogy eltévedek.', wrong: ['Egyszer már eltévedtem.', 'Soha nem tévedek el.', 'Mindig eltévedek.'], why: 'Szótári alak + ことがあります: időnként megesik.' },
+      { q: '„Azért tanulok japánul, hogy Japánban dolgozhassak." Mi hiányzik?', jp: '{日本|にほん}で{働|はたら}く＿、{日本語|にほんご}を{勉強|べんきょう}しています。', a: 'ために', wrong: ['ても', 'ばかり', 'ことに'], why: 'Cél: szótári alak + ために.' },
+      { q: '„Baleset miatt késik a vonat." Mi hiányzik?', jp: '{事故|じこ}＿ために、{電車|でんしゃ}が{遅|おく}れています。', a: 'の', wrong: ['な', 'に', 'を'], why: 'Főnév után: のために.' },
+      { q: '„Akkor is reggelizem, ha nincs időm." Mi hiányzik?', jp: '{時間|じかん}が＿、{朝|あさ}ごはんは{食|た}べます。', a: 'なくても', wrong: ['ないても', 'なかっても', 'なければ'], why: 'A ない て-alakja なくて; hozzá も: なくても.' },
+      { q: '„Ezt a feladatot egy gyerek is megérti." Mi hiányzik?', jp: 'この{問題|もんだい}は{子|こ}ども＿わかります。', a: 'でも', wrong: ['ても', 'しか', 'ばかり'], why: 'Főnév után でも: „még … is".' },
+      {
+        q: 'Melyik mondat jelenti: „Akkor is megyek, ha esik"?',
+        a: '{雨|あめ}が{降|ふ}っても、{行|い}きます。',
+        wrong: ['{雨|あめ}が{降|ふ}ったら、{行|い}きます。', '{雨|あめ}が{降|ふ}ると、{行|い}きます。', '{雨|あめ}が{降|ふ}るので、{行|い}きます。'],
+        why: 'A ても: a feltétel nem változtat az eredményen.'
+      },
+      { q: 'Ki döntött ebben a mondatban: {毎朝|まいあさ}{歩|ある}くことにしています。', a: 'Én magam: ez a saját szokásom.', wrong: ['A főnököm.', 'Az orvos írta elő.', 'Egy szabály írja elő.'], why: 'ことにしています: saját elhatározásból fakadó szokás.' },
+      {
+        q: 'Szerényen bejelented az esküvődet. Melyik mondat illik?',
+        a: '{結婚|けっこん}することになりました。',
+        wrong: ['{結婚|けっこん}することになっています。', '{結婚|けっこん}することがあります。', '{結婚|けっこん}してばかりいます。'],
+        why: 'A ことになりました szerény: mintha a körülmények hozták volna így.'
+      },
+      { q: '„Japánban az autók a bal oldalon közlekednek." Mi hiányzik?', jp: '{日本|にほん}では、{車|くるま}は{左側|ひだりがわ}を{走|はし}ることに＿。', a: 'なっています', wrong: ['しています', 'なりました', 'あります'], why: 'Érvényben lévő szabály: ことになっています.' },
+      { q: 'Melyik „csak" fejezi ki, hogy valamiből túl sok van?', a: 'ばかり', wrong: ['だけ', 'しか', 'まで'], why: 'A ばかり sokallja: „folyton csak", „csupa".' },
+      { q: 'Melyik mondat helyes?', a: '{千円|せんえん}しか{持|も}っていません。', wrong: ['{千円|せんえん}しか{持|も}っています。', '{千円|せんえん}しかあります。', '{千円|せんえん}しか{持|も}ちます。'], why: 'A しか után mindig tagadó ige áll.' },
+      {
+        q: 'Mit jelent: この{電車|でんしゃ}は{遅|おく}れることがあります。',
+        a: 'Ez a vonat néha késik.',
+        wrong: ['Ez a vonat már késett egyszer.', 'Ez a vonat mindig késik.', 'Ez a vonat soha nem késik.'],
+        why: 'Szótári alak + ことがあります: „előfordul, hogy…".'
+      },
+      { q: 'Melyik mondat illik egy pályázati indoklásba?', a: '{勉強|べんきょう}したいと{考|かんが}えている。', wrong: ['{勉強|べんきょう}したいんだよね。', '{勉強|べんきょう}したいなあ。', '{勉強|べんきょう}したいの。'], why: 'Az írott stílus rövid alakot használ, baráti mondatvégek nélkül.' }
     ]
   },
 
