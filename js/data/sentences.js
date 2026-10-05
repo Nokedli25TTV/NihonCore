@@ -3909,6 +3909,1199 @@ const NIHONCORE_SENTENCES = [
   },
 
   /* @feltöltés:kezdet — leckékhez kötött mondatok (a tanulási út sorrendjében) */
+  /* ── l4 · 〜をください · いくらですか · 〜から〜まで · 何曜日 ── */
+  {
+    id: 's_l4_01', level: 'N5', lesson: 'l4', translation: 'Ezt kérem.',
+    tokens: [
+      { type: 'word',     jp: 'これ',         romaji: 'kore',             hu: 'ez' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: 'ください',       romaji: 'kudasai',          hu: 'kérem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜をください · いくらですか · 〜から〜まで · 何曜日', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l4_02', level: 'N5', lesson: 'l4', translation: 'Abból az almából hármat kérek.',
+    tokens: [
+      { type: 'word',     jp: 'その',         romaji: 'sono',             hu: 'az a' },
+      { type: 'word',     jp: 'りんご',        romaji: 'ringo',            hu: 'alma' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'word',     jp: '三つ',         romaji: 'mittsu',           hu: 'három darab' },
+      { type: 'verb',     jp: 'ください',       romaji: 'kudasai',          hu: 'kérem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜をください · いくらですか · 〜から〜まで · 何曜日', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l4_03', level: 'N5', lesson: 'l4', translation: 'Mennyibe kerül ez az óra?',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez az' },
+      { type: 'word',     jp: '時計',         romaji: 'tokei',            hu: 'óra' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: 'いくらですか',     romaji: 'ikura desu ka',    hu: 'mennyibe kerül?' }
+    ],
+    metadata: { function: 'Question', form: '〜をください · いくらですか · 〜から〜まで · 何曜日', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l4_04', level: 'N5', lesson: 'l4', translation: 'A bank kilenctől háromig van nyitva.',
+    tokens: [
+      { type: 'word',     jp: '銀行',         romaji: 'ginkou',           hu: 'bank' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '九時',         romaji: 'kuji',             hu: 'kilenc óra' },
+      { type: 'particle', jp: 'から',         romaji: 'kara',             role: 'source' },
+      { type: 'word',     jp: '三時',         romaji: 'sanji',            hu: 'három óra' },
+      { type: 'particle', jp: 'まで',         romaji: 'made',             role: 'until' },
+      { type: 'verb',     jp: 'です',         romaji: 'desu',             hu: 'van (nyitva)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜をください · いくらですか · 〜から〜まで · 何曜日', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l4_05', level: 'N5', lesson: 'l4', translation: 'Az ebédszünet tizenkettőtől van.',
+    tokens: [
+      { type: 'word',     jp: '昼休み',        romaji: 'hiruyasumi',       hu: 'ebédszünet' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '十二時',        romaji: 'juuniji',          hu: 'tizenkét óra' },
+      { type: 'particle', jp: 'から',         romaji: 'kara',             role: 'source' },
+      { type: 'verb',     jp: 'です',         romaji: 'desu',             hu: 'van' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜をください · いくらですか · 〜から〜まで · 何曜日', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l4_06', level: 'N5', lesson: 'l4', translation: 'Milyen nap lesz holnap?',
+    tokens: [
+      { type: 'word',     jp: '明日',         romaji: 'ashita',           hu: 'holnap' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '何曜日ですか',     romaji: 'nan\'youbi desu ka', hu: 'milyen nap van?' }
+    ],
+    metadata: { function: 'Question', form: '〜をください · いくらですか · 〜から〜まで · 何曜日', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l4_07', level: 'N5', lesson: 'l4', translation: 'Hétfőtől péntekig dolgozom.',
+    tokens: [
+      { type: 'word',     jp: '月曜日',        romaji: 'getsuyoubi',       hu: 'hétfő' },
+      { type: 'particle', jp: 'から',         romaji: 'kara',             role: 'source' },
+      { type: 'word',     jp: '金曜日',        romaji: 'kin\'youbi',       hu: 'péntek' },
+      { type: 'particle', jp: 'まで',         romaji: 'made',             role: 'until' },
+      { type: 'verb',     jp: '働きます',       romaji: 'hatarakimasu',     hu: 'dolgozom' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜をください · いくらですか · 〜から〜まで · 何曜日', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l4_08', level: 'N5', lesson: 'l4', translation: 'Ez japán autó.',
+    tokens: [
+      { type: 'word',     jp: 'これ',         romaji: 'kore',             hu: 'ez' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '日本',         romaji: 'nihon',            hu: 'Japán' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'verb',     jp: '車です',        romaji: 'kurumadesu',       hu: 'autó' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜をください · いくらですか · 〜から〜まで · 何曜日', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── l5 · 〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont) ── */
+  {
+    id: 's_l5_01', level: 'N5', lesson: 'l5', translation: 'Holnap Kiotóba megyek.',
+    tokens: [
+      { type: 'word',     jp: '明日',         romaji: 'ashita',           hu: 'holnap' },
+      { type: 'word',     jp: '京都',         romaji: 'kyouto',           hu: 'Kiotó' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '行きます',       romaji: 'ikimasu',          hu: 'megyek' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont)', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l5_02', level: 'N5', lesson: 'l5', translation: 'Kerékpárral megyek az állomásra.',
+    tokens: [
+      { type: 'word',     jp: '自転車',        romaji: 'jitensha',         hu: 'kerékpár' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'tool' },
+      { type: 'word',     jp: '駅',          romaji: 'eki',              hu: 'állomás' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '行きます',       romaji: 'ikimasu',          hu: 'megyek' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont)', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l5_03', level: 'N5', lesson: 'l5', translation: 'A barátommal moziba mentem.',
+    tokens: [
+      { type: 'word',     jp: '友だち',        romaji: 'tomodachi',        hu: 'barát' },
+      { type: 'particle', jp: 'と',          romaji: 'to',               role: 'companion' },
+      { type: 'word',     jp: '映画館',        romaji: 'eigakan',          hu: 'mozi' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '行きました',      romaji: 'ikimashita',       hu: 'mentem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont)', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l5_04', level: 'N5', lesson: 'l5', translation: 'Hét órakor kelek.',
+    tokens: [
+      { type: 'word',     jp: '七時',         romaji: 'shichiji',         hu: 'hét óra' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
+      { type: 'verb',     jp: '起きます',       romaji: 'okimasu',          hu: 'felkelek' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont)', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l5_05', level: 'N5', lesson: 'l5', translation: 'Vasárnap a családommal a parkba megyek.',
+    tokens: [
+      { type: 'word',     jp: '日曜日',        romaji: 'nichiyoubi',       hu: 'vasárnap' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
+      { type: 'word',     jp: '家族',         romaji: 'kazoku',           hu: 'család' },
+      { type: 'particle', jp: 'と',          romaji: 'to',               role: 'companion' },
+      { type: 'word',     jp: '公園',         romaji: 'kouen',            hu: 'park' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '行きます',       romaji: 'ikimasu',          hu: 'megyek' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont)', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l5_06', level: 'N5', lesson: 'l5', translation: 'Tavaly jöttem Japánba.',
+    tokens: [
+      { type: 'word',     jp: '去年',         romaji: 'kyonen',           hu: 'tavaly' },
+      { type: 'word',     jp: '日本',         romaji: 'nihon',            hu: 'Japán' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '来ました',       romaji: 'kimashita',        hu: 'jöttem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont)', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l5_07', level: 'N5', lesson: 'l5', translation: 'Tíz órakor mentem haza.',
+    tokens: [
+      { type: 'word',     jp: '十時',         romaji: 'juuji',            hu: 'tíz óra' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
+      { type: 'word',     jp: 'うち',         romaji: 'uchi',             hu: 'otthon' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '帰りました',      romaji: 'kaerimashita',     hu: 'hazamentem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont)', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l5_08', level: 'N5', lesson: 'l5', translation: 'A bátyám taxival jött a kórházba.',
+    tokens: [
+      { type: 'word',     jp: '兄',          romaji: 'ani',              hu: 'bátyám' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'タクシー',       romaji: 'takushii',         hu: 'taxi' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'tool' },
+      { type: 'word',     jp: '病院',         romaji: 'byouin',           hu: 'kórház' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '来ました',       romaji: 'kimashita',        hu: 'jött' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜へ行きます · 〜で (eszköz) · 〜と (társ) · 〜に (időpont)', tense: 'Past', register: 'Polite' }
+  },
+
+  /* ── l8 · い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか ── */
+  {
+    id: 's_l8_01', level: 'N5', lesson: 'l8', translation: 'Kiotó régi város.',
+    tokens: [
+      { type: 'word',     jp: '京都',         romaji: 'kyouto',           hu: 'Kiotó' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '古い',         romaji: 'furui',            hu: 'régi' },
+      { type: 'verb',     jp: '町です',        romaji: 'machidesu',        hu: 'város' }
+    ],
+    metadata: { function: 'Affirmative', form: 'い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l8_02', level: 'N5', lesson: 'l8', translation: 'Ez praktikus szótár.',
+    tokens: [
+      { type: 'word',     jp: 'これ',         romaji: 'kore',             hu: 'ez' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '便利な',        romaji: 'benrina',          hu: 'praktikus' },
+      { type: 'verb',     jp: '辞書です',       romaji: 'jishodesu',        hu: 'szótár' }
+    ],
+    metadata: { function: 'Affirmative', form: 'い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l8_03', level: 'N5', lesson: 'l8', translation: 'Ez a szoba nem tágas.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '部屋',         romaji: 'heya',             hu: 'szoba' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '広くないです',     romaji: 'hirokunaidesu',    hu: 'nem tágas' }
+    ],
+    metadata: { function: 'Negative', form: 'い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l8_04', level: 'N5', lesson: 'l8', translation: 'Az a park nem csendes.',
+    tokens: [
+      { type: 'word',     jp: 'あの',         romaji: 'ano',              hu: 'az a' },
+      { type: 'word',     jp: '公園',         romaji: 'kouen',            hu: 'park' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '静かじゃありません',  romaji: 'shizukajaarimasen', hu: 'nem csendes' }
+    ],
+    metadata: { function: 'Negative', form: 'い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l8_05', level: 'N5', lesson: 'l8', translation: 'Milyen ember Tanaka úr?',
+    tokens: [
+      { type: 'word',     jp: '田中さん',       romaji: 'tanaka san',       hu: 'Tanaka úr' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'どんな',        romaji: 'donna',            hu: 'milyen' },
+      { type: 'verb',     jp: '人ですか',       romaji: 'hito desu ka',     hu: 'ember?' }
+    ],
+    metadata: { function: 'Question', form: 'い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l8_06', level: 'N5', lesson: 'l8', translation: 'Milyen az élet Japánban?',
+    tokens: [
+      { type: 'word',     jp: '日本',         romaji: 'nihon',            hu: 'Japán' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '生活',         romaji: 'seikatsu',         hu: 'élet' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: 'どうですか',      romaji: 'doudesuka',        hu: 'milyen?' }
+    ],
+    metadata: { function: 'Question', form: 'い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l8_07', level: 'N5', lesson: 'l8', translation: 'Kinyissam az ablakot?',
+    tokens: [
+      { type: 'word',     jp: '窓',          romaji: 'mado',             hu: 'ablak' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '開けましょうか',    romaji: 'akemashouka',      hu: 'kinyissam?' }
+    ],
+    metadata: { function: 'Question', form: 'い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l8_08', level: 'N5', lesson: 'l8', translation: 'A városom nem túl nagy.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '町',          romaji: 'machi',            hu: 'város' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'あまり',        romaji: 'amari',            hu: 'nem nagyon' },
+      { type: 'verb',     jp: '大きくないです',    romaji: 'ookikunaidesu',    hu: 'nem nagy' }
+    ],
+    metadata: { function: 'Negative', form: 'い / な + főnév · 〜くないです · 〜じゃありません · どんな · 〜ましょうか', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── l9 · 〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で ── */
+  {
+    id: 's_l9_01', level: 'N5', lesson: 'l9', translation: 'Tegnap esős idő volt.',
+    tokens: [
+      { type: 'word',     jp: '昨日',         romaji: 'kinou',            hu: 'tegnap' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '雨でした',       romaji: 'amedeshita',       hu: 'esős idő volt' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l9_02', level: 'N5', lesson: 'l9', translation: 'Az utazás nagyon élvezetes volt.',
+    tokens: [
+      { type: 'word',     jp: '旅行',         romaji: 'ryokou',           hu: 'utazás' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'とても',        romaji: 'totemo',           hu: 'nagyon' },
+      { type: 'verb',     jp: '楽しかったです',    romaji: 'tanoshikattadesu', hu: 'élvezetes volt' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l9_03', level: 'N5', lesson: 'l9', translation: 'A vizsga nem volt nehéz.',
+    tokens: [
+      { type: 'word',     jp: '試験',         romaji: 'shiken',           hu: 'vizsga' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '難しくなかったです',  romaji: 'muzukashikunakattadesu', hu: 'nem volt nehéz' }
+    ],
+    metadata: { function: 'Negative', form: '〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l9_04', level: 'N5', lesson: 'l9', translation: 'Reggel felkelek, és megmosom az arcom.',
+    tokens: [
+      { type: 'word',     jp: '朝',          romaji: 'asa',              hu: 'reggel' },
+      { type: 'verb',     jp: '起きて',        romaji: 'okite',            hu: 'felkelek, és' },
+      { type: 'word',     jp: '顔',          romaji: 'kao',              hu: 'arc' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '洗います',       romaji: 'araimasu',         hu: 'megmosom' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l9_05', level: 'N5', lesson: 'l9', translation: 'Ez a hely olcsó és finom.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '店',          romaji: 'mise',             hu: 'bolt (étterem)' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '安くて',        romaji: 'yasukute',         hu: 'olcsó, és' },
+      { type: 'verb',     jp: 'おいしいです',     romaji: 'oishiidesu',       hu: 'finom' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l9_06', level: 'N5', lesson: 'l9', translation: 'Tanaka úr kedves és jópofa ember.',
+    tokens: [
+      { type: 'word',     jp: '田中さん',       romaji: 'tanaka san',       hu: 'Tanaka úr' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '親切で',        romaji: 'shinsetsude',      hu: 'kedves, és' },
+      { type: 'word',     jp: 'おもしろい',      romaji: 'omoshiroi',        hu: 'érdekes (jópofa)' },
+      { type: 'verb',     jp: '人です',        romaji: 'hitodesu',         hu: 'ember' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l9_07', level: 'N5', lesson: 'l9', translation: 'Tegnap elmentem az áruházba, és cipőt vettem.',
+    tokens: [
+      { type: 'word',     jp: '昨日',         romaji: 'kinou',            hu: 'tegnap' },
+      { type: 'word',     jp: 'デパート',       romaji: 'depaato',          hu: 'áruház' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '行って',        romaji: 'itte',             hu: 'elmentem, és' },
+      { type: 'word',     jp: '靴',          romaji: 'kutsu',            hu: 'cipő' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '買いました',      romaji: 'kaimashita',       hu: 'vettem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l9_08', level: 'N5', lesson: 'l9', translation: 'A múlt héten nem értem rá.',
+    tokens: [
+      { type: 'word',     jp: '先週',         romaji: 'senshuu',          hu: 'múlt hét' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '暇じゃありませんでした', romaji: 'himajaarimasendeshita', hu: 'nem értem rá' }
+    ],
+    metadata: { function: 'Negative', form: '〜でした · 〜かったです · 〜て、〜 · 〜くて · 〜で', tense: 'Past', register: 'Polite' }
+  },
+
+  /* ── l10 · A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます ── */
+  {
+    id: 's_l10_01', level: 'N5', lesson: 'l10', translation: 'A vonat gyorsabb a busznál.',
+    tokens: [
+      { type: 'word',     jp: '電車',         romaji: 'densha',           hu: 'vonat' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'バス',         romaji: 'basu',             hu: 'busz' },
+      { type: 'word',     jp: 'より',         romaji: 'yori',             hu: '-nál, -nél (mint)' },
+      { type: 'verb',     jp: '速いです',       romaji: 'hayaidesu',        hu: 'gyors' }
+    ],
+    metadata: { function: 'Affirmative', form: 'A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l10_02', level: 'N5', lesson: 'l10', translation: 'A kutyát vagy a macskát szereti jobban?',
+    tokens: [
+      { type: 'word',     jp: '犬',          romaji: 'inu',              hu: 'kutya' },
+      { type: 'particle', jp: 'と',          romaji: 'to',               role: 'and' },
+      { type: 'word',     jp: '猫',          romaji: 'neko',             hu: 'macska' },
+      { type: 'particle', jp: 'と',          romaji: 'to',               role: 'and' },
+      { type: 'word',     jp: 'どちら',        romaji: 'dochira',          hu: 'melyik' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '好きですか',      romaji: 'suki desu ka',     hu: 'szereti?' }
+    ],
+    metadata: { function: 'Question', form: 'A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l10_03', level: 'N5', lesson: 'l10', translation: 'A macskát szeretem jobban.',
+    tokens: [
+      { type: 'word',     jp: '猫',          romaji: 'neko',             hu: 'macska' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: 'ほう',         romaji: 'hou',              hu: '(az egyik) oldal' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '好きです',       romaji: 'sukidesu',         hu: 'szeretem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l10_04', level: 'N5', lesson: 'l10', translation: 'A gyümölcsök közül az almát szeretem a legjobban.',
+    tokens: [
+      { type: 'word',     jp: '果物',         romaji: 'kudamono',         hu: 'gyümölcs' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '中',          romaji: 'naka',             hu: 'között' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location' },
+      { type: 'word',     jp: 'りんご',        romaji: 'ringo',            hu: 'alma' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'word',     jp: 'いちばん',       romaji: 'ichiban',          hu: 'leg-' },
+      { type: 'verb',     jp: '好きです',       romaji: 'sukidesu',         hu: 'szeretem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l10_05', level: 'N5', lesson: 'l10', translation: 'Én kávét kérek.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'コーヒー',       romaji: 'koohii',           hu: 'kávé' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'result' },
+      { type: 'verb',     jp: 'します',        romaji: 'shimasu',          hu: 'választom (kérem)' }
+    ],
+    metadata: { function: 'Affirmative', form: 'A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l10_06', level: 'N5', lesson: 'l10', translation: 'Miután kezet mostam, eszem.',
+    tokens: [
+      { type: 'word',     jp: '手',          romaji: 'te',               hu: 'kéz' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '洗ってから',      romaji: 'arattekara',       hu: 'miután megmostam' },
+      { type: 'word',     jp: 'ご飯',         romaji: 'gohan',            hu: 'étel (rizs)' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '食べます',       romaji: 'tabemasu',         hu: 'eszem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l10_07', level: 'N5', lesson: 'l10', translation: 'Felpróbálom ezt a ruhát.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '服',          romaji: 'fuku',             hu: 'ruha' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '着てみます',      romaji: 'kite mimasu',      hu: 'felpróbálom' }
+    ],
+    metadata: { function: 'Affirmative', form: 'A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l10_08', level: 'N5', lesson: 'l10', translation: 'Kérem, beszéljen egy kicsit lassabban!',
+    tokens: [
+      { type: 'word',     jp: 'もう少し',       romaji: 'mousukoshi',       hu: 'még egy kicsit' },
+      { type: 'word',     jp: 'ゆっくり',       romaji: 'yukkuri',          hu: 'lassan' },
+      { type: 'verb',     jp: '話してください',    romaji: 'hanashite kudasai', hu: 'beszéljen, kérem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'A より B のほうが · どちらが · いちばん · 〜にします · 〜てから · 〜てみます', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── l11 · 〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです ── */
+  {
+    id: 's_l11_01', level: 'N5', lesson: 'l11', translation: 'Kérem, ne állítsa ide az autót!',
+    tokens: [
+      { type: 'word',     jp: 'ここ',         romaji: 'koko',             hu: 'ide' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'goal' },
+      { type: 'word',     jp: '車',          romaji: 'kuruma',           hu: 'autó' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '止めないでください',  romaji: 'tomenaide kudasai', hu: 'ne állítsa le, kérem' }
+    ],
+    metadata: { function: 'Negative', form: '〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l11_02', level: 'N5', lesson: 'l11', translation: 'Miattam ne aggódjon!',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: 'こと',         romaji: 'koto',             hu: 'dolog (ügy)' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '心配しないでください', romaji: 'shinpaishinaide kudasai', hu: 'ne aggódjon, kérem' }
+    ],
+    metadata: { function: 'Negative', form: '〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l11_03', level: 'N5', lesson: 'l11', translation: 'Jobb lenne korán lefeküdnie.',
+    tokens: [
+      { type: 'word',     jp: '早く',         romaji: 'hayaku',           hu: 'korán' },
+      { type: 'verb',     jp: '寝た',         romaji: 'neta',             hu: 'lefekszik' },
+      { type: 'word',     jp: 'ほう',         romaji: 'hou',              hu: '(az az) irány' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: 'いいです',       romaji: 'iidesu',           hu: 'jobb' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l11_04', level: 'N5', lesson: 'l11', translation: 'Jobb lenne bevenni a gyógyszert.',
+    tokens: [
+      { type: 'word',     jp: '薬',          romaji: 'kusuri',           hu: 'gyógyszer' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '飲んだ',        romaji: 'nonda',            hu: 'bevesz' },
+      { type: 'word',     jp: 'ほう',         romaji: 'hou',              hu: '(az az) irány' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: 'いいです',       romaji: 'iidesu',           hu: 'jobb' },
+      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l11_05', level: 'N5', lesson: 'l11', translation: 'Ma jobb lenne nem elmenni otthonról.',
+    tokens: [
+      { type: 'word',     jp: '今日',         romaji: 'kyou',             hu: 'ma' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '出かけない',      romaji: 'dekakenai',        hu: 'nem megy el otthonról' },
+      { type: 'word',     jp: 'ほう',         romaji: 'hou',              hu: '(az az) irány' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: 'いいです',       romaji: 'iidesu',           hu: 'jobb' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l11_06', level: 'N5', lesson: 'l11', translation: 'Ma reggel miért késett?',
+    tokens: [
+      { type: 'word',     jp: '今朝',         romaji: 'kesa',             hu: 'ma reggel' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'どうして',       romaji: 'doushite',         hu: 'miért' },
+      { type: 'verb',     jp: '遅れたんですか',    romaji: 'okuretan desu ka', hu: 'késett? (magyarázatot kér)' }
+    ],
+    metadata: { function: 'Question', form: '〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l11_07', level: 'N5', lesson: 'l11', translation: 'Az a helyzet, hogy fáj a fejem.',
+    tokens: [
+      { type: 'word',     jp: '頭',          romaji: 'atama',            hu: 'fej' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '痛いんです',      romaji: 'itaindesu',        hu: 'fáj (ez a helyzet)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l11_08', level: 'N5', lesson: 'l11', translation: 'Az történt, hogy nem jött a vonat.',
+    tokens: [
+      { type: 'word',     jp: '電車',         romaji: 'densha',           hu: 'vonat' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '来なかったんです',   romaji: 'konakattandesu',   hu: 'nem jött (ez történt)' }
+    ],
+    metadata: { function: 'Negative', form: '〜ないでください · 〜たほうがいいです · 〜ないほうがいいです · 〜んです', tense: 'Past', register: 'Polite' }
+  },
+
+  /* ── l19 · 〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません ── */
+  {
+    id: 's_l19_01', level: 'N4', lesson: 'l19', translation: 'Gyalog megyek az állomásig.',
+    tokens: [
+      { type: 'word',     jp: '駅',          romaji: 'eki',              hu: 'állomás' },
+      { type: 'particle', jp: 'まで',         romaji: 'made',             role: 'until' },
+      { type: 'verb',     jp: '歩いていきます',    romaji: 'aruite ikimasu',   hu: 'gyalog megyek' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l19_02', level: 'N4', lesson: 'l19', translation: 'Viszek magammal ebédet.',
+    tokens: [
+      { type: 'word',     jp: 'お弁当',        romaji: 'obentou',          hu: 'ebédcsomag' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '持っていきます',    romaji: 'motte ikimasu',    hu: 'viszem magammal' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l19_03', level: 'N4', lesson: 'l19', translation: 'Minden reggel sétálok a parkban.',
+    tokens: [
+      { type: 'word',     jp: '毎朝',         romaji: 'maiasa',           hu: 'minden reggel' },
+      { type: 'word',     jp: '公園',         romaji: 'kouen',            hu: 'park' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'route' },
+      { type: 'verb',     jp: '散歩します',      romaji: 'sanposhimasu',     hu: 'sétálok' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l19_04', level: 'N4', lesson: 'l19', translation: 'Menjen egyenesen ezen az úton!',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez az' },
+      { type: 'word',     jp: '道',          romaji: 'michi',            hu: 'út' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'route' },
+      { type: 'word',     jp: 'まっすぐ',       romaji: 'massugu',          hu: 'egyenesen' },
+      { type: 'verb',     jp: '行ってください',    romaji: 'itte kudasai',     hu: 'menjen, kérem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l19_05', level: 'N4', lesson: 'l19', translation: 'A következő sarkon jobbra kanyarodom.',
+    tokens: [
+      { type: 'word',     jp: '次',          romaji: 'tsugi',            hu: 'következő' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '角',          romaji: 'kado',             hu: 'sarok' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'route' },
+      { type: 'word',     jp: '右',          romaji: 'migi',             hu: 'jobb' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'direction' },
+      { type: 'verb',     jp: '曲がります',      romaji: 'magarimasu',       hu: 'kanyarodom' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l19_06', level: 'N4', lesson: 'l19', translation: 'Ma reggel csak vizet ittam.',
+    tokens: [
+      { type: 'word',     jp: '今朝',         romaji: 'kesa',             hu: 'ma reggel' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '水',          romaji: 'mizu',             hu: 'víz' },
+      { type: 'word',     jp: 'だけ',         romaji: 'dake',             hu: 'csak' },
+      { type: 'verb',     jp: '飲みました',      romaji: 'nomimashita',      hu: 'ittam' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l19_07', level: 'N4', lesson: 'l19', translation: 'Csak száz jen van a pénztárcámban.',
+    tokens: [
+      { type: 'word',     jp: '財布',         romaji: 'saifu',            hu: 'pénztárca' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'location' },
+      { type: 'word',     jp: '百円',         romaji: 'hyakuen',          hu: 'száz jen' },
+      { type: 'word',     jp: 'しか',         romaji: 'shika',            hu: 'csak (és nem több)' },
+      { type: 'verb',     jp: 'ありません',      romaji: 'arimasen',         hu: 'nincs' }
+    ],
+    metadata: { function: 'Negative', form: '〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l19_08', level: 'N4', lesson: 'l19', translation: 'Csak vasárnap tudok pihenni.',
+    tokens: [
+      { type: 'word',     jp: '日曜日',        romaji: 'nichiyoubi',       hu: 'vasárnap' },
+      { type: 'word',     jp: 'しか',         romaji: 'shika',            hu: 'csak (és nem több)' },
+      { type: 'verb',     jp: '休めません',      romaji: 'yasumemasen',      hu: 'nem tudok pihenni' }
+    ],
+    metadata: { function: 'Negative', form: '〜ていきます · 〜を (útvonal) · 〜だけ · 〜しか〜ません', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── l21 · 〜くします · 〜にします · 〜てあります · 〜といいます · 〜って ── */
+  {
+    id: 's_l21_01', level: 'N4', lesson: 'l21', translation: 'Rendbe teszem a szobát.',
+    tokens: [
+      { type: 'word',     jp: '部屋',         romaji: 'heya',             hu: 'szoba' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'word',     jp: 'きれい',        romaji: 'kirei',            hu: 'tiszta (rendes)' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'result' },
+      { type: 'verb',     jp: 'します',        romaji: 'shimasu',          hu: 'teszem (olyanná)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜くします · 〜にします · 〜てあります · 〜といいます · 〜って', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l21_02', level: 'N4', lesson: 'l21', translation: 'Halkítsa le a tévét, kérem!',
+    tokens: [
+      { type: 'word',     jp: 'テレビ',        romaji: 'terebi',           hu: 'tévé' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '音',          romaji: 'oto',              hu: 'hang' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'word',     jp: '小さく',        romaji: 'chiisaku',         hu: 'halkra (kicsire)' },
+      { type: 'verb',     jp: 'してください',     romaji: 'shite kudasai',    hu: 'tegye, kérem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜くします · 〜にします · 〜てあります · 〜といいます · 〜って', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l21_03', level: 'N4', lesson: 'l21', translation: 'A falon térkép lóg.',
+    tokens: [
+      { type: 'word',     jp: '壁',          romaji: 'kabe',             hu: 'fal' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'location' },
+      { type: 'word',     jp: '地図',         romaji: 'chizu',            hu: 'térkép' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: 'はってあります',    romaji: 'hatte arimasu',    hu: 'ki van téve' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜くします · 〜にします · 〜てあります · 〜といいます · 〜って', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l21_04', level: 'N4', lesson: 'l21', translation: 'Az asztalra oda van téve egy könyv.',
+    tokens: [
+      { type: 'word',     jp: '机',          romaji: 'tsukue',           hu: 'asztal' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '上',          romaji: 'ue',               hu: 'fent (rajta)' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'location' },
+      { type: 'word',     jp: '本',          romaji: 'hon',              hu: 'könyv' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '置いてあります',    romaji: 'oite arimasu',     hu: 'oda van téve' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜くします · 〜にします · 〜てあります · 〜といいます · 〜って', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l21_05', level: 'N4', lesson: 'l21', translation: 'Ezt hogy mondják japánul?',
+    tokens: [
+      { type: 'word',     jp: 'これ',         romaji: 'kore',             hu: 'ez' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '日本語',        romaji: 'nihongo',          hu: 'japán nyelv' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'means' },
+      { type: 'word',     jp: '何',          romaji: 'nan',              hu: 'mi' },
+      { type: 'particle', jp: 'と',          romaji: 'to',               role: 'quotation' },
+      { type: 'verb',     jp: 'いいますか',      romaji: 'iimasuka',         hu: 'hogy mondják?' }
+    ],
+    metadata: { function: 'Question', form: '〜くします · 〜にします · 〜てあります · 〜といいます · 〜って', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l21_06', level: 'N4', lesson: 'l21', translation: 'A tanár azt mondta, hogy holnap szünet van.',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',           hu: 'tanár' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '明日',         romaji: 'ashita',           hu: 'holnap' },
+      { type: 'verb',     jp: '休みだ',        romaji: 'yasumida',         hu: 'szünet van' },
+      { type: 'particle', jp: 'と',          romaji: 'to',               role: 'quotation' },
+      { type: 'verb',     jp: '言いました',      romaji: 'iimashita',        hu: 'mondta' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜くします · 〜にします · 〜てあります · 〜といいます · 〜って', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l21_07', level: 'N4', lesson: 'l21', translation: 'Tanaka azt mondta, hogy nem jön.',
+    tokens: [
+      { type: 'word',     jp: '田中さん',       romaji: 'tanaka san',       hu: 'Tanaka úr' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '来ない',        romaji: 'konai',            hu: 'nem jön' },
+      { type: 'word',     jp: 'って',         romaji: 'tte',              hu: '(azt, hogy)' },
+      { type: 'verb',     jp: '言ってた',       romaji: 'itteta',           hu: 'mondta' },
+      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜くします · 〜にします · 〜てあります · 〜といいます · 〜って', tense: 'Past', register: 'Casual' }
+  },
+  {
+    id: 's_l21_08', level: 'N4', lesson: 'l21', translation: 'Rövidre vágattam a hajam.',
+    tokens: [
+      { type: 'word',     jp: '髪',          romaji: 'kami',             hu: 'haj' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'word',     jp: '短く',         romaji: 'mijikaku',         hu: 'rövidre' },
+      { type: 'verb',     jp: 'しました',       romaji: 'shimashita',       hu: 'tettem (levágattam)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜くします · 〜にします · 〜てあります · 〜といいます · 〜って', tense: 'Past', register: 'Polite' }
+  },
+
+  /* ── l23 · 〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう ── */
+  {
+    id: 's_l23_01', level: 'N4', lesson: 'l23', translation: 'A tanár kijavította a fogalmazásomat.',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',           hu: 'tanár' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'giver' },
+      { type: 'word',     jp: '作文',         romaji: 'sakubun',          hu: 'fogalmazás' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '直していただきました', romaji: 'naoshite itadakimashita', hu: 'kijavította nekem (tisztelettel)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l23_02', level: 'N4', lesson: 'l23', translation: 'Az osztályvezető elkísért az állomásig.',
+    tokens: [
+      { type: 'word',     jp: '部長',         romaji: 'buchou',           hu: 'osztályvezető' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'word',     jp: '駅',          romaji: 'eki',              hu: 'állomás' },
+      { type: 'particle', jp: 'まで',         romaji: 'made',             role: 'until' },
+      { type: 'verb',     jp: '送ってくださいました', romaji: 'okutte kudasaimashita', hu: 'elkísért (szíves volt)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l23_03', level: 'N4', lesson: 'l23', translation: 'Segítenél egy kicsit?',
+    tokens: [
+      { type: 'word',     jp: 'ちょっと',       romaji: 'chotto',           hu: 'egy kicsit' },
+      { type: 'verb',     jp: '手伝って',       romaji: 'tetsudatte',       hu: 'segít' },
+      { type: 'verb',     jp: 'くれませんか',     romaji: 'kuremasenka',      hu: 'megtennéd nekem?' }
+    ],
+    metadata: { function: 'Question', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l23_04', level: 'N4', lesson: 'l23', translation: 'Várna még egy kicsit, kérem?',
+    tokens: [
+      { type: 'word',     jp: 'もう少し',       romaji: 'mousukoshi',       hu: 'még egy kicsit' },
+      { type: 'verb',     jp: '待って',        romaji: 'matte',            hu: 'vár' },
+      { type: 'verb',     jp: 'いただけませんか',   romaji: 'itadakemasenka',   hu: 'megtenné nekem? (udvariasan)' }
+    ],
+    metadata: { function: 'Question', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l23_05', level: 'N4', lesson: 'l23', translation: 'Zenét hallgatni jó.',
+    tokens: [
+      { type: 'word',     jp: '音楽',         romaji: 'ongaku',           hu: 'zene' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '聞く',         romaji: 'kiku',             hu: 'hallgat' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'nominalizer' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '楽しいです',      romaji: 'tanoshiidesu',     hu: 'élvezetes' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l23_06', level: 'N4', lesson: 'l23', translation: 'Elfelejtettem elhozni a házi feladatot.',
+    tokens: [
+      { type: 'word',     jp: '宿題',         romaji: 'shukudai',         hu: 'házi feladat' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '持ってくる',      romaji: 'motte kuru',       hu: 'elhoz' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'nominalizer' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '忘れました',      romaji: 'wasuremashita',    hu: 'elfelejtettem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l23_07', level: 'N4', lesson: 'l23', translation: 'Még esik az eső.',
+    tokens: [
+      { type: 'word',     jp: '雨',          romaji: 'ame',              hu: 'eső' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'まだ',         romaji: 'mada',             hu: 'még' },
+      { type: 'verb',     jp: '降っています',     romaji: 'futte imasu',      hu: 'esik' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Progressive', register: 'Polite' }
+  },
+  {
+    id: 's_l23_08', level: 'N4', lesson: 'l23', translation: 'Ezt a szakét rizsből készítik.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '酒',          romaji: 'sake',             hu: 'szaké' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '米',          romaji: 'kome',             hu: 'rizs' },
+      { type: 'particle', jp: 'から',         romaji: 'kara',             role: 'source' },
+      { type: 'verb',     jp: '作ります',       romaji: 'tsukurimasu',      hu: 'készítik' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l23_09', level: 'N4', lesson: 'l23', translation: 'Busz már nem jön.',
+    tokens: [
+      { type: 'word',     jp: 'バス',         romaji: 'basu',             hu: 'busz' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'もう',         romaji: 'mou',              hu: 'már' },
+      { type: 'verb',     jp: '来ません',       romaji: 'kimasen',          hu: 'nem jön' }
+    ],
+    metadata: { function: 'Negative', form: '〜ていただきます · 〜てくれませんか · 〜ていただけませんか · 〜の (főnevesítés) · まだ · もう', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── k1 · けど · でも · しかし · それから · だから · それに · それでも ── */
+  {
+    id: 's_k1_01', level: 'N5', lesson: 'k1', translation: 'Ma álmos vagyok, de megcsinálom a leckét.',
+    tokens: [
+      { type: 'word',     jp: '今日',         romaji: 'kyou',             hu: 'ma' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '眠い',         romaji: 'nemui',            hu: 'álmos vagyok' },
+      { type: 'word',     jp: 'けど',         romaji: 'kedo',             hu: 'de' },
+      { type: 'word',     jp: '宿題',         romaji: 'shukudai',         hu: 'házi feladat' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: 'します',        romaji: 'shimasu',          hu: 'megcsinálom' }
+    ],
+    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k1_02', level: 'N5', lesson: 'k1', translation: 'Ez a film hosszú. De érdekes.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '映画',         romaji: 'eiga',             hu: 'film' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '長いです',       romaji: 'nagaidesu',        hu: 'hosszú' },
+      { type: 'word',     jp: 'でも',         romaji: 'demo',             hu: 'de' },
+      { type: 'verb',     jp: 'おもしろいです',    romaji: 'omoshiroidesu',    hu: 'érdekes' }
+    ],
+    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k1_03', level: 'N5', lesson: 'k1', translation: 'Reggel kávét ittam. Aztán bementem dolgozni.',
+    tokens: [
+      { type: 'word',     jp: '朝',          romaji: 'asa',              hu: 'reggel' },
+      { type: 'word',     jp: 'コーヒー',       romaji: 'koohii',           hu: 'kávé' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '飲みました',      romaji: 'nomimashita',      hu: 'ittam' },
+      { type: 'word',     jp: 'それから',       romaji: 'sorekara',         hu: 'aztán' },
+      { type: 'word',     jp: '会社',         romaji: 'kaisha',           hu: 'cég (munkahely)' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '行きました',      romaji: 'ikimashita',       hu: 'mentem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_k1_04', level: 'N5', lesson: 'k1', translation: 'Lázam van. Ezért ma otthon maradok.',
+    tokens: [
+      { type: 'word',     jp: '熱',          romaji: 'netsu',            hu: 'láz' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: 'あります',       romaji: 'arimasu',          hu: 'van' },
+      { type: 'word',     jp: 'だから',        romaji: 'dakara',           hu: 'ezért' },
+      { type: 'word',     jp: '今日',         romaji: 'kyou',             hu: 'ma' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '休みます',       romaji: 'yasumimasu',       hu: 'pihenek (nem megyek be)' }
+    ],
+    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k1_05', level: 'N5', lesson: 'k1', translation: 'Ez a lakás közel van az állomáshoz. Ráadásul olcsó.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: 'アパート',       romaji: 'apaato',           hu: 'lakás' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '駅',          romaji: 'eki',              hu: 'állomás' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'target' },
+      { type: 'verb',     jp: '近いです',       romaji: 'chikaidesu',       hu: 'közel van' },
+      { type: 'word',     jp: 'それに',        romaji: 'soreni',           hu: 'ráadásul' },
+      { type: 'verb',     jp: '安いです',       romaji: 'yasuidesu',        hu: 'olcsó' }
+    ],
+    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k1_06', level: 'N5', lesson: 'k1', translation: 'Sokszor gyakoroltam. Mégsem megy.',
+    tokens: [
+      { type: 'word',     jp: '何回も',        romaji: 'nankaimo',         hu: 'sokszor' },
+      { type: 'verb',     jp: '練習しました',     romaji: 'renshuushimashita', hu: 'gyakoroltam' },
+      { type: 'word',     jp: 'それでも',       romaji: 'soredemo',         hu: 'mégis' },
+      { type: 'verb',     jp: 'できません',      romaji: 'dekimasen',        hu: 'nem megy' }
+    ],
+    metadata: { function: 'Negative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k1_07', level: 'N5', lesson: 'k1', translation: 'A japán nehéz. Azonban élvezetes.',
+    tokens: [
+      { type: 'word',     jp: '日本語',        romaji: 'nihongo',          hu: 'japán nyelv' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '難しいです',      romaji: 'muzukashiidesu',   hu: 'nehéz' },
+      { type: 'word',     jp: 'しかし',        romaji: 'shikashi',         hu: 'azonban' },
+      { type: 'verb',     jp: '楽しいです',      romaji: 'tanoshiidesu',     hu: 'élvezetes' }
+    ],
+    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k1_08', level: 'N5', lesson: 'k1', translation: 'Kitakarítottam a szobát. És mostam is.',
+    tokens: [
+      { type: 'word',     jp: '部屋',         romaji: 'heya',             hu: 'szoba' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '掃除しました',     romaji: 'soujishimashita',  hu: 'kitakarítottam' },
+      { type: 'word',     jp: 'そして',        romaji: 'soshite',          hu: 'és' },
+      { type: 'word',     jp: '洗濯',         romaji: 'sentaku',          hu: 'mosás' },
+      { type: 'particle', jp: 'も',          romaji: 'mo',               role: 'inclusion' },
+      { type: 'verb',     jp: 'しました',       romaji: 'shimashita',       hu: 'megcsináltam' }
+    ],
+    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Past', register: 'Polite' }
+  },
+
+  /* ── k2 · 〜ね · 〜よ · 〜よね ── */
+  {
+    id: 's_k2_01', level: 'N5', lesson: 'k2', translation: 'Ma szép idő van, ugye?',
+    tokens: [
+      { type: 'word',     jp: '今日',         romaji: 'kyou',             hu: 'ma' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'いい',         romaji: 'ii',               hu: 'jó' },
+      { type: 'verb',     jp: '天気です',       romaji: 'tenkidesu',        hu: 'idő van' },
+      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
+    ],
+    metadata: { function: 'Question', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k2_02', level: 'N5', lesson: 'k2', translation: 'Vigyázz, ez az út veszélyes!',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez az' },
+      { type: 'word',     jp: '道',          romaji: 'michi',            hu: 'út' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '危ないです',      romaji: 'abunaidesu',       hu: 'veszélyes' },
+      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k2_03', level: 'N5', lesson: 'k2', translation: 'Tanaka úr esernyője ott van, mondom.',
+    tokens: [
+      { type: 'word',     jp: '田中さん',       romaji: 'tanaka san',       hu: 'Tanaka úr' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '傘',          romaji: 'kasa',             hu: 'esernyő' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: 'あそこです',      romaji: 'asokodesu',        hu: 'ott van' },
+      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k2_04', level: 'N5', lesson: 'k2', translation: 'Csípős ez az étel, ugye?',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez az' },
+      { type: 'word',     jp: '料理',         romaji: 'ryouri',           hu: 'étel' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '辛いです',       romaji: 'karaidesu',        hu: 'csípős' },
+      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
+    ],
+    metadata: { function: 'Question', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k2_05', level: 'N5', lesson: 'k2', translation: 'Figyelj, megjött a busz!',
+    tokens: [
+      { type: 'word',     jp: 'バス',         romaji: 'basu',             hu: 'busz' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '来ました',       romaji: 'kimashita',        hu: 'megjött' },
+      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ね · 〜よ · 〜よね', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_k2_06', level: 'N5', lesson: 'k2', translation: 'Úgy tudom, a vizsga jövő héten van, ugye?',
+    tokens: [
+      { type: 'word',     jp: '試験',         romaji: 'shiken',           hu: 'vizsga' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '来週です',       romaji: 'raishuudesu',      hu: 'jövő héten van' },
+      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' },
+      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
+    ],
+    metadata: { function: 'Question', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k2_07', level: 'N5', lesson: 'k2', translation: 'A japán nyár meleg, ugye?',
+    tokens: [
+      { type: 'word',     jp: '日本',         romaji: 'nihon',            hu: 'Japán' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '夏',          romaji: 'natsu',            hu: 'nyár' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '暑いです',       romaji: 'atsuidesu',        hu: 'meleg' },
+      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
+    ],
+    metadata: { function: 'Question', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k2_08', level: 'N5', lesson: 'k2', translation: 'Hagyd csak, viszem a csomagot!',
+    tokens: [
+      { type: 'word',     jp: '荷物',         romaji: 'nimotsu',          hu: 'csomag' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '持ちます',       romaji: 'mochimasu',        hu: 'viszem' },
+      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── k3 · 〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない ── */
+  {
+    id: 's_k3_01', level: 'N4', lesson: 'k3', translation: 'Már haza kell mennem.',
+    tokens: [
+      { type: 'word',     jp: 'もう',         romaji: 'mou',              hu: 'már' },
+      { type: 'word',     jp: '家',          romaji: 'ie',               hu: 'haza' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'goal' },
+      { type: 'verb',     jp: '帰らなくちゃ',     romaji: 'kaeranakucha',     hu: 'haza kell mennem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Casual' }
+  },
+  {
+    id: 's_k3_02', level: 'N4', lesson: 'k3', translation: 'Holnapig be kell adnom a beszámolót.',
+    tokens: [
+      { type: 'word',     jp: '明日',         romaji: 'ashita',           hu: 'holnap' },
+      { type: 'word',     jp: 'までに',        romaji: 'made ni',          hu: '-ig (határidő)' },
+      { type: 'word',     jp: 'レポート',       romaji: 'repooto',          hu: 'beszámoló' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '出さなきゃ',      romaji: 'dasanakya',        hu: 'be kell adnom' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Casual' }
+  },
+  {
+    id: 's_k3_03', level: 'N4', lesson: 'k3', translation: 'Jaj, elfelejtettem a leckét.',
+    tokens: [
+      { type: 'word',     jp: '宿題',         romaji: 'shukudai',         hu: 'házi feladat' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '忘れちゃった',     romaji: 'wasurechatta',     hu: 'elfelejtettem (jaj)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Past', register: 'Casual' }
+  },
+  {
+    id: 's_k3_04', level: 'N4', lesson: 'k3', translation: 'Az öcsém megette a süteményemet.',
+    tokens: [
+      { type: 'word',     jp: '弟',          romaji: 'otouto',           hu: 'öcsém' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: 'ケーキ',        romaji: 'keeki',            hu: 'sütemény' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '食べちゃった',     romaji: 'tabechatta',       hu: 'megette (sajnos)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Past', register: 'Casual' }
+  },
+  {
+    id: 's_k3_05', level: 'N4', lesson: 'k3', translation: 'Mit nézel most?',
+    tokens: [
+      { type: 'word',     jp: '今',          romaji: 'ima',              hu: 'most' },
+      { type: 'word',     jp: '何',          romaji: 'nani',             hu: 'mi' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '見てるの',       romaji: 'miteruno',         hu: 'nézel? (éppen)' }
+    ],
+    metadata: { function: 'Question', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Progressive', register: 'Casual' }
+  },
+  {
+    id: 's_k3_06', level: 'N4', lesson: 'k3', translation: 'A nővérem Tokióban lakik.',
+    tokens: [
+      { type: 'word',     jp: '姉',          romaji: 'ane',              hu: 'nővérem' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '東京',         romaji: 'toukyou',          hu: 'Tokió' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'location' },
+      { type: 'verb',     jp: '住んでます',      romaji: 'sundemasu',        hu: 'lakik' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k3_07', level: 'N4', lesson: 'k3', translation: 'Megveszem előre a jegyet, jó?',
+    tokens: [
+      { type: 'word',     jp: '切符',         romaji: 'kippu',            hu: 'jegy' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '買っとく',       romaji: 'kattoku',          hu: 'megveszem előre' },
+      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
+    ],
+    metadata: { function: 'Question', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Casual' }
+  },
+  {
+    id: 's_k3_08', level: 'N4', lesson: 'k3', translation: 'Itt nem szabad dohányozni!',
+    tokens: [
+      { type: 'word',     jp: 'ここ',         romaji: 'koko',             hu: 'itt' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
+      { type: 'word',     jp: 'たばこ',        romaji: 'tabako',           hu: 'cigaretta' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '吸っちゃいけない',   romaji: 'sutchaikenai',     hu: 'nem szabad szívni' },
+      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
+    ],
+    metadata: { function: 'Negative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Casual' }
+  },
+  {
+    id: 's_k3_09', level: 'N4', lesson: 'k3', translation: 'Minden nap át kell ismételnem a kanjikat.',
+    tokens: [
+      { type: 'word',     jp: '毎日',         romaji: 'mainichi',         hu: 'minden nap' },
+      { type: 'word',     jp: '漢字',         romaji: 'kanji',            hu: 'kanji' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '復習しなくてはいけません', romaji: 'fukushuu shinakute wa ikemasen', kana: 'ふくしゅうしなくてはいけません', hu: 'át kell ismételnem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── k4 · 〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい ── */
+  {
+    id: 's_k4_01', level: 'N5', lesson: 'k4', translation: 'Reggeli nélkül mentem iskolába.',
+    tokens: [
+      { type: 'word',     jp: '朝ご飯',        romaji: 'asagohan',         hu: 'reggeli' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '食べないで',      romaji: 'tabenaide',        hu: 'evés nélkül' },
+      { type: 'word',     jp: '学校',         romaji: 'gakkou',           hu: 'iskola' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '行きました',      romaji: 'ikimashita',       hu: 'mentem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_k4_02', level: 'N5', lesson: 'k4', translation: 'Hogyan jutok el a repülőtérre?',
+    tokens: [
+      { type: 'word',     jp: '空港',         romaji: 'kuukou',           hu: 'repülőtér' },
+      { type: 'particle', jp: 'まで',         romaji: 'made',             role: 'until' },
+      { type: 'word',     jp: 'どうやって',      romaji: 'douyatte',         hu: 'hogyan' },
+      { type: 'verb',     jp: '行きますか',      romaji: 'ikimasuka',        hu: 'megyek?' }
+    ],
+    metadata: { function: 'Question', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k4_03', level: 'N5', lesson: 'k4', translation: 'A bátyám ügyesen főz.',
+    tokens: [
+      { type: 'word',     jp: '兄',          romaji: 'ani',              hu: 'bátyám' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '料理',         romaji: 'ryouri',           hu: 'étel' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '作る',         romaji: 'tsukuru',          hu: 'készít' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'nominalizer' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '上手です',       romaji: 'jouzudesu',        hu: 'ügyes' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k4_04', level: 'N5', lesson: 'k4', translation: 'Szeretek úszni.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '泳ぐ',         romaji: 'oyogu',            hu: 'úszik' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'nominalizer' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '好きです',       romaji: 'sukidesu',         hu: 'szeretem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k4_05', level: 'N5', lesson: 'k4', translation: 'Havonta egyszer nézek filmet.',
+    tokens: [
+      { type: 'word',     jp: '月',          romaji: 'tsuki',            hu: 'hónap' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
+      { type: 'word',     jp: '一回',         romaji: 'ikkai',            hu: 'egyszer' },
+      { type: 'word',     jp: '映画',         romaji: 'eiga',             hu: 'film' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '見ます',        romaji: 'mimasu',           hu: 'nézek' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k4_06', level: 'N5', lesson: 'k4', translation: 'Naponta háromszor mosok fogat.',
+    tokens: [
+      { type: 'word',     jp: '一日',         romaji: 'ichinichi',        hu: 'egy nap' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
+      { type: 'word',     jp: '三回',         romaji: 'sankai',           hu: 'háromszor' },
+      { type: 'word',     jp: '歯',          romaji: 'ha',               hu: 'fog' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '磨きます',       romaji: 'migakimasu',       hu: 'mosom' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k4_07', level: 'N5', lesson: 'k4', translation: 'Szabadnapokon többnyire otthon vagyok.',
+    tokens: [
+      { type: 'word',     jp: '休み',         romaji: 'yasumi',           hu: 'pihenő (szabadság)' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '日',          romaji: 'hi',               hu: 'nap' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'たいてい',       romaji: 'taitei',           hu: 'többnyire' },
+      { type: 'word',     jp: '家',          romaji: 'ie',               hu: 'otthon' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'location' },
+      { type: 'verb',     jp: 'います',        romaji: 'imasu',            hu: 'vagyok' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_k4_08', level: 'N5', lesson: 'k4', translation: 'Mit szólna a vasárnaphoz?',
+    tokens: [
+      { type: 'word',     jp: '日曜日',        romaji: 'nichiyoubi',       hu: 'vasárnap' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: 'どうですか',      romaji: 'doudesuka',        hu: 'mit szólna hozzá?' }
+    ],
+    metadata: { function: 'Question', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
+  },
+
   /* ── l25 · 〜だろうと思います · 〜はずです · 〜か · 〜かどうか ── */
   {
     id: 's_l25_01', level: 'N4', lesson: 'l25', translation: 'Azt hiszem, holnap valószínűleg esni fog.',
@@ -4014,6 +5207,103 @@ const NIHONCORE_SENTENCES = [
       { type: 'verb',     jp: '行くの',        romaji: 'ikuno',            hu: 'mész? (magyarázatot kér)' }
     ],
     metadata: { function: 'Question', form: '〜だろうと思います · 〜はずです · 〜か · 〜かどうか', tense: 'Non-Past', register: 'Casual' }
+  },
+
+  /* ── l27 · ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ ── */
+  {
+    id: 's_l27_01', level: 'N4', lesson: 'l27', translation: 'Egy kicsit tudok kanjit olvasni.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '漢字',         romaji: 'kanji',            hu: 'kanji' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'word',     jp: '少し',         romaji: 'sukoshi',          hu: 'egy kicsit' },
+      { type: 'verb',     jp: '読めます',       romaji: 'yomemasu',         hu: 'el tudom olvasni' }
+    ],
+    metadata: { function: 'Affirmative', form: 'ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l27_02', level: 'N4', lesson: 'l27', translation: 'Ebben a könyvtárban tíz kötetig lehet kölcsönözni.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '図書館',        romaji: 'toshokan',         hu: 'könyvtár' },
+      { type: 'word',     jp: 'では',         romaji: 'de wa',            hu: '-ban (ami azt illeti)' },
+      { type: 'word',     jp: '十冊',         romaji: 'jussatsu',         hu: 'tíz kötet' },
+      { type: 'particle', jp: 'まで',         romaji: 'made',             role: 'until' },
+      { type: 'verb',     jp: '借りられます',     romaji: 'kariraremasu',     hu: 'ki lehet kölcsönözni' }
+    ],
+    metadata: { function: 'Affirmative', form: 'ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l27_03', level: 'N4', lesson: 'l27', translation: 'A csípős ételt nem tudom megenni.',
+    tokens: [
+      { type: 'word',     jp: '辛い',         romaji: 'karai',            hu: 'csípős' },
+      { type: 'word',     jp: '料理',         romaji: 'ryouri',           hu: 'étel' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '食べられません',    romaji: 'taberaremasen',    hu: 'nem tudom megenni' }
+    ],
+    metadata: { function: 'Negative', form: 'ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l27_04', level: 'N4', lesson: 'l27', translation: 'Hol vegyek jegyet?',
+    tokens: [
+      { type: 'word',     jp: '切符',         romaji: 'kippu',            hu: 'jegy' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'どこ',         romaji: 'doko',             hu: 'hol' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
+      { type: 'verb',     jp: '買ったら',       romaji: 'kattara',          hu: 'ha veszem' },
+      { type: 'verb',     jp: 'いいですか',      romaji: 'iidesuka',         hu: 'jó? (hol érdemes)' }
+    ],
+    metadata: { function: 'Question', form: 'ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l27_05', level: 'N4', lesson: 'l27', translation: 'Kitől kérdezzem meg?',
+    tokens: [
+      { type: 'word',     jp: 'だれ',         romaji: 'dare',             hu: 'ki' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'receiver' },
+      { type: 'verb',     jp: '聞いたら',       romaji: 'kiitara',          hu: 'ha megkérdezem' },
+      { type: 'verb',     jp: 'いいですか',      romaji: 'iidesuka',         hu: 'jó? (kit érdemes)' }
+    ],
+    metadata: { function: 'Question', form: 'ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l27_06', level: 'N4', lesson: 'l27', translation: 'Egészen biztos, hogy eljön.',
+    tokens: [
+      { type: 'word',     jp: '彼女',         romaji: 'kanojo',           hu: 'ő (nő)' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '来る',         romaji: 'kuru',             hu: 'eljön' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'result' },
+      { type: 'verb',     jp: 'きまっています',    romaji: 'kimatte imasu',    hu: 'biztosra vehető' }
+    ],
+    metadata: { function: 'Affirmative', form: 'ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l27_07', level: 'N4', lesson: 'l27', translation: 'Szabadnapon például takarítok meg mosok.',
+    tokens: [
+      { type: 'word',     jp: '休み',         romaji: 'yasumi',           hu: 'pihenő (szabadság)' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '日',          romaji: 'hi',               hu: 'nap' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '掃除',         romaji: 'souji',            hu: 'takarítás' },
+      { type: 'word',     jp: 'とか',         romaji: 'toka',             hu: 'például (meg ilyesmi)' },
+      { type: 'word',     jp: '洗濯',         romaji: 'sentaku',          hu: 'mosás' },
+      { type: 'word',     jp: 'とか',         romaji: 'toka',             hu: 'például (meg ilyesmi)' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: 'します',        romaji: 'shimasu',          hu: 'csinálok' }
+    ],
+    metadata: { function: 'Affirmative', form: 'ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l27_08', level: 'N4', lesson: 'l27', translation: 'Milyen magas ez a hegy?',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '山',          romaji: 'yama',             hu: 'hegy' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '高さ',         romaji: 'takasa',           hu: 'magasság' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: 'どのくらいですか',   romaji: 'donokurai desu ka', hu: 'mennyi?' }
+    ],
+    metadata: { function: 'Question', form: 'ható alak · 〜たらいいですか · 〜にきまっています · 〜とか · 〜さ', tense: 'Non-Past', register: 'Polite' }
   },
 
   /* ── l29 · 〜ところです · 〜ように言います · 〜ということです · 〜について ── */
@@ -4502,6 +5792,286 @@ const NIHONCORE_SENTENCES = [
     metadata: { function: 'Affirmative', form: '〜かた · 〜かわりに · 〜まま', tense: 'Past', register: 'Polite' }
   },
 
+  /* ── l36 · szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも ── */
+  {
+    id: 's_l36_01', level: 'N4', lesson: 'l36', translation: 'Ezt a templomot ötszáz évvel ezelőtt építették.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '寺',          romaji: 'tera',             hu: 'templom' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '五百年前',       romaji: 'gohyakunenmae',    hu: 'ötszáz évvel ezelőtt' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
+      { type: 'verb',     jp: '建てられました',    romaji: 'tateraremashita',  hu: 'megépítették' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l36_02', level: 'N4', lesson: 'l36', translation: 'Ezt a regényt Nacume Szószeki írta.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '小説',         romaji: 'shousetsu',        hu: 'regény' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '夏目漱石',       romaji: 'natsumesouseki',   hu: 'Nacume Szószeki' },
+      { type: 'word',     jp: 'によって',       romaji: 'ni yotte',         hu: 'által' },
+      { type: 'verb',     jp: '書かれました',     romaji: 'kakaremashita',    hu: 'megírták' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l36_03', level: 'N4', lesson: 'l36', translation: 'Az angolt az egész világon beszélik.',
+    tokens: [
+      { type: 'word',     jp: '英語',         romaji: 'eigo',             hu: 'angol nyelv' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '世界中',        romaji: 'sekaijuu',         hu: 'az egész világ' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
+      { type: 'verb',     jp: '話されています',    romaji: 'hanasarete imasu', hu: 'beszélik' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも', tense: 'Progressive', register: 'Polite' }
+  },
+  {
+    id: 's_l36_04', level: 'N4', lesson: 'l36', translation: 'Az értekezletet a harmadik szinten lévő teremben tartják.',
+    tokens: [
+      { type: 'word',     jp: '会議',         romaji: 'kaigi',            hu: 'értekezlet' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '三階',         romaji: 'sangai',           hu: 'harmadik szint' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '部屋',         romaji: 'heya',             hu: 'terem' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
+      { type: 'verb',     jp: '開かれます',      romaji: 'hirakaremasu',     hu: 'megtartják' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l36_05', level: 'N4', lesson: 'l36', translation: 'Ezt a dalt jól ismerik a fiatalok.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '歌',          romaji: 'uta',              hu: 'dal' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '若い',         romaji: 'wakai',            hu: 'fiatal' },
+      { type: 'word',     jp: '人',          romaji: 'hito',             hu: 'ember' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: 'よく',         romaji: 'yoku',             hu: 'jól' },
+      { type: 'verb',     jp: '知られています',    romaji: 'shirarete imasu',  hu: 'ismerik' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l36_06', level: 'N4', lesson: 'l36', translation: 'Júniustól júliusig sok az eső.',
+    tokens: [
+      { type: 'word',     jp: '六月',         romaji: 'rokugatsu',        hu: 'június' },
+      { type: 'particle', jp: 'から',         romaji: 'kara',             role: 'source' },
+      { type: 'word',     jp: '七月',         romaji: 'shichigatsu',      hu: 'július' },
+      { type: 'word',     jp: 'にかけて',       romaji: 'ni kakete',        hu: '-ig (terjedően)' },
+      { type: 'word',     jp: '雨',          romaji: 'ame',              hu: 'eső' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '多いです',       romaji: 'ooidesu',          hu: 'sok' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l36_07', level: 'N4', lesson: 'l36', translation: 'Nem iszunk egy teát vagy valamit?',
+    tokens: [
+      { type: 'word',     jp: 'お茶',         romaji: 'ocha',             hu: 'tea' },
+      { type: 'particle', jp: 'でも',         romaji: 'demo',             role: 'example' },
+      { type: 'verb',     jp: '飲みませんか',     romaji: 'nomimasenka',      hu: 'nem iszunk?' }
+    ],
+    metadata: { function: 'Question', form: 'szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l36_08', level: 'N4', lesson: 'l36', translation: 'Ezt az autót Németországban gyártották.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez az' },
+      { type: 'word',     jp: '車',          romaji: 'kuruma',           hu: 'autó' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'ドイツ',        romaji: 'doitsu',           hu: 'Németország' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
+      { type: 'verb',     jp: '作られました',     romaji: 'tsukuraremashita', hu: 'gyártották' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (a dolog az alany) · 〜によって · 〜から〜にかけて · 〜でも', tense: 'Past', register: 'Polite' }
+  },
+
+  /* ── l37 · szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか ── */
+  {
+    id: 's_l37_01', level: 'N4', lesson: 'l37', translation: 'Megdicsért az osztályvezető.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '部長',         romaji: 'buchou',           hu: 'osztályvezető' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'verb',     jp: 'ほめられました',    romaji: 'homeraremashita',  hu: 'megdicsértek' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l37_02', level: 'N4', lesson: 'l37', translation: 'Az öcsémet megszidta anyám.',
+    tokens: [
+      { type: 'word',     jp: '弟',          romaji: 'otouto',           hu: 'öcsém' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '母',          romaji: 'haha',             hu: 'anyám' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'verb',     jp: 'しかられました',    romaji: 'shikararemashita', hu: 'megszidták' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l37_03', level: 'N4', lesson: 'l37', translation: 'A vonaton ráléptek a lábamra.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '電車',         romaji: 'densha',           hu: 'vonat' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
+      { type: 'word',     jp: '足',          romaji: 'ashi',             hu: 'láb' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '踏まれました',     romaji: 'fumaremashita',    hu: 'ráléptek (a lábamra)' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l37_04', level: 'N4', lesson: 'l37', translation: 'Egy tolvaj ellopta a pénztárcámat.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '泥棒',         romaji: 'dorobou',          hu: 'tolvaj' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: '財布',         romaji: 'saifu',            hu: 'pénztárca' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '取られました',     romaji: 'toraremashita',    hu: 'ellopták (tőlem)' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l37_05', level: 'N4', lesson: 'l37', translation: 'Hazafelé megáztam.',
+    tokens: [
+      { type: 'word',     jp: '帰り道',        romaji: 'kaerimichi',       hu: 'hazaút' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
+      { type: 'word',     jp: '雨',          romaji: 'ame',              hu: 'eső' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'verb',     jp: '降られました',     romaji: 'furaremashita',    hu: 'megáztam (rám esett)' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l37_06', level: 'N4', lesson: 'l37', translation: 'Éjszaka sírt a gyerek, nem tudtam aludni.',
+    tokens: [
+      { type: 'word',     jp: '夜中',         romaji: 'yonaka',           hu: 'az éjszaka közepe' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
+      { type: 'word',     jp: '子ども',        romaji: 'kodomo',           hu: 'gyerek' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'verb',     jp: '泣かれました',     romaji: 'nakaremashita',    hu: 'sírt (és ez nekem rossz volt)' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l37_07', level: 'N4', lesson: 'l37', translation: 'A barátom meghívott egy buliba.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '友だち',        romaji: 'tomodachi',        hu: 'barát' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: 'パーティー',      romaji: 'paatii',           hu: 'buli' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'goal' },
+      { type: 'verb',     jp: '招待されました',    romaji: 'shoutaisaremashita', hu: 'meghívtak' }
+    ],
+    metadata: { function: 'Affirmative', form: 'szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l37_08', level: 'N4', lesson: 'l37', translation: 'Mi lenne, ha megbeszélnéd a tanárral?',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',           hu: 'tanár' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'receiver' },
+      { type: 'verb',     jp: '相談したら',      romaji: 'soudanshitara',    hu: 'ha megbeszélnéd' },
+      { type: 'verb',     jp: 'どうですか',      romaji: 'doudesuka',        hu: 'mit szólnál?' }
+    ],
+    metadata: { function: 'Question', form: 'szenvedő mondat (az ember az alany) · tárggyal · kellemetlenség · 〜たらどうですか', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── l38 · 〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに ── */
+  {
+    id: 's_l38_01', level: 'N3', lesson: 'l38', translation: 'A tanár úr már hazament.',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',           hu: 'tanár' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: 'もう',         romaji: 'mou',              hu: 'már' },
+      { type: 'verb',     jp: '帰られました',     romaji: 'kaeraremashita',   hu: 'hazament (tiszteleti)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l38_02', level: 'N3', lesson: 'l38', translation: 'Az igazgató úr újságot olvas.',
+    tokens: [
+      { type: 'word',     jp: '社長',         romaji: 'shachou',          hu: 'igazgató' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '新聞',         romaji: 'shinbun',          hu: 'újság' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: 'お読みになります',   romaji: 'oyomini narimasu', hu: 'olvas (tiszteleti)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l38_03', level: 'N3', lesson: 'l38', translation: 'Az osztályvezető a tárgyalóban van.',
+    tokens: [
+      { type: 'word',     jp: '部長',         romaji: 'buchou',           hu: 'osztályvezető' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '会議室',        romaji: 'kaigishitsu',      hu: 'tárgyaló' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'location' },
+      { type: 'verb',     jp: 'いらっしゃいます',   romaji: 'irasshaimasu',     hu: 'tartózkodik (tiszteleti)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l38_04', level: 'N3', lesson: 'l38', translation: 'Mit fogyaszt a tanár úr?',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',           hu: 'tanár' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '何',          romaji: 'nani',             hu: 'mi' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '召し上がりますか',   romaji: 'meshiagarimasuka', hu: 'fogyaszt? (tiszteleti)' }
+    ],
+    metadata: { function: 'Question', form: '〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l38_05', level: 'N3', lesson: 'l38', translation: 'Megnézte ezt a fényképet?',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '写真',         romaji: 'shashin',          hu: 'fénykép' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: 'ご覧になりましたか',  romaji: 'goranni narimashitaka', hu: 'megnézte? (tiszteleti)' }
+    ],
+    metadata: { function: 'Question', form: '〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l38_06', level: 'N3', lesson: 'l38', translation: 'Mit mondott a tanár úr?',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',           hu: 'tanár' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '何',          romaji: 'nan',              hu: 'mi' },
+      { type: 'particle', jp: 'と',          romaji: 'to',               role: 'quotation' },
+      { type: 'verb',     jp: 'おっしゃいましたか',  romaji: 'osshaimashitaka',  hu: 'mondott? (tiszteleti)' }
+    ],
+    metadata: { function: 'Question', form: '〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l38_07', level: 'N3', lesson: 'l38', translation: 'Amíg fiatal vagyok, sokféle országba szeretnék eljutni.',
+    tokens: [
+      { type: 'word',     jp: '若い',         romaji: 'wakai',            hu: 'fiatal' },
+      { type: 'word',     jp: 'うちに',        romaji: 'uchini',           hu: 'amíg (még)' },
+      { type: 'word',     jp: 'いろいろな',      romaji: 'iroirona',         hu: 'sokféle' },
+      { type: 'word',     jp: '国',          romaji: 'kuni',             hu: 'ország' },
+      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
+      { type: 'verb',     jp: '行きたいです',     romaji: 'ikitaidesu',       hu: 'szeretnék menni' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l38_08', level: 'N3', lesson: 'l38', translation: 'Egye meg, amíg meleg!',
+    tokens: [
+      { type: 'word',     jp: '熱い',         romaji: 'atsui',            hu: 'forró' },
+      { type: 'word',     jp: 'うちに',        romaji: 'uchini',           hu: 'amíg (még)' },
+      { type: 'verb',     jp: '食べてください',    romaji: 'tabete kudasai',   hu: 'egye meg, kérem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜れます・〜られます (tiszteleti) · お〜になります · いらっしゃいます · 〜うちに', tense: 'Non-Past', register: 'Polite' }
+  },
+
   /* ── l39 · お〜します · 参ります · 〜やすい · 〜にくい · 〜すぎます ── */
   {
     id: 's_l39_01', level: 'N3', lesson: 'l39', translation: 'Viszem a csomagját.',
@@ -4957,6 +6527,383 @@ const NIHONCORE_SENTENCES = [
     metadata: { function: 'Affirmative', form: 'parancsoló alak · 〜な · 〜ように · 〜ようにします · 〜とおりに', tense: 'Past', register: 'Polite' }
   },
 
+  /* ── l44 · 〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで ── */
+  {
+    id: 's_l44_01', level: 'N3', lesson: 'l44', translation: 'Az ígéretet be kell tartani.',
+    tokens: [
+      { type: 'word',     jp: '約束',         romaji: 'yakusoku',         hu: 'ígéret' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '守る',         romaji: 'mamoru',           hu: 'betart' },
+      { type: 'verb',     jp: 'べきです',       romaji: 'bekidesu',         hu: 'illik (kell)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l44_02', level: 'N3', lesson: 'l44', translation: 'Nem illik másokról rosszat mondani.',
+    tokens: [
+      { type: 'word',     jp: '人',          romaji: 'hito',             hu: 'ember (mások)' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '悪口',         romaji: 'warukuchi',        hu: 'rosszindulatú beszéd' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '言う',         romaji: 'iu',               hu: 'mond' },
+      { type: 'verb',     jp: 'べきではありません',  romaji: 'beki dewa arimasen', hu: 'nem illik' }
+    ],
+    metadata: { function: 'Negative', form: '〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l44_03', level: 'N3', lesson: 'l44', translation: 'Reggeli nélkül indultam el otthonról.',
+    tokens: [
+      { type: 'word',     jp: '朝ご飯',        romaji: 'asagohan',         hu: 'reggeli' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '食べずに',       romaji: 'tabezuni',         hu: 'evés nélkül' },
+      { type: 'verb',     jp: '出かけました',     romaji: 'dekakemashita',    hu: 'elmentem otthonról' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l44_04', level: 'N3', lesson: 'l44', translation: 'Szótár nélkül olvastam el.',
+    tokens: [
+      { type: 'word',     jp: '辞書',         romaji: 'jisho',            hu: 'szótár' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '使わずに',       romaji: 'tsukawazuni',      hu: 'használat nélkül' },
+      { type: 'verb',     jp: '読みました',      romaji: 'yomimashita',      hu: 'elolvastam' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l44_05', level: 'N3', lesson: 'l44', translation: 'Ez a város az állomás körül fejlődött ki.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '町',          romaji: 'machi',            hu: 'város' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '駅',          romaji: 'eki',              hu: 'állomás' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'word',     jp: '中心に',        romaji: 'chuushinni',       hu: 'középpontjában (köré)' },
+      { type: 'verb',     jp: '発展しました',     romaji: 'hattenshimashita', hu: 'fejlődött' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l44_06', level: 'N3', lesson: 'l44', translation: 'Főleg a fiatalok körében népszerű.',
+    tokens: [
+      { type: 'word',     jp: '若い',         romaji: 'wakai',            hu: 'fiatal' },
+      { type: 'word',     jp: '人',          romaji: 'hito',             hu: 'ember' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'word',     jp: '中心に',        romaji: 'chuushinni',       hu: 'főleg (középpontjában)' },
+      { type: 'word',     jp: '人気',         romaji: 'ninki',            hu: 'népszerűség' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: 'あります',       romaji: 'arimasu',          hu: 'van' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l44_07', level: 'N3', lesson: 'l44', translation: 'Nem tudtam az utat. Ezért megkérdeztem az állomás dolgozóját.',
+    tokens: [
+      { type: 'word',     jp: '道',          romaji: 'michi',            hu: 'út' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '分かりませんでした',  romaji: 'wakarimasendeshita', hu: 'nem tudtam' },
+      { type: 'word',     jp: 'そこで',        romaji: 'sokode',           hu: 'ezért (ekkor)' },
+      { type: 'word',     jp: '駅員',         romaji: 'ekiin',            hu: 'állomási dolgozó' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'receiver' },
+      { type: 'verb',     jp: '聞きました',      romaji: 'kikimashita',      hu: 'megkérdeztem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l44_08', level: 'N3', lesson: 'l44', translation: 'Ha baj van, meg kell beszélni valakivel.',
+    tokens: [
+      { type: 'verb',     jp: '困った',        romaji: 'komatta',          hu: 'bajban van' },
+      { type: 'word',     jp: 'とき',         romaji: 'toki',             hu: 'amikor' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'verb',     jp: '相談する',       romaji: 'soudansuru',       hu: 'megbeszél' },
+      { type: 'verb',     jp: 'べきです',       romaji: 'bekidesu',         hu: 'illik (kell)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜べきです · 〜べきではありません · 〜ずに · 〜を中心に · そこで', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── l45 · 〜ようとします · műveltető alak · 〜がります · 〜たがります ── */
+  {
+    id: 's_l45_01', level: 'N3', lesson: 'l45', translation: 'Épp indulni akartam, amikor megszólalt a telefon.',
+    tokens: [
+      { type: 'verb',     jp: '出かけようと',     romaji: 'dekakeyouto',      hu: 'el akartam indulni' },
+      { type: 'verb',     jp: 'した',         romaji: 'shita',            hu: '(épp) tettem' },
+      { type: 'word',     jp: 'とき',         romaji: 'toki',             hu: 'amikor' },
+      { type: 'word',     jp: '電話',         romaji: 'denwa',            hu: 'telefon' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'verb',     jp: '鳴りました',      romaji: 'narimashita',      hu: 'megszólalt' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ようとします · műveltető alak · 〜がります · 〜たがります', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l45_02', level: 'N3', lesson: 'l45', translation: 'Az anya megeteti a gyerekkel a zöldséget.',
+    tokens: [
+      { type: 'word',     jp: '母',          romaji: 'haha',             hu: 'az anya' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '子ども',        romaji: 'kodomo',           hu: 'gyerek' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: '野菜',         romaji: 'yasai',            hu: 'zöldség' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '食べさせます',     romaji: 'tabesasemasu',     hu: 'megeteti' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ようとします · műveltető alak · 〜がります · 〜たがります', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l45_03', level: 'N3', lesson: 'l45', translation: 'A tanár felállította a diákot.',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',           hu: 'tanár' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '学生',         romaji: 'gakusei',          hu: 'diák' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '立たせました',     romaji: 'tatasemashita',    hu: 'felállította' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ようとします · műveltető alak · 〜がります · 〜たがります', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l45_04', level: 'N3', lesson: 'l45', translation: 'Az osztályvezető kiküldetésbe küldte Tanaka urat.',
+    tokens: [
+      { type: 'word',     jp: '部長',         romaji: 'buchou',           hu: 'osztályvezető' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '田中さん',       romaji: 'tanaka san',       hu: 'Tanaka úr' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '出張させました',    romaji: 'shutchousasemashita', hu: 'kiküldetésbe küldte' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ようとします · műveltető alak · 〜がります · 〜たがります', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l45_05', level: 'N3', lesson: 'l45', translation: 'A gyerekek édességet akarnak enni.',
+    tokens: [
+      { type: 'word',     jp: '子ども',        romaji: 'kodomo',           hu: 'gyerek' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '甘い',         romaji: 'amai',             hu: 'édes' },
+      { type: 'word',     jp: 'もの',         romaji: 'mono',             hu: 'dolog' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '食べたがります',    romaji: 'tabetagarimasu',   hu: 'enni akar (látszik rajta)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ようとします · műveltető alak · 〜がります · 〜たがります', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l45_06', level: 'N3', lesson: 'l45', translation: 'Az öcsém új játékot szeretne.',
+    tokens: [
+      { type: 'word',     jp: '弟',          romaji: 'otouto',           hu: 'öcsém' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '新しい',        romaji: 'atarashii',        hu: 'új' },
+      { type: 'word',     jp: 'ゲーム',        romaji: 'geemu',            hu: 'játék' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: 'ほしがっています',   romaji: 'hoshigatte imasu', hu: 'szeretne (látszik rajta)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ようとします · műveltető alak · 〜がります · 〜たがります', tense: 'Progressive', register: 'Polite' }
+  },
+  {
+    id: 's_l45_07', level: 'N3', lesson: 'l45', translation: 'A kutya ki akar menni.',
+    tokens: [
+      { type: 'word',     jp: '犬',          romaji: 'inu',              hu: 'kutya' },
+      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
+      { type: 'word',     jp: '外',          romaji: 'soto',             hu: 'kint' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'goal' },
+      { type: 'verb',     jp: '出たがっています',   romaji: 'detagatte imasu',  hu: 'ki akar menni' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ようとします · műveltető alak · 〜がります · 〜たがります', tense: 'Progressive', register: 'Polite' }
+  },
+  {
+    id: 's_l45_08', level: 'N3', lesson: 'l45', translation: 'Vicceltem, és mindenkit megnevettettem.',
+    tokens: [
+      { type: 'word',     jp: '冗談',         romaji: 'joudan',           hu: 'vicc' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '言って',        romaji: 'itte',             hu: 'mondtam, és' },
+      { type: 'word',     jp: 'みんな',        romaji: 'minna',            hu: 'mindenki' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '笑わせました',     romaji: 'warawasemashita',  hu: 'megnevettettem' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜ようとします · műveltető alak · 〜がります · 〜たがります', tense: 'Past', register: 'Polite' }
+  },
+
+  /* ── l46 · 〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか ── */
+  {
+    id: 's_l46_01', level: 'N3', lesson: 'l46', translation: 'Csináld meg gyorsan a leckét!',
+    tokens: [
+      { type: 'word',     jp: '早く',         romaji: 'hayaku',           hu: 'gyorsan' },
+      { type: 'word',     jp: '宿題',         romaji: 'shukudai',         hu: 'házi feladat' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: 'しなさい',       romaji: 'shinasai',         hu: 'csináld meg!' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか', tense: 'Non-Past', register: 'Casual' }
+  },
+  {
+    id: 's_l46_02', level: 'N3', lesson: 'l46', translation: 'Egyél több zöldséget!',
+    tokens: [
+      { type: 'word',     jp: 'もっと',        romaji: 'motto',            hu: 'több (még)' },
+      { type: 'word',     jp: '野菜',         romaji: 'yasai',            hu: 'zöldség' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '食べなさい',      romaji: 'tabenasai',        hu: 'egyél!' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか', tense: 'Non-Past', register: 'Casual' }
+  },
+  {
+    id: 's_l46_03', level: 'N3', lesson: 'l46', translation: 'Apám engedi, hogy azt csináljam, amit szeretek.',
+    tokens: [
+      { type: 'word',     jp: '父',          romaji: 'chichi',           hu: 'apám' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'receiver' },
+      { type: 'word',     jp: '好きな',        romaji: 'sukina',           hu: 'kedvelt (amit szeretek)' },
+      { type: 'word',     jp: 'こと',         romaji: 'koto',             hu: 'dolog' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: 'させてくれます',    romaji: 'sasete kuremasu',  hu: 'engedi, hogy csináljam' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l46_04', level: 'N3', lesson: 'l46', translation: 'Anyám csak egy órát enged játszani az öcsémnek.',
+    tokens: [
+      { type: 'word',     jp: '母',          romaji: 'haha',             hu: 'anyám' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '弟',          romaji: 'otouto',           hu: 'öcsém' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: 'ゲーム',        romaji: 'geemu',            hu: 'játék' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'word',     jp: '一時間',        romaji: 'ichijikan',        hu: 'egy óra (időtartam)' },
+      { type: 'word',     jp: 'だけ',         romaji: 'dake',             hu: 'csak' },
+      { type: 'verb',     jp: 'させます',       romaji: 'sasemasu',         hu: 'engedi (játszani)' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l46_05', level: 'N3', lesson: 'l46', translation: 'Hadd magyarázzam el én!',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'verb',     jp: '説明させてください',  romaji: 'setsumeisasete kudasai', hu: 'hadd magyarázzam el' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l46_06', level: 'N3', lesson: 'l46', translation: 'Hadd gondolkodjam egy kicsit ezen az ügyön!',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez az' },
+      { type: 'word',     jp: '件',          romaji: 'ken',              hu: 'ügy' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '少し',         romaji: 'sukoshi',          hu: 'egy kicsit' },
+      { type: 'verb',     jp: '考えさせてください',  romaji: 'kangaesasete kudasai', hu: 'hadd gondolkodjam rajta' }
+    ],
+    metadata: { function: 'Affirmative', form: '〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l46_07', level: 'N3', lesson: 'l46', translation: 'Megengedné, hogy ma korábban hazamenjek?',
+    tokens: [
+      { type: 'word',     jp: '今日',         romaji: 'kyou',             hu: 'ma' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '早く',         romaji: 'hayaku',           hu: 'korán' },
+      { type: 'verb',     jp: '帰らせていただけませんか', romaji: 'kaerasete itadakemasenka', hu: 'megengedné, hogy hazamenjek?' }
+    ],
+    metadata: { function: 'Question', form: '〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか', tense: 'Non-Past', register: 'Polite' }
+  },
+  {
+    id: 's_l46_08', level: 'N3', lesson: 'l46', translation: 'Megengedné, hogy használjam ezt a tárgyalót?',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '会議室',        romaji: 'kaigishitsu',      hu: 'tárgyaló' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '使わせていただけませんか', romaji: 'tsukawasete itadakemasenka', hu: 'megengedné, hogy használjam?' }
+    ],
+    metadata: { function: 'Question', form: '〜なさい · műveltető: engedély · 〜させてください · 〜させていただけませんか', tense: 'Non-Past', register: 'Polite' }
+  },
+
+  /* ── l47 · műveltető-szenvedő alak · rövid alak · 考えさせられます ── */
+  {
+    id: 's_l47_01', level: 'N3', lesson: 'l47', translation: 'Anyám megetette velem a zöldséget.',
+    tokens: [
+      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
+      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
+      { type: 'word',     jp: '母',          romaji: 'haha',             hu: 'anyám' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: '野菜',         romaji: 'yasai',            hu: 'zöldség' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '食べさせられました',  romaji: 'tabesaseraremashita', hu: 'megetették velem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'műveltető-szenvedő alak · rövid alak · 考えさせられます', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l47_02', level: 'N3', lesson: 'l47', translation: 'Gyerekkoromban minden nap zongorázni kellett gyakorolnom.',
+    tokens: [
+      { type: 'word',     jp: '子ども',        romaji: 'kodomo',           hu: 'gyerek' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: 'とき',         romaji: 'toki',             hu: 'idején' },
+      { type: 'word',     jp: '毎日',         romaji: 'mainichi',         hu: 'minden nap' },
+      { type: 'word',     jp: 'ピアノ',        romaji: 'piano',            hu: 'zongora' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '練習させられました',  romaji: 'renshuusaseraremashita', hu: 'gyakoroltattak velem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'műveltető-szenvedő alak · rövid alak · 考えさせられます', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l47_03', level: 'N3', lesson: 'l47', translation: 'Egy egész órát várakoztattak az állomáson.',
+    tokens: [
+      { type: 'word',     jp: '駅',          romaji: 'eki',              hu: 'állomás' },
+      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
+      { type: 'word',     jp: '一時間',        romaji: 'ichijikan',        hu: 'egy óra (időtartam)' },
+      { type: 'particle', jp: 'も',          romaji: 'mo',               role: 'even/also' },
+      { type: 'verb',     jp: '待たされました',    romaji: 'matasaremashita',  hu: 'megvárakoztattak' }
+    ],
+    metadata: { function: 'Affirmative', form: 'műveltető-szenvedő alak · rövid alak · 考えさせられます', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l47_04', level: 'N3', lesson: 'l47', translation: 'Az osztályvezető megitatott velem egy italt.',
+    tokens: [
+      { type: 'word',     jp: '部長',         romaji: 'buchou',           hu: 'osztályvezető' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: 'お酒',         romaji: 'osake',            hu: 'alkohol' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '飲まされました',    romaji: 'nomasaremashita',  hu: 'megitatták velem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'műveltető-szenvedő alak · rövid alak · 考えさせられます', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l47_05', level: 'N3', lesson: 'l47', translation: 'A tanár újraíratta velem a fogalmazást.',
+    tokens: [
+      { type: 'word',     jp: '先生',         romaji: 'sensei',           hu: 'tanár' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: '作文',         romaji: 'sakubun',          hu: 'fogalmazás' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '書き直させられました', romaji: 'kakinaosaseraremashita', hu: 'újraíratták velem' }
+    ],
+    metadata: { function: 'Affirmative', form: 'műveltető-szenvedő alak · rövid alak · 考えさせられます', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l47_06', level: 'N3', lesson: 'l47', translation: 'Ez a film sok mindenen elgondolkodtatott.',
+    tokens: [
+      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
+      { type: 'word',     jp: '映画',         romaji: 'eiga',             hu: 'film' },
+      { type: 'word',     jp: 'には',         romaji: 'ni wa',            hu: '-nál (ami azt illeti)' },
+      { type: 'word',     jp: 'いろいろ',       romaji: 'iroiro',           hu: 'sok mindenen' },
+      { type: 'verb',     jp: '考えさせられました',  romaji: 'kangaesaseraremashita', hu: 'elgondolkodtatott' }
+    ],
+    metadata: { function: 'Affirmative', form: 'műveltető-szenvedő alak · rövid alak · 考えさせられます', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l47_07', level: 'N3', lesson: 'l47', translation: 'Az idősebb társam velem vitette a csomagot.',
+    tokens: [
+      { type: 'word',     jp: '先輩',         romaji: 'senpai',           hu: 'idősebb társ (szenpai)' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: '荷物',         romaji: 'nimotsu',          hu: 'csomag' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '持たされました',    romaji: 'motasaremashita',  hu: 'velem vitették' }
+    ],
+    metadata: { function: 'Affirmative', form: 'műveltető-szenvedő alak · rövid alak · 考えさせられます', tense: 'Past', register: 'Polite' }
+  },
+  {
+    id: 's_l47_08', level: 'N3', lesson: 'l47', translation: 'Kénytelen voltam segíteni a bátyámnak szobát takarítani.',
+    tokens: [
+      { type: 'word',     jp: '兄',          romaji: 'ani',              hu: 'bátyám' },
+      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'agent' },
+      { type: 'word',     jp: '部屋',         romaji: 'heya',             hu: 'szoba' },
+      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
+      { type: 'word',     jp: '掃除',         romaji: 'souji',            hu: 'takarítás' },
+      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
+      { type: 'verb',     jp: '手伝わされました',   romaji: 'tetsudawasaremashita', hu: 'kénytelen voltam segíteni' }
+    ],
+    metadata: { function: 'Affirmative', form: 'műveltető-szenvedő alak · rövid alak · 考えさせられます', tense: 'Past', register: 'Polite' }
+  },
+
   /* ── l48 · 〜をきっかけに · 〜せいで · 〜ば〜ほど · 〜として ── */
   {
     id: 's_l48_01', level: 'N3', lesson: 'l48', translation: 'Egy utazás hatására kezdtem japánul tanulni.',
@@ -5049,393 +6996,6 @@ const NIHONCORE_SENTENCES = [
       { type: 'verb',     jp: 'ありがとうございます', romaji: 'arigatou gozaimasu', hu: 'köszönöm' }
     ],
     metadata: { function: 'Affirmative', form: '〜をきっかけに · 〜せいで · 〜ば〜ほど · 〜として', tense: 'Non-Past', register: 'Polite' }
-  },
-
-  /* ── k1 · けど · でも · しかし · それから · だから · それに · それでも ── */
-  {
-    id: 's_k1_01', level: 'N5', lesson: 'k1', translation: 'Ma álmos vagyok, de megcsinálom a leckét.',
-    tokens: [
-      { type: 'word',     jp: '今日',         romaji: 'kyou',             hu: 'ma' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '眠い',         romaji: 'nemui',            hu: 'álmos vagyok' },
-      { type: 'word',     jp: 'けど',         romaji: 'kedo',             hu: 'de' },
-      { type: 'word',     jp: '宿題',         romaji: 'shukudai',         hu: 'házi feladat' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: 'します',        romaji: 'shimasu',          hu: 'megcsinálom' }
-    ],
-    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k1_02', level: 'N5', lesson: 'k1', translation: 'Ez a film hosszú. De érdekes.',
-    tokens: [
-      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
-      { type: 'word',     jp: '映画',         romaji: 'eiga',             hu: 'film' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '長いです',       romaji: 'nagaidesu',        hu: 'hosszú' },
-      { type: 'word',     jp: 'でも',         romaji: 'demo',             hu: 'de' },
-      { type: 'verb',     jp: 'おもしろいです',    romaji: 'omoshiroidesu',    hu: 'érdekes' }
-    ],
-    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k1_03', level: 'N5', lesson: 'k1', translation: 'Reggel kávét ittam. Aztán bementem dolgozni.',
-    tokens: [
-      { type: 'word',     jp: '朝',          romaji: 'asa',              hu: 'reggel' },
-      { type: 'word',     jp: 'コーヒー',       romaji: 'koohii',           hu: 'kávé' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '飲みました',      romaji: 'nomimashita',      hu: 'ittam' },
-      { type: 'word',     jp: 'それから',       romaji: 'sorekara',         hu: 'aztán' },
-      { type: 'word',     jp: '会社',         romaji: 'kaisha',           hu: 'cég (munkahely)' },
-      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
-      { type: 'verb',     jp: '行きました',      romaji: 'ikimashita',       hu: 'mentem' }
-    ],
-    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Past', register: 'Polite' }
-  },
-  {
-    id: 's_k1_04', level: 'N5', lesson: 'k1', translation: 'Lázam van. Ezért ma otthon maradok.',
-    tokens: [
-      { type: 'word',     jp: '熱',          romaji: 'netsu',            hu: 'láz' },
-      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
-      { type: 'verb',     jp: 'あります',       romaji: 'arimasu',          hu: 'van' },
-      { type: 'word',     jp: 'だから',        romaji: 'dakara',           hu: 'ezért' },
-      { type: 'word',     jp: '今日',         romaji: 'kyou',             hu: 'ma' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '休みます',       romaji: 'yasumimasu',       hu: 'pihenek (nem megyek be)' }
-    ],
-    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k1_05', level: 'N5', lesson: 'k1', translation: 'Ez a lakás közel van az állomáshoz. Ráadásul olcsó.',
-    tokens: [
-      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez a' },
-      { type: 'word',     jp: 'アパート',       romaji: 'apaato',           hu: 'lakás' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'word',     jp: '駅',          romaji: 'eki',              hu: 'állomás' },
-      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'target' },
-      { type: 'verb',     jp: '近いです',       romaji: 'chikaidesu',       hu: 'közel van' },
-      { type: 'word',     jp: 'それに',        romaji: 'soreni',           hu: 'ráadásul' },
-      { type: 'verb',     jp: '安いです',       romaji: 'yasuidesu',        hu: 'olcsó' }
-    ],
-    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k1_06', level: 'N5', lesson: 'k1', translation: 'Sokszor gyakoroltam. Mégsem megy.',
-    tokens: [
-      { type: 'word',     jp: '何回も',        romaji: 'nankaimo',         hu: 'sokszor' },
-      { type: 'verb',     jp: '練習しました',     romaji: 'renshuushimashita', hu: 'gyakoroltam' },
-      { type: 'word',     jp: 'それでも',       romaji: 'soredemo',         hu: 'mégis' },
-      { type: 'verb',     jp: 'できません',      romaji: 'dekimasen',        hu: 'nem megy' }
-    ],
-    metadata: { function: 'Negative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k1_07', level: 'N5', lesson: 'k1', translation: 'A japán nehéz. Azonban élvezetes.',
-    tokens: [
-      { type: 'word',     jp: '日本語',        romaji: 'nihongo',          hu: 'japán nyelv' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '難しいです',      romaji: 'muzukashiidesu',   hu: 'nehéz' },
-      { type: 'word',     jp: 'しかし',        romaji: 'shikashi',         hu: 'azonban' },
-      { type: 'verb',     jp: '楽しいです',      romaji: 'tanoshiidesu',     hu: 'élvezetes' }
-    ],
-    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k1_08', level: 'N5', lesson: 'k1', translation: 'Kitakarítottam a szobát. És mostam is.',
-    tokens: [
-      { type: 'word',     jp: '部屋',         romaji: 'heya',             hu: 'szoba' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '掃除しました',     romaji: 'soujishimashita',  hu: 'kitakarítottam' },
-      { type: 'word',     jp: 'そして',        romaji: 'soshite',          hu: 'és' },
-      { type: 'word',     jp: '洗濯',         romaji: 'sentaku',          hu: 'mosás' },
-      { type: 'particle', jp: 'も',          romaji: 'mo',               role: 'inclusion' },
-      { type: 'verb',     jp: 'しました',       romaji: 'shimashita',       hu: 'megcsináltam' }
-    ],
-    metadata: { function: 'Affirmative', form: 'けど · でも · しかし · それから · だから · それに · それでも', tense: 'Past', register: 'Polite' }
-  },
-
-  /* ── k2 · 〜ね · 〜よ · 〜よね ── */
-  {
-    id: 's_k2_01', level: 'N5', lesson: 'k2', translation: 'Ma szép idő van, ugye?',
-    tokens: [
-      { type: 'word',     jp: '今日',         romaji: 'kyou',             hu: 'ma' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'word',     jp: 'いい',         romaji: 'ii',               hu: 'jó' },
-      { type: 'verb',     jp: '天気です',       romaji: 'tenkidesu',        hu: 'idő van' },
-      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
-    ],
-    metadata: { function: 'Question', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k2_02', level: 'N5', lesson: 'k2', translation: 'Vigyázz, ez az út veszélyes!',
-    tokens: [
-      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez az' },
-      { type: 'word',     jp: '道',          romaji: 'michi',            hu: 'út' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '危ないです',      romaji: 'abunaidesu',       hu: 'veszélyes' },
-      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k2_03', level: 'N5', lesson: 'k2', translation: 'Tanaka úr esernyője ott van, mondom.',
-    tokens: [
-      { type: 'word',     jp: '田中さん',       romaji: 'tanaka san',       hu: 'Tanaka úr' },
-      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
-      { type: 'word',     jp: '傘',          romaji: 'kasa',             hu: 'esernyő' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: 'あそこです',      romaji: 'asokodesu',        hu: 'ott van' },
-      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k2_04', level: 'N5', lesson: 'k2', translation: 'Csípős ez az étel, ugye?',
-    tokens: [
-      { type: 'word',     jp: 'この',         romaji: 'kono',             hu: 'ez az' },
-      { type: 'word',     jp: '料理',         romaji: 'ryouri',           hu: 'étel' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '辛いです',       romaji: 'karaidesu',        hu: 'csípős' },
-      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
-    ],
-    metadata: { function: 'Question', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k2_05', level: 'N5', lesson: 'k2', translation: 'Figyelj, megjött a busz!',
-    tokens: [
-      { type: 'word',     jp: 'バス',         romaji: 'basu',             hu: 'busz' },
-      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
-      { type: 'verb',     jp: '来ました',       romaji: 'kimashita',        hu: 'megjött' },
-      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ね · 〜よ · 〜よね', tense: 'Past', register: 'Polite' }
-  },
-  {
-    id: 's_k2_06', level: 'N5', lesson: 'k2', translation: 'Úgy tudom, a vizsga jövő héten van, ugye?',
-    tokens: [
-      { type: 'word',     jp: '試験',         romaji: 'shiken',           hu: 'vizsga' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '来週です',       romaji: 'raishuudesu',      hu: 'jövő héten van' },
-      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' },
-      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
-    ],
-    metadata: { function: 'Question', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k2_07', level: 'N5', lesson: 'k2', translation: 'A japán nyár meleg, ugye?',
-    tokens: [
-      { type: 'word',     jp: '日本',         romaji: 'nihon',            hu: 'Japán' },
-      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
-      { type: 'word',     jp: '夏',          romaji: 'natsu',            hu: 'nyár' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '暑いです',       romaji: 'atsuidesu',        hu: 'meleg' },
-      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
-    ],
-    metadata: { function: 'Question', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k2_08', level: 'N5', lesson: 'k2', translation: 'Hagyd csak, viszem a csomagot!',
-    tokens: [
-      { type: 'word',     jp: '荷物',         romaji: 'nimotsu',          hu: 'csomag' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '持ちます',       romaji: 'mochimasu',        hu: 'viszem' },
-      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ね · 〜よ · 〜よね', tense: 'Non-Past', register: 'Polite' }
-  },
-
-  /* ── k3 · 〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない ── */
-  {
-    id: 's_k3_01', level: 'N4', lesson: 'k3', translation: 'Már haza kell mennem.',
-    tokens: [
-      { type: 'word',     jp: 'もう',         romaji: 'mou',              hu: 'már' },
-      { type: 'word',     jp: '家',          romaji: 'ie',               hu: 'haza' },
-      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'goal' },
-      { type: 'verb',     jp: '帰らなくちゃ',     romaji: 'kaeranakucha',     hu: 'haza kell mennem' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Casual' }
-  },
-  {
-    id: 's_k3_02', level: 'N4', lesson: 'k3', translation: 'Holnapig be kell adnom a beszámolót.',
-    tokens: [
-      { type: 'word',     jp: '明日',         romaji: 'ashita',           hu: 'holnap' },
-      { type: 'word',     jp: 'までに',        romaji: 'made ni',          hu: '-ig (határidő)' },
-      { type: 'word',     jp: 'レポート',       romaji: 'repooto',          hu: 'beszámoló' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '出さなきゃ',      romaji: 'dasanakya',        hu: 'be kell adnom' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Casual' }
-  },
-  {
-    id: 's_k3_03', level: 'N4', lesson: 'k3', translation: 'Jaj, elfelejtettem a leckét.',
-    tokens: [
-      { type: 'word',     jp: '宿題',         romaji: 'shukudai',         hu: 'házi feladat' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '忘れちゃった',     romaji: 'wasurechatta',     hu: 'elfelejtettem (jaj)' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Past', register: 'Casual' }
-  },
-  {
-    id: 's_k3_04', level: 'N4', lesson: 'k3', translation: 'Az öcsém megette a süteményemet.',
-    tokens: [
-      { type: 'word',     jp: '弟',          romaji: 'otouto',           hu: 'öcsém' },
-      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
-      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
-      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
-      { type: 'word',     jp: 'ケーキ',        romaji: 'keeki',            hu: 'sütemény' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '食べちゃった',     romaji: 'tabechatta',       hu: 'megette (sajnos)' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Past', register: 'Casual' }
-  },
-  {
-    id: 's_k3_05', level: 'N4', lesson: 'k3', translation: 'Mit nézel most?',
-    tokens: [
-      { type: 'word',     jp: '今',          romaji: 'ima',              hu: 'most' },
-      { type: 'word',     jp: '何',          romaji: 'nani',             hu: 'mi' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '見てるの',       romaji: 'miteruno',         hu: 'nézel? (éppen)' }
-    ],
-    metadata: { function: 'Question', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Progressive', register: 'Casual' }
-  },
-  {
-    id: 's_k3_06', level: 'N4', lesson: 'k3', translation: 'A nővérem Tokióban lakik.',
-    tokens: [
-      { type: 'word',     jp: '姉',          romaji: 'ane',              hu: 'nővérem' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'word',     jp: '東京',         romaji: 'toukyou',          hu: 'Tokió' },
-      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'location' },
-      { type: 'verb',     jp: '住んでます',      romaji: 'sundemasu',        hu: 'lakik' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k3_07', level: 'N4', lesson: 'k3', translation: 'Megveszem előre a jegyet, jó?',
-    tokens: [
-      { type: 'word',     jp: '切符',         romaji: 'kippu',            hu: 'jegy' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '買っとく',       romaji: 'kattoku',          hu: 'megveszem előre' },
-      { type: 'particle', jp: 'ね',          romaji: 'ne',               role: 'confirmer' }
-    ],
-    metadata: { function: 'Question', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Casual' }
-  },
-  {
-    id: 's_k3_08', level: 'N4', lesson: 'k3', translation: 'Itt nem szabad dohányozni!',
-    tokens: [
-      { type: 'word',     jp: 'ここ',         romaji: 'koko',             hu: 'itt' },
-      { type: 'particle', jp: 'で',          romaji: 'de',               role: 'location of action' },
-      { type: 'word',     jp: 'たばこ',        romaji: 'tabako',           hu: 'cigaretta' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '吸っちゃいけない',   romaji: 'sutchaikenai',     hu: 'nem szabad szívni' },
-      { type: 'particle', jp: 'よ',          romaji: 'yo',               role: 'assertion' }
-    ],
-    metadata: { function: 'Negative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Casual' }
-  },
-  {
-    id: 's_k3_09', level: 'N4', lesson: 'k3', translation: 'Minden nap át kell ismételnem a kanjikat.',
-    tokens: [
-      { type: 'word',     jp: '毎日',         romaji: 'mainichi',         hu: 'minden nap' },
-      { type: 'word',     jp: '漢字',         romaji: 'kanji',            hu: 'kanji' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '復習しなくてはいけません', romaji: 'fukushuu shinakute wa ikemasen', kana: 'ふくしゅうしなくてはいけません', hu: 'át kell ismételnem' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜なくちゃ · 〜なきゃ · 〜ちゃう · 〜てる · 〜とく · 〜ちゃいけない', tense: 'Non-Past', register: 'Polite' }
-  },
-
-  /* ── k4 · 〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい ── */
-  {
-    id: 's_k4_01', level: 'N5', lesson: 'k4', translation: 'Reggeli nélkül mentem iskolába.',
-    tokens: [
-      { type: 'word',     jp: '朝ご飯',        romaji: 'asagohan',         hu: 'reggeli' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '食べないで',      romaji: 'tabenaide',        hu: 'evés nélkül' },
-      { type: 'word',     jp: '学校',         romaji: 'gakkou',           hu: 'iskola' },
-      { type: 'particle', jp: 'へ',          romaji: 'e',                role: 'direction' },
-      { type: 'verb',     jp: '行きました',      romaji: 'ikimashita',       hu: 'mentem' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Past', register: 'Polite' }
-  },
-  {
-    id: 's_k4_02', level: 'N5', lesson: 'k4', translation: 'Hogyan jutok el a repülőtérre?',
-    tokens: [
-      { type: 'word',     jp: '空港',         romaji: 'kuukou',           hu: 'repülőtér' },
-      { type: 'particle', jp: 'まで',         romaji: 'made',             role: 'until' },
-      { type: 'word',     jp: 'どうやって',      romaji: 'douyatte',         hu: 'hogyan' },
-      { type: 'verb',     jp: '行きますか',      romaji: 'ikimasuka',        hu: 'megyek?' }
-    ],
-    metadata: { function: 'Question', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k4_03', level: 'N5', lesson: 'k4', translation: 'A bátyám ügyesen főz.',
-    tokens: [
-      { type: 'word',     jp: '兄',          romaji: 'ani',              hu: 'bátyám' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'word',     jp: '料理',         romaji: 'ryouri',           hu: 'étel' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '作る',         romaji: 'tsukuru',          hu: 'készít' },
-      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'nominalizer' },
-      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
-      { type: 'verb',     jp: '上手です',       romaji: 'jouzudesu',        hu: 'ügyes' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k4_04', level: 'N5', lesson: 'k4', translation: 'Szeretek úszni.',
-    tokens: [
-      { type: 'word',     jp: '私',          romaji: 'watashi',          hu: 'én' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: '泳ぐ',         romaji: 'oyogu',            hu: 'úszik' },
-      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'nominalizer' },
-      { type: 'particle', jp: 'が',          romaji: 'ga',               role: 'subject' },
-      { type: 'verb',     jp: '好きです',       romaji: 'sukidesu',         hu: 'szeretem' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k4_05', level: 'N5', lesson: 'k4', translation: 'Havonta egyszer nézek filmet.',
-    tokens: [
-      { type: 'word',     jp: '月',          romaji: 'tsuki',            hu: 'hónap' },
-      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
-      { type: 'word',     jp: '一回',         romaji: 'ikkai',            hu: 'egyszer' },
-      { type: 'word',     jp: '映画',         romaji: 'eiga',             hu: 'film' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '見ます',        romaji: 'mimasu',           hu: 'nézek' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k4_06', level: 'N5', lesson: 'k4', translation: 'Naponta háromszor mosok fogat.',
-    tokens: [
-      { type: 'word',     jp: '一日',         romaji: 'ichinichi',        hu: 'egy nap' },
-      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'time' },
-      { type: 'word',     jp: '三回',         romaji: 'sankai',           hu: 'háromszor' },
-      { type: 'word',     jp: '歯',          romaji: 'ha',               hu: 'fog' },
-      { type: 'particle', jp: 'を',          romaji: 'wo',               role: 'object' },
-      { type: 'verb',     jp: '磨きます',       romaji: 'migakimasu',       hu: 'mosom' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k4_07', level: 'N5', lesson: 'k4', translation: 'Szabadnapokon többnyire otthon vagyok.',
-    tokens: [
-      { type: 'word',     jp: '休み',         romaji: 'yasumi',           hu: 'pihenő (szabadság)' },
-      { type: 'particle', jp: 'の',          romaji: 'no',               role: 'possession' },
-      { type: 'word',     jp: '日',          romaji: 'hi',               hu: 'nap' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'word',     jp: 'たいてい',       romaji: 'taitei',           hu: 'többnyire' },
-      { type: 'word',     jp: '家',          romaji: 'ie',               hu: 'otthon' },
-      { type: 'particle', jp: 'に',          romaji: 'ni',               role: 'location' },
-      { type: 'verb',     jp: 'います',        romaji: 'imasu',            hu: 'vagyok' }
-    ],
-    metadata: { function: 'Affirmative', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
-  },
-  {
-    id: 's_k4_08', level: 'N5', lesson: 'k4', translation: 'Mit szólna a vasárnaphoz?',
-    tokens: [
-      { type: 'word',     jp: '日曜日',        romaji: 'nichiyoubi',       hu: 'vasárnap' },
-      { type: 'particle', jp: 'は',          romaji: 'wa',               role: 'topic' },
-      { type: 'verb',     jp: 'どうですか',      romaji: 'doudesuka',        hu: 'mit szólna hozzá?' }
-    ],
-    metadata: { function: 'Question', form: '〜ないで · どうやって · 〜のが上手です · 週に二回 · たいてい', tense: 'Non-Past', register: 'Polite' }
   },
 
   /* ── k5 · 〜間 · 〜間に · 〜たばかりです · 〜ていました · 〜ごろ · 〜おきに ── */

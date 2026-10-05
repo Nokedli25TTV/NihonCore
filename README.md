@@ -35,7 +35,7 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 <br />
 
 <div align="center">
-<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 207 lépés · 10 gyakorló modul" width="100%" />
+<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 224 lépés · 10 gyakorló modul" width="100%" />
 </div>
 
 <br />
@@ -54,7 +54,7 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 
 ### 🗺️ Tanulási út
 
-- **207 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
+- **224 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
 - Minden lecke után **a lecke saját mintái és mondatai** jönnek gyakorlásnak.
 - Első indításkor megkérdezi, **honnan indulsz**: nulláról, vagy már olvasod a kanát.
 - A kezdőlap **„Folytatás"** gombja mindig a következő lépésre visz.
@@ -115,7 +115,7 @@ A kezdőlapon a **„Mai ismétlés"** kártya szól, ha van esedékes kérdés.
 | | Modul | Mit gyakorolsz | Készlet |
 |---|---|---|---|
 | あ | **Kana** | hiragana és katakana: felismerés, fordítva, beírás, párosító; tábla hanggal | 104 jel írásonként |
-| 文 | **Mondat-Mester** | partikula-kitöltő és mondat-puzzle | 490 mondat, 16 partikula |
+| 文 | **Mondat-Mester** | partikula-kitöltő és mondat-puzzle | 627 mondat, 16 partikula |
 | 活 | **Ragozó** | 12 igealak a ます-tól a műveltető-szenvedőig: felismerés, építés, beírás | 108 ige |
 | 形 | **Melléknév** | い és な melléknevek 9 alakja | 149 melléknév |
 | 数 | **Számláló szavak** | つ・本・枚・冊… a hangváltozásokkal együtt | 12 számláló, 102 tárgy |
@@ -150,10 +150,10 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 
 | Leckék | | Gyakorlás | |
 |---|---:|---|---:|
-| Lecke | **57** | Lépés a tanulási úton | **207** |
+| Lecke | **57** | Lépés a tanulási úton | **224** |
 | Nyelvtani pont | **402** | Fejezet | **53** |
 | Példamondat (hanggal) | **2390** | Gyakorló modul | **10** |
-| Saját kérdés | **1142** | Mondat a Mondat-Mesterben | **490** |
+| Saját kérdés | **1142** | Mondat a Mondat-Mesterben | **627** |
 | Párbeszéd-sor | **699** | Ige a Ragozóban | **108** |
 | Kész kifejezés | **547** | Melléknév | **149** |
 | Szó-kártya | **1484** | Dátum- és idő-elem | **227** |

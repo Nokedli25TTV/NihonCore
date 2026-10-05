@@ -1,7 +1,7 @@
 # NihonCore — Claude project context
 
 > Ezt a fájlt **minden új munkamenet** beolvassa: mi a projekt, hol mi van, milyen szabályok
-> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-05, v92).
+> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-05, v93).
 > A teljes verzió-történet, a modulok motorjainak részletes leírása és a lezárt backlog a
 > **`HISTORY.md`**-ben van — oda akkor nézz be, ha egy régi döntés vagy javítás hátterét keresed.
 
@@ -42,9 +42,9 @@ a terv a munkamenet-memóriában van (`content-load-plan.md`), a már kész adag
 | Rész | Tartalom |
 |---|---|
 | **Leckék** | **57 lecke** (előkészítő + Dekiru 1: 24 + Dekiru 2: 24 + 8 kiegészítő N5 / N4): 402 nyelvtani pont, 2390 példamondat, 1142 saját kérdés, 699 párbeszéd-sor, 547 kifejezés, 1484 szó-kártya, 321 tábla, 344 „gyakori hiba", 197 kulturális tudnivaló |
-| **Tanulási út** | 207 lépés 53 fejezetben (75 lecke-lépés: magyarázat és hallás utáni kör; 132 gyakorló lépés a modulokból, ebből 56 „a lecke mintái" és 20 leckéhez kötött mondatkészlet) |
+| **Tanulási út** | 224 lépés 53 fejezetben (75 lecke-lépés: magyarázat és hallás utáni kör; 149 gyakorló lépés a modulokból, ebből 56 „a lecke mintái" és 37 leckéhez kötött mondatkészlet) |
 | Ragozó | 108 ige (75 godan + 31 ichidan + 2 rendhagyó), 12 alak |
-| Mondat-Mester | 490 mondat (176 N5 + 252 N4 + 62 N3), ebből 164 leckéhez kötött (20 készlet); 16 partikula a tálcán |
+| Mondat-Mester | 627 mondat (224 N5 + 301 N4 + 102 N3), ebből 301 leckéhez kötött (37 készlet); 16 partikula a tálcán |
 | Melléknév | 109 い + 40 な melléknév, 9 alak |
 | Számlálók | 12 számláló, 102 tárgy |
 | Dátum & Idő | 227 elem 8 kategóriában |
@@ -405,10 +405,8 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 
 **Tartalom-feltöltés (folyamatban):**
 - [x] Nyelvtani minták mind az 56 leckéhez (283 minta) + „a lecke mintái" lépések.
-- [x] Mondat-Mester-készlet annak a 20 leckének, amelynek a mintákon kívül nem volt gyakorló lépése.
-- [ ] Mondat-Mester-készlet a többi leckéhez is: most 39 leckének van saját vagy tematikus készlete
-      (a Dekiru 1 elején a régi N5-mondatok tartományai szolgálnak); 17-nek nincs — l4, l5, l8–l11, l19,
-      l21, l23, l27, l36–l38, l44–l47 —, ezeknek ragozó, melléknév vagy számláló lépésük van.
+- [x] Mondat-Mester-készlet 37 leckéhez (301 mondat): minden leckének van saját vagy tematikus
+      mondat-lépése (az l1–l3, l6, l7 és az l12–l33 egy részénél a régi mondatokból válogatva).
 - [ ] Ragozó: igék (108 → kb. 150), a leckék szókincséhez igazítva; számlálók, mini-leckék.
 - [ ] A leckék és az új készletek japán mondatait anyanyelvi lektor nem látta.
 - [ ] Az N4-es listából kimaradt apróságok: 〜てやる, 〜と言ってもいい, a 〜ということ főnevesítő.
@@ -428,6 +426,7 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 
 | Verzió | Mi történt |
 |---|---|
+| v93 | Tartalom-feltöltés: Mondat-Mester-készlet a maradék 17 leckéhez is (490 → 627 mondat, 207 → 224 lépés) |
 | v92 | Tartalom-feltöltés: célzott Mondat-Mester-készletek 20 leckéhez (326 → 490 mondat, 20 új lépés); a `lesson` mezős mondat út-lépésben csak a saját lépésében jön elő; token `kana` mező |
 | v91 | Romajival beírt válasz javítása: `NihonCoreKana` (wa / o / e partikula, ー, づ, kinyoubi); a Pro hallás eddig egy mondatot sem fogadott el; a minták kiegészítő módja romajit is elfogad |
 | v84–v90 | Tartalom-feltöltés: nyelvtani minták mind az 56 leckéhez (15 → 283 minta, 21 új kategória), leckénként „a lecke mintái" lépés (136 → 187); a felismerő kártya kiemeli a kérdezett részt |
