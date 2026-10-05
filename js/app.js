@@ -2168,6 +2168,140 @@ const NihonCoreAudio = (function () {
 
 
 /* ====================================================
+   ROMAJIBÓL ÁTÍRT VÁLASZ IGAZÍTÁSA ─────────────────
+   ----------------------------------------------------
+   Aki romajival ír, a partikulákat kiejtés szerint írja
+   (wa, o, e), a romaji-átíró pedig ebből わ / お / え jelet
+   ad a は / を / へ helyén; a katakana hosszújele (ー) helyén
+   megkettőzött magánhangzó áll; a づ romajija „zu", és az
+   „n" + magánhangzó kétféleképp olvasható (kinyoubi: きにょうび
+   vagy きんようび). Ez nem hiba: a repairSpoken a helyes kanához
+   igazítja a beírt szöveget, és ezeken a helyeken a helyes
+   jelet adja vissza. Csak ebben az irányban enged (a は helyén
+   わ jó, a わ helyén は nem), minden más eltérés érintetlen marad.
+   A Pro hallás és a Szabad fordítás használja.
+   ==================================================== */
+window.NihonCoreKana = (function () {
+  // helyes írás → amit a romajiból kapunk (csak ebben az irányban fogadjuk el)
+  const SPOKEN = { 'は': 'わ', 'を': 'お', 'へ': 'え', 'づ': 'ず', 'ぢ': 'じ' };
+  const ROWS = {
+    'あ': 'あかがさざただなはばぱまやらわゃぁ',
+    'い': 'いきぎしじちぢにひびぴみりぃ',
+    'う': 'うくぐすずつづぬふぶぷむゆるゅぅ',
+    'え': 'えけげせぜてでねへべぺめれぇ',
+    'お': 'おこごそぞとどのほぼぽもよろをょぉ'
+  };
+  // a romaji „n" kétértelmű: kinen = きねん vagy きんえん, kinyoubi = きにょうび vagy きんようび
+  const NA = { 'あ': 'な', 'い': 'に', 'う': 'ぬ', 'え': 'ね', 'お': 'の' };
+  const YA = { 'や': 'ゃ', 'ゆ': 'ゅ', 'よ': 'ょ' };
+  function vowelOf(ch) {
+    for (const v in ROWS) { if (ROWS[v].indexOf(ch) >= 0) return v; }
+    return '';
+  }
+  // elfogadható-e a beírt u jel a helyes t helyén? (prev: a helyes szöveg előző jele)
+  function tolerated(u, t, prev) {
+    if (SPOKEN[t] === u) return true;
+    if (t === 'ー' && prev) {
+      const v = vowelOf(prev);
+      return !!v && (u === v || (v === 'お' && u === 'う') || (v === 'え' && u === 'い'));
+    }
+    return false;
+  }
+  function repairSpoken(user, target) {
+    user = String(user || ''); target = String(target || '');
+    if (!user || !target || user === target) return user;
+    const n = user.length, m = target.length;
+    const one = (x, y) => user[x - 1] === target[y - 1] || tolerated(user[x - 1], target[y - 1], target[y - 2]);
+    // a helyes szövegben ん + magánhangzó, a beírtban egyetlen な-sori jel
+    const nasal1 = (x, y) => y >= 2 && target[y - 2] === 'ん' && NA[target[y - 1]] === user[x - 1];
+    // a helyes szövegben ん + や / ゆ / よ, a beírtban に + kis ゃ / ゅ / ょ
+    const nasal2 = (x, y) => x >= 2 && y >= 2 && target[y - 2] === 'ん' && user[x - 2] === 'に' && YA[target[y - 1]] === user[x - 1];
+    const dp = [];
+    for (let x = 0; x <= n; x++) { dp.push(new Array(m + 1).fill(0)); dp[x][0] = x; }
+    for (let y = 0; y <= m; y++) dp[0][y] = y;
+    for (let x = 1; x <= n; x++) for (let y = 1; y <= m; y++) {
+      let best = one(x, y) ? dp[x - 1][y - 1] : 1 + Math.min(dp[x - 1][y - 1], dp[x - 1][y], dp[x][y - 1]);
+      if (nasal1(x, y)) best = Math.min(best, dp[x - 1][y - 2]);
+      if (nasal2(x, y)) best = Math.min(best, dp[x - 2][y - 2]);
+      dp[x][y] = best;
+    }
+    let out = '', x = n, y = m;
+    while (x > 0) {
+      if (y > 0 && nasal2(x, y) && dp[x][y] === dp[x - 2][y - 2]) { out = target[y - 2] + target[y - 1] + out; x -= 2; y -= 2; }
+      else if (y > 0 && nasal1(x, y) && dp[x][y] === dp[x - 1][y - 2]) { out = target[y - 2] + target[y - 1] + out; x--; y -= 2; }
+      else if (y > 0 && one(x, y) && dp[x][y] === dp[x - 1][y - 1]) { out = target[y - 1] + out; x--; y--; }
+      else if (y > 0 && dp[x][y] === dp[x - 1][y - 1] + 1) { out = user[x - 1] + out; x--; y--; }
+      else if (dp[x][y] === dp[x - 1][y] + 1) { out = user[x - 1] + out; x--; }
+      else y--;
+    }
+    return out;
+  }
+
+  // Romaji → hiragana: Hepburn, a gépelős (wāpuro) változatokkal és az idegen szavak
+  // szótagjaival. A szóköz és az aposztróf szóhatár (hon ya, kin'youbi).
+  const ROMAJI = {
+    kya:'きゃ',kyu:'きゅ',kyo:'きょ', gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',
+    sha:'しゃ',shu:'しゅ',sho:'しょ', ja:'じゃ',ju:'じゅ',jo:'じょ',
+    cha:'ちゃ',chu:'ちゅ',cho:'ちょ', nya:'にゃ',nyu:'にゅ',nyo:'にょ',
+    hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ', bya:'びゃ',byu:'びゅ',byo:'びょ',
+    pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ', mya:'みゃ',myu:'みゅ',myo:'みょ',
+    rya:'りゃ',ryu:'りゅ',ryo:'りょ',
+    // gépelős (wāpuro) változatok
+    sya:'しゃ',syu:'しゅ',syo:'しょ', tya:'ちゃ',tyu:'ちゅ',tyo:'ちょ',
+    zya:'じゃ',zyu:'じゅ',zyo:'じょ', jya:'じゃ',jyu:'じゅ',jyo:'じょ',
+    si:'し',tu:'つ',hu:'ふ',zi:'じ',
+    // idegen szavak szótagjai (ボティ, カフェ, ファイル, ディスコード, ヴァロラント…)
+    she:'しぇ',che:'ちぇ',je:'じぇ',
+    fa:'ふぁ',fi:'ふぃ',fe:'ふぇ',fo:'ふぉ', ti:'てぃ',di:'でぃ',
+    wi:'うぃ',we:'うぇ', va:'ゔぁ',vi:'ゔぃ',vu:'ゔ',ve:'ゔぇ',vo:'ゔぉ',
+    ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',
+    ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',
+    sa:'さ',shi:'し',su:'す',se:'せ',so:'そ',
+    za:'ざ',ji:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',
+    ta:'た',chi:'ち',tsu:'つ',te:'て',to:'と',
+    da:'だ',du:'づ',de:'で',do:'ど',
+    na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',
+    ha:'は',hi:'ひ',fu:'ふ',he:'へ',ho:'ほ',
+    ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',
+    pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',
+    ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',
+    ya:'や',yu:'ゆ',yo:'よ',
+    ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',
+    wa:'わ',wo:'を',n:'ん',
+    a:'あ',i:'い',u:'う',e:'え',o:'お'
+  };
+  function fromRomaji(text) {
+    const s = String(text || '').toLowerCase().replace(/[^a-z\s、。']/g, '');
+    if (!s) return '';
+    let out = '';
+    let i = 0;
+    while (i < s.length) {
+      if (s[i] === ' ' || s[i] === "'") { i++; continue; }      // az aposztróf szóhatár: kin'youbi → きんようび
+      if (s[i] === 't' && s[i + 1] === 'c' && s[i + 2] === 'h') { out += 'っ'; i++; continue; }   // sawatcha → さわっちゃ
+      // sokuon — kettős mássalhangzó (kk, tt, pp, ss stb.) → kis っ
+      if (i + 1 < s.length && /[bcdfghjkmpqrstvwxyz]/.test(s[i]) && s[i] === s[i+1] && s[i] !== 'n') {
+        out += 'っ'; i++; continue;
+      }
+      // 3 char
+      if (i + 3 <= s.length && ROMAJI[s.slice(i, i+3)]) {
+        out += ROMAJI[s.slice(i, i+3)]; i += 3; continue;
+      }
+      // 2 char
+      if (i + 2 <= s.length && ROMAJI[s.slice(i, i+2)]) {
+        out += ROMAJI[s.slice(i, i+2)]; i += 2; continue;
+      }
+      // 1 char (vowel + n)
+      if (ROMAJI[s[i]]) { out += ROMAJI[s[i]]; i++; continue; }
+      // unknown — skip
+      i++;
+    }
+    return out;
+  }
+  return { repairSpoken, fromRomaji };
+})();
+
+
+/* ====================================================
    GLOBÁLIS VÁLASZ-FELOLVASÁS (V3 P2 F) ─────────────
    ----------------------------------------------------
    MutationObserver figyeli a modul-feedback konténereket
@@ -12041,7 +12175,7 @@ function initListeningPage() {
   function countLstPool() { return getActiveLessons().length; }
 
   // V6 — Pro mód: mondat-szintű listening. A meglévő Grammar Patterns példáit
-  // reuse-oljuk (30 mondat 12 N4 + 3 N3 mintából). A séma egységes a sima
+  // reuse-oljuk (mintánként két mondat). A séma egységes a sima
   // audio-leckéével: { id, text, romaji, meaningHu, source, jlpt }. NEM
   // hozunk létre új tartalmat — runtime aggregáció.
   function getProSentences() {
@@ -12272,7 +12406,10 @@ function initListeningPage() {
     let s = (input || '').toLowerCase().normalize('NFKC');
     s = s.replace(/[āâ]/g, 'aa').replace(/[īî]/g, 'ii').replace(/[ūû]/g, 'uu')
          .replace(/[ēê]/g, 'ee').replace(/[ōô]/g, 'oo');
-    s = s.replace(/[^a-z']/g, '');
+    // szavanként: a szóvégi n mindig ん (hon ya → ほんや, nem ほにゃ)
+    return s.replace(/[^a-z'\s]/g, '').split(/\s+/).map(romajiWordToKana).join('');
+  }
+  function romajiWordToKana(s) {
     let out = '', i = 0;
     while (i < s.length) {
       const c = s[i];
@@ -12414,8 +12551,10 @@ function initListeningPage() {
   // Diktálás-diagnózis: romaji input → canonical összevetés a lecke
   // explicit kana-válaszával. Egyezés → helyes; egyébként mora-diff.
   function classifyDictation(raw, lesson) {
-    const userKana = romajiToKana(raw);
-    const ansKana  = normalizeKana(lesson.text);
+    // A helyes oldalról az írásjelek kimaradnak (a romajiból sem lesz írásjel),
+    // és a partikulák kiejtés szerinti írása (wa, o, e) nem hiba.
+    const ansKana  = normalizeKana(lesson.text).replace(/[、。？！?!「」・,.]/g, '');
+    const userKana = window.NihonCoreKana.repairSpoken(romajiToKana(raw), ansKana);
     if (userKana && userKana === ansKana) {
       return { match: true, errorCode: null, chosenKana: userKana, diffHtml: '' };
     }
@@ -13635,8 +13774,12 @@ function initGrammarPage() {
 
   function diagnoseCloze(card, userInput) {
     const correct = String(card.example.clozeAnswer || '');
-    const u = normKana(userInput);
+    let u = normKana(userInput);
     if (!u) return { match: false, errorCode: 'empty', userNorm: u, targetNorm: normKana(correct) };
+    // romajival beírt válasz: kanává alakul; a kiejtés szerint írt partikula (wa, o, e) nem hiba
+    if (/^[a-z'\s-]+$/i.test(String(userInput).trim())) {
+      u = window.NihonCoreKana.repairSpoken(window.NihonCoreKana.fromRomaji(userInput), normKana(correct));
+    }
 
     if (u === normKana(correct)) {
       return { match: true, errorCode: null };
@@ -14342,13 +14485,13 @@ function initGrammarPage() {
         <div class="cj-prompt-meaning grm-sentence-hu">${escapeGrmHtml(ex.hu)}</div>
         <div class="cj-target">
           <span class="cj-target-label">Feladat:</span>
-          <span class="cj-target-name">Mi áll a <em>___</em> helyén? Írd be hiraganával.</span>
+          <span class="cj-target-name">Mi áll a <em>___</em> helyén? Írd be kanával vagy romajival.</span>
         </div>
       </div>
       ${renderGrmHintBar(card)}
       <div class="cj-input-area">
         <input type="text" class="cj-input" id="grmInput"
-               placeholder="hiraganával írd be a hiányzó részt"
+               placeholder="pl. たら vagy tara"
                autocomplete="off" autocapitalize="off" spellcheck="false" />
         <div class="cj-timer-bar"><div class="cj-timer-fill" id="grmTimerFill"></div></div>
       </div>
@@ -15017,7 +15160,7 @@ function initProductionPage() {
   function normJpProd(s) {
     return kataToHiraProd(String(s || '').trim())
       .replace(/\s+/g, '')
-      .replace(/[、。・！？]/g, '');   // punktuáció ignorálva
+      .replace(/[、。・！？「」『』（）]/g, '');   // punktuáció ignorálva
   }
 
   // Ruby HTML strip: a Grammar Patterns ex.jp `<ruby>水<rt>みず</rt></ruby>...`
@@ -15042,59 +15185,9 @@ function initProductionPage() {
     return true;
   }
 
-  // Egyszerű romaji→kana parser (a Listening modul reuse-a lehet, de itt
-  // local). Csak a leggyakoribb syllabákat ismeri, a komplexitás a
-  // Listening parser-é. Itt kis fallback van: ha a user TISZTÁN romaji-t ír,
-  // megpróbálja konvertálni; ha kevert, hagyja.
-  const PROD_ROMAJI_MAP = {
-    kya:'きゃ',kyu:'きゅ',kyo:'きょ', gya:'ぎゃ',gyu:'ぎゅ',gyo:'ぎょ',
-    sha:'しゃ',shu:'しゅ',sho:'しょ', ja:'じゃ',ju:'じゅ',jo:'じょ',
-    cha:'ちゃ',chu:'ちゅ',cho:'ちょ', nya:'にゃ',nyu:'にゅ',nyo:'にょ',
-    hya:'ひゃ',hyu:'ひゅ',hyo:'ひょ', bya:'びゃ',byu:'びゅ',byo:'びょ',
-    pya:'ぴゃ',pyu:'ぴゅ',pyo:'ぴょ', mya:'みゃ',myu:'みゅ',myo:'みょ',
-    rya:'りゃ',ryu:'りゅ',ryo:'りょ',
-    ka:'か',ki:'き',ku:'く',ke:'け',ko:'こ',
-    ga:'が',gi:'ぎ',gu:'ぐ',ge:'げ',go:'ご',
-    sa:'さ',shi:'し',su:'す',se:'せ',so:'そ',
-    za:'ざ',ji:'じ',zu:'ず',ze:'ぜ',zo:'ぞ',
-    ta:'た',chi:'ち',tsu:'つ',te:'て',to:'と',
-    da:'だ',di:'ぢ',du:'づ',de:'で',do:'ど',
-    na:'な',ni:'に',nu:'ぬ',ne:'ね',no:'の',
-    ha:'は',hi:'ひ',fu:'ふ',he:'へ',ho:'ほ',
-    ba:'ば',bi:'び',bu:'ぶ',be:'べ',bo:'ぼ',
-    pa:'ぱ',pi:'ぴ',pu:'ぷ',pe:'ぺ',po:'ぽ',
-    ma:'ま',mi:'み',mu:'む',me:'め',mo:'も',
-    ya:'や',yu:'ゆ',yo:'よ',
-    ra:'ら',ri:'り',ru:'る',re:'れ',ro:'ろ',
-    wa:'わ',wo:'を',n:'ん',
-    a:'あ',i:'い',u:'う',e:'え',o:'お'
-  };
-  function romajiToKanaProd(text) {
-    const s = String(text || '').toLowerCase().replace(/[^a-z\s、。]/g, '');
-    if (!s) return '';
-    let out = '';
-    let i = 0;
-    while (i < s.length) {
-      if (s[i] === ' ') { i++; continue; }
-      // sokuon — kettős mássalhangzó (kk, tt, pp, ss stb.) → kis っ
-      if (i + 1 < s.length && /[bcdfghjkmpqrstvwxyz]/.test(s[i]) && s[i] === s[i+1] && s[i] !== 'n') {
-        out += 'っ'; i++; continue;
-      }
-      // 3 char
-      if (i + 3 <= s.length && PROD_ROMAJI_MAP[s.slice(i, i+3)]) {
-        out += PROD_ROMAJI_MAP[s.slice(i, i+3)]; i += 3; continue;
-      }
-      // 2 char
-      if (i + 2 <= s.length && PROD_ROMAJI_MAP[s.slice(i, i+2)]) {
-        out += PROD_ROMAJI_MAP[s.slice(i, i+2)]; i += 2; continue;
-      }
-      // 1 char (vowel + n)
-      if (PROD_ROMAJI_MAP[s[i]]) { out += PROD_ROMAJI_MAP[s[i]]; i++; continue; }
-      // unknown — skip
-      i++;
-    }
-    return out;
-  }
+  // A romaji-átíró a közös NihonCoreKana része (a Nyelvtani minták kiegészítő
+  // módja is azt használja): ha a tanuló TISZTÁN romajit ír, kanává alakul.
+  function romajiToKanaProd(text) { return window.NihonCoreKana.fromRomaji(text); }
 
   // Heurisztika: a user input már kana? Ha legalább 80% hiragana/katakana,
   // ne konvertáljuk. Ha tisztán romaji (latin), konvertáljuk.
@@ -15224,8 +15317,11 @@ function initProductionPage() {
     const raw = String(rawInput || '').trim();
     if (!raw) return { verdict: 'wrong', empty: true };
 
-    // 1) Ha tisztán romaji, konvertálni
-    const userKana = isKanaDominant(raw) ? raw : romajiToKanaProd(raw);
+    // 1) Ha tisztán romaji, konvertálni — a kiejtés szerint írt partikula (wa, o, e)
+    //    és a hosszújel helyén megkettőzött magánhangzó ilyenkor nem hiba
+    const userKana = isKanaDominant(raw)
+      ? raw
+      : window.NihonCoreKana.repairSpoken(romajiToKanaProd(raw), kataToHiraProd(card.kana).replace(/[、。・！？「」『』（）\s]/g, ''));
     const userNorm = normJpProd(userKana);
     const targetNormKana = normJpProd(card.kana);
     // Alternatív target: kanji-mix (Mondat-Mester) vagy ruby-stripped (Grammar).
@@ -15251,8 +15347,8 @@ function initProductionPage() {
     const charDist = useKanaTarget ? charDistKana : charDistJp;
 
     // 4) Token-szintű alignment
-    const userToks = tokenizeProdPhrases(userKana.replace(/[、。・！？\s]/g, ''));
-    const targetToks = tokenizeProdPhrases(targetForTokens.replace(/[、。・！？\s]/g, ''));
+    const userToks = tokenizeProdPhrases(userKana.replace(/[、。・！？「」『』（）\s]/g, ''));
+    const targetToks = tokenizeProdPhrases(targetForTokens.replace(/[、。・！？「」『』（）\s]/g, ''));
     const align = alignTokens(userToks, targetToks);
 
     const tokensCorrect = align.tokenDiff.filter(d => d.state === 'correct').length;
