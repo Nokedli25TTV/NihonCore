@@ -36,7 +36,8 @@ window.NihonCoreSync = (function () {
     'nihoncore_prod_profile_v1',    'nihoncore_prod_settings_v1',
     'nihoncore_path_v1',            // tanulási út: szint + lépések haladása
     'nihoncore_kana_profile_v1',
-    'nihoncore_goal_v1'             // napi cél (a kezdőlap „Folytatás" kártyáján)
+    'nihoncore_goal_v1',            // napi cél (a kezdőlap „Folytatás" kártyáján)
+    'nihoncore_exams_v1'            // dolgozatok: a kitöltések listája
   ];
   const PREFIX_KEYS = ['nc_fc_state_'];   // flashcard "tudom/nem tudom" minden modul
 
@@ -137,7 +138,7 @@ window.NihonCoreSync = (function () {
       Object.keys(cloudData).forEach(k => {
         const cloudVal = cloudData[k];
         const localVal = localStorage.getItem(k);
-        if (k === 'nihoncore_sessions_v1') {
+        if (k === 'nihoncore_sessions_v1' || k === 'nihoncore_exams_v1') {   // azonosító szerinti lista
           localStorage.setItem(k, mergeSessions(localVal, cloudVal));  // mindig merge
         } else if (k === 'nihoncore_srs_v1') {
           localStorage.setItem(k, mergeSrs(localVal, cloudVal));        // mindig merge

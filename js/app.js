@@ -499,11 +499,12 @@ window.NihonCorePath = (function () {
     const rows = STEPS.map((s, i) => {
       const r = st.steps[s.id] || {};
       const skipped = s.level === 'zero' && st.level === 'kana' && !r.done;
-      return { step: s, index: i, done: !!r.done, best: typeof r.best === 'number' ? r.best : null, skipped: skipped };
+      return { step: s, index: i, done: !!r.done, best: typeof r.best === 'number' ? r.best : null, skipped: skipped, optional: !!s.optional };
     });
-    const next = rows.find(r => !r.done && !r.skipped) || null;
-    const total = rows.filter(r => !r.skipped).length;
-    const doneCount = rows.filter(r => r.done && !r.skipped).length;
+    // a nem kötelező lépés (dolgozat) nem állítja meg az utat, és nem számít bele a haladásba
+    const next = rows.find(r => !r.done && !r.skipped && !r.optional) || null;
+    const total = rows.filter(r => !r.skipped && !r.optional).length;
+    const doneCount = rows.filter(r => r.done && !r.skipped && !r.optional).length;
     return { level: st.level, rows: rows, next: next, total: total, doneCount: doneCount };
   }
 
@@ -2356,7 +2357,320 @@ window.NihonCoreKana = (function () {
     return stem + (stem && part ? ' ' : '') + part + tail;
   }
 
-  return { repairSpoken, fromRomaji, toRomaji };
+  // Élő kana-beírás: gépelés közben a latin betűk kanává alakulnak (hajimemashite → はじめまして).
+  // A még befejezetlen szótag (k, sh, ny, a szóvégi n) betűként marad, amíg ki nem derül, mi lesz belőle;
+  // final = true: beküldéskor a lezáratlan n is ん lesz.
+  function liveKana(value, final) {
+    return String(value == null ? '' : value).replace(/[A-Za-z']+/g, (runText, off, whole) => {
+      let s = runText.toLowerCase(), hold = '';
+      const atEnd = off + runText.length === whole.length;
+      if (atEnd && !final) {
+        hold = (/[^aiueo]+$/.exec(s) || [''])[0];
+        // „n" + másik mássalhangzó: az n már biztosan ん (konb → こんb); nn, ny és n' még nyitott
+        if (hold.length > 1 && hold[0] === 'n' && 'ny\''.indexOf(hold[1]) < 0) hold = hold.slice(1);
+        s = s.slice(0, s.length - hold.length);
+      } else if (final) {
+        s = s.replace(/nn$/, 'n');
+      }
+      return fromRomaji(s) + hold;
+    });
+  }
+  function bindInput(input) {
+    if (!input) return;
+    input.addEventListener('input', e => {
+      if (e.isComposing) return;                       // japán billentyűzet: a rendszer intézi
+      const v = liveKana(input.value, false);
+      if (v !== input.value) input.value = v;
+    });
+  }
+
+  return { repairSpoken, fromRomaji, toRomaji, liveKana, bindInput };
+})();
+
+
+/* ====================================================
+   RAGOZÓ MOTOR — közös (a Ragozó oldal és a dolgozatok használják)
+   ----------------------------------------------------
+   conjugate(ige, alak) → { kana, romaji, irregular, morphemes }. Csak a core.js
+   szabálytábláira (NIHONCORE_FORM_RULES, _GODAN_MAP, _TE_RULES, …) és az igék
+   adataira támaszkodik; állapota nincs.
+   ==================================================== */
+window.NihonCoreConj = (function () {
+
+  // ── VerbDetector ──────────────────────────────────
+  // P1-ben minden ige a DB-ből jön → group lookup garantált.
+  // Az auto-detektálás (DB-n kívüli igéhez) P2 feladat.
+  const VerbDetector = {
+    classify(verb) {
+      // verb objektum vagy id-string is megengedett
+      const v = typeof verb === 'string'
+        ? NIHONCORE_VERBS.find(x => x.id === verb)
+        : verb;
+      if (!v) return { group: 'unknown', confidence: 0 };
+      return {
+        group: v.group,
+        confidence: 1.0,
+        pseudoIchidan: !!v.pseudoIchidan,
+        irregularTe: !!v.irregularTe
+      };
+    }
+  };
+
+  // ── StemEngine ────────────────────────────────────
+  // Visszaad: { a:{kana,romaji}, i:..., u:..., e:..., o:... }
+  // Godan: stem + GodanMap[family][col]
+  // Ichidan: minden oszlopra ugyanaz (a stem) — Ichidan-nál nincs oszlopváltás
+  // Irregular: nem használjuk (külön tábla)
+  const StemEngine = {
+    getStems(verb) {
+      if (verb.group === 'godan') {
+        const fam = NIHONCORE_GODAN_MAP[verb.godanFamily];
+        if (!fam) return null;
+        const out = {};
+        for (const col of ['a','i','u','e','o']) {
+          out[col] = {
+            kana:   verb.stemKana   + fam[col].kana,
+            romaji: verb.stemRomaji + fam[col].romaji
+          };
+        }
+        return out;
+      }
+      if (verb.group === 'ichidan') {
+        const ichi = { kana: verb.stemKana, romaji: verb.stemRomaji };
+        return { a: ichi, i: ichi, u: ichi, e: ichi, o: ichi };
+      }
+      return null;
+    }
+  };
+
+  // ── Masu / Nai motor (és minden olyan, ami sima stem+suffix) ──
+  function composeStemSuffix(verb, formCode) {
+    const rule = NIHONCORE_FORM_RULES[formCode];
+    if (!rule || !rule.stemColumn) return null;
+
+    if (verb.group === 'irregular') {
+      const irr = NIHONCORE_IRREGULAR_FORMS[verb.id];
+      return irr && irr[formCode] ? { ...irr[formCode], irregular: true } : null;
+    }
+
+    const stems = StemEngine.getStems(verb);
+    if (!stems) return null;
+    let stem = stems[rule.stemColumn];
+    // -aru honorific igék: a masu-stem ('i' oszlop) override (pl. kudasaru → ください,
+    // a sima くださり helyett) — NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem.
+    let irregularStem = false;
+    if (rule.stemColumn === 'i'
+        && NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem
+        && NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem[verb.id]) {
+      stem = NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem[verb.id];
+      irregularStem = true;
+    }
+    const suf  = (verb.group === 'ichidan' && rule.ichidanSuffix) ? rule.ichidanSuffix : rule.suffix;
+
+    return {
+      kana:   stem.kana   + suf.kana,
+      romaji: stem.romaji + suf.romaji,
+      irregular: irregularStem,
+      morphemes: {
+        stem: stem,
+        suffix: suf,
+        column: rule.stemColumn,
+        ...(irregularStem ? { irregularStem: true } : {})
+      }
+    };
+  }
+
+  // ── Te / Ta motor (külön logika — családi minta) ──
+  function composeTeTa(verb, which /* 'te' | 'ta' */) {
+    // Irregular
+    if (verb.group === 'irregular') {
+      const irr = NIHONCORE_IRREGULAR_FORMS[verb.id];
+      return irr && irr[which] ? { ...irr[which], irregular: true } : null;
+    }
+
+    // Rendhagyó te/ta (csak 行く a P1-ben)
+    if (verb.irregularTe) {
+      const ex = NIHONCORE_VERB_EXCEPTIONS.irregularTe[verb.id];
+      if (ex && ex[which]) return { ...ex[which], irregular: true };
+    }
+
+    // Ichidan: stem + て / た
+    if (verb.group === 'ichidan') {
+      const suf = which === 'te'
+        ? { kana: 'て', romaji: 'te' }
+        : { kana: 'た', romaji: 'ta' };
+      return {
+        kana:   verb.stemKana   + suf.kana,
+        romaji: verb.stemRomaji + suf.romaji,
+        irregular: false,
+        morphemes: {
+          stem:   { kana: verb.stemKana, romaji: verb.stemRomaji },
+          suffix: suf,
+          column: 'ichidan'
+        }
+      };
+    }
+
+    // Godan: family-rule alapján
+    if (verb.group === 'godan') {
+      const rule = NIHONCORE_TE_RULES[verb.godanFamily];
+      if (!rule) return null;
+      const suf = rule[which];
+      return {
+        kana:   verb.stemKana   + suf.kana,
+        romaji: verb.stemRomaji + suf.romaji,
+        irregular: false,
+        morphemes: {
+          stem:    { kana: verb.stemKana, romaji: verb.stemRomaji },
+          suffix:  suf,
+          column:  'te-rule:' + verb.godanFamily,
+          pattern: rule.pattern
+        }
+      };
+    }
+    return null;
+  }
+
+  // ── Causative-Passive (kompozíció: passive ∘ causative) ──
+  // Pl. nomu → nomaseru (causative) → nomaserareru (passive applied)
+  //     taberu → tabesaseru → tabesaserareru
+  function composeCausativePassive(verb) {
+    if (verb.group === 'irregular') {
+      const irr = NIHONCORE_IRREGULAR_FORMS[verb.id];
+      return irr && irr.causative_passive ? { ...irr.causative_passive, irregular: true } : null;
+    }
+    const caus = composeStemSuffix(verb, 'causative');
+    if (!caus) return null;
+    // A causative kimenete -る/ru végű (-seru/saseru). Erre rakjuk a passive -rareru/られる-t.
+    const newKana   = caus.kana.replace(/る$/,   'られる');
+    const newRomaji = caus.romaji.replace(/ru$/, 'rareru');
+    return {
+      kana: newKana,
+      romaji: newRomaji,
+      irregular: false,
+      morphemes: caus.morphemes ? {
+        stem: caus.morphemes.stem,
+        suffix: {
+          kana:   caus.morphemes.suffix.kana   + 'られる',
+          romaji: caus.morphemes.suffix.romaji + 'rareru'
+        },
+        column: caus.morphemes.column,
+        composedFrom: 'causative+passive'
+      } : null
+    };
+  }
+
+  // ── Egységes belépő — verb + formCode → forma ────
+  function conjugate(verb, formCode) {
+    if (formCode === 'te') return composeTeTa(verb, 'te');
+    if (formCode === 'ta') return composeTeTa(verb, 'ta');
+    if (formCode === 'causative_passive') return composeCausativePassive(verb);
+    return composeStemSuffix(verb, formCode);
+  }
+
+  return { VerbDetector, StemEngine, composeStemSuffix, composeTeTa, composeCausativePassive, conjugate };
+})();
+
+
+/* ====================================================
+   MONDAT-ELLENŐRZŐ — közös (a Mondat-Mester puzzle-módja és a dolgozatok használják)
+   ----------------------------------------------------
+   validate(sorrend, mondat) → { valid, errorType?, message?, hint? }. A mondat eredeti
+   sorrendje mindig jó; összetett állítmánynál az első igétől kötött a sorrend, előtte a
+   „szó + partikula" egységek felcserélhetők.
+   ==================================================== */
+window.NihonCorePuzzle = (function () {
+  function extractPhrases(tokens) {
+    const phrases = [];
+    let current = [];
+    for (let i = 0; i < tokens.length; i++) {
+      const t = tokens[i];
+      if (t.type === 'verb') {
+        if (current.length) phrases.push(current);
+        phrases.push([t]);
+        current = [];
+      } else if (t.type === 'particle') {
+        current.push(t);
+        if (t.romaji !== 'no') {
+          phrases.push(current);
+          current = [];
+        }
+      } else {
+        current.push(t);
+      }
+    }
+    if (current.length) phrases.push(current);
+    return phrases;
+  }
+
+  function phraseKey(phrase) {
+    return phrase.map(t => `${t.type}:${t.romaji}|${t.jp}`).join(',');
+  }
+
+  function validatePuzzle(answerIndices, sentence) {
+    const tokens = answerIndices.map(i => sentence.tokens[i]);
+
+    if (tokens.length !== sentence.tokens.length) {
+      return { valid: false, errorType: 'incomplete', message: 'Még nincs minden token a válasz-területen.', hint: 'Húzd / kattintsd a maradék tokeneket a tálcáról.' };
+    }
+
+    // A mondat eredeti sorrendje mindig helyes (az azonos szövegű tokenek felcserélhetők).
+    const sameTok = (a, b) => a.type === b.type && a.jp === b.jp;
+    const orig = sentence.tokens;
+    if (tokens.every((t, i) => sameTok(t, orig[i]))) return { valid: true };
+
+    // Összetett állítmány (行く つもりです · 撮って も いいですか · 行った こと が あります):
+    // több ige, ige utáni partikula vagy segédszó. Itt az első igétől a mondat végéig
+    // kötött a sorrend; előtte a „szó + partikula" egységek szabadon cserélhetők.
+    const firstVerb = orig.findIndex(t => t.type === 'verb');
+    if (firstVerb !== orig.length - 1) {
+      const cut = firstVerb < 0 ? orig.length - 1 : firstVerb;
+      const tailOk = tokens.slice(cut).every((t, i) => sameTok(t, orig[cut + i]));
+      if (!tailOk) {
+        return { valid: false, errorType: 'predicate_order',
+          message: `Ennek a mondatnak a vége több szóból álló állítmány: <strong class="pp-fb-jp">${orig.slice(cut).map(t => t.jp).join(' ')}</strong>. Ezek a mondat végén, ebben a sorrendben állnak.`,
+          hint: 'Az előtte álló „szó + partikula" párok sorrendje szabad, de a pár tagjai együtt maradnak.' };
+      }
+      const headKeys = arr => extractPhrases(arr.slice(0, cut)).map(phraseKey).sort().join('||');
+      if (headKeys(tokens) !== headKeys(orig)) {
+        return { valid: false, errorType: 'pair_broken', message: 'Egy főnév-partikula pár fel van bontva — ezek mindig együtt kell maradjanak.', hint: 'A „szó + partikula" mindig egymás mellett áll a japánban (pl. <strong class="pp-fb-jp">寿司を</strong>, <strong class="pp-fb-jp">公園に</strong>).' };
+      }
+      return { valid: true };
+    }
+
+    const last = tokens[tokens.length - 1];
+    if (last.type !== 'verb') {
+      return { valid: false, errorType: 'verb_not_at_end', message: 'A japán mondatban az ige <strong>mindig a mondat végén</strong> áll.', hint: `Az ige itt: <strong class="pp-fb-jp">${sentence.tokens.find(t => t.type === 'verb').jp}</strong> — tedd a legvégére.` };
+    }
+    for (let i = 0; i < tokens.length - 1; i++) {
+      if (tokens[i].type === 'verb') {
+        return { valid: false, errorType: 'verb_in_middle', message: `Egyetlen ige van a mondatban, és annak a <strong>legvégén</strong> kell lennie.`, hint: `A "${tokens[i].jp}" ige most a ${i + 1}. helyen van — tedd a végére.` };
+      }
+    }
+    for (let i = 0; i < tokens.length; i++) {
+      const t = tokens[i];
+      if (t.type !== 'particle') continue;
+      const prev = tokens[i - 1];
+      if (!prev) {
+        return { valid: false, errorType: 'particle_first', message: `A "<strong class="pp-fb-jp">${t.jp}</strong>" partikula nem állhat a mondat elején.`, hint: 'Partikula előtt mindig főnévnek vagy a hozzá tartozó szónak kell állnia.' };
+      }
+      if (prev.type === 'verb') {
+        return { valid: false, errorType: 'particle_after_verb', message: `A "<strong class="pp-fb-jp">${t.jp}</strong>" partikula nem állhat ige után — az ige a mondat végén áll.`, hint: '' };
+      }
+      if (prev.type === 'particle' && prev.romaji !== 'no') {
+        return { valid: false, errorType: 'particle_after_particle', message: `Két nem-の partikula nem állhat egymás után. A "<strong class="pp-fb-jp">${t.jp}</strong>" előtti "${prev.jp}" más főnévhez tartozik.`, hint: '' };
+      }
+    }
+
+    const userKeys = extractPhrases(tokens).map(phraseKey).sort();
+    const origKeys = extractPhrases(sentence.tokens).map(phraseKey).sort();
+    if (userKeys.join('||') !== origKeys.join('||')) {
+      return { valid: false, errorType: 'pair_broken', message: 'Egy főnév-partikula pár fel van bontva — ezek mindig együtt kell maradjanak.', hint: 'A "tárgy + partikula" mindig egymás mellett áll a japánban (pl. <strong class="pp-fb-jp">寿司を</strong>, <strong class="pp-fb-jp">公園に</strong>).' };
+    }
+    return { valid: true };
+  }
+
+  return { validate: validatePuzzle, extractPhrases: extractPhrases };
 })();
 
 
@@ -2984,7 +3298,7 @@ function initLanding() {
     }
 
     const s = v.next.step;
-    const stepNo = v.rows.filter(r => !r.skipped).findIndex(r => r.step.id === s.id) + 1;
+    const stepNo = v.rows.filter(r => !r.skipped && !r.optional).findIndex(r => r.step.id === s.id) + 1;
     const started = v.doneCount > 0 || v.next.best !== null;
     top.innerHTML = `
       <div class="continue glass-panel-heavy" data-glyph="${esc(s.glyph)}">
@@ -3073,9 +3387,10 @@ function initLanding() {
     if (row.done) chips.push('<span class="path-pop-chip is-ok">Kész</span>');
     else if (row.skipped) chips.push('<span class="path-pop-chip">Átugorva: már olvasod a kanát</span>');
     else if (isNext) chips.push('<span class="path-pop-chip">Ez a következő lépés</span>');
+    else if (row.optional) chips.push('<span class="path-pop-chip">Nem kötelező: nélküle is mehetsz tovább</span>');
     if (row.best !== null) chips.push('<span class="path-pop-chip' + (row.done ? ' is-ok' : '') + '">Legjobb köröd: ' + pctText(row.best) + '</span>');
     else if (!row.skipped) chips.push('<span class="path-pop-chip">A lépéshez ' + Math.round(Path.PASS * 100) + '% kell</span>');
-    const cta = row.done ? 'Gyakorlás újra' : row.skipped ? 'Mégis megnézem' : (row.best !== null ? 'Folytatás' : 'Kezdés');
+    const cta = row.optional ? (row.best !== null ? 'Megírom újra' : 'Megnézem') : row.done ? 'Gyakorlás újra' : row.skipped ? 'Mégis megnézem' : (row.best !== null ? 'Folytatás' : 'Kezdés');
 
     const pop = document.createElement('div');
     pop.className = 'path-pop';
@@ -3141,7 +3456,7 @@ function initLanding() {
     let gi = 0;                                           // csomópont-sorszám az egész úton (a kanyar folytonos)
     list.innerHTML = units.map((u, ui) => {
       const uid = u.unit.id || ('u' + ui);
-      const live = u.rows.filter(r => !r.skipped);
+      const live = u.rows.filter(r => !r.skipped && !r.optional);
       const done = live.filter(r => r.done).length;
       const complete = live.length > 0 && done === live.length;
       // a frissen kész lépés fejezete ezen a megnyitáson még nyitva marad (hogy látsszon az animáció)
@@ -3161,8 +3476,8 @@ function initLanding() {
         const s = r.step;
         const isNext = v.next && v.next.step.id === s.id && !!v.level;
         const cls = (r.done ? ' is-done' : r.skipped ? ' is-skipped' : isNext ? ' is-next' : '') +
-                    (fresh.indexOf(s.id) >= 0 ? ' just-done' : '');
-        const state = r.done ? 'kész' : r.skipped ? 'átugorva' : isNext ? 'következő lépés' : 'még nem kezdted el';
+                    (r.optional ? ' is-exam' : '') + (fresh.indexOf(s.id) >= 0 ? ' just-done' : '');
+        const state = r.done ? 'kész' : r.skipped ? 'átugorva' : isNext ? 'következő lépés' : r.optional ? 'nem kötelező dolgozat' : 'még nem kezdted el';
         const n = gi + i;
         return `
           <li class="path-node${cls}" style="--x: ${xs[i]}px">
@@ -3267,7 +3582,7 @@ function initLanding() {
 
     tocBody.innerHTML = units.map((u, ui) => {
       const uid = u.unit.id || ('u' + ui);
-      const live = u.rows.filter(r => !r.skipped);
+      const live = u.rows.filter(r => !r.skipped && !r.optional);
       const done = live.filter(r => r.done).length;
       const complete = live.length > 0 && done === live.length;
       const hasNext = !!nextId && u.rows.some(r => r.step.id === nextId);
@@ -3276,8 +3591,8 @@ function initLanding() {
       const steps = u.rows.map(r => {
         const s = r.step;
         const isNext = s.id === nextId;
-        const cls = r.done ? ' is-done' : r.skipped ? ' is-skipped' : isNext ? ' is-next' : '';
-        const state = r.done ? 'kész' : r.skipped ? 'átugorva' : isNext ? 'következő lépés' : 'még nem kezdted el';
+        const cls = (r.done ? ' is-done' : r.skipped ? ' is-skipped' : isNext ? ' is-next' : '') + (r.optional ? ' is-exam' : '');
+        const state = r.done ? 'kész' : r.skipped ? 'átugorva' : isNext ? 'következő lépés' : r.optional ? 'nem kötelező dolgozat' : 'még nem kezdted el';
         return `
           <li class="ptoc-step${cls}">
             <button class="ptoc-step-btn" type="button" data-step="${esc(s.id)}" aria-label="${esc(s.title)}, ${state}">
@@ -6907,96 +7222,8 @@ function initPracticePage() {
     return tokens.length;
   }
 
-  // ── Puzzle validátor ─────────────────────────────
-  function extractPhrases(tokens) {
-    const phrases = [];
-    let current = [];
-    for (let i = 0; i < tokens.length; i++) {
-      const t = tokens[i];
-      if (t.type === 'verb') {
-        if (current.length) phrases.push(current);
-        phrases.push([t]);
-        current = [];
-      } else if (t.type === 'particle') {
-        current.push(t);
-        if (t.romaji !== 'no') {
-          phrases.push(current);
-          current = [];
-        }
-      } else {
-        current.push(t);
-      }
-    }
-    if (current.length) phrases.push(current);
-    return phrases;
-  }
-
-  function phraseKey(phrase) {
-    return phrase.map(t => `${t.type}:${t.romaji}|${t.jp}`).join(',');
-  }
-
-  function validatePuzzle(answerIndices, sentence) {
-    const tokens = answerIndices.map(i => sentence.tokens[i]);
-
-    if (tokens.length !== sentence.tokens.length) {
-      return { valid: false, errorType: 'incomplete', message: 'Még nincs minden token a válasz-területen.', hint: 'Húzd / kattintsd a maradék tokeneket a tálcáról.' };
-    }
-
-    // A mondat eredeti sorrendje mindig helyes (az azonos szövegű tokenek felcserélhetők).
-    const sameTok = (a, b) => a.type === b.type && a.jp === b.jp;
-    const orig = sentence.tokens;
-    if (tokens.every((t, i) => sameTok(t, orig[i]))) return { valid: true };
-
-    // Összetett állítmány (行く つもりです · 撮って も いいですか · 行った こと が あります):
-    // több ige, ige utáni partikula vagy segédszó. Itt az első igétől a mondat végéig
-    // kötött a sorrend; előtte a „szó + partikula" egységek szabadon cserélhetők.
-    const firstVerb = orig.findIndex(t => t.type === 'verb');
-    if (firstVerb !== orig.length - 1) {
-      const cut = firstVerb < 0 ? orig.length - 1 : firstVerb;
-      const tailOk = tokens.slice(cut).every((t, i) => sameTok(t, orig[cut + i]));
-      if (!tailOk) {
-        return { valid: false, errorType: 'predicate_order',
-          message: `Ennek a mondatnak a vége több szóból álló állítmány: <strong class="pp-fb-jp">${orig.slice(cut).map(t => t.jp).join(' ')}</strong>. Ezek a mondat végén, ebben a sorrendben állnak.`,
-          hint: 'Az előtte álló „szó + partikula" párok sorrendje szabad, de a pár tagjai együtt maradnak.' };
-      }
-      const headKeys = arr => extractPhrases(arr.slice(0, cut)).map(phraseKey).sort().join('||');
-      if (headKeys(tokens) !== headKeys(orig)) {
-        return { valid: false, errorType: 'pair_broken', message: 'Egy főnév-partikula pár fel van bontva — ezek mindig együtt kell maradjanak.', hint: 'A „szó + partikula" mindig egymás mellett áll a japánban (pl. <strong class="pp-fb-jp">寿司を</strong>, <strong class="pp-fb-jp">公園に</strong>).' };
-      }
-      return { valid: true };
-    }
-
-    const last = tokens[tokens.length - 1];
-    if (last.type !== 'verb') {
-      return { valid: false, errorType: 'verb_not_at_end', message: 'A japán mondatban az ige <strong>mindig a mondat végén</strong> áll.', hint: `Az ige itt: <strong class="pp-fb-jp">${sentence.tokens.find(t => t.type === 'verb').jp}</strong> — tedd a legvégére.` };
-    }
-    for (let i = 0; i < tokens.length - 1; i++) {
-      if (tokens[i].type === 'verb') {
-        return { valid: false, errorType: 'verb_in_middle', message: `Egyetlen ige van a mondatban, és annak a <strong>legvégén</strong> kell lennie.`, hint: `A "${tokens[i].jp}" ige most a ${i + 1}. helyen van — tedd a végére.` };
-      }
-    }
-    for (let i = 0; i < tokens.length; i++) {
-      const t = tokens[i];
-      if (t.type !== 'particle') continue;
-      const prev = tokens[i - 1];
-      if (!prev) {
-        return { valid: false, errorType: 'particle_first', message: `A "<strong class="pp-fb-jp">${t.jp}</strong>" partikula nem állhat a mondat elején.`, hint: 'Partikula előtt mindig főnévnek vagy a hozzá tartozó szónak kell állnia.' };
-      }
-      if (prev.type === 'verb') {
-        return { valid: false, errorType: 'particle_after_verb', message: `A "<strong class="pp-fb-jp">${t.jp}</strong>" partikula nem állhat ige után — az ige a mondat végén áll.`, hint: '' };
-      }
-      if (prev.type === 'particle' && prev.romaji !== 'no') {
-        return { valid: false, errorType: 'particle_after_particle', message: `Két nem-の partikula nem állhat egymás után. A "<strong class="pp-fb-jp">${t.jp}</strong>" előtti "${prev.jp}" más főnévhez tartozik.`, hint: '' };
-      }
-    }
-
-    const userKeys = extractPhrases(tokens).map(phraseKey).sort();
-    const origKeys = extractPhrases(sentence.tokens).map(phraseKey).sort();
-    if (userKeys.join('||') !== origKeys.join('||')) {
-      return { valid: false, errorType: 'pair_broken', message: 'Egy főnév-partikula pár fel van bontva — ezek mindig együtt kell maradjanak.', hint: 'A "tárgy + partikula" mindig egymás mellett áll a japánban (pl. <strong class="pp-fb-jp">寿司を</strong>, <strong class="pp-fb-jp">公園に</strong>).' };
-    }
-    return { valid: true };
-  }
+  // ── Puzzle validátor: a közös NihonCorePuzzle modulban él (a dolgozatok is azt használják) ──
+  const validatePuzzle = window.NihonCorePuzzle.validate;
 
   function checkPuzzle(sentence) {
     const result = validatePuzzle(puzzleState.answerIndices, sentence);
@@ -7460,178 +7687,8 @@ function initConjugationPage() {
   };
 
   /* ─────────────────────────────────────────────────
-     B) ENGINE — Conjugation core ─────────────────── */
-
-  // ── VerbDetector ──────────────────────────────────
-  // P1-ben minden ige a DB-ből jön → group lookup garantált.
-  // Az auto-detektálás (DB-n kívüli igéhez) P2 feladat.
-  const VerbDetector = {
-    classify(verb) {
-      // verb objektum vagy id-string is megengedett
-      const v = typeof verb === 'string'
-        ? NIHONCORE_VERBS.find(x => x.id === verb)
-        : verb;
-      if (!v) return { group: 'unknown', confidence: 0 };
-      return {
-        group: v.group,
-        confidence: 1.0,
-        pseudoIchidan: !!v.pseudoIchidan,
-        irregularTe: !!v.irregularTe
-      };
-    }
-  };
-
-  // ── StemEngine ────────────────────────────────────
-  // Visszaad: { a:{kana,romaji}, i:..., u:..., e:..., o:... }
-  // Godan: stem + GodanMap[family][col]
-  // Ichidan: minden oszlopra ugyanaz (a stem) — Ichidan-nál nincs oszlopváltás
-  // Irregular: nem használjuk (külön tábla)
-  const StemEngine = {
-    getStems(verb) {
-      if (verb.group === 'godan') {
-        const fam = NIHONCORE_GODAN_MAP[verb.godanFamily];
-        if (!fam) return null;
-        const out = {};
-        for (const col of ['a','i','u','e','o']) {
-          out[col] = {
-            kana:   verb.stemKana   + fam[col].kana,
-            romaji: verb.stemRomaji + fam[col].romaji
-          };
-        }
-        return out;
-      }
-      if (verb.group === 'ichidan') {
-        const ichi = { kana: verb.stemKana, romaji: verb.stemRomaji };
-        return { a: ichi, i: ichi, u: ichi, e: ichi, o: ichi };
-      }
-      return null;
-    }
-  };
-
-  // ── Masu / Nai motor (és minden olyan, ami sima stem+suffix) ──
-  function composeStemSuffix(verb, formCode) {
-    const rule = NIHONCORE_FORM_RULES[formCode];
-    if (!rule || !rule.stemColumn) return null;
-
-    if (verb.group === 'irregular') {
-      const irr = NIHONCORE_IRREGULAR_FORMS[verb.id];
-      return irr && irr[formCode] ? { ...irr[formCode], irregular: true } : null;
-    }
-
-    const stems = StemEngine.getStems(verb);
-    if (!stems) return null;
-    let stem = stems[rule.stemColumn];
-    // -aru honorific igék: a masu-stem ('i' oszlop) override (pl. kudasaru → ください,
-    // a sima くださり helyett) — NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem.
-    let irregularStem = false;
-    if (rule.stemColumn === 'i'
-        && NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem
-        && NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem[verb.id]) {
-      stem = NIHONCORE_VERB_EXCEPTIONS.irregularMasuStem[verb.id];
-      irregularStem = true;
-    }
-    const suf  = (verb.group === 'ichidan' && rule.ichidanSuffix) ? rule.ichidanSuffix : rule.suffix;
-
-    return {
-      kana:   stem.kana   + suf.kana,
-      romaji: stem.romaji + suf.romaji,
-      irregular: irregularStem,
-      morphemes: {
-        stem: stem,
-        suffix: suf,
-        column: rule.stemColumn,
-        ...(irregularStem ? { irregularStem: true } : {})
-      }
-    };
-  }
-
-  // ── Te / Ta motor (külön logika — családi minta) ──
-  function composeTeTa(verb, which /* 'te' | 'ta' */) {
-    // Irregular
-    if (verb.group === 'irregular') {
-      const irr = NIHONCORE_IRREGULAR_FORMS[verb.id];
-      return irr && irr[which] ? { ...irr[which], irregular: true } : null;
-    }
-
-    // Rendhagyó te/ta (csak 行く a P1-ben)
-    if (verb.irregularTe) {
-      const ex = NIHONCORE_VERB_EXCEPTIONS.irregularTe[verb.id];
-      if (ex && ex[which]) return { ...ex[which], irregular: true };
-    }
-
-    // Ichidan: stem + て / た
-    if (verb.group === 'ichidan') {
-      const suf = which === 'te'
-        ? { kana: 'て', romaji: 'te' }
-        : { kana: 'た', romaji: 'ta' };
-      return {
-        kana:   verb.stemKana   + suf.kana,
-        romaji: verb.stemRomaji + suf.romaji,
-        irregular: false,
-        morphemes: {
-          stem:   { kana: verb.stemKana, romaji: verb.stemRomaji },
-          suffix: suf,
-          column: 'ichidan'
-        }
-      };
-    }
-
-    // Godan: family-rule alapján
-    if (verb.group === 'godan') {
-      const rule = NIHONCORE_TE_RULES[verb.godanFamily];
-      if (!rule) return null;
-      const suf = rule[which];
-      return {
-        kana:   verb.stemKana   + suf.kana,
-        romaji: verb.stemRomaji + suf.romaji,
-        irregular: false,
-        morphemes: {
-          stem:    { kana: verb.stemKana, romaji: verb.stemRomaji },
-          suffix:  suf,
-          column:  'te-rule:' + verb.godanFamily,
-          pattern: rule.pattern
-        }
-      };
-    }
-    return null;
-  }
-
-  // ── Causative-Passive (kompozíció: passive ∘ causative) ──
-  // Pl. nomu → nomaseru (causative) → nomaserareru (passive applied)
-  //     taberu → tabesaseru → tabesaserareru
-  function composeCausativePassive(verb) {
-    if (verb.group === 'irregular') {
-      const irr = NIHONCORE_IRREGULAR_FORMS[verb.id];
-      return irr && irr.causative_passive ? { ...irr.causative_passive, irregular: true } : null;
-    }
-    const caus = composeStemSuffix(verb, 'causative');
-    if (!caus) return null;
-    // A causative kimenete -る/ru végű (-seru/saseru). Erre rakjuk a passive -rareru/られる-t.
-    const newKana   = caus.kana.replace(/る$/,   'られる');
-    const newRomaji = caus.romaji.replace(/ru$/, 'rareru');
-    return {
-      kana: newKana,
-      romaji: newRomaji,
-      irregular: false,
-      morphemes: caus.morphemes ? {
-        stem: caus.morphemes.stem,
-        suffix: {
-          kana:   caus.morphemes.suffix.kana   + 'られる',
-          romaji: caus.morphemes.suffix.romaji + 'rareru'
-        },
-        column: caus.morphemes.column,
-        composedFrom: 'causative+passive'
-      } : null
-    };
-  }
-
-  // ── Egységes belépő — verb + formCode → forma ────
-  function conjugate(verb, formCode) {
-    if (formCode === 'te') return composeTeTa(verb, 'te');
-    if (formCode === 'ta') return composeTeTa(verb, 'ta');
-    if (formCode === 'causative_passive') return composeCausativePassive(verb);
-    return composeStemSuffix(verb, formCode);
-  }
+     B) ENGINE — a ragozó motor a közös NihonCoreConj modulban él (a dolgozatok is azt használják) */
+  const { VerbDetector, StemEngine, composeStemSuffix, composeTeTa, composeCausativePassive, conjugate } = window.NihonCoreConj;
 
   /* ─────────────────────────────────────────────────
      C) EXERCISE GENERATOR ─────────────────────────── */
@@ -16008,7 +16065,8 @@ function initStatsPage() {
     'arimasu-imasu': 'Alap igék',  // V5 P2 — verb-engine instrumented
     production: 'Szabad fordítás', // V7 P1
     kana: 'Kana',
-    lesson: 'Lecke'
+    lesson: 'Lecke',
+    exam: 'Dolgozat'
   };
   const MODE_LABELS = {
     recognition: 'Felismerés', build: 'Építkezés', mastery: 'Mester',
@@ -16017,6 +16075,7 @@ function initStatsPage() {
     free: 'Szabad fordítás',
     reverse: 'Fordítva', typing: 'Beírás', match: 'Párosító',
     check: 'Ellenőrzés', listen: 'Hallás utáni kör', review: 'Ismétlés', retry: 'Hibák újra', quick: 'Gyors kérdések',
+    'exam-quick': 'Kis teszt', 'exam-big': 'Nagy dolgozat',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
@@ -18883,6 +18942,855 @@ function initLessonPage() {
 
 
 /* ====================================================
+   10. initExamPage() — Dolgozatok (exam.html)
+   ----------------------------------------------------
+   Kis teszt 4 leckénként (30 perc, 30 kérdés), nagy dolgozat 12 leckénként (60 perc,
+   60 kérdés): a leírásuk NIHONCORE_EXAMS (core.js), a lépésük a tanulási úton `optional`.
+   A kérdések kitöltésenként a leckék meglévő anyagából állnak össze, azonos arányokkal:
+   kb. 80% a dolgozat saját leckéiből, 20% a korábbiakból.
+     Részek:   gram (nyelvtan és olvasás) · part (partikulák és mondatépítés) ·
+               write (ragozás és beírás) · listen (hallás)
+     Típusok:  choice (négy válasz) · tokens (mondat összerakása) · typed (beírás, a romaji
+               gépelés közben kanává alakul)
+   Vizsga-mód: fut az óra, visszajelzés csak a végén. Gyakorló mód: idő nélkül, kérdésenként
+   visszajelzéssel. Mentés: nihoncore_exams_v1 (kitöltések, szinkronizál),
+   nihoncore_exam_settings_v1 (az indítás előtti beállítások, eszköz-helyi).
+   ==================================================== */
+function initExamPage() {
+  const main = document.getElementById('examMain');
+  if (!main) return;
+
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const RB = /\{([^|{}]+)\|([^|{}]+)\}/g;
+  const ruby = s => esc(s).replace(RB, '<ruby>$1<rt>$2</rt></ruby>');
+  const reading = s => String(s).replace(RB, '$2').replace(/[\s　＿…]/g, '');
+  const plain = s => String(s == null ? '' : s).replace(RB, '$1').replace(/<rt>[^<]*<\/rt>/g, '').replace(/<[^>]+>/g, '');
+  const hasJp = s => /[぀-ヿ一-鿿]/.test(s);
+  const hira = s => String(s || '').replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+  const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; } return a; };
+  const PLAY = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>';
+
+  const EXAMS = (typeof NIHONCORE_EXAMS !== 'undefined') ? NIHONCORE_EXAMS : [];
+  const COURSE = (typeof NIHONCORE_COURSE !== 'undefined') ? NIHONCORE_COURSE : [];
+  const PATH = (typeof NIHONCORE_PATH !== 'undefined') ? NIHONCORE_PATH : [];
+  const UNITS = (typeof NIHONCORE_PATH_UNITS !== 'undefined') ? NIHONCORE_PATH_UNITS : [];
+  const SENT = (typeof NIHONCORE_SENTENCES !== 'undefined') ? NIHONCORE_SENTENCES : [];
+  const VERBS = (typeof NIHONCORE_VERBS !== 'undefined') ? NIHONCORE_VERBS : [];
+  const PATTERNS = (typeof NIHONCORE_GRAMMAR_PATTERNS !== 'undefined') ? NIHONCORE_GRAMMAR_PATTERNS : [];
+  const PARTICLES = (typeof NIHONCORE_PARTICLES !== 'undefined') ? NIHONCORE_PARTICLES : [];
+  const FORMS = (typeof NIHONCORE_FORM_RULES !== 'undefined') ? NIHONCORE_FORM_RULES : {};
+  const Kana = window.NihonCoreKana, Conj = window.NihonCoreConj, Puzzle = window.NihonCorePuzzle;
+
+  const ATT_KEY = 'nihoncore_exams_v1', SET_KEY = 'nihoncore_exam_settings_v1', PATH_KEY = 'nihoncore_path_v1';
+  const PASS = 0.6, MAX_ATTEMPTS = 200;
+  const SECTIONS = { gram: 'Nyelvtan és olvasás', part: 'Partikulák és mondatépítés', write: 'Ragozás és beírás', listen: 'Hallás' };
+  const SEC_SHORT = { gram: 'Nyelvtan', part: 'Partikulák', write: 'Beírás', listen: 'Hallás' };   // a kör-sávba
+  const SEC_ORDER = ['gram', 'part', 'write', 'listen'];
+  // kérdésszám típusonként: kis teszt / nagy dolgozat
+  const PLAN = {
+    quick: { quiz: 8,  pattern: 4, read: 3, particle: 4, puzzle: 3, conj: 3, cloze: 2, listen: 3 },
+    big:   { quiz: 16, pattern: 8, read: 6, particle: 8, puzzle: 6, conj: 6, cloze: 4, listen: 6 }
+  };
+  const REVIEW_SHARE = 0.2;
+
+  let examId = null;
+  try { examId = new URLSearchParams(window.location.search).get('id'); } catch (e) {}
+  const exam = EXAMS.find(x => x.id === examId) || null;
+
+  /* ── Tárolás ─────────────────────────────────────── */
+  function loadAttempts() {
+    try { const a = JSON.parse(localStorage.getItem(ATT_KEY) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+  }
+  function saveAttempt(att) {
+    const all = loadAttempts();
+    all.push(att);
+    if (all.length > MAX_ATTEMPTS) all.splice(0, all.length - MAX_ATTEMPTS);
+    try { localStorage.setItem(ATT_KEY, JSON.stringify(all)); } catch (e) {}
+    if (window.NihonCoreSync && NihonCoreSync.schedulePush) NihonCoreSync.schedulePush();
+  }
+  const settings = { examMode: true, romaji: true, hu: true, audio: true };
+  try { Object.assign(settings, JSON.parse(localStorage.getItem(SET_KEY) || '{}') || {}); } catch (e) {}
+  const saveSettings = () => { try { localStorage.setItem(SET_KEY, JSON.stringify(settings)); } catch (e) {} };
+  function applyHelpers(on) {
+    document.body.classList.toggle('helpers-no-romaji', on && !settings.romaji);
+    document.body.classList.toggle('helpers-no-hu', on && !settings.hu);
+  }
+  // a dolgozat a tanulási út (nem kötelező) lépése: 60%-tól kész, akárhonnan nyílt az oldal
+  function markPathStep(id, pct) {
+    try {
+      const st = JSON.parse(localStorage.getItem(PATH_KEY) || 'null') || { level: null, steps: {} };
+      st.steps = st.steps || {};
+      const prev = st.steps[id] || {};
+      st.steps[id] = { best: Math.max(typeof prev.best === 'number' ? prev.best : 0, pct), done: !!prev.done || pct >= PASS, ts: Date.now() };
+      localStorage.setItem(PATH_KEY, JSON.stringify(st));
+    } catch (e) {}
+  }
+
+  /* ── Leckék, fejezetek ───────────────────────────── */
+  const lessonOf = id => COURSE.find(l => l.id === id) || null;
+  const lessonName = id => { const l = lessonOf(id); return !l ? id : (l.label ? l.title : l.no + '. lecke'); };
+  const ORDER = [];
+  PATH.forEach(s => {
+    if (s.module !== 'lesson' || s.mode) return;
+    const m = /[?&]id=(\w+)/.exec(s.href || '');
+    if (m && ORDER.indexOf(m[1]) < 0) ORDER.push(m[1]);
+  });
+  const reviewLessons = ex => {
+    const first = ORDER.indexOf(ex.lessons[0]);
+    return first <= 0 ? [] : ORDER.slice(0, first).filter(id => id !== 'l0' && ex.lessons.indexOf(id) < 0);
+  };
+  const unitOf = id => UNITS.find(u => u.steps.indexOf(id + '-lesson') >= 0) || null;
+  const stepsOf = id => { const u = unitOf(id); return u ? u.steps.map(sid => PATH.find(s => s.id === sid)).filter(Boolean) : []; };
+
+  /* ── Kérdés-készletek leckénként ─────────────────── */
+  const TRAY_JP = PARTICLES.map(p => p.jp);
+  const cache = {};
+  const memo = (k, fn) => (k in cache) ? cache[k] : (cache[k] = fn());
+
+  // a lecke mondatai: a saját készlete + a fejezet Mondat-Mester lépéseinek régi mondatai
+  function sentencesFor(id) {
+    return memo('sent:' + id, () => {
+      const out = SENT.filter(s => s.lesson === id);
+      const seen = {};
+      out.forEach(s => { seen[s.id] = true; });
+      stepsOf(id).filter(st => st.module === 'practice' && st.preset).forEach(st => {
+        const p = st.preset;
+        if (!p.ids && !p.idRanges && !p.particlesOnly && !p.particlesAny) return;
+        SENT.forEach(s => {
+          if (seen[s.id] || s.lesson) return;
+          let ok = false;
+          if (p.ids) ok = p.ids.indexOf(s.id) >= 0;
+          else if (p.idRanges) { const m = /^s_n5_(\d+)$/.exec(s.id); ok = !!m && p.idRanges.some(r => +m[1] >= r[0] && +m[1] <= r[1]); }
+          else {
+            if (s.level !== (p.level || 'N5')) return;
+            const ps = s.tokens.filter(t => t.type === 'particle').map(t => t.jp);
+            ok = ps.length > 0 && (!p.particlesOnly || ps.every(x => p.particlesOnly.indexOf(x) >= 0)) &&
+                 (!p.particlesAny || ps.some(x => p.particlesAny.indexOf(x) >= 0));
+          }
+          if (ok) { seen[s.id] = true; out.push(s); }
+        });
+      });
+      return out;
+    });
+  }
+  const examplesFor = id => memo('ex:' + id, () => {
+    const l = lessonOf(id), out = [];
+    if (l) l.points.forEach((p, pi) => (p.examples || []).forEach((e, ei) => { if (e.jp && e.hu) out.push({ lesson: id, id: id + ':' + pi + ':' + ei, jp: e.jp, romaji: e.romaji || '', hu: e.hu }); }));
+    return out;
+  });
+  const patternsFor = id => memo('pat:' + id, () => PATTERNS.filter(p => p.lesson === id && p.examples && p.examples.length));
+  // az addig tanult ragozási alakok: a fejezetek Ragozó-lépéseiből
+  function conjSetup(ids) {
+    const forms = {}, themes = {};
+    ids.forEach(id => stepsOf(id).forEach(st => {
+      if (st.module !== 'conjugation' || !st.preset || !st.preset.only) return;
+      (st.preset.only.forms || []).forEach(f => { forms[f] = true; });
+      (st.preset.only.themes || []).forEach(t => { themes[t] = true; });
+    }));
+    return { forms: Object.keys(forms), themes: Object.keys(themes) };
+  }
+
+  // kiemelt rész a mintamondatban: a kiegészítendő rész helyére a válasz kerül, jelölve
+  const patternSentence = ex => String(ex.cloze || ex.jp).replace('___BLANK___', '<span class="grm-hl">' + esc(ex.clozeAnswer) + '</span>');
+  const clozeSentence = ex => String(ex.cloze || '').replace('___BLANK___', '<span class="exam-blank" aria-label="hiányzó rész">＿＿</span>');
+
+  // mely partikulák nem lehetnek rossz válaszok (mert azon a helyen is elfogadhatók lennének)
+  const NEAR = { 'は': ['が', 'も'], 'が': ['は', 'も'], 'を': ['は', 'も'], 'に': ['へ', 'は', 'も', 'で'], 'へ': ['に', 'は', 'も'], 'で': ['は', 'も', 'に'],
+                 'も': ['は', 'が', 'を'], 'と': ['も', 'は', 'や'], 'の': [], 'から': ['は', 'も'], 'まで': ['は', 'も', 'に'], 'か': ['ね', 'よ'], 'ね': ['よ', 'か'], 'よ': ['ね', 'か'],
+                 'なら': ['は', 'も'], 'でも': ['は', 'も'] };
+  const COMMON = ['は', 'が', 'を', 'に', 'で', 'へ', 'と', 'も', 'の', 'から', 'まで'];
+
+  // egy lecke jelöltjei egy kérdéstípushoz (a válaszlehetőségek később készülnek)
+  function candidates(type, id) {
+    return memo(type + ':' + id, () => {
+      const out = [];
+      if (type === 'quiz') {
+        const l = lessonOf(id);
+        (l && l.quiz || []).forEach((q, i) => {
+          if (!q || !q.a || !q.wrong || q.wrong.length < 2) return;
+          out.push({ type: 'choice', sec: 'gram', kind: 'quiz', lesson: id, key: 'lesson:' + id + ':' + i,
+            prompt: q.q, jp: q.jp || '', answer: q.a, options: [q.a].concat(q.wrong.slice(0, 3)), why: q.why || '' });
+        });
+      } else if (type === 'read' || type === 'listen') {
+        examplesFor(id).forEach(e => out.push(type === 'read'
+          ? { type: 'choice', sec: 'gram', kind: 'read', lesson: id, key: 'read:' + e.id, ex: e, prompt: 'Mit jelent ez a mondat?', jp: e.jp, romaji: e.romaji, answer: e.hu }
+          : { type: 'choice', sec: 'listen', kind: 'listen', lesson: id, key: 'listen:' + e.id, ex: e, prompt: 'Hallgasd meg: mit jelent?', say: reading(e.jp), jpAfter: e.jp, answer: e.hu }));
+      } else if (type === 'pattern' || type === 'cloze') {
+        patternsFor(id).forEach(p => p.examples.forEach((ex, i) => {
+          if (!ex.cloze || !ex.clozeAnswer) return;
+          out.push(type === 'pattern'
+            ? { type: 'choice', sec: 'gram', kind: 'pattern', lesson: id, key: 'pat:' + p.id + ':' + i, group: 'pe:' + p.id + ':' + i, pattern: p, prompt: 'Mit fejez ki a kiemelt rész?', html: patternSentence(ex), hu: ex.hu, answer: p.summary,
+                why: p.label + ': ' + p.summary }
+            : { type: 'typed', sec: 'write', kind: 'cloze', lesson: id, key: 'cloze:' + p.id + ':' + i, group: 'pe:' + p.id + ':' + i, pattern: p, prompt: 'Írd be a hiányzó részt!', html: clozeSentence(ex), hu: ex.hu,
+                answerKana: ex.clozeAnswer, answerShow: ex.clozeAnswer, why: p.label + ': ' + p.summary });
+        }));
+      } else if (type === 'particle') {
+        sentencesFor(id).forEach(s => {
+          s.tokens.forEach((t, ti) => {
+            if (t.type !== 'particle' || TRAY_JP.indexOf(t.jp) < 0 || !NEAR[t.jp]) return;
+            out.push({ type: 'choice', sec: 'part', kind: 'particle', lesson: id, key: 'par:' + s.id + ':' + ti, group: s.id, sentence: s, blank: ti,
+              prompt: 'Melyik partikula hiányzik?', hu: s.translation, answer: t.jp });
+          });
+        });
+      } else if (type === 'puzzle') {
+        sentencesFor(id).forEach(s => {
+          if (s.tokens.length < 4 || s.tokens.length > 9) return;
+          out.push({ type: 'tokens', sec: 'part', kind: 'puzzle', lesson: id, key: 'puz:' + s.id, group: s.id, sentence: s, prompt: 'Rakd össze a mondatot!', hu: s.translation });
+        });
+      }
+      return out;
+    });
+  }
+
+  /* ── A dolgozat összeállítása ─────────────────────── */
+  // n elem, a leckék között egyenletesen elosztva
+  function pickSpread(byLesson, n, used) {
+    const lessons = shuffle(Object.keys(byLesson)), picked = [];
+    const bags = {};
+    lessons.forEach(l => { bags[l] = shuffle(byLesson[l]); });
+    let moved = true;
+    while (picked.length < n && moved) {
+      moved = false;
+      for (let i = 0; i < lessons.length && picked.length < n; i++) {
+        const bag = bags[lessons[i]];
+        while (bag.length) {
+          const it = bag.pop();
+          const g = it.group || it.key;
+          if (used[it.key] || used['g:' + g] || (it.ex && used['ex:' + it.ex.id])) continue;
+          used[it.key] = true; used['g:' + g] = true;
+          if (it.ex) used['ex:' + it.ex.id] = true;
+          picked.push(it); moved = true;
+          break;
+        }
+      }
+    }
+    return picked;
+  }
+  function draw(type, n, mainIds, revIds, used) {
+    if (n <= 0) return [];
+    const pool = ids => { const m = {}; ids.forEach(id => { const c = candidates(type, id); if (c.length) m[id] = c; }); return m; };
+    const mainPool = pool(mainIds), revPool = pool(revIds);
+    const wantRev = Object.keys(revPool).length ? Math.round(n * REVIEW_SHARE) : 0;
+    let out = pickSpread(revPool, wantRev, used);
+    out = out.concat(pickSpread(mainPool, n - out.length, used));
+    if (out.length < n) out = out.concat(pickSpread(revPool, n - out.length, used));   // ha a saját leckékből nem telik ki
+    return out;
+  }
+  function conjItems(n, mainIds, revIds, used) {
+    if (n <= 0 || !Conj) return [];
+    let setup = conjSetup(mainIds);
+    const all = conjSetup(revIds.concat(mainIds));
+    const forms = setup.forms.length ? setup.forms : all.forms;
+    if (!forms.length) return [];
+    const themes = (setup.themes.length ? setup.themes : all.themes);
+    let verbs = VERBS.filter(v => !themes.length || themes.indexOf(v.theme || 'daily') >= 0);
+    if (verbs.length < 6) verbs = VERBS.slice();
+    // a korábban tanult alakok is előjöhetnek (ismétlés), de ritkábban
+    const older = all.forms.filter(f => forms.indexOf(f) < 0);
+    const out = [];
+    const bag = shuffle(verbs);
+    let guard = 0;
+    while (out.length < n && bag.length && guard++ < 400) {
+      const v = bag.pop();
+      const useOld = older.length && Math.random() < REVIEW_SHARE;
+      const form = (useOld ? older : forms)[Math.floor(Math.random() * (useOld ? older : forms).length)];
+      const key = 'conj:' + v.id + ':' + form;
+      if (used[key]) continue;
+      const res = Conj.conjugate(v, form);
+      const rule = FORMS[form];
+      if (!res || !res.kana || !rule) continue;
+      used[key] = true;
+      // kanjival beírva is jó: az ige kanjis töve + a ragozott végződés
+      const okuri = (/[ぁ-ん]+$/.exec(v.kanji) || [''])[0];
+      const stemKana = okuri && v.kana.slice(-okuri.length) === okuri ? v.kana.slice(0, v.kana.length - okuri.length) : '';
+      const alt = stemKana && res.kana.indexOf(stemKana) === 0 ? v.kanji.slice(0, v.kanji.length - okuri.length) + res.kana.slice(stemKana.length) : '';
+      out.push({ type: 'typed', sec: 'write', kind: 'conj', lesson: '', key: key, verb: v, form: form,
+        prompt: 'Ragozd az igét!', answerKana: res.kana, answerRomaji: res.romaji, answerAlt: alt, answerShow: res.kana,
+        why: rule.nameHu + (rule.example ? ' (' + rule.example + ')' : '') });
+    }
+    return out;
+  }
+
+  // válaszlehetőségek a választós kérdésekhez
+  function finishChoice(it, scope) {
+    if (it.kind === 'quiz') { it.options = shuffle(it.options); return it; }
+    if (it.kind === 'read' || it.kind === 'listen') {
+      const others = shuffle(scope.examples.filter(e => e.hu !== it.answer && e.id !== it.ex.id));
+      const opts = [it.answer];
+      // hasonló hosszú mondatok előre: így a hossz nem árulja el a választ
+      others.sort((a, b) => Math.abs(a.hu.length - it.answer.length) - Math.abs(b.hu.length - it.answer.length));
+      shuffle(others.slice(0, 8)).forEach(e => { if (opts.length < 4 && opts.indexOf(e.hu) < 0) opts.push(e.hu); });
+      it.options = shuffle(opts);
+      it.why = it.ex.romaji ? plain(it.ex.jp) + ' (' + it.ex.romaji + ')' : plain(it.ex.jp);
+      return it;
+    }
+    if (it.kind === 'pattern') {
+      const p = it.pattern, opts = [p.summary];
+      const add = list => shuffle(list).forEach(x => { if (opts.length < 4 && x.id !== p.id && opts.indexOf(x.summary) < 0) opts.push(x.summary); });
+      add(scope.patterns.filter(x => (p.contrasts || []).indexOf(x.id) >= 0));
+      add(scope.patterns.filter(x => x.lesson === p.lesson));
+      add(scope.patterns);
+      add(PATTERNS.filter(x => x.jlpt === p.jlpt));
+      add(PATTERNS);
+      it.options = shuffle(opts);
+      return it;
+    }
+    if (it.kind === 'particle') {
+      const near = NEAR[it.answer] || [];
+      const inSentence = it.sentence.tokens.filter(t => t.type === 'particle').map(t => t.jp);
+      const opts = [it.answer];
+      shuffle(COMMON.filter(x => x !== it.answer && near.indexOf(x) < 0)).forEach(x => { if (opts.length < 4) opts.push(x); });
+      it.options = shuffle(opts);
+      const def = PARTICLES.find(p => p.jp === it.answer);
+      it.why = def ? it.answer + ': ' + def.fullExplain + '.' : '';
+      it.others = inSentence;
+      return it;
+    }
+    return it;
+  }
+
+  function buildExam(ex) {
+    const mainIds = ex.lessons.slice(), revIds = reviewLessons(ex);
+    const plan = Object.assign({}, PLAN[ex.kind === 'big' ? 'big' : 'quick']);
+    if (!settings.audio) { plan.read += plan.listen; plan.listen = 0; }
+    const target = Object.keys(plan).reduce((s, k) => s + plan[k], 0);
+    const used = {};
+    const scopeIds = revIds.concat(mainIds);
+    const scope = { examples: [], patterns: [] };
+    scopeIds.forEach(id => { scope.examples = scope.examples.concat(examplesFor(id)); scope.patterns = scope.patterns.concat(patternsFor(id)); });
+
+    let items = [];
+    ['listen', 'read', 'pattern', 'cloze', 'particle', 'puzzle', 'quiz'].forEach(t => { items = items.concat(draw(t, plan[t], mainIds, revIds, used)); });
+    items = items.concat(conjItems(plan.conj, mainIds, revIds, used));
+    // ami egy típusból nem telt ki (pl. még nincs tanult igealak), azt a leckék saját kérdései pótolják
+    if (items.length < target) items = items.concat(draw('quiz', target - items.length, mainIds, revIds, used));
+    if (items.length < target) items = items.concat(draw('read', target - items.length, mainIds, revIds, used));
+    items.forEach(it => { if (it.type === 'choice') finishChoice(it, scope); });
+    items = items.filter(it => it.type !== 'choice' || (it.options && it.options.length >= 3));
+    // részenként, a részen belül kevert sorrendben
+    let ordered = [];
+    SEC_ORDER.forEach(sec => { ordered = ordered.concat(shuffle(items.filter(it => it.sec === sec))); });
+    return ordered;
+  }
+  // mit ígér a lobbi: a terv szerinti darabszámok részenként
+  function planSummary(ex) {
+    const p = PLAN[ex.kind === 'big' ? 'big' : 'quick'];
+    return { gram: p.quiz + p.pattern + p.read + (settings.audio ? 0 : p.listen), part: p.particle + p.puzzle, write: p.conj + p.cloze, listen: settings.audio ? p.listen : 0 };
+  }
+  const examMinutes = ex => ex.minutes || (ex.kind === 'big' ? 60 : 30);
+  const examCount = ex => { const p = PLAN[ex.kind === 'big' ? 'big' : 'quick']; return Object.keys(p).reduce((s, k) => s + p[k], 0); };
+
+  /* ── Megjelenítés: közös elemek ───────────────────── */
+  const hero = document.getElementById('examHero');
+  const lobby = document.getElementById('examLobby');
+  const runtime = document.getElementById('examRuntime');
+  const fmtTime = ms => { const s = Math.max(0, Math.round(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+  const fmtDate = ts => { const d = new Date(ts); return d.getFullYear() + '. ' + String(d.getMonth() + 1).padStart(2, '0') + '. ' + String(d.getDate()).padStart(2, '0') + '.'; };
+  const pct = (c, t) => t ? Math.round(c / t * 100) : 0;
+  const lessonRange = ex => {
+    const first = lessonOf(ex.lessons[0]), last = lessonOf(ex.lessons[ex.lessons.length - 1]);
+    return first && last ? first.no + '–' + last.no + '. lecke' : '';
+  };
+
+  /* ── Dolgozatok listája (exam.html, azonosító nélkül) ── */
+  function renderIndex() {
+    const atts = loadAttempts();
+    if (hero) hero.innerHTML = `
+      <div class="module-hero-icon icon-glow-gold"><span lang="ja">試</span></div>
+      <div class="module-hero-meta">
+        <div class="module-meta-row"><span class="badge-jlpt">JLPT N5 → N4</span><span class="badge-group">Nem kötelező</span></div>
+        <h1 class="module-page-title">Dolgozatok</h1>
+        <p class="module-page-desc">Négy leckénként egy kis teszt (30 perc), tizenkét leckénként egy nagy dolgozat (60 perc). Minden kitöltés más kérdésekből áll, és elmentődik: látod, mennyit fejlődtél.</p>
+      </div>`;
+    runtime.classList.add('hidden');
+    lobby.className = 'exam-index';
+    lobby.innerHTML = EXAMS.map(ex => {
+      const mine = atts.filter(a => a.exam === ex.id);
+      const best = mine.reduce((m, a) => Math.max(m, pct(a.correct, a.total)), -1);
+      const last = mine[mine.length - 1];
+      return `
+        <a class="exam-row glass-panel${ex.kind === 'big' ? ' is-big' : ''}${best >= PASS * 100 ? ' is-passed' : ''}" href="exam.html?id=${esc(ex.id)}">
+          <span class="exam-row-glyph" lang="ja" aria-hidden="true">${esc(ex.glyph || '試')}</span>
+          <span class="exam-row-text">
+            <span class="exam-row-kicker">${ex.kind === 'big' ? 'Nagy dolgozat' : 'Kis teszt'} · ${examMinutes(ex)} perc · ${examCount(ex)} kérdés</span>
+            <strong class="exam-row-title">${esc(ex.title)}</strong>
+            <span class="exam-row-sub">${mine.length ? 'Legjobb: ' + best + '% · ' + mine.length + ' kitöltés · utoljára ' + fmtDate(last.ts) : 'Még nem írtad meg'}</span>
+          </span>
+          <span class="exam-row-score">${mine.length ? best + '%' : '–'}</span>
+        </a>`;
+    }).join('') || '<p class="lp-body">Még nincs dolgozat.</p>';
+  }
+
+  /* ── Lobbi: miből áll, beállítások, korábbi eredmények ── */
+  function historyHtml(ex) {
+    const mine = loadAttempts().filter(a => a.exam === ex.id);
+    if (!mine.length) return '<div class="lobby-stats exam-history"><span class="exam-history-empty">Ezt a dolgozatot még nem írtad meg.</span></div>';
+    const best = mine.reduce((m, a) => Math.max(m, pct(a.correct, a.total)), 0);
+    const rows = mine.slice(-5).reverse().map(a => `
+      <li class="exam-att">
+        <span class="exam-att-date">${fmtDate(a.ts)}</span>
+        <span class="exam-att-mode">${a.examMode ? 'vizsga' : 'gyakorló'}</span>
+        <span class="exam-att-time">${fmtTime(a.durationMs)}</span>
+        <strong class="exam-att-score${pct(a.correct, a.total) >= PASS * 100 ? ' is-ok' : ''}">${a.correct} / ${a.total} · ${pct(a.correct, a.total)}%</strong>
+      </li>`).join('');
+    const first = pct(mine[0].correct, mine[0].total), lastP = pct(mine[mine.length - 1].correct, mine[mine.length - 1].total);
+    const trend = mine.length > 1 ? (lastP > first ? 'Az első kitöltés óta +' + (lastP - first) + ' százalékpont.' : lastP < first ? 'Az első kitöltésed ' + first + '% volt, a legutóbbi ' + lastP + '%.' : 'Az első és a legutóbbi kitöltésed egyformán ' + lastP + '%.') : '';
+    return `
+      <div class="lobby-stats exam-history">
+        <div class="exam-history-head"><strong>Korábbi eredményeid</strong><span>Legjobb: ${best}% · ${mine.length} kitöltés</span></div>
+        <ul class="exam-att-list">${rows}</ul>
+        ${trend ? '<p class="exam-history-trend">' + trend + '</p>' : ''}
+      </div>`;
+  }
+  function renderLobby() {
+    const ex = exam;
+    applyHelpers(false);
+    const rev = reviewLessons(ex);
+    if (hero) {
+      hero.classList.remove('hidden');
+      hero.innerHTML = `
+        <div class="module-hero-icon icon-glow-gold"><span lang="ja">${esc(ex.glyph || '試')}</span></div>
+        <div class="module-hero-meta">
+          <div class="module-meta-row"><span class="badge-jlpt">${ex.kind === 'big' ? 'Nagy dolgozat' : 'Kis teszt'}</span><span class="badge-group">${examMinutes(ex)} perc · ${examCount(ex)} kérdés</span></div>
+          <h1 class="module-page-title">${esc(ex.title)}</h1>
+          <p class="module-page-desc">${esc(ex.desc || '')}</p>
+        </div>`;
+    }
+    const plan = planSummary(ex);
+    const sw = (key, title, text) => `
+        <label class="cj-adapt-switch exam-switch">
+          <input type="checkbox" data-exam-set="${key}"${settings[key] ? ' checked' : ''} />
+          <span class="cj-adapt-text"><strong>${title}</strong><em>${text}</em></span>
+        </label>`;
+    runtime.classList.add('hidden');
+    lobby.classList.remove('hidden');
+    lobby.innerHTML = `
+      <div class="lobby-header">
+        <h2 class="lobby-title">Mielőtt elkezded</h2>
+        <p class="lobby-sub">${ex.lessons.length} lecke anyaga${rev.length ? ', és egy kevés ismétlés a korábbiakból' : ''}. Minden kitöltés más kérdésekből áll.</p>
+      </div>
+      <div class="lobby-section" data-lobby-keep>
+        <div class="lobby-section-label">Miből áll</div>
+        <ul class="exam-parts">
+          ${SEC_ORDER.filter(s => plan[s] > 0).map(s => `<li class="exam-part"><span class="exam-part-name">${SECTIONS[s]}</span><span class="exam-part-n">${plan[s]} kérdés</span></li>`).join('')}
+        </ul>
+        <p class="exam-lessons">${ex.lessons.map(id => { const l = lessonOf(id); return l ? '<span class="exam-lesson-chip">' + esc(l.label ? l.title : l.no + '. ' + plain(l.title)) + '</span>' : ''; }).join('')}</p>
+      </div>
+      <div class="lobby-section" data-lobby-keep>
+        <div class="lobby-section-label">Beállítások</div>
+        ${sw('examMode', 'Vizsga-mód: időre', 'Fut az óra (' + examMinutes(ex) + ' perc), és csak a végén látod, mit találtál el: mint a JLPT-n. Kikapcsolva nincs idő, és minden kérdés után jön a magyarázat.')}
+        ${sw('romaji', 'Romaji segítség', 'A japán szavak alatt látszik az átírás. Kikapcsolva csak a kana és a kanji marad.')}
+        ${sw('hu', 'Magyar segítség', 'A mondatok alatt látszik a fordítás, ahol az nem maga a feladat.')}
+        ${sw('audio', 'Hanggal', 'Van hallás rész: a mondatot meghallgatod. Kikapcsolva a hallás rész kimarad, a helyére olvasós kérdés kerül.')}
+      </div>
+      ${historyHtml(ex)}
+      <button class="btn btn-primary glow-effect ml-start" id="examStart" type="button">Kezdés — ${examCount(ex)} kérdés</button>`;
+    lobby.querySelectorAll('[data-exam-set]').forEach(inp => inp.addEventListener('change', () => {
+      settings[inp.dataset.examSet] = inp.checked;
+      saveSettings();
+      const partsEl = lobby.querySelector('.exam-parts');
+      if (partsEl) { const p2 = planSummary(ex); partsEl.innerHTML = SEC_ORDER.filter(s => p2[s] > 0).map(s => `<li class="exam-part"><span class="exam-part-name">${SECTIONS[s]}</span><span class="exam-part-n">${p2[s]} kérdés</span></li>`).join(''); }
+    }));
+    document.getElementById('examStart').addEventListener('click', startExam);
+  }
+
+  /* ── A kör ─────────────────────────────────────────── */
+  const run = { items: [], idx: 0, results: [], startTs: 0, endTs: 0, timer: 0, submitted: false, score: 0, done: false };
+  const cardEl = () => document.getElementById('examCard');
+  const actionsEl = () => document.getElementById('examActions');
+  const fbEl = () => document.getElementById('examFeedback');
+
+  function startExam() {
+    run.items = buildExam(exam);
+    if (!run.items.length) return;
+    run.idx = 0; run.results = []; run.score = 0; run.done = false;
+    run.startTs = Date.now();
+    run.endTs = settings.examMode ? run.startTs + examMinutes(exam) * 60000 : 0;
+    applyHelpers(true);
+    if (window.NihonCoreRound) NihonCoreRound.begin(() => ({ module: 'exam', mode: exam.kind === 'big' ? 'exam-big' : 'exam-quick', results: run.results, score: run.score, startTs: run.startTs, skipPath: true }));
+    lobby.classList.add('hidden');
+    if (hero) hero.classList.add('hidden');
+    runtime.classList.remove('hidden', 'exam-done');
+    document.getElementById('examSummary').classList.add('hidden');
+    document.getElementById('examStat1Label').textContent = settings.examMode ? 'Idő' : 'Helyes';
+    clearInterval(run.timer);
+    if (settings.examMode) run.timer = setInterval(tick, 1000);
+    tick();
+    renderCard();
+  }
+  function tick() {
+    const v = document.getElementById('examStat1');
+    if (!v) return;
+    if (!settings.examMode) { v.textContent = run.results.filter(r => r.correct).length; return; }
+    const left = run.endTs - Date.now();
+    v.textContent = fmtTime(left);
+    v.classList.toggle('is-low', left <= 5 * 60000);
+    if (left <= 0 && !run.done) finish(true);
+  }
+  function updateBar() {
+    const n = run.items.length, it = run.items[run.idx];
+    document.getElementById('examStat2').textContent = Math.min(run.idx + 1, n) + ' / ' + n;
+    document.getElementById('examCount').textContent = it ? SEC_SHORT[it.sec] : '';
+    document.getElementById('examFill').style.width = (run.idx / n * 100) + '%';
+    if (!settings.examMode) tick();
+  }
+
+  const eyebrow = it => `
+      <div class="cj-prompt-eyebrow">
+        <span class="cj-pe-group">${SECTIONS[it.sec]}</span>${it.lesson ? '<span class="cj-pe-dot">·</span>' + esc(lessonName(it.lesson)) : ''}
+      </div>`;
+  const huLine = it => it.hu ? `<div class="exam-hint-hu">${esc(it.hu)}</div>` : '';
+  const romajiOf = jp => (Kana && /^[ぁ-ゖァ-ヺー]+$/.test(jp)) ? Kana.toRomaji(jp) : '';
+
+  // a mondat tokenjei egy hiánnyal (partikula-kérdés)
+  function blankSentence(it) {
+    return it.sentence.tokens.map((t, i) => i === it.blank
+      ? '<span class="exam-tokw is-blank"><span class="exam-blank">＿</span></span>'
+      : `<span class="exam-tokw${t.type === 'particle' ? ' is-particle' : ''}"><span class="exam-tokw-jp" lang="ja">${esc(t.jp)}</span><span class="exam-tokw-romaji">${esc(t.type === 'particle' ? (romajiOf(t.jp) || t.romaji) : t.romaji)}</span></span>`).join('');
+  }
+
+  function renderCard() {
+    run.submitted = false;
+    const it = run.items[run.idx];
+    updateBar();
+    const fb = fbEl();
+    fb.classList.add('hidden'); fb.innerHTML = '';
+    const card = cardEl();
+    card.className = 'conj-card glass-panel-heavy exam-card exam-card-' + it.kind;
+    let body = '';
+    if (it.type === 'choice') {
+      const long = it.options.some(o => plain(o).length > 14);
+      const jpBlock = it.kind === 'particle' ? `<div class="exam-sentence">${blankSentence(it)}</div>`
+        : it.html ? `<div class="exam-jp" lang="ja">${it.html}</div>`
+        : it.jp ? `<div class="exam-jp" lang="ja">${ruby(it.jp)}</div>${it.kind === 'read' && it.romaji ? '<div class="exam-jp-romaji">' + esc(it.romaji) + '</div>' : ''}` : '';
+      const listenBlock = it.kind === 'listen' ? `
+          <div class="lq-listen">
+            <button class="lq-listen-btn" id="examPlay" type="button" aria-label="Lejátszás">${PLAY}</button>
+            <button class="btn btn-ghost lq-listen-slow" id="examSlow" type="button">Lassabban</button>
+          </div>
+          <div class="exam-jp exam-listen-text hidden" id="examListenText" lang="ja">${ruby(it.jpAfter)}</div>` : '';
+      body = `
+        <div class="cj-prompt">
+          ${eyebrow(it)}
+          <div class="lq-question">${ruby(it.prompt)}</div>
+          ${jpBlock}${listenBlock}
+          ${it.kind === 'particle' || it.kind === 'pattern' ? huLine(it) : ''}
+        </div>
+        <div class="cj-options lq-options${long ? ' lq-options-long' : ''}">
+          ${it.options.map((o, i) => `<button class="cj-option" type="button" data-idx="${i}"><span class="lq-opt"${hasJp(o) ? ' lang="ja"' : ''}>${ruby(o)}</span>${romajiOf(o) ? '<span class="exam-opt-romaji">' + esc(romajiOf(o)) + '</span>' : ''}</button>`).join('')}
+        </div>`;
+    } else if (it.type === 'tokens') {
+      it.order = [];
+      it.tray = shuffle(it.sentence.tokens.map((t, i) => i));
+      body = `
+        <div class="cj-prompt">
+          ${eyebrow(it)}
+          <div class="lq-question">${esc(it.prompt)}</div>
+          <div class="exam-task-hu">${esc(it.hu)}</div>
+        </div>
+        <div class="exam-answer" id="examAnswer" aria-label="A mondatod"></div>
+        <div class="exam-tray" id="examTray" aria-label="Szavak"></div>`;
+    } else {
+      const target = it.kind === 'conj' ? `
+          <div class="exam-verb"><span class="exam-verb-jp" lang="ja">${esc(it.verb.kanji)}</span><span class="exam-verb-kana" lang="ja">${esc(it.verb.kana)}</span><span class="exam-verb-romaji">${esc(it.verb.romaji)}</span><span class="exam-verb-hu">${esc(it.verb.meaningHu)}</span></div>
+          <div class="cj-target"><span class="cj-target-label">Alak:</span><span class="cj-target-name">${esc(FORMS[it.form].nameHu)}</span></div>`
+        : `<div class="exam-jp" lang="ja">${it.html}</div>${huLine(it)}`;
+      body = `
+        <div class="cj-prompt">
+          ${eyebrow(it)}
+          <div class="lq-question">${esc(it.prompt)}</div>
+          ${target}
+        </div>
+        <div class="cj-input-area">
+          <input type="text" class="cj-input exam-input" id="examInput" lang="ja" placeholder="kanával vagy romajival" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" />
+        </div>`;
+    }
+    card.innerHTML = body + '<button class="dont-know-btn" type="button">Nem tudom</button>';
+    actionsEl().innerHTML = (it.type !== 'choice' || settings.examMode)
+      ? `<button class="btn btn-primary glow-effect cj-submit" id="examSubmit" type="button" disabled>${settings.examMode ? 'Tovább' : 'Ellenőrzés'}</button>` : '';
+    wireCard(it);
+    if (window.NihonCoreRound) NihonCoreRound.scrollToRound();
+  }
+
+  function playItem(it, speed) {
+    const btn = document.getElementById('examPlay');
+    if (btn) btn.classList.add('is-playing');
+    if (!window.NihonCoreAudio) { listenFailed(); return; }
+    NihonCoreAudio.play(it.say, { speed: speed, onEnd: () => { if (btn) btn.classList.remove('is-playing'); }, onError: listenFailed });
+  }
+  // ha a hang nem megy, a mondat szövege jelenik meg: a kérdés így is megválaszolható
+  function listenFailed() {
+    const t = document.getElementById('examListenText'), btn = document.getElementById('examPlay');
+    if (btn) btn.classList.remove('is-playing');
+    if (t) t.classList.remove('hidden');
+  }
+
+  function wireCard(it) {
+    const card = cardEl();
+    const submit = document.getElementById('examSubmit');
+    card.querySelector('.dont-know-btn').addEventListener('click', () => { if (!run.submitted) answer(it, null, true); });
+    if (it.type === 'choice') {
+      const buttons = card.querySelectorAll('.cj-option');
+      buttons.forEach(btn => btn.addEventListener('click', () => {
+        if (run.submitted) return;
+        const i = parseInt(btn.dataset.idx, 10);
+        if (!settings.examMode) { answer(it, it.options[i], false, btn); return; }
+        // vizsga-módban a választás a „Tovább"-ig módosítható
+        buttons.forEach(b => b.classList.toggle('is-picked', b === btn));
+        it.picked = i;
+        if (submit) submit.disabled = false;
+      }));
+      if (submit) submit.addEventListener('click', () => { if (!run.submitted && it.picked != null) answer(it, it.options[it.picked], false); });
+      if (it.kind === 'listen') {
+        document.getElementById('examPlay').addEventListener('click', () => playItem(it, 0.9));
+        document.getElementById('examSlow').addEventListener('click', () => playItem(it, 0.65));
+        playItem(it, 0.9);
+      }
+    } else if (it.type === 'tokens') {
+      const paint = () => {
+        const tok = (i, where) => { const t = it.sentence.tokens[i]; return `<button class="exam-tok${t.type === 'particle' ? ' is-particle' : ''}" type="button" data-tok="${i}" data-where="${where}"><span class="exam-tok-jp" lang="ja">${esc(t.jp)}</span><span class="exam-tok-romaji">${esc(t.romaji)}</span></button>`; };
+        document.getElementById('examAnswer').innerHTML = it.order.map(i => tok(i, 'answer')).join('') || '<span class="exam-answer-hint">Koppints a szavakra a kívánt sorrendben.</span>';
+        document.getElementById('examTray').innerHTML = it.tray.filter(i => it.order.indexOf(i) < 0).map(i => tok(i, 'tray')).join('');
+        if (submit) submit.disabled = it.order.length !== it.sentence.tokens.length;
+      };
+      // a kezelő a kártya saját tárolóin él (a következő kártya újakat kap)
+      const onTok = e => {
+        const b = e.target.closest ? e.target.closest('.exam-tok') : null;
+        if (!b || run.submitted) return;
+        const i = parseInt(b.dataset.tok, 10);
+        if (b.dataset.where === 'tray') it.order.push(i); else it.order = it.order.filter(x => x !== i);
+        paint();
+      };
+      document.getElementById('examAnswer').addEventListener('click', onTok);
+      document.getElementById('examTray').addEventListener('click', onTok);
+      paint();
+      if (submit) submit.addEventListener('click', () => { if (!run.submitted) answer(it, it.order.slice(), false); });
+    } else {
+      const input = document.getElementById('examInput');
+      if (Kana && Kana.bindInput) Kana.bindInput(input);
+      input.addEventListener('input', () => { if (submit) submit.disabled = !input.value.trim(); });
+      input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing && input.value.trim() && !run.submitted) { e.preventDefault(); answer(it, input.value, false); } });
+      if (submit) submit.addEventListener('click', () => { if (!run.submitted && input.value.trim()) answer(it, input.value, false); });
+      setTimeout(() => { try { input.focus({ preventScroll: true }); } catch (e) {} }, 60);
+    }
+  }
+
+  // beírt válasz: kana vagy romaji; a kiejtés szerint írt partikula és a kanjis alak is jó
+  const normKana = s => hira(String(s || '')).replace(/[\s　、。？！?!「」・]/g, '');
+  function checkTyped(it, raw) {
+    const target = normKana(it.answerKana);
+    let u = String(raw || '').trim();
+    if (Kana) u = Kana.liveKana(u, true);
+    const un = normKana(u);
+    if (it.answerAlt && un === normKana(it.answerAlt)) return { ok: true, shown: u };
+    const fixed = Kana ? Kana.repairSpoken(un, target) : un;
+    return { ok: fixed === target, shown: u };
+  }
+
+  function answer(it, given, dontKnow, btn) {
+    run.submitted = true;
+    let ok = false, shown = '';
+    if (!dontKnow) {
+      if (it.type === 'choice') { ok = given === it.answer; shown = given; }
+      else if (it.type === 'tokens') { ok = !!(Puzzle && Puzzle.validate(given, it.sentence).valid); shown = given.map(i => it.sentence.tokens[i].jp).join(' '); }
+      else { const r = checkTyped(it, given); ok = r.ok; shown = r.shown; }
+    }
+    const correctText = it.type === 'tokens' ? it.sentence.tokens.map(t => t.jp).join(' ') : it.type === 'typed' ? it.answerShow : it.answer;
+    run.results.push({ key: it.key, sec: it.sec, lesson: it.lesson, kind: it.kind, correct: ok, errorCode: ok ? null : (dontKnow ? 'dont_know' : 'wrong_choice'),
+      given: shown, answer: correctText, item: it });
+    if (ok) run.score += 10;
+    if (!ok && it.kind === 'quiz' && window.NihonCoreSRS) { try { NihonCoreSRS.recordReview(it.key, 0); } catch (e) {} }
+    if (window.NihonCoreAudio && NihonCoreAudio.stop) NihonCoreAudio.stop();
+    if (settings.examMode) { next(); return; }
+    showFeedback(it, ok, dontKnow, shown, correctText, btn);
+  }
+
+  function showFeedback(it, ok, dontKnow, shown, correctText, btn) {
+    const card = cardEl();
+    card.querySelectorAll('.cj-option, .dont-know-btn, .exam-tok, #examInput').forEach(b => { b.disabled = true; });
+    const sb = document.getElementById('examSubmit');
+    if (sb) sb.disabled = true;
+    if (it.type === 'choice') {
+      const buttons = card.querySelectorAll('.cj-option');
+      if (btn) btn.classList.add(ok ? 'correct' : 'wrong');
+      if (!ok) buttons[it.options.indexOf(it.answer)].classList.add('reveal-correct');
+      if (it.kind === 'listen') listenFailed();          // a válasz után a mondat szövege is látszik
+    } else if (it.type === 'typed') {
+      const input = document.getElementById('examInput');
+      if (input) input.classList.add(ok ? 'cnh-input-correct' : 'cnh-input-wrong');
+    }
+    const isLast = run.idx + 1 >= run.items.length;
+    const fb = fbEl();
+    fb.className = 'conj-feedback ' + (ok ? 'pr-fb-correct' : dontKnow ? 'pr-fb-dontknow' : 'pr-fb-wrong');
+    const jpAns = hasJp(correctText);
+    fb.innerHTML = `
+      <div class="pr-fb-header">
+        <span class="pr-fb-mark">${ok ? '✅' : dontKnow ? '💡' : '🤔'}</span>
+        <span class="pr-fb-title">${ok ? 'Így van' : dontKnow ? 'Ez a helyes' : 'Nézzük meg együtt'}</span>
+      </div>
+      <div class="pr-fb-explain">
+        ${ok && it.type !== 'tokens' ? '' : `<div class="pfe-row pfe-correct">
+          <span class="pfe-label">Helyes</span>
+          <span class="pfe-text"><strong class="${jpAns ? 'pfe-jp-ok' : ''}"${jpAns ? ' lang="ja"' : ''}>${ruby(correctText)}</strong>${it.answerRomaji ? ' <span class="pfe-roman">(' + esc(it.answerRomaji) + ')</span>' : ''}</span>
+        </div>`}
+        ${!ok && shown ? `<div class="pfe-row pfe-wrong">
+          <span class="pfe-label">A te válaszod</span>
+          <span class="pfe-text"${hasJp(shown) ? ' lang="ja"' : ''}>${esc(shown)}</span>
+        </div>` : ''}
+        ${it.kind === 'puzzle' || it.kind === 'read' || it.kind === 'listen' ? '' : `<div class="pfe-row pfe-context">
+          <span class="pfe-label">Miért?</span>
+          <span class="pfe-text">${ruby(it.why || '')}</span>
+        </div>`}
+        ${it.kind === 'read' || it.kind === 'listen' ? `<div class="pfe-row pfe-context">
+          <span class="pfe-label">A mondat</span>
+          <span class="pfe-text" lang="ja">${ruby(it.ex.jp)}${it.ex.romaji ? ' <span class="pfe-roman">(' + esc(it.ex.romaji) + ')</span>' : ''}</span>
+        </div>` : ''}
+      </div>
+      <button class="btn btn-primary cj-next" id="examNext" type="button">${isLast ? 'Eredmény' : 'Következő'}</button>`;
+    document.getElementById('examNext').addEventListener('click', next);
+    tick();
+  }
+
+  function next() {
+    run.idx++;
+    if (run.idx >= run.items.length) finish(false);
+    else renderCard();
+  }
+
+  /* ── Befejezés, mentés, eredmény ──────────────────── */
+  function finish(timeUp) {
+    if (run.done) return;
+    run.done = true;
+    clearInterval(run.timer);
+    if (window.NihonCoreAudio && NihonCoreAudio.stop) NihonCoreAudio.stop();
+    // ami az idő lejártáig nem került sorra, az megválaszolatlan (hibának számít)
+    for (let i = run.results.length; i < run.items.length; i++) {
+      const it = run.items[i];
+      run.results.push({ key: it.key, sec: it.sec, lesson: it.lesson, kind: it.kind, correct: false, errorCode: 'timeout', given: '',
+        answer: it.type === 'tokens' ? it.sentence.tokens.map(t => t.jp).join(' ') : it.type === 'typed' ? it.answerShow : it.answer, item: it });
+    }
+    const total = run.results.length, correct = run.results.filter(r => r.correct).length;
+    const sections = {}, lessons = {};
+    run.results.forEach(r => {
+      (sections[r.sec] = sections[r.sec] || [0, 0])[1]++; if (r.correct) sections[r.sec][0]++;
+      if (r.lesson) { (lessons[r.lesson] = lessons[r.lesson] || [0, 0])[1]++; if (r.correct) lessons[r.lesson][0]++; }
+    });
+    const durationMs = Math.max(0, Date.now() - run.startTs);
+    const att = {
+      id: 'e' + Date.now() + Math.random().toString(36).slice(2, 7), ts: Date.now(), exam: exam.id, kind: exam.kind,
+      examMode: !!settings.examMode, timeUp: !!timeUp, durationMs: durationMs, limitMs: settings.examMode ? examMinutes(exam) * 60000 : 0,
+      total: total, correct: correct, sections: sections, lessons: lessons,
+      opts: { romaji: !!settings.romaji, hu: !!settings.hu, audio: !!settings.audio },
+      wrong: run.results.filter(r => !r.correct).slice(0, 60).map(r => ({ k: r.key, s: r.sec, l: r.lesson, c: r.errorCode }))
+    };
+    saveAttempt(att);
+    if (window.NihonCoreStats) {
+      NihonCoreStats.recordSession({ module: 'exam', mode: exam.kind === 'big' ? 'exam-big' : 'exam-quick',
+        results: run.results.map(r => ({ correct: r.correct, errorCode: r.errorCode })), score: run.score, startTs: run.startTs, skipPath: true });
+    }
+    markPathStep(exam.id, total ? correct / total : 0);
+    if (window.NihonCoreSync && NihonCoreSync.schedulePush) NihonCoreSync.schedulePush();
+    showSummary(att, timeUp);
+  }
+
+  function reviewRow(r) {
+    const it = r.item;
+    const q = it.kind === 'conj' ? esc(it.verb.kanji) + ' → ' + esc(FORMS[it.form].nameHu)
+      : it.kind === 'particle' ? '<span lang="ja">' + it.sentence.tokens.map((t, i) => i === it.blank ? '＿' : esc(t.jp)).join(' ') + '</span>'
+      : it.kind === 'puzzle' ? esc(it.hu)
+      : it.kind === 'listen' ? '<span lang="ja">' + ruby(it.ex.jp) + '</span>'
+      : it.html ? '<span lang="ja">' + it.html + '</span>'
+      : it.jp ? esc(plain(it.prompt)) + ' <span lang="ja">' + ruby(it.jp) + '</span>' : ruby(it.prompt);
+    return `
+      <li class="exam-rev">
+        <div class="exam-rev-q">${q}</div>
+        <div class="exam-rev-a"><span class="exam-rev-label">Helyes</span><strong${hasJp(r.answer) ? ' lang="ja"' : ''}>${ruby(r.answer)}</strong></div>
+        ${r.given ? `<div class="exam-rev-g"><span class="exam-rev-label">A te válaszod</span><span${hasJp(r.given) ? ' lang="ja"' : ''}>${esc(r.given)}</span></div>`
+                  : `<div class="exam-rev-g"><span class="exam-rev-label">${r.errorCode === 'timeout' ? 'Nem jutott rá idő' : 'Nem válaszoltál'}</span></div>`}
+        ${it.why && it.kind !== 'read' && it.kind !== 'listen' ? `<div class="exam-rev-why">${ruby(it.why)}</div>` : ''}
+        <div class="exam-rev-meta">${SECTIONS[r.sec]}${r.lesson ? ' · ' + esc(lessonName(r.lesson)) : ''}</div>
+      </li>`;
+  }
+  function showSummary(att, timeUp) {
+    applyHelpers(false);
+    const p = pct(att.correct, att.total), passed = p >= PASS * 100;
+    const mine = loadAttempts().filter(a => a.exam === exam.id);
+    const prev = mine.length > 1 ? mine[mine.length - 2] : null;
+    const prevP = prev ? pct(prev.correct, prev.total) : null;
+    const weak = Object.keys(att.lessons).filter(l => pct(att.lessons[l][0], att.lessons[l][1]) < PASS * 100 && att.lessons[l][1] >= 2)
+      .sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
+    const wrong = run.results.filter(r => !r.correct);
+    cardEl().innerHTML = ''; actionsEl().innerHTML = '';
+    fbEl().classList.add('hidden');
+    runtime.classList.add('exam-done');
+    const sEl = document.getElementById('examSummary');
+    sEl.classList.remove('hidden');
+    sEl.classList.add('glass-panel-heavy');
+    sEl.innerHTML = `
+      <div class="summary-icon">${p === 100 ? '🏆' : passed ? '🎯' : '🌱'}</div>
+      <h3>${timeUp ? 'Lejárt az idő' : passed ? 'Megvan a dolgozat' : 'Ez most még nem lett meg'}</h3>
+      <div class="summary-score">${att.correct} / ${att.total}<small> · ${p}%</small></div>
+      <p class="lq-summary-note">${passed ? 'A dolgozathoz 60% kell: megvan.' : 'A dolgozathoz 60% kell. Nézd át a hibáidat, és írd meg újra: más kérdéseket kapsz.'}
+        ${prevP !== null ? ' Az előző kitöltésed ' + prevP + '% volt' + (p > prevP ? ': +' + (p - prevP) + ' százalékpont.' : p < prevP ? '.' : ', most is annyi.') : ''}</p>
+      <div class="exam-sum-meta">
+        <span class="exam-sum-chip">Idő: ${fmtTime(att.durationMs)}${att.limitMs ? ' / ' + fmtTime(att.limitMs) : ''}</span>
+        <span class="exam-sum-chip">${att.examMode ? 'Vizsga-mód' : 'Gyakorló mód'}</span>
+      </div>
+      <div class="exam-sum-block">
+        <div class="lp-block-title">Részenként</div>
+        ${SEC_ORDER.filter(s => att.sections[s]).map(s => { const v = att.sections[s], q = pct(v[0], v[1]); return `
+          <div class="exam-bar-row"><span class="exam-bar-name">${SECTIONS[s]}</span>
+            <span class="exam-bar"><span class="exam-bar-fill${q >= PASS * 100 ? ' is-ok' : ''}" style="width:${q}%"></span></span>
+            <span class="exam-bar-val">${v[0]} / ${v[1]}</span></div>`; }).join('')}
+      </div>
+      <div class="exam-sum-block">
+        <div class="lp-block-title">Leckénként</div>
+        <div class="exam-lesson-grid">
+          ${Object.keys(att.lessons).sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b)).map(l => { const v = att.lessons[l], q = pct(v[0], v[1]); return `<a class="exam-lesson${q >= PASS * 100 ? ' is-ok' : ' is-weak'}" href="lesson.html?id=${esc(l)}" title="${esc(lessonName(l))}"><span class="exam-lesson-name">${esc(lessonName(l))}</span><span class="exam-lesson-val">${v[0]} / ${v[1]}</span></a>`; }).join('')}
+        </div>
+        ${weak.length ? '<p class="exam-weak">Ezeket érdemes átismételni: ' + weak.map(l => esc(lessonName(l))).join(', ') + '. (A lecke nevére koppintva megnyílik.)</p>' : ''}
+      </div>
+      ${wrong.length ? `
+      <details class="exam-review"${wrong.length <= 6 ? ' open' : ''}>
+        <summary class="exam-review-sum">Hibáid és a helyes válaszok (${wrong.length})</summary>
+        <ul class="exam-rev-list">${wrong.map(reviewRow).join('')}</ul>
+      </details>` : '<p class="exam-weak">Hibátlan: minden kérdést eltaláltál.</p>'}
+      <div class="kana-summary-actions">
+        <button class="btn btn-primary" id="examAgain" type="button">Megírom újra</button>
+        <a class="btn btn-outline" href="../index.html#path" data-no-guard>Vissza az útra</a>
+        <a class="btn btn-ghost" href="exam.html" data-no-guard>Minden dolgozat</a>
+      </div>`;
+    document.getElementById('examAgain').addEventListener('click', backToLobby);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  function backToLobby() {
+    clearInterval(run.timer);
+    run.done = true;
+    runtime.classList.add('hidden');
+    runtime.classList.remove('exam-done');
+    document.getElementById('examSummary').classList.add('hidden');
+    renderLobby();
+    if (window.NihonCoreRound) NihonCoreRound.refresh();
+  }
+
+  // Kilépés kör közben: a kör-őr megerősítést kér, az eddigi válaszok a statisztikába kerülnek;
+  // a félbehagyott dolgozat nem számít kitöltésnek.
+  const exitBtn = document.getElementById('examExit');
+  if (exitBtn) exitBtn.addEventListener('click', () => {
+    if (window.NihonCoreRound) NihonCoreRound.flush();
+    if (window.NihonCoreAudio && NihonCoreAudio.stop) NihonCoreAudio.stop();
+    backToLobby();
+  });
+
+  if (exam) renderLobby(); else renderIndex();
+  if (window.NihonCoreRound) NihonCoreRound.refresh();
+
+  window._exam = { exam, buildExam, candidates, sentencesFor, conjSetup, reviewLessons, checkTyped, run, settings, startExam, finish, loadAttempts,
+    show: i => { run.idx = i; renderCard(); } };
+}
+
+
+/* ====================================================
    10. PAGE DETECTOR — egy oldal-init futtatása ─────
    ----------------------------------------------------
    A switch egy függvénybe csomagolva (window.NihonCoreInitPage).
@@ -18891,6 +19799,8 @@ function initLessonPage() {
 function initCurrentPage() {
   if (document.getElementById('statsMain')) {
     initStatsPage();
+  } else if (document.getElementById('examMain')) {
+    initExamPage();
   } else if (document.getElementById('kanaMain')) {
     initKanaPage();
   } else if (document.getElementById('lessonMain')) {

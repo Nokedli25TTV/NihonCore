@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 190" width="1200" height="190" role="img" aria-labelledby="st sd">
   <title id="st">NihonCore számokban</title>
-  <desc id="sd">57 lecke, 402 nyelvtani pont, 2390 példamondat, 1142 kérdés, 224 lépés a tanulási úton, 10 gyakorló modul.</desc>
+  <desc id="sd">57 lecke, 402 nyelvtani pont, 2390 példamondat, 1142 kérdés, 236 lépés a tanulási úton, 10 gyakorló modul.</desc>
   <defs>
     <linearGradient id="c1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5B76F5"/><stop offset="1" stop-color="#2F44C4"/></linearGradient>
     <linearGradient id="c2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FB6C6"/><stop offset="1" stop-color="#157F96"/></linearGradient>
@@ -51,7 +51,7 @@
   <g class="card d5"><g transform="translate(808 10)"><g clip-path="url(#k)">
     <rect width="184" height="170" fill="url(#c5)"/><text class="jp" x="92" y="162" font-size="118">道</text>
     <rect class="sh s5" x="0" y="0" width="90" height="170" fill="url(#shine)"/></g>
-    <text class="t n" x="22" y="78">224</text><text class="t l" x="22" y="108">lépés az úton</text><text class="t s" x="22" y="131">53 fejezetben</text></g></g>
+    <text class="t n" x="22" y="78">236</text><text class="t l" x="22" y="108">lépés az úton</text><text class="t s" x="22" y="131">53 fejezetben</text></g></g>
 
   <g class="card d6"><g transform="translate(1008 10)"><g clip-path="url(#k)">
     <rect width="184" height="170" fill="url(#c6)"/><text class="jp" x="92" y="162" font-size="118">練</text>

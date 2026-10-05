@@ -1367,6 +1367,9 @@ const NIHONCORE_PATH = [
     module: 'datetime', href: 'pages/datetime.html',
     preset: { only: { categories: ['weekdays', 'times'] }, set: { mode: 'recognition' } } },
 
+  { id: 't04', glyph: '試', title: '1. teszt: 1–4. lecke', optional: true,
+    desc: 'Kis teszt, 30 perc, 30 kérdés: az 1–4. lecke anyaga vegyesen.',
+    module: 'exam', href: 'pages/exam.html?id=t04' },
   // ── 5. lecke ──
   { id: 'l5-lesson', glyph: '読', title: 'Magyarázat: 〜ます, へ, で, と',
     desc: 'Az ige négy udvarias alakja; hová, mivel, kivel, mikor.',
@@ -1447,6 +1450,9 @@ const NIHONCORE_PATH = [
     preset: { only: { forms: ['i_present_affirmative', 'i_present_negative', 'na_noun_modifier', 'na_present_affirmative', 'na_present_negative'] },
               set: { mode: 'recognition' } } },
 
+  { id: 't08', glyph: '試', title: '2. teszt: 5–8. lecke', optional: true,
+    desc: 'Kis teszt, 30 perc, 30 kérdés: az 5–8. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    module: 'exam', href: 'pages/exam.html?id=t08' },
   // ── 9. lecke ──
   { id: 'l9-lesson', glyph: '読', title: 'Magyarázat: 〜かった, 〜でした, て-alak',
     desc: 'Múlt idő a mellékneveknél, és a て-alak, ami mondatokat fűz össze.',
@@ -1528,6 +1534,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_001', 's_n4_004', 's_n4_006', 's_n4_008', 's_n4_009', 's_n4_010', 's_n4_011'] } },
 
+  { id: 'd12', glyph: '験', title: 'Nagy dolgozat: 1–12. lecke', optional: true,
+    desc: 'Nagy dolgozat, 60 perc, 60 kérdés: az 1–12. lecke anyaga vegyesen. A Dekiru 1 első fele.',
+    module: 'exam', href: 'pages/exam.html?id=d12' },
   // ── 13. lecke ──
   { id: 'l13-lesson', glyph: '読', title: 'Magyarázat: 〜ので, あげます, もらいます',
     desc: 'Indoklás, választás, adás és kapás.',
@@ -1592,6 +1601,9 @@ const NIHONCORE_PATH = [
               ids: ['s_n4_app_006', 's_n4_app_007', 's_n4_app_008', 's_n4_app_010', 's_n4_app_013',
                     's_n4_app_016', 's_n4_app_019'] } },
 
+  { id: 't16', glyph: '試', title: '3. teszt: 13–16. lecke', optional: true,
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 13–16. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    module: 'exam', href: 'pages/exam.html?id=t16' },
   // ── 17. lecke ──
   { id: 'l17-lesson', glyph: '読', title: 'Magyarázat: 〜とき, 〜てはいけません',
     desc: 'Amikor…; mi szabad és mi tilos; két állítás egy mondatban.',
@@ -1661,6 +1673,9 @@ const NIHONCORE_PATH = [
     preset: { only: { forms: ['masu', 'mashita', 'te'], themes: ['transitivity'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
 
+  { id: 't20', glyph: '試', title: '4. teszt: 17–20. lecke', optional: true,
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 17–20. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    module: 'exam', href: 'pages/exam.html?id=t20' },
   // ── 21. lecke ──
   { id: 'l21-lesson', glyph: '読', title: 'Magyarázat: 〜くします, 〜てあります',
     desc: 'Valamilyenné tesz; el van készítve; úgy hívják, azt mondta.',
@@ -1729,6 +1744,9 @@ const NIHONCORE_PATH = [
               ids: ['s_n4_trn_002', 's_n4_trn_004', 's_n4_trn_006', 's_n4_trn_008', 's_n4_trn_010',
                     's_n4_trn_012', 's_n4_trn_014', 's_n4_trn_016', 's_n4_trn_018', 's_n4_trn_019'] } },
 
+  { id: 'd24', glyph: '験', title: 'Nagy dolgozat: 13–24. lecke', optional: true,
+    desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 13–24. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 1 második fele: ezzel zárul az N5 szint.',
+    module: 'exam', href: 'pages/exam.html?id=d24' },
   // ── A Dekiru 1 után: összefoglaló gyakorlás ──
   { id: 'listening', glyph: '聴', title: 'Hallás',
     desc: 'Hosszú és rövid hangok, kis っ: halld meg a különbséget.',
@@ -1882,6 +1900,9 @@ const NIHONCORE_PATH = [
     module: 'grammar', href: 'pages/grammar.html',
     preset: { patterns: ['eba', 'nara', 'de_gozaimasu', 'shi_shi', 'ni_chigai_nai', 'tara'], set: { mode: 'recognition' } } },
 
+  { id: 't28', glyph: '試', title: '5. teszt: 25–28. lecke', optional: true,
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 25–28. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    module: 'exam', href: 'pages/exam.html?id=t28' },
   // ── 29. lecke ──
   { id: 'l29-lesson', glyph: '読', title: 'Magyarázat: 〜ところ, 〜について',
     desc: 'Éppen készülök, csinálom, most fejeztem be; üzenet átadása.',
@@ -1942,6 +1963,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_l32_01', 's_l32_02', 's_l32_03', 's_l32_04', 's_l32_05', 's_l32_06', 's_l32_07', 's_l32_08'] } },
 
+  { id: 't32', glyph: '試', title: '6. teszt: 29–32. lecke', optional: true,
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 29–32. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    module: 'exam', href: 'pages/exam.html?id=t32' },
   // ── 33. lecke ──
   { id: 'l33-lesson', glyph: '読', title: 'Magyarázat: 〜そうです, 〜みたい',
     desc: 'Minek látszik; olyan, mint; körülbelül; íz, illat, hang.',
@@ -2010,6 +2034,9 @@ const NIHONCORE_PATH = [
     preset: { only: { forms: ['passive'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
 
+  { id: 'd36', glyph: '験', title: 'Nagy dolgozat: 25–36. lecke', optional: true,
+    desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 25–36. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 2 első fele.',
+    module: 'exam', href: 'pages/exam.html?id=d36' },
   // ── 37. lecke ──
   { id: 'l37-lesson', glyph: '読', title: 'Magyarázat: megdicsértek, elloptak',
     desc: 'Szenvedő mondat emberrel; kellemetlenség; 〜おかげで.',
@@ -2082,6 +2109,9 @@ const NIHONCORE_PATH = [
     desc: 'A 40. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l40&round=listen' },
 
+  { id: 't40', glyph: '試', title: '7. teszt: 37–40. lecke', optional: true,
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 37–40. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    module: 'exam', href: 'pages/exam.html?id=t40' },
   // ── 41. lecke ──
   { id: 'l41-lesson', glyph: '読', title: 'Magyarázat: まるで〜よう, 〜しかない',
     desc: 'Mintha…; egész sok; nincs más hátra; nem hiába.',
@@ -2152,6 +2182,9 @@ const NIHONCORE_PATH = [
     preset: { only: { forms: ['nai'], themes: ['state', 'clothing'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'mastery' } } },
 
+  { id: 't44', glyph: '試', title: '8. teszt: 41–44. lecke', optional: true,
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 41–44. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    module: 'exam', href: 'pages/exam.html?id=t44' },
   // ── 45. lecke ──
   { id: 'l45-lesson', glyph: '読', title: 'Magyarázat: műveltető alak',
     desc: 'Megpróbál; megcsináltat valakivel; más érzései és vágyai.',
@@ -2226,6 +2259,9 @@ const NIHONCORE_PATH = [
     desc: 'A 48. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l48&round=listen' },
 
+  { id: 'd48', glyph: '験', title: 'Nagy dolgozat: 37–48. lecke', optional: true,
+    desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 37–48. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 2 második fele: ezzel zárul az N4 szint.',
+    module: 'exam', href: 'pages/exam.html?id=d48' },
   // ── Kiegészítő leckék: JLPT N4 (ami a két kötetből kimaradt) ──
   { id: 'k5-lesson', glyph: '間', title: 'Kiegészítés: közben, éppen, az imént',
     desc: '〜間, 〜間に, 〜たばかり, 〜ていました, 〜おきに.',
@@ -2309,7 +2345,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l3',   kicker: 'Dekiru 1 · 3. lecke', title: 'Mi hol van?',         sub: 'あります és います, helyviszonyok, család',
     steps: ['l3-lesson', 'l3-patterns', 'basic-verbs', 'l3-where'] },
   { id: 'u-l4',   kicker: 'Dekiru 1 · 4. lecke', title: 'Vásárlás és idő',     sub: '〜をください, számlálók, óra, a hét napjai',
-    steps: ['l4-lesson', 'l4-patterns', 'l4-shopping', 'counters', 'datetime'] },
+    steps: ['l4-lesson', 'l4-patterns', 'l4-shopping', 'counters', 'datetime', 't04'] },
   { id: 'u-l5',   kicker: 'Dekiru 1 · 5. lecke', title: 'Hová, mikor, mivel?', sub: 'A ます-alak; へ, で, と; dátum',
     steps: ['l5-lesson', 'l5-patterns', 'l5-going', 'l5-masu', 'l5-move', 'l5-dates'] },
   { id: 'u-l6',   kicker: 'Dekiru 1 · 6. lecke', title: 'Mindennapok',         sub: 'を és で; 〜ませんか, 〜ましょう',
@@ -2317,7 +2353,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l7',   kicker: 'Dekiru 1 · 7. lecke', title: 'Mit szeretsz?',       sub: '〜が好きです, から, よく és あまり',
     steps: ['l7-lesson', 'l7-patterns', 'l7-ga'] },
   { id: 'u-l8',   kicker: 'Dekiru 1 · 8. lecke', title: 'Milyen?',             sub: 'い- és な-melléknevek, 〜たいです',
-    steps: ['l8-lesson', 'l8-patterns', 'l8-adjectives', 'adjectives'] },
+    steps: ['l8-lesson', 'l8-patterns', 'l8-adjectives', 'adjectives', 't08'] },
   { id: 'u-l9',   kicker: 'Dekiru 1 · 9. lecke',  title: 'Milyen volt?',         sub: 'Múlt idejű melléknevek; a て-alak',
     steps: ['l9-lesson', 'l9-patterns', 'l9-past', 'l9-adj-past', 'l9-te'] },
   { id: 'u-l10',  kicker: 'Dekiru 1 · 10. lecke', title: 'Melyik a jobb?',       sub: 'より, いちばん; 〜てください, 〜てから, 〜てみます',
@@ -2325,7 +2361,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l11',  kicker: 'Dekiru 1 · 11. lecke', title: 'Mit tegyek?',          sub: 'た- és ない-alak; tanács, tiltás, 〜んです',
     steps: ['l11-lesson', 'l11-patterns', 'l11-advice', 'verb-forms'] },
   { id: 'u-l12',  kicker: 'Dekiru 1 · 12. lecke', title: 'Barátok között',       sub: 'Közvetlen stílus; 〜ています; jelzős szerkezet',
-    steps: ['l12-lesson', 'l12-patterns', 'l12-forms', 'l12-teiru'] },
+    steps: ['l12-lesson', 'l12-patterns', 'l12-forms', 'l12-teiru', 'd12'] },
   { id: 'u-l13',  kicker: 'Dekiru 1 · 13. lecke', title: 'Ajándék',              sub: '〜ので, 〜にします; あげます, くれます, もらいます',
     steps: ['l13-lesson', 'l13-patterns', 'l13-giving', 'l13-verbs'] },
   { id: 'u-l14',  kicker: 'Dekiru 1 · 14. lecke', title: 'Tervek és vélemények', sub: 'もう és まだ; 〜と思います, 〜がほしい, 〜つもりです',
@@ -2333,7 +2369,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l15',  kicker: 'Dekiru 1 · 15. lecke', title: 'Találkozunk?',         sub: '〜でしょう, 〜てしまいます, 〜たり; 〜てもいいですか',
     steps: ['l15-lesson', 'l15-patterns', 'l15-permission'] },
   { id: 'u-l16',  kicker: 'Dekiru 1 · 16. lecke', title: 'Hobbi és tapasztalat', sub: '〜こと, 〜たことがあります, 〜ことができます',
-    steps: ['l16-lesson', 'l16-patterns', 'l16-experience'] },
+    steps: ['l16-lesson', 'l16-patterns', 'l16-experience', 't16'] },
   { id: 'u-l17',  kicker: 'Dekiru 1 · 17. lecke', title: 'Szabad és tilos',      sub: '〜とき; 〜てはいけません; A は B で、C は D です',
     steps: ['l17-lesson', 'l17-patterns', 'l17-rules'] },
   { id: 'u-l18',  kicker: 'Dekiru 1 · 18. lecke', title: 'Készülődés',           sub: '〜かもしれません; 〜なります; 〜ことにします; さしあげます',
@@ -2341,7 +2377,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l19',  kicker: 'Dekiru 1 · 19. lecke', title: 'Úton',                 sub: '〜なければなりません; 〜ていきます; だけ és しか',
     steps: ['l19-lesson', 'l19-nai', 'l19-patterns', 'l19-only'] },
   { id: 'u-l20',  kicker: 'Dekiru 1 · 20. lecke', title: 'Városnézés',           sub: 'Tárgyas és tárgyatlan igék; 〜ています (állapot); 〜という',
-    steps: ['l20-lesson', 'l20-patterns', 'l20-pairs', 'l20-verbs'] },
+    steps: ['l20-lesson', 'l20-patterns', 'l20-pairs', 'l20-verbs', 't20'] },
   { id: 'u-l21',  kicker: 'Dekiru 1 · 21. lecke', title: 'Minden készen áll',    sub: '〜くします; 〜てあります; 〜といいます',
     steps: ['l21-lesson', 'l21-patterns', 'l21-make', 'l21-te'] },
   { id: 'u-l22',  kicker: 'Dekiru 1 · 22. lecke', title: 'Szívességek',          sub: '〜てあげます, 〜てくれます, 〜てもらいます; 〜ておきます; 〜ながら',
@@ -2349,7 +2385,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l23',  kicker: 'Dekiru 1 · 23. lecke', title: 'Udvarias kérések',     sub: '〜てくださいます, 〜ていただきます; 〜の; まだ és もう',
     steps: ['l23-lesson', 'l23-patterns', 'l23-favor', 'l23-te'] },
   { id: 'u-l24',  kicker: 'Dekiru 1 · 24. lecke', title: 'Búcsú',                sub: '〜てきます, 〜ていきます; 〜ています (állapot)',
-    steps: ['l24-lesson', 'l24-patterns', 'l24-state'] },
+    steps: ['l24-lesson', 'l24-patterns', 'l24-state', 'd24'] },
   { id: 'u-next', kicker: 'A Dekiru 1 után',      title: 'Összefoglaló gyakorlás', sub: 'Hallás, nyelvtani minták, szabad fordítás; utána a Dekiru 2 leckéi jönnek',
     steps: ['listening', 'patterns', 'production'] },
   { id: 'u-k-n5', kicker: 'Kiegészítő · JLPT N5', title: 'Ami a könyvből kimaradt', sub: 'Kötőszavak, mondatvégi partikulák, beszélt rövidítések, hogyan és milyen gyakran',
@@ -2361,7 +2397,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l27',  kicker: 'Dekiru 2 · 27. lecke', title: 'Ki mit tud?',          sub: 'Ható alak; 〜にきまっています; 〜とか; 〜さ',
     steps: ['l27-lesson', 'l27-patterns', 'l27-can', 'l27-potential', 'l27-potential-w'] },
   { id: 'u-l28',  kicker: 'Dekiru 2 · 28. lecke', title: 'Melyiket ajánlja?',    sub: '〜ば, 〜なら; 〜でございます; 〜し; 〜にちがいありません',
-    steps: ['l28-lesson', 'l28-if', 'l28-patterns'] },
+    steps: ['l28-lesson', 'l28-if', 'l28-patterns', 't28'] },
   { id: 'u-l29',  kicker: 'Dekiru 2 · 29. lecke', title: 'Új félév',             sub: '〜ところ; 〜ように言います; 〜ということです; 〜について',
     steps: ['l29-lesson', 'l29-patterns', 'l29-tokoro', 'l29-listen'] },
   { id: 'u-l30',  kicker: 'Dekiru 2 · 30. lecke', title: 'Közös munka',          sub: '〜のに; 〜なくてもかまいません; 〜によって',
@@ -2369,7 +2405,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l31',  kicker: 'Dekiru 2 · 31. lecke', title: 'Útbaigazítás',         sub: '〜と; 〜にくらべて; 見えます, 聞こえます; 〜ようです',
     steps: ['l31-lesson', 'l31-patterns', 'l31-senses'] },
   { id: 'u-l32',  kicker: 'Dekiru 2 · 32. lecke', title: 'Külföldi tanulmányok', sub: '〜ても; 〜ことになります; 〜ばかり; 〜ために',
-    steps: ['l32-lesson', 'l32-patterns', 'l32-koto'] },
+    steps: ['l32-lesson', 'l32-patterns', 'l32-koto', 't32'] },
   { id: 'u-l33',  kicker: 'Dekiru 2 · 33. lecke', title: 'A konyhában',          sub: '〜そうです (látszat); 〜みたいな; 〜くらい; 〜がします',
     steps: ['l33-lesson', 'l33-patterns', 'l33-looks'] },
   { id: 'u-l34',  kicker: 'Dekiru 2 · 34. lecke', title: 'Mit hallottál?',       sub: '〜そうです (hallomás); 〜によると; 〜らしいです',
@@ -2377,7 +2413,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l35',  kicker: 'Dekiru 2 · 35. lecke', title: 'Hogyan kell?',         sub: '〜方; 〜かわりに; 〜にかわって; 〜まま',
     steps: ['l35-lesson', 'l35-patterns', 'l35-kata', 'l35-listen'] },
   { id: 'u-l36',  kicker: 'Dekiru 2 · 36. lecke', title: 'Rendezvény',           sub: 'Szenvedő alak; 〜によって; 〜から〜にかけて; 〜でも',
-    steps: ['l36-lesson', 'l36-patterns', 'l36-built', 'l36-passive'] },
+    steps: ['l36-lesson', 'l36-patterns', 'l36-built', 'l36-passive', 'd36'] },
   { id: 'u-l37',  kicker: 'Dekiru 2 · 37. lecke', title: 'Baj történt',          sub: 'Szenvedő mondat emberrel; kellemetlenség; 〜おかげで',
     steps: ['l37-lesson', 'l37-patterns', 'l37-suffered', 'l37-passive-w'] },
   { id: 'u-l38',  kicker: 'Dekiru 2 · 38. lecke', title: 'Tiszteletteljes beszéd', sub: 'お〜になります; いらっしゃいます; ご〜ください; 〜うちに',
@@ -2385,7 +2421,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l39',  kicker: 'Dekiru 2 · 39. lecke', title: 'Szerényen szólva',     sub: 'お〜します; 参ります, 申します; 〜やすい, 〜にくい; 〜すぎます',
     steps: ['l39-lesson', 'l39-patterns', 'l39-humble', 'l39-listen'] },
   { id: 'u-l40',  kicker: 'Dekiru 2 · 40. lecke', title: 'Interjú',              sub: 'いくら〜ても; 何でも; 〜始めます, 〜出します, 〜続けます',
-    steps: ['l40-lesson', 'l40-patterns', 'l40-compound', 'l40-listen'] },
+    steps: ['l40-lesson', 'l40-patterns', 'l40-compound', 'l40-listen', 't40'] },
   { id: 'u-l41',  kicker: 'Dekiru 2 · 41. lecke', title: 'Bemutató',             sub: 'まるで〜ようです; 〜も; 〜しかありません; 〜だけあって',
     steps: ['l41-lesson', 'l41-patterns', 'l41-marude', 'l41-listen'] },
   { id: 'u-l42',  kicker: 'Dekiru 2 · 42. lecke', title: 'Vita',                 sub: '〜にとって; 〜から見ると; 〜こそ; egyetértés és ellenvetés',
@@ -2393,7 +2429,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l43',  kicker: 'Dekiru 2 · 43. lecke', title: 'Tanulási tanácsok',    sub: 'Parancsoló alak; 〜な; 〜ように; 〜ようにします; 〜とおりに',
     steps: ['l43-lesson', 'l43-patterns', 'l43-command', 'l43-listen'] },
   { id: 'u-l44',  kicker: 'Dekiru 2 · 44. lecke', title: 'Beszédverseny',        sub: '〜べきです; 〜ずに; 〜を中心に',
-    steps: ['l44-lesson', 'l44-patterns', 'l44-should', 'l44-nai'] },
+    steps: ['l44-lesson', 'l44-patterns', 'l44-should', 'l44-nai', 't44'] },
   { id: 'u-l45',  kicker: 'Dekiru 2 · 45. lecke', title: 'Félreértés',           sub: '〜ようとします; műveltető alak; 〜がります, 〜たがります',
     steps: ['l45-lesson', 'l45-patterns', 'l45-make-do', 'l45-causative'] },
   { id: 'u-l46',  kicker: 'Dekiru 2 · 46. lecke', title: 'Megbeszélés',          sub: '〜なさい; műveltető mondatok; 〜させてください',
@@ -2401,11 +2437,54 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l47',  kicker: 'Dekiru 2 · 47. lecke', title: 'Nyelvtanulás',         sub: 'Műveltető-szenvedő alak: 〜させられます, 〜されます',
     steps: ['l47-lesson', 'l47-patterns', 'l47-forced', 'l47-causpass'] },
   { id: 'u-l48',  kicker: 'Dekiru 2 · 48. lecke', title: 'Köszönet és búcsú',    sub: '〜をきっかけに; 〜せいで; 〜ば〜ほど; 〜として',
-    steps: ['l48-lesson', 'l48-patterns', 'l48-because', 'l48-listen'] },
+    steps: ['l48-lesson', 'l48-patterns', 'l48-because', 'l48-listen', 'd48'] },
   { id: 'u-k-n4', kicker: 'Kiegészítő · JLPT N4', title: 'Ami a könyvekből kimaradt', sub: 'Idő, kívánság és tanács, bizonyosság, szükség és eset',
     steps: ['k5-lesson', 'k5-patterns', 'k5-time', 'k5-listen', 'k6-lesson', 'k6-patterns', 'k6-wish', 'k6-listen', 'k7-lesson', 'k7-patterns', 'k7-impression', 'k7-listen', 'k8-lesson', 'k8-patterns', 'k8-formal', 'k8-listen'] },
   { id: 'u-end',  kicker: 'A Dekiru 2 után',      title: 'Záró gyakorlás',       sub: 'Nyelvtani minták kiegészítéssel és mondatszintű hallás',
     steps: ['final-cloze', 'final-pro'] }
+];
+
+/* Dolgozatok (pages/exam.html): kis teszt 4 leckénként (30 perc, 30 kérdés), nagy dolgozat 12 leckénként
+   (60 perc, 60 kérdés). A kérdések a `lessons` leckék anyagából állnak össze (kb. 80%), a többi a korábbi
+   leckékből jön ismétlésnek. A dolgozat lépése a tanulási úton `optional`: nélküle is tovább lehet menni.
+   Mezők: id (= a lépés azonosítója), kind: quick | big, title, desc, glyph, lessons[], minutes? */
+const NIHONCORE_EXAMS = [
+  { id: 't04', kind: 'quick', glyph: '試', title: '1. teszt: 1–4. lecke',
+    desc: 'Kis teszt, 30 perc, 30 kérdés: az 1–4. lecke anyaga vegyesen.',
+    lessons: ['l1', 'l2', 'l3', 'l4'] },
+  { id: 't08', kind: 'quick', glyph: '試', title: '2. teszt: 5–8. lecke',
+    desc: 'Kis teszt, 30 perc, 30 kérdés: az 5–8. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    lessons: ['l5', 'l6', 'l7', 'l8'] },
+  { id: 'd12', kind: 'big', glyph: '験', title: 'Nagy dolgozat: 1–12. lecke',
+    desc: 'Nagy dolgozat, 60 perc, 60 kérdés: az 1–12. lecke anyaga vegyesen. A Dekiru 1 első fele.',
+    lessons: ['l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7', 'l8', 'l9', 'l10', 'l11', 'l12'] },
+  { id: 't16', kind: 'quick', glyph: '試', title: '3. teszt: 13–16. lecke',
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 13–16. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    lessons: ['l13', 'l14', 'l15', 'l16'] },
+  { id: 't20', kind: 'quick', glyph: '試', title: '4. teszt: 17–20. lecke',
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 17–20. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    lessons: ['l17', 'l18', 'l19', 'l20'] },
+  { id: 'd24', kind: 'big', glyph: '験', title: 'Nagy dolgozat: 13–24. lecke',
+    desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 13–24. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 1 második fele: ezzel zárul az N5 szint.',
+    lessons: ['l13', 'l14', 'l15', 'l16', 'l17', 'l18', 'l19', 'l20', 'l21', 'l22', 'l23', 'l24'] },
+  { id: 't28', kind: 'quick', glyph: '試', title: '5. teszt: 25–28. lecke',
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 25–28. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    lessons: ['l25', 'l26', 'l27', 'l28'] },
+  { id: 't32', kind: 'quick', glyph: '試', title: '6. teszt: 29–32. lecke',
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 29–32. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    lessons: ['l29', 'l30', 'l31', 'l32'] },
+  { id: 'd36', kind: 'big', glyph: '験', title: 'Nagy dolgozat: 25–36. lecke',
+    desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 25–36. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 2 első fele.',
+    lessons: ['l25', 'l26', 'l27', 'l28', 'l29', 'l30', 'l31', 'l32', 'l33', 'l34', 'l35', 'l36'] },
+  { id: 't40', kind: 'quick', glyph: '試', title: '7. teszt: 37–40. lecke',
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 37–40. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    lessons: ['l37', 'l38', 'l39', 'l40'] },
+  { id: 't44', kind: 'quick', glyph: '試', title: '8. teszt: 41–44. lecke',
+    desc: 'Kis teszt, 30 perc, 30 kérdés: a 41–44. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
+    lessons: ['l41', 'l42', 'l43', 'l44'] },
+  { id: 'd48', kind: 'big', glyph: '験', title: 'Nagy dolgozat: 37–48. lecke',
+    desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 37–48. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 2 második fele: ezzel zárul az N4 szint.',
+    lessons: ['l37', 'l38', 'l39', 'l40', 'l41', 'l42', 'l43', 'l44', 'l45', 'l46', 'l47', 'l48'] }
 ];
 
 /* ====================================================

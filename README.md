@@ -35,7 +35,7 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 <br />
 
 <div align="center">
-<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 224 lépés · 10 gyakorló modul" width="100%" />
+<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 236 lépés · 10 gyakorló modul" width="100%" />
 </div>
 
 <br />
@@ -54,8 +54,9 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 
 ### 🗺️ Tanulási út
 
-- **224 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
+- **236 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
 - Minden lecke után **a lecke saját mintái és mondatai** jönnek gyakorlásnak.
+- Négy leckénként **kis teszt** (30 perc), tizenkét leckénként **nagy dolgozat** (60 perc): nem kötelező, időre is megírható, és minden kitöltés elmentődik.
 - Első indításkor megkérdezi, **honnan indulsz**: nulláról, vagy már olvasod a kanát.
 - A kezdőlap **„Folytatás"** gombja mindig a következő lépésre visz.
 - Egy lépés akkor kész, ha egy teljes kört legalább **60%**-ra megcsinálsz.
@@ -150,7 +151,7 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 
 | Leckék | | Gyakorlás | |
 |---|---:|---|---:|
-| Lecke | **57** | Lépés a tanulási úton | **224** |
+| Lecke | **57** | Lépés a tanulási úton | **236** |
 | Nyelvtani pont | **402** | Fejezet | **53** |
 | Példamondat (hanggal) | **2390** | Gyakorló modul | **10** |
 | Saját kérdés | **1142** | Mondat a Mondat-Mesterben | **627** |
@@ -160,6 +161,7 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 | Táblázat | **321** | Hang-lecke | **134** |
 | „Gyakori hiba" | **344** | Kana-jel | **208** |
 | Kulturális tudnivaló | **197** | Nyelvtani minta | **283** |
+| | | Dolgozat | **12** |
 
 A leckék megoszlása: 1 előkészítő (írás és kiejtés) · 24 a *Dekiru 1* nyomán · 24 a *Dekiru 2* nyomán ·
 8 kiegészítő (JLPT N5 és N4).

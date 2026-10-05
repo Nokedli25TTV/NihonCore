@@ -8416,6 +8416,175 @@ html.theme-sumi .review-card.is-due .path-glyph { color: #171C2E; }
 .lp-ex.is-current { border-color: rgb(var(--brand-rgb) / 0.55); background: var(--brand-soft); }
 
 /* ════════════════════════════════════════════════════════
+   DOLGOZAT (pages/exam.html) — lista, lobbi, kártyák, eredmény
+   ----------------------------------------------------
+   A kör-keretet (sáv, kártya, visszajelzés) a KÖR-KERET blokk adja; itt csak a
+   dolgozat saját elemei vannak: a kérdéstípusok (hiányos mondat, összerakós
+   tokenek, ragozandó ige) és az eredmény-lap bontásai.
+   ════════════════════════════════════════════════════════ */
+
+/* Dolgozatok listája */
+.exam-index { display: grid; gap: 12px; }
+.exam-row {
+  display: flex; align-items: center; gap: 14px; min-height: var(--touch);
+  padding: 14px 16px; border-radius: var(--radius-md);
+  text-decoration: none; color: var(--sumi);
+}
+.exam-row:active { transform: translateY(2px); }
+.exam-row-glyph {
+  flex-shrink: 0; width: 48px; height: 48px; border-radius: 14px;
+  display: grid; place-items: center;
+  font-family: var(--font-jp); font-size: var(--fs-xl); font-weight: 500;
+  color: var(--brand-deep); background: var(--brand-soft);
+}
+.exam-row.is-big { border-color: rgb(var(--gold-rgb) / 0.45); }
+.exam-row.is-big .exam-row-glyph { color: var(--gold-ink); background: rgb(var(--gold-rgb) / 0.16); }
+.exam-row-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.exam-row-kicker { font-size: var(--fs-2xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--sumi-soft); }
+.exam-row-title { font-size: var(--fs-md); font-weight: 800; line-height: 1.3; }
+.exam-row-sub { font-size: var(--fs-sm); font-weight: 500; color: var(--sumi-soft); }
+.exam-row-score { flex-shrink: 0; font-size: var(--fs-lg); font-weight: 800; color: var(--sumi-faint); font-variant-numeric: tabular-nums; }
+.exam-row.is-passed .exam-row-score { color: var(--ok-deep); }
+
+/* Lobbi */
+.exam-parts { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.exam-part {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  padding: 10px 14px; border-radius: var(--radius-sm);
+  background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+  font-size: var(--fs-base); font-weight: 700; color: var(--sumi);
+}
+.exam-part-n { font-size: var(--fs-sm); font-weight: 600; color: var(--sumi-soft); white-space: nowrap; }
+.exam-lessons { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; }
+.exam-lesson-chip { padding: 4px 10px; border-radius: 999px; font-size: var(--fs-xs); font-weight: 600; color: var(--brand-deep); background: var(--brand-soft); }
+.exam-switch + .exam-switch { margin-top: 16px; }
+.lobby-stats.exam-history { display: block; text-align: left; }
+.exam-history-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; font-size: var(--fs-sm); color: var(--sumi-soft); }
+.exam-history-head strong { font-size: var(--fs-base); color: var(--sumi); }
+.exam-history-empty { font-size: var(--fs-sm); color: var(--sumi-soft); font-weight: 500; }
+.exam-att-list { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 6px; }
+.exam-att { display: grid; grid-template-columns: auto auto 1fr auto; gap: 10px; align-items: baseline; font-size: var(--fs-sm); font-variant-numeric: tabular-nums; }
+.exam-att-mode, .exam-att-time { color: var(--sumi-soft); font-weight: 500; }
+.exam-att-score { font-weight: 800; color: var(--sumi); }
+.exam-att-score.is-ok { color: var(--ok-deep); }
+.exam-history-trend { margin: 10px 0 0; font-size: var(--fs-sm); color: var(--sumi-soft); line-height: 1.5; }
+
+/* Kör-sáv: az óra az utolsó öt percben figyelmeztet */
+#examStat1.is-low { color: var(--amber-ink); }
+
+/* Kártyák */
+.exam-jp {
+  margin-top: 10px; font-family: var(--font-jp-text); font-weight: 500;
+  font-size: clamp(1.25rem, 5.2vw, 1.6rem); line-height: 2; text-align: center; color: var(--sumi);
+}
+.exam-jp-romaji, .exam-opt-romaji, .exam-tokw-romaji, .exam-tok-romaji, .exam-verb-romaji {
+  font-family: var(--font-body); font-size: var(--fs-xs); font-weight: 500; line-height: 1.3; color: var(--sumi-soft);
+}
+.exam-jp-romaji { text-align: center; }
+.exam-opt-romaji { display: block; }
+.exam-hint-hu { margin-top: 8px; text-align: center; font-size: var(--fs-base); font-weight: 500; line-height: 1.45; color: var(--sumi-soft); }
+.exam-task-hu { margin-top: 10px; text-align: center; font-size: var(--fs-lg); font-weight: 700; line-height: 1.4; color: var(--sumi); text-wrap: balance; }
+.exam-blank {
+  display: inline-block; min-width: 2.4em; margin: 0 2px; text-align: center;
+  color: var(--brand-deep); border-bottom: 3px solid var(--brand);
+}
+.grm-hl + .exam-blank, .exam-jp .exam-blank { line-height: 1.2; }
+
+/* hiányos mondat (partikula-kérdés): tokenek az átírásukkal */
+.exam-sentence { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 6px 10px; margin-top: 14px; }
+.exam-tokw { display: inline-flex; flex-direction: column; align-items: center; }
+.exam-tokw-jp { font-family: var(--font-jp-text); font-weight: 500; font-size: clamp(1.2rem, 5vw, 1.5rem); line-height: 1.5; color: var(--sumi); }
+.exam-tokw.is-particle .exam-tokw-jp { color: var(--brand-deep); }
+.exam-tokw.is-blank .exam-blank { font-family: var(--font-jp-text); font-size: clamp(1.2rem, 5vw, 1.5rem); line-height: 1.5; }
+
+/* vizsga-módban a kiválasztott válasz a „Tovább"-ig módosítható */
+.cj-option.is-picked { border-color: var(--brand); background: var(--brand-soft); box-shadow: 0 3px 0 rgb(var(--brand-rgb) / 0.45); }
+
+/* mondat összerakása */
+.exam-answer {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px;
+  min-height: 68px; margin-top: 14px; padding: 12px;
+  border-radius: var(--radius-md); border: 2px dashed rgb(var(--tint-rgb) / 0.22); background: var(--glass-fill);
+}
+.exam-answer-hint { font-size: var(--fs-sm); font-weight: 500; color: var(--sumi-soft); }
+.exam-tray { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; min-height: 56px; margin-top: 14px; }
+.exam-tok {
+  display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+  min-height: var(--touch); padding: 6px 12px;
+  font: inherit; color: var(--sumi); cursor: pointer;
+  border-radius: var(--radius-sm); border: 1px solid rgb(var(--tint-rgb) / 0.16);
+  background: rgb(var(--glass-rgb) / 0.96); box-shadow: 0 3px 0 rgb(var(--tint-rgb) / 0.16);
+  transition: transform var(--t-fast) var(--ease-out);
+}
+.exam-tok:active { transform: translateY(2px); box-shadow: 0 1px 0 rgb(var(--tint-rgb) / 0.16); }
+.exam-tok:focus-visible { outline: 3px solid rgb(var(--brand-rgb) / 0.55); outline-offset: 2px; }
+.exam-tok:disabled { cursor: default; opacity: 0.75; }
+.exam-tok.is-particle { color: var(--brand-deep); background: var(--brand-soft); border-color: rgb(var(--brand-rgb) / 0.30); }
+.exam-tok-jp { font-family: var(--font-jp-text); font-size: var(--fs-lg); font-weight: 500; line-height: 1.4; }
+
+/* ragozandó ige */
+.exam-verb { display: flex; flex-direction: column; align-items: center; gap: 2px; margin-top: 12px; }
+.exam-verb-jp { font-family: var(--font-jp-text); font-size: var(--fs-2xl); font-weight: 500; line-height: 1.3; color: var(--sumi); }
+.exam-verb-kana { font-family: var(--font-jp-text); font-size: var(--fs-base); font-weight: 500; color: var(--sumi-soft); }
+.exam-verb-hu { font-size: var(--fs-base); font-weight: 600; color: var(--sumi-soft); }
+.exam-card .cj-target { justify-content: center; margin-top: 12px; }
+.exam-input { text-align: center; font-family: var(--font-jp-text); }
+
+body.helpers-no-romaji .exam-jp-romaji,
+body.helpers-no-romaji .exam-opt-romaji,
+body.helpers-no-romaji .exam-tokw-romaji,
+body.helpers-no-romaji .exam-tok-romaji,
+body.helpers-no-romaji .exam-verb-romaji { display: none; }
+body.helpers-no-hu .exam-hint-hu,
+body.helpers-no-hu .exam-verb-hu { display: none; }
+
+/* Eredmény */
+.exam-done .pr-stats, .exam-done .round-progress, .exam-done #examCard, .exam-done #examActions { display: none; }
+.summary-score small { font-size: 0.5em; font-weight: 700; color: var(--sumi-soft); letter-spacing: 0; }
+.exam-sum-meta { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 12px; }
+.exam-sum-chip {
+  padding: 4px 12px; border-radius: 999px; font-size: var(--fs-xs); font-weight: 700; color: var(--sumi-soft);
+  background: var(--glass-fill); border: 1px solid var(--glass-fill-edge); font-variant-numeric: tabular-nums;
+}
+.exam-sum-block { width: 100%; margin-top: 22px; text-align: left; }
+.exam-bar-row {
+  display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(56px, 1fr) auto; align-items: center; gap: 10px;
+  margin-top: 8px; font-size: var(--fs-sm); font-weight: 600; color: var(--sumi);
+}
+.exam-bar { height: 10px; border-radius: 999px; background: rgb(var(--tint-rgb) / 0.10); overflow: hidden; }
+.exam-bar-fill { display: block; height: 100%; border-radius: inherit; background: var(--amber); }
+.exam-bar-fill.is-ok { background: var(--ok); }
+.exam-bar-val { color: var(--sumi-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.exam-lesson-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 8px; margin-top: 8px; }
+.exam-lesson {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: var(--touch);
+  padding: 8px 12px; border-radius: var(--radius-sm);
+  font-size: var(--fs-sm); font-weight: 700; text-decoration: none; color: var(--sumi);
+  background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+}
+.exam-lesson-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exam-lesson-val { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+.exam-lesson.is-ok .exam-lesson-val { color: var(--ok-deep); }
+.exam-lesson.is-weak { border-color: rgb(var(--amber-rgb) / 0.55); }
+.exam-lesson.is-weak .exam-lesson-val { color: var(--amber-ink); }
+.exam-weak { margin: 10px 0 0; font-size: var(--fs-sm); line-height: 1.5; color: var(--sumi-soft); }
+.exam-review { width: 100%; margin-top: 22px; text-align: left; }
+.exam-review-sum { display: flex; align-items: center; min-height: var(--touch); cursor: pointer; font-size: var(--fs-base); font-weight: 800; color: var(--sumi); }
+.exam-rev-list { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 10px; }
+.exam-rev { padding: 12px 14px; border-radius: var(--radius-sm); background: var(--glass-fill); border: 1px solid var(--glass-fill-edge); }
+.exam-rev-q { font-size: var(--fs-base); font-weight: 600; line-height: 1.8; color: var(--sumi); }
+.exam-rev-q [lang="ja"], .exam-rev-a [lang="ja"], .exam-rev-g [lang="ja"] { font-family: var(--font-jp-text); font-weight: 500; }
+.exam-rev-a, .exam-rev-g { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin-top: 4px; font-size: var(--fs-sm); color: var(--sumi); }
+.exam-rev-label { flex-shrink: 0; font-size: var(--fs-2xs); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--sumi-soft); }
+.exam-rev-a strong { font-size: var(--fs-base); color: var(--ok-deep); }
+.exam-rev-why { margin-top: 6px; font-size: var(--fs-sm); line-height: 1.5; color: var(--sumi-soft); }
+.exam-rev-meta { margin-top: 6px; font-size: var(--fs-2xs); font-weight: 600; color: var(--sumi-soft); }
+
+/* A térképen és a tartalomjegyzékben: a dolgozat nem kötelező lépés (szaggatott arany perem) */
+.path-node.is-exam:not(.is-done) .path-node-disc { border-style: dashed; border-color: rgb(var(--gold-rgb) / 0.70); color: var(--gold-ink); }
+.ptoc-step.is-exam:not(.is-done) .ptoc-glyph { color: var(--gold-ink); }
+
+/* ════════════════════════════════════════════════════════
    SZÖVEG-ERŐSÍTÉS (user-visszajelzés: a kérdések és a magyarázatok
    szövege „vékony és csúnya" volt)
    ----------------------------------------------------

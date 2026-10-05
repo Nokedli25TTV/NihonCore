@@ -1,7 +1,7 @@
 # NihonCore — Claude project context
 
 > Ezt a fájlt **minden új munkamenet** beolvassa: mi a projekt, hol mi van, milyen szabályok
-> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-05, v94).
+> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-05, v96).
 > A teljes verzió-történet, a modulok motorjainak részletes leírása és a lezárt backlog a
 > **`HISTORY.md`**-ben van — oda akkor nézz be, ha egy régi döntés vagy javítás hátterét keresed.
 
@@ -42,7 +42,7 @@ a terv a munkamenet-memóriában van (`content-load-plan.md`), a már kész adag
 | Rész | Tartalom |
 |---|---|
 | **Leckék** | **57 lecke** (előkészítő + Dekiru 1: 24 + Dekiru 2: 24 + 8 kiegészítő N5 / N4): 402 nyelvtani pont, 2390 példamondat, 1142 saját kérdés, 699 párbeszéd-sor, 547 kifejezés, 1484 szó-kártya, 321 tábla, 344 „gyakori hiba", 197 kulturális tudnivaló |
-| **Tanulási út** | 224 lépés 53 fejezetben (75 lecke-lépés: magyarázat és hallás utáni kör; 149 gyakorló lépés a modulokból, ebből 56 „a lecke mintái" és 37 leckéhez kötött mondatkészlet) |
+| **Tanulási út** | 236 lépés 53 fejezetben: 224 kötelező (75 lecke-lépés: magyarázat és hallás utáni kör; 149 gyakorló lépés a modulokból, ebből 56 „a lecke mintái" és 37 leckéhez kötött mondatkészlet) + 12 nem kötelező dolgozat |
 | Ragozó | 168 ige (111 godan + 55 ichidan + 2 rendhagyó), 12 alak |
 | Mondat-Mester | 627 mondat (224 N5 + 301 N4 + 102 N3), ebből 301 leckéhez kötött (37 készlet); 16 partikula a tálcán |
 | Melléknév | 109 い + 40 な melléknév, 9 alak |
@@ -51,7 +51,8 @@ a terv a munkamenet-memóriában van (`content-load-plan.md`), a már kész adag
 | Hallás & Kiejtés | 134 hang-lecke + 566 mondat (Pro hallás: a nyelvtani minták példái) |
 | Nyelvtani minták | 283 minta (92 N5 + 138 N4 + 53 N3) 32 kategóriában, mintánként 2 példa; 268 leckéhez kötött (56 lecke) |
 | Kana | 104 jel írásonként (hiragana + katakana) — teljes készlet |
-| Mini-leckék | 7 (modulonként egy minta) |
+| Mini-leckék | 7 (modulonként egy minta) — félretéve |
+| **Dolgozatok** | 12: nyolc kis teszt (4 leckénként, 30 perc, 30 kérdés) és négy nagy dolgozat (12 leckénként, 60 perc, 60 kérdés); a kérdések kitöltésenként a leckék anyagából állnak össze |
 
 ---
 
@@ -79,6 +80,7 @@ NihonCoreV2/
 │   ├── listening.html      ← Hallás & Kiejtés
 │   ├── grammar.html        ← Nyelvtani minták
 │   ├── production.html     ← Szabad fordítás
+│   ├── exam.html           ← Dolgozatok (azonosító nélkül: a lista · ?id=t04 … d48: egy dolgozat)
 │   ├── stats.html          ← Statisztika
 │   └── login.html · register.html
 ├── css/
@@ -148,7 +150,9 @@ Gyors térkép: `grep -n "^function init\|^window.NihonCore\|^const NihonCore\|^
 | `initAuthHeaderState` | fiók-jelvény és menü a fejlécben |
 | `initHelpersToggle` | Romaji / Magyar / Hang kapcsolók (`body.helpers-no-romaji`, `helpers-no-hu`) |
 | `NihonCoreAudio` | hang: `play(szöveg, { speed, onEnd, onError })`, `stop()`, `speakAnswer()`. Google TTS, hibánál a böngésző japán felolvasója. |
-| `NihonCoreKana` | romajival beírt válasz: `fromRomaji(szöveg)` (romaji → hiragana) és `repairSpoken(beírt, helyes)` — a kiejtés szerint írt partikula (wa, o, e), a kettőzött magánhangzó a ー helyén, a „zu" a づ helyén nem hiba. A Pro hallás, a Szabad fordítás és a minták kiegészítő módja használja. |
+| `NihonCoreKana` | kana ⇄ romaji: `fromRomaji(szöveg)` · `toRomaji(kana-darab)` (kiejtés szerint: a darab végi は = wa) · `repairSpoken(beírt, helyes)` — a kiejtés szerint írt partikula (wa, o, e), a kettőzött magánhangzó a ー helyén, a „zu" a づ helyén nem hiba · `liveKana(érték)` / `bindInput(mező)`: gépelés közben a romaji kanává alakul. A Pro hallás, a Szabad fordítás, a minták kiegészítő módja, a kanás leckék és a dolgozatok használják. |
+| `NihonCoreConj` | **ragozó motor** (állapot nélkül): `conjugate(ige, alak)` → `{ kana, romaji, irregular, morphemes }`, `StemEngine`, `VerbDetector`. A Ragozó oldal és a dolgozatok közösen használják. |
+| `NihonCorePuzzle` | **mondat-ellenőrző**: `validate(sorrend, mondat)` — a Mondat-Mester puzzle-módja és a dolgozatok közösen használják. |
 | `initGlobalAnswerAudio` · `initGlobalFeedbackMotion` | a visszajelzés helyes japán válaszának felolvasása (`.pfe-jp-ok`) és animálása |
 | `initFocusBanner` | a statisztika „célzott gyakorlás" ajánlata a modul-oldalon |
 | `NihonCoreStats` | **munkamenet-napló**: `recordSession(info)`, `getSessions()`, `getDailyAggregates()`, `getToday()`, `getStreak()`, `clearSessions()` |
@@ -156,17 +160,17 @@ Gyors térkép: `grep -n "^function init\|^window.NihonCore\|^const NihonCore\|^
 
 **Oldalak:** `initLanding` (kezdőlap) · `initModulePage` (Alap igék, Számlálók) · `initPracticePage`
 (Mondat-Mester) · `initAuthPages` · `initConjugationPage` · `initAdjectivesPage` · `initDateTimePage` ·
-`initListeningPage` · `initGrammarPage` · `initProductionPage` · `initStatsPage` · `initKanaPage` ·
-`initLessonPage`. A modulok motorjainak belső felépítése: `HISTORY.md` 2. fejezet.
+`initListeningPage` · `initGrammarPage` · `initProductionPage` · `initExamPage` (dolgozatok) · `initStatsPage` ·
+`initKanaPage` · `initLessonPage`. A modulok motorjainak belső felépítése: `HISTORY.md` 2. fejezet.
 
 **Oldal-felismerő** (`initCurrentPage`, a fájl végén) a `<main>` azonosítója szerint: `statsMain`,
-`kanaMain`, `lessonMain`, `prodMain`, `grmMain`, `listeningMain`, `dtMain`, `adjMain`, `conjugationMain`,
+`examMain`, `kanaMain`, `lessonMain`, `prodMain`, `grmMain`, `listeningMain`, `dtMain`, `adjMain`, `conjugationMain`,
 `moduleMain`, `practiceMain`, `.auth-card`, `homeMain`. A `modules.html`-nek nincs saját initje.
 
 🔴 **A közös modulok a `window`-n legyenek** (`window.NihonCoreX = …`): a felső szintű `const` nem kerül
 a `window`-ra, és a `window.NihonCoreX` ellenőrzések csendben hamisak lesznek (ebből volt már hiba).
 
-**Fejlesztői kampók** (konzolból, tesztből): `window._lesson`, `_conj`, `_adj`, `_dt`, `_lst`, `_grm`.
+**Fejlesztői kampók** (konzolból, tesztből): `window._lesson`, `_conj`, `_adj`, `_dt`, `_lst`, `_grm`, `_prod`, `_exam`.
 
 ---
 
@@ -176,7 +180,7 @@ Minden fájl globális `const`-okat ad, egymástól függetlenek, `defer`-rel t�
 
 | Fájl | Globálok |
 |---|---|
-| `core.js` | `NIHONCORE_MODULES` (arimasu-imasu, szamlalok) · `NIHONCORE_PARTICLES` (16) · `PARTICLE_ERROR_RULES` · ragozás: `_GODAN_MAP`, `_TE_RULES`, `_VERB_EXCEPTIONS`, `_IRREGULAR_FORMS`, `_FORM_RULES`, `_FORM_GROUPS`, `_ERROR_TYPES` · melléknév: `_ADJ_FORM_RULES`, `_ADJ_FORM_GROUPS`, `_ADJ_ERROR_TYPES` · `_DT_CATEGORIES`, `_DT_ERROR_TYPES` · `_AUDIO_CATEGORIES`, `_AUDIO_TIERS`, `_AUDIO_ERROR_TYPES` · `_GRAMMAR_CATEGORIES`, `_GRAMMAR_ERROR_TYPES` · **`NIHONCORE_PATH`**, **`NIHONCORE_PATH_UNITS`** · `NIHONCORE_LESSONS` |
+| `core.js` | `NIHONCORE_MODULES` (arimasu-imasu, szamlalok) · `NIHONCORE_PARTICLES` (16) · `PARTICLE_ERROR_RULES` · ragozás: `_GODAN_MAP`, `_TE_RULES`, `_VERB_EXCEPTIONS`, `_IRREGULAR_FORMS`, `_FORM_RULES`, `_FORM_GROUPS`, `_ERROR_TYPES` · melléknév: `_ADJ_FORM_RULES`, `_ADJ_FORM_GROUPS`, `_ADJ_ERROR_TYPES` · `_DT_CATEGORIES`, `_DT_ERROR_TYPES` · `_AUDIO_CATEGORIES`, `_AUDIO_TIERS`, `_AUDIO_ERROR_TYPES` · `_GRAMMAR_CATEGORIES`, `_GRAMMAR_ERROR_TYPES` · **`NIHONCORE_PATH`**, **`NIHONCORE_PATH_UNITS`** · **`NIHONCORE_EXAMS`** (dolgozatok) · `NIHONCORE_LESSONS` |
 | `course.js` | `NIHONCORE_COURSE` — a leckék. A séma a fájl elején van leírva. |
 | `sentences.js` | `NIHONCORE_SENTENCES` — tokenizált mondatok (`type`: `word` / `particle` / `verb`) |
 | `verbs.js` · `adjectives.js` | `NIHONCORE_VERBS` · `NIHONCORE_I_ADJECTIVES`, `NIHONCORE_NA_ADJECTIVES` |
@@ -208,7 +212,8 @@ Minden fájl globális `const`-okat ad, egymástól függetlenek, `defer`-rel t�
 **Betöltés:** a 8 gyakorló oldal (module, practice, conjugation, adjectives, datetime, listening, grammar,
 production) és a statisztika mind a 8 modul-adatfájlt tölti (`core`, `sentences`,
 `verbs`, `adjectives`, `counters`, `datetime`, `audio`, `grammar`); `index.html`: csak `core.js`;
-`lesson.html`: `core.js` + `course.js`; `kana.html`: `core.js` + `kana.js`; `modules.html`, `login`,
+`lesson.html`: `core.js` + `course.js`; `exam.html`: `core`, `course`, `sentences`, `verbs`, `grammar`;
+`kana.html`: `core.js` + `kana.js`; `modules.html`, `login`,
 `register`: adat nélkül. Mindenhol: anime.js (CDN) → adat → `auth.js` → `sync.js` → `app.js`.
 
 ---
@@ -221,9 +226,10 @@ production) és a statisztika mind a 8 modul-adatfájlt tölti (`core`, `sentenc
 | `nihoncore_srs_v1` | ismétlés-ütemező (`grammar:` és `lesson:` elemek) | ✓ elemenként a frissebb |
 | `nihoncore_path_v1` | tanulási út: szint + lépések (`best`, `done`) | ✓ |
 | `nihoncore_goal_v1` | napi cél | ✓ |
+| `nihoncore_exams_v1` | dolgozatok: a kitöltések listája (dátum, mód, idő, pontszám, részenként és leckénként, hibák) | ✓ hozzáfűzés |
 | `nihoncore_<modul>_profile_v1` / `_settings_v1` | modul-profilok és lobbi-beállítások (conj, adj, dt, listening, grm, prod, kana) | ✓ (a kana_settings nem) |
 | `nc_fc_state_*` | szókártyák állapota | ✓ |
-| `nihoncore_theme`, `helpers_*`, `audio_on`, `timer`, `lobby_custom_open`, `toc_v1`, `lesson_pos_v1`, `lessons_seen`, `path_seen_v1`, `dlg_jponly`, `focus_hint`, `last_readiness_tier` | eszköz-helyi beállítások és nézet-állapot | ✗ |
+| `nihoncore_exam_settings_v1` (a dolgozat indítás előtti beállításai), `nihoncore_theme`, `helpers_*`, `audio_on`, `timer`, `lobby_custom_open`, `toc_v1`, `lesson_pos_v1`, `lessons_seen`, `path_seen_v1`, `dlg_jponly`, `focus_hint`, `last_readiness_tier` | eszköz-helyi beállítások és nézet-állapot | ✗ |
 | `sessionStorage: nihoncore_map_open` | a térképen kézzel nyitott / csukott fejezetek | ✗ |
 
 Szinkron (`js/sync.js`): `users/{uid}` dokumentum; belépéskor letöltés + összefésülés, utána feltöltés
@@ -235,7 +241,8 @@ Szinkron (`js/sync.js`): `users/{uid}` dokumentum; belépéskor letöltés + ös
 ## 6. Hogyan működik: út, lecke, kör, ismétlés
 
 ### Tanulási út (`core.js` + `NihonCorePath` + `initLanding`)
-- **Lépés** (`NIHONCORE_PATH`): `{ id, glyph, title, desc, module, href, level?, mode?, preset? }`.
+- **Lépés** (`NIHONCORE_PATH`): `{ id, glyph, title, desc, module, href, level?, mode?, preset?, optional? }`. Az `optional` lépés
+  (dolgozat) megjelenik a térképen, de nem állítja meg az utat, és nem számít bele a haladásba.
   **Fejezet** (`NIHONCORE_PATH_UNITS`): `{ id, kicker, title, sub, steps[] }`. Új lecke vagy lépés = csak adat.
 - **`preset`** a lépés előre beállított köre, modulonként: Mondat-Mester `level`, `mode`, `ids`, `idRanges`,
   `particlesOnly`, `particlesAny` · Ragozó / Melléknév / Dátum / Nyelvtan `only` (szűrők) + `set` (pl. `mode`) ·
@@ -260,6 +267,24 @@ Szinkron (`js/sync.js`): `users/{uid}` dokumentum; belépéskor letöltés + ös
 - **Ismétlés:** a saját kérdések az ütemezőbe kerülnek (`srsMark`): rossz válasz → azonnal esedékes; jó válasz
   csak akkor léptet előre, ha a kérdés új vagy már esedékes volt.
 - **Párbeszéd:** „Lejátszás végig" (`playDialogue`) és „Csak japánul" nézet.
+- **Kanás leckék (1–4.: nincs kanji):** a megjelenítés után a `glossRomaji(elem)` a magyarázatok, táblák, minták, „gyakori
+  hibák" és kérdések kana-darabjai fölé romajit tesz (`ruby.lp-rj > rt.lp-rj-romaji`); a példák, a párbeszéd és a szavak saját
+  romaji-sora marad. Új, kanát tartalmazó lecke-elem megjelenítése után hívd meg rá.
+
+### Dolgozatok (`core.js` + `initExamPage`)
+- **Leírás** (`NIHONCORE_EXAMS`): `{ id, kind: 'quick' | 'big', glyph, title, desc, lessons[] }`; az `id` egyben a (nem kötelező)
+  lépés azonosítója a tanulási úton. Kis teszt: 30 perc, 30 kérdés; nagy dolgozat: 60 perc, 60 kérdés.
+- **Összeállítás** kitöltésenként, azonos arányokkal (`PLAN`): kb. 80% a `lessons` leckéiből, 20% a korábbiakból. Források: a
+  leckék saját kérdései és példamondatai (`course.js`), a lecke mintái (`grammar.js`), a lecke mondatai (`sentences.js`: a
+  `lesson` mezősek + a fejezet Mondat-Mester lépéseinek régi mondatai), az addig tanult igealakok (a fejezetek Ragozó-lépéseiből).
+- **Részek:** `gram` (saját kérdés, mintafelismerés, olvasás) · `part` (partikula, mondat összerakása) · `write` (ragozás, a minta
+  hiányzó része: beírós, a romaji gépelés közben kanává alakul) · `listen` (mondat hang után). **Típusok:** `choice` / `tokens` / `typed`.
+- **Beállítások indítás előtt** (`nihoncore_exam_settings_v1`): vizsga-mód (óra, visszajelzés csak a végén; a választás a
+  „Tovább"-ig módosítható) vagy gyakorló mód (idő nélkül, kérdésenként visszajelzés) · romaji · magyar segítség · hanggal
+  (nélküle a hallás rész helyére olvasós kérdés kerül).
+- **Befejezés:** a kitöltés mentése (`nihoncore_exams_v1`), `recordSession({ module: 'exam', mode: 'exam-quick' | 'exam-big', skipPath })`,
+  a lépés 60%-tól kész (az oldal maga írja az út állapotát), a hibás saját kérdések az ismétlés-ütemezőbe kerülnek.
+  A félbehagyott dolgozat nem kitöltés (a válaszok részmentésként a statisztikába mennek).
 
 ### Minden kör közös életciklusa
 `NihonCoreRound.begin(snapshotFn)` → kártyák (`scrollToRound()` lapozáskor) → a végén
@@ -378,7 +403,7 @@ a meglévő osztályneveket használni.
 
 **A stíluslap rétegei:** tokenek, váz → a modulok régebbi szabályai → a fájl **végén** a közös blokkok, ebben a
 sorrendben: KÖR-KERET · LOBBI · KANA · MINI-LECKE · TANULÁSI ÚT — térkép · STATISZTIKA — műszerfal · MOZGÁS ÉS
-FELÜLET-FINOMÍTÁS · LECKE-OLDAL · SZÖVEG-ERŐSÍTÉS. A végső blokkok felülírják a korábbiakat: közös viselkedést
+FELÜLET-FINOMÍTÁS · LECKE-OLDAL · DOLGOZAT · SZÖVEG-ERŐSÍTÉS. A végső blokkok felülírják a korábbiakat: közös viselkedést
 oda írj, ne a modul-szekcióba.
 
 ---
@@ -413,7 +438,13 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 - [ ] A leckék és az új készletek japán mondatait anyanyelvi lektor nem látta.
 - [ ] Az N4-es listából kimaradt apróságok: 〜てやる, 〜と言ってもいい, a 〜ということ főnevesítő.
 
-**Dolgozatok — megbeszélt terv (2026-10-05; a user döntései, a megvalósítás még nem indult):**
+**Dolgozatok — a user 2026-10-05-i döntései; kész a motor (v96), hátravan:**
+- [ ] **Statisztika:** új „Dolgozatok" rész (mikor, hányszor, fejlődés tesztenként) — az adat már gyűlik (`nihoncore_exams_v1`).
+- [ ] Félbehagyott dolgozat folytatása (újratöltés túlélése); „Hibáim újra" a dolgozat végén.
+- [ ] Számlálók pótlása (a user kérte); a minták több példát kapnak a leckék meglévő példamondataiból (a user jóváhagyta).
+- [ ] Melléknév-ragozás a dolgozatokban (most csak igék); a k1–k8 kiegészítő leckék csak ismétlésként szerepelnek.
+
+*A megbeszélt terv (megvalósítva, kivéve a fentieket):*
 - Kis teszt (30 perc, kb. 30 kérdés) a 4., 8., 16., 20., 28., 32., 40., 44. lecke után: az utolsó 4 lecke + kb. 20%
   ismétlés. Nagy dolgozat (60 perc, kb. 60 kérdés) a 12., 24., 36., 48. lecke után.
 - Vegyes részek (nyelvtan és partikulák, ragozás, mondatépítés, hallás), csak a már tanult anyagból; **beírós
@@ -422,8 +453,6 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
   elmentődik (dátum, idő, pontszám, részpontok, hibák) és szinkronizál.
 - Indítás előtt **beállítások**: időre (vizsga-mód) vagy idő nélkül, romaji / magyar segítség, hanggal vagy hang nélkül.
 - Statisztika: új „Dolgozatok" rész (mikor, hányszor, fejlődés tesztenként).
-- Előtte: számlálók pótlása; a minták több példát kapnak a leckék meglévő példamondataiból; az 1–4. lecke
-  tábláiban, mintáiban, „gyakori hibáiban" és kérdéseiben a kana alá romaji kerül (most csak a példamondatoknál van).
 - A mini-leckék félretéve (`HISTORY.md` 3. fejezet). A LexiLearn japán részének beolvasztása nyitott kérdés.
 
 **Funkció (ötletek, a user még nem kérte):**
@@ -441,6 +470,8 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 
 | Verzió | Mi történt |
 |---|---|
+| v96 | **Dolgozatok**: új oldal (`exam.html`), 12 dolgozat a tanulási úton nem kötelező lépésként; vizsga- és gyakorló mód, beállítások, mentés és szinkron; közös `NihonCoreConj`, `NihonCorePuzzle`, élő kana-beírás |
+| v95 | Romaji a kanás leckék (1–4.) magyarázataiban, tábláiban, mintáiban és kérdéseiben (`NihonCoreKana.toRomaji`, `glossRomaji`) |
 | v94 | Tartalom-feltöltés: 60 új ige a Ragozóba a leckék gyakori igéiből (108 → 168) |
 | v93 | Tartalom-feltöltés: Mondat-Mester-készlet a maradék 17 leckéhez is (490 → 627 mondat, 207 → 224 lépés) |
 | v92 | Tartalom-feltöltés: célzott Mondat-Mester-készletek 20 leckéhez (326 → 490 mondat, 20 új lépés); a `lesson` mezős mondat út-lépésben csak a saját lépésében jön elő; token `kana` mező |
