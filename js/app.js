@@ -16086,6 +16086,7 @@ function initStatsPage() {
     { id: 'overview',  name: 'Áttekintés', enabled: true  },
     { id: 'radar',     name: 'Modulok',    enabled: true  },
     { id: 'analytics', name: 'Elemzés',    enabled: true  },
+    { id: 'exams',     name: 'Dolgozatok', enabled: true  },
     { id: 'history',   name: 'Előzmények', enabled: true  }
   ];
   let activeTab = 'overview';
@@ -16509,6 +16510,9 @@ function initStatsPage() {
         ${t.name}${t.enabled ? '' : ' 🔒'}
       </button>
     `).join('');
+    // telefonon a fül-sáv vízszintesen görgethető: az aktív fül legyen látható
+    const bar = document.getElementById('statsTabs'), act = bar.querySelector('.stats-tab.active');
+    if (act && bar.scrollWidth > bar.clientWidth) bar.scrollLeft = Math.max(0, act.offsetLeft - (bar.clientWidth - act.offsetWidth) / 2);
     document.querySelectorAll('.stats-tab').forEach(btn => {
       if (btn.disabled) return;
       btn.addEventListener('click', () => {
@@ -16524,6 +16528,7 @@ function initStatsPage() {
     if      (activeTab === 'overview')  renderOverview();
     else if (activeTab === 'radar')     renderRadar();
     else if (activeTab === 'analytics') renderAnalytics();
+    else if (activeTab === 'exams')     renderExams();
     else if (activeTab === 'history')   renderHistory();
     else renderComingSoon();
   }
@@ -16981,6 +16986,110 @@ function initStatsPage() {
       ${timeOfDayCard()}
       ${srsPanels}
     `;
+  }
+
+  /* ── Dolgozatok: kitöltések, fejlődés dolgozatonként ───────────── */
+  // Az adat a dolgozat-oldal mentése (nihoncore_exams_v1): kitöltésenként dátum, mód, idő, pontszám,
+  // részenkénti és leckénkénti bontás. A dolgozatok leírása: NIHONCORE_EXAMS (core.js).
+  const EXAM_SECTIONS = { gram: 'Nyelvtan és olvasás', part: 'Partikulák és mondatépítés', write: 'Ragozás és beírás', listen: 'Hallás' };
+  const EXAM_PASS = 60;
+  function renderExams() {
+    const el = document.getElementById('statsContent');
+    const defs = (typeof NIHONCORE_EXAMS !== 'undefined') ? NIHONCORE_EXAMS : [];
+    let atts = [];
+    try { atts = JSON.parse(localStorage.getItem('nihoncore_exams_v1') || '[]') || []; } catch (e) {}
+    atts = atts.filter(a => a && a.exam && a.total).sort((a, b) => (a.ts || 0) - (b.ts || 0));
+    const pc = a => Math.round(a.correct / a.total * 100);
+    const day = ts => { const d = new Date(ts); return d.getFullYear() + '. ' + pad(d.getMonth() + 1) + '. ' + pad(d.getDate()) + '.'; };
+    const clock = ms => { const s = Math.max(0, Math.round(ms / 1000)); return Math.floor(s / 60) + ':' + pad(s % 60); };
+    if (!atts.length) {
+      el.innerHTML = emptyState('試', 'Még nem írtál dolgozatot.',
+        'Négy leckénként egy kis teszt, tizenkét leckénként egy nagy dolgozat vár: itt látod majd, hogyan sikerültek, és mennyit fejlődtél.') +
+        '<p class="st-exam-cta"><a class="btn btn-primary" href="exam.html">A dolgozatokhoz</a></p>';
+      return;
+    }
+    const byExam = {};
+    atts.forEach(a => { (byExam[a.exam] = byExam[a.exam] || []).push(a); });
+    const written = defs.filter(d => byExam[d.id]);
+    const avg = Math.round(atts.reduce((s, a) => s + pc(a), 0) / atts.length);
+    const passed = written.filter(d => byExam[d.id].some(a => pc(a) >= EXAM_PASS)).length;
+
+    // gyenge leckék: dolgozatonként a legutóbbi kitöltés leckénkénti eredményéből
+    const lessonAgg = {};
+    Object.keys(byExam).forEach(id => {
+      const last = byExam[id][byExam[id].length - 1];
+      Object.keys(last.lessons || {}).forEach(l => { const v = last.lessons[l]; const t = lessonAgg[l] = lessonAgg[l] || [0, 0]; t[0] += v[0]; t[1] += v[1]; });
+    });
+    const weak = Object.keys(lessonAgg).filter(l => lessonAgg[l][1] >= 2 && lessonAgg[l][0] / lessonAgg[l][1] * 100 < EXAM_PASS)
+      .sort((a, b) => lessonAgg[a][0] / lessonAgg[a][1] - lessonAgg[b][0] / lessonAgg[b][1]).slice(0, 8);
+    const lessonLabel = l => /^l\d+$/.test(l) ? l.slice(1) + '. lecke' : 'Kiegészítő ' + l.slice(1) + '.';
+
+    const cards = written.map(d => {
+      const mine = byExam[d.id];
+      const last = mine[mine.length - 1], first = mine[0];
+      const best = mine.reduce((m, a) => Math.max(m, pc(a)), 0);
+      const diff = pc(last) - pc(first);
+      const points = mine.slice(-12).map(a => ({ label: day(a.ts), value: pc(a) }));
+      const secs = Object.keys(EXAM_SECTIONS).filter(s => last.sections && last.sections[s]).map(s => {
+        const v = last.sections[s], q = Math.round(v[0] / v[1] * 100);
+        return `<div class="exam-bar-row"><span class="exam-bar-name">${EXAM_SECTIONS[s]}</span>
+            <span class="exam-bar"><span class="exam-bar-fill${q >= EXAM_PASS ? ' is-ok' : ''}" style="width:${q}%"></span></span>
+            <span class="exam-bar-val">${v[0]} / ${v[1]}</span></div>`;
+      }).join('');
+      const rows = mine.slice(-6).reverse().map(a => `
+            <li class="exam-att">
+              <span class="exam-att-date">${day(a.ts)}</span>
+              <span class="exam-att-mode">${a.examMode ? 'vizsga' : 'gyakorló'}</span>
+              <span class="exam-att-time">${clock(a.durationMs || 0)}${a.timeUp ? ' · lejárt' : ''}</span>
+              <strong class="exam-att-score${pc(a) >= EXAM_PASS ? ' is-ok' : ''}">${a.correct} / ${a.total} · ${pc(a)}%</strong>
+            </li>`).join('');
+      return `
+        <div class="act-card glass-panel st-exam${d.kind === 'big' ? ' is-big' : ''}">
+          <div class="st-exam-head">
+            <span class="st-exam-glyph" lang="ja" aria-hidden="true">${d.glyph || '試'}</span>
+            <div class="st-exam-titles">
+              <div class="act-card-title">${d.title}</div>
+              <div class="act-card-sub">${mine.length} kitöltés · legjobb <strong>${best}%</strong> · legutóbb ${pc(last)}%${mine.length > 1 ? ' · az első óta ' + (diff > 0 ? '+' + diff : diff) + ' százalékpont' : ''}</div>
+            </div>
+            <span class="st-exam-score${best >= EXAM_PASS ? ' is-ok' : ''}">${best}%</span>
+          </div>
+          ${mine.length >= 2 ? lineSvg(points, { max: 100, unit: '%' }) : '<p class="md-empty">Egy kitöltésed van: a fejlődés vonala a második után rajzolódik ki.</p>'}
+          <div class="st-exam-block">
+            <div class="st-exam-label">A legutóbbi kitöltés részenként</div>
+            ${secs}
+          </div>
+          <div class="st-exam-block">
+            <div class="st-exam-label">Kitöltések</div>
+            <ul class="exam-att-list">${rows}</ul>
+          </div>
+          <a class="btn btn-outline st-exam-again" href="exam.html?id=${d.id}">Megírom újra</a>
+        </div>`;
+    }).join('');
+    const todo = defs.filter(d => !byExam[d.id]);
+
+    el.innerHTML = `
+      <div class="an-stats">
+        <div class="an-stat glass-panel"><span class="an-stat-num">${atts.length}</span><span class="an-stat-label">kitöltés</span></div>
+        <div class="an-stat glass-panel"><span class="an-stat-num">${written.length} / ${defs.length}</span><span class="an-stat-label">megírt dolgozat</span></div>
+        <div class="an-stat glass-panel"><span class="an-stat-num">${passed}</span><span class="an-stat-label">sikeres (60% fölött)</span></div>
+        <div class="an-stat glass-panel"><span class="an-stat-num">${avg}%</span><span class="an-stat-label">átlagos eredmény</span></div>
+      </div>
+      ${weak.length ? `
+      <div class="act-card glass-panel">
+        <div class="act-card-title">Ezeket érdemes átismételni</div>
+        <div class="act-card-sub">A dolgozatok legutóbbi kitöltései szerint ezekben a leckékben volt a legtöbb hiba.</div>
+        <div class="exam-lesson-grid">
+          ${weak.map(l => `<a class="exam-lesson is-weak" href="lesson.html?id=${l}"><span class="exam-lesson-name">${lessonLabel(l)}</span><span class="exam-lesson-val">${lessonAgg[l][0]} / ${lessonAgg[l][1]}</span></a>`).join('')}
+        </div>
+      </div>` : ''}
+      ${cards}
+      ${todo.length ? `
+      <div class="act-card glass-panel">
+        <div class="act-card-title">Még meg nem írt dolgozatok</div>
+        <div class="st-exam-todo">
+          ${todo.map(d => `<a class="st-exam-todo-link" href="exam.html?id=${d.id}"><span lang="ja" aria-hidden="true">${d.glyph || '試'}</span>${d.title}</a>`).join('')}
+        </div>
+      </div>` : ''}`;
   }
 
   // V5 P3b — Ismert SRS-scope-ok listája. Jövőbeli modulok ide kerülnek.

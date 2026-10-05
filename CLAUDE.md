@@ -1,7 +1,7 @@
 # NihonCore — Claude project context
 
 > Ezt a fájlt **minden új munkamenet** beolvassa: mi a projekt, hol mi van, milyen szabályok
-> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-05, v96).
+> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-05, v97).
 > A teljes verzió-történet, a modulok motorjainak részletes leírása és a lezárt backlog a
 > **`HISTORY.md`**-ben van — oda akkor nézz be, ha egy régi döntés vagy javítás hátterét keresed.
 
@@ -285,6 +285,8 @@ Szinkron (`js/sync.js`): `users/{uid}` dokumentum; belépéskor letöltés + ös
 - **Befejezés:** a kitöltés mentése (`nihoncore_exams_v1`), `recordSession({ module: 'exam', mode: 'exam-quick' | 'exam-big', skipPath })`,
   a lépés 60%-tól kész (az oldal maga írja az út állapotát), a hibás saját kérdések az ismétlés-ütemezőbe kerülnek.
   A félbehagyott dolgozat nem kitöltés (a válaszok részmentésként a statisztikába mennek).
+- **Statisztika → „Dolgozatok" fül** (`renderExams`): összesítő számok, a gyenge leckék (dolgozatonként a legutóbbi kitöltésből),
+  dolgozatonként kártya (a kitöltések vonala, a legutóbbi részenként, a kitöltések listája), a még meg nem írtak.
 
 ### Minden kör közös életciklusa
 `NihonCoreRound.begin(snapshotFn)` → kártyák (`scrollToRound()` lapozáskor) → a végén
@@ -438,8 +440,7 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 - [ ] A leckék és az új készletek japán mondatait anyanyelvi lektor nem látta.
 - [ ] Az N4-es listából kimaradt apróságok: 〜てやる, 〜と言ってもいい, a 〜ということ főnevesítő.
 
-**Dolgozatok — a user 2026-10-05-i döntései; kész a motor (v96), hátravan:**
-- [ ] **Statisztika:** új „Dolgozatok" rész (mikor, hányszor, fejlődés tesztenként) — az adat már gyűlik (`nihoncore_exams_v1`).
+**Dolgozatok — a user 2026-10-05-i döntései; kész a motor (v96) és a statisztika-fül (v97), hátravan:**
 - [ ] Félbehagyott dolgozat folytatása (újratöltés túlélése); „Hibáim újra" a dolgozat végén.
 - [ ] Számlálók pótlása (a user kérte); a minták több példát kapnak a leckék meglévő példamondataiból (a user jóváhagyta).
 - [ ] Melléknév-ragozás a dolgozatokban (most csak igék); a k1–k8 kiegészítő leckék csak ismétlésként szerepelnek.
@@ -470,6 +471,7 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 
 | Verzió | Mi történt |
 |---|---|
+| v97 | A statisztika új „Dolgozatok" füle: kitöltések, fejlődés dolgozatonként, gyenge leckék; telefonon a fül-sáv görgethető |
 | v96 | **Dolgozatok**: új oldal (`exam.html`), 12 dolgozat a tanulási úton nem kötelező lépésként; vizsga- és gyakorló mód, beállítások, mentés és szinkron; közös `NihonCoreConj`, `NihonCorePuzzle`, élő kana-beírás |
 | v95 | Romaji a kanás leckék (1–4.) magyarázataiban, tábláiban, mintáiban és kérdéseiben (`NihonCoreKana.toRomaji`, `glossRomaji`) |
 | v94 | Tartalom-feltöltés: 60 új ige a Ragozóba a leckék gyakori igéiből (108 → 168) |

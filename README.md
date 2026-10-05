@@ -136,6 +136,7 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 - **Sorozat**, mai körök, pontosság és idő.
 - **Éves aktivitás-naptár** (mint a GitHubé).
 - Modulonkénti teljesítmény, **vakfoltok** és célzott ajánlat: mit gyakorolj most.
+- **Dolgozatok**: mikor, hányszor és milyen eredménnyel írtad meg őket, és mennyit fejlődtél.
 - Minden kör előzménye, a félbehagyottak is.
 
 ### 📱 Kényelmi dolgok
@@ -223,8 +224,9 @@ Utána nyisd meg az `index.html`-t a böngészőben. (A belépés, a szinkron é
 - [x] 57 részletes lecke lapozós menettel, párbeszéddel, gyors kérdésekkel
 - [x] Időzített ismétlés, napi cél, sorozat
 - [x] 10 gyakorló modul és statisztika
+- [x] Dolgozatok: kis teszt 4 leckénként, nagy dolgozat 12 leckénként, vizsga-móddal
 - [x] Fiók, szinkron, telepíthető app, sötét téma
-- [ ] A gyakorló modulok nagy tartalom-feltöltése
+- [x] Leckénkénti gyakorló anyag: minták, mondatok, igék
 - [ ] Anyanyelvi lektorálás
 
 <br />

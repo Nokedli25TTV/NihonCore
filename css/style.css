@@ -7833,9 +7833,10 @@ html.theme-sumi .day-pick-btn.is-on, html.theme-sumi .day-pick-btn.is-on span { 
    és a prefers-reduced-motion kikapcsolja.
    ════════════════════════════════════════════════════════ */
 
-/* Statisztika-fülek telefonon: négy egyenlő fül, görgetés nélkül */
+/* Statisztika-fülek telefonon: öt fül a saját szélességében; ami nem fér ki, vízszintesen görgethető
+   (az aktív fül a megnyitáskor a látható részre kerül) */
 @media (max-width: 599px) {
-  .stats-main .stats-tab { flex: 1 1 0; min-width: 0; padding: 0 4px; font-size: var(--fs-xs); }
+  .stats-main .stats-tab { flex: 1 0 auto; padding: 0 8px; font-size: var(--fs-xs); }   /* így az ötödik fül széle is kilátszik */
 }
 
 /* Lenyomható kártyák: a modul-kártya és a lobbi mód-gombjai */
@@ -8579,6 +8580,28 @@ body.helpers-no-hu .exam-verb-hu { display: none; }
 .exam-rev-a strong { font-size: var(--fs-base); color: var(--ok-deep); }
 .exam-rev-why { margin-top: 6px; font-size: var(--fs-sm); line-height: 1.5; color: var(--sumi-soft); }
 .exam-rev-meta { margin-top: 6px; font-size: var(--fs-2xs); font-weight: 600; color: var(--sumi-soft); }
+
+/* Statisztika → Dolgozatok fül: dolgozatonként egy kártya (vonal a kitöltésekről, részek, lista) */
+.st-exam-head { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.st-exam-glyph {
+  flex-shrink: 0; width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center;
+  font-family: var(--font-jp); font-size: var(--fs-lg); font-weight: 500; color: var(--brand-deep); background: var(--brand-soft);
+}
+.st-exam.is-big .st-exam-glyph { color: var(--gold-ink); background: rgb(var(--gold-rgb) / 0.16); }
+.st-exam-titles { flex: 1; min-width: 0; }
+.st-exam-score { flex-shrink: 0; font-size: var(--fs-xl); font-weight: 800; color: var(--sumi-soft); font-variant-numeric: tabular-nums; }
+.st-exam-score.is-ok { color: var(--ok-deep); }
+.st-exam-block { margin-top: 16px; }
+.st-exam-label { font-size: var(--fs-2xs); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: var(--sumi-soft); }
+.st-exam-again { margin-top: 16px; width: 100%; justify-content: center; }
+.st-exam-cta { text-align: center; margin-top: 16px; }
+.st-exam-todo { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.st-exam-todo-link {
+  display: inline-flex; align-items: center; gap: 8px; min-height: var(--touch); padding: 6px 14px; border-radius: 999px;
+  font-size: var(--fs-sm); font-weight: 700; text-decoration: none; color: var(--sumi);
+  background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+}
+.st-exam-todo-link [lang="ja"] { font-family: var(--font-jp); color: var(--brand-deep); }
 
 /* A térképen és a tartalomjegyzékben: a dolgozat nem kötelező lépés (szaggatott arany perem) */
 .path-node.is-exam:not(.is-done) .path-node-disc { border-style: dashed; border-color: rgb(var(--gold-rgb) / 0.70); color: var(--gold-ink); }
