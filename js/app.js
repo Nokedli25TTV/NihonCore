@@ -6203,6 +6203,9 @@ function initPracticePage() {
   // vagy felsorolt mondatokra (ids) szűkítheti a kört
   function matchesIdRanges(s) {
     if (lobbyState.ids) return lobbyState.ids.indexOf(s.id) >= 0;
+    // Út-lépésben a leckéhez kötött mondatok (lesson mező) csak a saját, felsorolt lépésükben
+    // szerepelnek: az általános lépések (első mondatok, szórend) köre nem telik meg későbbi anyaggal.
+    if (lobbyState.inStep && s.lesson) return false;
     const ranges = lobbyState.idRanges;
     if (!ranges) return true;
     const m = /^s_n5_(\d+)$/.exec(s.id || '');
@@ -7064,6 +7067,7 @@ function initPracticePage() {
     const step = window.NihonCorePath && NihonCorePath.activeStep();
     const p = step && step.module === 'practice' && step.preset;
     if (!p) return;
+    lobbyState.inStep = true;
     if (p.particlesOnly) lobbyState.particlesOnly = p.particlesOnly;
     if (p.particlesAny)  lobbyState.particlesAny  = p.particlesAny;
     if (p.idRanges)      lobbyState.idRanges      = p.idRanges;
@@ -15102,8 +15106,9 @@ function initProductionPage() {
         if (!drillSettings.jlpt[level]) return;      // a mondat saját szintje szerint
         const jp = s.tokens.map(t => t.jp).join('');
         const kana = s.tokens.map(t => {
-          // Partikulák jp-je mindig pure kana; szavak/igék jp-je kanji-mix lehet
-          return isPureKanaJp(t.jp) ? t.jp : romajiToKanaProd(t.romaji);
+          // Partikulák jp-je mindig pure kana; szavak/igék jp-je kanji-mix lehet:
+          // ott a token saját olvasata (kana) dönt, ennek híján a romajiból számoljuk
+          return isPureKanaJp(t.jp) ? t.jp : (t.kana || romajiToKanaProd(t.romaji));
         }).join('');
         const romaji = s.tokens.map(t => t.romaji).join(' ');
         out.push({
