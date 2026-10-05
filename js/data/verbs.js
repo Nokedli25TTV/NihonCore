@@ -886,5 +886,448 @@ const NIHONCORE_VERBS = [
     level: 'N4', theme: 'state', meaningHu: 'hallatszik / hallható',
     note: 'Intranzitív! A spontán hallható hangokra utal. Vonzat: が.',
     example: { jp: '鳥の声が聞こえます。', romaji: 'tori no koe ga kikoemasu.', hu: 'Hallatszik a madarak hangja.' }
+  },
+
+  /* @feltöltés:kezdet — a leckék gyakori igéi */
+  {
+    id: 'narau', kanji: '習う', kana: 'ならう', romaji: 'narau',
+    group: 'godan', godanFamily: 'u',
+    stemKana: 'なら', stemRomaji: 'nara',
+    level: 'N5', theme: 'daily', meaningHu: 'tanul (valakitől)',
+    example: { jp: '先生に日本語を習います。', romaji: 'sensei ni nihongo wo naraimasu.', hu: 'A tanártól japánul tanulok.' }
+  },
+  {
+    id: 'tetsudau', kanji: '手伝う', kana: 'てつだう', romaji: 'tetsudau',
+    group: 'godan', godanFamily: 'u',
+    stemKana: 'てつだ', stemRomaji: 'tetsuda',
+    level: 'N4', theme: 'daily', meaningHu: 'segít',
+    example: { jp: '母の仕事を手伝います。', romaji: 'haha no shigoto wo tetsudaimasu.', hu: 'Segítek anyámnak a munkában.' }
+  },
+  {
+    id: 'suu', kanji: '吸う', kana: 'すう', romaji: 'suu',
+    group: 'godan', godanFamily: 'u',
+    stemKana: 'す', stemRomaji: 'su',
+    level: 'N5', theme: 'daily', meaningHu: 'szív, beszív',
+    example: { jp: '朝の空気を吸います。', romaji: 'asa no kuuki wo suimasu.', hu: 'Beszívom a reggeli levegőt.' }
+  },
+  {
+    id: 'chigau', kanji: '違う', kana: 'ちがう', romaji: 'chigau',
+    group: 'godan', godanFamily: 'u',
+    stemKana: 'ちが', stemRomaji: 'chiga',
+    level: 'N4', theme: 'state', meaningHu: 'különbözik / nem az',
+    note: 'Tagadásra is használják: ちがいます = „nem, nem úgy van". Vonzat: が.',
+    example: { jp: '答えが違います。', romaji: 'kotae ga chigaimasu.', hu: 'Nem jó a válasz.' }
+  },
+  {
+    id: 'hirou', kanji: '拾う', kana: 'ひろう', romaji: 'hirou',
+    group: 'godan', godanFamily: 'u',
+    stemKana: 'ひろ', stemRomaji: 'hiro',
+    level: 'N4', theme: 'daily', meaningHu: 'felvesz (a földről), talál',
+    example: { jp: '道で財布を拾いました。', romaji: 'michi de saifu wo hiroimashita.', hu: 'Az úton találtam egy pénztárcát.' }
+  },
+  {
+    id: 'oku', kanji: '置く', kana: 'おく', romaji: 'oku',
+    group: 'godan', godanFamily: 'ku',
+    stemKana: 'お', stemRomaji: 'o',
+    level: 'N5', theme: 'daily', meaningHu: 'letesz, odatesz',
+    example: { jp: '机の上に本を置きます。', romaji: 'tsukue no ue ni hon wo okimasu.', hu: 'Az asztalra teszem a könyvet.' }
+  },
+  {
+    id: 'naku', kanji: '泣く', kana: 'なく', romaji: 'naku',
+    group: 'godan', godanFamily: 'ku',
+    stemKana: 'な', stemRomaji: 'na',
+    level: 'N4', theme: 'state', meaningHu: 'sír',
+    example: { jp: '赤ちゃんが泣いています。', romaji: 'akachan ga naiteimasu.', hu: 'Sír a kisbaba.' }
+  },
+  {
+    id: 'migaku', kanji: '磨く', kana: 'みがく', romaji: 'migaku',
+    group: 'godan', godanFamily: 'ku',
+    stemKana: 'みが', stemRomaji: 'miga',
+    level: 'N5', theme: 'daily', meaningHu: 'fényesít, (fogat) mos',
+    example: { jp: '毎朝歯を磨きます。', romaji: 'maiasa wa wo migakimasu.', hu: 'Minden reggel fogat mosok.' }
+  },
+  {
+    id: 'hiku_play', kanji: '弾く', kana: 'ひく', romaji: 'hiku',
+    group: 'godan', godanFamily: 'ku',
+    stemKana: 'ひ', stemRomaji: 'hi',
+    level: 'N5', theme: 'daily', meaningHu: 'játszik (zongorán, gitáron)',
+    example: { jp: 'ピアノを弾きます。', romaji: 'piano wo hikimasu.', hu: 'Zongorázom.' }
+  },
+  {
+    id: 'todoku', kanji: '届く', kana: 'とどく', romaji: 'todoku',
+    group: 'godan', godanFamily: 'ku',
+    stemKana: 'とど', stemRomaji: 'todo',
+    level: 'N4', theme: 'transitivity', meaningHu: 'megérkezik (küldemény)',
+    note: 'Intranzitív (Tárgyatlan). Párja a 届ける (todokeru).',
+    example: { jp: '荷物が届きました。', romaji: 'nimotsu ga todokimashita.', hu: 'Megérkezett a csomag.' }
+  },
+  {
+    id: 'ugoku', kanji: '動く', kana: 'うごく', romaji: 'ugoku',
+    group: 'godan', godanFamily: 'ku',
+    stemKana: 'うご', stemRomaji: 'ugo',
+    level: 'N4', theme: 'movement', meaningHu: 'mozog, működik',
+    example: { jp: '時計が動きません。', romaji: 'tokei ga ugokimasen.', hu: 'Nem jár az óra.' }
+  },
+  {
+    id: 'osu', kanji: '押す', kana: 'おす', romaji: 'osu',
+    group: 'godan', godanFamily: 'su',
+    stemKana: 'お', stemRomaji: 'o',
+    level: 'N5', theme: 'daily', meaningHu: 'megnyom, tol',
+    example: { jp: 'このボタンを押します。', romaji: 'kono botan wo oshimasu.', hu: 'Megnyomom ezt a gombot.' }
+  },
+  {
+    id: 'sagasu', kanji: '探す', kana: 'さがす', romaji: 'sagasu',
+    group: 'godan', godanFamily: 'su',
+    stemKana: 'さが', stemRomaji: 'saga',
+    level: 'N4', theme: 'daily', meaningHu: 'keres',
+    example: { jp: '鍵を探しています。', romaji: 'kagi wo sagashiteimasu.', hu: 'A kulcsomat keresem.' }
+  },
+  {
+    id: 'watasu', kanji: '渡す', kana: 'わたす', romaji: 'watasu',
+    group: 'godan', godanFamily: 'su',
+    stemKana: 'わた', stemRomaji: 'wata',
+    level: 'N4', theme: 'giving', meaningHu: 'átad',
+    example: { jp: '先生に宿題を渡します。', romaji: 'sensei ni shukudai wo watashimasu.', hu: 'Átadom a tanárnak a házi feladatot.' }
+  },
+  {
+    id: 'hikkosu', kanji: '引っ越す', kana: 'ひっこす', romaji: 'hikkosu',
+    group: 'godan', godanFamily: 'su',
+    stemKana: 'ひっこ', stemRomaji: 'hikko',
+    level: 'N4', theme: 'movement', meaningHu: 'költözik',
+    example: { jp: '来月大阪へ引っ越します。', romaji: 'raigetsu oosaka e hikkoshimasu.', hu: 'Jövő hónapban Oszakába költözöm.' }
+  },
+  {
+    id: 'hakobu', kanji: '運ぶ', kana: 'はこぶ', romaji: 'hakobu',
+    group: 'godan', godanFamily: 'bu',
+    stemKana: 'はこ', stemRomaji: 'hako',
+    level: 'N4', theme: 'movement', meaningHu: 'szállít, visz',
+    example: { jp: '荷物を部屋へ運びます。', romaji: 'nimotsu wo heya e hakobimasu.', hu: 'A szobába viszem a csomagot.' }
+  },
+  {
+    id: 'narabu', kanji: '並ぶ', kana: 'ならぶ', romaji: 'narabu',
+    group: 'godan', godanFamily: 'bu',
+    stemKana: 'なら', stemRomaji: 'nara',
+    level: 'N4', theme: 'transitivity', meaningHu: 'sorban áll',
+    note: 'Intranzitív (Tárgyatlan). Párja a 並べる (naraberu).',
+    example: { jp: '店の前に人が並んでいます。', romaji: 'mise no mae ni hito ga narandeimasu.', hu: 'Emberek állnak sorban a bolt előtt.' }
+  },
+  {
+    id: 'yorokobu', kanji: '喜ぶ', kana: 'よろこぶ', romaji: 'yorokobu',
+    group: 'godan', godanFamily: 'bu',
+    stemKana: 'よろこ', stemRomaji: 'yoroko',
+    level: 'N4', theme: 'state', meaningHu: 'örül',
+    example: { jp: '母はとても喜びました。', romaji: 'haha wa totemo yorokobimashita.', hu: 'Anyám nagyon megörült.' }
+  },
+  {
+    id: 'tanomu', kanji: '頼む', kana: 'たのむ', romaji: 'tanomu',
+    group: 'godan', godanFamily: 'mu',
+    stemKana: 'たの', stemRomaji: 'tano',
+    level: 'N4', theme: 'daily', meaningHu: 'megkér, rendel',
+    example: { jp: '友だちに買い物を頼みます。', romaji: 'tomodachi ni kaimono wo tanomimasu.', hu: 'Megkérem a barátomat, hogy vásároljon be.' }
+  },
+  {
+    id: 'fumu', kanji: '踏む', kana: 'ふむ', romaji: 'fumu',
+    group: 'godan', godanFamily: 'mu',
+    stemKana: 'ふ', stemRomaji: 'fu',
+    level: 'N4', theme: 'daily', meaningHu: 'rálép',
+    example: { jp: '足を踏まないでください。', romaji: 'ashi wo fumanaidekudasai.', hu: 'Kérem, ne lépjen a lábamra!' }
+  },
+  {
+    id: 'nusumu', kanji: '盗む', kana: 'ぬすむ', romaji: 'nusumu',
+    group: 'godan', godanFamily: 'mu',
+    stemKana: 'ぬす', stemRomaji: 'nusu',
+    level: 'N4', theme: 'daily', meaningHu: 'ellop',
+    example: { jp: '泥棒がお金を盗みました。', romaji: 'dorobou ga okane wo nusumimashita.', hu: 'A tolvaj pénzt lopott.' }
+  },
+  {
+    id: 'owaru', kanji: '終わる', kana: 'おわる', romaji: 'owaru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'おわ', stemRomaji: 'owa',
+    level: 'N5', theme: 'daily', meaningHu: 'véget ér',
+    example: { jp: '授業は三時に終わります。', romaji: 'jugyou wa sanji ni owarimasu.', hu: 'Az óra háromkor ér véget.' }
+  },
+  {
+    id: 'uru', kanji: '売る', kana: 'うる', romaji: 'uru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'う', stemRomaji: 'u',
+    level: 'N5', theme: 'daily', meaningHu: 'elad, árul',
+    example: { jp: 'あの店は花を売っています。', romaji: 'ano mise wa hana wo utteimasu.', hu: 'Az a bolt virágot árul.' }
+  },
+  {
+    id: 'toru_photo', kanji: '撮る', kana: 'とる', romaji: 'toru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'と', stemRomaji: 'to',
+    level: 'N5', theme: 'daily', meaningHu: '(fényképet) készít',
+    note: 'Ugyanúgy hangzik, mint a 取る (elvesz): a kanji mutatja, hogy fényképről, felvételről van szó.',
+    example: { jp: '公園で写真を撮ります。', romaji: 'kouen de shashin wo torimasu.', hu: 'Fényképezek a parkban.' }
+  },
+  {
+    id: 'mamoru', kanji: '守る', kana: 'まもる', romaji: 'mamoru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'まも', stemRomaji: 'mamo',
+    level: 'N4', theme: 'daily', meaningHu: 'megvéd, betart',
+    example: { jp: '約束を守ります。', romaji: 'yakusoku wo mamorimasu.', hu: 'Betartom az ígéretemet.' }
+  },
+  {
+    id: 'komaru', kanji: '困る', kana: 'こまる', romaji: 'komaru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'こま', stemRomaji: 'koma',
+    level: 'N5', theme: 'state', meaningHu: 'bajban van, gondja van',
+    example: { jp: 'お金がなくて困っています。', romaji: 'okane ga nakute komatteimasu.', hu: 'Nincs pénzem, bajban vagyok.' }
+  },
+  {
+    id: 'naru_ring', kanji: '鳴る', kana: 'なる', romaji: 'naru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'な', stemRomaji: 'na',
+    level: 'N4', theme: 'state', meaningHu: 'szól, megszólal',
+    note: 'Intranzitív. Ne keverd a 成る (válik valamivé) igével: a kanji más.',
+    example: { jp: '電話が鳴っています。', romaji: 'denwa ga natteimasu.', hu: 'Szól a telefon.' }
+  },
+  {
+    id: 'tomaru_stay', kanji: '泊まる', kana: 'とまる', romaji: 'tomaru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'とま', stemRomaji: 'toma',
+    level: 'N4', theme: 'movement', meaningHu: 'megszáll',
+    note: 'Ugyanúgy hangzik, mint a 止まる (megáll). Vonzat: に (hol száll meg).',
+    example: { jp: '友だちの家に泊まります。', romaji: 'tomodachi no ie ni tomarimasu.', hu: 'A barátomnál szállok meg.' }
+  },
+  {
+    id: 'kawaru', kanji: '変わる', kana: 'かわる', romaji: 'kawaru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'かわ', stemRomaji: 'kawa',
+    level: 'N4', theme: 'transitivity', meaningHu: 'megváltozik',
+    note: 'Intranzitív (Tárgyatlan). Párja a 変える (kaeru).',
+    example: { jp: '天気が変わりました。', romaji: 'tenki ga kawarimashita.', hu: 'Megváltozott az idő.' }
+  },
+  {
+    id: 'sawaru', kanji: '触る', kana: 'さわる', romaji: 'sawaru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'さわ', stemRomaji: 'sawa',
+    level: 'N4', theme: 'daily', meaningHu: 'megérint',
+    note: 'Vonzat: に (amihez hozzáér).',
+    example: { jp: 'この絵に触らないでください。', romaji: 'kono e ni sawaranaidekudasai.', hu: 'Kérem, ne érjen ehhez a képhez!' }
+  },
+  {
+    id: 'okoru', kanji: '怒る', kana: 'おこる', romaji: 'okoru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'おこ', stemRomaji: 'oko',
+    level: 'N4', theme: 'state', meaningHu: 'megharagszik',
+    example: { jp: '父はすぐ怒ります。', romaji: 'chichi wa sugu okorimasu.', hu: 'Apám hamar megharagszik.' }
+  },
+  {
+    id: 'ayamaru', kanji: '謝る', kana: 'あやまる', romaji: 'ayamaru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'あやま', stemRomaji: 'ayama',
+    level: 'N4', theme: 'daily', meaningHu: 'bocsánatot kér',
+    example: { jp: '友だちに謝りました。', romaji: 'tomodachi ni ayamarimashita.', hu: 'Bocsánatot kértem a barátomtól.' }
+  },
+  {
+    id: 'atsumaru', kanji: '集まる', kana: 'あつまる', romaji: 'atsumaru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'あつま', stemRomaji: 'atsuma',
+    level: 'N4', theme: 'transitivity', meaningHu: 'összegyűlik',
+    note: 'Intranzitív (Tárgyatlan). Párja a 集める (atsumeru).',
+    example: { jp: '学生が教室に集まりました。', romaji: 'gakusei ga kyoushitsu ni atsumarimashita.', hu: 'A diákok összegyűltek a teremben.' }
+  },
+  {
+    id: 'ganbaru', kanji: '頑張る', kana: 'がんばる', romaji: 'ganbaru',
+    group: 'godan', godanFamily: 'ru',
+    stemKana: 'がんば', stemRomaji: 'ganba',
+    level: 'N4', theme: 'daily', meaningHu: 'kitart, igyekszik',
+    example: { jp: '試験まで頑張ります。', romaji: 'shiken made ganbarimasu.', hu: 'A vizsgáig mindent beleadok.' }
+  },
+  {
+    id: 'iru_need', kanji: '要る', kana: 'いる', romaji: 'iru',
+    group: 'godan', godanFamily: 'ru', pseudoIchidan: true,
+    stemKana: 'い', stemRomaji: 'i',
+    level: 'N5', theme: 'state', meaningHu: 'kell, szükséges',
+    note: 'Ál-Ichidan! Godanként ragozódik: いります, いらない, いって. Vonzat: が. (A いる „van" valódi Ichidan.)',
+    example: { jp: 'パスポートが要ります。', romaji: 'pasupooto ga irimasu.', hu: 'Útlevél kell.' }
+  },
+  {
+    id: 'heru', kanji: '減る', kana: 'へる', romaji: 'heru',
+    group: 'godan', godanFamily: 'ru', pseudoIchidan: true,
+    stemKana: 'へ', stemRomaji: 'he',
+    level: 'N4', theme: 'state', meaningHu: 'csökken, fogy',
+    note: 'Ál-Ichidan! Godanként ragozódik: へります, へらない, へって. Ellentéte: 増える (fueru).',
+    example: { jp: '子どもの数が減っています。', romaji: 'kodomo no kazu ga hetteimasu.', hu: 'Csökken a gyerekek száma.' }
+  },
+  {
+    id: 'kariru', kanji: '借りる', kana: 'かりる', romaji: 'kariru',
+    group: 'ichidan',
+    stemKana: 'かり', stemRomaji: 'kari',
+    level: 'N5', theme: 'giving', meaningHu: 'kölcsönkér, kölcsönvesz',
+    note: 'Aki kér, az 借りる; aki ad, az 貸す (kasu).',
+    example: { jp: '図書館で本を借ります。', romaji: 'toshokan de hon wo karimasu.', hu: 'Könyvet kölcsönzök a könyvtárban.' }
+  },
+  {
+    id: 'shiraberu', kanji: '調べる', kana: 'しらべる', romaji: 'shiraberu',
+    group: 'ichidan',
+    stemKana: 'しらべ', stemRomaji: 'shirabe',
+    level: 'N4', theme: 'daily', meaningHu: 'utánanéz, megvizsgál',
+    example: { jp: '辞書で言葉を調べます。', romaji: 'jisho de kotoba wo shirabemasu.', hu: 'Szótárban nézem meg a szót.' }
+  },
+  {
+    id: 'tateru', kanji: '建てる', kana: 'たてる', romaji: 'tateru',
+    group: 'ichidan',
+    stemKana: 'たて', stemRomaji: 'tate',
+    level: 'N4', theme: 'daily', meaningHu: 'épít',
+    example: { jp: '来年家を建てます。', romaji: 'rainen ie wo tatemasu.', hu: 'Jövőre házat építek.' }
+  },
+  {
+    id: 'kotaeru', kanji: '答える', kana: 'こたえる', romaji: 'kotaeru',
+    group: 'ichidan',
+    stemKana: 'こたえ', stemRomaji: 'kotae',
+    level: 'N5', theme: 'daily', meaningHu: 'válaszol',
+    note: 'Vonzat: に (amire válaszol).',
+    example: { jp: '質問に答えます。', romaji: 'shitsumon ni kotaemasu.', hu: 'Válaszolok a kérdésre.' }
+  },
+  {
+    id: 'okureru', kanji: '遅れる', kana: 'おくれる', romaji: 'okureru',
+    group: 'ichidan',
+    stemKana: 'おくれ', stemRomaji: 'okure',
+    level: 'N4', theme: 'state', meaningHu: 'késik',
+    example: { jp: '電車が十分遅れました。', romaji: 'densha ga juppun okuremashita.', hu: 'Tíz percet késett a vonat.' }
+  },
+  {
+    id: 'tsuzukeru', kanji: '続ける', kana: 'つづける', romaji: 'tsuzukeru',
+    group: 'ichidan',
+    stemKana: 'つづけ', stemRomaji: 'tsuzuke',
+    level: 'N4', theme: 'daily', meaningHu: 'folytat',
+    example: { jp: '勉強を続けます。', romaji: 'benkyou wo tsuzukemasu.', hu: 'Folytatom a tanulást.' }
+  },
+  {
+    id: 'tsutaeru', kanji: '伝える', kana: 'つたえる', romaji: 'tsutaeru',
+    group: 'ichidan',
+    stemKana: 'つたえ', stemRomaji: 'tsutae',
+    level: 'N4', theme: 'giving', meaningHu: 'átad (üzenetet), közöl',
+    example: { jp: '田中さんに電話番号を伝えます。', romaji: 'tanakasan ni denwabangou wo tsutaemasu.', hu: 'Megmondom Tanaka úrnak a telefonszámot.' }
+  },
+  {
+    id: 'suteru', kanji: '捨てる', kana: 'すてる', romaji: 'suteru',
+    group: 'ichidan',
+    stemKana: 'すて', stemRomaji: 'sute',
+    level: 'N4', theme: 'daily', meaningHu: 'kidob',
+    example: { jp: 'ごみを捨てます。', romaji: 'gomi wo sutemasu.', hu: 'Kidobom a szemetet.' }
+  },
+  {
+    id: 'atsumeru', kanji: '集める', kana: 'あつめる', romaji: 'atsumeru',
+    group: 'ichidan',
+    stemKana: 'あつめ', stemRomaji: 'atsume',
+    level: 'N4', theme: 'transitivity', meaningHu: 'gyűjt, összegyűjt',
+    note: 'Tranzitív (Tárgyas). Párja a 集まる (atsumaru).',
+    example: { jp: '切手を集めています。', romaji: 'kitte wo atsumeteimasu.', hu: 'Bélyeget gyűjtök.' }
+  },
+  {
+    id: 'kaeru_change', kanji: '変える', kana: 'かえる', romaji: 'kaeru',
+    group: 'ichidan',
+    stemKana: 'かえ', stemRomaji: 'kae',
+    level: 'N4', theme: 'transitivity', meaningHu: 'megváltoztat',
+    note: 'Tranzitív (Tárgyas). Párja a 変わる (kawaru). Valódi Ichidan: ne keverd a 帰る (hazamegy) godan igével.',
+    example: { jp: '予定を変えます。', romaji: 'yotei wo kaemasu.', hu: 'Megváltoztatom a tervet.' }
+  },
+  {
+    id: 'abiru', kanji: '浴びる', kana: 'あびる', romaji: 'abiru',
+    group: 'ichidan',
+    stemKana: 'あび', stemRomaji: 'abi',
+    level: 'N5', theme: 'daily', meaningHu: '(zuhanyt) vesz',
+    example: { jp: '朝シャワーを浴びます。', romaji: 'asa shawaa wo abimasu.', hu: 'Reggel zuhanyozom.' }
+  },
+  {
+    id: 'umareru', kanji: '生まれる', kana: 'うまれる', romaji: 'umareru',
+    group: 'ichidan',
+    stemKana: 'うまれ', stemRomaji: 'umare',
+    level: 'N4', theme: 'state', meaningHu: 'megszületik',
+    example: { jp: '私は東京で生まれました。', romaji: 'watashi wa toukyou de umaremashita.', hu: 'Tokióban születtem.' }
+  },
+  {
+    id: 'sodateru', kanji: '育てる', kana: 'そだてる', romaji: 'sodateru',
+    group: 'ichidan',
+    stemKana: 'そだて', stemRomaji: 'sodate',
+    level: 'N4', theme: 'daily', meaningHu: 'nevel, termeszt',
+    example: { jp: '庭で野菜を育てています。', romaji: 'niwa de yasai wo sodateteimasu.', hu: 'A kertben zöldséget termesztek.' }
+  },
+  {
+    id: 'homeru', kanji: '褒める', kana: 'ほめる', romaji: 'homeru',
+    group: 'ichidan',
+    stemKana: 'ほめ', stemRomaji: 'home',
+    level: 'N4', theme: 'giving', meaningHu: 'megdicsér',
+    example: { jp: '先生は学生を褒めました。', romaji: 'sensei wa gakusei wo homemashita.', hu: 'A tanár megdicsérte a diákot.' }
+  },
+  {
+    id: 'todokeru', kanji: '届ける', kana: 'とどける', romaji: 'todokeru',
+    group: 'ichidan',
+    stemKana: 'とどけ', stemRomaji: 'todoke',
+    level: 'N4', theme: 'transitivity', meaningHu: 'kézbesít, elvisz',
+    note: 'Tranzitív (Tárgyas). Párja a 届く (todoku).',
+    example: { jp: '荷物を家まで届けます。', romaji: 'nimotsu wo ie made todokemasu.', hu: 'Házhoz viszem a csomagot.' }
+  },
+  {
+    id: 'kuraberu', kanji: '比べる', kana: 'くらべる', romaji: 'kuraberu',
+    group: 'ichidan',
+    stemKana: 'くらべ', stemRomaji: 'kurabe',
+    level: 'N4', theme: 'daily', meaningHu: 'összehasonlít',
+    example: { jp: '値段を比べます。', romaji: 'nedan wo kurabemasu.', hu: 'Összehasonlítom az árakat.' }
+  },
+  {
+    id: 'nareru', kanji: '慣れる', kana: 'なれる', romaji: 'nareru',
+    group: 'ichidan',
+    stemKana: 'なれ', stemRomaji: 'nare',
+    level: 'N4', theme: 'state', meaningHu: 'megszokik',
+    note: 'Vonzat: に (amit megszokik).',
+    example: { jp: '日本の生活に慣れました。', romaji: 'nihon no seikatsu ni naremashita.', hu: 'Megszoktam a japán életet.' }
+  },
+  {
+    id: 'tariru', kanji: '足りる', kana: 'たりる', romaji: 'tariru',
+    group: 'ichidan',
+    stemKana: 'たり', stemRomaji: 'tari',
+    level: 'N4', theme: 'state', meaningHu: 'elég, elegendő',
+    note: 'Vonzat: が (ami elég vagy nem elég).',
+    example: { jp: '時間が足りません。', romaji: 'jikan ga tarimasen.', hu: 'Nincs elég idő.' }
+  },
+  {
+    id: 'miseru', kanji: '見せる', kana: 'みせる', romaji: 'miseru',
+    group: 'ichidan',
+    stemKana: 'みせ', stemRomaji: 'mise',
+    level: 'N5', theme: 'giving', meaningHu: 'megmutat',
+    example: { jp: '友だちに写真を見せます。', romaji: 'tomodachi ni shashin wo misemasu.', hu: 'Megmutatom a barátomnak a fényképet.' }
+  },
+  {
+    id: 'naraberu', kanji: '並べる', kana: 'ならべる', romaji: 'naraberu',
+    group: 'ichidan',
+    stemKana: 'ならべ', stemRomaji: 'narabe',
+    level: 'N4', theme: 'transitivity', meaningHu: 'sorba rak',
+    note: 'Tranzitív (Tárgyas). Párja a 並ぶ (narabu).',
+    example: { jp: '机の上に皿を並べます。', romaji: 'tsukue no ue ni sara wo narabemasu.', hu: 'Tányérokat rakok az asztalra.' }
+  },
+  {
+    id: 'fueru', kanji: '増える', kana: 'ふえる', romaji: 'fueru',
+    group: 'ichidan',
+    stemKana: 'ふえ', stemRomaji: 'fue',
+    level: 'N4', theme: 'state', meaningHu: 'növekszik, gyarapszik',
+    note: 'Intranzitív. Ellentéte: 減る (heru).',
+    example: { jp: '外国人の学生が増えました。', romaji: 'gaikokujin no gakusei ga fuemashita.', hu: 'Több lett a külföldi diák.' }
+  },
+  {
+    id: 'nigeru', kanji: '逃げる', kana: 'にげる', romaji: 'nigeru',
+    group: 'ichidan',
+    stemKana: 'にげ', stemRomaji: 'nige',
+    level: 'N4', theme: 'movement', meaningHu: 'elmenekül, megszökik',
+    example: { jp: '猫が窓から逃げました。', romaji: 'neko ga mado kara nigemashita.', hu: 'A macska kiszökött az ablakon.' }
+  },
+  {
+    id: 'tasukeru', kanji: '助ける', kana: 'たすける', romaji: 'tasukeru',
+    group: 'ichidan',
+    stemKana: 'たすけ', stemRomaji: 'tasuke',
+    level: 'N4', theme: 'giving', meaningHu: 'megment, segít',
+    example: { jp: '困っている人を助けます。', romaji: 'komatteiru hito wo tasukemasu.', hu: 'Segítek a bajban lévő embernek.' }
+  },
+  {
+    id: 'yameru', kanji: '辞める', kana: 'やめる', romaji: 'yameru',
+    group: 'ichidan',
+    stemKana: 'やめ', stemRomaji: 'yame',
+    level: 'N4', theme: 'daily', meaningHu: 'felmond, kilép',
+    example: { jp: '来月会社を辞めます。', romaji: 'raigetsu kaisha wo yamemasu.', hu: 'Jövő hónapban felmondok a cégnél.' }
   }
+  /* @feltöltés:vég */
 ];

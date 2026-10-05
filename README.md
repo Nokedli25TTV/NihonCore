@@ -116,7 +116,7 @@ A kezdőlapon a **„Mai ismétlés"** kártya szól, ha van esedékes kérdés.
 |---|---|---|---|
 | あ | **Kana** | hiragana és katakana: felismerés, fordítva, beírás, párosító; tábla hanggal | 104 jel írásonként |
 | 文 | **Mondat-Mester** | partikula-kitöltő és mondat-puzzle | 627 mondat, 16 partikula |
-| 活 | **Ragozó** | 12 igealak a ます-tól a műveltető-szenvedőig: felismerés, építés, beírás | 108 ige |
+| 活 | **Ragozó** | 12 igealak a ます-tól a műveltető-szenvedőig: felismerés, építés, beírás | 168 ige |
 | 形 | **Melléknév** | い és な melléknevek 9 alakja | 149 melléknév |
 | 数 | **Számláló szavak** | つ・本・枚・冊… a hangváltozásokkal együtt | 12 számláló, 102 tárgy |
 | 時 | **Dátum & Idő** | hónapok, napok, órák, percek, évek, relatív idő | 227 elem |
@@ -154,7 +154,7 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 | Nyelvtani pont | **402** | Fejezet | **53** |
 | Példamondat (hanggal) | **2390** | Gyakorló modul | **10** |
 | Saját kérdés | **1142** | Mondat a Mondat-Mesterben | **627** |
-| Párbeszéd-sor | **699** | Ige a Ragozóban | **108** |
+| Párbeszéd-sor | **699** | Ige a Ragozóban | **168** |
 | Kész kifejezés | **547** | Melléknév | **149** |
 | Szó-kártya | **1484** | Dátum- és idő-elem | **227** |
 | Táblázat | **321** | Hang-lecke | **134** |
