@@ -406,8 +406,9 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 **Tartalom-feltöltés (folyamatban):**
 - [x] Nyelvtani minták mind az 56 leckéhez (283 minta) + „a lecke mintái" lépések.
 - [x] Mondat-Mester-készlet annak a 20 leckének, amelynek a mintákon kívül nem volt gyakorló lépése.
-- [ ] Mondat-Mester-készlet a többi leckéhez is (most 37 leckének van saját vagy tematikus készlete;
-      a Dekiru 1 elején a régi N5-mondatok tartományai szolgálnak).
+- [ ] Mondat-Mester-készlet a többi leckéhez is: most 39 leckének van saját vagy tematikus készlete
+      (a Dekiru 1 elején a régi N5-mondatok tartományai szolgálnak); 17-nek nincs — l4, l5, l8–l11, l19,
+      l21, l23, l27, l36–l38, l44–l47 —, ezeknek ragozó, melléknév vagy számláló lépésük van.
 - [ ] Ragozó: igék (108 → kb. 150), a leckék szókincséhez igazítva; számlálók, mini-leckék.
 - [ ] A leckék és az új készletek japán mondatait anyanyelvi lektor nem látta.
 - [ ] Az N4-es listából kimaradt apróságok: 〜てやる, 〜と言ってもいい, a 〜ということ főnevesítő.
