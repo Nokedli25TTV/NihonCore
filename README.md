@@ -35,7 +35,7 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 <br />
 
 <div align="center">
-<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 136 lépés · 10 gyakorló modul" width="100%" />
+<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 207 lépés · 10 gyakorló modul" width="100%" />
 </div>
 
 <br />
@@ -54,7 +54,8 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 
 ### 🗺️ Tanulási út
 
-- **136 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
+- **207 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
+- Minden lecke után **a lecke saját mintái és mondatai** jönnek gyakorlásnak.
 - Első indításkor megkérdezi, **honnan indulsz**: nulláról, vagy már olvasod a kanát.
 - A kezdőlap **„Folytatás"** gombja mindig a következő lépésre visz.
 - Egy lépés akkor kész, ha egy teljes kört legalább **60%**-ra megcsinálsz.
@@ -114,13 +115,13 @@ A kezdőlapon a **„Mai ismétlés"** kártya szól, ha van esedékes kérdés.
 | | Modul | Mit gyakorolsz | Készlet |
 |---|---|---|---|
 | あ | **Kana** | hiragana és katakana: felismerés, fordítva, beírás, párosító; tábla hanggal | 104 jel írásonként |
-| 文 | **Mondat-Mester** | partikula-kitöltő és mondat-puzzle | 326 mondat, 16 partikula |
+| 文 | **Mondat-Mester** | partikula-kitöltő és mondat-puzzle | 490 mondat, 16 partikula |
 | 活 | **Ragozó** | 12 igealak a ます-tól a műveltető-szenvedőig: felismerés, építés, beírás | 108 ige |
 | 形 | **Melléknév** | い és な melléknevek 9 alakja | 149 melléknév |
 | 数 | **Számláló szavak** | つ・本・枚・冊… a hangváltozásokkal együtt | 12 számláló, 102 tárgy |
 | 時 | **Dátum & Idő** | hónapok, napok, órák, percek, évek, relatív idő | 227 elem |
-| 聞 | **Hallás & Kiejtés** | felismerés, diktálás, mondatok; hosszú hang és kis っ csapdák | 134 hang-lecke |
-| 型 | **Nyelvtani minták** | felismerés, kiegészítés, fordítás | 15 minta |
+| 聞 | **Hallás & Kiejtés** | felismerés, diktálás, mondatok; hosszú hang és kis っ csapdák | 134 hang-lecke, 566 mondat |
+| 型 | **Nyelvtani minták** | felismerés, kiegészítés, fordítás: leckénként a lecke mintái | 283 minta, 566 példa |
 | 訳 | **Szabad fordítás** | magyarról japánra, szabadon beírva, ötfokú értékeléssel | a mondatkészletből |
 | 有 | **Alap igék** | a ます-alak négy formája: létezés, mozgás, fogyasztás | — |
 
@@ -149,16 +150,16 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 
 | Leckék | | Gyakorlás | |
 |---|---:|---|---:|
-| Lecke | **57** | Lépés a tanulási úton | **136** |
+| Lecke | **57** | Lépés a tanulási úton | **207** |
 | Nyelvtani pont | **402** | Fejezet | **53** |
 | Példamondat (hanggal) | **2390** | Gyakorló modul | **10** |
-| Saját kérdés | **1142** | Mondat a Mondat-Mesterben | **326** |
+| Saját kérdés | **1142** | Mondat a Mondat-Mesterben | **490** |
 | Párbeszéd-sor | **699** | Ige a Ragozóban | **108** |
 | Kész kifejezés | **547** | Melléknév | **149** |
 | Szó-kártya | **1484** | Dátum- és idő-elem | **227** |
 | Táblázat | **321** | Hang-lecke | **134** |
 | „Gyakori hiba" | **344** | Kana-jel | **208** |
-| Kulturális tudnivaló | **197** | | |
+| Kulturális tudnivaló | **197** | Nyelvtani minta | **283** |
 
 A leckék megoszlása: 1 előkészítő (írás és kiejtés) · 24 a *Dekiru 1* nyomán · 24 a *Dekiru 2* nyomán ·
 8 kiegészítő (JLPT N5 és N4).

@@ -733,6 +733,64 @@ Ellenőrzés: minden `steps` azonosító létezzen a `NIHONCORE_PATH`-ban, és m
 
 ---
 
+## 8d. Leckéhez kötött készletek (a 2026-10-es feltöltés rendje)
+
+A feltöltés leckénként halad: minden lecke kap **nyelvtani mintákat** és (ahol kell) **saját
+Mondat-Mester-mondatokat**, és mindkettőhöz lépés kerül a tanulási útra.
+
+**Hol vannak?** A `js/data/grammar.js` és a `js/data/sentences.js` tömbjének végén, két jel között:
+
+```js
+  /* @feltöltés:kezdet — … */
+  …leckénként rendezett rekordok…
+  /* @feltöltés:vég */
+```
+
+A blokk tömör forrásból generált: kézzel is javítható, de új adag beírásakor az egész blokk újraíródik
+(a kézi javítást a forrásba is vissza kell vezetni).
+
+**Nyelvtani minta** — a régi séma, plusz a `lesson` mező:
+
+```js
+{ id: 'kedo', label: '〜けど・〜けれども', jlpt: 'N5', category: 'connective', lesson: 'k1',
+  summary: 'Ellentét a mondaton belül: „…, de…".',     // a felismerő mód válasz-szövege: rövid és EGYEDI
+  structure: 'mondat + けど / けれども、 mondat',
+  explanation: '…',
+  examples: [ { jp: '<ruby>高<rt>たか</rt></ruby>いけど、…', kana, romaji, hu,
+                cloze: '…___BLANK___…', clozeAnswer: 'けど',   // a minta legjellemzőbb eleme
+                tokens: ['たかいけど', '、', 'かいます', '。'] } ],   // a tokenek összefűzve = kana
+  contrasts: ['demo_sentence', 'noni'] }               // létező minta-azonosítók
+```
+
+- A kategória a `core.js` `NIHONCORE_GRAMMAR_CATEGORIES` listájából való (32 van).
+- A romaji gépelős stílusú: `ou`, a katakana hosszú hangja kettőzött magánhangzó (`koohii`), a partikulák
+  kiejtés szerint (`wa`, `o`, `e`).
+- Lépés a tanulási úton: `lN-patterns` (felismerő mód, `preset.patterns` a lecke mintáival), a lecke-lépés után.
+
+**Mondat-Mester-mondat** — a régi séma, plusz a `lesson` mező és az opcionális token-`kana`:
+
+```js
+{ id: 's_l25_01', level: 'N4', lesson: 'l25', translation: 'Azt hiszem, holnap valószínűleg esni fog.',
+  tokens: [ { type: 'word', jp: '明日', romaji: 'ashita', hu: 'holnap' },
+            { type: 'particle', jp: 'は', romaji: 'wa', role: 'topic' },
+            … { type: 'verb', jp: '思います', romaji: 'omoimasu', hu: 'gondolom' } ],
+  metadata: { function: 'Affirmative', form: '〜だろうと思います', tense: 'Non-Past', register: 'Polite' } }
+```
+
+- A `tense` csak `Non-Past` / `Past` / `Progressive`, a `register` csak `Polite` / `Casual` (a lobbi szűrői).
+- Összetett mondatnál (több ige, kötőszó) az **első igétől a mondat végéig kötött a sorrend**; az utolsó
+  nem-partikula token legyen `verb` (állítmány). A kötőelemek (ように, ために, まま…) `word` típusúak.
+- Kanjis tokennél a Szabad fordítás a romajiból számolja a kanát; ha ez nem pontos (つづける → `tsuzukeru`),
+  a token kapjon `kana` mezőt.
+- Út-lépésben a `lesson` mezős mondat csak a saját lépésében (`preset.ids`) jön elő, szabad gyakorlásban
+  a szintje szerint mindig.
+- Lépés a tanulási úton: a lecke `-patterns` lépése után, `preset: { level, mode: 'puzzle', ids: [...] }`.
+
+**Ellenőrzés adagonként:** szintaxis (`node --check`), a lépések végigjátszása fej nélküli böngészőben, és
+hogy minden mondat elfogadja-e a saját romajiját a Szabad fordításban és a Pro hallásban.
+
+---
+
 ## 9. A „nagy load" forgatókönyv
 
 Amikor készen állsz, a következő sorrendet javaslom:

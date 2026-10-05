@@ -1,7 +1,7 @@
 # NihonCore — Claude project context
 
 > Ezt a fájlt **minden új munkamenet** beolvassa: mi a projekt, hol mi van, milyen szabályok
-> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-04, v83).
+> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-05, v92).
 > A teljes verzió-történet, a modulok motorjainak részletes leírása és a lezárt backlog a
 > **`HISTORY.md`**-ben van — oda akkor nézz be, ha egy régi döntés vagy javítás hátterét keresed.
 
@@ -23,32 +23,33 @@ nyelvtani minták, szabad fordítás, kana) és **statisztika**.
 - **Testvér-app:** a user LexiLearn nevű appja viszi a **szókincset és a kanjit**. A NihonCore ezt
   nem duplázza: a leckékbe csak a megértéshez kellő szavak kerülnek.
 
-### 🔴 A tartalom-feltöltés a legutolsó lépés
+### 🟢 A tartalom-feltöltés folyamatban van (2026-10-04 óta)
 
-A user **most fejleszti** az appot. A gyakorló modulok készletei szándékosan kicsik (lent a számok);
-a nagy feltöltés egyben, a legvégén jön, amikor minden működés le van igazolva.
+A user elindította a nagy feltöltést („kezdhetjük… nagy munka lesz"). A sorrendet nem ő szabta meg:
+a terv a munkamenet-memóriában van (`content-load-plan.md`), a már kész adagok a 11. fejezetben.
 
-- ❌ **Ne adj hozzá magadtól** igét, szót, mondatot csak azért, mert kevésnek tűnik.
-- ❌ **Ne javasolj tartalom-bővítést** kis lépésekben.
-- ✅ Új **funkció, mechanika, motor**: nincs korlát.
-- ✅ Új **mező a sémában**: rendben, a meglévő készleten kitöltve.
-- Útmutató és sémák a feltöltéshez: **`CONTENT_LOAD_GUIDE.md`**.
+- ✅ **Leckéhez kötött gyakorló anyag** készül: nyelvtani minták és Mondat-Mester-készletek leckénként,
+  mindegyikhez lépés a tanulási úton. Adagonként: generálás → fej nélküli próba → commit.
+- ✅ Új **funkció, mechanika, motor**: nincs korlát. Új **mező a sémában**: rendben.
+- ❌ **Szókincset és kanjit ne tölts fel** (az a LexiLearn dolga); a leckékhez nem tartozó, öncélú
+  mennyiség-növelés sem cél.
+- Sémák és a generált blokkok rendje: **`CONTENT_LOAD_GUIDE.md`** (8d. fejezet).
 
-**Kivétel: a leckék** (`js/data/course.js`) — azok készek és részletesek (a user kérésére).
+**A leckék** (`js/data/course.js`) készek és részletesek (a user kérésére).
 
 ### Mi van benne most
 
 | Rész | Tartalom |
 |---|---|
 | **Leckék** | **57 lecke** (előkészítő + Dekiru 1: 24 + Dekiru 2: 24 + 8 kiegészítő N5 / N4): 402 nyelvtani pont, 2390 példamondat, 1142 saját kérdés, 699 párbeszéd-sor, 547 kifejezés, 1484 szó-kártya, 321 tábla, 344 „gyakori hiba", 197 kulturális tudnivaló |
-| **Tanulási út** | 136 lépés 53 fejezetben (75 lecke-lépés: magyarázat és hallás utáni kör; 61 gyakorló lépés a modulokból) |
+| **Tanulási út** | 207 lépés 53 fejezetben (75 lecke-lépés: magyarázat és hallás utáni kör; 132 gyakorló lépés a modulokból, ebből 56 „a lecke mintái" és 20 leckéhez kötött mondatkészlet) |
 | Ragozó | 108 ige (75 godan + 31 ichidan + 2 rendhagyó), 12 alak |
-| Mondat-Mester | 326 mondat (152 N5 + 161 N4 + 13 N3), 16 partikula a tálcán |
+| Mondat-Mester | 490 mondat (176 N5 + 252 N4 + 62 N3), ebből 164 leckéhez kötött (20 készlet); 16 partikula a tálcán |
 | Melléknév | 109 い + 40 な melléknév, 9 alak |
 | Számlálók | 12 számláló, 102 tárgy |
 | Dátum & Idő | 227 elem 8 kategóriában |
-| Hallás & Kiejtés | 134 hang-lecke + 30 mondat (Pro hallás) |
-| Nyelvtani minták | 15 minta, mintánként 2 példa |
+| Hallás & Kiejtés | 134 hang-lecke + 566 mondat (Pro hallás: a nyelvtani minták példái) |
+| Nyelvtani minták | 283 minta (92 N5 + 138 N4 + 53 N3) 32 kategóriában, mintánként 2 példa; 268 leckéhez kötött (56 lecke) |
 | Kana | 104 jel írásonként (hiragana + katakana) — teljes készlet |
 | Mini-leckék | 7 (modulonként egy minta) |
 
@@ -147,6 +148,7 @@ Gyors térkép: `grep -n "^function init\|^window.NihonCore\|^const NihonCore\|^
 | `initAuthHeaderState` | fiók-jelvény és menü a fejlécben |
 | `initHelpersToggle` | Romaji / Magyar / Hang kapcsolók (`body.helpers-no-romaji`, `helpers-no-hu`) |
 | `NihonCoreAudio` | hang: `play(szöveg, { speed, onEnd, onError })`, `stop()`, `speakAnswer()`. Google TTS, hibánál a böngésző japán felolvasója. |
+| `NihonCoreKana` | romajival beírt válasz: `fromRomaji(szöveg)` (romaji → hiragana) és `repairSpoken(beírt, helyes)` — a kiejtés szerint írt partikula (wa, o, e), a kettőzött magánhangzó a ー helyén, a „zu" a づ helyén nem hiba. A Pro hallás, a Szabad fordítás és a minták kiegészítő módja használja. |
 | `initGlobalAnswerAudio` · `initGlobalFeedbackMotion` | a visszajelzés helyes japán válaszának felolvasása (`.pfe-jp-ok`) és animálása |
 | `initFocusBanner` | a statisztika „célzott gyakorlás" ajánlata a modul-oldalon |
 | `NihonCoreStats` | **munkamenet-napló**: `recordSession(info)`, `getSessions()`, `getDailyAggregates()`, `getToday()`, `getStreak()`, `clearSessions()` |
@@ -187,7 +189,16 @@ Minden fájl globális `const`-okat ad, egymástól függetlenek, `defer`-rel t�
   élnek. Ha ugyanaz a `const` két fájlban szerepel, a betöltés `SyntaxError`-ral megáll.
 - Egy tartalom-fájl **teljes cseréje** rendben van (a user így tölt fel), összefésülni nem kell.
 - **Mondat-Mester:** a partikula-token `romaji` mezője a tálca-azonosító (`NIHONCORE_PARTICLES[].id`);
-  ami nincs a tálcán, az partikula-módban megoldhatatlan. A の szerepe `possession`.
+  ami nincs a tálcán, az partikula-módban megoldhatatlan. A の szerepe `possession`. A `metadata.tense`
+  csak `Non-Past` / `Past` / `Progressive`, a `register` csak `Polite` / `Casual` lehet (a lobbi szűrői).
+  Kanjis tokennél a Szabad fordítás a romajiból számolja a kanát: ahol ez nem pontos (つづける), a token
+  kapjon `kana` mezőt.
+- **Leckéhez kötött készletek** (`lesson: 'l25'` mező a mintán / mondaton): a `grammar.js` és a
+  `sentences.js` végén, `/* @feltöltés:kezdet … */` és `/* @feltöltés:vég */` között állnak, leckénként
+  rendezve. Tömör forrásból generált blokkok: kézzel is szerkeszthetők, de új adagnál a blokk egésze újraíródik.
+  Út-lépésben a `lesson` mezős mondat csak a saját (`ids`-szel felsorolt) lépésében jön elő.
+- **Nyelvtani minta `summary` mezője** a felismerő mód válasz-szövege: rövid és **egyedi** legyen. A példa
+  `cloze` / `clozeAnswer` része a minta legjellemzőbb eleme (a felismerő kártya ezt emeli ki).
 - **Leckék japán szövege:** 1–4. lecke kana szóközökkel; 5-től kanji `{漢字|かな}` jelöléssel (ebből lesz a
   furigana ÉS a felolvasott kana). A `lead` és a `cando` sima szöveg: ott nem lehet jelölés.
 - 🔴 **A lecke `quiz` tömbjének sorrendje azonosító** (az ismétlés-ütemező `lesson:<lecke>:<sorszám>` kulcsa):
@@ -392,11 +403,13 @@ oda írj, ne a modul-szekcióba.
 **Amit a usernek kell kipróbálnia (én nem tudom ellenőrizni):** valódi telefonon a hang (a párbeszéd
 végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több nap után visszajönnek-e az ismétlés kérdései.
 
-**Tartalom (a user dönt, mikor):**
-- [ ] A gyakorló modulok nagy feltöltése (`CONTENT_LOAD_GUIDE.md`). Leckénként célzott mondatkészlet a
-      Mondat-Mesterhez csak néhány leckénél van; 10 Dekiru 2 leckének és a kiegészítő leckéknek a hallás utáni
-      kör az egyetlen gyakorló lépése.
-- [ ] A leckék japán mondatait anyanyelvi lektor nem látta.
+**Tartalom-feltöltés (folyamatban):**
+- [x] Nyelvtani minták mind az 56 leckéhez (283 minta) + „a lecke mintái" lépések.
+- [x] Mondat-Mester-készlet annak a 20 leckének, amelynek a mintákon kívül nem volt gyakorló lépése.
+- [ ] Mondat-Mester-készlet a többi leckéhez is (most 37 leckének van saját vagy tematikus készlete;
+      a Dekiru 1 elején a régi N5-mondatok tartományai szolgálnak).
+- [ ] Ragozó: igék (108 → kb. 150), a leckék szókincséhez igazítva; számlálók, mini-leckék.
+- [ ] A leckék és az új készletek japán mondatait anyanyelvi lektor nem látta.
 - [ ] Az N4-es listából kimaradt apróságok: 〜てやる, 〜と言ってもいい, a 〜ということ főnevesítő.
 
 **Funkció (ötletek, a user még nem kérte):**
@@ -414,6 +427,9 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 
 | Verzió | Mi történt |
 |---|---|
+| v92 | Tartalom-feltöltés: célzott Mondat-Mester-készletek 20 leckéhez (326 → 490 mondat, 20 új lépés); a `lesson` mezős mondat út-lépésben csak a saját lépésében jön elő; token `kana` mező |
+| v91 | Romajival beírt válasz javítása: `NihonCoreKana` (wa / o / e partikula, ー, づ, kinyoubi); a Pro hallás eddig egy mondatot sem fogadott el; a minták kiegészítő módja romajit is elfogad |
+| v84–v90 | Tartalom-feltöltés: nyelvtani minták mind az 56 leckéhez (15 → 283 minta, 21 új kategória), leckénként „a lecke mintái" lépés (136 → 187); a felismerő kártya kiemeli a kérdezett részt |
 | v83 | Jelölt gyors kérdések (`point` mező) · teljes partikula-tálca (16) · a napi cél szinkronizál · javítás az ütemező szinkron-összefésülésében · a `CLAUDE.md` rendbetétele, `HISTORY.md`, `README.md` |
 | v82 | „Hibáim újra" · egy pont két lapon · párbeszéd végighallgatása és „csak japánul" · összecsukható fejezetek a térképen · napi cél és sorozat |
 | v81 | Napi ismétlés a leckék kérdéseiből (`lesson.html?review=1`, `lesson:` elemek az ütemezőben) |
