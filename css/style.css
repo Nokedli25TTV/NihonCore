@@ -7990,6 +7990,15 @@ html.theme-sumi .day-pick-btn.is-on, html.theme-sumi .day-pick-btn.is-on span { 
 .lp-ex-romaji { font-size: var(--fs-sm); font-style: normal; color: var(--sumi-faint); line-height: 1.4; }
 .lp-ex-hu { margin-top: 2px; font-size: var(--fs-base); color: var(--sumi-soft); line-height: 1.45; }
 body.helpers-no-romaji .lp-ex-romaji { display: none; }
+
+/* Kanás leckék (1–4.): romaji a kana-darabok fölött — magyarázat, tábla, minta, gyakori hiba, kérdés.
+   (A példáknak és a szavaknak saját romaji-soruk van.) A Romaji kapcsoló ezt is elrejti. */
+.lesson-main rt.lp-rj-romaji {
+  font-family: var(--font-body); font-size: var(--fs-2xs); font-weight: 600;
+  color: var(--sumi-soft); letter-spacing: 0; line-height: 1.25;
+}
+ruby.lp-rj { white-space: nowrap; }                      /* a darab és az átírása ne törjön ketté sorvégen */
+body.helpers-no-romaji .lp-rj-romaji { display: none; }
 body.helpers-no-hu .lp-ex-hu { display: none; }
 
 .lp-tip {

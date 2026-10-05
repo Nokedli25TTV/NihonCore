@@ -2297,7 +2297,66 @@ window.NihonCoreKana = (function () {
     }
     return out;
   }
-  return { repairSpoken, fromRomaji };
+  // Kana → romaji: egy kana-darab (szóközök és írásjelek nélküli kana-sor) átírása a kiejtés szerint.
+  // A darab végi は partikula „wa", a へ „e", a を mindig „o"; a ー megkettőzi az előző magánhangzót.
+  const KANA_RO = {
+    あ:'a',い:'i',う:'u',え:'e',お:'o', か:'ka',き:'ki',く:'ku',け:'ke',こ:'ko', が:'ga',ぎ:'gi',ぐ:'gu',げ:'ge',ご:'go',
+    さ:'sa',し:'shi',す:'su',せ:'se',そ:'so', ざ:'za',じ:'ji',ず:'zu',ぜ:'ze',ぞ:'zo',
+    た:'ta',ち:'chi',つ:'tsu',て:'te',と:'to', だ:'da',ぢ:'ji',づ:'zu',で:'de',ど:'do',
+    な:'na',に:'ni',ぬ:'nu',ね:'ne',の:'no', は:'ha',ひ:'hi',ふ:'fu',へ:'he',ほ:'ho',
+    ば:'ba',び:'bi',ぶ:'bu',べ:'be',ぼ:'bo', ぱ:'pa',ぴ:'pi',ぷ:'pu',ぺ:'pe',ぽ:'po',
+    ま:'ma',み:'mi',む:'mu',め:'me',も:'mo', や:'ya',ゆ:'yu',よ:'yo',
+    ら:'ra',り:'ri',る:'ru',れ:'re',ろ:'ro', わ:'wa',を:'o',ん:'n', ゔ:'vu',
+    ぁ:'a',ぃ:'i',ぅ:'u',ぇ:'e',ぉ:'o'
+  };
+  const KANA_YOON = { ゃ: 'ya', ゅ: 'yu', ょ: 'yo' };
+  const KANA_FOREIGN = { ふぁ:'fa',ふぃ:'fi',ふぇ:'fe',ふぉ:'fo', てぃ:'ti',でぃ:'di', うぃ:'wi',うぇ:'we', しぇ:'she',じぇ:'je',ちぇ:'che', ゔぁ:'va',ゔぃ:'vi',ゔぇ:'ve',ゔぉ:'vo' };
+  // egy kana-sor szótagonkénti átírása (szabályok nélkül)
+  function kanaSyllables(s) {
+    let out = '', dbl = false;
+    for (let i = 0; i < s.length; i++) {
+      const ch = s[i], nx = s[i + 1];
+      if (ch === 'っ') { dbl = true; continue; }
+      if (ch === 'ー') { const v = out.slice(-1); if (/[aiueo]/.test(v)) out += v; continue; }
+      let r;
+      if (nx && KANA_FOREIGN[ch + nx]) { r = KANA_FOREIGN[ch + nx]; i++; }
+      else if (KANA_RO[ch] && KANA_YOON[nx]) {
+        const b = KANA_RO[ch];
+        r = /^(shi|chi|ji)$/.test(b) ? b.slice(0, -1) + KANA_YOON[nx].slice(1) : b.slice(0, -1) + KANA_YOON[nx];
+        i++;
+      } else r = KANA_RO[ch] || KANA_YOON[ch] || '';
+      if (ch === 'ん' && nx && /[あいうえおやゆよ]/.test(nx)) r = "n'";
+      if (dbl && r) { r = (r[0] === 'c' ? 't' : r[0]) + r; dbl = false; }
+      out += r;
+    }
+    return out;
+  }
+  const RO_WHOLE = { 'はは': 'haha', 'こんにちは': 'konnichiwa', 'こんばんは': 'konbanwa' };
+  const RO_COPULA = { 'です': 'desu', 'でした': 'deshita', 'ではありません': 'dewa arimasen', 'じゃありません': 'ja arimasen',
+    'ではありませんでした': 'dewa arimasen deshita', 'じゃありませんでした': 'ja arimasen deshita' };
+  const RO_COPULA_RE = /^(.*?)(ではありませんでした|じゃありませんでした|ではありません|じゃありません|でした|です)$/;
+  function toRomaji(chunk) {
+    const raw = String(chunk || '');
+    if (RO_WHOLE[raw]) return RO_WHOLE[raw];
+    if (/[ァ-ヶ]/.test(raw) && !/[ぁ-ゖ]/.test(raw)) return kanaSyllables(raw.replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60)));
+    let s = raw.replace(/[ァ-ヶ]/g, ch => String.fromCharCode(ch.charCodeAt(0) - 0x60));
+    let tail = '';
+    // kérdő か a です / ます alakok után
+    if (/(です|でした|ます|ません|ました|ませんでした)か$/.test(s)) { s = s.slice(0, -1); tail = ' ka'; }
+    // állítmány-végződés (a főnévhez tapadó です, でした, じゃありません…)
+    const cop = RO_COPULA_RE.exec(s);
+    if (cop) { s = cop[1]; tail = (s ? ' ' : '') + RO_COPULA[cop[2]] + tail; }
+    // a darab végi partikula kiejtés szerint
+    let part = '';
+    if (/はも$/.test(s)) { s = s.slice(0, -2); part = 'wa mo'; }
+    else if (/は$/.test(s)) { s = s.slice(0, -1); part = 'wa'; }
+    else if (/へ$/.test(s)) { s = s.slice(0, -1); part = 'e'; }
+    else if (/を$/.test(s)) { s = s.slice(0, -1); part = 'o'; }
+    const stem = kanaSyllables(s);
+    return stem + (stem && part ? ' ' : '') + part + tail;
+  }
+
+  return { repairSpoken, fromRomaji, toRomaji };
 })();
 
 
@@ -2320,7 +2379,8 @@ window.NihonCoreKana = (function () {
   // furigana (pure kana) olvasatra, mert AZ a tananyaggal egyező kiejtés.
   function extractKanaPreferringText(el) {
     const clone = el.cloneNode(true);
-    clone.querySelectorAll('ruby').forEach(r => {
+    clone.querySelectorAll('ruby.lp-rj rt').forEach(rt => rt.remove());   // romaji-átírás: itt a kana a kiejtés
+    clone.querySelectorAll('ruby:not(.lp-rj)').forEach(r => {
       const rt = r.querySelector('rt');
       const kana = rt ? rt.textContent : '';
       const span = document.createElement('span');
@@ -17809,6 +17869,48 @@ function initLessonPage() {
   }
 
   /* ── B) Nyelvtani pontok ───────────────────────── */
+  // Kanás lecke (1–4.: nincs kanji, így furigana sincs): a magyarázatok, táblák, minták, „gyakori hibák"
+  // és kérdések kana-darabjai fölé romaji kerül. A példáknak, a párbeszédnek és a szavaknak saját
+  // romaji-soruk van, azokhoz nem nyúl. A fejléc Romaji kapcsolója ezt is elrejti.
+  const isKanaLesson = l => !!(l && l.points && l.points.length &&
+    !l.points.some(p => p.examples.some(e => /\{[^|{}]+\|/.test(e.jp))));
+  function glossRomaji(rootEl, forLesson) {
+    if (!rootEl || !window.NihonCoreKana || !isKanaLesson(forLesson || lesson)) return;
+    const walker = document.createTreeWalker(rootEl, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      if (!/[ぁ-ゖァ-ヺ]/.test(node.nodeValue)) continue;
+      if (node.parentElement.closest('ruby, rt, .lp-ex-jp, .lp-ex-romaji, .lp-word, script, style')) continue;
+      nodes.push(node);
+    }
+    const RUN = /[ぁ-ゖァ-ヺー]+/g;
+    nodes.forEach(node => {
+      const text = node.nodeValue, frag = document.createDocumentFragment();
+      let last = 0, m;
+      RUN.lastIndex = 0;
+      while ((m = RUN.exec(text))) {
+        const ro = /[ぁ-ゖァ-ヺ]/.test(m[0]) ? NihonCoreKana.toRomaji(m[0]) : '';
+        if (!ro) continue;
+        if (m.index > last) frag.appendChild(document.createTextNode(text.slice(last, m.index)));
+        const rb = document.createElement('ruby');
+        rb.className = 'lp-rj';
+        rb.appendChild(document.createTextNode(m[0]));
+        const rt = document.createElement('rt');
+        rt.className = 'lp-rj-romaji';
+        rt.textContent = ro;
+        rb.appendChild(rt);
+        frag.appendChild(rb);
+        last = m.index + m[0].length;
+      }
+      if (!last) return;
+      if (last < text.length) frag.appendChild(document.createTextNode(text.slice(last)));
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+  // a kör kártyájának leckéje (ismétlésnél a kérdés saját leckéje)
+  const cardLesson = q => (lesson.review && srsOf.get(q)) ? srsOf.get(q).lesson : lesson;
+
   function renderLesson() {
     // meghallgatható sor (példa, párbeszéd, kifejezés): a hang a data-say-ből megy
     const sayRow = (e, extra) => `
@@ -18203,6 +18305,7 @@ function initLessonPage() {
       </div>
       <button class="dont-know-btn" type="button">Nem tudom</button>
       <div class="lp-quick-fb hidden" aria-live="polite"></div>`;
+    glossRomaji(sec);
     const buttons = sec.querySelectorAll('.cj-option');
     const right = options.indexOf(q.a);
     const done = (ok, dontKnow) => {
@@ -18215,6 +18318,7 @@ function initLessonPage() {
       fb.className = 'lp-quick-fb ' + (ok ? 'is-ok' : dontKnow ? 'is-reveal' : 'is-miss');
       fb.innerHTML = `<div class="lp-quick-fb-title">${ok ? 'Így van' : dontKnow ? 'Ez a helyes válasz' : 'Nézzük meg együtt'}</div>
         <div class="lp-quick-fb-why">${ruby(q.why)}</div>`;
+      glossRomaji(fb);
       quickDone[pi] = true;
       updateStepBar();
       const next = document.getElementById('lsNext');
@@ -18529,6 +18633,7 @@ function initLessonPage() {
         ${card.options.map((o, i) => `<button class="cj-option" type="button" data-idx="${i}">${optHtml(o)}</button>`).join('')}
       </div>
       <button class="dont-know-btn" type="button">Nem tudom</button>`;
+    glossRomaji(document.getElementById('lqCard'), cardLesson(q));
 
     if (q.listen) {
       const playBtn = document.getElementById('lqPlay');
@@ -18594,6 +18699,7 @@ function initLessonPage() {
         </div>
       </div>
       <button class="btn btn-primary cj-next" id="lqNext" type="button">${isLast ? 'Eredmény' : 'Következő'}</button>`;
+    glossRomaji(fb, cardLesson(q));
     document.getElementById('lqNext').addEventListener('click', advance);
   }
 
@@ -18769,7 +18875,7 @@ function initLessonPage() {
     }
   }
 
-  if (lesson.review) renderReview(); else renderLesson();
+  if (lesson.review) renderReview(); else { renderLesson(); glossRomaji(content); }
   window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, buildListenRound, practiceRows, steps, showLap,
     playDialogue, stopDialogue, dlgRun, flushQuick,
     quickMatches: () => (quickMap || (quickMap = buildQuickMap())).map(l => l.length) };
