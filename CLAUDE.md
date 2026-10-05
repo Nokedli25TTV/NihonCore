@@ -413,6 +413,19 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 - [ ] A leckék és az új készletek japán mondatait anyanyelvi lektor nem látta.
 - [ ] Az N4-es listából kimaradt apróságok: 〜てやる, 〜と言ってもいい, a 〜ということ főnevesítő.
 
+**Dolgozatok — megbeszélt terv (2026-10-05; a user döntései, a megvalósítás még nem indult):**
+- Kis teszt (30 perc, kb. 30 kérdés) a 4., 8., 16., 20., 28., 32., 40., 44. lecke után: az utolsó 4 lecke + kb. 20%
+  ismétlés. Nagy dolgozat (60 perc, kb. 60 kérdés) a 12., 24., 36., 48. lecke után.
+- Vegyes részek (nyelvtan és partikulák, ragozás, mondatépítés, hallás), csak a már tanult anyagból; **beírós
+  feladat is van**, a romaji gépelés közben azonnal kanává alakul.
+- **Nem kötelező** (kiemelt lépés a térképen, nélküle is tovább lehet menni). Újraírható; minden kitöltés
+  elmentődik (dátum, idő, pontszám, részpontok, hibák) és szinkronizál.
+- Indítás előtt **beállítások**: időre (vizsga-mód) vagy idő nélkül, romaji / magyar segítség, hanggal vagy hang nélkül.
+- Statisztika: új „Dolgozatok" rész (mikor, hányszor, fejlődés tesztenként).
+- Előtte: számlálók pótlása; a minták több példát kapnak a leckék meglévő példamondataiból; az 1–4. lecke
+  tábláiban, mintáiban, „gyakori hibáiban" és kérdéseiben a kana alá romaji kerül (most csak a példamondatoknál van).
+- A mini-leckék félretéve (`HISTORY.md` 3. fejezet). A LexiLearn japán részének beolvasztása nyitott kérdés.
+
 **Funkció (ötletek, a user még nem kérte):**
 - [ ] A párbeszéd sorai egy lapon 1,6–4,2 ezer px: ha sok, a sorok is kettébonthatók.
 - [ ] A példamondatok hallás utáni ismétlése az ütemezőben.

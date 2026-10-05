@@ -439,6 +439,7 @@ haladás → LexiLearn. Morfológia / hallás / sentence-szintű grammar / produ
 - Chartok: kézzel rajzolt SVG/CSS (nincs külső függőség — user-döntés). **V4 TELJES.**
 
 ### Még backlogban (V2.x / V3.x / V5.x)
+- [ ] **Mini-leckék (félretéve, 2026-10-05, user-döntés: „hagyjuk most")** — a modulok lobbija fölötti „Tanuld meg" panelekből modulonként egy mintadarab van (7). A részletes leckék óta kevésbé kellenek; később lehet belőlük valami (pl. a modulból link a kapcsolódó leckére, vagy modulonként több rövid panel).
 - [ ] **Melléknév modul: kérdő transzformációs réteg** — `…ですか / …でしたか / …ではありませんか` mint külön formák (nem csak `ka` postfix)
 - [ ] **Ragozó modul: igeállomány bővítése** — végleges feltöltés (utolsó lépés, lásd Section 1.1)
 - [ ] **Melléknév modul: állomány bővítése** — végleges feltöltés
