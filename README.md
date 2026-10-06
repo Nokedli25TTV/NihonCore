@@ -35,7 +35,7 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 <br />
 
 <div align="center">
-<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 238 lépés · 10 gyakorló modul" width="100%" />
+<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 296 lépés · 10 gyakorló modul" width="100%" />
 </div>
 
 <br />
@@ -54,9 +54,10 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 
 ### 🗺️ Tanulási út
 
-- **238 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
+- **296 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
 - Minden lecke után **a lecke saját mintái és mondatai** jönnek gyakorlásnak.
 - Négy leckénként **kis teszt** (30 perc), tizenkét leckénként **nagy dolgozat** (60 perc): nem kötelező, időre is megírható, és minden kitöltés elmentődik.
+- A két könyv végén **N5 és N4 próbavizsga** a JLPT mintájára: külön mért részek (nyelvtan és olvasás, majd hallás), a részek között szünet.
 - Első indításkor megkérdezi, **honnan indulsz**: nulláról, vagy már olvasod a kanát.
 - A kezdőlap **„Folytatás"** gombja mindig a következő lépésre visz.
 - Egy lépés akkor kész, ha egy teljes kört legalább **60%**-ra megcsinálsz.
@@ -89,6 +90,7 @@ flowchart LR
 - **Párbeszéd** minden leckében: végighallgatható, és átváltható „csak japánul" nézetre.
 - **Minden példamondat meghallgatható**, furiganával, átírással és fordítással (ezek ki is kapcsolhatók).
 - **Gyors kérdés** minden pont után, a lecke végén **10 kérdéses ellenőrző kör** és **hallás utáni kör**.
+- **Olvasmány** minden leckéhez: rövid szöveg a lecke nyelvtanával, négy kérdéssel; a végén ott a fordítása.
 - Minden válasz után megmutatja, **miért** az a helyes.
 - **„Hibáim újra"**: amit elrontottál, rögtön átveheted még egyszer.
 
@@ -152,7 +154,7 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 
 | Leckék | | Gyakorlás | |
 |---|---:|---|---:|
-| Lecke | **57** | Lépés a tanulási úton | **238** |
+| Lecke | **57** | Lépés a tanulási úton | **296** |
 | Nyelvtani pont | **402** | Fejezet | **53** |
 | Példamondat (hanggal) | **2390** | Gyakorló modul | **10** |
 | Saját kérdés | **1142** | Mondat a Mondat-Mesterben | **627** |
@@ -162,7 +164,7 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 | Táblázat | **321** | Hang-lecke | **134** |
 | „Gyakori hiba" | **344** | Kana-jel | **208** |
 | Kulturális tudnivaló | **197** | Nyelvtani minta | **283** |
-| | | Dolgozat | **12** |
+| Olvasmány (kérdésekkel) | **56** | Dolgozat és próbavizsga | **14** |
 
 A leckék megoszlása: 1 előkészítő (írás és kiejtés) · 24 a *Dekiru 1* nyomán · 24 a *Dekiru 2* nyomán ·
 8 kiegészítő (JLPT N5 és N4).
@@ -225,6 +227,7 @@ Utána nyisd meg az `index.html`-t a böngészőben. (A belépés, a szinkron é
 - [x] Időzített ismétlés, napi cél, sorozat
 - [x] 10 gyakorló modul és statisztika
 - [x] Dolgozatok: kis teszt 4 leckénként, nagy dolgozat 12 leckénként, vizsga-móddal
+- [x] Olvasásértés minden leckéhez; N5 és N4 próbavizsga külön mért részekkel
 - [x] Fiók, szinkron, telepíthető app, sötét téma
 - [x] Leckénkénti gyakorló anyag: minták, mondatok, igék
 - [ ] Anyanyelvi lektorálás

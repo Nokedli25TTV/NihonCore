@@ -793,6 +793,29 @@ javítani kell.
 **Dátum & Idő — számlálós alakok** (`NIHONCORE_DT_AGES`, `NIHONCORE_DT_DURATIONS`): a közös séma, plusz `unit` (a számláló
 kanája), `naive` (a hibás „szabályos" alak), `alt: { kana, romaji }` (második helyes olvasat).
 
+**A lecke olvasmánya** (`course.js`, a lecke `reading` mezője, a `quiz` tömb előtt):
+
+```js
+reading: {
+  title: '{京都|きょうと}の{一日|いちにち}', titleHu: 'Egy nap Kiotóban',
+  text: [                                   // szövegrészenként (egy-két mondat); par: új bekezdés kezdődik
+    { jp: '…', hu: '…' },
+    { jp: '…', hu: '…', par: true }
+  ],
+  words: [{ jp: '{早|はや}く', hu: 'korán' }],   // (nem kötelező) a megértéshez kellő, még nem tanult szavak
+  questions: [                              // pontosan négy, a szöveg sorrendjében
+    { q: 'Milyen volt az ebéd?', a: 'Olcsó és finom', wrong: ['…', '…', '…'], why: '{安|やす}くて、おいしかったです: …' }
+  ]
+}
+```
+
+- Saját szöveg, 5–12 szövegrész, **csak a leckéig tanult nyelvtannal** (az 1–4. leckében kana tagolva, ige nélkül; az 5.-től
+  kanji `{漢字|かな}` jelöléssel, szóköz nélkül). A lecke új szerkezetei többször is forduljanak elő.
+- A kérdés és a válaszok magyarul (ahol a japán alak a lényeg, japánul); a `why` idézi a szöveg megfelelő részét, és megnevezi
+  a szerkezetet. A helyes válasz ne legyen feltűnően a leghosszabb.
+- Lépés a tanulási úton: `lN-read` (`module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=lN&round=read'`), a lecke
+  utolsó lépése a dolgozat előtt. A dolgozatok olvasásértés része és a próbavizsgák is ezeket a szövegeket használják.
+
 **Ellenőrzés adagonként:** szintaxis (`node --check`), a lépések végigjátszása fej nélküli böngészőben, és
 hogy minden mondat elfogadja-e a saját romajiját a Szabad fordításban és a Pro hallásban.
 

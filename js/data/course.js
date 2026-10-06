@@ -32,6 +32,13 @@
        phrases  [{ jp, romaji, hu, note? }] kész fordulatok (a kérdés-készletbe is bekerülnek)
        words    [{ title, note?, items: [{ jp, romaji, hu, say? }] }] a leckéhez kellő szavak
        culture  [{ title, text }] tudnivalók Japánról
+       reading  a lecke olvasmánya: rövid szöveg a lecke nyelvtanával + kérdések a tartalmáról
+                { title, titleHu, text: [{ jp, hu, par? }], words?: [{ jp, hu }], questions: [{ q, a, wrong: [3], why }] }
+                · text: mondatonként (a fordítás csak a kör összesítőjében látszik); par: új bekezdés kezdődik
+                · words: a megértéshez kellő, a leckékben még nem tanult szavak
+                · questions: négy kérdés, a szöveg sorrendjében (a lecke „Olvasás" köre és a dolgozatok
+                  olvasásértés része kérdezi; az ismétlés-ütemezőbe nem kerülnek)
+                A blokkok generáltak (az „@olvasás" megjegyzés jelöli őket): kézzel is szerkeszthetők.
      quiz    ellenőrző kérdések: { point?, q, jp?, a, wrong: [3 rossz válasz], why }
              (leckénként 20; egy kör ezekből és a példamondatokból készített
               fordítós kérdésekből áll össze — app.js: initLessonPage)
@@ -892,6 +899,31 @@ const NIHONCORE_COURSE = [
         text: 'Az évfolyamot iskolatípusonként számolják újra. Az általános iskola (<b>しょうがっこう</b>) hat év, hatéves kortól; az alsó középiskola (<b>ちゅうがっこう</b>) három év; a felső középiskola (<b>こうこう</b>) szintén három; az egyetem (<b>だいがく</b>) négy. Egy tizenhét éves diák ezért nem „tizenegyedikes", hanem こうこうの にねんせい: a gimnázium másodikosa.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'わたしと ケンさん', titleHu: 'Én és Ken',
+      text: [
+        { jp: 'はじめまして。わたしは アンナです。', hu: 'Örvendek. Anna vagyok.' },
+        { jp: 'ハンガリーから きました。ハンガリーじんです。', hu: 'Magyarországról jöttem. Magyar vagyok.' },
+        { jp: 'じゅうななさいです。こうこうせいです。', hu: 'Tizenhét éves vagyok. Gimnazista vagyok.' },
+        { jp: 'しゅみは おんがくです。', hu: 'A hobbim a zene.' },
+        { jp: 'ケンさんは わたしの ともだちです。', hu: 'Ken a barátom.', par: true },
+        { jp: 'ケンさんは にほんじんです。ケンさんも じゅうななさいです。', hu: 'Ken japán. Ő is tizenhét éves.' },
+        { jp: 'ケンさんの しゅみは サッカーです。', hu: 'Ken hobbija a foci.' },
+        { jp: 'たなかさんは ケンさんの せんせいです。えいごの せんせいです。', hu: 'Tanaka úr Ken tanára. Angoltanár.' }
+      ],
+      words: [{ jp: 'ともだち', hu: 'barát' }],
+      questions: [
+        { q: 'Honnan jött Anna?', a: 'Magyarországról', wrong: ['Japánból', 'Nagy-Britanniából', 'Amerikából'],
+          why: 'A szövegben: ハンガリーから きました — „Magyarországról jöttem".' },
+        { q: 'Hány éves Ken?', a: 'Tizenhét', wrong: ['Tizenhat', 'Tizennyolc', 'Tíz'],
+          why: 'ケンさんも じゅうななさいです: a も miatt ő is annyi, mint Anna, vagyis じゅうなな (17).' },
+        { q: 'Mi Ken hobbija?', a: 'A foci', wrong: ['A zene', 'Az utazás', 'A főzés'],
+          why: 'ケンさんの しゅみは サッカーです. A zene (おんがく) Anna hobbija.' },
+        { q: 'Ki Tanaka úr?', a: 'Ken angoltanára', wrong: ['Anna japántanára', 'Ken barátja', 'Anna osztálytársa'],
+          why: 'たなかさんは ケンさんの せんせいです。えいごの せんせいです — Ken tanára, és angolt tanít.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Diák vagyok." Melyik partikula hiányzik?', jp: 'わたし＿ がくせいです。', a: 'は', wrong: ['の', 'か', 'を'], why: 'A は jelöli, miről szól a mondat: „ami engem illet, diák".' },
       { point: 3, q: '„A nevem Anna." Melyik partikula hiányzik?', jp: 'わたし＿ なまえは アンナです。', a: 'の', wrong: ['は', 'も', 'か'], why: 'A の köti össze a birtokost a birtokkal: わたしの なまえ = az én nevem.' },
@@ -1216,6 +1248,30 @@ const NIHONCORE_COURSE = [
         text: 'Ha vendégségben teával kínálnak, az <b>おちゃ</b> zöld teát jelent. A nálunk megszokott fekete tea neve <b>こうちゃ</b> („vörös tea"). Nyáron gyakran <b>むぎちゃ</b>-t kapsz: ez pirított árpából készült, hidegen, jégkockával ivott ital, koffein nélkül.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'わたしの へや', titleHu: 'A szobám',
+      text: [
+        { jp: 'ここは さとうさんの うちです。', hu: 'Ez itt Szatóék háza.' },
+        { jp: 'わたしの へやは にかいです。', hu: 'Az én szobám a második szinten (az emeleten) van.' },
+        { jp: 'これは わたしの つくえです。', hu: 'Ez az én asztalom.' },
+        { jp: 'この ほんは にほんごの じしょです。', hu: 'Ez a könyv japán szótár.' },
+        { jp: 'その かばんは わたしの かばんじゃありません。ユイさんの かばんです。', hu: 'Az a táska nem az enyém. Jui táskája.' },
+        { jp: 'あの とけいは さとうさんの とけいです。', hu: 'Az az óra ott Szató úré.' },
+        { jp: 'トイレは いっかいです。おふろも いっかいです。', hu: 'A vécé az első szinten (a földszinten) van. A fürdő is ott van.', par: true },
+        { jp: 'あそこは にわです。', hu: 'Ott távolabb a kert van.' }
+      ],
+      questions: [
+        { q: 'Hol van Anna szobája?', a: 'A második szinten', wrong: ['Az első szinten', 'A harmadik szinten', 'A kert mellett'],
+          why: 'わたしの へやは にかいです — にかい a második szint, vagyis magyarul az első emelet.' },
+        { q: 'Kié a táska?', a: 'Juié', wrong: ['Annáé', 'Szató úré', 'Kené'],
+          why: 'わたしの かばんじゃありません。ユイさんの かばんです — nem Annáé, hanem Juié.' },
+        { q: 'Mi az a könyv, amelyről Anna ír?', a: 'Japán szótár', wrong: ['Angol szótár', 'Japán füzet', 'Jui könyve'],
+          why: 'この ほんは にほんごの じしょです: にほんごの じしょ = japán szótár.' },
+        { q: 'Mi van az első szinten?', a: 'A vécé és a fürdő', wrong: ['Anna szobája és a vécé', 'A kert és a konyha', 'Csak a fürdő'],
+          why: 'トイレは いっかいです。おふろも いっかいです — a も jelzi, hogy a fürdő is ott van.' }
+      ]
+    },
     quiz: [
       { point: 1, q: 'A tárgy a beszélgetőtársad kezében van. Melyik szóval mutatsz rá?', a: 'それ', wrong: ['これ', 'あれ', 'どれ'], why: 'A それ arra vonatkozik, ami a hallgatóhoz van közel.' },
       { point: 2, q: '„Ez a táska az enyém." Mi hiányzik?', jp: '＿ かばんは わたしのです。', a: 'この', wrong: ['これ', 'ここ', 'どの'], why: 'Főnév előtt この áll; a これ csak önállóan.' },
@@ -1598,6 +1654,30 @@ const NIHONCORE_COURSE = [
         text: 'A <b>せんせい</b> nem csak a tanárnak jár. Így szólítják az orvost, az ügyvédet, az írót, a harcművészet vagy a teaszertartás mesterét is: mindenkit, akitől tanulni lehet, vagy aki a tudásával szolgál. A saját foglalkozásodról beszélve viszont a semleges <b>きょうし</b> (oktató), <b>いしゃ</b> (orvos) szót használod.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'さとうさんの うちと まち', titleHu: 'Szatóék háza és a város',
+      text: [
+        { jp: 'さとうさんの かぞくは よにんです。', hu: 'Szatóék négyen vannak.' },
+        { jp: 'おとうさんと おかあさんと ユイさんと おとうとさんが います。', hu: 'Ott van az apa, az anya, Jui és az öccse.' },
+        { jp: 'うちに いぬも います。ねこは いません。', hu: 'A házban kutya is van. Macska nincs.' },
+        { jp: 'うちの ちかくに こうえんが あります。', hu: 'A ház közelében van egy park.', par: true },
+        { jp: 'こうえんに きや はなが あります。こどもも います。', hu: 'A parkban fák, virágok és egyebek vannak. Gyerekek is vannak.' },
+        { jp: 'えきの まえに コンビニと ほんやが あります。', hu: 'Az állomás előtt van egy kisbolt és egy könyvesbolt.' },
+        { jp: 'ゆうびんきょくは ぎんこうの となりに あります。', hu: 'A posta a bank mellett van.' },
+        { jp: 'この まちに としょかんは ありません。', hu: 'Ebben a városban nincs könyvtár.' }
+      ],
+      questions: [
+        { q: 'Hányan vannak Szatóék?', a: 'Négyen', wrong: ['Hárman', 'Öten', 'Ketten'],
+          why: 'かぞくは よにんです: よにん = négy fő (apa, anya, Jui és az öccse).' },
+        { q: 'Milyen állat van a házban?', a: 'Csak kutya', wrong: ['Csak macska', 'Kutya és macska', 'Kutya és madár'],
+          why: 'いぬも います。ねこは いません — kutya van, macska nincs.' },
+        { q: 'Mi van az állomás előtt?', a: 'Kisbolt és könyvesbolt', wrong: ['Posta és bank', 'Park és könyvtár', 'Kisbolt és postahivatal'],
+          why: 'えきの まえに コンビニと ほんやが あります.' },
+        { q: 'Hol van a posta?', a: 'A bank mellett', wrong: ['Az állomás előtt', 'A park közelében', 'A könyvesbolt mögött'],
+          why: 'ゆうびんきょくは ぎんこうの となりに あります: となり = közvetlenül mellette.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„A parkban van egy kutya." Mi hiányzik?', jp: 'こうえんに いぬが ＿。', a: 'います', wrong: ['あります', 'です', 'ありません'], why: 'Élőlényre います jár.' },
       { point: 3, q: '„Az asztalon van egy könyv." Mi hiányzik?', jp: 'つくえの ＿に ほんが あります。', a: 'うえ', wrong: ['した', 'まえ', 'なか'], why: 'うえ = fölött, rajta.' },
@@ -2025,6 +2105,30 @@ const NIHONCORE_COURSE = [
         text: 'Ha egy boltban azt kérdezed, van-e valami, és az eladó csak annyit mond: <b>ちょっと…</b> (kicsit…), az udvarias <b>nem</b>. A japán eladó nem szívesen mond kerek „nincs"-et a vevőnek, ezért a mondatot befejezetlenül hagyja, és a hangsúlyból kell értened. Ugyanígy utasíthatsz vissza te is: ちょっと…, egy sajnálkozó mosollyal.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'えきの まえの パンの みせ', titleHu: 'A pékség az állomás előtt',
+      text: [
+        { jp: 'えきの まえに パンの みせが あります。', hu: 'Az állomás előtt van egy pékség.' },
+        { jp: 'みせは ごぜん しちじから ごご ろくじまでです。', hu: 'A bolt reggel héttől este hatig van nyitva.' },
+        { jp: 'やすみは にちようびです。', hu: 'Vasárnap zárva van.' },
+        { jp: 'パンは ひとつ ひゃくごじゅうえんです。ケーキは ひとつ さんびゃくえんです。', hu: 'A péksütemény darabja 150 jen. A torta darabja 300 jen.' },
+        { jp: 'ぎゅうにゅうも あります。いっぽん にひゃくえんです。', hu: 'Tej is van. Egy doboz 200 jen.' },
+        { jp: 'きょうは どようびです。いま ごご ごじです。', hu: 'Ma szombat van. Most délután öt óra van.', par: true },
+        { jp: 'アンナさんは みせに います。「パンを ふたつと ぎゅうにゅうを いっぽん ください。」', hu: 'Anna a boltban van. „Két péksüteményt és egy tejet kérek."' },
+        { jp: '「ぜんぶで ごひゃくえんです。」', hu: '„Összesen 500 jen."' }
+      ],
+      questions: [
+        { q: 'Mikor van nyitva a bolt?', a: 'Reggel 7-től este 6-ig', wrong: ['Reggel 6-tól este 7-ig', 'Reggel 7-től este 7-ig', 'Délután 5-től 6-ig'],
+          why: 'ごぜん しちじから ごご ろくじまで: しちじ = 7 óra, ろくじ = 6 óra.' },
+        { q: 'Melyik napon van zárva a bolt?', a: 'Vasárnap', wrong: ['Szombaton', 'Hétfőn', 'Pénteken'],
+          why: 'やすみは にちようびです — a szünnap a vasárnap. A szombat (どようび) a mai nap.' },
+        { q: 'Mit kér Anna?', a: 'Két péksüteményt és egy tejet', wrong: ['Egy péksüteményt és két tejet', 'Két tortát és egy tejet', 'Két péksüteményt és egy tortát'],
+          why: 'パンを ふたつと ぎゅうにゅうを いっぽん ください: ふたつ = kettő, いっぽん = egy (hosszúkás tárgy).' },
+        { q: 'Mennyit fizet Anna?', a: '500 jent', wrong: ['350 jent', '450 jent', '650 jent'],
+          why: 'ぜんぶで ごひゃくえんです: két péksütemény (2 × 150) és egy tej (200) összesen 500 jen.' }
+      ]
+    },
     quiz: [
       { point: 3, q: '„Három almát kérek." Mi hiányzik?', jp: 'りんごを ＿ ください。', a: 'みっつ', wrong: ['さんまい', 'さんぼん', 'さんさつ'], why: 'Az almára az általános 〜つ sor jár: みっつ = három darab.' },
       { point: 3, q: 'Melyik számlálóval számolod a bélyeget? (lapos tárgy)', a: '〜まい', wrong: ['〜ほん', '〜さつ', '〜にん'], why: 'Lapos, vékony tárgyakra 〜まい jár.' },
@@ -2442,6 +2546,31 @@ const NIHONCORE_COURSE = [
         text: 'A nagyobb állomásoknak több kijáratuk van, és ezeket égtájak szerint nevezik el: <b>{北口|きたぐち}</b> (északi), <b>{南口|みなみぐち}</b> (déli), <b>{東口|ひがしぐち}</b> (keleti), <b>{西口|にしぐち}</b> (nyugati kijárat). Ha valakivel az állomásnál találkozol, mindig a kijáratot is beszéljétek meg, különben ugyanannál az állomásnál várhattok egymásra fél órát, két különböző helyen.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'アンナさんの{学校|がっこう}', titleHu: 'Anna iskolába jár',
+      text: [
+        { jp: 'アンナさんは{毎日|まいにち}{七時|しちじ}に{学校|がっこう}へ{行|い}きます。', hu: 'Anna minden nap hétkor megy iskolába.' },
+        { jp: 'うちから{学校|がっこう}まで{自転車|じてんしゃ}で{二十分|にじゅっぷん}です。', hu: 'Otthonról az iskoláig biciklivel húsz perc.' },
+        { jp: '{雨|あめ}の{日|ひ}はバスで{行|い}きます。', hu: 'Esős napon busszal megy.' },
+        { jp: '{授業|じゅぎょう}は{八時半|はちじはん}から{三時|さんじ}までです。', hu: 'A tanítás fél kilenctől háromig tart.' },
+        { jp: '{四時|よじ}にケンさんといっしょにうちへ{帰|かえ}ります。', hu: 'Négykor Kennel együtt megy haza.' },
+        { jp: '{先週|せんしゅう}の{土曜日|どようび}は{学校|がっこう}へ{行|い}きませんでした。', hu: 'Múlt szombaton nem ment iskolába.', par: true },
+        { jp: 'ユイさんと{電車|でんしゃ}で{東京|とうきょう}へ{行|い}きました。{一時間|いちじかん}かかりました。', hu: 'Juival vonattal Tokióba ment. Egy óráig tartott az út.' },
+        { jp: 'アンナさんは{一|いっ}か{月|げつ}に{二回|にかい}{東京|とうきょう}へ{行|い}きます。', hu: 'Anna havonta kétszer megy Tokióba.' }
+      ],
+      words: [{ jp: '{雨|あめ}の{日|ひ}', hu: 'esős nap' }],
+      questions: [
+        { q: 'Mivel megy Anna iskolába, ha esik az eső?', a: 'Busszal', wrong: ['Biciklivel', 'Vonattal', 'Gyalog'],
+          why: '{雨|あめ}の{日|ひ}はバスで{行|い}きます. Biciklivel ({自転車|じてんしゃ}で) a többi napon megy.' },
+        { q: 'Meddig tart a tanítás?', a: 'Három óráig', wrong: ['Négy óráig', 'Fél kilencig', 'Hét óráig'],
+          why: '{授業|じゅぎょう}は{八時半|はちじはん}から{三時|さんじ}までです: a まで a végpontot jelöli. Négykor már hazamegy.' },
+        { q: 'Kivel ment Anna Tokióba?', a: 'Juival', wrong: ['Kennel', 'A tanárával', 'Egyedül'],
+          why: 'ユイさんと{電車|でんしゃ}で{東京|とうきょう}へ{行|い}きました: a と jelöli, kivel. Kennel hazafelé megy együtt.' },
+        { q: 'Milyen gyakran megy Anna Tokióba?', a: 'Havonta kétszer', wrong: ['Hetente kétszer', 'Havonta egyszer', 'Minden szombaton'],
+          why: '{一|いっ}か{月|げつ}に{二回|にかい}: egy hónapra két alkalom.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Tegnap könyvtárba mentem." Mi hiányzik?', jp: 'きのう{図書館|としょかん}へ＿。', a: '{行|い}きました', wrong: ['{行|い}きます', '{行|い}きません', '{行|い}きませんでした'], why: 'Múlt idő, állítás: 〜ました.' },
       { point: 3, q: '„Busszal megyek." Melyik partikula hiányzik?', jp: 'バス＿{行|い}きます。', a: 'で', wrong: ['に', 'へ', 'と'], why: 'Az eszközt a で jelöli.' },
@@ -2811,6 +2940,30 @@ const NIHONCORE_COURSE = [
         text: 'A japán diákok az órák után sokáig az iskolában maradnak: délután zajlanak a szakkörök és a sportfoglalkozások (<b>{部活|ぶかつ}</b>), és szinte mindenki tagja valamelyiknek. A boltok később nyitnak és később zárnak, mint nálunk, a sarki kisboltok (<b>コンビニ</b>) pedig éjjel-nappal nyitva vannak.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ケンさんの{日曜日|にちようび}', titleHu: 'Ken vasárnapja',
+      text: [
+        { jp: 'ケンさんは{日曜日|にちようび}、{九時|くじ}に{起|お}きます。', hu: 'Ken vasárnap kilenckor kel.' },
+        { jp: '{朝|あさ}ごはんを{食|た}べます。それから、{部屋|へや}で{音楽|おんがく}を{聞|き}きます。', hu: 'Megreggelizik. Aztán a szobájában zenét hallgat.' },
+        { jp: '{昼|ひる}は{駅|えき}の{前|まえ}の{喫茶店|きっさてん}でアンナさんに{会|あ}います。', hu: 'Délben az állomás előtti kávézóban találkozik Annával.' },
+        { jp: '{二人|ふたり}はコーヒーを{飲|の}みます。そして、ケーキを{食|た}べます。', hu: 'Kávét isznak. És tortát esznek.' },
+        { jp: '「アンナさん、いっしょに{映画|えいが}を{見|み}に{行|い}きませんか。」', hu: '„Anna, nem megyünk el együtt megnézni egy filmet?"', par: true },
+        { jp: '「いいですね。{行|い}きましょう。」', hu: '„Jó ötlet. Menjünk!"' },
+        { jp: '{二人|ふたり}は{映画館|えいがかん}で{日本|にほん}の{映画|えいが}を{見|み}ます。', hu: 'A moziban japán filmet néznek.' },
+        { jp: '{夜|よる}、ケンさんはうちで{晩|ばん}ごはんを{食|た}べます。{十一時|じゅういちじ}に{寝|ね}ます。', hu: 'Este Ken otthon vacsorázik. Tizenegykor fekszik le.' }
+      ],
+      questions: [
+        { q: 'Mit csinál Ken reggeli után?', a: 'Zenét hallgat a szobájában', wrong: ['Filmet néz a moziban', 'Kávét iszik a kávézóban', 'Vacsorát főz otthon'],
+          why: 'それから、{部屋|へや}で{音楽|おんがく}を{聞|き}きます: a それから azt jelzi, mi jön a reggeli után.' },
+        { q: 'Hol találkozik Ken Annával?', a: 'Az állomás előtti kávézóban', wrong: ['A mozi előtt', 'Ken szobájában', 'Az állomás előtti könyvesboltban'],
+          why: '{駅|えき}の{前|まえ}の{喫茶店|きっさてん}で: a で a találkozás helyét jelöli.' },
+        { q: 'Mit javasol Ken Annának?', a: 'Hogy menjenek el filmet nézni', wrong: ['Hogy igyanak még egy kávét', 'Hogy vacsorázzanak együtt', 'Hogy hallgassanak zenét'],
+          why: '{映画|えいが}を{見|み}に{行|い}きませんか: a 〜ませんか meghívás, a {見|み}に a célt mondja meg.' },
+        { q: 'Hol vacsorázik Ken?', a: 'Otthon', wrong: ['A kávézóban', 'Egy étteremben', 'Annáéknál'],
+          why: 'うちで{晩|ばん}ごはんを{食|た}べます: うち = otthon.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Könyvet olvasok." Melyik partikula hiányzik?', jp: '{本|ほん}＿{読|よ}みます。', a: 'を', wrong: ['が', 'に', 'で'], why: 'A cselekvés tárgyát a を jelöli.' },
       { point: 2, q: '„A könyvtárban tanulok." Melyik partikula hiányzik?', jp: '{図書館|としょかん}＿{勉強|べんきょう}します。', a: 'で', wrong: ['に', 'へ', 'を'], why: 'A cselekvés helye で; a に a létezés helye lenne.' },
@@ -3124,6 +3277,29 @@ const NIHONCORE_COURSE = [
         text: 'A japán beszélgetésben a nyílt visszautasítás udvariatlan, mert kellemetlen helyzetbe hozza a másikat. Ezért a „nem" helyett <b>jelzéseket</b> használnak: ちょっと… (kicsit…), {考|かんが}えておきます (majd meggondolom), {難|むずか}しいですね (hát, ez nehéz). Ha ezeket hallod, az nemet jelent, és nem illik tovább erősködni.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'スポーツと{音楽|おんがく}', titleHu: 'Sport és zene',
+      text: [
+        { jp: 'アンナさんはスポーツが{好|す}きです。', hu: 'Anna szereti a sportot.' },
+        { jp: 'テニスは{上手|じょうず}ですが、{水泳|すいえい}はあまり{上手|じょうず}じゃありません。', hu: 'Teniszezni jól tud, de úszni nem nagyon.' },
+        { jp: 'よく{土曜日|どようび}にケンさんとテニスをします。', hu: 'Szombaton gyakran teniszezik Kennel.' },
+        { jp: 'ケンさんはテニスがとても{上手|じょうず}です。{毎日|まいにち}{練習|れんしゅう}しますから。', hu: 'Ken nagyon jól teniszezik. Mert minden nap edz.' },
+        { jp: 'ユイさんはスポーツがあまり{好|す}きじゃありません。', hu: 'Jui nem nagyon szereti a sportot.', par: true },
+        { jp: '{音楽|おんがく}が{好|す}きです。ときどきコンサートに{行|い}きます。', hu: 'A zenét szereti. Néha koncertre megy.' },
+        { jp: 'アンナさんは{日本|にほん}の{歌|うた}がぜんぜんわかりませんが、ユイさんといっしょによく{聞|き}きます。', hu: 'Anna egyáltalán nem érti a japán dalokat, de Juival együtt gyakran hallgatja őket.' }
+      ],
+      questions: [
+        { q: 'Miben nem nagyon ügyes Anna?', a: 'Az úszásban', wrong: ['A teniszben', 'A fociban', 'Az éneklésben'],
+          why: '{水泳|すいえい}はあまり{上手|じょうず}じゃありません: az あまり tagadással „nem nagyon".' },
+        { q: 'Miért teniszezik Ken nagyon jól?', a: 'Mert minden nap edz', wrong: ['Mert szombatonként Annával játszik', 'Mert szereti a zenét', 'Mert gyakran jár meccsre'],
+          why: '{毎日|まいにち}{練習|れんしゅう}しますから: a mondat végi から az okot adja meg.' },
+        { q: 'Mit szeret Jui?', a: 'A zenét', wrong: ['A sportot', 'A teniszt', 'Az úszást'],
+          why: 'ユイさんはスポーツがあまり{好|す}きじゃありません。{音楽|おんがく}が{好|す}きです.' },
+        { q: 'Mit csinál Anna a japán dalokkal?', a: 'Nem érti, de gyakran hallgatja őket', wrong: ['Érti őket, de ritkán hallgatja', 'Nem érti, ezért nem hallgatja őket', 'Jól érti, és gyakran énekli őket'],
+          why: 'ぜんぜんわかりませんが、…よく{聞|き}きます: a が itt „de", a よく „gyakran".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Szeretem a zenét." Melyik partikula hiányzik?', jp: '{音楽|おんがく}＿{好|す}きです。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {好|す}き melléknév, ezért a tárgya が-t kap.' },
       { point: 3, q: '„Mert nincs időm." Mi hiányzik?', jp: '{時間|じかん}がありません＿。', a: 'から', wrong: ['まで', 'か', 'も'], why: 'Az ok mondata után から áll.' },
@@ -3522,6 +3698,31 @@ const NIHONCORE_COURSE = [
         text: 'Japánban az időjárás említése szinte a köszönés része. Ismerősök találkozásakor gyakran ez az első mondat: <b>いい{天気|てんき}ですね</b> (szép időnk van), <b>{暑|あつ}いですね</b> (meleg van, ugye?). Nem kell rá hosszan felelni: elég egy そうですね. A levelek is hagyományosan az évszakra utaló mondattal kezdődnek.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'わたしの{町|まち}、ブダペスト', titleHu: 'A városom, Budapest',
+      text: [
+        { jp: 'ブダペストはハンガリーの{大|おお}きい{町|まち}です。', hu: 'Budapest Magyarország nagy városa.' },
+        { jp: '{古|ふる}い{建物|たてもの}が{多|おお}いです。とてもきれいな{町|まち}です。', hu: 'Sok a régi épület. Nagyon szép város.' },
+        { jp: '{町|まち}にドナウ{川|がわ}があります。{川|かわ}の{景色|けしき}は{有名|ゆうめい}です。', hu: 'A városban ott a Duna. A folyó látképe híres.' },
+        { jp: '{夏|なつ}は{暑|あつ}いですが、{冬|ふゆ}はとても{寒|さむ}いです。', hu: 'Nyáron meleg van, de télen nagyon hideg.' },
+        { jp: '{食|た}べ{物|もの}はおいしいです。そして、あまり{高|たか}くないです。', hu: 'Az ételek finomak. És nem túl drágák.' },
+        { jp: '{地下鉄|ちかてつ}やバスがあります。{便利|べんり}ですが、{静|しず}かな{町|まち}じゃありません。', hu: 'Van metró, busz és más is. Kényelmes, de nem csendes város.' },
+        { jp: 'わたしは{来年|らいねん}、ユイさんとブダペストへ{行|い}きたいです。', hu: 'Jövőre Juival szeretnék Budapestre menni.', par: true },
+        { jp: '{温泉|おんせん}に{入|はい}りたいです。それから、ケーキも{食|た}べたいです。', hu: 'Szeretnék termálfürdőbe menni. Aztán süteményt is szeretnék enni.' }
+      ],
+      words: [{ jp: 'ドナウ{川|がわ}', hu: 'a Duna' }, { jp: '{夏|なつ}', hu: 'nyár' }, { jp: '{冬|ふゆ}', hu: 'tél' }, { jp: '{食|た}べ{物|もの}', hu: 'étel' }, { jp: '{入|はい}ります', hu: 'bemegy; (fürdőbe) megy' }],
+      questions: [
+        { q: 'Milyen város Budapest a szöveg szerint?', a: 'Nagy és nagyon szép', wrong: ['Kicsi és csendes', 'Új és drága', 'Nagy, de nem híres'],
+          why: '{大|おお}きい{町|まち}です … とてもきれいな{町|まち}です.' },
+        { q: 'Milyen Budapesten a tél?', a: 'Nagyon hideg', wrong: ['Meleg', 'Kicsit hűvös', 'Nem túl hideg'],
+          why: '{冬|ふゆ}はとても{寒|さむ}いです. A meleg ({暑|あつ}い) a nyárra vonatkozik.' },
+        { q: 'Mit ír Anna az ételekről?', a: 'Finomak, és nem túl drágák', wrong: ['Finomak, de nagyon drágák', 'Olcsók, de nem finomak', 'Nem túl finomak'],
+          why: 'おいしいです。そして、あまり{高|たか}くないです: az あまり + tagadás = „nem túl".' },
+        { q: 'Mit szeretne Anna Budapesten csinálni?', a: 'Fürdőbe menni és süteményt enni', wrong: ['Régi épületeket nézni és metrózni', 'A Dunán hajózni és halat enni', 'Csendes helyen pihenni'],
+          why: '{温泉|おんせん}に{入|はい}りたいです。それから、ケーキも{食|た}べたいです: a 〜たいです a vágyat fejezi ki.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Csendes város." Mi hiányzik?', jp: '{静|しず}か＿{町|まち}です。', a: 'な', wrong: ['い', 'の', 'に'], why: 'な-melléknév és főnév közé な kerül.' },
       { point: 3, q: 'Mi a 高い tagadása?', a: '{高|たか}くないです', wrong: ['{高|たか}いじゃありません', '{高|たか}じゃないです', '{高|たか}いくないです'], why: 'Az い helyére くない kerül.' },
@@ -3875,6 +4076,31 @@ const NIHONCORE_COURSE = [
         text: 'A hagyományos japán levél nem a mondanivalóval indul. Előbb az évszakra vagy az időjárásra utaló mondat áll, aztán az érdeklődés a címzett egészsége felől (<b>お{元気|げんき}ですか</b>), és csak ezután jön a lényeg. A levelet jókívánság zárja, például <b>お{体|からだ}に{気|き}をつけてください</b>. Baráti képeslapon ez mind rövidebb, de az egészségre vonatkozó kérdés szinte mindig megmarad.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{京都|きょうと}の{一日|いちにち}', titleHu: 'Egy nap Kiotóban',
+      text: [
+        { jp: '{先週|せんしゅう}の{週末|しゅうまつ}、ユイさんと{京都|きょうと}へ{行|い}きました。', hu: 'Múlt hétvégén Juival Kiotóba mentem.' },
+        { jp: '{朝|あさ}{早|はや}く{起|お}きて、{新幹線|しんかんせん}に{乗|の}りました。', hu: 'Reggel korán keltem, és felszálltam a sinkanszenre.' },
+        { jp: '{京都|きょうと}は{人|ひと}が{多|おお}くて、にぎやかでした。', hu: 'Kiotóban sok volt az ember, nyüzsgő volt.' },
+        { jp: 'お{寺|てら}は{静|しず}かで、とてもきれいでした。', hu: 'A templom csendes volt és nagyon szép.' },
+        { jp: '{昼|ひる}ごはんはうどんを{食|た}べました。{安|やす}くて、おいしかったです。', hu: 'Ebédre udont ettünk. Olcsó volt és finom.', par: true },
+        { jp: '{午後|ごご}は{店|みせ}でおみやげを{買|か}って、お{茶|ちゃ}を{飲|の}みました。', hu: 'Délután egy boltban ajándékot vettünk, és teáztunk.' },
+        { jp: '{天気|てんき}はあまりよくなかったですが、{寒|さむ}くなかったです。', hu: 'Az idő nem volt túl jó, de nem volt hideg.' },
+        { jp: '{一日|いちにち}たくさん{歩|ある}いて、{疲|つか}れました。でも、とても{楽|たの}しかったです。', hu: 'Egész nap sokat gyalogoltunk, elfáradtam. De nagyon jó volt.' }
+      ],
+      words: [{ jp: '{早|はや}く', hu: 'korán' }, { jp: '{乗|の}ります', hu: 'felszáll' }, { jp: 'おみやげ', hu: 'ajándék (útról)' }, { jp: '{歩|ある}きます', hu: 'gyalogol' }, { jp: '{疲|つか}れます', hu: 'elfárad' }],
+      questions: [
+        { q: 'Milyen volt Kiotó?', a: 'Sok volt az ember, nyüzsgő volt', wrong: ['Csendes volt, alig járt arra valaki', 'Hideg volt és esett', 'Kicsi volt és unalmas'],
+          why: '{人|ひと}が{多|おお}くて、にぎやかでした. A csendes ({静|しず}か) a templomra vonatkozik.' },
+        { q: 'Milyen volt az ebéd?', a: 'Olcsó és finom', wrong: ['Drága, de finom', 'Olcsó, de nem finom', 'Drága, és nem is finom'],
+          why: '{安|やす}くて、おいしかったです: a 〜くて két tulajdonságot köt össze.' },
+        { q: 'Mit csináltak délután?', a: 'Ajándékot vettek, és teáztak', wrong: ['Templomot néztek, és ebédeltek', 'Felszálltak a sinkanszenre', 'Udont ettek egy boltban'],
+          why: 'おみやげを{買|か}って、お{茶|ちゃ}を{飲|の}みました: a て-alak sorba fűzi a cselekvéseket.' },
+        { q: 'Milyen volt az idő?', a: 'Nem túl jó, de nem volt hideg', wrong: ['Nagyon szép és meleg', 'Rossz volt: esett, és nagyon hideg volt', 'Jó, de hideg'],
+          why: 'あまりよくなかったですが、{寒|さむ}くなかったです: mindkét melléknév tagadó múlt időben áll.' }
+      ]
+    },
     quiz: [
       { point: 2, q: '„A film érdekes volt." Mi hiányzik?', jp: '{映画|えいが}は＿。', a: 'おもしろかったです', wrong: ['おもしろいでした', 'おもしろくてです', 'おもしろいかったです'], why: 'い-melléknév múltja: い → かった.' },
       { point: 3, q: '„A város csendes volt." Mi hiányzik?', jp: '{町|まち}は{静|しず}か＿。', a: 'でした', wrong: ['かったです', 'くてです', 'いでした'], why: 'A な-melléknév múltja でした, mint a főnévé.' },
@@ -4257,6 +4483,31 @@ const NIHONCORE_COURSE = [
         text: 'Néhány étel, amellyel minden diák találkozik: a <b>カレーライス</b> sűrű curryszósz rizzsel; a <b>かつ{丼|どん}</b> rántott sertésszelet tojással rizsen; az <b>おでん</b> szójaszószos lében főtt zöldségek és halpogácsák, főleg télen. Szinte mindenhez jár <b>みそ{汁|しる}</b>, az erjesztett szójababból készült leves. A nyugati ételek neve katakanával íródik: スパゲッティ, ピザ, サラダ.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{二|ふた}つの{食堂|しょくどう}', titleHu: 'Két étkezde',
+      text: [
+        { jp: '{大学|だいがく}の{近|ちか}くに{食堂|しょくどう}が{二|ふた}つあります。「さくら」と「ふじ」です。', hu: 'Az egyetem közelében két étkezde van: a Szakura és a Fudzsi.' },
+        { jp: '「さくら」は「ふじ」より{安|やす}いです。でも、「ふじ」のほうがおいしいです。', hu: 'A Szakura olcsóbb, mint a Fudzsi. De a Fudzsi finomabb.' },
+        { jp: '「ふじ」のメニューの{中|なか}で、カレーがいちばん{人気|にんき}があります。', hu: 'A Fudzsi étlapján a curry a legnépszerűbb.' },
+        { jp: 'わたしは{今日|きょう}、ケンさんと「ふじ」へ{行|い}きました。', hu: 'Ma Kennel a Fudzsiba mentem.', par: true },
+        { jp: 'この{店|みせ}では、まず{入口|いりぐち}で{食券|しょっけん}を{買|か}ってから、{席|せき}にすわります。', hu: 'Ebben az étkezdében először a bejáratnál ételjegyet veszel, és csak utána ülsz le.' },
+        { jp: 'ケンさんはカレーにしました。わたしはラーメンを{食|た}べてみました。', hu: 'Ken a curryt választotta. Én megkóstoltam a rament.' },
+        { jp: 'ラーメンはカレーより{高|たか}かったですが、とてもおいしかったです。', hu: 'A ramen drágább volt a currynél, de nagyon finom volt.' },
+        { jp: 'みなさんも「ふじ」へ{行|い}ってみてください。', hu: 'Menjetek el ti is a Fudzsiba, próbáljátok ki!' }
+      ],
+      words: [{ jp: '{食堂|しょくどう}', hu: 'étkezde, menza' }, { jp: '{人気|にんき}があります', hu: 'népszerű' }, { jp: '{入口|いりぐち}', hu: 'bejárat' }, { jp: '{食券|しょっけん}', hu: 'ételjegy' }, { jp: '{席|せき}にすわります', hu: 'leül a helyére' }],
+      questions: [
+        { q: 'Melyik étkezde az olcsóbb?', a: 'A Szakura', wrong: ['A Fudzsi', 'Egyformán olcsók', 'A szöveg nem mondja meg'],
+          why: '「さくら」は「ふじ」より{安|やす}いです: a より előtt az áll, amihez hasonlítunk.' },
+        { q: 'Mi a legnépszerűbb étel a Fudzsiban?', a: 'A curry', wrong: ['A ramen', 'Az udon', 'A sütemény'],
+          why: 'カレーがいちばん{人気|にんき}があります: az いちばん a „leg-".' },
+        { q: 'Mit kell először csinálni a Fudzsiban?', a: 'Ételjegyet venni a bejáratnál', wrong: ['Leülni egy szabad helyre, és várni', 'Rendelni a pincértől', 'Sorba állni a pultnál'],
+          why: 'まず{入口|いりぐち}で{食券|しょっけん}を{買|か}ってから、{席|せき}にすわります: a 〜てから azt mondja meg, mi történik előbb.' },
+        { q: 'Mit evett Anna, és milyen volt?', a: 'Rament: drágább volt, de finom', wrong: ['Curryt: olcsó volt és finom', 'Rament: olcsó volt, de nem ízlett', 'Curryt: drága volt, de finom'],
+          why: 'わたしはラーメンを{食|た}べてみました。ラーメンはカレーより{高|たか}かったですが、とてもおいしかったです.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„A vonat gyorsabb, mint a busz." Mi hiányzik?', jp: 'バス＿{電車|でんしゃ}のほうが{速|はや}いです。', a: 'より', wrong: ['から', 'まで', 'と'], why: 'Amihez hasonlítasz, az より-t kap.' },
       { point: 2, q: '„A kávét vagy a teát szereted jobban?" Mi hiányzik?', jp: 'コーヒーと{紅茶|こうちゃ}と＿が{好|す}きですか。', a: 'どちら', wrong: ['どれ', 'なに', 'どんな'], why: 'Két dolog közül どちら kérdez.' },
@@ -4674,6 +4925,31 @@ const NIHONCORE_COURSE = [
         text: 'A megfázás hagyományos japán ellenszere a <b>{卵酒|たまござけ}</b> (meleg szaké tojássárgájával és cukorral) és a <b>しょうが{湯|ゆ}</b> (forró gyömbérital): mindkettő átmelegíti a testet. Torokfájásra a nyak köré tekert, megsütött póréhagymát ajánlották a nagymamák. A beteg könnyű étele az <b>おかゆ</b>, a híg rizskása.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{風邪|かぜ}をひきました', titleHu: 'Megfáztam',
+      text: [
+        { jp: 'きのうの{夜|よる}から{頭|あたま}が{痛|いた}いんです。{熱|ねつ}もあります。', hu: 'Tegnap este óta fáj a fejem. Lázam is van.' },
+        { jp: '{今朝|けさ}は{学校|がっこう}を{休|やす}んで、{病院|びょういん}へ{行|い}きました。', hu: 'Ma reggel nem mentem iskolába, hanem orvoshoz mentem.' },
+        { jp: 'お{医者|いしゃ}さんはとても{親切|しんせつ}でした。', hu: 'Az orvos nagyon kedves volt.' },
+        { jp: '「{風邪|かぜ}ですね。{薬|くすり}を{飲|の}んで、ゆっくり{休|やす}んだほうがいいですよ。」', hu: '„Megfázás. Jobb, ha beveszi a gyógyszert, és alaposan kipiheni magát."', par: true },
+        { jp: '「{今日|きょう}はお{風呂|ふろ}に{入|はい}らないでください。」', hu: '„Ma ne fürödjön."' },
+        { jp: '「それから、{冷|つめ}たいものは{飲|の}まないほうがいいです。」', hu: '„És hideget jobb, ha nem iszik."' },
+        { jp: '{薬|くすり}は{一日|いちにち}に{三回|さんかい}{飲|の}みます。', hu: 'A gyógyszert naponta háromszor kell bevenni.', par: true },
+        { jp: 'うちへ{帰|かえ}って、すぐ{寝|ね}ました。あしたも{学校|がっこう}を{休|やす}みます。', hu: 'Hazamentem, és rögtön lefeküdtem. Holnap sem megyek iskolába.' }
+      ],
+      words: [{ jp: '{痛|いた}い', hu: 'fáj' }, { jp: '{今朝|けさ}', hu: 'ma reggel' }, { jp: 'ゆっくり{休|やす}みます', hu: 'alaposan kipiheni magát' }, { jp: 'すぐ', hu: 'rögtön' }],
+      questions: [
+        { q: 'Mi a baja Annának?', a: 'Fáj a feje, és lázas', wrong: ['Fáj a hasa, és köhög', 'Fáj a foga', 'Megsérült a lába'],
+          why: '{頭|あたま}が{痛|いた}いんです。{熱|ねつ}もあります: a 〜んです magyarázatot ad a helyzetre.' },
+        { q: 'Mit tanácsol az orvos?', a: 'Vegye be a gyógyszert, és pihenjen', wrong: ['Menjen iskolába, de ne sportoljon', 'Igyon sok hideg vizet', 'Fürödjön meleg vízben'],
+          why: '{薬|くすり}を{飲|の}んで、ゆっくり{休|やす}んだほうがいいですよ: a 〜たほうがいい tanács.' },
+        { q: 'Mit ne csináljon ma Anna?', a: 'Ne fürödjön', wrong: ['Ne egyen semmit', 'Ne aludjon napközben', 'Ne vegyen be gyógyszert'],
+          why: 'お{風呂|ふろ}に{入|はい}らないでください: a 〜ないでください udvarias tiltás.' },
+        { q: 'Hányszor kell bevenni a gyógyszert?', a: 'Naponta háromszor', wrong: ['Naponta egyszer', 'Háromnaponta egyszer', 'Hetente háromszor'],
+          why: '{一日|いちにち}に{三回|さんかい}: egy napra három alkalom.' }
+      ]
+    },
     quiz: [
       { point: 1, q: 'Mi a {飲|の}みます た-alakja?', a: '{飲|の}んだ', wrong: ['{飲|の}みた', '{飲|の}った', '{飲|の}いた'], why: 'み → んで, illetve んだ.' },
       { point: 2, q: 'Mi a {書|か}きます ない-alakja?', a: '{書|か}かない', wrong: ['{書|か}きない', '{書|か}くない', '{書|か}こない'], why: '1. csoport: az i-hang a-hangra vált: き → か.' },
@@ -5021,6 +5297,31 @@ const NIHONCORE_COURSE = [
         text: 'Külföldiként a biztos választás mindig a です / ます. Közvetlen stílusra akkor válthatsz, ha a másik <b>egyidős vagy fiatalabb</b>, közeli viszonyban vagytok, és ő maga is így beszél veled. Idősebb ismerős, {先輩|せんぱい}, tanár felé akkor is az udvarias stílus marad, ha ő rövid alakokban szól hozzád: a stílus nem kölcsönös, hanem a viszonyt tükrözi.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ユイへのメール', titleHu: 'E-mail Juinak',
+      text: [
+        { jp: 'ユイ、{元気|げんき}？わたしは{元気|げんき}だよ。', hu: 'Jui, jól vagy? Én jól vagyok.' },
+        { jp: '{今|いま}、{部屋|へや}で{音楽|おんがく}を{聞|き}いている。', hu: 'Most a szobámban zenét hallgatok.' },
+        { jp: 'きのう、クラスに{新|あたら}しい{留学生|りゅうがくせい}が{来|き}た。{名前|なまえ}はマリアさん。', hu: 'Tegnap új cserediák jött az osztályba. Mariának hívják.', par: true },
+        { jp: '{髪|かみ}が{長|なが}くて、{背|せ}が{高|たか}い{人|ひと}だよ。', hu: 'Hosszú hajú, magas lány.' },
+        { jp: 'マリアさんは{東京|とうきょう}に{住|す}んでいるお{姉|ねえ}さんのうちから{学校|がっこう}に{来|き}ている。', hu: 'Maria a Tokióban élő nővérétől jár iskolába.' },
+        { jp: '{日本語|にほんご}はまだあまり{上手|じょうず}じゃないけど、{毎日|まいにち}{勉強|べんきょう}している。', hu: 'Japánul még nem tud túl jól, de minden nap tanul.' },
+        { jp: 'きのうマリアさんが{作|つく}ったクッキーを{食|た}べた。とてもおいしかった。', hu: 'Tegnap ettem a kekszből, amit Maria sütött. Nagyon finom volt.' },
+        { jp: '{今度|こんど}、{三人|さんにん}で{会|あ}わない？', hu: 'Legközelebb nem találkozunk hárman?', par: true }
+      ],
+      words: [{ jp: 'クッキー', hu: 'keksz' }, { jp: '{今度|こんど}', hu: 'legközelebb' }, { jp: '{三人|さんにん}で', hu: 'hárman' }],
+      questions: [
+        { q: 'Mit csinál most Anna?', a: 'Zenét hallgat a szobájában', wrong: ['Kekszet süt Mariával', 'Japánul tanul az iskolában', 'Tokióban van a nővérénél'],
+          why: '{今|いま}、{部屋|へや}で{音楽|おんがく}を{聞|き}いている: a 〜ている az éppen folyó cselekvés (közvetlen stílusban).' },
+        { q: 'Hogy néz ki Maria?', a: 'Hosszú hajú és magas', wrong: ['Rövid hajú és magas', 'Hosszú hajú és alacsony', 'Rövid hajú és alacsony'],
+          why: '{髪|かみ}が{長|なが}くて、{背|せ}が{高|たか}い{人|ひと}: {髪|かみ}が{長|なが}い = hosszú hajú, {背|せ}が{高|たか}い = magas.' },
+        { q: 'Ki lakik Tokióban?', a: 'Maria nővére', wrong: ['Jui nővére', 'Anna családja', 'Maria tanára'],
+          why: '{東京|とうきょう}に{住|す}んでいるお{姉|ねえ}さん: a főnév elé tett mondat a nővért jellemzi.' },
+        { q: 'Mit javasol Anna a levél végén?', a: 'Hogy találkozzanak hárman', wrong: ['Hogy süssenek együtt kekszet', 'Hogy tanuljanak együtt japánul', 'Hogy Jui írjon Mariának'],
+          why: '{三人|さんにん}で{会|あ}わない？ — a tagadó kérdés közvetlen stílusban meghívás.' }
+      ]
+    },
     quiz: [
       { point: 1, q: 'Mi a {行|い}きました közvetlen (rövid) alakja?', a: '{行|い}った', wrong: ['{行|い}く', '{行|い}かない', '{行|い}って'], why: 'A ました rövid párja a た-alak.' },
       { point: 1, q: 'Mi a {食|た}べません közvetlen alakja?', a: '{食|た}べない', wrong: ['{食|た}べた', '{食|た}べる', '{食|た}べなかった'], why: 'A ません rövid párja a ない-alak.' },
@@ -5362,6 +5663,31 @@ const NIHONCORE_COURSE = [
         text: 'A <b>{喫茶店|きっさてん}</b> a régi vágású kávéház: csendes, félhomályos, a kávé mellé pirítóst, szendvicset is adnak. A <b>カフェ</b> a divatos, világos kávézó. A harmadik fajta a <b>まんが{喫茶|きっさ}</b>: itt óradíjat fizetsz egy kis fülkéért, és annyi képregényt olvashatsz a polcokról, amennyit bírsz; az üdítő az automatából ingyen jár.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{誕生日|たんじょうび}のプレゼント', titleHu: 'Születésnapi ajándék',
+      text: [
+        { jp: '{来週|らいしゅう}の{土曜日|どようび}はユイさんの{誕生日|たんじょうび}です。', hu: 'Jövő szombaton lesz Jui születésnapja.' },
+        { jp: 'プレゼントをあげたいので、きのうデパートへ{行|い}きました。', hu: 'Szeretnék neki ajándékot adni, ezért tegnap elmentem az áruházba.' },
+        { jp: 'ユイさんは{絵|え}が{好|す}きなので、{色|いろ}えんぴつにしました。', hu: 'Jui szereti a rajzot, ezért színes ceruzát választottam.' },
+        { jp: '{赤|あか}い{箱|はこ}のと{青|あお}い{箱|はこ}のがありました。わたしは{青|あお}いのを{買|か}いました。', hu: 'Volt piros dobozos és kék dobozos. A kéket vettem meg.' },
+        { jp: '{去年|きょねん}のわたしの{誕生日|たんじょうび}に、ユイさんはかわいいかばんをくれました。', hu: 'Tavaly a születésnapomra Jui egy aranyos táskát adott nekem.', par: true },
+        { jp: 'ケンさんには{本|ほん}をもらいました。', hu: 'Kentől könyvet kaptam.' },
+        { jp: 'わたしはそのかばんを{毎日|まいにち}{使|つか}っています。', hu: 'Azt a táskát minden nap használom.' },
+        { jp: 'ユイさんの{誕生日|たんじょうび}が{楽|たの}しみです。', hu: 'Alig várom Jui születésnapját.' }
+      ],
+      words: [{ jp: 'プレゼント', hu: 'ajándék' }, { jp: '{色|いろ}えんぴつ', hu: 'színes ceruza' }, { jp: '{箱|はこ}', hu: 'doboz' }, { jp: '{去年|きょねん}', hu: 'tavaly' }, { jp: '{楽|たの}しみです', hu: 'alig várom' }],
+      questions: [
+        { q: 'Miért ment Anna az áruházba?', a: 'Mert ajándékot akar adni Juinak', wrong: ['Mert táskát akar venni magának', 'Mert Kennel találkozott ott', 'Mert elfogyott a színes ceruzája'],
+          why: 'プレゼントをあげたいので: a ので az okot adja meg.' },
+        { q: 'Melyik színes ceruzát vette meg?', a: 'A kék dobozosat', wrong: ['A piros dobozosat', 'Mindkettőt', 'Egyiket sem'],
+          why: '{青|あお}いのを{買|か}いました: a の itt a főnév (a doboz ceruza) helyén áll.' },
+        { q: 'Mit kapott Anna tavaly Juitól?', a: 'Egy táskát', wrong: ['Egy könyvet', 'Színes ceruzát', 'Egy rajzot'],
+          why: 'ユイさんはかわいいかばんをくれました: a くれます = (nekem) ad.' },
+        { q: 'Kitől kapott Anna könyvet?', a: 'Kentől', wrong: ['Juitól', 'Mariától', 'A tanárától'],
+          why: 'ケンさんには{本|ほん}をもらいました: az もらいます mellett a に azt jelöli, akitől kapunk.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Mivel esik az eső, nem megyek el itthonról." Mi hiányzik?', jp: '{雨|あめ}が{降|ふ}っている＿、{出|で}かけません。', a: 'ので', wrong: ['より', 'まで', 'だけ'], why: 'Ok: rövid alak + ので.' },
       { point: 1, q: '„Mivel ma szünnap van, otthon vagyok." Mi hiányzik?', jp: '{今日|きょう}は{休|やす}み＿、{家|うち}にいます。', a: 'なので', wrong: ['ので', 'だので', 'のので'], why: 'Főnév után なので áll.' },
@@ -5739,6 +6065,31 @@ const NIHONCORE_COURSE = [
         text: 'A japánok karácsonyi lap helyett <b>újévi lapot</b> (<b>{年賀状|ねんがじょう}</b>) küldenek. A posta az év végéig gyűjti őket, és mindet január elsején reggel kézbesíti. A lapokon az új év állatövi jegye látható: a tizenkét állat évről évre váltja egymást. A japán időszámítás a császárok uralkodása szerint is számolja az éveket: 2019 óta a <b>{令和|れいわ}</b> korszak tart.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{冬休|ふゆやす}みの{計画|けいかく}', titleHu: 'Tervek a téli szünetre',
+      text: [
+        { jp: 'もうすぐ{冬休|ふゆやす}みです。', hu: 'Hamarosan itt a téli szünet.' },
+        { jp: 'わたしは{冬休|ふゆやす}みに{北海道|ほっかいどう}へ{行|い}くつもりです。', hu: 'A téli szünetben Hokkaidóra készülök.' },
+        { jp: '{飛行機|ひこうき}の{切符|きっぷ}はもう{買|か}いましたが、ホテルはまだ{予約|よやく}していません。', hu: 'A repülőjegyet már megvettem, de szállást még nem foglaltam.' },
+        { jp: '{北海道|ほっかいどう}の{冬|ふゆ}はとても{寒|さむ}いと{思|おも}います。', hu: 'Azt hiszem, Hokkaidón nagyon hideg a tél.', par: true },
+        { jp: '{行|い}くまえに、{新|あたら}しいコートを{買|か}いたいと{思|おも}います。', hu: 'Indulás előtt szeretnék venni egy új kabátot.' },
+        { jp: '{暖|あたた}かい{手袋|てぶくろ}もほしいです。', hu: 'Meleg kesztyűt is szeretnék.' },
+        { jp: '{北海道|ほっかいどう}ではスキーをしたあとで、{温泉|おんせん}に{入|はい}るつもりです。', hu: 'Hokkaidón síelés után termálfürdőbe megyek.', par: true },
+        { jp: 'うちへ{帰|かえ}ったあとで、みなさんに{写真|しゃしん}を{見|み}せたいと{思|おも}います。', hu: 'Miután hazajöttem, szeretném megmutatni nektek a fényképeket.' }
+      ],
+      words: [{ jp: '{計画|けいかく}', hu: 'terv' }, { jp: '{予約|よやく}します', hu: 'lefoglal' }, { jp: 'コート', hu: 'kabát' }, { jp: '{手袋|てぶくろ}', hu: 'kesztyű' }, { jp: 'スキー', hu: 'síelés' }, { jp: '{見|み}せます', hu: 'megmutat' }],
+      questions: [
+        { q: 'Mit intézett el már Anna?', a: 'Megvette a repülőjegyet', wrong: ['Lefoglalta a szállást', 'Megvette az új kabátot', 'Megvette a kesztyűt'],
+          why: '{切符|きっぷ}はもう{買|か}いましたが、ホテルはまだ{予約|よやく}していません: もう = már, まだ + tagadás = még nem.' },
+        { q: 'Mit szeretne venni indulás előtt?', a: 'Új kabátot', wrong: ['Síléceket', 'Fényképezőgépet', 'Repülőjegyet'],
+          why: '{行|い}くまえに、{新|あたら}しいコートを{買|か}いたいと{思|おも}います: a 〜まえに előtt szótári alak áll.' },
+        { q: 'Mit tervez Anna a síelés után?', a: 'Termálfürdőbe megy', wrong: ['Kabátot vásárol', 'Hazarepül', 'Fényképeket mutat'],
+          why: 'スキーをしたあとで、{温泉|おんせん}に{入|はい}るつもりです: a 〜たあとで = miután.' },
+        { q: 'Mit gondol Anna Hokkaidó teléről?', a: 'Hogy nagyon hideg', wrong: ['Hogy nagyon drága', 'Hogy enyhe', 'Hogy unalmas'],
+          why: 'とても{寒|さむ}いと{思|おも}います: a 〜と{思|おも}います a saját véleményt vezeti be.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Nem, még nem ettem." Mi hiányzik?', jp: 'いいえ、まだ＿。', a: '{食|た}べていません', wrong: ['{食|た}べませんでした', '{食|た}べました', '{食|た}べています'], why: 'Még nem: まだ + 〜ていません.' },
       { point: 3, q: '„Lefekvés előtt fogat mosok." Mi hiányzik?', jp: '＿まえに、{歯|は}をみがきます。', a: '{寝|ね}る', wrong: ['{寝|ね}た', '{寝|ね}て', '{寝|ね}ます'], why: 'A まえに előtt szótári alak áll.' },
@@ -6086,6 +6437,31 @@ const NIHONCORE_COURSE = [
         text: 'Az <b>お{疲|つか}れさまでした</b> a japán munkahely leggyakoribb mondata: „elfáradtál, köszönjük". Így búcsúznak a kollégák a nap végén, így köszönti a csapat az edzésről távozót, így gratulálnak a fellépés után. Benne van az elismerés, a köszönet és az együttérzés is. Napközben, folyosón találkozva jelen időben hangzik el: お{疲|つか}れさまです.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{日曜日|にちようび}の{失敗|しっぱい}', titleHu: 'Vasárnapi baklövések',
+      text: [
+        { jp: '{日曜日|にちようび}、ユイさんと{十時|じゅうじ}に{駅|えき}で{会|あ}う{約束|やくそく}でした。', hu: 'Vasárnap tízre beszéltünk meg találkozót Juival az állomáson.' },
+        { jp: 'でも、わたしは{寝坊|ねぼう}してしまいました。', hu: 'De elaludtam.' },
+        { jp: '{急|いそ}いでうちを{出|で}ましたが、{電車|でんしゃ}の{中|なか}にかさを{忘|わす}れてしまいました。', hu: 'Sietve indultam el otthonról, de a vonaton felejtettem az esernyőmet.' },
+        { jp: '{十時半|じゅうじはん}に{駅|えき}に{着|つ}きました。「{遅|おく}れて、すみません。」', hu: 'Fél tizenegykor értem az állomásra. „Elnézést, hogy késtem."' },
+        { jp: 'ユイさんは{怒|おこ}りませんでした。「{大丈夫|だいじょうぶ}ですよ。」', hu: 'Jui nem haragudott. „Semmi baj."' },
+        { jp: 'それから、{二人|ふたり}で{買|か}い{物|もの}をしたり、{映画|えいが}を{見|み}たりしました。', hu: 'Aztán ketten vásároltunk, moziztunk, ilyesmi.', par: true },
+        { jp: '{映画|えいが}も{晩|ばん}ごはんもよかったです。', hu: 'A film is, a vacsora is jó volt.' },
+        { jp: 'あしたは{雨|あめ}でしょう。{新|あたら}しいかさを{買|か}います。', hu: 'Holnap valószínűleg esni fog. Veszek egy új esernyőt.' }
+      ],
+      words: [{ jp: '{失敗|しっぱい}', hu: 'baklövés, kudarc' }, { jp: '{約束|やくそく}', hu: 'megbeszélt találkozó' }, { jp: '{寝坊|ねぼう}します', hu: 'elalszik (reggel)' }, { jp: '{急|いそ}いで', hu: 'sietve' }, { jp: '{忘|わす}れます', hu: 'ottfelejt' }, { jp: '{着|つ}きます', hu: 'megérkezik' }, { jp: '{怒|おこ}ります', hu: 'haragszik' }],
+      questions: [
+        { q: 'Miért késett Anna?', a: 'Mert elaludt', wrong: ['Mert késett a vonat', 'Mert esett az eső', 'Mert rossz állomásra ment'],
+          why: '{寝坊|ねぼう}してしまいました: a 〜てしまいます itt a sajnálatos, nem szándékos eseményt jelzi.' },
+        { q: 'Mit hagyott Anna a vonaton?', a: 'Az esernyőjét', wrong: ['A táskáját', 'A telefonját', 'A jegyét'],
+          why: '{電車|でんしゃ}の{中|なか}にかさを{忘|わす}れてしまいました.' },
+        { q: 'Mivel töltötték a napot?', a: 'Vásároltak, moziztak', wrong: ['Kávéztak, sétáltak', 'Tanultak, zenét hallgattak', 'Az esernyőt keresték'],
+          why: '{買|か}い{物|もの}をしたり、{映画|えいが}を{見|み}たりしました: a 〜たり〜たり példákat sorol fel.' },
+        { q: 'Milyen idő várható holnap?', a: 'Eső', wrong: ['Napsütés', 'Hó', 'Erős szél'],
+          why: 'あしたは{雨|あめ}でしょう: a 〜でしょう valószínűséget fejez ki.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Holnap valószínűleg napos idő lesz." Mi hiányzik?', jp: 'あしたは{晴|は}れる＿。', a: 'でしょう', wrong: ['ましょう', 'でした', 'ください'], why: 'Feltevés: rövid alak + でしょう.' },
       { point: 2, q: '„Otthon felejtettem a pénztárcámat." (sajnálkozva) Mi hiányzik?', jp: '{財布|さいふ}を{忘|わす}れて＿。', a: 'しまいました', wrong: ['ありました', 'ください', 'いいです'], why: 'Megtörtént, és bánom: て-alak + しまいました.' },
@@ -6421,6 +6797,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán üzletekben a vevőt <b>お{客様|きゃくさま}</b>-nak hívják, és az eladó különleges, tiszteletteljes nyelven beszél hozzá: いらっしゃいませ, {少々|しょうしょう}お{待|ま}ちください, かしこまりました, {申|もう}し{訳|わけ}ありません. Ezeket az új alkalmazottak betanulják, mint egy szerepet. Vevőként nem kell így válaszolnod: a sima です / ます tökéletesen megfelel.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'アルバイトの{自己紹介|じこしょうかい}', titleHu: 'Bemutatkozás diákmunkához',
+      text: [
+        { jp: 'わたしはアンナです。ハンガリーの{留学生|りゅうがくせい}です。', hu: 'Anna vagyok. Magyar cserediák.' },
+        { jp: '{趣味|しゅみ}は{本|ほん}を{読|よ}むことと、{写真|しゃしん}をとることです。', hu: 'A hobbim az olvasás és a fényképezés.' },
+        { jp: '{日本|にほん}の{小説|しょうせつ}を{読|よ}んだことがありますが、{漢字|かんじ}が{多|おお}くて{大変|たいへん}でした。', hu: 'Olvastam már japán regényt, de sok volt benne a kanji, nehéz volt.' },
+        { jp: 'ひらがなとカタカナは{全部|ぜんぶ}{読|よ}むことができます。', hu: 'A hiraganát és a katakanát mind el tudom olvasni.' },
+        { jp: '{英語|えいご}は{話|はな}すことができますが、{中国語|ちゅうごくご}はできません。', hu: 'Angolul tudok beszélni, de kínaiul nem.' },
+        { jp: 'アルバイトはまだしたことがありません。', hu: 'Diákmunkát még nem végeztem.', par: true },
+        { jp: '{平日|へいじつ}は{授業|じゅぎょう}がありますが、{週末|しゅうまつ}は{時間|じかん}があります。', hu: 'Hétköznap tanításom van, de hétvégén ráérek.' },
+        { jp: '{本|ほん}が{好|す}きなので、{本屋|ほんや}で{働|はたら}きたいです。どうぞよろしくお{願|ねが}いします。', hu: 'Szeretem a könyveket, ezért könyvesboltban szeretnék dolgozni. Kérem, fogadják jó szívvel a jelentkezésemet.' }
+      ],
+      words: [{ jp: '{自己紹介|じこしょうかい}', hu: 'bemutatkozás' }, { jp: '{小説|しょうせつ}', hu: 'regény' }, { jp: '{大変|たいへん}', hu: 'nehéz, megerőltető' }, { jp: '{全部|ぜんぶ}', hu: 'mind' }, { jp: 'アルバイト', hu: 'diákmunka' }, { jp: '{平日|へいじつ}', hu: 'hétköznap' }],
+      questions: [
+        { q: 'Mi Anna hobbija?', a: 'Az olvasás és a fényképezés', wrong: ['Az olvasás és a főzés', 'A fényképezés és az utazás', 'A nyelvtanulás és a zene'],
+          why: '{本|ほん}を{読|よ}むことと、{写真|しゃしん}をとることです: az ige + こと főnévvé teszi a cselekvést.' },
+        { q: 'Miért volt nehéz a japán regény?', a: 'Mert sok volt benne a kanji', wrong: ['Mert nagyon hosszú volt', 'Mert unalmas volt', 'Mert nem volt hozzá szótára'],
+          why: '{漢字|かんじ}が{多|おお}くて{大変|たいへん}でした: a 〜くて itt okot is kifejez.' },
+        { q: 'Melyik nyelven nem tud Anna?', a: 'Kínaiul', wrong: ['Angolul', 'Japánul', 'Magyarul'],
+          why: '{英語|えいご}は{話|はな}すことができますが、{中国語|ちゅうごくご}はできません: a は a két nyelvet állítja szembe.' },
+        { q: 'Mikor ér rá Anna dolgozni?', a: 'Hétvégén', wrong: ['Hétköznap délelőtt', 'Minden este', 'Csak a szünetben'],
+          why: '{平日|へいじつ}は{授業|じゅぎょう}がありますが、{週末|しゅうまつ}は{時間|じかん}があります.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„A hobbim a fényképezés." Mi hiányzik?', jp: '{趣味|しゅみ}は{写真|しゃしん}を＿ことです。', a: '{撮|と}る', wrong: ['{撮|と}って', '{撮|と}ります', '{撮|と}り'], why: 'A こと előtt szótári alak áll.' },
       { point: 2, q: '„Voltam már Japánban." Mi hiányzik?', jp: '{日本|にほん}へ＿ことがあります。', a: '{行|い}った', wrong: ['{行|い}って', '{行|い}きます', '{行|い}き'], why: 'Tapasztalat: た-alak + ことがあります.' },
@@ -6751,6 +7152,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán a köszönetet is idő szerint ragozza. Ha valamiért <b>előre</b> vagy éppen most mondasz köszönetet, <b>ありがとうございます</b> a helyes. Ha a dolog már <b>megtörtént és lezárult</b> (segítettek, kiszolgáltak, véget ért az óra), a múlt idejű <b>ありがとうございました</b> jár. A szállodából távozva ezért az utóbbit mondod.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{旅館|りょかん}のきまり', titleHu: 'A fogadó szabályai',
+      text: [
+        { jp: 'わたしたちの{旅館|りょかん}へようこそ。', hu: 'Üdvözöljük a fogadónkban!' },
+        { jp: '{朝|あさ}ごはんは{七時|しちじ}から{九時|くじ}までで、{晩|ばん}ごはんは{六時|ろくじ}から{八時|はちじ}までです。', hu: 'A reggeli héttől kilencig, a vacsora hattól nyolcig van.' },
+        { jp: '{部屋|へや}に{入|はい}るとき、スリッパをぬいでください。', hu: 'Amikor belép a szobába, vegye le a papucsot.' },
+        { jp: '{温泉|おんせん}は{夜|よる}{十一時|じゅういちじ}まで{入|はい}ってもいいです。', hu: 'A fürdőt este tizenegyig lehet használni.', par: true },
+        { jp: '{温泉|おんせん}に{入|はい}るとき、タオルをお{湯|ゆ}に{入|い}れてはいけません。', hu: 'Fürdés közben a törülközőt nem szabad a vízbe tenni.' },
+        { jp: '{部屋|へや}でたばこを{吸|す}ってはいけません。', hu: 'A szobában tilos dohányozni.' },
+        { jp: '{出|で}かけるとき、かぎをフロントに{預|あず}けてください。', hu: 'Amikor elmegy, adja le a kulcsot a recepción.', par: true },
+        { jp: '{困|こま}ったとき、いつでもフロントに{電話|でんわ}してください。', hu: 'Ha bármi gond adódik, bármikor telefonáljon a recepcióra.' }
+      ],
+      words: [{ jp: '{旅館|りょかん}', hu: 'hagyományos japán fogadó' }, { jp: 'きまり', hu: 'szabály' }, { jp: 'ぬぎます', hu: 'levesz (cipőt, ruhát)' }, { jp: 'タオル', hu: 'törülköző' }, { jp: 'お{湯|ゆ}', hu: 'meleg víz' }, { jp: 'たばこを{吸|す}います', hu: 'dohányzik' }, { jp: 'フロント', hu: 'recepció' }, { jp: '{預|あず}けます', hu: 'megőrzésre lead' }, { jp: '{困|こま}ります', hu: 'bajban van' }],
+      questions: [
+        { q: 'Mikor van a vacsora?', a: 'Hattól nyolcig', wrong: ['Héttől kilencig', 'Hattól kilencig', 'Nyolctól tizenegyig'],
+          why: '{晩|ばん}ごはんは{六時|ろくじ}から{八時|はちじ}までです. A héttől kilencig tartó idő a reggelié: a で a két tagmondatot köti össze.' },
+        { q: 'Mit kell tenni, amikor belépünk a szobába?', a: 'Le kell venni a papucsot', wrong: ['Le kell adni a kulcsot', 'Fel kell venni a papucsot', 'Telefonálni kell a recepcióra'],
+          why: '{部屋|へや}に{入|はい}るとき、スリッパをぬいでください: a 〜るとき a belépés pillanatára (még előtte) vonatkozik.' },
+        { q: 'Mit nem szabad a fürdőben?', a: 'A törülközőt a vízbe tenni', wrong: ['Este tíz után bemenni a fürdőbe', 'Papucs nélkül bemenni', 'Törülközőt bevinni'],
+          why: 'タオルをお{湯|ゆ}に{入|い}れてはいけません: a 〜てはいけません tiltás.' },
+        { q: 'Mi a teendő a kulccsal, ha a vendég elmegy?', a: 'Le kell adni a recepción', wrong: ['Magával kell vinnie', 'A szobában kell hagynia', 'Az ajtóban kell hagynia'],
+          why: '{出|で}かけるとき、かぎをフロントに{預|あず}けてください.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Gyerekkoromban Tokióban laktam." Mi hiányzik?', jp: '{子|こ}ども＿とき、{東京|とうきょう}に{住|す}んでいました。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のとき.' },
       { point: 1, q: '„Amikor ráérek, olvasok." Mi hiányzik?', jp: '{暇|ひま}＿とき、{本|ほん}を{読|よ}みます。', a: 'な', wrong: ['の', 'だ', 'い'], why: 'な-melléknév után: なとき.' },
@@ -7160,6 +7586,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán szereti a hosszú szavakat két-két szótagra rövidíteni: a {関西空港|かんさいくうこう} (Kanszai repülőtér) így lesz <b>{関空|かんくう}</b>, a パーソナルコンピューター pedig <b>パソコン</b>. Japánban nincs nyári időszámítás, ezért az időeltolódás Magyarországhoz képest nyáron hét, télen nyolc óra.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{旅行|りょこう}の{準備|じゅんび}', titleHu: 'Készülődés az útra',
+      text: [
+        { jp: '{来月|らいげつ}、アンナさんといっしょにハンガリーへ{行|い}くことにしました。', hu: 'Úgy döntöttem, jövő hónapban Annával Magyarországra megyek.' },
+        { jp: '{今|いま}、ハンガリーは{春|はる}で、だんだん{暖|あたた}かくなります。', hu: 'Magyarországon most tavasz van, egyre melegebb lesz.' },
+        { jp: 'でも、{夜|よる}は{寒|さむ}いかもしれません。セーターもかばんに{入|い}れました。', hu: 'De este talán hideg lesz. Pulóvert is tettem a táskába.' },
+        { jp: '{先生|せんせい}がハンガリーの{本|ほん}をくださいました。', hu: 'A tanárnő adott nekem egy könyvet Magyarországról.', par: true },
+        { jp: 'その{本|ほん}を{読|よ}んで、ハンガリー{語|ご}のあいさつを{少|すこ}し{覚|おぼ}えました。', hu: 'Elolvastam, és megtanultam néhány magyar köszönést.' },
+        { jp: 'アンナさんのご{両親|りょうしん}には、{日本|にほん}のお{茶|ちゃ}をさしあげるつもりです。', hu: 'Anna szüleinek japán teát szeretnék ajándékozni.' },
+        { jp: '{今日|きょう}は{部屋|へや}をきれいにそうじして、{早|はや}く{寝|ね}ます。', hu: 'Ma szépen kitakarítom a szobámat, és korán lefekszem.', par: true },
+        { jp: '{旅行|りょこう}の{日|ひ}が{近|ちか}くなって、とても{楽|たの}しみです。', hu: 'Közeledik az utazás napja, nagyon várom.' }
+      ],
+      words: [{ jp: '{準備|じゅんび}', hu: 'előkészület' }, { jp: '{春|はる}', hu: 'tavasz' }, { jp: 'だんだん', hu: 'fokozatosan' }, { jp: 'セーター', hu: 'pulóver' }, { jp: 'あいさつ', hu: 'köszönés' }, { jp: '{覚|おぼ}えます', hu: 'megtanul, megjegyez' }, { jp: 'ご{両親|りょうしん}', hu: '(valaki) szülei' }, { jp: 'そうじします', hu: 'takarít' }],
+      questions: [
+        { q: 'Mit döntött el Jui?', a: 'Hogy Annával Magyarországra megy', wrong: ['Hogy egyedül utazik Magyarországra', 'Hogy magyarul fog tanulni', 'Hogy Anna szüleit Japánba hívja'],
+          why: 'アンナさんといっしょにハンガリーへ{行|い}くことにしました: a 〜ことにします a saját döntést fejezi ki.' },
+        { q: 'Miért tett Jui pulóvert a táskába?', a: 'Mert este talán hideg lesz', wrong: ['Mert Magyarországon tél van', 'Mert Anna kérte rá', 'Mert a tanárnő tanácsolta'],
+          why: '{夜|よる}は{寒|さむ}いかもしれません: a 〜かもしれません bizonytalan feltevés („talán").' },
+        { q: 'Mit kapott Jui a tanárnőtől?', a: 'Egy könyvet Magyarországról', wrong: ['Egy doboz finom japán zöld teát', 'Egy meleg pulóvert', 'Egy magyar szótárt'],
+          why: '{先生|せんせい}がハンガリーの{本|ほん}をくださいました: a くださいます a くれます tiszteleti párja.' },
+        { q: 'Mit visz Jui Anna szüleinek?', a: 'Japán teát', wrong: ['Egy könyvet', 'Japán édességet', 'Pulóvert'],
+          why: 'ご{両親|りょうしん}には、{日本|にほん}のお{茶|ちゃ}をさしあげるつもりです: a さしあげます az あげます tiszteleti párja.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Lehet, hogy holnap esni fog." Mi hiányzik?', jp: 'あしたは{雨|あめ}が{降|ふ}る＿。', a: 'かもしれません', wrong: ['ことにします', 'になります', 'てはいけません'], why: 'Bizonytalan lehetőség: rövid alak + かもしれません.' },
       {
@@ -7537,6 +7988,31 @@ const NIHONCORE_COURSE = [
         text: 'A hosszabb vonatút elmaradhatatlan része az <b>{駅弁|えきべん}</b>, az állomáson árult ebéddoboz. Minden vidéknek megvan a maga híres doboza a helyi különlegességekkel, és sokan kifejezetten ezért utaznak. A helyi vonatokon viszont nem illik enni: az csak a távolsági járatokon és a sinkanszenen szokás.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ブダペストに{着|つ}きました', titleHu: 'Megérkeztünk Budapestre',
+      text: [
+        { jp: 'きのう、ブダペストに{着|つ}きました。', hu: 'Tegnap megérkeztünk Budapestre.' },
+        { jp: '{空港|くうこう}から{町|まち}までバスで{行|い}きました。{四十分|よんじゅっぷん}しかかかりませんでした。', hu: 'A reptérről busszal mentünk a városba. Csak negyven percig tartott.' },
+        { jp: '{地下鉄|ちかてつ}に{乗|の}るまえに、{切符|きっぷ}を{買|か}わなければなりません。', hu: 'Mielőtt metróra szállsz, jegyet kell venni.', par: true },
+        { jp: 'でも、アンナさんは{学生|がくせい}の{定期券|ていきけん}があるので、{買|か}わなくてもいいです。', hu: 'De Annának diákbérlete van, ezért neki nem kell vennie.' },
+        { jp: 'わたしは{一日券|いちにちけん}を{一枚|いちまい}だけ{買|か}いました。', hu: 'Én csak egy napijegyet vettem.' },
+        { jp: '{駅|えき}を{出|で}て、ドナウ{川|がわ}の{橋|はし}を{渡|わた}りました。', hu: 'Kijöttünk az állomásról, és átkeltünk a Duna hídján.', par: true },
+        { jp: 'それから、{川|かわ}のそばの{道|みち}を{歩|ある}いていきました。', hu: 'Aztán a folyó menti úton sétáltunk tovább.' },
+        { jp: 'あしたは{早|はや}く{起|お}きなければなりません。{朝|あさ}{七時|しちじ}の{電車|でんしゃ}でエゲルへ{行|い}きますから。', hu: 'Holnap korán kell kelnem. Mert a reggel hétórás vonattal Egerbe megyünk.' }
+      ],
+      words: [{ jp: '{空港|くうこう}', hu: 'repülőtér' }, { jp: '{定期券|ていきけん}', hu: 'bérlet' }, { jp: '{一日券|いちにちけん}', hu: 'napijegy' }, { jp: '{橋|はし}を{渡|わた}ります', hu: 'átmegy a hídon' }, { jp: 'そば', hu: 'mellett, közelében' }, { jp: 'エゲル', hu: 'Eger' }],
+      questions: [
+        { q: 'Mennyi ideig tartott az út a reptérről a városba?', a: 'Csak negyven percig', wrong: ['Több mint egy óráig', 'Csak tíz percig', 'Négy óráig'],
+          why: '{四十分|よんじゅっぷん}しかかかりませんでした: a しか + tagadás = „csak" (kevesebb, mint várnánk).' },
+        { q: 'Miért nem kell Annának jegyet vennie?', a: 'Mert diákbérlete van', wrong: ['Mert Jui vett neki', 'Mert a metró ingyenes', 'Mert gyalog mennek'],
+          why: '{定期券|ていきけん}があるので、{買|か}わなくてもいいです: a 〜なくてもいい = nem szükséges.' },
+        { q: 'Mit vett Jui?', a: 'Egyetlen napijegyet', wrong: ['Két vonaljegyet', 'Egy havi diákbérletet', 'Semmit'],
+          why: '{一日券|いちにちけん}を{一枚|いちまい}だけ{買|か}いました: a だけ = „csak".' },
+        { q: 'Miért kell holnap korán kelni?', a: 'Mert a hétórás vonattal Egerbe mennek', wrong: ['Mert reggel hétre ki kell menni a reptérre', 'Mert reggel jegyet kell venni', 'Mert a hídon akarnak sétálni'],
+          why: '{早|はや}く{起|お}きなければなりません。{朝|あさ}{七時|しちじ}の{電車|でんしゃ}でエゲルへ{行|い}きますから: a から adja meg az okot.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Holnap korán kell kelnem." Mi hiányzik?', jp: 'あした{早|はや}く＿なりません。', a: '{起|お}きなければ', wrong: ['{起|お}きれば', '{起|お}きなくて', '{起|お}きないで'], why: 'ない-alak: {起|お}きない → {起|お}きなければなりません.' },
       { point: 1, q: 'Hogyan mondod: „Be kell vennem (meg kell innom)."', a: '{飲|の}まなければなりません。', wrong: ['{飲|の}みなければなりません。', '{飲|の}まなくてもいいです。', '{飲|の}んではいけません。'], why: '{飲|の}まない → {飲|の}まなければなりません.' },
@@ -7891,6 +8367,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán boltban a reklamáció halkan, szinte bocsánatkérő hangon kezdődik: すみません、さっき{買|か}ったんですが…, és a vevő csak leírja a hibát. Az eladó többnyire azonnal elnézést kér ({申|もう}し{訳|わけ}ございません), és cserét vagy visszatérítést ajánl. Felemelt hang, követelés ritka; aki így tesz, önmagát hozza kínos helyzetbe.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{市場|いちば}で', titleHu: 'A piacon',
+      text: [
+        { jp: '{今日|きょう}、アンナさんと「ナジチャルノク」という{市場|いちば}へ{行|い}きました。', hu: 'Ma Annával a Nagycsarnok nevű piacra mentünk.' },
+        { jp: '{九時|くじ}に{着|つ}きましたが、ドアはもう{開|あ}いていました。', hu: 'Kilenckor értünk oda, de az ajtó már nyitva volt.' },
+        { jp: '{一階|いっかい}には{野菜|やさい}や{果物|くだもの}の{店|みせ}が{並|なら}んでいます。', hu: 'A földszinten zöldség- és gyümölcsárusok sorakoznak.' },
+        { jp: '{赤|あか}い{粉|こな}を{売|う}っている{店|みせ}がありました。', hu: 'Volt egy bolt, ahol piros port árultak.', par: true },
+        { jp: 'パプリカという{調味料|ちょうみりょう}で、スープに{使|つか}います。', hu: 'Paprikának hívják ezt a fűszert, levesbe használják.' },
+        { jp: '{辛|から}いか{甘|あま}いか、わかりませんでした。{聞|き}いてみました。どちらもありました。', hu: 'Nem tudtam, csípős-e vagy édes. Megkérdeztem. Mindkettő volt.' },
+        { jp: 'わたしは{甘|あま}いのを{三|みっ}つ{買|か}いました。{三|みっ}つで{二千|にせん}フォリントでした。', hu: 'Az édesből vettem hármat. A három összesen kétezer forint volt.' },
+        { jp: '{店|みせ}を{出|で}るとき、かばんが{開|あ}いていました。アンナさんがすぐ{閉|し}めました。', hu: 'Amikor kijöttünk a boltból, nyitva volt a táskám. Anna rögtön becsukta.', par: true }
+      ],
+      words: [{ jp: '{市場|いちば}', hu: 'piac' }, { jp: '{並|なら}びます', hu: 'sorakozik' }, { jp: '{粉|こな}', hu: 'por' }, { jp: '{売|う}ります', hu: 'árul' }, { jp: '{調味料|ちょうみりょう}', hu: 'fűszer, ízesítő' }, { jp: '{辛|から}い', hu: 'csípős' }, { jp: '{甘|あま}い', hu: 'édes' }, { jp: 'フォリント', hu: 'forint' }],
+      questions: [
+        { q: 'Milyen volt az ajtó, amikor odaértek?', a: 'Már nyitva volt', wrong: ['Még zárva volt', 'Éppen akkor nyitották ki', 'Nem találták meg'],
+          why: 'ドアはもう{開|あ}いていました: a tárgyatlan {開|あ}きます + ています az állapotot írja le (nyitva van).' },
+        { q: 'Mire használják a paprikát a szöveg szerint?', a: 'Levesbe', wrong: ['Süteménybe', 'Teába', 'Gyümölcs mellé'],
+          why: 'スープに{使|つか}います: a に itt a felhasználás célját jelöli.' },
+        { q: 'Mit vett Jui?', a: 'Három édes paprikát', wrong: ['Három csípős paprikát', 'Egy édeset és két csípőset', 'Csak megnézte, nem vett'],
+          why: '{甘|あま}いのを{三|みっ}つ{買|か}いました: a の a „paprika" szó helyén áll.' },
+        { q: 'Mennyit fizetett Jui?', a: 'A háromért összesen kétezer forintot', wrong: ['Darabjáért kétezer forintot', 'A háromért összesen háromezer forintot', 'Darabjáért kétszáz forintot'],
+          why: '{三|みっ}つで{二千|にせん}フォリントでした: a mennyiség utáni で = „összesen ennyiért".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Kinyitom az ablakot." Mi hiányzik?', jp: '{窓|まど}＿{開|あ}けます。', a: 'を', wrong: ['が', 'に', 'で'], why: 'A {開|あ}けます tárgyas ige: a tárgya を-t kap.' },
       { point: 1, q: '„Kinyílik az ablak." Mi hiányzik?', jp: '{窓|まど}＿{開|あ}きます。', a: 'が', wrong: ['を', 'に', 'で'], why: 'A {開|あ}きます tárgyatlan: ami változik, が-t kap.' },
@@ -8312,6 +8813,31 @@ const NIHONCORE_COURSE = [
         text: 'Januárban, a második hétfőn tartják a <b>felnőtté válás napját</b>. A húszévesek a városházán gyűlnek össze: a lányok hosszú ujjú, díszes kimonóban, a fiúk öltönyben vagy hagyományos viseletben. A nagykorúság határa 2022 óta ugyan 18 év, de alkoholt inni és dohányozni továbbra is csak 20 éves kortól szabad, és a legtöbb város ma is a húszéveseket ünnepli.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{日本|にほん}の{日|ひ}の{準備|じゅんび}', titleHu: 'Készül a Japán nap',
+      text: [
+        { jp: 'あしたは{学校|がっこう}の「{日本|にほん}の{日|ひ}」です。{準備|じゅんび}はもう{終|お}わりました。', hu: 'Holnap lesz az iskolában a „Japán nap". Az előkészületekkel már végeztünk.' },
+        { jp: '{教室|きょうしつ}の{壁|かべ}に{日本|にほん}の{写真|しゃしん}がはってあります。', hu: 'A terem falára japán fényképek vannak kitéve.' },
+        { jp: '{机|つくえ}の{上|うえ}には{折|お}り{紙|がみ}が{並|なら}べてあります。', hu: 'Az asztalokon origamik vannak kirakva.' },
+        { jp: '{折|お}り{紙|がみ}で{作|つく}った{鳥|とり}もあります。この{鳥|とり}は{日本語|にほんご}で「つる」と{言|い}います。', hu: 'Hajtogatott madár is van. Ezt a madarat japánul „curu"-nak hívják.' },
+        { jp: '{暑|あつ}かったので、{窓|まど}を{開|あ}けて、{部屋|へや}を{涼|すず}しくしました。', hu: 'Meleg volt, ezért ablakot nyitottunk, és lehűtöttük a termet.', par: true },
+        { jp: 'ユイさんは「{部屋|へや}をもっと{明|あか}るくしましょう」と{言|い}いました。', hu: 'Jui azt mondta: „Tegyük világosabbá a termet!"' },
+        { jp: 'わたしたちは{電気|でんき}を{全部|ぜんぶ}つけました。', hu: 'Felkapcsoltuk az összes lámpát.' },
+        { jp: '{先生|せんせい}は「とてもきれいにできましたね」と{言|い}いました。', hu: 'A tanár azt mondta: „Nagyon szépen sikerült."' }
+      ],
+      words: [{ jp: '{壁|かべ}', hu: 'fal' }, { jp: 'はります', hu: 'kiragaszt' }, { jp: '{折|お}り{紙|がみ}', hu: 'origami' }, { jp: '{並|なら}べます', hu: 'kirak, sorba rak' }, { jp: '{明|あか}るい', hu: 'világos' }, { jp: '{電気|でんき}をつけます', hu: 'lámpát kapcsol' }, { jp: 'できます', hu: 'elkészül' }],
+      questions: [
+        { q: 'Mi van a terem falán?', a: 'Japán fényképek', wrong: ['Origami madarak', 'Egy nagy térkép', 'Még semmi'],
+          why: '{壁|かべ}に{日本|にほん}の{写真|しゃしん}がはってあります: a 〜てあります valaki által előkészített állapotot jelöl.' },
+        { q: 'Hogy hívják japánul a hajtogatott madarat?', a: 'つる', wrong: ['とり', 'おりがみ', 'かべ'],
+          why: 'この{鳥|とり}は{日本語|にほんご}で「つる」と{言|い}います: a 〜と{言|い}います a megnevezést adja meg (つる = daru).' },
+        { q: 'Miért nyitottak ablakot?', a: 'Mert meleg volt', wrong: ['Mert sötét volt', 'Mert a tanár kérte', 'Mert festékszag volt'],
+          why: '{暑|あつ}かったので、{窓|まど}を{開|あ}けて、{部屋|へや}を{涼|すず}しくしました: a 〜くします = valamilyenné tesz.' },
+        { q: 'Mit javasolt Jui?', a: 'Hogy tegyék világosabbá a termet', wrong: ['Hogy hűtsék le a termet', 'Hogy tegyenek ki több fényképet', 'Hogy hajtogassanak még madarat'],
+          why: '「{部屋|へや}をもっと{明|あか}るくしましょう」と{言|い}いました: a と előtt az idézett mondat áll.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Kérem, halkítsa le a tévét." Mi hiányzik?', jp: 'テレビの{音|おと}を＿してください。', a: '{小|ちい}さく', wrong: ['{小|ちい}さい', '{小|ちい}さに', '{小|ちい}さくて'], why: 'い-melléknév + します: い → く.' },
       { point: 1, q: '„Rendbe tettem a szobát." Mi hiányzik?', jp: '{部屋|へや}を＿しました。', a: 'きれいに', wrong: ['きれいく', 'きれいな', 'きれいで'], why: 'な-melléknév + にします.' },
@@ -8674,6 +9200,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán vendégek Európában a több száz éves kőépületeket csodálják meg: Japánban a hagyományos házak, templomok, szentélyek <b>fából</b> épültek. A földrengések, a tűz és a párás éghajlat miatt kevés az igazán régi épület; sokat újra és újra felépítettek. A híres várak tornyai közül is csak tizenkettő maradt meg eredeti formájában.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'エゲルへの{旅行|りょこう}', titleHu: 'Kirándulás Egerbe',
+      text: [
+        { jp: '{土曜日|どようび}、アンナさんのお{父|とう}さんが{車|くるま}でエゲルへ{連|つ}れていってくれました。', hu: 'Szombaton Anna apukája elvitt minket kocsival Egerbe.' },
+        { jp: '{行|い}くまえに、アンナさんがお{弁当|べんとう}を{作|つく}っておきました。', hu: 'Indulás előtt Anna előre elkészítette az útravalót.' },
+        { jp: '{車|くるま}の{中|なか}で、{音楽|おんがく}を{聞|き}きながらサンドイッチを{食|た}べました。', hu: 'A kocsiban zenét hallgatva szendvicset ettünk.' },
+        { jp: 'エゲルではお{城|しろ}を{見|み}ました。アンナさんがお{城|しろ}の{歴史|れきし}を{説明|せつめい}してくれました。', hu: 'Egerben megnéztük a várat. Anna elmagyarázta nekem a vár történetét.', par: true },
+        { jp: 'わたしはお{父|とう}さんに{写真|しゃしん}をとってもらいました。', hu: 'Megkértem az apukáját, hogy fényképezzen le.' },
+        { jp: 'お{礼|れい}に、{日本|にほん}の{歌|うた}を{教|おし}えてあげました。', hu: 'Köszönetképpen megtanítottam nekik egy japán dalt.' },
+        { jp: '{帰|かえ}りは、みんなで{歌|うた}いながら{帰|かえ}りました。', hu: 'Hazafelé mindannyian énekelve jöttünk.', par: true },
+        { jp: '「{連|つ}れていってくれて、ありがとうございました。」', hu: '„Köszönöm, hogy elvittek."' }
+      ],
+      words: [{ jp: '{連|つ}れていきます', hu: 'elvisz (valakit)' }, { jp: 'サンドイッチ', hu: 'szendvics' }, { jp: '{歴史|れきし}', hu: 'történelem' }, { jp: '{説明|せつめい}します', hu: 'elmagyaráz' }, { jp: 'お{礼|れい}に', hu: 'köszönetképpen' }, { jp: '{歌|うた}います', hu: 'énekel' }],
+      questions: [
+        { q: 'Ki vitte el őket Egerbe?', a: 'Anna apukája', wrong: ['Anna anyukája', 'Ken', 'Egy buszsofőr'],
+          why: 'お{父|とう}さんが{車|くるま}でエゲルへ{連|つ}れていってくれました: a 〜てくれます = valaki megtesz értünk valamit.' },
+        { q: 'Mit készített el Anna indulás előtt?', a: 'Az útravalót', wrong: ['A fényképezőgépet', 'A térképet', 'A jegyeket'],
+          why: 'お{弁当|べんとう}を{作|つく}っておきました: a 〜ておきます = előre megcsinál.' },
+        { q: 'Ki fényképezte le Juit?', a: 'Anna apukája', wrong: ['Anna', 'Egy turista', 'Saját maga'],
+          why: 'お{父|とう}さんに{写真|しゃしん}をとってもらいました: a 〜てもらいます mellett a に jelöli, aki a szívességet teszi.' },
+        { q: 'Mit adott Jui köszönetképpen?', a: 'Megtanított egy japán dalt', wrong: ['Készített egy szendvicset', 'Vett egy ajándékot', 'Mesélt a vár történetéről'],
+          why: 'お{礼|れい}に、{日本|にほん}の{歌|うた}を{教|おし}えてあげました: a 〜てあげます = megtesz valamit másért.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Kölcsönadtam az esernyőmet a barátomnak." Mi hiányzik?', jp: '{友|とも}だちに{傘|かさ}を{貸|か}して＿。', a: 'あげました', wrong: ['くれました', 'もらいました', 'おきました'], why: 'Én teszek szívességet másnak: てあげます.' },
       { point: 2, q: '„Anyám készített nekem uzsonnát." Mi hiányzik?', jp: '{母|はは}がお{弁当|べんとう}を{作|つく}って＿。', a: 'くれました', wrong: ['あげました', 'もらいました', 'いきました'], why: 'Nekem tesz szívességet, és ő az alany: てくれます.' },
@@ -9125,6 +9676,31 @@ const NIHONCORE_COURSE = [
         text: 'A <b>{別腹|べつばら}</b> („külön gyomor") a japánok kedvelt tréfás szava: a főétel után is marad hely az édességnek. Éttermek, cukrászdák reklámjaiban is gyakran látni. Ha jóllaktál, de a süteményt mégis elfogadnád, ezzel a szóval mindenkit megnevettetsz.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'おばあさんの{家|いえ}で', titleHu: 'A nagymamánál',
+      text: [
+        { jp: '{日曜日|にちようび}、アンナさんのおばあさんの{家|いえ}で{昼|ひる}ごはんをいただきました。', hu: 'Vasárnap Anna nagymamájánál ebédeltünk.' },
+        { jp: 'おばあさんはグヤーシュというスープを{作|つく}ってくださいました。', hu: 'A nagymama gulyáslevest főzött nekünk.' },
+        { jp: 'このスープは{牛肉|ぎゅうにく}と{野菜|やさい}で{作|つく}ります。', hu: 'Ez a leves marhahúsból és zöldségből készül.' },
+        { jp: 'とてもおいしくて、わたしはもう{一杯|いっぱい}いただきました。', hu: 'Nagyon finom volt, kértem még egy tányérral.' },
+        { jp: '{料理|りょうり}を{作|つく}るのは{大変|たいへん}ですが、おばあさんは{料理|りょうり}をするのが{好|す}きです。', hu: 'Főzni fárasztó, de a nagymama szeret főzni.', par: true },
+        { jp: '「{作|つく}り{方|かた}を{教|おし}えていただけませんか。」おばあさんは{紙|かみ}に{書|か}いてくださいました。', hu: '„Megtanítaná, hogyan kell elkészíteni?" A nagymama leírta nekem egy papírra.' },
+        { jp: 'ワインはぶどうから{作|つく}ります。わたしはまだ{十七歳|じゅうななさい}ですから、{飲|の}みませんでした。', hu: 'A bor szőlőből készül. Én még csak tizenhét éves vagyok, ezért nem ittam.', par: true },
+        { jp: 'おなかがいっぱいです。もう{何|なに}も{入|はい}りません。', hu: 'Tele vagyok. Már semmi sem fér belém.' }
+      ],
+      words: [{ jp: 'グヤーシュ', hu: 'gulyás' }, { jp: '{牛肉|ぎゅうにく}', hu: 'marhahús' }, { jp: 'もう{一杯|いっぱい}', hu: 'még egy tányérral, pohárral' }, { jp: '{作|つく}り{方|かた}', hu: 'az elkészítés módja' }, { jp: 'ワイン', hu: 'bor' }, { jp: 'ぶどう', hu: 'szőlő' }, { jp: 'おなかがいっぱい', hu: 'jóllakott' }],
+      questions: [
+        { q: 'Mit főzött a nagymama?', a: 'Gulyáslevest', wrong: ['Halászlét', 'Zöldséglevest hús nélkül', 'Szőlőlevest'],
+          why: 'グヤーシュというスープを{作|つく}ってくださいました: a 〜てくださいます a 〜てくれます tiszteleti párja.' },
+        { q: 'Miből készül ez a leves?', a: 'Marhahúsból és zöldségből', wrong: ['Csirkéből és tésztából', 'Halból és paprikából', 'Szőlőből és zöldségből'],
+          why: '{牛肉|ぎゅうにく}と{野菜|やさい}で{作|つく}ります: a で azt az alapanyagot jelöli, amely a kész ételben is felismerhető.' },
+        { q: 'Mit kért Jui a nagymamától?', a: 'Hogy tanítsa meg az elkészítését', wrong: ['Hogy főzzön még egy adagot', 'Hogy töltsön neki egy kis bort', 'Hogy írjon neki levelet'],
+          why: '{作|つく}り{方|かた}を{教|おし}えていただけませんか: a 〜ていただけませんか nagyon udvarias kérés.' },
+        { q: 'Miért nem ivott Jui bort?', a: 'Mert még csak tizenhét éves', wrong: ['Mert nem szereti a szőlőt', 'Mert már tele volt', 'Mert a nagymama nem kínálta'],
+          why: 'まだ{十七歳|じゅうななさい}ですから、{飲|の}みませんでした: a まだ = „még (csak)".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„A tanár kijavította a fogalmazásomat." (tisztelettel) Mi hiányzik?', jp: '{先生|せんせい}が{作文|さくぶん}を{直|なお}して＿。', a: 'くださいました', wrong: ['いただきました', 'さしあげました', 'あげました'], why: 'A tanár az alany (が), nekem tette: てくださいました.' },
       { point: 1, q: '„A tanár úr tanított japánra." Mi hiányzik?', jp: '{先生|せんせい}＿{日本語|にほんご}を{教|おし}えていただきました。', a: 'に', wrong: ['が', 'を', 'で'], why: 'A ていただきます mellett a segítő に-t kap.' },
@@ -9556,6 +10132,32 @@ const NIHONCORE_COURSE = [
         text: 'A japán diák napja nem ér véget az utolsó órával. A legtöbben <b>klubfoglalkozásra</b> járnak — sport, zene, kalligráfia, teaszertartás —, sokszor mindennap, hétvégén is. Este sokan különórára vagy felvételi-előkészítő iskolába mennek. Ezért számít egy japán vendégnek meglepőnek, hogy a magyar diákok délután egyszerűen hazamennek.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'お{礼|れい}の{手紙|てがみ}', titleHu: 'Köszönőlevél',
+      text: [
+        { jp: 'アンナさんのご{家族|かぞく}のみなさん、お{元気|げんき}ですか。', hu: 'Kedves Anna családja, hogy vannak?' },
+        { jp: 'わたしは{先週|せんしゅう}、{日本|にほん}に{帰|かえ}ってきました。', hu: 'Múlt héten hazaérkeztem Japánba.' },
+        { jp: 'ハンガリーでは{本当|ほんとう}にお{世話|せわ}になりました。', hu: 'Igazán köszönöm, hogy Magyarországon gondomat viselték.' },
+        { jp: 'みなさんのおかげで、とても{楽|たの}しい{旅行|りょこう}になりました。', hu: 'Önöknek köszönhetően nagyon jó utazás lett belőle.' },
+        { jp: 'ブダペストだけでなく、エゲルやバラトンも{見|み}ることができました。', hu: 'Nemcsak Budapestet, hanem Egert és a Balatont is láthattam.', par: true },
+        { jp: 'おばあさんのスープを{日本|にほん}で{作|つく}ってみました。{家族|かぞく}も{喜|よろこ}んでいます。', hu: 'Itthon megpróbáltam megfőzni a nagymama levesét. A családom is örül neki.' },
+        { jp: '{日本|にほん}はだんだん{暑|あつ}くなってきました。', hu: 'Japánban egyre melegebb lett.', par: true },
+        { jp: 'これからもハンガリー{語|ご}の{勉強|べんきょう}を{続|つづ}けていきます。', hu: 'Ezután is folytatom a magyartanulást.' },
+        { jp: '{今度|こんど}は{日本|にほん}へ{遊|あそ}びに{来|き}てください。', hu: 'Legközelebb jöjjenek el Japánba vendégségbe!' }
+      ],
+      words: [{ jp: 'お{世話|せわ}になりました', hu: 'köszönöm a gondoskodást' }, { jp: '{本当|ほんとう}に', hu: 'igazán' }, { jp: 'バラトン', hu: 'a Balaton' }, { jp: '{喜|よろこ}びます', hu: 'örül' }, { jp: '{続|つづ}けます', hu: 'folytat' }, { jp: '{遊|あそ}びに{来|き}ます', hu: 'vendégségbe jön' }],
+      questions: [
+        { q: 'Mikor ért haza Jui Japánba?', a: 'Múlt héten', wrong: ['Tegnap', 'Múlt hónapban', 'Még úton van'],
+          why: '{先週|せんしゅう}、{日本|にほん}に{帰|かえ}ってきました: a 〜てきます a beszélő felé (ide) irányuló mozgás.' },
+        { q: 'Mit látott Jui Magyarországon?', a: 'Budapestet, Egert és a Balatont', wrong: ['Csak Budapestet', 'Budapestet és Egert, a Balatont nem', 'Csak Egert és a Balatont'],
+          why: 'ブダペストだけでなく、エゲルやバラトンも: a 〜だけでなく、〜も = nemcsak…, hanem… is.' },
+        { q: 'Mit próbált ki Jui otthon?', a: 'Megfőzte a nagymama levesét', wrong: ['Elénekelt egy magyar dalt', 'Fényképalbumot készített', 'Megkóstolt egy magyar bort'],
+          why: 'おばあさんのスープを{日本|にほん}で{作|つく}ってみました: a 〜てみます = kipróbál.' },
+        { q: 'Mit tervez Jui ezután?', a: 'Tovább tanul magyarul', wrong: ['Visszaköltözik Magyarországra', 'Abbahagyja a nyelvtanulást', 'Szakácsnak tanul'],
+          why: 'ハンガリー{語|ご}の{勉強|べんきょう}を{続|つづ}けていきます: a 〜ていきます itt a jövőbe tartó folytatást jelzi.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Elugrom innivalóért, és visszajövök." Mi hiányzik?', jp: '{飲|の}み{物|もの}を{買|か}って＿。', a: 'きます', wrong: ['いきます', 'あります', 'います'], why: 'Megteszem és visszajövök: てきます.' },
       { point: 1, q: 'Mit mondasz, amikor elindulsz otthonról?', a: '{行|い}ってきます。', wrong: ['{行|い}っていきます。', 'ただいま。', 'おかえりなさい。'], why: '{行|い}ってきます: elmegyek, és visszajövök.' },
@@ -9984,6 +10586,31 @@ const NIHONCORE_COURSE = [
         text: 'Japánul minden mondat elárulja, milyen viszonyban vagy a másikkal. Ismeretlennel, idősebbel, hivatalos helyzetben <b>udvarias alak</b> (です / ます) jár; barátok, családtagok, osztálytársak között <b>rövid alak</b>. A váltás nem magától történik: a japánok gyakran megbeszélik, mikor térnek át a közvetlen hangra. Kezdőként az udvarias alak mindig biztonságos — a rövid alakot viszont értened kell, mert körülötted mindenki azt használja.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{空港|くうこう}で', titleHu: 'A repülőtéren',
+      text: [
+        { jp: 'やっと{日本|にほん}の{空港|くうこう}に{着|つ}きました。', hu: 'Végre megérkeztem a japán reptérre.' },
+        { jp: 'ケンさんとユイさんが{迎|むか}えに{来|く}るはずです。', hu: 'Kennek és Juinak ki kell jönnie elém.' },
+        { jp: 'でも、{出口|でぐち}にだれもいません。{二人|ふたり}がどこにいるか、わかりません。', hu: 'De a kijáratnál nincs senki. Nem tudom, hol vannak.' },
+        { jp: '{飛行機|ひこうき}が{一時間|いちじかん}{早|はや}く{着|つ}いたので、たぶんまだ{来|き}ていないのだろうと{思|おも}います。', hu: 'A gép egy órával korábban érkezett, úgyhogy valószínűleg még nem értek ide.', par: true },
+        { jp: 'もしかしたら、{道|みち}が{混|こ}んでいるのかもしれません。', hu: 'Az is lehet, hogy dugó van az úton.' },
+        { jp: 'わたしのメールを{読|よ}んだかどうか、{電話|でんわ}で{聞|き}いてみます。', hu: 'Felhívom őket, megkérdezem, olvasták-e az e-mailemet.' },
+        { jp: 'そのとき、ユイさんが{走|はし}ってきました。「アンナさん、ごめんね。{待|ま}った？」', hu: 'Ekkor odafutott Jui. „Anna, bocsi! Sokat vártál?"', par: true },
+        { jp: 'きっと{楽|たの}しい{一年|いちねん}になるでしょう。', hu: 'Biztosan jó évem lesz.' }
+      ],
+      words: [{ jp: 'やっと', hu: 'végre' }, { jp: '{迎|むか}えに{来|き}ます', hu: 'elé jön' }, { jp: '{出口|でぐち}', hu: 'kijárat' }, { jp: '{混|こ}んでいます', hu: 'zsúfolt; dugó van' }, { jp: '{走|はし}ってきます', hu: 'odafut' }],
+      questions: [
+        { q: 'Kinek kell Anna elé jönnie?', a: 'Kennek és Juinak', wrong: ['Csak Juinak', 'A fogadócsaládnak', 'A tanárának'],
+          why: 'ケンさんとユイさんが{迎|むか}えに{来|く}るはずです: a 〜はずです azt fejezi ki, hogy valaminek így kell lennie.' },
+        { q: 'Miért nincsenek még ott Anna szerint?', a: 'Mert a gép egy órával korábban érkezett', wrong: ['Mert elfelejtették, melyik nap jön', 'Mert rossz kijárathoz mentek', 'Mert Anna nem írt nekik'],
+          why: '{一時間|いちじかん}{早|はや}く{着|つ}いたので、たぶんまだ{来|き}ていないのだろうと{思|おも}います: a たぶん 〜だろう feltevés.' },
+        { q: 'Mit akar Anna megkérdezni telefonon?', a: 'Hogy olvasták-e az e-mailjét', wrong: ['Hogy melyik kijáratnál vannak', 'Hogy mikor indul a busz', 'Hogy hol lehet taxit fogni'],
+          why: 'メールを{読|よ}んだかどうか: a 〜かどうか az eldöntendő kérdést építi be a mondatba („vajon … -e").' },
+        { q: 'Mi történik a végén?', a: 'Jui odafut Annához', wrong: ['Anna taxiba ül', 'Anna egyedül vár tovább', 'Ken felhívja Annát'],
+          why: 'そのとき、ユイさんが{走|はし}ってきました.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Azt hiszem, a gép késni fog." Mi hiányzik?', jp: '{飛行機|ひこうき}は{遅|おく}れる＿と{思|おも}います。', a: 'だろう', wrong: ['です', 'ます', 'かどうか'], why: 'Feltevés: rövid alak + だろう + と{思|おも}います.' },
       { point: 2, q: '„Tanakának ma elvileg szabadnapja van." Mi hiányzik?', jp: '{田中|たなか}さんは{今日|きょう}{休|やす}み＿はずです。', a: 'の', wrong: ['な', 'だ', 'に'], why: 'Főnév után: のはずです.' },
@@ -10413,6 +11040,31 @@ const NIHONCORE_COURSE = [
         text: 'A <b>{将来|しょうらい}の{夢|ゆめ}</b> — „a jövőbeli álmom" — a japán iskola állandó fogalmazástémája. A kicsik sportolók, cukrászok, tanárok szeretnének lenni; a nagyobbak álmai józanabbak. Az elhelyezkedés rendje is más: az egyetemisták már az utolsó év előtt nekilátnak az álláskeresésnek, és a cégek az új végzősöket egyszerre, <b>áprilisban</b> veszik fel. Aki ezt a hullámot lekési, annak sokkal nehezebb.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'わたしの{夢|ゆめ}', titleHu: 'Az álmom',
+      text: [
+        { jp: 'わたしの{夢|ゆめ}は{通訳|つうやく}になることです。', hu: 'Az álmom, hogy tolmács legyek.' },
+        { jp: '{大学|だいがく}を{卒業|そつぎょう}したら、{日本|にほん}の{会社|かいしゃ}で{働|はたら}こうと{思|おも}っています。', hu: 'Ha elvégzem az egyetemet, japán cégnél szeretnék dolgozni.' },
+        { jp: '{来年|らいねん}の{七月|しちがつ}までに、{日本語|にほんご}の{試験|しけん}を{受|う}けようと{思|おも}います。', hu: 'Jövő júliusig le szeretném tenni a japán nyelvvizsgát.' },
+        { jp: '{毎晩|まいばん}、{晩|ばん}ごはんを{食|た}べたら、{二時間|にじかん}{勉強|べんきょう}します。', hu: 'Minden este vacsora után két órát tanulok.' },
+        { jp: 'ユイさんの{夢|ゆめ}は{小学校|しょうがっこう}の{先生|せんせい}になることです。', hu: 'Jui álma, hogy általános iskolai tanár legyen.', par: true },
+        { jp: '「{夏休|なつやす}みになったら、{子|こ}どものキャンプを{手伝|てつだ}おうと{思|おも}っているんだ」と{言|い}いました。', hu: 'Azt mondta: „Ha itt a nyári szünet, egy gyerektáborban fogok segíteni."' },
+        { jp: '{今日|きょう}は{春|はる}らしい{暖|あたた}かい{日|ひ}です。', hu: 'Ma igazi tavaszias, meleg nap van.', par: true },
+        { jp: '{授業|じゅぎょう}が{終|お}わったら、ユイさんと{公園|こうえん}で{勉強|べんきょう}しようと{思|おも}います。', hu: 'Ha vége az óráknak, Juival a parkban fogunk tanulni.' }
+      ],
+      words: [{ jp: '{夢|ゆめ}', hu: 'álom' }, { jp: '{通訳|つうやく}', hu: 'tolmács' }, { jp: '{卒業|そつぎょう}します', hu: 'elvégzi (az iskolát)' }, { jp: '{試験|しけん}を{受|う}けます', hu: 'vizsgázik' }, { jp: '{毎晩|まいばん}', hu: 'minden este' }, { jp: '{小学校|しょうがっこう}', hu: 'általános iskola' }, { jp: 'キャンプ', hu: 'tábor' }, { jp: '{手伝|てつだ}います', hu: 'segít' }],
+      questions: [
+        { q: 'Mi szeretne lenni Anna?', a: 'Tolmács', wrong: ['Tanár', 'Orvos', 'Mérnök'],
+          why: 'わたしの{夢|ゆめ}は{通訳|つうやく}になることです. A tanár ({先生|せんせい}) Jui álma.' },
+        { q: 'Meddig szeretné Anna letenni a nyelvvizsgát?', a: 'Jövő júliusig', wrong: ['Idén júliusig', 'A diploma megszerzése után', 'Jövő tavaszig'],
+          why: '{来年|らいねん}の{七月|しちがつ}までに: a までに határidőt jelöl („legkésőbb addigra").' },
+        { q: 'Mit tervez Jui a nyári szünetre?', a: 'Gyerektáborban segít', wrong: ['Japán cégnél dolgozik', 'Nyelvvizsgára készül', 'A parkban tanul'],
+          why: '{夏休|なつやす}みになったら、{子|こ}どものキャンプを{手伝|てつだ}おうと{思|おも}っている: a szándékos alak + と{思|おも}う tervet fejez ki.' },
+        { q: 'Mit csinál Anna minden este vacsora után?', a: 'Két órát tanul', wrong: ['Juival a parkba megy', 'Filmet néz', 'Két órát dolgozik'],
+          why: '{晩|ばん}ごはんを{食|た}べたら、{二時間|にじかん}{勉強|べんきょう}します: itt a 〜たら = „miután".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Ha esik az eső, nem megyek." Mi hiányzik?', jp: '{雨|あめ}が＿、{行|い}きません。', a: '{降|ふ}ったら', wrong: ['{降|ふ}るたら', '{降|ふ}りたら', '{降|ふ}ってら'], why: 'た-alak + ら: {降|ふ}った → {降|ふ}ったら.' },
       { point: 1, q: '„Ha olcsó, megveszem." Mi hiányzik?', jp: '＿、{買|か}います。', a: '{安|やす}かったら', wrong: ['{安|やす}いたら', '{安|やす}いだったら', '{安|やす}くたら'], why: 'い-melléknév: い → かったら.' },
@@ -10882,6 +11534,31 @@ const NIHONCORE_COURSE = [
         text: 'A visszautasításnak megvan a rendje. Először <b>megköszönöd</b> a meghívást; aztán homályos okot mondasz, félbehagyott mondattal ({今日|きょう}はちょっと…); végül jelzed, hogy máskor szívesen mennél (また{誘|さそ}ってください). A meghívó így válaszol: {残念|ざんねん}ですね。では、{次|つぎ}の{機会|きかい}に. Nyers „nem megyek" senkitől sem hangzik el.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'パーティーの{準備|じゅんび}', titleHu: 'Készül a buli',
+      text: [
+        { jp: '{土曜日|どようび}にクラスのパーティーをします。', hu: 'Szombaton osztálybulit tartunk.' },
+        { jp: 'わたしは{料理|りょうり}があまりできませんが、ハンガリーのスープは{作|つく}れます。', hu: 'Nem nagyon tudok főzni, de magyar levest tudok készíteni.' },
+        { jp: 'ケンさんはギターが{弾|ひ}けるので、{音楽|おんがく}をお{願|ねが}いしました。', hu: 'Ken tud gitározni, ezért őt kértük meg a zenére.' },
+        { jp: 'マリアさんはケーキとかクッキーとか、{甘|あま}いものが{上手|じょうず}に{作|つく}れます。', hu: 'Maria ügyesen tud tortát, kekszet, ilyesmit sütni.' },
+        { jp: 'マリアさんの{作|つく}ったケーキは、おいしいにきまっています。', hu: 'Maria tortája biztosan finom lesz.' },
+        { jp: 'リーさんは{車|くるま}が{運転|うんてん}できるので、{飲|の}み{物|もの}を{運|はこ}んでくれます。', hu: 'Li tud vezetni, ezért ő hozza el az italokat.', par: true },
+        { jp: '{部屋|へや}の{広|ひろ}さは{十分|じゅうぶん}ですが、いすが{足|た}りません。', hu: 'A terem elég nagy, de nincs elég szék.' },
+        { jp: 'となりの{教室|きょうしつ}から{借|か}りられるかどうか、{先生|せんせい}に{聞|き}いてみます。', hu: 'Megkérdezem a tanárt, kölcsönkérhetünk-e a szomszéd teremből.' }
+      ],
+      words: [{ jp: 'ギターを{弾|ひ}きます', hu: 'gitározik' }, { jp: '{運転|うんてん}します', hu: 'vezet' }, { jp: '{運|はこ}びます', hu: 'szállít, visz' }, { jp: '{十分|じゅうぶん}', hu: 'elegendő' }, { jp: '{足|た}ります', hu: 'elég' }, { jp: '{借|か}ります', hu: 'kölcsönkér' }],
+      questions: [
+        { q: 'Mit tud Anna készíteni?', a: 'Magyar levest', wrong: ['Tortát és kekszet', 'Japán ételeket', 'Semmit sem'],
+          why: 'ハンガリーのスープは{作|つく}れます: {作|つく}れます a {作|つく}ります ható alakja („tud készíteni").' },
+        { q: 'Miért Kent kérték meg a zenére?', a: 'Mert tud gitározni', wrong: ['Mert sok lemeze van', 'Mert szépen énekel', 'Mert van autója'],
+          why: 'ギターが{弾|ひ}けるので: a ható alak mellett a tárgyat が jelöli.' },
+        { q: 'Ki hozza az italokat, és miért?', a: 'Li, mert tud vezetni', wrong: ['Ken, mert közel lakik', 'Maria, mert ő vásárol be', 'Anna, mert ráér'],
+          why: 'リーさんは{車|くるま}が{運転|うんてん}できるので、{飲|の}み{物|もの}を{運|はこ}んでくれます.' },
+        { q: 'Mi a gond a teremmel?', a: 'Nincs elég szék', wrong: ['Túl kicsi', 'Túl messze van', 'Nincs benne asztal'],
+          why: '{広|ひろ}さは{十分|じゅうぶん}ですが、いすが{足|た}りません: a {広|ひろ}さ („nagyság") a {広|ひろ}い melléknévből képzett főnév.' }
+      ]
+    },
     quiz: [
       { point: 1, q: 'Mi a {書|か}きます ható alakja?', a: '{書|か}けます', wrong: ['{書|か}かれます', '{書|か}きられます', '{書|か}こます'], why: '1. csoport: く → け + ます.' },
       { point: 2, q: 'Mi a {食|た}べます ható alakja?', a: '{食|た}べられます', wrong: ['{食|た}べえます', '{食|た}べできます', '{食|た}びられます'], why: '2. csoport: る → られます.' },
@@ -11268,6 +11945,31 @@ const NIHONCORE_COURSE = [
         text: 'Tokió híres negyede, <b>Akihabara</b> a háború után rádióalkatrészek piacaként indult, később „az elektronika városa" lett. Ma legalább annyian keresik fel az anime, a manga és a videójátékok miatt: figurák, képregények, játéktermek, tematikus kávézók sorakoznak a régi alkatrészboltok mellett. A két világ jól megfér egymás mellett.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{新|あたら}しいパソコン', titleHu: 'Az új számítógép',
+      text: [
+        { jp: 'パソコンが{古|ふる}くなったので、{新|あたら}しいのを{買|か}うことにしました。', hu: 'Elöregedett a gépem, ezért úgy döntöttem, újat veszek.' },
+        { jp: '{電気屋|でんきや}の{店員|てんいん}に{聞|き}きました。「{軽|かる}いパソコンはありますか。」', hu: 'Megkérdeztem az elektronikai bolt eladóját: „Van könnyű gépük?"' },
+        { jp: '「{軽|かる}いのなら、こちらがおすすめでございます。」', hu: '„Ha könnyűt keres, ezt ajánlom."' },
+        { jp: 'そのパソコンは{軽|かる}いし、{画面|がめん}もきれいだし、とてもいいと{思|おも}いました。', hu: 'Az a gép könnyű is, a kijelzője is szép: nagyon jónak találtam.' },
+        { jp: 'でも、{値段|ねだん}は{十五万円|じゅうごまんえん}でした。', hu: 'De az ára százötvenezer jen volt.', par: true },
+        { jp: '「もう{少|すこ}し{安|やす}ければ、{買|か}えるんですが…。」', hu: '„Ha egy kicsit olcsóbb volna, meg tudnám venni…"' },
+        { jp: '「{来週|らいしゅう}になれば、セールが{始|はじ}まります。{二割|にわり}{安|やす}くなりますよ。」', hu: '„Jövő héten kezdődik az akció. Húsz százalékkal olcsóbb lesz."' },
+        { jp: '{来週|らいしゅう}なら{買|か}えます。{人気|にんき}があるにちがいありませんから、{朝|あさ}{早|はや}く{行|い}くつもりです。', hu: 'Jövő héten meg tudom venni. Biztosan népszerű, ezért reggel korán megyek.', par: true }
+      ],
+      words: [{ jp: 'パソコン', hu: 'számítógép' }, { jp: '{電気屋|でんきや}', hu: 'elektronikai bolt' }, { jp: '{軽|かる}い', hu: 'könnyű' }, { jp: 'おすすめ', hu: 'ajánlat' }, { jp: '{画面|がめん}', hu: 'kijelző' }, { jp: '{値段|ねだん}', hu: 'ár' }, { jp: 'セール', hu: 'akció' }, { jp: '{二割|にわり}', hu: 'húsz százalék' }],
+      questions: [
+        { q: 'Miért vesz Anna új gépet?', a: 'Mert a régi elöregedett', wrong: ['Mert a régit ellopták', 'Mert ajándékba szánja', 'Mert éppen akció van'],
+          why: 'パソコンが{古|ふる}くなったので、{新|あたら}しいのを{買|か}うことにしました.' },
+        { q: 'Milyen gépet keres Anna?', a: 'Könnyűt', wrong: ['Nagy kijelzőset', 'A legolcsóbbat', 'Használtat'],
+          why: '「{軽|かる}いパソコンはありますか」 — az eladó is erre felel: {軽|かる}いのなら („ha könnyűről van szó").' },
+        { q: 'Miért nem vette meg aznap a gépet?', a: 'Mert drága volt', wrong: ['Mert nehéz volt', 'Mert nem volt raktáron', 'Mert nem tetszett a kijelzője'],
+          why: 'もう{少|すこ}し{安|やす}ければ、{買|か}えるんですが: a 〜ば feltétel — „ha olcsóbb volna, meg tudnám venni".' },
+        { q: 'Mi lesz jövő héten?', a: 'Akció kezdődik, a gép olcsóbb lesz', wrong: ['Új típus érkezik, a régit már nem árulják', 'A bolt egy hétre bezár', 'A gép ára tovább emelkedik'],
+          why: '{来週|らいしゅう}になれば、セールが{始|はじ}まります。{二割|にわり}{安|やす}くなりますよ.' }
+      ]
+    },
     quiz: [
       { point: 1, q: 'Mi a {行|い}きます ば-alakja?', a: '{行|い}けば', wrong: ['{行|い}かば', '{行|い}きば', '{行|い}くば'], why: '1. csoport: く → けば.' },
       { point: 1, q: 'Mi az いい ば-alakja?', a: 'よければ', wrong: ['いければ', 'いいば', 'よくば'], why: 'Az いい rendhagyó: よければ.' },
@@ -11634,6 +12336,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán iskolákban a tanév <b>áprilisban</b> kezdődik, és sok helyen egy-két évente újraosztják az osztályokat. A kihirdetés napja nagy izgalom: ki kivel kerül össze, ki lesz az osztályfőnök? A gyerekek így sokkal több társukat ismerik meg — cserébe a barátoktól időnként el kell válni.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{新|あたら}しい{学期|がっき}', titleHu: 'Az új félév',
+      text: [
+        { jp: '{今日|きょう}から{新|あたら}しい{学期|がっき}です。わたしは{今|いま}、{教室|きょうしつ}に{着|つ}いたところです。', hu: 'Ma kezdődik az új félév. Éppen most értem a terembe.' },
+        { jp: 'マリアさんはとなりの{席|せき}で{宿題|しゅくだい}をしているところです。', hu: 'Maria a mellettem lévő helyen éppen a háziját írja.' },
+        { jp: '{授業|じゅぎょう}はこれから{始|はじ}まるところです。', hu: 'Az óra mindjárt kezdődik.' },
+        { jp: '{掲示板|けいじばん}のお{知|し}らせを{読|よ}みました。{来週|らいしゅう}の{金曜日|きんようび}にテストがあるということです。', hu: 'Elolvastam a hirdetményt a táblán. Eszerint jövő pénteken teszt lesz.', par: true },
+        { jp: 'テストは{日本|にほん}の{文化|ぶんか}についてです。', hu: 'A teszt a japán kultúráról szól.' },
+        { jp: '{先生|せんせい}は、{辞書|じしょ}を{持|も}ってこないように{言|い}いました。', hu: 'A tanárnő azt mondta, ne hozzunk szótárt.' },
+        { jp: 'でも、わたしはその{日|ひ}、{病院|びょういん}へ{行|い}かなければなりません。', hu: 'Nekem viszont aznap orvoshoz kell mennem.', par: true },
+        { jp: '「テストを{月曜日|げつようび}に{受|う}けたいんですが、よろしいでしょうか。」', hu: '„Hétfőn szeretném megírni a tesztet. Lehetséges volna?"' }
+      ],
+      words: [{ jp: '{学期|がっき}', hu: 'félév' }, { jp: '{掲示板|けいじばん}', hu: 'hirdetőtábla' }, { jp: 'お{知|し}らせ', hu: 'hirdetmény' }, { jp: '{文化|ぶんか}', hu: 'kultúra' }, { jp: '{持|も}ってきます', hu: 'magával hoz' }],
+      questions: [
+        { q: 'Mit csinál éppen Maria?', a: 'A háziját írja', wrong: ['A hirdetményt olvassa', 'A tanárnővel beszél', 'Most lép be a terembe'],
+          why: '{宿題|しゅくだい}をしているところです: a 〜ているところ = éppen csinálja.' },
+        { q: 'Miről szól a teszt?', a: 'A japán kultúráról', wrong: ['A japán nyelvtanról', 'A kanjikról', 'A japán történelemről'],
+          why: '{日本|にほん}の{文化|ぶんか}についてです: a 〜について = „-ról, -ről".' },
+        { q: 'Mit mondott a tanárnő a szótárról?', a: 'Hogy ne hozzanak', wrong: ['Hogy mindenki hozzon', 'Hogy csak a cserediákok hozhatnak', 'Hogy a teremben lesz szótár'],
+          why: '{辞書|じしょ}を{持|も}ってこないように{言|い}いました: a 〜ないように{言|い}います felszólítást ad tovább („azt mondta, ne…").' },
+        { q: 'Miért kér Anna másik időpontot?', a: 'Mert aznap orvoshoz kell mennie', wrong: ['Mert nem tudott felkészülni', 'Mert aznap elutazik', 'Mert pénteken dolgozik'],
+          why: 'その{日|ひ}、{病院|びょういん}へ{行|い}かなければなりません.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Éppen indulni készülök." Mi hiányzik?', jp: 'これから＿ところです。', a: '{出|で}かける', wrong: ['{出|で}かけた', '{出|で}かけている', '{出|で}かけて'], why: 'Közvetlenül előtte: szótári alak + ところです.' },
       { point: 3, q: '„Éppen most érkeztem." Mi hiányzik?', jp: 'たった{今|いま}＿ところです。', a: '{着|つ}いた', wrong: ['{着|つ}く', '{着|つ}いている', '{着|つ}いて'], why: 'Épp befejeződött: た-alak + ところです.' },
@@ -12046,6 +12773,30 @@ const NIHONCORE_COURSE = [
         text: 'A japán családban a nap legfontosabb étkezése a <b>vacsora</b>: rizs, leves és több kisebb fogás, minden este frissen főzve. A hideg vacsora — szendvics, felvágott — egy japánnak hiányérzetet kelt. A hagyományos terítés elve: egy leves, három fogás, mellé rizs.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{大学祭|だいがくさい}のポスター', titleHu: 'Plakát az egyetemi fesztiválra',
+      text: [
+        { jp: '{来月|らいげつ}の{大学祭|だいがくさい}で、わたしたちのクラスはハンガリー{料理|りょうり}の{店|みせ}を{出|だ}します。', hu: 'A jövő havi egyetemi fesztiválon az osztályunk magyar ételeket árul.' },
+        { jp: 'わたしはポスターを{作|つく}りました。{三時間|さんじかん}かかったのに、あまり{上手|じょうず}にできませんでした。', hu: 'Én készítettem a plakátot. Három órámba telt, mégsem sikerült valami jól.' },
+        { jp: 'ケンさんに{見|み}せて、「{日本語|にほんご}を{直|なお}してもらえませんか」と{頼|たの}みました。', hu: 'Megmutattam Kennek, és megkértem: „Kijavítanád a japánomat?"', par: true },
+        { jp: 'ケンさんは「『{食|た}べれます』より『{食|た}べられます』のほうが{自然|しぜん}だと{思|おも}うよ」と{言|い}いました。', hu: 'Ken azt mondta: „Szerintem a »taberaremasu« természetesebb, mint a »taberemasu«."' },
+        { jp: '{好|す}きな{色|いろ}は{人|ひと}によって{違|ちが}いますから、{色|いろ}は{変|か}えなくてもかまいません。', hu: 'Hogy ki milyen színt szeret, az emberenként más, úgyhogy a színeken nem kell változtatni.' },
+        { jp: '「{字|じ}をもう{少|すこ}し{大|おお}きくしてもかまいませんか。」「うん、そのほうがいいね。」', hu: '„Nem baj, ha a betűket kicsit nagyobbra veszem?" „Sőt, úgy jobb lesz."' },
+        { jp: 'ケンさんのアドバイスによって、ポスターはずっとよくなりました。', hu: 'Ken tanácsainak köszönhetően a plakát sokkal jobb lett.', par: true }
+      ],
+      words: [{ jp: '{大学祭|だいがくさい}', hu: 'egyetemi fesztivál' }, { jp: 'ポスター', hu: 'plakát' }, { jp: '{店|みせ}を{出|だ}します', hu: 'standot állít' }, { jp: '{直|なお}します', hu: 'kijavít' }, { jp: '{頼|たの}みます', hu: 'megkér' }, { jp: '{自然|しぜん}', hu: 'természetes' }, { jp: '{違|ちが}います', hu: 'különbözik' }, { jp: '{変|か}えます', hu: 'megváltoztat' }, { jp: '{字|じ}', hu: 'betű, írásjegy' }, { jp: 'ずっと', hu: 'sokkal' }],
+      questions: [
+        { q: 'Mit árul az osztály a fesztiválon?', a: 'Magyar ételeket', wrong: ['Japán ételeket', 'Plakátokat', 'Használt könyveket'],
+          why: 'ハンガリー{料理|りょうり}の{店|みせ}を{出|だ}します.' },
+        { q: 'Mi volt a baj a plakáttal?', a: 'Sokáig készült, mégsem lett jó', wrong: ['Túl hamar elkészült', 'Elveszett a fesztivál előtt', 'Túl nagyra sikerült'],
+          why: '{三時間|さんじかん}かかったのに、あまり{上手|じょうず}にできませんでした: a のに csalódott „mégis, pedig".' },
+        { q: 'Mit kért Anna Kentől?', a: 'Hogy javítsa ki a japánját', wrong: ['Hogy rajzolja újra a plakátot', 'Hogy válasszon más színeket', 'Hogy fordítsa le magyarra'],
+          why: '{日本語|にほんご}を{直|なお}してもらえませんか: a 〜てもらえませんか udvarias kérés.' },
+        { q: 'Min nem kell változtatni?', a: 'A színeken', wrong: ['A betűk méretén', 'A japán szövegen', 'A plakát méretén'],
+          why: '{色|いろ}は{変|か}えなくてもかまいません: a 〜なくてもかまいません = nem baj, ha nem. A betűket viszont nagyobbra veszik.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Bevettem a gyógyszert, mégsem megy le a lázam." Mi hiányzik?', jp: '{薬|くすり}を{飲|の}んだ＿、{熱|ねつ}が{下|さ}がりません。', a: 'のに', wrong: ['ので', 'から', 'なら'], why: 'A várttal ellentétes eredmény: のに.' },
       { point: 1, q: '„Vasárnap van, mégis dolgoznom kell." Mi hiányzik?', jp: '{日曜日|にちようび}＿のに、{働|はたら}かなければなりません。', a: 'な', wrong: ['だ', 'の', 'で'], why: 'Főnév után: なのに.' },
@@ -12479,6 +13230,31 @@ const NIHONCORE_COURSE = [
         text: 'A tea neve a világ nyelveiben két alakban él, mert Kínából két úton terjedt el. A szárazföldi úton az északi kínai <b>cha</b> jutott tovább: innen a japán お{茶|ちゃ}, az orosz, a török, a hindi szó. A tengeri úton a holland hajósok egy déli kínai nyelvjárás <b>te</b> alakját vitték Európába: ebből lett az angol tea, a német Tee — és a magyar tea is.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'はじめての{大阪|おおさか}', titleHu: 'Először Oszakában',
+      text: [
+        { jp: '{先週|せんしゅう}、はじめて{大阪|おおさか}へ{行|い}きました。', hu: 'Múlt héten először jártam Oszakában.' },
+        { jp: '{東京|とうきょう}にくらべて、{大阪|おおさか}の{人|ひと}は{話|はな}すのが{速|はや}いです。', hu: 'Tokióhoz képest az oszakaiak gyorsabban beszélnek.' },
+        { jp: 'お{城|しろ}への{道|みち}がわからなかったので、{駅|えき}の{前|まえ}で{聞|き}きました。', hu: 'Nem tudtam az utat a várhoz, ezért az állomás előtt megkérdeztem.', par: true },
+        { jp: '「この{道|みち}をまっすぐ{行|い}って、{二|ふた}つ{目|め}の{角|かど}を{右|みぎ}に{曲|ま}がると、{公園|こうえん}があります。」', hu: '„Ha egyenesen megy ezen az úton, és a második sarkon jobbra fordul, lesz egy park."' },
+        { jp: '「{公園|こうえん}に{入|はい}ると、お{城|しろ}が{見|み}えますよ。」', hu: '„Ha bemegy a parkba, már látszik a vár."' },
+        { jp: '{公園|こうえん}では、{鳥|とり}の{声|こえ}が{聞|き}こえました。', hu: 'A parkban madárcsicsergés hallatszott.', par: true },
+        { jp: 'お{城|しろ}の{前|まえ}に{人|ひと}がたくさん{並|なら}んでいました。{人気|にんき}があるようです。', hu: 'A vár előtt sokan álltak sorba. Úgy látszik, népszerű.' },
+        { jp: 'はじめは{関西弁|かんさいべん}がぜんぜんわかりませんでしたが、{三日目|みっかめ}には{少|すこ}しわかるようになりました。', hu: 'Eleinte egyáltalán nem értettem a kanszai nyelvjárást, de a harmadik napra már kicsit érteni kezdtem.' }
+      ],
+      words: [{ jp: 'はじめて', hu: 'először' }, { jp: '{速|はや}い', hu: 'gyors' }, { jp: 'まっすぐ', hu: 'egyenesen' }, { jp: '{二|ふた}つ{目|め}の{角|かど}', hu: 'a második sarok' }, { jp: '{曲|ま}がります', hu: 'fordul' }, { jp: '{並|なら}びます', hu: 'sorba áll' }, { jp: '{関西弁|かんさいべん}', hu: 'kanszai nyelvjárás' }, { jp: '{三日目|みっかめ}', hu: 'a harmadik nap' }],
+      questions: [
+        { q: 'Hol kell jobbra fordulni?', a: 'A második sarkon', wrong: ['Az első sarkon', 'A park után', 'Az állomás előtt'],
+          why: '{二|ふた}つ{目|め}の{角|かど}を{右|みぎ}に{曲|ま}がると: a 〜と után az következik, ami ilyenkor mindig bekövetkezik.' },
+        { q: 'Honnan látszik a vár?', a: 'A parkból', wrong: ['Az állomásról', 'A második sarokról', 'Csak a kapujából'],
+          why: '{公園|こうえん}に{入|はい}ると、お{城|しろ}が{見|み}えますよ: a {見|み}えます = „látszik" (magától a szem elé kerül).' },
+        { q: 'Miből gondolja Anna, hogy a vár népszerű?', a: 'Sokan álltak sorba előtte', wrong: ['Drága volt a belépő', 'Sok plakát hirdette', 'A járókelő mondta neki'],
+          why: '{人|ひと}がたくさん{並|なら}んでいました。{人気|にんき}があるようです: a 〜ようです a látottakból levont következtetés.' },
+        { q: 'Mi változott a harmadik napra?', a: 'Kicsit már értette a nyelvjárást', wrong: ['Már ő is nyelvjárásban beszélt', 'Egyedül is odatalált a várhoz', 'Megszokta a tömeget'],
+          why: '{少|すこ}しわかるようになりました: a 〜ようになります = (fokozatosan) képessé válik valamire.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Ha egyenesen megy, jobbra lesz egy bank." Mi hiányzik?', jp: 'まっすぐ{行|い}く＿、{右|みぎ}に{銀行|ぎんこう}があります。', a: 'と', wrong: ['ば', 'たら', 'のに'], why: 'Útbaigazítás, törvényszerű eredmény: szótári alak + と.' },
       {
@@ -12929,6 +13705,31 @@ const NIHONCORE_COURSE = [
         text: 'Japánban is gond, hogy a fiatalok a nagyvárosokba költöznek: sok faluban szinte csak idősek maradtak, iskolák zárnak be, házak állnak üresen. Válaszul a települések <b>újjáélesztő mozgalmakat</b> indítanak: felélesztik a hagyományos ünnepeket, helyi termékeket népszerűsítenek, városi vendégeket hívnak a földekre dolgozni. A jelenség Magyarországon is ismerős — jó téma egy pályázati esszéhez.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{寮|りょう}の{生活|せいかつ}', titleHu: 'Élet a kollégiumban',
+      text: [
+        { jp: '{四月|しがつ}から{大学|だいがく}の{寮|りょう}に{住|す}むことになりました。', hu: 'Úgy alakult, hogy áprilistól az egyetem kollégiumában lakom.' },
+        { jp: '{寮|りょう}では、{夜|よる}{十一時|じゅういちじ}までに{帰|かえ}ることになっています。', hu: 'A kollégiumban az a szabály, hogy este tizenegyig haza kell érni.' },
+        { jp: '{友|とも}だちが{来|き}ても、{部屋|へや}に{泊|と}めてはいけません。', hu: 'Ha barát jön is, nem alhat a szobádban.' },
+        { jp: 'はじめは、{同|おな}じ{国|くに}の{学生|がくせい}とばかり{話|はな}していました。', hu: 'Eleinte csak a honfitársaimmal beszélgettem.', par: true },
+        { jp: 'でも、{日本語|にほんご}が{上手|じょうず}になるために、{今|いま}は{食堂|しょくどう}で{日本人|にほんじん}の{学生|がくせい}と{話|はな}しています。', hu: 'De hogy jobban megtanuljak japánul, most a menzán japán diákokkal beszélgetek.' },
+        { jp: '{忙|いそが}しくても、{毎朝|まいあさ}{食堂|しょくどう}で{朝|あさ}ごはんを{食|た}べます。', hu: 'Akármilyen elfoglalt vagyok, minden reggel a menzán reggelizem.' },
+        { jp: 'ときどき、{夜|よる}{遅|おそ}くまで{図書館|としょかん}で{勉強|べんきょう}することがあります。', hu: 'Néha előfordul, hogy késő estig a könyvtárban tanulok.', par: true },
+        { jp: '{寮|りょう}の{生活|せいかつ}は{大変|たいへん}ですが、{毎日|まいにち}が{楽|たの}しいです。', hu: 'A kollégiumi élet nem könnyű, de minden napját élvezem.' }
+      ],
+      words: [{ jp: '{寮|りょう}', hu: 'kollégium' }, { jp: '{生活|せいかつ}', hu: 'élet, életmód' }, { jp: '{泊|と}めます', hu: 'elszállásol' }, { jp: '{同|おな}じ{国|くに}', hu: 'ugyanaz az ország' }, { jp: '{毎朝|まいあさ}', hu: 'minden reggel' }, { jp: '{遅|おそ}くまで', hu: 'késő estig' }],
+      questions: [
+        { q: 'Mi a szabály a kollégiumban?', a: 'Este tizenegyig haza kell érni', wrong: ['Tizenegy után nem lehet tanulni', 'Reggel hétkor fel kell kelni', 'Vendég csak hétvégén jöhet'],
+          why: '{夜|よる}{十一時|じゅういちじ}までに{帰|かえ}ることになっています: a 〜ことになっています szabályt, megszokott rendet jelöl.' },
+        { q: 'Kikkel beszélgetett Anna eleinte?', a: 'Csak a honfitársaival', wrong: ['Csak japán diákokkal', 'Szinte senkivel', 'Főleg a tanáraival'],
+          why: '{同|おな}じ{国|くに}の{学生|がくせい}とばかり{話|はな}していました: a ばかり = „folyton csak".' },
+        { q: 'Miért beszélget most japán diákokkal?', a: 'Hogy jobban megtanuljon japánul', wrong: ['Mert a honfitársai elköltöztek', 'Mert ez a kollégium szabálya', 'Hogy angolul tanítsa őket'],
+          why: '{日本語|にほんご}が{上手|じょうず}になるために: a 〜ために a célt adja meg.' },
+        { q: 'Mi fordul elő néha Annával?', a: 'Késő estig a könyvtárban tanul', wrong: ['Kihagyja a reggelit', 'Tizenegy után ér haza a kollégiumba', 'A barátai nála alszanak'],
+          why: '{夜|よる}{遅|おそ}くまで{図書館|としょかん}で{勉強|べんきょう}することがあります: a 〜ことがあります = „előfordul, hogy".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Akkor is lesz meccs, ha esik." Mi hiányzik?', jp: '{雨|あめ}が＿、{試合|しあい}はあります。', a: '{降|ふ}っても', wrong: ['{降|ふ}ったら', '{降|ふ}れば', '{降|ふ}ると'], why: 'Megengedő feltétel: て-alak + も.' },
       { point: 1, q: '„Akkor is megveszem, ha drága." Mi hiányzik?', jp: '＿、{買|か}います。', a: '{高|たか}くても', wrong: ['{高|たか}いても', '{高|たか}でも', '{高|たか}ければ'], why: 'い-melléknév: い → くても.' },
@@ -13335,6 +14136,31 @@ const NIHONCORE_COURSE = [
         text: 'A szusi őse nem étel volt, hanem <b>tartósítási eljárás</b>: a halat erjedő rizs közé tették. A ma ismert, kézzel formázott falat a 19. században született Edóban, a mai Tokióban, utcai gyorsételként. Hagyományosan kézzel eszik, de pálcikával is szabad. A futószalagos szusiétterem a 20. század második felében terjedt el — és vele a szusi az egész világon.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'すき{焼|や}きの{夜|よる}', titleHu: 'Szukijaki-est',
+      text: [
+        { jp: 'きのう、ユイさんの{家|いえ}で{晩|ばん}ごはんをごちそうになりました。', hu: 'Tegnap Juiéknál vacsoráztam.' },
+        { jp: '{台所|だいどころ}から、いいにおいがしました。', hu: 'A konyhából jó illat áradt.' },
+        { jp: 'テーブルの{上|うえ}には、おいしそうな{料理|りょうり}がたくさん{並|なら}んでいました。', hu: 'Az asztalon sok ínycsiklandó étel sorakozott.' },
+        { jp: 'お{母|かあ}さんは{三十分|さんじゅっぷん}ぐらいで{全部|ぜんぶ}{作|つく}りました。プロのような{人|ひと}です。', hu: 'Az anyukája körülbelül fél óra alatt elkészítette mindet. Olyan, mint egy profi.' },
+        { jp: '{鍋|なべ}の{中|なか}の{肉|にく}は{柔|やわ}らかそうでした。', hu: 'A lábosban a hús puhának látszott.', par: true },
+        { jp: '{豆腐|とうふ}は{箸|はし}から{落|お}ちそうで、{食|た}べるのが{難|むずか}しかったです。', hu: 'A tofu majdnem leesett a pálcikáról, nehéz volt megenni.' },
+        { jp: '{日本|にほん}では、お{茶|ちゃ}わんを{手|て}に{持|も}って{食|た}べるのがマナーです。', hu: 'Japánban az az illem, hogy a rizsestálkát kézbe véve eszünk.' },
+        { jp: 'ユイさんの{弟|おとうと}さんは、うれしそうにごはんを{三杯|さんばい}{食|た}べました。', hu: 'Jui öccse boldogan megevett három tál rizst.', par: true }
+      ],
+      words: [{ jp: 'ごちそうになります', hu: 'megvendégelik' }, { jp: 'におい', hu: 'illat, szag' }, { jp: 'プロ', hu: 'profi' }, { jp: '{落|お}ちます', hu: 'leesik' }, { jp: 'マナー', hu: 'illem' }, { jp: '{三杯|さんばい}', hu: 'három tál' }],
+      questions: [
+        { q: 'Mit vett észre Anna először?', a: 'Jó illat jött a konyhából', wrong: ['Zene szólt a nappaliból', 'Hideg volt a házban', 'Odaégett a vacsora'],
+          why: '{台所|だいどころ}から、いいにおいがしました: a 〜がします érzékelést fejez ki (illat, hang, íz).' },
+        { q: 'Mennyi idő alatt készült el a vacsora?', a: 'Körülbelül fél óra alatt', wrong: ['Több mint három óra alatt', 'Tíz perc alatt', 'Egy egész délután'],
+          why: '{三十分|さんじゅっぷん}ぐらいで{全部|ぜんぶ}{作|つく}りました: a ぐらい = „körülbelül".' },
+        { q: 'Miért volt nehéz megenni a tofut?', a: 'Mert majdnem leesett a pálcikáról', wrong: ['Mert túl forró volt', 'Mert túl kemény volt', 'Mert Annának nem ízlett a szójaszósz'],
+          why: '{箸|はし}から{落|お}ちそうで: ige + そうです = „mindjárt megtörténik, úgy néz ki".' },
+        { q: 'Mi az illem Japánban a szöveg szerint?', a: 'A rizsestálkát kézbe véve enni', wrong: ['A tálkát az asztalon hagyni', 'Csendben, beszéd nélkül enni', 'A rizst a végére hagyni'],
+          why: 'お{茶|ちゃ}わんを{手|て}に{持|も}って{食|た}べるのがマナーです.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Ez a torta finomnak látszik." Mi hiányzik?', jp: 'このケーキは＿です。', a: 'おいしそう', wrong: ['おいしいそう', 'おいしくそう', 'おいしさそう'], why: 'Látszat: az い lemarad, おいしそう. (Az おいしいそうです azt jelenti: azt hallottam, finom.)' },
       { point: 1, q: 'Mi az いい „…-nak látszik" alakja?', a: 'よさそう', wrong: ['いそう', 'いいそう', 'よそう'], why: 'Az いい rendhagyó: よさそう.' },
@@ -13698,6 +14524,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán egészségügyi adatlapokon mindig szerepel a <b>vércsoport</b> — de a kérdés hétköznapi beszélgetésben is gyakori. Japánban elterjedt hiedelem, hogy a vércsoport összefügg a jellemmel: az A-sok gondosak, a 0-sok nagyvonalúak, a B-sek öntörvényűek. Tudományos alapja nincs; a horoszkóphoz hasonló társalgási téma.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{台風|たいふう}のニュース', titleHu: 'Hírek a tájfunról',
+      text: [
+        { jp: '{天気予報|てんきよほう}によると、あしたの{夜|よる}、{大|おお}きい{台風|たいふう}が{来|く}るそうです。', hu: 'Az időjárás-jelentés szerint holnap este nagy tájfun érkezik.' },
+        { jp: '{電車|でんしゃ}は{午後|ごご}から{止|と}まるらしいです。', hu: 'Állítólag a vonatok délutántól nem járnak.' },
+        { jp: '{大学|だいがく}のホームページによると、あしたの{授業|じゅぎょう}は{休|やす}みだそうです。', hu: 'Az egyetem honlapja szerint a holnapi órák elmaradnak.' },
+        { jp: 'ケンさんは「{水|みず}と{食|た}べ{物|もの}を{買|か}っておいたほうがいいよ」と{言|い}っていました。', hu: 'Ken azt mondta: „Jobb, ha előre veszel vizet és ennivalót."', par: true },
+        { jp: 'それで、スーパーへ{行|い}きましたが、パンはもうありませんでした。', hu: 'Ezért elmentem a boltba, de kenyér már nem volt.' },
+        { jp: 'みんな{同|おな}じことを{考|かんが}えているようです。', hu: 'Úgy látszik, mindenki ugyanarra gondol.' },
+        { jp: '{外|そと}を{見|み}ると、{空|そら}が{暗|くら}くて、{今|いま}にも{雨|あめ}が{降|ふ}りそうです。', hu: 'Kinézve sötét az ég, bármelyik pillanatban eleredhet az eső.', par: true },
+        { jp: '{寮|りょう}の{人|ひと}の{話|はなし}では、{去年|きょねん}の{台風|たいふう}のときは{電気|でんき}が{一日|いちにち}{止|と}まったそうです。', hu: 'A kollégisták szerint a tavalyi tájfunkor egy napig nem volt áram.' }
+      ],
+      words: [{ jp: '{台風|たいふう}', hu: 'tájfun' }, { jp: '{止|と}まります', hu: 'leáll' }, { jp: 'ホームページ', hu: 'honlap' }, { jp: '{考|かんが}えます', hu: 'gondol' }, { jp: '{空|そら}', hu: 'ég' }, { jp: '{暗|くら}い', hu: 'sötét' }, { jp: '{今|いま}にも', hu: 'bármelyik pillanatban' }, { jp: '{降|ふ}ります', hu: 'esik' }],
+      questions: [
+        { q: 'Mikor érkezik a tájfun?', a: 'Holnap este', wrong: ['Ma este', 'Holnap reggel', 'Jövő héten'],
+          why: 'あしたの{夜|よる}、{大|おお}きい{台風|たいふう}が{来|く}るそうです: a rövid alak + そうです hallott hírt ad tovább.' },
+        { q: 'Mi lesz a holnapi órákkal?', a: 'Elmaradnak', wrong: ['Délután tartják meg őket', 'Csak az első marad el', 'Még senki sem tudja'],
+          why: 'あしたの{授業|じゅぎょう}は{休|やす}みだそうです: főnév után だ + そうです áll.' },
+        { q: 'Mit tanácsolt Ken?', a: 'Hogy vegyen előre vizet és ennivalót', wrong: ['Hogy menjen haza a családjához vidékre', 'Hogy ne menjen ki az utcára', 'Hogy töltse fel a telefonját'],
+          why: '「{水|みず}と{食|た}べ{物|もの}を{買|か}っておいたほうがいいよ」と{言|い}っていました: a 〜と{言|い}っていました más szavait idézi.' },
+        { q: 'Mi történt a tavalyi tájfun idején?', a: 'Egy napig nem volt áram', wrong: ['Egy hétig nem jártak a vonatok', 'Elfogyott a víz a boltokban', 'Bezárt a kollégium'],
+          why: '{電気|でんき}が{一日|いちにち}{止|と}まったそうです.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Azt hallottam, holnap havazni fog." Mi hiányzik?', jp: 'あしたは{雪|ゆき}が＿そうです。', a: '{降|ふ}る', wrong: ['{降|ふ}り', '{降|ふ}って', '{降|ふ}ろう'], why: 'Hallomás: teljes rövid alak + そうです. ({降|ふ}りそうです = úgy néz ki, mindjárt esik.)' },
       { point: 1, q: '„Úgy hallom, jól van." Mi hiányzik?', jp: '{彼|かれ}は{元気|げんき}＿そうです。', a: 'だ', wrong: ['な', 'の', 'に'], why: 'な-melléknév + だそうです.' },
@@ -14100,6 +14951,31 @@ const NIHONCORE_COURSE = [
         text: 'Az internetes tanulás előnye, hogy olcsó, és akkor tanulsz, amikor akarsz; a hátránya, hogy senki sem felel vissza, és nem minden megbízható, amit találsz. Hasznos fogás: ha bizonytalan vagy egy kifejezésben, írd be idézőjelben egy keresőbe — ha sok japán oldalon szerepel, valószínűleg természetes. De a beszédet csak beszélgetve lehet megtanulni.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{辞書|じしょ}とスマホ', titleHu: 'Szótár és okostelefon',
+      text: [
+        { jp: 'わたしはまだ{紙|かみ}の{辞書|じしょ}の{引|ひ}き{方|かた}がよくわかりません。', hu: 'Még nem igazán tudom, hogyan kell használni a papírszótárt.' },
+        { jp: 'それで、{辞書|じしょ}のかわりにスマホのアプリを{使|つか}っています。', hu: 'Ezért szótár helyett telefonos alkalmazást használok.' },
+        { jp: 'アプリは{漢字|かんじ}の{読|よ}み{方|かた}がすぐわかるので、{便利|べんり}です。', hu: 'Az alkalmazásban rögtön látszik a kanji olvasata, ezért kényelmes.' },
+        { jp: 'でも、{短所|たんしょ}もあります。{調|しら}べた{言葉|ことば}をすぐ{忘|わす}れてしまうのです。', hu: 'De hátránya is van: a kikeresett szót hamar elfelejtem.' },
+        { jp: '{先生|せんせい}は「{調|しら}べるかわりに、まず{意味|いみ}を{考|かんが}えてみてください」と{言|い}いました。', hu: 'A tanárnő azt mondta: „Kikeresés helyett először próbálja kitalálni a jelentését."' },
+        { jp: 'きのうは{電気|でんき}をつけたまま、{机|つくえ}で{寝|ね}てしまいました。スマホも{手|て}に{持|も}ったままでした。', hu: 'Tegnap égve hagyott lámpa mellett az asztalnál aludtam el. A telefon is a kezemben maradt.', par: true },
+        { jp: '{今日|きょう}は{病気|びょうき}の{森|もり}{先生|せんせい}にかわって、{山田|やまだ}{先生|せんせい}が{教|おし}えました。', hu: 'Ma a beteg Mori tanárnő helyett Jamada tanár úr tanított.', par: true },
+        { jp: '{山田|やまだ}{先生|せんせい}はノートの{書|か}き{方|かた}を{教|おし}えてくれました。', hu: 'Jamada tanár úr megmutatta, hogyan érdemes jegyzetelni.' }
+      ],
+      words: [{ jp: '{辞書|じしょ}を{引|ひ}きます', hu: 'szótárban keres' }, { jp: 'スマホ', hu: 'okostelefon' }, { jp: 'アプリ', hu: 'alkalmazás' }, { jp: '{調|しら}べます', hu: 'utánanéz' }, { jp: '{言葉|ことば}', hu: 'szó' }, { jp: '{意味|いみ}', hu: 'jelentés' }, { jp: '{病気|びょうき}', hu: 'betegség' }],
+      questions: [
+        { q: 'Miért használ Anna alkalmazást szótár helyett?', a: 'Mert nem tudja jól használni a papírszótárt', wrong: ['Mert elvesztette a papírszótárát', 'Mert a tanárnő ezt kérte tőle', 'Mert a szótár túl nehéz a táskájában'],
+          why: '{辞書|じしょ}の{引|ひ}き{方|かた}がよくわかりません: az igető + {方|かた} = „a módja, ahogyan".' },
+        { q: 'Mi az alkalmazás hátránya?', a: 'A kikeresett szót hamar elfelejti', wrong: ['Nem mutatja a kanji olvasatát', 'Lassan működik', 'Sokba kerül'],
+          why: '{短所|たんしょ}もあります。{調|しら}べた{言葉|ことば}をすぐ{忘|わす}れてしまうのです.' },
+        { q: 'Mit tanácsolt a tanárnő?', a: 'Először próbálja kitalálni a jelentést', wrong: ['Mindig papírszótárt használjon', 'Írja le legalább tízszer az új szót a füzetébe', 'Ne használja órán a telefont'],
+          why: '{調|しら}べるかわりに、まず{意味|いみ}を{考|かんが}えてみてください: ige + かわりに = „ahelyett, hogy".' },
+        { q: 'Ki tanított ma, és miért?', a: 'Jamada tanár úr, mert Mori tanárnő beteg', wrong: ['Mori tanárnő, mert Jamada tanár úr beteg', 'Jamada tanár úr, mert Mori tanárnő elutazott', 'Egy diák, mert mindkét tanár hiányzott'],
+          why: '{病気|びょうき}の{森|もり}{先生|せんせい}にかわって、{山田|やまだ}{先生|せんせい}が{教|おし}えました: a 〜にかわって = valaki helyett, az ő szerepében.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Mondja meg, hogyan kell olvasni ezt a kanjit." Mi hiányzik?', jp: 'この{漢字|かんじ}の＿{方|かた}を{教|おし}えてください。', a: '{読|よ}み', wrong: ['{読|よ}む', '{読|よ}んで', '{読|よ}め'], why: 'ます-tő + {方|かた}: {読|よ}みます → {読|よ}み{方|かた}.' },
       { point: 1, q: '„Nem tudom, hogyan kell jegyet venni." Mi hiányzik?', jp: '{切符|きっぷ}＿{買|か}い{方|かた}がわかりません。', a: 'の', wrong: ['を', 'に', 'で'], why: 'A {買|か}い{方|かた} főnév, ezért a tárgy の-t kap.' },
@@ -14542,6 +15418,31 @@ const NIHONCORE_COURSE = [
         text: 'Ha Japánba utazol, vigyél magaddal néhány <b>apró, könnyű, jellegzetes</b> ajándékot: őrölt paprikát, mézet, szaloncukrot, hímzett terítőt, képeskönyvet. A drága ajándék zavarba ejt, mert viszonozni kell. Fontos a csomagolás: Japánban a szép papír és a gondos becsomagolás az ajándék része.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '「ハンガリーの{夕|ゆう}べ」のお{知|し}らせ', titleHu: 'Értesítés a Magyar estről',
+      text: [
+        { jp: '{十一月|じゅういちがつ}{三日|みっか}に、{大学|だいがく}のホールで「ハンガリーの{夕|ゆう}べ」が{開|ひら}かれます。', hu: 'November harmadikán az egyetem nagytermében megrendezik a Magyar estet.' },
+        { jp: 'このイベントは{留学生会|りゅうがくせいかい}によって{行|おこな}われます。', hu: 'Az eseményt a cserediákok egyesülete szervezi.' },
+        { jp: '{六時|ろくじ}から{七時|しちじ}にかけて、ハンガリーの{音楽|おんがく}が{演奏|えんそう}されます。', hu: 'Hattól hétig magyar zenét adnak elő.', par: true },
+        { jp: 'そのあと、ハンガリーの{映画|えいが}が{紹介|しょうかい}されます。', hu: 'Utána bemutatnak egy magyar filmet.' },
+        { jp: 'この{映画|えいが}は{有名|ゆうめい}な{監督|かんとく}によって{作|つく}られました。', hu: 'Ezt a filmet egy híres rendező készítette.' },
+        { jp: '{会場|かいじょう}では、ハンガリーのお{菓子|かし}も{売|う}られます。', hu: 'A helyszínen magyar süteményeket is árulnak.' },
+        { jp: '{参加費|さんかひ}は{無料|むりょう}です。{学生|がくせい}でなくても、だれでも{参加|さんか}できます。', hu: 'A részvétel ingyenes. Nem csak diákok: bárki részt vehet.', par: true },
+        { jp: '{質問|しつもん}は、{留学生会|りゅうがくせいかい}のアンナまでメールでお{願|ねが}いします。', hu: 'Kérdéseiket e-mailben Annának, a cserediák-egyesülethez küldjék.' }
+      ],
+      words: [{ jp: '{夕|ゆう}べ', hu: 'est' }, { jp: 'ホール', hu: 'nagyterem' }, { jp: 'イベント', hu: 'esemény' }, { jp: '{留学生会|りゅうがくせいかい}', hu: 'cserediákok egyesülete' }, { jp: '{演奏|えんそう}します', hu: 'előad (zenét)' }, { jp: '{紹介|しょうかい}します', hu: 'bemutat' }, { jp: '{監督|かんとく}', hu: 'rendező' }, { jp: 'お{菓子|かし}', hu: 'sütemény, édesség' }, { jp: '{参加|さんか}します', hu: 'részt vesz' }],
+      questions: [
+        { q: 'Ki szervezi az estet?', a: 'A cserediákok egyesülete', wrong: ['Az egyetem tanárai', 'Egy híres rendező', 'A magyar nagykövetség'],
+          why: '{留学生会|りゅうがくせいかい}によって{行|おこな}われます: szenvedő mondatban a によって jelöli, aki a cselekvést végzi.' },
+        { q: 'Mi lesz hattól hétig?', a: 'Magyar zene', wrong: ['Filmvetítés', 'Süteményvásár', 'Előadás Magyarországról'],
+          why: '{六時|ろくじ}から{七時|しちじ}にかけて、ハンガリーの{音楽|おんがく}が{演奏|えんそう}されます: a 〜から〜にかけて időtartamot jelöl.' },
+        { q: 'Mennyibe kerül a részvétel?', a: 'Ingyenes', wrong: ['Ötszáz jenbe', 'Csak diákoknak ingyenes', 'A szöveg nem mondja meg'],
+          why: '{参加費|さんかひ}は{無料|むりょう}です.' },
+        { q: 'Ki vehet részt az esten?', a: 'Bárki', wrong: ['Csak az egyetem diákjai', 'Csak a cserediákok', 'Csak a meghívottak'],
+          why: 'だれでも{参加|さんか}できます: kérdőszó + でも = „bárki".' }
+      ]
+    },
     quiz: [
       { point: 1, q: 'Mi a {書|か}きます szenvedő alakja?', a: '{書|か}かれます', wrong: ['{書|か}けます', '{書|か}きられます', '{書|か}かせます'], why: '1. csoport: か-tő + れます.' },
       { point: 1, q: 'Mi a {食|た}べます szenvedő alakja?', a: '{食|た}べられます', wrong: ['{食|た}べされます', '{食|た}べさせます', '{食|た}ばれます'], why: '2. csoport: る → られます.' },
@@ -15015,6 +15916,31 @@ const NIHONCORE_COURSE = [
         text: 'A nyilvános helyek ma ismert <b>piktogramjai</b> — mosdó, vészkijárat, információ — nagyrészt Japánból terjedtek el: az 1964-es tokiói olimpiára dolgozták ki őket, hogy a külföldi vendégek nyelvtudás nélkül is eligazodjanak. Néhány jel sajátosan japán: a három gőzcsíkos <b>♨</b> a termálfürdőt, a <b>〒</b> a postát jelöli.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ひどい{一日|いちにち}', titleHu: 'Egy pocsék nap',
+      text: [
+        { jp: 'きのうはひどい{一日|いちにち}でした。', hu: 'Tegnap pocsék napom volt.' },
+        { jp: 'まず、{朝|あさ}の{電車|でんしゃ}で{足|あし}を{踏|ふ}まれました。', hu: 'Először is a reggeli vonaton ráléptek a lábamra.' },
+        { jp: 'それから、{授業|じゅぎょう}に{遅|おく}れて、{先生|せんせい}に{注意|ちゅうい}されました。', hu: 'Aztán elkéstem az óráról, és a tanár rám szólt.' },
+        { jp: '{帰|かえ}りに{雨|あめ}に{降|ふ}られて、{服|ふく}がぬれてしまいました。', hu: 'Hazafelé megáztam, csuromvizes lett a ruhám.' },
+        { jp: 'さいごに、{駅|えき}で{財布|さいふ}がないことに{気|き}がつきました。すりに{盗|ぬす}まれたのかもしれません。', hu: 'Végül az állomáson vettem észre, hogy nincs meg a pénztárcám. Lehet, hogy zsebtolvaj lopta el.', par: true },
+        { jp: '{交番|こうばん}へ{行|い}くと、{警察官|けいさつかん}に{財布|さいふ}の{色|いろ}や{特徴|とくちょう}を{聞|き}かれました。', hu: 'Amikor bementem a rendőrőrsre, a rendőr megkérdezte a pénztárcám színét és ismertetőjegyeit.' },
+        { jp: '{一時間後|いちじかんご}、{交番|こうばん}から{電話|でんわ}がありました。{親切|しんせつ}な{人|ひと}が{拾|ひろ}って、{届|とど}けてくれたそうです。', hu: 'Egy óra múlva telefonáltak az őrsről. Egy kedves ember megtalálta, és leadta.', par: true },
+        { jp: 'その{人|ひと}のおかげで、{財布|さいふ}は{無事|ぶじ}に{戻|もど}りました。', hu: 'Neki köszönhetően a pénztárcám épségben visszakerült.' }
+      ],
+      words: [{ jp: 'ひどい', hu: 'szörnyű, pocsék' }, { jp: '{注意|ちゅうい}します', hu: 'figyelmeztet, rászól' }, { jp: '{服|ふく}', hu: 'ruha' }, { jp: 'ぬれます', hu: 'vizes lesz' }, { jp: '{一時間後|いちじかんご}', hu: 'egy óra múlva' }, { jp: '{無事|ぶじ}に', hu: 'épségben' }, { jp: '{戻|もど}ります', hu: 'visszakerül' }],
+      questions: [
+        { q: 'Mi történt Annával a reggeli vonaton?', a: 'Ráléptek a lábára', wrong: ['Ellopták a táskáját', 'Elaludt, és továbbment', 'Rászólt egy utas'],
+          why: '{足|あし}を{踏|ふ}まれました: szenvedő alak tárggyal — a kellemetlenség Annát érte.' },
+        { q: 'Miért szólt rá a tanár?', a: 'Mert elkésett az óráról', wrong: ['Mert nem írt házit', 'Mert vizes ruhában jött', 'Mert telefonozott az órán'],
+          why: '{授業|じゅぎょう}に{遅|おく}れて、{先生|せんせい}に{注意|ちゅうい}されました: a に jelöli, aki a cselekvést végezte.' },
+        { q: 'Mit kérdezett a rendőr?', a: 'A pénztárca színét és ismertetőjegyeit', wrong: ['Anna lakcímét, telefonszámát és útlevelét', 'A tolvaj kinézetét', 'Hogy mennyi pénz volt benne'],
+          why: '{警察官|けいさつかん}に{財布|さいふ}の{色|いろ}や{特徴|とくちょう}を{聞|き}かれました.' },
+        { q: 'Hogyan került elő a pénztárca?', a: 'Egy kedves ember megtalálta, és leadta', wrong: ['A rendőr elfogta a tolvajt', 'Anna a táskája alján találta meg', 'A kalauz találta meg a vonaton'],
+          why: '{親切|しんせつ}な{人|ひと}が{拾|ひろ}って、{届|とど}けてくれたそうです。その{人|ひと}のおかげで…: az おかげで a jó kimenetel okát adja meg.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Megszidott apám." Mi hiányzik?', jp: '{父|ちち}＿しかられました。', a: 'に', wrong: ['を', 'が', 'で'], why: 'Szenvedő mondatban a cselekvő に-t kap.' },
       { point: 2, q: '„A vonaton ellopták a pénztárcámat." Mi hiányzik?', jp: '{電車|でんしゃ}の{中|なか}で{財布|さいふ}＿{盗|ぬす}まれました。', a: 'を', wrong: ['に', 'で', 'へ'], why: 'Az alany én vagyok; a pénztárca megtartja az を-t.' },
@@ -15471,6 +16397,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán beszédben gyakoriak a közmondások. <b>{猿|さる}も{木|き}から{落|お}ちる</b> — „a majom is leesik a fáról": a legügyesebb is hibázhat. <b>{石|いし}の{上|うえ}にも{三年|さんねん}</b> — „a kövön is három év": aki kitart, annak a hideg kő is átmelegszik. <b>{七転|ななころ}び{八起|やお}き</b> — „hétszer elesni, nyolcszor felállni": soha ne add fel.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{森|もり}{先生|せんせい}', titleHu: 'Mori tanárnő',
+      text: [
+        { jp: '{森|もり}{先生|せんせい}は{毎朝|まいあさ}{八時|はちじ}に{大学|だいがく}にいらっしゃいます。', hu: 'Mori tanárnő minden reggel nyolckor érkezik az egyetemre.' },
+        { jp: '{研究室|けんきゅうしつ}でコーヒーを{召|め}し{上|あ}がりながら、{新聞|しんぶん}をお{読|よ}みになります。', hu: 'A szobájában kávézás közben újságot olvas.' },
+        { jp: '{先生|せんせい}はハンガリーに{三回|さんかい}{行|い}かれたことがあります。ハンガリーのことをよくご{存|ぞん}じです。', hu: 'A tanárnő háromszor járt Magyarországon. Jól ismeri az országot.' },
+        { jp: 'きのう、{先生|せんせい}はわたしの{作文|さくぶん}をご{覧|らん}になって、「よく{書|か}けていますね」とおっしゃいました。', hu: 'Tegnap megnézte a fogalmazásomat, és azt mondta: „Jól sikerült."', par: true },
+        { jp: '{質問|しつもん}があるときは、{先生|せんせい}の{研究室|けんきゅうしつ}に{電話|でんわ}をかけます。', hu: 'Ha kérdésem van, felhívom a tanárnőt a szobájában.' },
+        { jp: '「あしたの{三時|さんじ}でよろしいですか。」「ええ、どうぞ。{研究室|けんきゅうしつ}の{前|まえ}でお{待|ま}ちください。」', hu: '„Megfelel holnap három órakor?" „Igen, hogyne. Várjon a szobám előtt."' },
+        { jp: '{先生|せんせい}は{来年|らいねん}、{大学|だいがく}をおやめになるそうです。', hu: 'Úgy hallom, a tanárnő jövőre otthagyja az egyetemet.', par: true },
+        { jp: '{先生|せんせい}がいらっしゃるうちに、たくさん{質問|しつもん}したいと{思|おも}います。', hu: 'Amíg itt van, szeretnék tőle minél többet kérdezni.' }
+      ],
+      words: [{ jp: '{研究室|けんきゅうしつ}', hu: 'tanári szoba, kutatószoba' }, { jp: '{作文|さくぶん}', hu: 'fogalmazás' }, { jp: 'いらっしゃいます', hu: '(tiszteleti) jön, megy, van' }, { jp: '{召|め}し{上|あ}がります', hu: '(tiszteleti) eszik, iszik' }, { jp: 'ご{存|ぞん}じです', hu: '(tiszteleti) tudja, ismeri' }, { jp: 'ご{覧|らん}になります', hu: '(tiszteleti) megnéz' }, { jp: 'おっしゃいます', hu: '(tiszteleti) mond' }, { jp: 'やめます', hu: 'otthagy, abbahagy' }],
+      questions: [
+        { q: 'Mit csinál a tanárnő reggel a szobájában?', a: 'Kávézik, és újságot olvas', wrong: ['Fogalmazásokat javít, és teázik', 'Telefonon beszél', 'Magyarul tanul'],
+          why: 'コーヒーを{召|め}し{上|あ}がりながら、{新聞|しんぶん}をお{読|よ}みになります: {召|め}し{上|あ}がります a {飲|の}みます, お{読|よ}みになります a {読|よ}みます tiszteleti alakja.' },
+        { q: 'Hányszor járt a tanárnő Magyarországon?', a: 'Háromszor', wrong: ['Egyszer', 'Még soha', 'Minden évben'],
+          why: 'ハンガリーに{三回|さんかい}{行|い}かれたことがあります: {行|い}かれます itt nem szenvedő, hanem tiszteleti alak.' },
+        { q: 'Mit mondott a tanárnő Anna fogalmazásáról?', a: 'Hogy jól sikerült', wrong: ['Hogy sok benne a hiba', 'Hogy túl rövid lett', 'Hogy írja át az egészet'],
+          why: '「よく{書|か}けていますね」とおっしゃいました: おっしゃいます = a {言|い}います tiszteleti párja.' },
+        { q: 'Miért akar Anna most minél többet kérdezni?', a: 'Mert a tanárnő jövőre elmegy az egyetemről', wrong: ['Mert közeleg a vizsga', 'Mert a tanárnő Magyarországra utazik', 'Mert Anna hamarosan hazautazik'],
+          why: '{来年|らいねん}、{大学|だいがく}をおやめになるそうです … いらっしゃるうちに: a 〜うちに = „amíg még (tart az állapot)".' }
+      ]
+    },
     quiz: [
       { point: 2, q: '„Az igazgató úr már hazatért." (tiszteleti) Mi hiányzik?', jp: '{社長|しゃちょう}はもうお{帰|かえ}り＿。', a: 'になりました', wrong: ['しました', 'ください', 'にしました'], why: 'Tiszteleti forma: お + ます-tő + になります.' },
       { point: 2, q: 'Mi a {書|か}きます お〜になります alakja?', a: 'お{書|か}きになります', wrong: ['お{書|か}くになります', 'お{書|か}いてになります', 'ご{書|か}きになります'], why: 'お + ます-tő ({書|か}き) + になります.' },
@@ -15940,6 +16891,31 @@ const NIHONCORE_COURSE = [
         text: 'A tiszteleti nyelv a japánoknak is nehéz: a pályakezdők a cégeknél külön tanulják. Külföldiként bőven elég, ha <b>pontosan használod a です / ます alakot</b>, ismersz néhány állandó formulát (〜と{申|もう}します, お{願|ねが}いいたします, {失礼|しつれい}いたします), és <b>megérted</b>, amit neked mondanak. A hibát megbocsátják; a túlzásba vitt tiszteleti nyelv viszont barátok között távolságtartásnak hat.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{新年会|しんねんかい}のスピーチ', titleHu: 'Beszéd az újévi összejövetelen',
+      text: [
+        { jp: 'みなさま、{明|あ}けましておめでとうございます。アンナと{申|もう}します。', hu: 'Boldog új évet mindenkinek! Annának hívnak.' },
+        { jp: 'ハンガリーから{参|まい}りました。{去年|きょねん}の{四月|しがつ}からこの{大学|だいがく}で{勉強|べんきょう}しております。', hu: 'Magyarországról jöttem. Tavaly április óta tanulok ezen az egyetemen.' },
+        { jp: 'はじめは{漢字|かんじ}が{多|おお}すぎて、{教科書|きょうかしょ}がとても{読|よ}みにくかったです。', hu: 'Eleinte túl sok volt a kanji, nagyon nehezen olvastam a tankönyvet.', par: true },
+        { jp: 'でも、{先生|せんせい}の{説明|せつめい}はいつもわかりやすくて、{少|すこ}しずつ{読|よ}めるようになりました。', hu: 'De a tanárnő magyarázata mindig érthető, így lassanként megtanultam olvasni.' },
+        { jp: 'きのうはおせち{料理|りょうり}をいただきました。おいしくて、{食|た}べすぎてしまいました。', hu: 'Tegnap újévi ételeket ettem. Olyan finom volt, hogy túlettem magam.', par: true },
+        { jp: '{今日|きょう}はハンガリーのお{菓子|かし}をお{持|も}ちしました。あとでお{配|くば}りいたします。', hu: 'Ma magyar süteményt hoztam. Később szétosztom.' },
+        { jp: '{日本語|にほんご}はまだまだですが、これからもがんばります。', hu: 'A japánom még messze nem tökéletes, de ezután is igyekezni fogok.', par: true },
+        { jp: '{今年|ことし}もどうぞよろしくお{願|ねが}いいたします。', hu: 'Kérem, idén is fogadjanak jóindulattal.' }
+      ],
+      words: [{ jp: '{明|あ}けましておめでとうございます', hu: 'boldog új évet' }, { jp: '{申|もう}します', hu: '(szerény) hívnak; mondom' }, { jp: '{参|まい}ります', hu: '(szerény) jövök, megyek' }, { jp: '{少|すこ}しずつ', hu: 'lassanként' }, { jp: 'お{菓子|かし}', hu: 'sütemény, édesség' }, { jp: '{配|くば}ります', hu: 'szétoszt' }, { jp: 'がんばります', hu: 'igyekszik' }, { jp: '{今年|ことし}', hu: 'idén' }],
+      questions: [
+        { q: 'Mióta tanul Anna az egyetemen?', a: 'Tavaly április óta', wrong: ['Idén január óta', 'Két éve', 'Tavaly szeptember óta'],
+          why: '{去年|きょねん}の{四月|しがつ}から…{勉強|べんきょう}しております: a 〜ております a 〜ています szerény alakja.' },
+        { q: 'Mi volt nehéz eleinte?', a: 'A tankönyv olvasása a sok kanji miatt', wrong: ['A tanárnő magyarázatának megértése', 'Az újévi ételek megszokása', 'A beszéd megírása'],
+          why: '{漢字|かんじ}が{多|おお}すぎて、{教科書|きょうかしょ}がとても{読|よ}みにくかったです: 〜すぎます = túl sok, 〜にくい = nehéz megtenni.' },
+        { q: 'Mi történt tegnap?', a: 'Anna túlette magát az újévi ételekből', wrong: ['Anna magyar süteményt sütött a tanszéknek', 'Anna beszédet mondott', 'Anna egész nap tanult'],
+          why: 'おいしくて、{食|た}べすぎてしまいました.' },
+        { q: 'Mit hozott Anna az összejövetelre?', a: 'Magyar süteményt', wrong: ['Újévi ételt', 'Egy üveg magyar bort', 'Tankönyveket'],
+          why: 'ハンガリーのお{菓子|かし}をお{持|も}ちしました: az お〜します szerény alak — a beszélő a saját cselekvéséről szól.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Viszem a csomagját." (szerényen) Mi hiányzik?', jp: 'お{荷物|にもつ}をお{持|も}ち＿。', a: 'します', wrong: ['になります', 'ください', 'でございます'], why: 'Szerény forma: お + ます-tő + します.' },
       {
@@ -16388,6 +17364,31 @@ const NIHONCORE_COURSE = [
         text: 'Japánban a köszönet nem ér véget a búcsúval. Ha valaki segített, <b>másnap üzenetben</b> is megköszönöd, és amikor legközelebb találkoztok, azzal kezded: {先日|せんじつ}はありがとうございました („köszönöm a múltkorit"). Ez nem túlzás, hanem a kapcsolat ápolása: jelzi, hogy nem felejtetted el a szívességet.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{山田|やまだ}さんへのインタビュー', titleHu: 'Interjú Jamada úrral',
+      text: [
+        { jp: '{先週|せんしゅう}、{観光案内所|かんこうあんないじょ}で{働|はたら}いている{山田|やまだ}さんにインタビューしました。', hu: 'Múlt héten interjút készítettem Jamada úrral, aki a turistainformációban dolgozik.' },
+        { jp: '{山田|やまだ}さんは{二十年前|にじゅうねんまえ}にこの{仕事|しごと}を{始|はじ}めて、{今|いま}も{働|はたら}きつづけています。', hu: 'Jamada úr húsz éve kezdte ezt a munkát, és azóta is folyamatosan dolgozik.' },
+        { jp: '{英語|えいご}は{三十歳|さんじゅっさい}のときに{習|なら}いはじめたそうです。', hu: 'Angolul harmincévesen kezdett tanulni.' },
+        { jp: '「{何歳|なんさい}になっても、{新|あたら}しいことは{勉強|べんきょう}できますよ」とおっしゃいました。', hu: 'Azt mondta: „Akárhány éves az ember, tanulhat új dolgokat."' },
+        { jp: '{案内所|あんないじょ}には、いつでも、だれでも{質問|しつもん}に{来|く}ることができます。', hu: 'Az irodába bármikor, bárki bejöhet kérdezni.', par: true },
+        { jp: 'インタビューの{途中|とちゅう}で{急|きゅう}に{雨|あめ}が{降|ふ}りだしました。', hu: 'Az interjú közben hirtelen eleredt az eső.' },
+        { jp: '{山田|やまだ}さんは、{困|こま}っていそうな{観光客|かんこうきゃく}を{見|み}て、すぐかさを{貸|か}しました。{観光客|かんこうきゃく}はとてもうれしそうでした。', hu: 'Jamada úr meglátott egy bajban lévőnek látszó turistát, és rögtön kölcsönadott neki egy esernyőt. A turista nagyon boldognak látszott.' },
+        { jp: '{記事|きじ}を{書|か}きおわったら、{山田|やまだ}さんにお{礼|れい}のメールを{送|おく}るつもりです。', hu: 'Ha megírtam a cikket, köszönő e-mailt küldök Jamada úrnak.', par: true }
+      ],
+      words: [{ jp: 'インタビュー', hu: 'interjú' }, { jp: '{観光案内所|かんこうあんないじょ}', hu: 'turistainformáció' }, { jp: '{仕事|しごと}', hu: 'munka' }, { jp: '{習|なら}います', hu: 'tanul (valakitől)' }, { jp: '{途中|とちゅう}で', hu: 'közben' }, { jp: '{急|きゅう}に', hu: 'hirtelen' }, { jp: '{観光客|かんこうきゃく}', hu: 'turista' }, { jp: '{貸|か}します', hu: 'kölcsönad' }, { jp: '{記事|きじ}', hu: 'cikk' }],
+      questions: [
+        { q: 'Mióta dolgozik Jamada úr a turistainformációban?', a: 'Húsz éve', wrong: ['Harminc éve', 'Tavaly óta', 'Két éve'],
+          why: '{二十年前|にじゅうねんまえ}にこの{仕事|しごと}を{始|はじ}めて、{今|いま}も{働|はたら}きつづけています: a 〜つづけます = folyamatosan csinálja.' },
+        { q: 'Mikor kezdett Jamada úr angolul tanulni?', a: 'Harmincévesen', wrong: ['Húszévesen', 'Gyerekkorában', 'Az egyetemen'],
+          why: '{三十歳|さんじゅっさい}のときに{習|なら}いはじめたそうです: a 〜はじめます = elkezd valamit.' },
+        { q: 'Mit tett Jamada úr, amikor eleredt az eső?', a: 'Esernyőt adott kölcsön egy turistának', wrong: ['Becsukta az irodát', 'Félbehagyta az interjút, és hazament', 'Taxit hívott Annának'],
+          why: '{困|こま}っていそうな{観光客|かんこうきゃく}を{見|み}て、すぐかさを{貸|か}しました: a 〜そうな mások állapotáról szóló benyomás.' },
+        { q: 'Mit tervez Anna, ha megírta a cikket?', a: 'Köszönő e-mailt küld', wrong: ['Újabb interjút készít', 'Visszaviszi az esernyőt', 'Lefordítja a cikket angolra'],
+          why: '{書|か}きおわったら、…お{礼|れい}のメールを{送|おく}るつもりです: a 〜おわります = befejez valamit.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Akármeddig várok, nem jön a busz." Mi hiányzik?', jp: '＿{待|ま}っても、バスが{来|き}ません。', a: 'いくら', wrong: ['いくつ', 'どれ', 'なんでも'], why: 'いくら〜ても = akármennyire is.' },
       { point: 1, q: '„Bármit eszem, finom." Mi hiányzik?', jp: '{何|なに}を＿、おいしいです。', a: '{食|た}べても', wrong: ['{食|た}べたら', '{食|た}べれば', '{食|た}べると'], why: 'Kérdőszó + て-alak + も.' },
@@ -16752,6 +17753,31 @@ const NIHONCORE_COURSE = [
         text: 'Japán legdélebbi szigetcsoportja, <b>Okinava</b> évszázadokig önálló királyság volt, saját nyelvvel, zenével, konyhával. Jellegzetes hangszere a kígyóbőrrel bevont, háromhúros <b>szansin</b>, a japán samiszen rokona. Az okinavai dallamok ma is felismerhetők a japán popzenében: a régi hangzás új ruhában tér vissza.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ブショーヤーラーシュ', titleHu: 'A busójárás',
+      text: [
+        { jp: 'ハンガリーのモハーチという{町|まち}で、{毎年|まいとし}{二月|にがつ}に「ブショーヤーラーシュ」というお{祭|まつ}りが{行|おこな}われます。', hu: 'A magyarországi Mohácson minden februárban megrendezik a busójárást.' },
+        { jp: '「ブショー」というのは、こわい{仮面|かめん}をかぶった{人|ひと}のことです。', hu: 'A „busó" ijesztő álarcot viselő embert jelent.' },
+        { jp: '{仮面|かめん}は{木|き}で{作|つく}られていて、まるで{鬼|おに}のようです。', hu: 'Az álarc fából készül, szinte olyan, mint egy démon.' },
+        { jp: 'お{祭|まつ}りは{六日間|むいかかん}も{続|つづ}きます。', hu: 'Az ünnep hat teljes napig tart.', par: true },
+        { jp: '{小|ちい}さい{町|まち}ですが、{観光客|かんこうきゃく}が{何万人|なんまんにん}も{来|き}ます。', hu: 'Kis város, mégis több tízezer turista érkezik.' },
+        { jp: 'ホテルは{少|すこ}ししかありませんから、{早|はや}く{予約|よやく}しなければなりません。', hu: 'Szálloda csak kevés van, ezért korán kell foglalni.' },
+        { jp: '{有名|ゆうめい}なお{祭|まつ}りだけあって、{外国|がいこく}でもよく{知|し}られています。', hu: 'Híres ünnep, így nem csoda, hogy külföldön is jól ismerik.', par: true },
+        { jp: '{最後|さいご}の{日|ひ}には、{大|おお}きい{火|ひ}をたいて、{冬|ふゆ}にさよならを{言|い}います。', hu: 'Az utolsó napon nagy tüzet raknak, és elbúcsúztatják a telet.' }
+      ],
+      words: [{ jp: 'モハーチ', hu: 'Mohács' }, { jp: 'お{祭|まつ}り', hu: 'ünnep, fesztivál' }, { jp: '{仮面|かめん}をかぶります', hu: 'álarcot visel' }, { jp: '{鬼|おに}', hu: 'démon, ördög' }, { jp: '{六日間|むいかかん}', hu: 'hat napig' }, { jp: '{続|つづ}きます', hu: 'tart, folytatódik' }, { jp: '{観光客|かんこうきゃく}', hu: 'turista' }, { jp: '{外国|がいこく}', hu: 'külföld' }, { jp: '{最後|さいご}', hu: 'utolsó' }, { jp: '{火|ひ}をたきます', hu: 'tüzet rak' }],
+      questions: [
+        { q: 'Mit jelent a „busó"?', a: 'Ijesztő álarcot viselő embert', wrong: ['A város régi, török kori nevét', 'Egy téli ételt', 'A tavasz első napját'],
+          why: '「ブショー」というのは、こわい{仮面|かめん}をかぶった{人|ひと}のことです: a 〜というのは…のことです meghatározást ad.' },
+        { q: 'Miből készül az álarc?', a: 'Fából', wrong: ['Papírból', 'Bőrből', 'Fémből'],
+          why: '{仮面|かめん}は{木|き}で{作|つく}られていて: a で az alapanyagot jelöli.' },
+        { q: 'Miért kell korán szállást foglalni?', a: 'Mert kevés a szálloda', wrong: ['Mert drágák a szállodák', 'Mert februárban sok zárva van', 'Mert csak csoportokat fogadnak'],
+          why: 'ホテルは{少|すこ}ししかありませんから: a しかありません = „csak ennyi van" (kevés).' },
+        { q: 'Mi történik az utolsó napon?', a: 'Nagy tüzet raknak, és elbúcsúztatják a telet', wrong: ['Díjat kap a legszebb álarc készítője', 'A turisták is álarcot kapnak ajándékba', 'A busók átvonulnak a szomszéd városba'],
+          why: '{最後|さいご}の{日|ひ}には、{大|おお}きい{火|ひ}をたいて、{冬|ふゆ}にさよならを{言|い}います.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Mintha álom volna." Mi hiányzik?', jp: '＿{夢|ゆめ}のようです。', a: 'まるで', wrong: ['いくら', 'ぜひ', 'たしかに'], why: 'Hasonlat: まるで〜のようです.' },
       { point: 1, q: '„Úgy beszél japánul, mintha japán volna." Mi hiányzik?', jp: '{彼|かれ}はまるで{日本人|にほんじん}＿{日本語|にほんご}を{話|はな}します。', a: 'のように', wrong: ['のような', 'みたいな', 'そうに'], why: 'Ige előtt: のように.' },
@@ -17138,6 +18164,31 @@ const NIHONCORE_COURSE = [
         text: 'Biztonságos témák: az időjárás, a szülőhely, az ételek, a hobbi, az utazás. Kerülendő eleinte a politika, a vallás, a fizetés. Meglepő lehet, hogy az <b>életkorra</b> hamar rákérdeznek: nem tolakodás, hanem tájékozódás — a kor dönti el, ki kinek beszél tiszteletteljesebben. A japánok szívesen kérdeznek a másik országáról, és örülnek, ha te is kérdezel az övékről.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{制服|せいふく}は{必要|ひつよう}か', titleHu: 'Kell-e egyenruha?',
+      text: [
+        { jp: '{今日|きょう}の{授業|じゅぎょう}で、「{学校|がっこう}に{制服|せいふく}は{必要|ひつよう}か」について{話|はな}し{合|あ}いました。', hu: 'A mai órán arról vitatkoztunk, kell-e iskolai egyenruha.' },
+        { jp: 'マリアさんは{賛成|さんせい}でした。「{制服|せいふく}があれば、{毎朝|まいあさ}{服|ふく}を{選|えら}ばなくてもいいし、{親|おや}にとってもお{金|かね}がかかりません。」', hu: 'Maria mellette volt: „Ha van egyenruha, nem kell reggelente ruhát választani, és a szülőknek sem kerül sokba."', par: true },
+        { jp: 'リーさんは{反対|はんたい}でした。「たしかに{便利|べんり}ですが、{学生|がくせい}から{見|み}ると、{自由|じゆう}がないと{思|おも}います。」', hu: 'Li ellene volt: „Kétségtelenül praktikus, de a diák szemszögéből nincs szabadság."', par: true },
+        { jp: '「{好|す}きな{服|ふく}を{着|き}ることこそ、{自分|じぶん}らしさではないでしょうか。」', hu: '„Éppen az adja az egyéniségünket, hogy azt viseljük, amit szeretünk, nem igaz?"' },
+        { jp: 'わたしの{国|くに}の{学校|がっこう}には{制服|せいふく}がありませんでした。', hu: 'Az én hazám iskoláiban nem volt egyenruha.', par: true },
+        { jp: 'ですから、わたしにとって{日本|にほん}の{制服|せいふく}はとてもめずらしいです。', hu: 'Ezért számomra a japán egyenruha nagyon különleges.' },
+        { jp: '{外国人|がいこくじん}から{見|み}ると、かわいいし、{日本|にほん}らしい{文化|ぶんか}だと{思|おも}います。', hu: 'Külföldi szemmel aranyos, és jellegzetesen japán kultúra.' },
+        { jp: '{先生|せんせい}は「どちらの{意見|いけん}にも{理由|りゆう}がありますね」とおっしゃいました。', hu: 'A tanárnő azt mondta: „Mindkét véleménynek megvan az oka."', par: true }
+      ],
+      words: [{ jp: '{制服|せいふく}', hu: 'egyenruha' }, { jp: '{必要|ひつよう}', hu: 'szükséges' }, { jp: '{話|はな}し{合|あ}います', hu: 'megbeszél, megvitat' }, { jp: '{賛成|さんせい}', hu: 'egyetértés' }, { jp: '{反対|はんたい}', hu: 'ellenzés' }, { jp: '{選|えら}びます', hu: 'választ' }, { jp: '{親|おや}', hu: 'szülő' }, { jp: '{自由|じゆう}', hu: 'szabadság' }, { jp: '{自分|じぶん}らしさ', hu: 'egyéniség' }, { jp: 'めずらしい', hu: 'ritka, különleges' }, { jp: '{意見|いけん}', hu: 'vélemény' }, { jp: '{理由|りゆう}', hu: 'ok' }],
+      questions: [
+        { q: 'Miért támogatja Maria az egyenruhát?', a: 'Mert nem kell reggel ruhát választani, és olcsóbb', wrong: ['Mert szebb, mint a saját ruha, és tovább is tart', 'Mert a tanárok kérik, és ez az iskola szabálya', 'Mert Japánban hagyomány, és mindenki szereti viselni'],
+          why: '{服|ふく}を{選|えら}ばなくてもいいし、{親|おや}にとってもお{金|かね}がかかりません: a 〜にとって = valakinek a számára.' },
+        { q: 'Mi Li ellenvetése?', a: 'A diáknak nincs szabadsága', wrong: ['Az egyenruha túl drága', 'Az egyenruha kényelmetlen', 'Az egyenruha nem praktikus'],
+          why: '{学生|がくせい}から{見|み}ると、{自由|じゆう}がないと{思|おも}います: a 〜から{見|み}ると = valakinek a szemszögéből. Azt, hogy praktikus, Li is elismeri (たしかに).' },
+        { q: 'Volt-e egyenruha Anna iskolájában?', a: 'Nem volt', wrong: ['Volt, de csak ünnepeken', 'Volt, minden nap', 'A szöveg nem mondja meg'],
+          why: 'わたしの{国|くに}の{学校|がっこう}には{制服|せいふく}がありませんでした.' },
+        { q: 'Mit mondott a tanárnő a vita végén?', a: 'Mindkét véleménynek megvan az oka', wrong: ['Mariának van igaza', 'Linek van igaza', 'A vitát jövő héten folytatják'],
+          why: '「どちらの{意見|いけん}にも{理由|りゆう}がありますね」とおっしゃいました.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Számomra a család a legfontosabb." Mi hiányzik?', jp: '{私|わたし}＿、{家族|かぞく}がいちばん{大切|たいせつ}です。', a: 'にとって', wrong: ['について', 'によって', 'にくらべて'], why: 'Kinek a szempontjából: 〜にとって.' },
       { point: 2, q: '„A szülő szemében a gyerek mindig gyerek marad." Mi hiányzik?', jp: '{親|おや}＿、{子|こ}どもはいつまでも{子|こ}どもです。', a: 'から{見|み}ると', wrong: ['について', 'のかわりに', 'だけあって'], why: 'Nézőpont: 〜から{見|み}ると.' },
@@ -17583,6 +18634,31 @@ const NIHONCORE_COURSE = [
         text: 'Egy egyszerű, bárhol végezhető gyakorlat: fogalmazd meg magadban japánul, amit éppen látsz és csinálsz. „Ott egy villanyoszlop. Rajta plakát. Odáig megyek." Ha elakadsz egy szónál, később utánanézel. Nem kell hozzá partner, és rászoktat arra, hogy <b>egész mondatokban</b> gondolkodj, ne szavakban.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{先輩|せんぱい}のアドバイス', titleHu: 'A felsőbb éves tanácsai',
+      text: [
+        { jp: '{試験|しけん}の{前|まえ}に、{先輩|せんぱい}がアドバイスをくれました。', hu: 'Vizsga előtt egy felsőbb éves tanácsokat adott.' },
+        { jp: '{第一|だいいち}に、{毎日|まいにち}{少|すこ}しずつ{勉強|べんきょう}しろ、ということです。', hu: 'Először is: minden nap tanulj egy keveset.' },
+        { jp: '「{試験|しけん}の{前|まえ}の{日|ひ}だけ{勉強|べんきょう}するな」と{言|い}われました。', hu: 'Azt mondta: „Ne csak a vizsga előtti napon tanulj!"' },
+        { jp: '{第二|だいに}に、{忘|わす}れないように、{新|あたら}しい{言葉|ことば}はすぐノートに{書|か}くことです。', hu: 'Másodszor: hogy ne felejtsd el, az új szót rögtön írd be a füzetbe.', par: true },
+        { jp: 'わたしは{先輩|せんぱい}が{言|い}ったとおりに、{毎晩|まいばん}{三十分|さんじゅっぷん}{復習|ふくしゅう}するようにしています。', hu: 'Úgy, ahogy mondta, igyekszem minden este fél órát ismételni.', par: true },
+        { jp: 'それから、{夜|よる}{十二時|じゅうにじ}までに{寝|ね}るようにしています。', hu: 'És igyekszem éjfélig lefeküdni.' },
+        { jp: '{先輩|せんぱい}のように{日本語|にほんご}が{上手|じょうず}になりたいです。', hu: 'Szeretnék olyan jól tudni japánul, mint ő.' },
+        { jp: '{試験|しけん}に{合格|ごうかく}できるように、がんばります。', hu: 'Igyekszem, hogy átmenjek a vizsgán.' }
+      ],
+      words: [{ jp: '{先輩|せんぱい}', hu: 'felsőbb éves, idősebb társ' }, { jp: 'アドバイス', hu: 'tanács' }, { jp: '{少|すこ}しずつ', hu: 'apránként' }, { jp: '{言葉|ことば}', hu: 'szó' }, { jp: '{復習|ふくしゅう}します', hu: 'ismétel' }, { jp: '{合格|ごうかく}します', hu: 'átmegy (vizsgán)' }, { jp: 'がんばります', hu: 'igyekszik' }],
+      questions: [
+        { q: 'Mi az első tanács?', a: 'Minden nap tanulj egy keveset', wrong: ['Csak a vizsga előtt tanulj', 'Tanulj együtt a társaiddal', 'Aludj sokat a vizsga előtt'],
+          why: '{毎日|まいにち}{少|すこ}しずつ{勉強|べんきょう}しろ: a {勉強|べんきょう}しろ a します parancsoló alakja.' },
+        { q: 'Miért kell az új szót rögtön leírni?', a: 'Hogy ne felejtsd el', wrong: ['Hogy szebb legyen a füzeted', 'Hogy megmutasd a tanárnak', 'Hogy gyorsabban tudj írni'],
+          why: '{忘|わす}れないように: a 〜ないように célt fejez ki („nehogy").' },
+        { q: 'Mit csinál Anna minden este?', a: 'Fél órát ismétel', wrong: ['Fél órát olvas', 'Éjfél utánig tanul', 'Új szavakat ír a falra'],
+          why: '{毎晩|まいばん}{三十分|さんじゅっぷん}{復習|ふくしゅう}するようにしています: a 〜ようにしています = igyekszik rendszeresen megtenni.' },
+        { q: 'Mire vágyik Anna?', a: 'Hogy olyan jól tudjon japánul, mint a felsőbb éves', wrong: ['Hogy ő is tanácsot adhasson majd a fiatalabb diákoknak', 'Hogy minél később fekhessen le', 'Hogy egyedül, segítség nélkül tanuljon'],
+          why: '{先輩|せんぱい}のように{日本語|にほんご}が{上手|じょうず}になりたいです: a 〜のように = „úgy, mint".' }
+      ]
+    },
     quiz: [
       { point: 1, q: 'Mi a {行|い}きます parancsoló alakja?', a: '{行|い}け', wrong: ['{行|い}こ', '{行|い}きろ', '{行|い}くな'], why: '1. csoport: く → け.' },
       { point: 1, q: 'Mi a {食|た}べます parancsoló alakja?', a: '{食|た}べろ', wrong: ['{食|た}べれ', '{食|た}べえ', '{食|た}べな'], why: '2. csoport: る → ろ.' },
@@ -18005,6 +19081,31 @@ const NIHONCORE_COURSE = [
         text: 'A japán iskolákban régi hagyomány a szónokverseny ({弁論大会|べんろんたいかい}), és a japánul tanulóknak a világ sok országában — Magyarországon is — rendeznek ilyet évente. A téma szabadon választható, a beszéd néhány perces, a végén a zsűri kérdez. Nem a hibátlan nyelvtan dönt: az számít, van-e saját gondolatod, és el tudod-e juttatni a hallgatókhoz.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ごみを{減|へ}らそう', titleHu: 'Csökkentsük a szemetet!',
+      text: [
+        { jp: 'みなさん、こんにちは。{今日|きょう}は、ごみの{問題|もんだい}を{中心|ちゅうしん}にお{話|はな}しします。', hu: 'Jó napot kívánok! Ma főleg a szemét kérdéséről fogok beszélni.' },
+        { jp: 'わたしたちは{毎日|まいにち}、たくさんのごみを{出|だ}しています。', hu: 'Nap mint nap rengeteg szemetet termelünk.' },
+        { jp: 'まだ{使|つか}える{物|もの}を{捨|す}てるべきではありません。', hu: 'A még használható dolgokat nem volna szabad kidobni.' },
+        { jp: 'そこで、わたしは{三|みっ}つのことを{始|はじ}めました。', hu: 'Ezért három dologba kezdtem bele.', par: true },
+        { jp: '{買|か}い{物|もの}のとき、レジ{袋|ぶくろ}をもらわずに、{自分|じぶん}のかばんを{使|つか}います。', hu: 'Vásárláskor nem kérek szatyrot, a saját táskámat használom.' },
+        { jp: '{食|た}べ{物|もの}は{残|のこ}さず、{全部|ぜんぶ}{食|た}べます。そして、ごみはきちんと{分別|ぶんべつ}して{出|だ}します。', hu: 'Az ételt nem hagyom meg, mindet megeszem. A szemetet pedig rendesen szétválogatva teszem ki.' },
+        { jp: 'このように、{小|ちい}さいことでも、みんなでやれば{地球|ちきゅう}を{守|まも}ることができます。', hu: 'Így, ha kis dolgokat is, de mindannyian megteszünk, megóvhatjuk a Földet.', par: true },
+        { jp: '{一人一人|ひとりひとり}が{自分|じぶん}にできることを{考|かんが}えるべきだと{思|おも}います。', hu: 'Úgy gondolom, mindenkinek végig kellene gondolnia, ő mit tehet.' }
+      ],
+      words: [{ jp: 'ごみ', hu: 'szemét' }, { jp: '{問題|もんだい}', hu: 'probléma, kérdés' }, { jp: '{捨|す}てます', hu: 'kidob' }, { jp: 'レジ{袋|ぶくろ}', hu: 'bolti szatyor' }, { jp: '{自分|じぶん}の', hu: 'saját' }, { jp: '{残|のこ}します', hu: 'meghagy' }, { jp: 'きちんと', hu: 'rendesen' }, { jp: '{分別|ぶんべつ}します', hu: 'szétválogat' }, { jp: '{地球|ちきゅう}', hu: 'a Föld' }, { jp: '{守|まも}ります', hu: 'megóv' }, { jp: '{一人一人|ひとりひとり}', hu: 'mindenki, egyenként' }],
+      questions: [
+        { q: 'Miről szól a beszéd?', a: 'A szemét kérdéséről', wrong: ['A vásárlásról', 'Az egészséges étkezésről', 'A beszédversenyről'],
+          why: 'ごみの{問題|もんだい}を{中心|ちゅうしん}にお{話|はな}しします: a 〜を{中心|ちゅうしん}に = „…-t a középpontba állítva".' },
+        { q: 'Mit nem volna szabad tenni a beszélő szerint?', a: 'Kidobni a még használható dolgokat', wrong: ['Saját táskával menni a boltba vásárolni', 'Mindent megenni', 'Szétválogatni a szemetet'],
+          why: 'まだ{使|つか}える{物|もの}を{捨|す}てるべきではありません: a 〜べきではありません = „nem helyes, nem volna szabad".' },
+        { q: 'Mit csinál a beszélő vásárláskor?', a: 'A saját táskáját használja', wrong: ['Papírszatyrot kér', 'Két szatyrot is kér', 'Kézben viszi haza az árut'],
+          why: 'レジ{袋|ぶくろ}をもらわずに、{自分|じぶん}のかばんを{使|つか}います: a 〜ずに = 〜ないで („anélkül, hogy").' },
+        { q: 'Mi a beszéd záró gondolata?', a: 'Mindenki gondolja végig, ő mit tehet', wrong: ['A gondot a kormánynak kell megoldania', 'A szemét kérdése megoldhatatlan', 'Csak a nagy lépéseknek van értelmük'],
+          why: '{一人一人|ひとりひとり}が{自分|じぶん}にできることを{考|かんが}えるべきだと{思|おも}います: a 〜べきです = „helyes volna, kellene".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Az ígéretet be kell tartani." Mi hiányzik?', jp: '{約束|やくそく}は{守|まも}る＿です。', a: 'べき', wrong: ['まま', 'ばかり', 'ところ'], why: 'Ami helyes: szótári alak + べきです.' },
       { point: 2, q: '„Nem illik másokról rosszat mondani." Mi hiányzik?', jp: '{人|ひと}の{悪口|わるくち}を{言|い}う＿。', a: 'べきではありません', wrong: ['べきません', 'べくないです', 'べきないです'], why: 'A tagadás: べきではありません.' },
@@ -18420,6 +19521,31 @@ const NIHONCORE_COURSE = [
         text: 'Magyarul gond nélkül mondjuk: „a húgom fél", „a barátom szomorú". Japánul ez túl magabiztos volna: honnan tudhatnád, mit érez valaki belül? A nyelvtan ezért megkülönbözteti a kettőt. A saját érzésedet kijelented ({怖|こわ}いです); a másét úgy írod le, ahogy kívülről látszik ({怖|こわ}がっています), vagy jelzed, honnan tudod ({怖|こわ}いそうです, {怖|こわ}いと{言|い}っています). Ez a tapintat a nyelvtanba épült.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'たろうくんと{一日|いちにち}', titleHu: 'Egy nap Taróval',
+      text: [
+        { jp: '{日曜日|にちようび}、ユイさんの{弟|おとうと}のたろうくんと{一日|いちにち}いっしょにいました。', hu: 'Vasárnap egész nap Jui öccsével, Taróval voltam.' },
+        { jp: 'たろうくんは{五歳|ごさい}で、{何|なん}でも{自分|じぶん}でやりたがります。', hu: 'Taro ötéves, és mindent maga akar csinálni.' },
+        { jp: '{朝|あさ}、{野菜|やさい}を{食|た}べるのを{嫌|いや}がりましたが、お{母|かあ}さんは{少|すこ}しだけ{食|た}べさせました。', hu: 'Reggel nem akarta megenni a zöldséget, de az anyukája megetetett vele egy keveset.', par: true },
+        { jp: 'それから、お{母|かあ}さんはたろうくんに{部屋|へや}を{片付|かたづ}けさせました。', hu: 'Aztán az anyukája rendet rakatott vele a szobájában.' },
+        { jp: '{公園|こうえん}では、{大|おお}きい{犬|いぬ}を{怖|こわ}がって、わたしの{後|うし}ろに{隠|かく}れました。', hu: 'A parkban megijedt egy nagy kutyától, és elbújt mögöttem.', par: true },
+        { jp: '{帰|かえ}ろうとしたとき、たろうくんはアイスクリームをほしがりました。', hu: 'Amikor éppen indultunk volna haza, Taro fagyit akart.' },
+        { jp: 'わたしが{買|か}おうとすると、ユイさんが「{晩|ばん}ごはんの{前|まえ}だから、だめ」と{言|い}いました。', hu: 'Már vettem volna neki, de Jui azt mondta: „Vacsora előtt nem lehet."' },
+        { jp: 'たろうくんはとても{残念|ざんねん}がっていました。', hu: 'Taro nagyon bánta.' }
+      ],
+      words: [{ jp: '{何|なん}でも', hu: 'mindent' }, { jp: '{自分|じぶん}で', hu: 'maga, egyedül' }, { jp: '{嫌|いや}がります', hu: 'húzódozik tőle' }, { jp: '{片付|かたづ}けます', hu: 'rendet rak' }, { jp: '{怖|こわ}がります', hu: 'fél' }, { jp: '{隠|かく}れます', hu: 'elbújik' }, { jp: 'アイスクリーム', hu: 'fagylalt' }, { jp: '{残念|ざんねん}がります', hu: 'bánja, sajnálja' }],
+      questions: [
+        { q: 'Milyen gyerek Taro?', a: 'Mindent maga akar csinálni', wrong: ['Mindentől fél', 'Semmihez sincs kedve, csak játszana', 'Mindent megeszik'],
+          why: '{何|なん}でも{自分|じぶん}でやりたがります: a 〜たがります más (harmadik személy) vágyát írja le.' },
+        { q: 'Mit csináltatott Taróval az anyukája?', a: 'Rendet rakatott vele a szobájában', wrong: ['Megsétáltatta vele a szomszéd kutyáját', 'Fagyit vetetett vele', 'Megíratta vele a leckét'],
+          why: 'たろうくんに{部屋|へや}を{片付|かたづ}けさせました: műveltető mondat tárggyal — akit cselekedtetünk, に-t kap.' },
+        { q: 'Mi történt a parkban?', a: 'Taro megijedt egy kutyától, és elbújt Anna mögé', wrong: ['Taro megsimogatott egy nagy kutyát, és játszott vele', 'Taro elesett, és sírni kezdett', 'Taro elveszett a fák között'],
+          why: '{大|おお}きい{犬|いぬ}を{怖|こわ}がって、わたしの{後|うし}ろに{隠|かく}れました: a 〜がります más érzését írja le.' },
+        { q: 'Miért nem kapott Taro fagyit?', a: 'Mert vacsora előtt voltak', wrong: ['Mert Annánál nem volt pénz', 'Mert bezárt a fagyizó', 'Mert nem ette meg a zöldséget'],
+          why: '「{晩|ばん}ごはんの{前|まえ}だから、だめ」. Anna már vette volna: {買|か}おうとすると („amikor éppen venni akartam").' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Éppen indulni készültem, amikor megszólalt a telefon." Mi hiányzik?', jp: '＿としたとき、{電話|でんわ}が{鳴|な}りました。', a: '{出|で}かけよう', wrong: ['{出|で}かける', '{出|で}かけて', '{出|で}かけろ'], why: 'Szándékos alak + とします: éppen készülök rá.' },
       { point: 2, q: 'Mi a {書|か}きます műveltető alakja?', a: '{書|か}かせます', wrong: ['{書|か}かれます', '{書|か}けさせます', '{書|か}きさせます'], why: '1. csoport: か-tő + せます.' },
@@ -18866,6 +19992,31 @@ const NIHONCORE_COURSE = [
         text: 'Japánban a köszönés testi érintés nélkül történik: kézfogás, puszi, ölelés helyett meghajolnak. Ez a közeli kapcsolatokra is igaz — évek után viszontlátott családtagok sem feltétlenül ölelik meg egymást a repülőtéren. Aki magyar szokás szerint puszit ad, zavarba hozhatja a másikat. A szeretet jele itt inkább a gondoskodás: egy csésze tea, egy becsomagolt útravaló.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{店長|てんちょう}との{相談|そうだん}', titleHu: 'Megbeszélés az üzletvezetővel',
+      text: [
+        { jp: 'わたしは{週|しゅう}に{三回|さんかい}、{本屋|ほんや}でアルバイトをしています。', hu: 'Hetente háromszor könyvesboltban dolgozom.' },
+        { jp: '{店長|てんちょう}はやさしい{人|ひと}で、わたしにいろいろな{仕事|しごと}をさせてくれます。', hu: 'Az üzletvezető kedves ember, sokféle munkát rám bíz.' },
+        { jp: 'でも、{来月|らいげつ}は{試験|しけん}があります。{両親|りょうしん}を{心配|しんぱい}させたくないので、{勉強|べんきょう}しなければなりません。', hu: 'De jövő hónapban vizsgám van. Nem szeretném aggasztani a szüleimet, ezért tanulnom kell.', par: true },
+        { jp: 'それで、{店長|てんちょう}に{相談|そうだん}しました。', hu: 'Ezért megbeszéltem az üzletvezetővel.' },
+        { jp: '「{来月|らいげつ}は{週|しゅう}に{一回|いっかい}だけ{働|はたら}かせていただけませんか。」', hu: '„Megengedné, hogy jövő hónapban csak heti egyszer dolgozzam?"' },
+        { jp: '{店長|てんちょう}は「いいですよ。{試験|しけん}のほうが{大事|だいじ}です。しっかり{勉強|べんきょう}しなさい」と{言|い}ってくれました。', hu: 'Az üzletvezető azt mondta: „Rendben. A vizsga fontosabb. Tanulj rendesen!"', par: true },
+        { jp: '「そのかわり、{試験|しけん}が{終|お}わったら、{土曜日|どようび}も{来|こ}させてください。」', hu: '„Cserébe a vizsga után hadd jöjjek szombaton is!"' },
+        { jp: '{店長|てんちょう}は{笑|わら}って、「それは{助|たす}かります」と{言|い}いました。', hu: 'Az üzletvezető nevetett: „Az nagy segítség lesz."' }
+      ],
+      words: [{ jp: '{店長|てんちょう}', hu: 'üzletvezető' }, { jp: 'いろいろな', hu: 'sokféle' }, { jp: '{心配|しんぱい}します', hu: 'aggódik' }, { jp: '{相談|そうだん}します', hu: 'megbeszél, tanácsot kér' }, { jp: '{大事|だいじ}', hu: 'fontos' }, { jp: 'しっかり', hu: 'rendesen, alaposan' }, { jp: 'そのかわり', hu: 'cserébe' }, { jp: '{助|たす}かります', hu: 'nagy segítség' }],
+      questions: [
+        { q: 'Milyen gyakran dolgozik most Anna?', a: 'Hetente háromszor', wrong: ['Hetente egyszer', 'Minden nap', 'Csak szombaton'],
+          why: '{週|しゅう}に{三回|さんかい}、{本屋|ほんや}でアルバイトをしています.' },
+        { q: 'Miért akar jövő hónapban kevesebbet dolgozni?', a: 'Mert vizsgája lesz', wrong: ['Mert elutazik', 'Mert megbetegedett', 'Mert másik munkát talált'],
+          why: '{来月|らいげつ}は{試験|しけん}があります。{両親|りょうしん}を{心配|しんぱい}させたくないので…: az érzést kiváltó műveltetőnél az érintett を-t kap.' },
+        { q: 'Mit kért Anna az üzletvezetőtől?', a: 'Hogy jövő hónapban csak heti egyszer dolgozhasson', wrong: ['Hogy jövő hónaptól több fizetést kapjon', 'Hogy egy hónapig egyáltalán ne kelljen bejönnie', 'Hogy munka közben a boltban tanulhasson'],
+          why: '{週|しゅう}に{一回|いっかい}だけ{働|はたら}かせていただけませんか: a 〜させていただけませんか nagyon udvarias engedélykérés.' },
+        { q: 'Mit ajánlott fel Anna cserébe?', a: 'Hogy a vizsga után szombaton is bejön', wrong: ['Hogy maga helyett hoz egy barátot', 'Hogy egy hétig ingyen dolgozik', 'Hogy esténként tovább marad'],
+          why: '{試験|しけん}が{終|お}わったら、{土曜日|どようび}も{来|こ}させてください: a 〜させてください = „engedje meg, hogy…".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Kelj fel gyorsan!" (szülő a gyereknek) Mi hiányzik?', jp: '{早|はや}く{起|お}き＿。', a: 'なさい', wrong: ['ください', 'なら', 'ながら'], why: 'Utasítás felülről: ます-tő + なさい.' },
       { point: 3, q: '„Megnevettettem mindenkit." Mi hiányzik?', jp: 'みんな＿{笑|わら}わせました。', a: 'を', wrong: ['に', 'が', 'で'], why: 'Érzést kiváltó műveltetőnél az érintett を-t kap.' },
@@ -19280,6 +20431,31 @@ const NIHONCORE_COURSE = [
         text: 'Sok ember életében több nyelv van jelen, és nem mind egyforma erős: az egyiket otthon hallotta, a másikat az iskolában tanulta, a harmadikon csak néhány szót tud a nagyszüleitől. Japánban külön szó van a külföldön felnőtt, majd hazatért gyerekekre: {帰国子女|きこくしじょ}. Az a nyelv is a tiéd, amelyet nem beszélsz hibátlanul — minden nyelv egy újabb ablak, amelyen át a világra és önmagadra nézel.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'わたしと{外国語|がいこくご}', titleHu: 'Én és az idegen nyelvek',
+      text: [
+        { jp: '{子|こ}どものとき、わたしは{母|はは}にピアノを{習|なら}わされました。', hu: 'Gyerekkoromban anyám zongorázni járatott.' },
+        { jp: '{毎日|まいにち}{一時間|いちじかん}{練習|れんしゅう}させられて、とても{嫌|いや}でした。', hu: 'Naponta egy órát kellett gyakorolnom, nagyon utáltam.' },
+        { jp: '{学校|がっこう}では、{英語|えいご}の{単語|たんご}をたくさん{覚|おぼ}えさせられました。', hu: 'Az iskolában rengeteg angol szót kellett megtanulnom.' },
+        { jp: 'でも、{日本語|にほんご}はだれにも{勉強|べんきょう}させられたのではありません。', hu: 'De japánul senki sem kényszerített tanulni.', par: true },
+        { jp: '{日本|にほん}のアニメを{見|み}て、{自分|じぶん}から{始|はじ}めました。', hu: 'Japán animéket néztem, és magamtól kezdtem el.' },
+        { jp: '{今|いま}、{日本語|にほんご}を{聞|き}くことと{読|よ}むことはできますが、{書|か}くことはまだ{苦手|にがて}です。', hu: 'Most a hallás utáni értés és az olvasás megy, de írni még nem megy jól.' },
+        { jp: '{先週|せんしゅう}の{授業|じゅぎょう}で{日本|にほん}の{昔話|むかしばなし}を{読|よ}んで、いろいろなことを{考|かんが}えさせられました。', hu: 'A múlt heti órán egy japán népmesét olvastunk, és sok mindenen elgondolkodtam.', par: true },
+        { jp: '{今|いま}は、ピアノを{習|なら}わせてくれた{母|はは}にも{感謝|かんしゃ}しています。', hu: 'Ma már annak is hálás vagyok anyámnak, hogy zongorázni taníttatott.' }
+      ],
+      words: [{ jp: 'ピアノ', hu: 'zongora' }, { jp: '{嫌|いや}', hu: 'kellemetlen, utálatos' }, { jp: '{単語|たんご}', hu: 'szó' }, { jp: '{自分|じぶん}から', hu: 'magától' }, { jp: '{苦手|にがて}', hu: 'nem megy jól' }, { jp: '{昔話|むかしばなし}', hu: 'népmese' }, { jp: '{感謝|かんしゃ}します', hu: 'hálás' }],
+      questions: [
+        { q: 'Mit kellett Annának gyerekkorában csinálnia?', a: 'Zongorázni tanulni', wrong: ['Japánul tanulni', 'Animéket nézni', 'Angol könyveket olvasni'],
+          why: '{母|はは}にピアノを{習|なら}わされました: a műveltető-szenvedő alak — „rákényszerítettek, hogy…".' },
+        { q: 'Hogyan kezdett Anna japánul tanulni?', a: 'Magától, az animék hatására', wrong: ['Az anyja kérésére', 'Az iskolában, kötelezően', 'Egy japán barátja miatt'],
+          why: 'アニメを{見|み}て、{自分|じぶん}から{始|はじ}めました: {自分|じぶん}から = saját elhatározásból.' },
+        { q: 'Mi megy még nehezen Annának japánul?', a: 'Az írás', wrong: ['A hallás utáni értés', 'Az olvasás', 'A kiejtés'],
+          why: '{書|か}くことはまだ{苦手|にがて}です.' },
+        { q: 'Hogyan gondol ma Anna a zongoraleckékre?', a: 'Hálás értük az anyjának', wrong: ['Még mindig haragszik miattuk', 'Sajnálja, hogy abbahagyta', 'Már nem emlékszik rájuk'],
+          why: 'ピアノを{習|なら}わせてくれた{母|はは}にも{感謝|かんしゃ}しています: a 〜させてくれます itt hálát fejez ki („megadta a lehetőséget").' }
+      ]
+    },
     quiz: [
       { point: 1, q: 'Mi a {食|た}べます műveltető-szenvedő alakja?', a: '{食|た}べさせられます', wrong: ['{食|た}べられさせます', '{食|た}べさせます', '{食|た}べらせます'], why: '{食|た}べさせる + られます.' },
       { point: 2, q: 'Mi a {待|ま}ちます rövid műveltető-szenvedő alakja?', a: '{待|ま}たされます', wrong: ['{待|ま}たせます', '{待|ま}たれます', '{待|ま}ちされます'], why: '{待|ま}たせられます → {待|ま}たされます.' },
@@ -19762,6 +20938,31 @@ const NIHONCORE_COURSE = [
         text: 'Ha valaki elmegy — munkahelyről, iskolából, az országból —, búcsúestet ({送別会|そうべつかい}) rendeznek neki. Az elköszönő rövid beszédet mond, a többiek pedig gyakran egy közös lapot adnak át, amelyre mindenki írt néhány sort ({寄|よ}せ{書|が}き). Az állomásra, a repülőtérre kikísérik, és addig integetnek, amíg látni lehet. A búcsú szava barátok között nem a さようなら, hanem a „majd találkozunk": また{会|あ}いましょう.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'お{別|わか}れのスピーチ', titleHu: 'Búcsúbeszéd',
+      text: [
+        { jp: 'みなさん、{一年間|いちねんかん}、{本当|ほんとう}にありがとうございました。', hu: 'Kedves mindenki, nagyon köszönöm ezt az egy évet!' },
+        { jp: 'わたしは{一冊|いっさつ}の{漫画|まんが}をきっかけに、{日本語|にほんご}の{勉強|べんきょう}を{始|はじ}めました。', hu: 'Egyetlen manga hatására kezdtem japánul tanulni.' },
+        { jp: '{日本|にほん}に{来|き}たころは、{言葉|ことば}がわからないせいで、よく{失敗|しっぱい}しました。', hu: 'Amikor Japánba jöttem, a nyelvtudásom hiánya miatt sokszor hibáztam.' },
+        { jp: 'でも、{日本語|にほんご}は{勉強|べんきょう}すれば{勉強|べんきょう}するほど、おもしろくなりました。', hu: 'De a japán minél többet tanultam, annál érdekesebb lett.' },
+        { jp: '{留学生|りゅうがくせい}として、たくさんの{人|ひと}に{出会|であ}うことができました。', hu: 'Cserediákként rengeteg emberrel ismerkedhettem meg.', par: true },
+        { jp: '{来月|らいげつ}、ハンガリーに{帰国|きこく}します。{帰|かえ}ったら、{通訳|つうやく}として{働|はたら}くつもりです。', hu: 'Jövő hónapban hazatérek Magyarországra. Otthon tolmácsként szeretnék dolgozni.' },
+        { jp: 'みなさんと{別|わか}れるのは{寂|さび}しいですが、この{一年|いちねん}の{思|おも}い{出|で}は{一生|いっしょう}{忘|わす}れません。', hu: 'Szomorú elválni, de ennek az évnek az emlékét egy életre megőrzöm.', par: true },
+        { jp: 'ハンガリーにいらっしゃるときは、ぜひ{連絡|れんらく}してください。', hu: 'Ha Magyarországon járnak, feltétlenül jelentkezzenek!' }
+      ],
+      words: [{ jp: '{一年間|いちねんかん}', hu: 'egy éven át' }, { jp: '{漫画|まんが}', hu: 'manga' }, { jp: '{失敗|しっぱい}します', hu: 'hibázik' }, { jp: '{出会|であ}います', hu: 'megismerkedik' }, { jp: '{帰国|きこく}します', hu: 'hazatér' }, { jp: '{別|わか}れます', hu: 'elválik' }, { jp: '{寂|さび}しい', hu: 'szomorú, magányos' }, { jp: '{思|おも}い{出|で}', hu: 'emlék' }, { jp: '{一生|いっしょう}', hu: 'egy életen át' }, { jp: '{連絡|れんらく}します', hu: 'jelentkezik' }],
+      questions: [
+        { q: 'Minek a hatására kezdett Anna japánul tanulni?', a: 'Egy manga hatására', wrong: ['Egy japán film hatására', 'Egy barátja tanácsára', 'A tanára biztatására'],
+          why: '{一冊|いっさつ}の{漫画|まんが}をきっかけに: a 〜をきっかけに = „…-nak a hatására, …-ból kiindulva".' },
+        { q: 'Miért hibázott sokat eleinte?', a: 'Mert nem értette a nyelvet', wrong: ['Mert nem figyelt oda', 'Mert mindenki siettette', 'Mert nem mert kérdezni'],
+          why: '{言葉|ことば}がわからないせいで: a 〜せいで a rossz kimenetel okát adja meg.' },
+        { q: 'Mit mond Anna a japántanulásról?', a: 'Minél többet tanulta, annál érdekesebb lett', wrong: ['Minél többet tanulta, annál nehezebb lett', 'Eleinte érdekes volt, később unalmas', 'Mindvégig egyformán nehéz volt'],
+          why: '{勉強|べんきょう}すれば{勉強|べんきょう}するほど、おもしろくなりました: a 〜ば〜ほど = „minél…, annál…".' },
+        { q: 'Mit tervez Anna otthon?', a: 'Tolmácsként fog dolgozni', wrong: ['Japántanár lesz', 'Tovább tanul az egyetemen', 'Mangákat fog fordítani'],
+          why: '{通訳|つうやく}として{働|はたら}くつもりです: a 〜として = „…-ként, … minőségben".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Egy utazás hatására kezdtem japánul tanulni." Mi hiányzik?', jp: '{旅行|りょこう}＿、{日本語|にほんご}の{勉強|べんきょう}を{始|はじ}めました。', a: 'をきっかけに', wrong: ['のせいで', 'として', 'について'], why: 'Ami elindította: 〜をきっかけに.' },
       { point: 2, q: '„Az eső miatt elmaradt a meccs." Mi hiányzik?', jp: '{雨|あめ}＿、{試合|しあい}が{中止|ちゅうし}になりました。', a: 'のせいで', wrong: ['のおかげで', 'をきっかけに', 'として'], why: 'Rossz eredmény oka: 〜のせいで.' },
@@ -20156,6 +21357,31 @@ const NIHONCORE_COURSE = [
         text: 'A mondat eleji だから beszélgetésben könnyen türelmetlennek hat: „hát mondom!" — mintha a másik nem értené, amit már egyszer elmondtál. Udvarias helyzetben a <b>ですから</b> a jó választás; ha pedig csak elmeséled, mi történt, a semleges <b>それで</b> illik. Ugyanaz a logikai kapcsolat, három különböző hangulat.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{山|やま}に{登|のぼ}りました', titleHu: 'Hegyet másztunk',
+      text: [
+        { jp: '{土曜日|どようび}、ケンさんと{山|やま}に{登|のぼ}りました。', hu: 'Szombaton Kennel hegyet másztunk.' },
+        { jp: '{朝|あさ}は{天気|てんき}がよかったです。だから、たくさんの{人|ひと}がいました。', hu: 'Reggel jó idő volt. Ezért sokan voltak.' },
+        { jp: '{道|みち}は{長|なが}かったけど、{景色|けしき}がきれいで{楽|たの}しかったです。', hu: 'Hosszú volt az út, de szép volt a kilátás, élveztük.' },
+        { jp: '{昼|ひる}ごろ、{山|やま}の{上|うえ}に{着|つ}きました。そして、お{弁当|べんとう}を{食|た}べました。', hu: 'Dél körül értünk fel a csúcsra. És megebédeltünk.' },
+        { jp: 'しかし、{午後|ごご}は{急|きゅう}に{雨|あめ}が{降|ふ}りました。', hu: 'Délután azonban hirtelen eleredt az eső.', par: true },
+        { jp: 'わたしはかさを{持|も}っていませんでした。それで、{服|ふく}がぬれてしまいました。', hu: 'Nem volt nálam esernyő. Így elázott a ruhám.' },
+        { jp: 'それに、{帰|かえ}りのバスは{一時間|いちじかん}{来|き}ませんでした。', hu: 'Ráadásul a visszafelé tartó busz egy óráig nem jött.' },
+        { jp: 'とても{疲|つか}れました。それでも、また{行|い}きたいです。', hu: 'Nagyon elfáradtam. Mégis szeretnék újra elmenni.', par: true }
+      ],
+      words: [{ jp: '{山|やま}に{登|のぼ}ります', hu: 'hegyet mászik' }, { jp: '{昼|ひる}ごろ', hu: 'dél körül' }, { jp: '{急|きゅう}に', hu: 'hirtelen' }, { jp: '{降|ふ}ります', hu: 'esik' }, { jp: '{服|ふく}がぬれます', hu: 'elázik a ruhája' }, { jp: '{疲|つか}れます', hu: 'elfárad' }],
+      questions: [
+        { q: 'Miért voltak sokan a hegyen?', a: 'Mert reggel jó idő volt', wrong: ['Mert ünnepnap volt', 'Mert ingyenes volt a busz', 'Mert versenyt rendeztek'],
+          why: '{天気|てんき}がよかったです。だから、たくさんの{人|ひと}がいました: a だから a következményt vezeti be.' },
+        { q: 'Milyen volt az út felfelé?', a: 'Hosszú, de szép és élvezetes', wrong: ['Rövid és unalmas', 'Hosszú, unalmas és nagyon fárasztó', 'Rövid, de veszélyes'],
+          why: '{道|みち}は{長|なが}かったけど、{景色|けしき}がきれいで{楽|たの}しかったです: a けど = „de".' },
+        { q: 'Miért ázott el Anna ruhája?', a: 'Mert nem volt nála esernyő', wrong: ['Mert beleesett a patakba', 'Mert Ken leöntötte teával', 'Mert elvesztette a kabátját'],
+          why: 'かさを{持|も}っていませんでした。それで、{服|ふく}がぬれてしまいました: a それで = „ezért, így".' },
+        { q: 'Mit gondol Anna a kirándulásról?', a: 'Elfáradt, mégis újra elmenne', wrong: ['Elfáradt, ezért többet nem megy', 'Nem fáradt el, de unatkozott', 'Jó volt, de legközelebb busszal megy fel'],
+          why: 'とても{疲|つか}れました。それでも、また{行|い}きたいです: a それでも = „mégis, ennek ellenére".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Drága, de megveszem." Mi hiányzik?', jp: '{高|たか}い＿、{買|か}います。', a: 'けど', wrong: ['から', 'ので', 'だから'], why: 'Mondaton belüli ellentét: けど.' },
       { point: 3, q: 'Melyik kötőszó illik írott, hivatalos szövegbe („azonban")?', a: 'しかし', wrong: ['でも', 'けど', 'それから'], why: 'A しかし írott, hivatalos; a でも és a けど beszélt nyelvi.' },
@@ -20516,6 +21742,31 @@ const NIHONCORE_COURSE = [
         text: 'A nyelvkönyvek régebben élesen elválasztották a „férfias" (ぞ, ぜ, かい, だい) és a „nőies" (わ, かしら) mondatvégeket. A mai fiatalok beszédében ez a különbség sokat halványult: a legtöbben semleges alakokat használnak. A filmek, animék és mangák viszont ma is ezekkel a szócskákkal rajzolják meg a szereplőket — a kemény hőst, az előkelő hölgyet, a bölcs öreget. Felismerni jó; utánozni a mindennapi életben nem érdemes.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{花見|はなみ}の{日|ひ}', titleHu: 'Virágnéző nap',
+      text: [
+        { jp: '{今日|きょう}はユイさんとケンさんと{公園|こうえん}へ{花見|はなみ}に{行|い}った。', hu: 'Ma Juival és Kennel virágnézőbe mentünk a parkba.' },
+        { jp: 'ユイ「わあ、きれいだね。」', hu: 'Jui: „Hű, de szép, ugye?"', par: true },
+        { jp: 'ケン「あそこにいい{場所|ばしょ}があるよ。」', hu: 'Ken: „Ott van egy jó hely."' },
+        { jp: 'わたし「お{弁当|べんとう}、{足|た}りるかな。」', hu: 'Én: „Vajon elég lesz az ebéd?"' },
+        { jp: 'ユイ「{大丈夫|だいじょうぶ}。たくさん{作|つく}ったの。」', hu: 'Jui: „Nyugi. Sokat csináltam."' },
+        { jp: 'ケン「このたまごやき、おいしいなあ。」', hu: 'Ken: „De finom ez a tojásrolád!"' },
+        { jp: 'ユイ「{来年|らいねん}も{三人|さんにん}で{来|き}たいね。」ケン「うん、{約束|やくそく}だよ。」', hu: 'Jui: „Jövőre is jó volna eljönni hárman, nem?" Ken: „Jó, megígérem."' },
+        { jp: '{来年|らいねん}もここで{桜|さくら}を{見|み}ることができるかな。きっとできるよね。', hu: 'Vajon jövőre is láthatom itt a cseresznyevirágot? Biztosan, ugye?', par: true }
+      ],
+      words: [{ jp: '{花見|はなみ}', hu: 'cseresznyevirág-nézés' }, { jp: '{場所|ばしょ}', hu: 'hely' }, { jp: '{足|た}ります', hu: 'elég' }, { jp: 'たまごやき', hu: 'tojásrolád' }, { jp: '{約束|やくそく}', hu: 'ígéret' }, { jp: '{桜|さくら}', hu: 'cseresznyevirág' }],
+      questions: [
+        { q: 'Hová mentek hárman?', a: 'Virágnézőbe a parkba', wrong: ['Moziba', 'Hegyet mászni', 'Étterembe ebédelni'],
+          why: '{公園|こうえん}へ{花見|はなみ}に{行|い}った.' },
+        { q: 'Mi miatt aggódik Anna?', a: 'Hogy elég lesz-e az ebéd', wrong: ['Hogy esni fog-e az eső', 'Hogy találnak-e helyet', 'Hogy ízleni fog-e az étel'],
+          why: 'お{弁当|べんとう}、{足|た}りるかな: a かな magunknak feltett kérdés („vajon…?").' },
+        { q: 'Mit mond Ken a tojásroládról?', a: 'Hogy nagyon finom', wrong: ['Hogy kevés belőle', 'Hogy túl édes', 'Hogy ő készítette'],
+          why: 'おいしいなあ: a なあ a beszélő saját, felkiáltó érzését fejezi ki.' },
+        { q: 'Mit szeretne Jui jövőre?', a: 'Újra eljönni hárman', wrong: ['Egyedül eljönni', 'Másik parkba menni', 'Több ebédet hozni'],
+          why: '{来年|らいねん}も{三人|さんにん}で{来|き}たいね: a ね egyetértést vár a többiektől.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Szép időnk van, ugye?" Mi hiányzik?', jp: 'いい{天気|てんき}です＿。', a: 'ね', wrong: ['よ', 'かい', 'なあ'], why: 'Egyetértést vársz: ね.' },
       { point: 2, q: '„Megjött a vonat!" (a másik nem vette észre) Mi hiányzik?', jp: '{電車|でんしゃ}が{来|き}ました＿。', a: 'よ', wrong: ['ね', 'かな', 'かい'], why: 'Új információ a másiknak: よ.' },
@@ -20946,6 +22197,31 @@ const NIHONCORE_COURSE = [
         text: 'A rövidítések tájanként is mások. Kiotó és Oszaka vidékén, a Kanszai régióban a tagadás 〜ない helyett gyakran 〜へん (わからへん: „nem értem"), a だめ helyett あかん hangzik, a {本当|ほんとう} helyett ほんま, a köszönet pedig おおきに. Ezeket nem kell használnod, de ha arra jársz, jó tudni, hogy nem egy másik nyelvet hallasz: csak a japán egyik színét.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ユイからのメッセージ', titleHu: 'Üzenetek Juitól',
+      text: [
+        { jp: 'ユイ「アンナ、{今|いま}{何|なに}してる？」', hu: 'Jui: „Anna, mit csinálsz most?"' },
+        { jp: 'アンナ「{宿題|しゅくだい}してる。あしたまでに{出|だ}さなきゃ。」', hu: 'Anna: „Házit írok. Holnapig be kell adnom."' },
+        { jp: 'ユイ「わたしはもう{終|お}わっちゃった。」', hu: 'Jui: „Én már végeztem vele."' },
+        { jp: 'アンナ「いいなあ。{三番|さんばん}の{問題|もんだい}がぜんぜんわかんない。」', hu: 'Anna: „De jó neked. A hármas feladatot egyáltalán nem értem."' },
+        { jp: 'ユイ「{先生|せんせい}が、{辞書|じしょ}を{使|つか}っちゃいけないって{言|い}ってたよ。」', hu: 'Jui: „A tanár azt mondta, nem szabad szótárt használni."', par: true },
+        { jp: 'アンナ「そっか。じゃ、もう{少|すこ}し{考|かんが}えてみる。」', hu: 'Anna: „Értem. Akkor még gondolkodom rajta egy kicsit."' },
+        { jp: 'ユイ「あした{雨|あめ}だって。かさ、かばんに{入|い}れとくといいよ。」', hu: 'Jui: „Azt mondják, holnap esik. Érdemes előre betenned az esernyőt a táskádba."', par: true },
+        { jp: 'アンナ「ありがとう。{今|いま}{入|い}れとく。じゃ、またあした。」', hu: 'Anna: „Köszi. Most beteszem. Akkor holnap találkozunk."' }
+      ],
+      words: [{ jp: 'メッセージ', hu: 'üzenet' }, { jp: '{宿題|しゅくだい}を{出|だ}します', hu: 'beadja a házit' }, { jp: '{三番|さんばん}の{問題|もんだい}', hu: 'a hármas feladat' }, { jp: 'そっか', hu: 'értem (közvetlen)' }, { jp: '{考|かんが}えます', hu: 'gondolkodik' }],
+      questions: [
+        { q: 'Mit csinál éppen Anna?', a: 'Házit ír', wrong: ['Szótárt keres', 'Esernyőt pakol', 'Juinál vendégeskedik'],
+          why: '{宿題|しゅくだい}してる: a してる a している rövidült, beszélt alakja.' },
+        { q: 'Meddig kell beadni a házit?', a: 'Holnapig', wrong: ['Ma estig', 'Jövő hétig', 'Már tegnap kellett volna'],
+          why: 'あしたまでに{出|だ}さなきゃ: a 〜なきゃ a 〜なければなりません rövidülése („muszáj").' },
+        { q: 'Mit mondott a tanár?', a: 'Hogy nem szabad szótárt használni', wrong: ['Hogy a hármas feladat nem kötelező', 'Hogy holnap elmarad az óra', 'Hogy mindenki hozzon esernyőt'],
+          why: '{使|つか}っちゃいけないって{言|い}ってたよ: 〜ちゃいけない = 〜てはいけない, a って az idézet jele.' },
+        { q: 'Mit tanácsol Jui a végén?', a: 'Hogy Anna tegye be előre az esernyőt', wrong: ['Hogy Anna kérjen segítséget a tanártól', 'Hogy Anna hagyja ki a hármas feladatot', 'Hogy Anna feküdjön le korán'],
+          why: 'かばんに{入|い}れとくといいよ: a 〜とく a 〜ておく rövidülése („előre megtenni").' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Most már haza kell mennem." Mi hiányzik?', jp: 'もう{帰|かえ}ら＿いけません。', a: 'なくては', wrong: ['なくても', 'ないで', 'なくて'], why: 'Kell: なくては + いけません.' },
       { point: 2, q: 'Minek a rövid alakja: {行|い}かなくちゃ', a: '{行|い}かなくては(いけない)', wrong: ['{行|い}かなくてもいい', '{行|い}かないでください', '{行|い}ってはいけない'], why: 'なくては → なくちゃ.' },
@@ -21332,6 +22608,31 @@ const NIHONCORE_COURSE = [
         text: 'A コンビニ a japán mindennapok része: éjjel-nappal nyitva tart, és minden sarkon van egy. Friss rizsgombócot, szendvicset, meleg ételt, dobozos ebédet ({弁当|べんとう}) is árul — a bentót kérésre meg is melegítik. Sok egyedül élő fiatal és irodai dolgozó innen eszik. Az otthon készített bentó viszont a gondoskodás jele: a szülő a gyereknek, sokan maguknak csomagolnak reggel.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ケンさんの{料理|りょうり}', titleHu: 'Ken és a főzés',
+      text: [
+        { jp: 'ケンさんは{料理|りょうり}を{作|つく}るのが{上手|じょうず}です。', hu: 'Ken jól főz.' },
+        { jp: '{週|しゅう}に{三回|さんかい}、{自分|じぶん}で{晩|ばん}ごはんを{作|つく}ります。', hu: 'Hetente háromszor maga készíti a vacsoráját.' },
+        { jp: 'たいてい{本|ほん}を{見|み}ないで{作|つく}ります。', hu: 'Többnyire szakácskönyv nélkül főz.' },
+        { jp: 'わたしは{料理|りょうり}が{下手|へた}ですが、{食|た}べるのは{大好|だいす}きです。', hu: 'Én ügyetlenül főzök, de enni nagyon szeretek.' },
+        { jp: 'きのう、ケンさんに「カレーはどうやって{作|つく}りますか」と{聞|き}きました。', hu: 'Tegnap megkérdeztem Kent: „Hogyan kell curryt készíteni?"', par: true },
+        { jp: '「まず{野菜|やさい}と{肉|にく}を{切|き}って、{鍋|なべ}に{入|い}れます。それから{三十分|さんじゅっぷん}{煮|に}ます。」', hu: '„Először felvágod a zöldséget és a húst, és a lábosba teszed. Aztán fél óráig főzöd."' },
+        { jp: '「{土曜日|どようび}にいっしょに{作|つく}るのはどうですか。」「いいですね。」', hu: '„Mit szólnál, ha szombaton együtt főznénk?" „Jó ötlet."' },
+        { jp: '{友|とも}だちと{料理|りょうり}するのは{楽|たの}しいです。たまに{失敗|しっぱい}しますが、いつもおいしく{食|た}べます。', hu: 'Barátokkal főzni jó. Néha nem sikerül, de mindig jóízűen megesszük.', par: true }
+      ],
+      words: [{ jp: '{自分|じぶん}で', hu: 'maga, egyedül' }, { jp: '{切|き}ります', hu: 'vág' }, { jp: '{鍋|なべ}', hu: 'lábos' }, { jp: '{煮|に}ます', hu: 'főz (lében)' }, { jp: '{失敗|しっぱい}します', hu: 'nem sikerül, elront' }],
+      questions: [
+        { q: 'Milyen gyakran főz Ken vacsorát?', a: 'Hetente háromszor', wrong: ['Minden nap', 'Hetente egyszer', 'Csak szombaton'],
+          why: '{週|しゅう}に{三回|さんかい}: egy hétre három alkalom.' },
+        { q: 'Hogyan főz Ken többnyire?', a: 'Szakácskönyv nélkül', wrong: ['Mindig recept szerint', 'Anna segítségével', 'Videót nézve közben'],
+          why: 'たいてい{本|ほん}を{見|み}ないで{作|つく}ります: a 〜ないで = „anélkül, hogy".' },
+        { q: 'Mit kérdezett Anna Kentől?', a: 'Hogyan kell curryt készíteni', wrong: ['Miért szeret főzni', 'Milyen gyakran főz magának vacsorát', 'Mit főz szombaton'],
+          why: 'カレーはどうやって{作|つく}りますか: a どうやって a módra kérdez („hogyan, milyen lépésekben").' },
+        { q: 'Mit javasolt Ken?', a: 'Hogy főzzenek együtt szombaton', wrong: ['Hogy Anna vegyen szakácskönyvet', 'Hogy menjenek étterembe', 'Hogy Anna tanuljon meg egyedül főzni'],
+          why: 'いっしょに{作|つく}るのはどうですか: a 〜のはどうですか javaslat („mit szólnál, ha…").' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Reggeli nélkül mentem el." Mi hiányzik?', jp: '{朝|あさ}ごはんを＿、{出|で}かけました。', a: '{食|た}べないで', wrong: ['{食|た}べなくて', '{食|た}べないと', '{食|た}べなければ'], why: 'Anélkül, hogy: ない-alak + で.' },
       { point: 2, q: '„Hogyan jutok el az állomásra?" Mi hiányzik?', jp: '{駅|えき}まで＿{行|い}きますか。', a: 'どうやって', wrong: ['どうして', 'どんな', 'どのくらい'], why: 'A módra kérdez: どうやって.' },
@@ -21703,6 +23004,31 @@ const NIHONCORE_COURSE = [
         text: 'Japánban az iskolai és az üzleti év is áprilisban kezdődik: a frissen végzettek ilyenkor lépnek be egyszerre a cégekhez. Az új munkatárs az első évben újoncnak számít, és ezt maga is gyakran mondja: まだ{入|はい}ったばかりで… („még csak most kezdtem…"). Ez egyszerre mentegetőzés és kérés: nézzék el a hibáit, és tanítsák. A 〜たばかり így a szerénység egyik eszköze is.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{留守|るす}のあいだに', titleHu: 'Amíg Jui távol volt',
+      text: [
+        { jp: 'きのう、ユイさんは{十時|じゅうじ}ごろ{買|か}い{物|もの}に{出|で}かけました。', hu: 'Tegnap Jui tíz óra körül elment vásárolni.' },
+        { jp: 'ユイさんが{出|で}かけているあいだ、{弟|おとうと}のたろうくんはずっとゲームをしていました。', hu: 'Amíg Jui távol volt, az öccse, Taro végig játszott.' },
+        { jp: 'わたしはそのあいだに、{部屋|へや}をそうじしておきました。', hu: 'Én ezalatt kitakarítottam a szobát.' },
+        { jp: '{十二時|じゅうにじ}ごろ、{急|きゅう}に{雨|あめ}が{降|ふ}りだしました。', hu: 'Dél körül hirtelen eleredt az eső.', par: true },
+        { jp: '{洗濯物|せんたくもの}がぬれないうちに、{急|いそ}いで{中|なか}に{入|い}れました。', hu: 'Mielőtt megázott volna a kiteregetett ruha, gyorsan behordtam.' },
+        { jp: 'バスは{二十分|にじゅっぷん}おきに{来|き}ますが、ユイさんはなかなか{帰|かえ}ってきませんでした。', hu: 'A busz húszpercenként jár, de Jui csak nem akart hazaérni.' },
+        { jp: '{一時|いちじ}ごろ、やっと{帰|かえ}ってきました。{先月|せんげつ}{買|か}ったばかりのかさを、{電車|でんしゃ}に{忘|わす}れたそうです。', hu: 'Egy óra körül végre megjött. Azt mondta, a múlt hónapban vett, vadonatúj esernyőjét a vonaton felejtette.', par: true },
+        { jp: 'わたしたちは{料理|りょうり}が{温|あたた}かいうちに、{昼|ひる}ごはんを{食|た}べました。', hu: 'Megebédeltünk, amíg még meleg volt az étel.' }
+      ],
+      words: [{ jp: '{留守|るす}', hu: 'távollét (otthonról)' }, { jp: '{出|で}かけます', hu: 'elmegy otthonról' }, { jp: 'ずっと', hu: 'végig' }, { jp: '{洗濯物|せんたくもの}', hu: 'kiteregetett ruha' }, { jp: '{急|いそ}いで', hu: 'sietve' }, { jp: '{温|あたた}かい', hu: 'meleg (étel)' }],
+      questions: [
+        { q: 'Mit csinált Taro, amíg Jui távol volt?', a: 'Végig játszott', wrong: ['Takarított', 'Aludt', 'Az esernyőt kereste'],
+          why: '{出|で}かけているあいだ、…ずっとゲームをしていました: az あいだ (に nélkül) a teljes időtartamra vonatkozik.' },
+        { q: 'Mit csinált közben Anna?', a: 'Kitakarította a szobát', wrong: ['Ebédet főzött kettejüknek', 'Vásárolni ment', 'Tévét nézett'],
+          why: 'そのあいだに、{部屋|へや}をそうじしておきました: az あいだに = az időszakon belül, egyszer megtörténő cselekvés.' },
+        { q: 'Miért hordta be Anna gyorsan a ruhákat?', a: 'Hogy ne ázzanak meg', wrong: ['Mert már megszáradtak', 'Mert Jui megkérte rá', 'Mert besötétedett'],
+          why: '{洗濯物|せんたくもの}がぬれないうちに: a 〜ないうちに = „mielőtt még megtörténne".' },
+        { q: 'Mi történt Jui esernyőjével?', a: 'A vonaton felejtette', wrong: ['Eltörte a szél', 'Kölcsönadta valakinek', 'Otthon hagyta'],
+          why: '{買|か}ったばかりのかさを、{電車|でんしゃ}に{忘|わす}れたそうです: a 〜たばかり = „éppen csak, nemrég".' }
+      ]
+    },
     quiz: [
       { point: 2, q: '„Amíg nem voltam otthon, megjött a csomag." Mi hiányzik?', jp: '{留守|るす}の＿、{荷物|にもつ}が{届|とど}きました。', a: '{間|あいだ}に', wrong: ['{間|あいだ}', 'ごろ', 'おきに'], why: 'Egyszeri esemény az időszakon belül: {間|あいだ}に.' },
       {
@@ -22102,6 +23428,31 @@ const NIHONCORE_COURSE = [
         text: 'Július hetedike a <b>{七夕|たなばた}</b>, a csillagok ünnepe. Ilyenkor az emberek színes papírcsíkokra írják a kívánságaikat, és bambuszágra kötik őket: iskolákban, állomásokon, bevásárlóutcákon mindenütt ott lengenek. A kívánság a 〜ますように fordulattal zárul: {家族|かぞく}が{元気|げんき}でいられますように („bárcsak egészséges maradna a családom"). A szentélyek fatábláira is ugyanígy írnak.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: 'ユイさんへの{手紙|てがみ}', titleHu: 'Levél Juinak',
+      text: [
+        { jp: 'ユイさん、お{元気|げんき}ですか。', hu: 'Kedves Jui, hogy vagy?' },
+        { jp: '{八月|はちがつ}にハンガリーへ{来|く}る{予定|よてい}だと{聞|き}いて、とてもうれしいです。', hu: 'Nagyon örülök, hogy augusztusra tervezed a magyarországi utat.' },
+        { jp: 'ぜひ、うちに{泊|と}まってほしいです。', hu: 'Mindenképp szeretném, ha nálunk laknál.' },
+        { jp: '{八月|はちがつ}は{暑|あつ}いので、{帽子|ぼうし}を{持|も}ってきたらどうですか。', hu: 'Augusztusban meleg van, mi lenne, ha hoznál kalapot?', par: true },
+        { jp: '「おみやげは{何|なに}を{持|も}っていったらいいですか」と{書|か}いてありましたが、{何|なに}もいりませんよ。', hu: 'Azt írtad: „Milyen ajándékot vigyek?" — de nem kell semmi.' },
+        { jp: '{両親|りょうしん}は、ユイさんに{会|あ}うのを{楽|たの}しみにしています。', hu: 'A szüleim alig várják, hogy találkozzanak veled.' },
+        { jp: '{去年|きょねん}、{日本|にほん}でユイさんに{会|あ}えて{本当|ほんとう}によかったです。', hu: 'Nagyon örülök, hogy tavaly Japánban megismerhettelek.', par: true },
+        { jp: 'いっしょにバラトンへ{行|い}く{予定|よてい}です。{天気|てんき}がいいといいですね。', hu: 'Úgy tervezem, együtt megyünk a Balatonra. Remélem, jó idő lesz.' }
+      ],
+      words: [{ jp: '{予定|よてい}', hu: 'terv, program' }, { jp: '{泊|と}まります', hu: 'megszáll' }, { jp: '{帽子|ぼうし}', hu: 'kalap' }, { jp: 'おみやげ', hu: 'ajándék (útról)' }, { jp: 'いります', hu: 'kell, szükséges' }, { jp: 'バラトン', hu: 'a Balaton' }],
+      questions: [
+        { q: 'Mikor jön Jui Magyarországra?', a: 'Augusztusban', wrong: ['Júliusban', 'Jövő tavasszal', 'Karácsonykor'],
+          why: '{八月|はちがつ}にハンガリーへ{来|く}る{予定|よてい}だ: a 〜{予定|よてい}です rögzített tervet jelöl.' },
+        { q: 'Mit szeretne Anna?', a: 'Hogy Jui náluk lakjon', wrong: ['Hogy Jui szállodában lakjon', 'Hogy Jui hozzon ajándékot', 'Hogy Jui egyedül menjen a Balatonra'],
+          why: 'うちに{泊|と}まってほしいです: a 〜てほしい = azt szeretném, hogy (más) megtegye.' },
+        { q: 'Mit tanácsol Anna Juinak?', a: 'Hogy hozzon kalapot', wrong: ['Hogy hozzon meleg kabátot', 'Hogy tanuljon meg magyarul', 'Hogy hozzon sok ajándékot'],
+          why: '{帽子|ぼうし}を{持|も}ってきたらどうですか: a 〜たらどうですか szelíd tanács („mi lenne, ha…").' },
+        { q: 'Mit terveznek együtt?', a: 'Elmennek a Balatonra', wrong: ['Japánba utaznak', 'Meglátogatják Jui szüleit', 'Egész nyáron tanulnak'],
+          why: 'いっしょにバラトンへ{行|い}く{予定|よてい}です。{天気|てんき}がいいといいですね: a 〜といいですね reményt fejez ki.' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Szeretném, ha anyám hamar meggyógyulna." Mi hiányzik?', jp: '{母|はは}に{早|はや}く{元気|げんき}になって＿です。', a: 'ほしい', wrong: ['たい', 'あげたい', 'みたい'], why: 'Mástól szeretném: て-alak + ほしい.' },
       {
@@ -22472,6 +23823,31 @@ const NIHONCORE_COURSE = [
         text: 'A {気|き} lefordíthatatlan szó: egyszerre kedv, figyelem, hangulat, lelkierő. Több tucat kifejezés épül rá, és ezek sokat elárulnak arról, mit tart fontosnak a japán gondolkodás. A figyelmes ember {気|き}がきく („működik a {気|き}-je"): észreveszi, mire van szüksége a másiknak, mielőtt az szólna. Aki tekintettel van másokra, az {気|き}を{使|つか}う. A társaság hangulatára ráérezni pedig annyi, mint {空気|くうき}を{読|よ}む: „olvasni a levegőt".'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{古|ふる}い{写真|しゃしん}', titleHu: 'A régi fénykép',
+      text: [
+        { jp: 'きのう、ケンさんの{部屋|へや}で{古|ふる}い{写真|しゃしん}を{見|み}つけました。', hu: 'Tegnap Ken szobájában találtam egy régi fényképet.' },
+        { jp: '{写真|しゃしん}の{男|おとこ}の{子|こ}は、{十歳|じゅっさい}ぐらいに{見|み}えました。', hu: 'A képen a fiú olyan tízévesnek látszott.' },
+        { jp: '「これはケンさんですか。」「いいえ、ぼくのはずがありません。{三十年|さんじゅうねん}も{前|まえ}の{写真|しゃしん}ですよ。」', hu: '„Ez te vagy, Ken?" „Nem, az kizárt. Ez a kép harmincéves."', par: true },
+        { jp: 'よく{見|み}ると、{後|うし}ろに{古|ふる}い{車|くるま}があることに{気|き}がつきました。', hu: 'Jobban megnézve észrevettem, hogy a háttérben egy régi autó áll.' },
+        { jp: '「まさか、ケンさんのお{父|とう}さんですか。」「ええ、やっぱりわかりますか。」', hu: '„Csak nem az apukád?" „De igen. Mégiscsak látszik, ugye?"' },
+        { jp: '{二人|ふたり}は{顔|かお}がとても{似|に}ています。さすが{親子|おやこ}です。', hu: 'Nagyon hasonlít az arcuk. Hiába, apa és fia.', par: true },
+        { jp: 'ケンさんは「{父|ちち}は{今|いま}も{若|わか}く{見|み}えるけど、そんなに{若|わか}くないよ」と{笑|わら}いました。', hu: 'Ken nevetett: „Apám most is fiatalnak látszik, pedig nem olyan fiatal."' },
+        { jp: 'その{写真|しゃしん}の{場所|ばしょ}がどこか{気|き}になりましたが、ケンさんもなかなか{思|おも}い{出|だ}せませんでした。', hu: 'Érdekelt, hol készült a kép, de Kennek sem akart eszébe jutni.' }
+      ],
+      words: [{ jp: '{見|み}つけます', hu: 'talál' }, { jp: '{男|おとこ}の{子|こ}', hu: 'fiú' }, { jp: 'ぼく', hu: 'én (férfi, közvetlen)' }, { jp: '{顔|かお}', hu: 'arc' }, { jp: '{似|に}ています', hu: 'hasonlít' }, { jp: '{親子|おやこ}', hu: 'szülő és gyermeke' }, { jp: '{若|わか}い', hu: 'fiatal' }, { jp: '{思|おも}い{出|だ}します', hu: 'eszébe jut' }],
+      questions: [
+        { q: 'Hány évesnek látszott a fiú a képen?', a: 'Körülbelül tízévesnek', wrong: ['Körülbelül harmincévesnek', 'Körülbelül húszévesnek', 'Körülbelül ötévesnek'],
+          why: '{十歳|じゅっさい}ぐらいに{見|み}えました: a 〜に{見|み}えます = „valamilyennek látszik".' },
+        { q: 'Miért nem lehet Ken a képen?', a: 'Mert a kép harmincéves', wrong: ['Mert Ken nem szeret fényképezkedni', 'Mert Kennek sosem volt autója', 'Mert a képen egy lány van'],
+          why: 'ぼくのはずがありません。{三十年|さんじゅうねん}も{前|まえ}の{写真|しゃしん}ですよ: a 〜はずがありません = „az kizárt".' },
+        { q: 'Ki van valójában a képen?', a: 'Ken apja', wrong: ['Ken bátyja', 'Ken nagyapja', 'Egy ismeretlen fiú'],
+          why: '「まさか、ケンさんのお{父|とう}さんですか。」「ええ…」: a まさか a hitetlenkedő „csak nem".' },
+        { q: 'Mi nem derült ki?', a: 'Hogy hol készült a kép', wrong: ['Hogy ki van a képen', 'Hogy mi áll a háttérben', 'Hogy milyen régi a kép'],
+          why: '{場所|ばしょ}がどこか{気|き}になりましたが、…なかなか{思|おも}い{出|だ}せませんでした: a なかなか + tagadás = „csak nem akar sikerülni".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Kizárt, hogy ő ilyet mondjon." Mi hiányzik?', jp: '{彼|かれ}がそんなことを{言|い}う＿。', a: 'はずがありません', wrong: ['はずです', 'かもしれません', 'ことがあります'], why: 'Lehetetlennek tartom: 〜はずがありません.' },
       { point: 1, q: 'Mi a 〜はずです ellentéte („kizárt")?', a: 'はずがありません', wrong: ['はずでした', 'はずですか', 'はずになります'], why: 'はずです: elvileg úgy van. はずがありません: kizárt.' },
@@ -22902,6 +24278,31 @@ const NIHONCORE_COURSE = [
         text: 'Magyarul nyugodtan kijelentjük: „ez a legrégibb templom az országban". Japánul az ilyen mondat végére szinte mindig odakerül: 〜と{言|い}われています — „úgy tartják". Ez nem bizonytalanság, hanem pontosság és szerénység: a beszélő nem állít sajátjaként olyat, amit csak hallott. Az idegenvezetők, a híradó, a tankönyvek mind így fogalmaznak. Aki elhagyja, az japán fülnek túl magabiztosnak hat.'
       }
     ],
+    /* @olvasás */
+    reading: {
+      title: '{海外旅行|かいがいりょこう}の{準備|じゅんび}', titleHu: 'Készülődés külföldi útra',
+      text: [
+        { jp: '{外国|がいこく}へ{行|い}くのに、パスポートが{必要|ひつよう}です。', hu: 'Külföldi utazáshoz útlevél kell.' },
+        { jp: '{国|くに}によっては、ビザも{必要|ひつよう}な{場合|ばあい}があります。', hu: 'Országtól függően vízum is kellhet.' },
+        { jp: 'ビザが{必要|ひつよう}な{場合|ばあい}は、{大使館|たいしかん}または{旅行会社|りょこうがいしゃ}に{聞|き}いてください。', hu: 'Ha vízum kell, érdeklődjön a nagykövetségen vagy az utazási irodánál.' },
+        { jp: '{荷物|にもつ}には、{薬|くすり}や{地図|ちず}などを{入|い}れておくといいでしょう。', hu: 'A csomagba érdemes gyógyszert, térképet és hasonlókat tenni.', par: true },
+        { jp: '{今|いま}はスマホだけで{切符|きっぷ}を{買|か}ったり、ホテルを{予約|よやく}したりできます。', hu: 'Ma már pusztán a telefonnal lehet jegyet venni vagy szállást foglalni.' },
+        { jp: 'でも、{小|ちい}さい{店|みせ}ではカードが{使|つか}いづらいので、{現金|げんきん}も{少|すこ}し{持|も}っていったほうがいいです。', hu: 'De kis boltokban nehézkes a kártyahasználat, ezért jobb egy kevés készpénzt is vinni.' },
+        { jp: '{飛行機|ひこうき}が{中止|ちゅうし}になった{場合|ばあい}は、すぐ{航空会社|こうくうがいしゃ}に{連絡|れんらく}してください。', hu: 'Ha törlik a járatot, azonnal lépjen kapcsolatba a légitársasággal.', par: true },
+        { jp: '{旅行|りょこう}は{準備|じゅんび}がいちばん{大切|たいせつ}だと{言|い}われています。', hu: 'Úgy mondják, az utazásban az előkészület a legfontosabb.' }
+      ],
+      words: [{ jp: '{海外旅行|かいがいりょこう}', hu: 'külföldi utazás' }, { jp: 'パスポート', hu: 'útlevél' }, { jp: 'ビザ', hu: 'vízum' }, { jp: '{大使館|たいしかん}', hu: 'nagykövetség' }, { jp: '{旅行会社|りょこうがいしゃ}', hu: 'utazási iroda' }, { jp: '{荷物|にもつ}', hu: 'csomag' }, { jp: 'スマホ', hu: 'okostelefon' }, { jp: 'カード', hu: 'bankkártya' }, { jp: '{現金|げんきん}', hu: 'készpénz' }, { jp: '{航空会社|こうくうがいしゃ}', hu: 'légitársaság' }, { jp: '{大切|たいせつ}', hu: 'fontos' }],
+      questions: [
+        { q: 'Mi kell mindig a külföldi utazáshoz?', a: 'Útlevél', wrong: ['Vízum', 'Készpénz', 'Térkép'],
+          why: '{外国|がいこく}へ{行|い}くのに、パスポートが{必要|ひつよう}です: a 〜のに itt célt jelöl („ahhoz, hogy"). Vízum csak némely országba kell.' },
+        { q: 'Hol lehet a vízumról érdeklődni?', a: 'A nagykövetségen vagy az utazási irodánál', wrong: ['A repülőtéren vagy a szálloda recepciójánál', 'Csak a légitársaságnál', 'A rendőrségen vagy a postán'],
+          why: '{大使館|たいしかん}または{旅行会社|りょこうがいしゃ}に{聞|き}いてください: a または = „vagy" (hivatalosabb stílusban).' },
+        { q: 'Miért jó készpénzt is vinni?', a: 'Mert kis boltokban nehézkes kártyával fizetni', wrong: ['Mert a telefon bármikor elromolhat', 'Mert a szállodák csak készpénzt fogadnak el', 'Mert kártyával minden drágább'],
+          why: 'カードが{使|つか}いづらいので: a 〜づらい = „nehézkes, kényelmetlen megtenni".' },
+        { q: 'Mi a teendő, ha törlik a járatot?', a: 'Azonnal szólni kell a légitársaságnak', wrong: ['Haza kell menni, és várni kell', 'Új jegyet kell venni a telefonnal', 'El kell menni a nagykövetségre'],
+          why: '{中止|ちゅうし}になった{場合|ばあい}は、すぐ{航空会社|こうくうがいしゃ}に{連絡|れんらく}してください: a 〜{場合|ばあい}は = „abban az esetben, ha".' }
+      ]
+    },
     quiz: [
       { point: 1, q: '„Az utazáshoz útlevél kell." Mi hiányzik?', jp: '{旅行|りょこう}にはパスポートが＿です。', a: '{必要|ひつよう}', wrong: ['{場合|ばあい}', '{予定|よてい}', '{上手|じょうず}'], why: '〜が{必要|ひつよう}です = szükség van rá.' },
       { point: 1, q: '„Nem szükséges sietni." Mi hiányzik?', jp: '{急|いそ}ぐ{必要|ひつよう}＿ありません。', a: 'は', wrong: ['を', 'に', 'で'], why: 'Tagadva: 〜{必要|ひつよう}はありません.' },

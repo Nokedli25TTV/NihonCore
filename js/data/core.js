@@ -1321,6 +1321,9 @@ const NIHONCORE_PATH = [
     desc: '〜さい: いっさい, はっさい, じゅっさい, はたち — melyik olvasat a helyes?',
     module: 'datetime', href: 'pages/datetime.html',
     preset: { only: { categories: ['ages'] }, set: { mode: 'recognition' } } },
+  { id: 'l1-read', glyph: '文', title: 'Olvasás: Én és Ken',
+    desc: '1. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l1&round=read' },
 
   // ── 2. lecke ──
   { id: 'l2-lesson', glyph: '読', title: 'Magyarázat: これ, この, ここ',
@@ -1338,6 +1341,9 @@ const NIHONCORE_PATH = [
     desc: 'Helyek megmutatása és a どこ kérdés.',
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N5', mode: 'particles', idRanges: [[63, 92]] } },
+  { id: 'l2-read', glyph: '文', title: 'Olvasás: A szobám',
+    desc: '2. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l2&round=read' },
 
   // ── 3. lecke ──
   { id: 'l3-lesson', glyph: '読', title: 'Magyarázat: あります, います',
@@ -1355,6 +1361,9 @@ const NIHONCORE_PATH = [
     desc: '〜の うえ / した / なか に: helymeghatározás mondatban.',
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N5', mode: 'particles', idRanges: [[123, 152]] } },
+  { id: 'l3-read', glyph: '文', title: 'Olvasás: Szatóék háza és a város',
+    desc: '3. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l3&round=read' },
 
   // ── 4. lecke ──
   { id: 'l4-lesson', glyph: '読', title: 'Magyarázat: 〜をください, óra, napok',
@@ -1377,6 +1386,9 @@ const NIHONCORE_PATH = [
     desc: 'なんじ, なんようび: a rendhagyó olvasatokkal.',
     module: 'datetime', href: 'pages/datetime.html',
     preset: { only: { categories: ['weekdays', 'times'] }, set: { mode: 'recognition' } } },
+  { id: 'l4-read', glyph: '文', title: 'Olvasás: A pékség az állomás előtt',
+    desc: '4. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l4&round=read' },
 
   { id: 't04', glyph: '試', title: '1. teszt: 1–4. lecke', optional: true,
     desc: 'Kis teszt, 30 perc, 30 kérdés: az 1–4. lecke anyaga vegyesen.',
@@ -1411,6 +1423,9 @@ const NIHONCORE_PATH = [
     desc: '〜時間, 〜週間, 〜か月, 〜年間: よじかん, いっしゅうかん, ろっかげつ…',
     module: 'datetime', href: 'pages/datetime.html',
     preset: { only: { categories: ['durations'] }, set: { mode: 'recognition' } } },
+  { id: 'l5-read', glyph: '文', title: 'Olvasás: Anna iskolába jár',
+    desc: '5. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l5&round=read' },
 
   // ── 6. lecke ──
   { id: 'l6-lesson', glyph: '読', title: 'Magyarázat: を, で, 〜ませんか',
@@ -1432,6 +1447,9 @@ const NIHONCORE_PATH = [
     desc: 'Rakd össze a mondatot az összekevert szavakból.',
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N5', mode: 'puzzle' } },
+  { id: 'l6-read', glyph: '文', title: 'Olvasás: Ken vasárnapja',
+    desc: '6. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l6&round=read' },
 
   // ── 7. lecke ──
   { id: 'l7-lesson', glyph: '読', title: 'Magyarázat: 〜が好きです, から',
@@ -1445,6 +1463,9 @@ const NIHONCORE_PATH = [
     desc: 'Szeretem, van, értem: mondatok が-val.',
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N5', mode: 'particles', particlesAny: ['が'] } },
+  { id: 'l7-read', glyph: '文', title: 'Olvasás: Sport és zene',
+    desc: '7. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l7&round=read' },
 
   // ── 8. lecke ──
   { id: 'l8-lesson', glyph: '読', title: 'Magyarázat: melléknevek, 〜たい',
@@ -1464,6 +1485,9 @@ const NIHONCORE_PATH = [
     module: 'adjectives', href: 'pages/adjectives.html',
     preset: { only: { forms: ['i_present_affirmative', 'i_present_negative', 'na_noun_modifier', 'na_present_affirmative', 'na_present_negative'] },
               set: { mode: 'recognition' } } },
+  { id: 'l8-read', glyph: '文', title: 'Olvasás: A városom, Budapest',
+    desc: '8. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l8&round=read' },
 
   { id: 't08', glyph: '試', title: '2. teszt: 5–8. lecke', optional: true,
     desc: 'Kis teszt, 30 perc, 30 kérdés: az 5–8. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
@@ -1491,6 +1515,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['te'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
+  { id: 'l9-read', glyph: '文', title: 'Olvasás: Egy nap Kiotóban',
+    desc: '9. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l9&round=read' },
 
   // ── 10. lecke ──
   { id: 'l10-lesson', glyph: '読', title: 'Magyarázat: より, いちばん, 〜てください',
@@ -1510,6 +1537,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['te'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'mastery' } } },
+  { id: 'l10-read', glyph: '文', title: 'Olvasás: Két étkezde',
+    desc: '10. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l10&round=read' },
 
   // ── 11. lecke ──
   { id: 'l11-lesson', glyph: '読', title: 'Magyarázat: た-alak, ない-alak, tanács',
@@ -1529,6 +1559,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['nai', 'ta'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
+  { id: 'l11-read', glyph: '文', title: 'Olvasás: Megfáztam',
+    desc: '11. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l11&round=read' },
 
   // ── 12. lecke ──
   { id: 'l12-lesson', glyph: '読', title: 'Magyarázat: közvetlen stílus, 〜ています',
@@ -1548,6 +1581,9 @@ const NIHONCORE_PATH = [
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_001', 's_n4_004', 's_n4_006', 's_n4_008', 's_n4_009', 's_n4_010', 's_n4_011'] } },
+  { id: 'l12-read', glyph: '文', title: 'Olvasás: E-mail Juinak',
+    desc: '12. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l12&round=read' },
 
   { id: 'd12', glyph: '験', title: 'Nagy dolgozat: 1–12. lecke', optional: true,
     desc: 'Nagy dolgozat, 60 perc, 60 kérdés: az 1–12. lecke anyaga vegyesen. A Dekiru 1 első fele.',
@@ -1570,6 +1606,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['masu', 'mashita', 'te', 'ta'], themes: ['giving'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
+  { id: 'l13-read', glyph: '文', title: 'Olvasás: Születésnapi ajándék',
+    desc: '13. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l13&round=read' },
 
   // ── 14. lecke ──
   { id: 'l14-lesson', glyph: '読', title: 'Magyarázat: もう, まだ, 〜と思います',
@@ -1585,6 +1624,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_011', 's_n4_021', 's_n4_vol_001', 's_n4_vol_002', 's_n4_vol_005', 's_n4_vol_006',
                     's_n4_vol_008', 's_n4_vol_009', 's_n4_vol_013', 's_n4_vol_018'] } },
+  { id: 'l14-read', glyph: '文', title: 'Olvasás: Tervek a téli szünetre',
+    desc: '14. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l14&round=read' },
 
   // ── 15. lecke ──
   { id: 'l15-lesson', glyph: '読', title: 'Magyarázat: 〜でしょう, 〜てしまう, 〜たり',
@@ -1600,6 +1642,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_prm_001', 's_n4_prm_004', 's_n4_prm_007', 's_n4_prm_009', 's_n4_prm_011',
                     's_n4_prm_013', 's_n4_prm_015', 's_n4_prm_017', 's_n4_prm_019', 's_n4_prm_020'] } },
+  { id: 'l15-read', glyph: '文', title: 'Olvasás: Vasárnapi baklövések',
+    desc: '15. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l15&round=read' },
 
   // ── 16. lecke ──
   { id: 'l16-lesson', glyph: '読', title: 'Magyarázat: 〜こと, 〜たことがある, できます',
@@ -1615,6 +1660,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_app_006', 's_n4_app_007', 's_n4_app_008', 's_n4_app_010', 's_n4_app_013',
                     's_n4_app_016', 's_n4_app_019'] } },
+  { id: 'l16-read', glyph: '文', title: 'Olvasás: Bemutatkozás diákmunkához',
+    desc: '16. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l16&round=read' },
 
   { id: 't16', glyph: '試', title: '3. teszt: 13–16. lecke', optional: true,
     desc: 'Kis teszt, 30 perc, 30 kérdés: a 13–16. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
@@ -1633,6 +1681,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_prm_002', 's_n4_prm_003', 's_n4_prm_005', 's_n4_prm_006', 's_n4_prm_008',
                     's_n4_prm_010', 's_n4_prm_012', 's_n4_prm_014', 's_n4_prm_016', 's_n4_prm_018'] } },
+  { id: 'l17-read', glyph: '文', title: 'Olvasás: A fogadó szabályai',
+    desc: '17. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l17&round=read' },
 
   // ── 18. lecke ──
   { id: 'l18-lesson', glyph: '読', title: 'Magyarázat: 〜かもしれません, 〜なります',
@@ -1648,6 +1699,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_chg_001', 's_n4_chg_002', 's_n4_chg_003', 's_n4_chg_004', 's_n4_chg_005',
                     's_n4_chg_015', 's_n4_chg_017'] } },
+  { id: 'l18-read', glyph: '文', title: 'Olvasás: Készülődés az útra',
+    desc: '18. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l18&round=read' },
 
   // ── 19. lecke ──
   { id: 'l19-lesson', glyph: '読', title: 'Magyarázat: 〜なければなりません',
@@ -1667,6 +1721,9 @@ const NIHONCORE_PATH = [
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_l19_01', 's_l19_02', 's_l19_03', 's_l19_04', 's_l19_05', 's_l19_06', 's_l19_07', 's_l19_08'] } },
+  { id: 'l19-read', glyph: '文', title: 'Olvasás: Megérkeztünk Budapestre',
+    desc: '19. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l19&round=read' },
 
   // ── 20. lecke ──
   { id: 'l20-lesson', glyph: '読', title: 'Magyarázat: kinyitom és kinyílik',
@@ -1687,6 +1744,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['masu', 'mashita', 'te'], themes: ['transitivity'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
+  { id: 'l20-read', glyph: '文', title: 'Olvasás: A piacon',
+    desc: '20. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l20&round=read' },
 
   { id: 't20', glyph: '試', title: '4. teszt: 17–20. lecke', optional: true,
     desc: 'Kis teszt, 30 perc, 30 kérdés: a 17–20. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
@@ -1709,6 +1769,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['te'], themes: ['transitivity'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'mastery' } } },
+  { id: 'l21-read', glyph: '文', title: 'Olvasás: Készül a Japán nap',
+    desc: '21. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l21&round=read' },
 
   // ── 22. lecke ──
   { id: 'l22-lesson', glyph: '読', title: 'Magyarázat: 〜てあげます, 〜ておきます',
@@ -1724,6 +1787,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_dyn_004', 's_n4_dyn_005', 's_n4_dyn_006', 's_n4_dyn_007', 's_n4_dyn_011', 's_n4_dyn_012',
                     's_n4_dyn_013', 's_n4_dyn_015', 's_n4_dyn_016', 's_n4_dyn_018', 's_n4_dyn_020'] } },
+  { id: 'l22-read', glyph: '文', title: 'Olvasás: Kirándulás Egerbe',
+    desc: '22. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l22&round=read' },
 
   // ── 23. lecke ──
   { id: 'l23-lesson', glyph: '読', title: 'Magyarázat: udvarias kérések, 〜の',
@@ -1743,6 +1809,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['te'], themes: ['giving'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'mastery' } } },
+  { id: 'l23-read', glyph: '文', title: 'Olvasás: A nagymamánál',
+    desc: '23. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l23&round=read' },
 
   // ── 24. lecke ──
   { id: 'l24-lesson', glyph: '読', title: 'Magyarázat: 〜てきます, 〜ていきます',
@@ -1758,6 +1827,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_trn_002', 's_n4_trn_004', 's_n4_trn_006', 's_n4_trn_008', 's_n4_trn_010',
                     's_n4_trn_012', 's_n4_trn_014', 's_n4_trn_016', 's_n4_trn_018', 's_n4_trn_019'] } },
+  { id: 'l24-read', glyph: '文', title: 'Olvasás: Köszönőlevél',
+    desc: '24. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l24&round=read' },
 
   { id: 'd24', glyph: '験', title: 'Nagy dolgozat: 13–24. lecke', optional: true,
     desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 13–24. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 1 második fele: ezzel zárul az N5 szint.',
@@ -1791,6 +1863,9 @@ const NIHONCORE_PATH = [
   { id: 'k1-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k1&round=listen' },
+  { id: 'k1-read', glyph: '文', title: 'Olvasás: Hegyet másztunk',
+    desc: 'Rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=k1&round=read' },
   { id: 'k2-lesson', glyph: '終', title: 'Kiegészítés: a mondat vége',
     desc: 'ね, よ, なあ, かな, かい, じゃないか.',
     module: 'lesson', href: 'pages/lesson.html?id=k2' },
@@ -1806,6 +1881,9 @@ const NIHONCORE_PATH = [
   { id: 'k2-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k2&round=listen' },
+  { id: 'k2-read', glyph: '文', title: 'Olvasás: Virágnéző nap',
+    desc: 'Rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=k2&round=read' },
   { id: 'k3-lesson', glyph: '略', title: 'Kiegészítés: beszélt rövidítések',
     desc: 'なくちゃ, ちゃいけない, ちゃう, てる, って.',
     module: 'lesson', href: 'pages/lesson.html?id=k3' },
@@ -1821,6 +1899,9 @@ const NIHONCORE_PATH = [
   { id: 'k3-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k3&round=listen' },
+  { id: 'k3-read', glyph: '文', title: 'Olvasás: Üzenetek Juitól',
+    desc: 'Rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=k3&round=read' },
   { id: 'k4-lesson', glyph: '様', title: 'Kiegészítés: hogyan, milyen jól',
     desc: '〜ないで, どうやって, 〜のが上手, いつも és たまに.',
     module: 'lesson', href: 'pages/lesson.html?id=k4' },
@@ -1836,6 +1917,13 @@ const NIHONCORE_PATH = [
   { id: 'k4-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k4&round=listen' },
+  { id: 'k4-read', glyph: '文', title: 'Olvasás: Ken és a főzés',
+    desc: 'Rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=k4&round=read' },
+
+  { id: 'n5', glyph: '模', title: 'N5 próbavizsga', optional: true,
+    desc: 'Próbavizsga a JLPT N5 mintájára: nyelvtan és olvasás 40 perc, hallás 30 perc. A Dekiru 1 teljes anyaga.',
+    module: 'exam', href: 'pages/exam.html?id=n5' },
 
   // ════════ DEKIRU 2 (25–48. lecke) ════════
 
@@ -1855,6 +1943,9 @@ const NIHONCORE_PATH = [
   { id: 'l25-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 25. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l25&round=listen' },
+  { id: 'l25-read', glyph: '文', title: 'Olvasás: A repülőtéren',
+    desc: '25. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l25&round=read' },
 
   // ── 26. lecke ──
   { id: 'l26-lesson', glyph: '読', title: 'Magyarázat: 〜たら, szándékos alak',
@@ -1875,6 +1966,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_cnd_001', 's_n4_cnd_008', 's_n4_cnd_012', 's_n4_cnd_013', 's_n4_cnd_016', 's_n4_cnd_020',
                     's_n4_vol_004', 's_n4_vol_007', 's_n4_vol_011', 's_n4_vol_016', 's_n4_vol_019'] } },
+  { id: 'l26-read', glyph: '文', title: 'Olvasás: Az álmom',
+    desc: '26. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l26&round=read' },
 
   // ── 27. lecke ──
   { id: 'l27-lesson', glyph: '読', title: 'Magyarázat: ható alak',
@@ -1899,6 +1993,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['potential'], themes: ['daily', 'movement'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'mastery' } } },
+  { id: 'l27-read', glyph: '文', title: 'Olvasás: Készül a buli',
+    desc: '27. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l27&round=read' },
 
   // ── 28. lecke ──
   { id: 'l28-lesson', glyph: '読', title: 'Magyarázat: 〜ば, 〜なら',
@@ -1914,6 +2011,9 @@ const NIHONCORE_PATH = [
     desc: 'A három feltételes szerkezet: mit fejez ki a mondat?',
     module: 'grammar', href: 'pages/grammar.html',
     preset: { patterns: ['eba', 'nara', 'de_gozaimasu', 'shi_shi', 'ni_chigai_nai', 'tara'], set: { mode: 'recognition' } } },
+  { id: 'l28-read', glyph: '文', title: 'Olvasás: Az új számítógép',
+    desc: '28. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l28&round=read' },
 
   { id: 't28', glyph: '試', title: '5. teszt: 25–28. lecke', optional: true,
     desc: 'Kis teszt, 30 perc, 30 kérdés: a 25–28. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
@@ -1934,6 +2034,9 @@ const NIHONCORE_PATH = [
   { id: 'l29-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 29. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l29&round=listen' },
+  { id: 'l29-read', glyph: '文', title: 'Olvasás: Az új félév',
+    desc: '29. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l29&round=read' },
 
   // ── 30. lecke ──
   { id: 'l30-lesson', glyph: '読', title: 'Magyarázat: 〜のに, 〜によって',
@@ -1948,6 +2051,9 @@ const NIHONCORE_PATH = [
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_l30_01', 's_l30_02', 's_l30_03', 's_l30_04', 's_l30_05', 's_l30_06', 's_l30_07', 's_l30_08'] } },
+  { id: 'l30-read', glyph: '文', title: 'Olvasás: Plakát az egyetemi fesztiválra',
+    desc: '30. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l30&round=read' },
 
   // ── 31. lecke ──
   { id: 'l31-lesson', glyph: '読', title: 'Magyarázat: 〜と, 〜ようです',
@@ -1963,6 +2069,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_chg_006', 's_n4_chg_007', 's_n4_chg_008', 's_n4_chg_009', 's_n4_chg_010', 's_n4_chg_014',
                     's_n4_cnd_004', 's_n4_cnd_009', 's_n4_cnd_019', 's_n4_app_004', 's_n4_app_014', 's_n4_app_017'] } },
+  { id: 'l31-read', glyph: '文', title: 'Olvasás: Először Oszakában',
+    desc: '31. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l31&round=read' },
 
   // ── 32. lecke ──
   { id: 'l32-lesson', glyph: '読', title: 'Magyarázat: 〜ても, 〜ために',
@@ -1977,6 +2086,9 @@ const NIHONCORE_PATH = [
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_l32_01', 's_l32_02', 's_l32_03', 's_l32_04', 's_l32_05', 's_l32_06', 's_l32_07', 's_l32_08'] } },
+  { id: 'l32-read', glyph: '文', title: 'Olvasás: Élet a kollégiumban',
+    desc: '32. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l32&round=read' },
 
   { id: 't32', glyph: '試', title: '6. teszt: 29–32. lecke', optional: true,
     desc: 'Kis teszt, 30 perc, 30 kérdés: a 29–32. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
@@ -1995,6 +2107,9 @@ const NIHONCORE_PATH = [
     preset: { level: 'N4', mode: 'puzzle',
               ids: ['s_n4_app_001', 's_n4_app_002', 's_n4_app_003', 's_n4_app_005', 's_n4_app_009',
                     's_n4_app_011', 's_n4_app_012', 's_n4_app_015', 's_n4_app_018', 's_n4_app_020'] } },
+  { id: 'l33-read', glyph: '文', title: 'Olvasás: Szukijaki-est',
+    desc: '33. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l33&round=read' },
 
   // ── 34. lecke ──
   { id: 'l34-lesson', glyph: '読', title: 'Magyarázat: hallomás, 〜らしい',
@@ -2012,6 +2127,9 @@ const NIHONCORE_PATH = [
   { id: 'l34-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 34. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l34&round=listen' },
+  { id: 'l34-read', glyph: '文', title: 'Olvasás: Hírek a tájfunról',
+    desc: '34. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l34&round=read' },
 
   // ── 35. lecke ──
   { id: 'l35-lesson', glyph: '読', title: 'Magyarázat: 〜方, 〜かわりに, 〜まま',
@@ -2029,6 +2147,9 @@ const NIHONCORE_PATH = [
   { id: 'l35-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 35. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l35&round=listen' },
+  { id: 'l35-read', glyph: '文', title: 'Olvasás: Szótár és okostelefon',
+    desc: '35. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l35&round=read' },
 
   // ── 36. lecke ──
   { id: 'l36-lesson', glyph: '読', title: 'Magyarázat: szenvedő alak',
@@ -2048,6 +2169,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['passive'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
+  { id: 'l36-read', glyph: '文', title: 'Olvasás: Értesítés a Magyar estről',
+    desc: '36. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l36&round=read' },
 
   { id: 'd36', glyph: '験', title: 'Nagy dolgozat: 25–36. lecke', optional: true,
     desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 25–36. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 2 első fele.',
@@ -2070,6 +2194,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['passive'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'mastery' } } },
+  { id: 'l37-read', glyph: '文', title: 'Olvasás: Egy pocsék nap',
+    desc: '37. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l37&round=read' },
 
   // ── 38. lecke ──
   { id: 'l38-lesson', glyph: '読', title: 'Magyarázat: tiszteleti nyelv',
@@ -2089,6 +2216,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['passive'], themes: ['movement'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
+  { id: 'l38-read', glyph: '文', title: 'Olvasás: Mori tanárnő',
+    desc: '38. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l38&round=read' },
 
   // ── 39. lecke ──
   { id: 'l39-lesson', glyph: '読', title: 'Magyarázat: szerény nyelv',
@@ -2106,6 +2236,9 @@ const NIHONCORE_PATH = [
   { id: 'l39-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 39. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l39&round=listen' },
+  { id: 'l39-read', glyph: '文', title: 'Olvasás: Beszéd az újévi összejövetelen',
+    desc: '39. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l39&round=read' },
 
   // ── 40. lecke ──
   { id: 'l40-lesson', glyph: '読', title: 'Magyarázat: bármi, elkezd, folytat',
@@ -2123,6 +2256,9 @@ const NIHONCORE_PATH = [
   { id: 'l40-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 40. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l40&round=listen' },
+  { id: 'l40-read', glyph: '文', title: 'Olvasás: Interjú Jamada úrral',
+    desc: '40. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l40&round=read' },
 
   { id: 't40', glyph: '試', title: '7. teszt: 37–40. lecke', optional: true,
     desc: 'Kis teszt, 30 perc, 30 kérdés: a 37–40. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
@@ -2143,6 +2279,9 @@ const NIHONCORE_PATH = [
   { id: 'l41-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 41. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l41&round=listen' },
+  { id: 'l41-read', glyph: '文', title: 'Olvasás: A busójárás',
+    desc: '41. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l41&round=read' },
 
   // ── 42. lecke ──
   { id: 'l42-lesson', glyph: '読', title: 'Magyarázat: 〜にとって, 〜こそ',
@@ -2160,6 +2299,9 @@ const NIHONCORE_PATH = [
   { id: 'l42-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 42. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l42&round=listen' },
+  { id: 'l42-read', glyph: '文', title: 'Olvasás: Kell-e egyenruha?',
+    desc: '42. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l42&round=read' },
 
   // ── 43. lecke ──
   { id: 'l43-lesson', glyph: '読', title: 'Magyarázat: parancsoló alak',
@@ -2177,6 +2319,9 @@ const NIHONCORE_PATH = [
   { id: 'l43-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 43. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l43&round=listen' },
+  { id: 'l43-read', glyph: '文', title: 'Olvasás: A felsőbb éves tanácsai',
+    desc: '43. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l43&round=read' },
 
   // ── 44. lecke ──
   { id: 'l44-lesson', glyph: '読', title: 'Magyarázat: 〜べきです, 〜ずに',
@@ -2196,6 +2341,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['nai'], themes: ['state', 'clothing'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'mastery' } } },
+  { id: 'l44-read', glyph: '文', title: 'Olvasás: Csökkentsük a szemetet!',
+    desc: '44. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l44&round=read' },
 
   { id: 't44', glyph: '試', title: '8. teszt: 41–44. lecke', optional: true,
     desc: 'Kis teszt, 30 perc, 30 kérdés: a 41–44. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból.',
@@ -2218,6 +2366,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['causative'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
+  { id: 'l45-read', glyph: '文', title: 'Olvasás: Egy nap Taróval',
+    desc: '45. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l45&round=read' },
 
   // ── 46. lecke ──
   { id: 'l46-lesson', glyph: '読', title: 'Magyarázat: 〜なさい, 〜させてください',
@@ -2237,6 +2388,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['causative'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'mastery' } } },
+  { id: 'l46-read', glyph: '文', title: 'Olvasás: Megbeszélés az üzletvezetővel',
+    desc: '46. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l46&round=read' },
 
   // ── 47. lecke ──
   { id: 'l47-lesson', glyph: '読', title: 'Magyarázat: 〜させられます',
@@ -2256,6 +2410,9 @@ const NIHONCORE_PATH = [
     module: 'conjugation', href: 'pages/conjugation.html',
     preset: { only: { forms: ['causative_passive'], themes: ['daily'], groups: ['godan', 'ichidan', 'irregular'] },
               set: { mode: 'recognition' } } },
+  { id: 'l47-read', glyph: '文', title: 'Olvasás: Én és az idegen nyelvek',
+    desc: '47. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l47&round=read' },
 
   // ── 48. lecke ──
   { id: 'l48-lesson', glyph: '読', title: 'Magyarázat: 〜ば〜ほど, 〜として',
@@ -2273,6 +2430,9 @@ const NIHONCORE_PATH = [
   { id: 'l48-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A 48. lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=l48&round=listen' },
+  { id: 'l48-read', glyph: '文', title: 'Olvasás: Búcsúbeszéd',
+    desc: '48. lecke: rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=l48&round=read' },
 
   { id: 'd48', glyph: '験', title: 'Nagy dolgozat: 37–48. lecke', optional: true,
     desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 37–48. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 2 második fele: ezzel zárul az N4 szint.',
@@ -2293,6 +2453,9 @@ const NIHONCORE_PATH = [
   { id: 'k5-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k5&round=listen' },
+  { id: 'k5-read', glyph: '文', title: 'Olvasás: Amíg Jui távol volt',
+    desc: 'Rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=k5&round=read' },
   { id: 'k6-lesson', glyph: '願', title: 'Kiegészítés: kívánság és tanács',
     desc: '〜てほしい, 〜たらどうですか, 〜てよかった, 〜予定です.',
     module: 'lesson', href: 'pages/lesson.html?id=k6' },
@@ -2308,6 +2471,9 @@ const NIHONCORE_PATH = [
   { id: 'k6-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k6&round=listen' },
+  { id: 'k6-read', glyph: '文', title: 'Olvasás: Levél Juinak',
+    desc: 'Rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=k6&round=read' },
   { id: 'k7-lesson', glyph: '確', title: 'Kiegészítés: biztos? kizárt?',
     desc: '〜はずがない, 〜に見える, なかなか〜ない, さすが.',
     module: 'lesson', href: 'pages/lesson.html?id=k7' },
@@ -2323,6 +2489,9 @@ const NIHONCORE_PATH = [
   { id: 'k7-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k7&round=listen' },
+  { id: 'k7-read', glyph: '文', title: 'Olvasás: A régi fénykép',
+    desc: 'Rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=k7&round=read' },
   { id: 'k8-lesson', glyph: '要', title: 'Kiegészítés: ha úgy adódik',
     desc: '〜が必要, 〜場合は, 〜など, 〜のに (cél), 〜だけで.',
     module: 'lesson', href: 'pages/lesson.html?id=k8' },
@@ -2338,6 +2507,9 @@ const NIHONCORE_PATH = [
   { id: 'k8-listen', glyph: '聞', title: 'Hallás utáni kör',
     desc: 'A kiegészítő lecke példamondatait hallod: válaszd ki, mit jelentenek.',
     module: 'lesson', mode: 'listen', href: 'pages/lesson.html?id=k8&round=listen' },
+  { id: 'k8-read', glyph: '文', title: 'Olvasás: Készülődés külföldi útra',
+    desc: 'Rövid szöveg a lecke nyelvtanával, utána négy kérdés a tartalmáról.',
+    module: 'lesson', mode: 'read', href: 'pages/lesson.html?id=k8&round=read' },
 
   // ── A Dekiru 2 után: záró gyakorlás ──
   { id: 'final-cloze', glyph: '結', title: 'Minták kiegészítéssel',
@@ -2347,122 +2519,130 @@ const NIHONCORE_PATH = [
   { id: 'final-pro', glyph: '耳', title: 'Mondatok hallás után',
     desc: 'Pro hallás: egész mondatot hallasz, és leírod.',
     module: 'listening', href: 'pages/listening.html',
-    preset: { set: { mode: 'pro' } } }
+    preset: { set: { mode: 'pro' } } },
+
+  { id: 'n4', glyph: '模', title: 'N4 próbavizsga', optional: true,
+    desc: 'Próbavizsga a JLPT N4 mintájára: nyelvtan és olvasás 55 perc, hallás 35 perc. A két könyv teljes anyaga.',
+    module: 'exam', href: 'pages/exam.html?id=n4' }
 ];
 
 const NIHONCORE_PATH_UNITS = [
   { id: 'u-kana', kicker: 'Előkészítő',          title: 'Az írás',             sub: 'Kiejtés, hiragana és katakana',
     steps: ['l0-lesson', 'kana-hira', 'kana-kata'] },
   { id: 'u-l1',   kicker: 'Dekiru 1 · 1. lecke', title: 'Bemutatkozás',        sub: 'Ki vagyok, mivel foglalkozom: です, は, の, も, か',
-    steps: ['l1-lesson', 'l1-patterns', 'first-sentences', 'l1-age'] },
+    steps: ['l1-lesson', 'l1-patterns', 'first-sentences', 'l1-age', 'l1-read'] },
   { id: 'u-l2',   kicker: 'Dekiru 1 · 2. lecke', title: 'Ez, az, amaz',        sub: 'これ, この, ここ; kié; tagadás',
-    steps: ['l2-lesson', 'l2-patterns', 'l2-things', 'l2-places'] },
+    steps: ['l2-lesson', 'l2-patterns', 'l2-things', 'l2-places', 'l2-read'] },
   { id: 'u-l3',   kicker: 'Dekiru 1 · 3. lecke', title: 'Mi hol van?',         sub: 'あります és います, helyviszonyok, család',
-    steps: ['l3-lesson', 'l3-patterns', 'basic-verbs', 'l3-where'] },
+    steps: ['l3-lesson', 'l3-patterns', 'basic-verbs', 'l3-where', 'l3-read'] },
   { id: 'u-l4',   kicker: 'Dekiru 1 · 4. lecke', title: 'Vásárlás és idő',     sub: '〜をください, számlálók, óra, a hét napjai',
-    steps: ['l4-lesson', 'l4-patterns', 'l4-shopping', 'counters', 'datetime', 't04'] },
+    steps: ['l4-lesson', 'l4-patterns', 'l4-shopping', 'counters', 'datetime', 'l4-read', 't04'] },
   { id: 'u-l5',   kicker: 'Dekiru 1 · 5. lecke', title: 'Hová, mikor, mivel?', sub: 'A ます-alak; へ, で, と; dátum',
-    steps: ['l5-lesson', 'l5-patterns', 'l5-going', 'l5-masu', 'l5-move', 'l5-dates', 'l5-durations'] },
+    steps: ['l5-lesson', 'l5-patterns', 'l5-going', 'l5-masu', 'l5-move', 'l5-dates', 'l5-durations', 'l5-read'] },
   { id: 'u-l6',   kicker: 'Dekiru 1 · 6. lecke', title: 'Mindennapok',         sub: 'を és で; 〜ませんか, 〜ましょう',
-    steps: ['l6-lesson', 'l6-patterns', 'l6-daily', 'particles', 'word-order'] },
+    steps: ['l6-lesson', 'l6-patterns', 'l6-daily', 'particles', 'word-order', 'l6-read'] },
   { id: 'u-l7',   kicker: 'Dekiru 1 · 7. lecke', title: 'Mit szeretsz?',       sub: '〜が好きです, から, よく és あまり',
-    steps: ['l7-lesson', 'l7-patterns', 'l7-ga'] },
+    steps: ['l7-lesson', 'l7-patterns', 'l7-ga', 'l7-read'] },
   { id: 'u-l8',   kicker: 'Dekiru 1 · 8. lecke', title: 'Milyen?',             sub: 'い- és な-melléknevek, 〜たいです',
-    steps: ['l8-lesson', 'l8-patterns', 'l8-adjectives', 'adjectives', 't08'] },
+    steps: ['l8-lesson', 'l8-patterns', 'l8-adjectives', 'adjectives', 'l8-read', 't08'] },
   { id: 'u-l9',   kicker: 'Dekiru 1 · 9. lecke',  title: 'Milyen volt?',         sub: 'Múlt idejű melléknevek; a て-alak',
-    steps: ['l9-lesson', 'l9-patterns', 'l9-past', 'l9-adj-past', 'l9-te'] },
+    steps: ['l9-lesson', 'l9-patterns', 'l9-past', 'l9-adj-past', 'l9-te', 'l9-read'] },
   { id: 'u-l10',  kicker: 'Dekiru 1 · 10. lecke', title: 'Melyik a jobb?',       sub: 'より, いちばん; 〜てください, 〜てから, 〜てみます',
-    steps: ['l10-lesson', 'l10-patterns', 'l10-compare', 'l10-te'] },
+    steps: ['l10-lesson', 'l10-patterns', 'l10-compare', 'l10-te', 'l10-read'] },
   { id: 'u-l11',  kicker: 'Dekiru 1 · 11. lecke', title: 'Mit tegyek?',          sub: 'た- és ない-alak; tanács, tiltás, 〜んです',
-    steps: ['l11-lesson', 'l11-patterns', 'l11-advice', 'verb-forms'] },
+    steps: ['l11-lesson', 'l11-patterns', 'l11-advice', 'verb-forms', 'l11-read'] },
   { id: 'u-l12',  kicker: 'Dekiru 1 · 12. lecke', title: 'Barátok között',       sub: 'Közvetlen stílus; 〜ています; jelzős szerkezet',
-    steps: ['l12-lesson', 'l12-patterns', 'l12-forms', 'l12-teiru', 'd12'] },
+    steps: ['l12-lesson', 'l12-patterns', 'l12-forms', 'l12-teiru', 'l12-read', 'd12'] },
   { id: 'u-l13',  kicker: 'Dekiru 1 · 13. lecke', title: 'Ajándék',              sub: '〜ので, 〜にします; あげます, くれます, もらいます',
-    steps: ['l13-lesson', 'l13-patterns', 'l13-giving', 'l13-verbs'] },
+    steps: ['l13-lesson', 'l13-patterns', 'l13-giving', 'l13-verbs', 'l13-read'] },
   { id: 'u-l14',  kicker: 'Dekiru 1 · 14. lecke', title: 'Tervek és vélemények', sub: 'もう és まだ; 〜と思います, 〜がほしい, 〜つもりです',
-    steps: ['l14-lesson', 'l14-patterns', 'l14-plans'] },
+    steps: ['l14-lesson', 'l14-patterns', 'l14-plans', 'l14-read'] },
   { id: 'u-l15',  kicker: 'Dekiru 1 · 15. lecke', title: 'Találkozunk?',         sub: '〜でしょう, 〜てしまいます, 〜たり; 〜てもいいですか',
-    steps: ['l15-lesson', 'l15-patterns', 'l15-permission'] },
+    steps: ['l15-lesson', 'l15-patterns', 'l15-permission', 'l15-read'] },
   { id: 'u-l16',  kicker: 'Dekiru 1 · 16. lecke', title: 'Hobbi és tapasztalat', sub: '〜こと, 〜たことがあります, 〜ことができます',
-    steps: ['l16-lesson', 'l16-patterns', 'l16-experience', 't16'] },
+    steps: ['l16-lesson', 'l16-patterns', 'l16-experience', 'l16-read', 't16'] },
   { id: 'u-l17',  kicker: 'Dekiru 1 · 17. lecke', title: 'Szabad és tilos',      sub: '〜とき; 〜てはいけません; A は B で、C は D です',
-    steps: ['l17-lesson', 'l17-patterns', 'l17-rules'] },
+    steps: ['l17-lesson', 'l17-patterns', 'l17-rules', 'l17-read'] },
   { id: 'u-l18',  kicker: 'Dekiru 1 · 18. lecke', title: 'Készülődés',           sub: '〜かもしれません; 〜なります; 〜ことにします; さしあげます',
-    steps: ['l18-lesson', 'l18-patterns', 'l18-change'] },
+    steps: ['l18-lesson', 'l18-patterns', 'l18-change', 'l18-read'] },
   { id: 'u-l19',  kicker: 'Dekiru 1 · 19. lecke', title: 'Úton',                 sub: '〜なければなりません; 〜ていきます; だけ és しか',
-    steps: ['l19-lesson', 'l19-nai', 'l19-patterns', 'l19-only'] },
+    steps: ['l19-lesson', 'l19-nai', 'l19-patterns', 'l19-only', 'l19-read'] },
   { id: 'u-l20',  kicker: 'Dekiru 1 · 20. lecke', title: 'Városnézés',           sub: 'Tárgyas és tárgyatlan igék; 〜ています (állapot); 〜という',
-    steps: ['l20-lesson', 'l20-patterns', 'l20-pairs', 'l20-verbs', 't20'] },
+    steps: ['l20-lesson', 'l20-patterns', 'l20-pairs', 'l20-verbs', 'l20-read', 't20'] },
   { id: 'u-l21',  kicker: 'Dekiru 1 · 21. lecke', title: 'Minden készen áll',    sub: '〜くします; 〜てあります; 〜といいます',
-    steps: ['l21-lesson', 'l21-patterns', 'l21-make', 'l21-te'] },
+    steps: ['l21-lesson', 'l21-patterns', 'l21-make', 'l21-te', 'l21-read'] },
   { id: 'u-l22',  kicker: 'Dekiru 1 · 22. lecke', title: 'Szívességek',          sub: '〜てあげます, 〜てくれます, 〜てもらいます; 〜ておきます; 〜ながら',
-    steps: ['l22-lesson', 'l22-patterns', 'l22-favors'] },
+    steps: ['l22-lesson', 'l22-patterns', 'l22-favors', 'l22-read'] },
   { id: 'u-l23',  kicker: 'Dekiru 1 · 23. lecke', title: 'Udvarias kérések',     sub: '〜てくださいます, 〜ていただきます; 〜の; まだ és もう',
-    steps: ['l23-lesson', 'l23-patterns', 'l23-favor', 'l23-te'] },
+    steps: ['l23-lesson', 'l23-patterns', 'l23-favor', 'l23-te', 'l23-read'] },
   { id: 'u-l24',  kicker: 'Dekiru 1 · 24. lecke', title: 'Búcsú',                sub: '〜てきます, 〜ていきます; 〜ています (állapot)',
-    steps: ['l24-lesson', 'l24-patterns', 'l24-state', 'd24'] },
+    steps: ['l24-lesson', 'l24-patterns', 'l24-state', 'l24-read', 'd24'] },
   { id: 'u-next', kicker: 'A Dekiru 1 után',      title: 'Összefoglaló gyakorlás', sub: 'Hallás, nyelvtani minták, szabad fordítás; utána a Dekiru 2 leckéi jönnek',
     steps: ['listening', 'patterns', 'production'] },
   { id: 'u-k-n5', kicker: 'Kiegészítő · JLPT N5', title: 'Ami a könyvből kimaradt', sub: 'Kötőszavak, mondatvégi partikulák, beszélt rövidítések, hogyan és milyen gyakran',
-    steps: ['k1-lesson', 'k1-patterns', 'k1-links', 'k1-listen', 'k2-lesson', 'k2-patterns', 'k2-endings', 'k2-listen', 'k3-lesson', 'k3-patterns', 'k3-spoken', 'k3-listen', 'k4-lesson', 'k4-patterns', 'k4-everyday', 'k4-listen'] },
+    steps: ['k1-lesson', 'k1-patterns', 'k1-links', 'k1-listen', 'k1-read', 'k2-lesson', 'k2-patterns', 'k2-endings', 'k2-listen', 'k2-read', 'k3-lesson', 'k3-patterns', 'k3-spoken', 'k3-listen', 'k3-read', 'k4-lesson', 'k4-patterns', 'k4-everyday', 'k4-listen', 'k4-read', 'n5'] },
   { id: 'u-l25',  kicker: 'Dekiru 2 · 25. lecke', title: 'A repülőtéren',        sub: '〜だろう, 〜はずです; 〜か és 〜かどうか; 〜の？',
-    steps: ['l25-lesson', 'l25-patterns', 'l25-guess', 'l25-listen'] },
+    steps: ['l25-lesson', 'l25-patterns', 'l25-guess', 'l25-listen', 'l25-read'] },
   { id: 'u-l26',  kicker: 'Dekiru 2 · 26. lecke', title: 'Álmok és tervek',      sub: '〜たら; szándékos alak; 〜までに; 〜らしい',
-    steps: ['l26-lesson', 'l26-patterns', 'l26-volitional', 'l26-tara'] },
+    steps: ['l26-lesson', 'l26-patterns', 'l26-volitional', 'l26-tara', 'l26-read'] },
   { id: 'u-l27',  kicker: 'Dekiru 2 · 27. lecke', title: 'Ki mit tud?',          sub: 'Ható alak; 〜にきまっています; 〜とか; 〜さ',
-    steps: ['l27-lesson', 'l27-patterns', 'l27-can', 'l27-potential', 'l27-potential-w'] },
+    steps: ['l27-lesson', 'l27-patterns', 'l27-can', 'l27-potential', 'l27-potential-w', 'l27-read'] },
   { id: 'u-l28',  kicker: 'Dekiru 2 · 28. lecke', title: 'Melyiket ajánlja?',    sub: '〜ば, 〜なら; 〜でございます; 〜し; 〜にちがいありません',
-    steps: ['l28-lesson', 'l28-if', 'l28-patterns', 't28'] },
+    steps: ['l28-lesson', 'l28-if', 'l28-patterns', 'l28-read', 't28'] },
   { id: 'u-l29',  kicker: 'Dekiru 2 · 29. lecke', title: 'Új félév',             sub: '〜ところ; 〜ように言います; 〜ということです; 〜について',
-    steps: ['l29-lesson', 'l29-patterns', 'l29-tokoro', 'l29-listen'] },
+    steps: ['l29-lesson', 'l29-patterns', 'l29-tokoro', 'l29-listen', 'l29-read'] },
   { id: 'u-l30',  kicker: 'Dekiru 2 · 30. lecke', title: 'Közös munka',          sub: '〜のに; 〜なくてもかまいません; 〜によって',
-    steps: ['l30-lesson', 'l30-patterns', 'l30-kamaimasen'] },
+    steps: ['l30-lesson', 'l30-patterns', 'l30-kamaimasen', 'l30-read'] },
   { id: 'u-l31',  kicker: 'Dekiru 2 · 31. lecke', title: 'Útbaigazítás',         sub: '〜と; 〜にくらべて; 見えます, 聞こえます; 〜ようです',
-    steps: ['l31-lesson', 'l31-patterns', 'l31-senses'] },
+    steps: ['l31-lesson', 'l31-patterns', 'l31-senses', 'l31-read'] },
   { id: 'u-l32',  kicker: 'Dekiru 2 · 32. lecke', title: 'Külföldi tanulmányok', sub: '〜ても; 〜ことになります; 〜ばかり; 〜ために',
-    steps: ['l32-lesson', 'l32-patterns', 'l32-koto', 't32'] },
+    steps: ['l32-lesson', 'l32-patterns', 'l32-koto', 'l32-read', 't32'] },
   { id: 'u-l33',  kicker: 'Dekiru 2 · 33. lecke', title: 'A konyhában',          sub: '〜そうです (látszat); 〜みたいな; 〜くらい; 〜がします',
-    steps: ['l33-lesson', 'l33-patterns', 'l33-looks'] },
+    steps: ['l33-lesson', 'l33-patterns', 'l33-looks', 'l33-read'] },
   { id: 'u-l34',  kicker: 'Dekiru 2 · 34. lecke', title: 'Mit hallottál?',       sub: '〜そうです (hallomás); 〜によると; 〜らしいです',
-    steps: ['l34-lesson', 'l34-patterns', 'l34-hearsay', 'l34-listen'] },
+    steps: ['l34-lesson', 'l34-patterns', 'l34-hearsay', 'l34-listen', 'l34-read'] },
   { id: 'u-l35',  kicker: 'Dekiru 2 · 35. lecke', title: 'Hogyan kell?',         sub: '〜方; 〜かわりに; 〜にかわって; 〜まま',
-    steps: ['l35-lesson', 'l35-patterns', 'l35-kata', 'l35-listen'] },
+    steps: ['l35-lesson', 'l35-patterns', 'l35-kata', 'l35-listen', 'l35-read'] },
   { id: 'u-l36',  kicker: 'Dekiru 2 · 36. lecke', title: 'Rendezvény',           sub: 'Szenvedő alak; 〜によって; 〜から〜にかけて; 〜でも',
-    steps: ['l36-lesson', 'l36-patterns', 'l36-built', 'l36-passive', 'd36'] },
+    steps: ['l36-lesson', 'l36-patterns', 'l36-built', 'l36-passive', 'l36-read', 'd36'] },
   { id: 'u-l37',  kicker: 'Dekiru 2 · 37. lecke', title: 'Baj történt',          sub: 'Szenvedő mondat emberrel; kellemetlenség; 〜おかげで',
-    steps: ['l37-lesson', 'l37-patterns', 'l37-suffered', 'l37-passive-w'] },
+    steps: ['l37-lesson', 'l37-patterns', 'l37-suffered', 'l37-passive-w', 'l37-read'] },
   { id: 'u-l38',  kicker: 'Dekiru 2 · 38. lecke', title: 'Tiszteletteljes beszéd', sub: 'お〜になります; いらっしゃいます; ご〜ください; 〜うちに',
-    steps: ['l38-lesson', 'l38-patterns', 'l38-respect', 'l38-honorific'] },
+    steps: ['l38-lesson', 'l38-patterns', 'l38-respect', 'l38-honorific', 'l38-read'] },
   { id: 'u-l39',  kicker: 'Dekiru 2 · 39. lecke', title: 'Szerényen szólva',     sub: 'お〜します; 参ります, 申します; 〜やすい, 〜にくい; 〜すぎます',
-    steps: ['l39-lesson', 'l39-patterns', 'l39-humble', 'l39-listen'] },
+    steps: ['l39-lesson', 'l39-patterns', 'l39-humble', 'l39-listen', 'l39-read'] },
   { id: 'u-l40',  kicker: 'Dekiru 2 · 40. lecke', title: 'Interjú',              sub: 'いくら〜ても; 何でも; 〜始めます, 〜出します, 〜続けます',
-    steps: ['l40-lesson', 'l40-patterns', 'l40-compound', 'l40-listen', 't40'] },
+    steps: ['l40-lesson', 'l40-patterns', 'l40-compound', 'l40-listen', 'l40-read', 't40'] },
   { id: 'u-l41',  kicker: 'Dekiru 2 · 41. lecke', title: 'Bemutató',             sub: 'まるで〜ようです; 〜も; 〜しかありません; 〜だけあって',
-    steps: ['l41-lesson', 'l41-patterns', 'l41-marude', 'l41-listen'] },
+    steps: ['l41-lesson', 'l41-patterns', 'l41-marude', 'l41-listen', 'l41-read'] },
   { id: 'u-l42',  kicker: 'Dekiru 2 · 42. lecke', title: 'Vita',                 sub: '〜にとって; 〜から見ると; 〜こそ; egyetértés és ellenvetés',
-    steps: ['l42-lesson', 'l42-patterns', 'l42-opinion', 'l42-listen'] },
+    steps: ['l42-lesson', 'l42-patterns', 'l42-opinion', 'l42-listen', 'l42-read'] },
   { id: 'u-l43',  kicker: 'Dekiru 2 · 43. lecke', title: 'Tanulási tanácsok',    sub: 'Parancsoló alak; 〜な; 〜ように; 〜ようにします; 〜とおりに',
-    steps: ['l43-lesson', 'l43-patterns', 'l43-command', 'l43-listen'] },
+    steps: ['l43-lesson', 'l43-patterns', 'l43-command', 'l43-listen', 'l43-read'] },
   { id: 'u-l44',  kicker: 'Dekiru 2 · 44. lecke', title: 'Beszédverseny',        sub: '〜べきです; 〜ずに; 〜を中心に',
-    steps: ['l44-lesson', 'l44-patterns', 'l44-should', 'l44-nai', 't44'] },
+    steps: ['l44-lesson', 'l44-patterns', 'l44-should', 'l44-nai', 'l44-read', 't44'] },
   { id: 'u-l45',  kicker: 'Dekiru 2 · 45. lecke', title: 'Félreértés',           sub: '〜ようとします; műveltető alak; 〜がります, 〜たがります',
-    steps: ['l45-lesson', 'l45-patterns', 'l45-make-do', 'l45-causative'] },
+    steps: ['l45-lesson', 'l45-patterns', 'l45-make-do', 'l45-causative', 'l45-read'] },
   { id: 'u-l46',  kicker: 'Dekiru 2 · 46. lecke', title: 'Megbeszélés',          sub: '〜なさい; műveltető mondatok; 〜させてください',
-    steps: ['l46-lesson', 'l46-patterns', 'l46-let', 'l46-causative-w'] },
+    steps: ['l46-lesson', 'l46-patterns', 'l46-let', 'l46-causative-w', 'l46-read'] },
   { id: 'u-l47',  kicker: 'Dekiru 2 · 47. lecke', title: 'Nyelvtanulás',         sub: 'Műveltető-szenvedő alak: 〜させられます, 〜されます',
-    steps: ['l47-lesson', 'l47-patterns', 'l47-forced', 'l47-causpass'] },
+    steps: ['l47-lesson', 'l47-patterns', 'l47-forced', 'l47-causpass', 'l47-read'] },
   { id: 'u-l48',  kicker: 'Dekiru 2 · 48. lecke', title: 'Köszönet és búcsú',    sub: '〜をきっかけに; 〜せいで; 〜ば〜ほど; 〜として',
-    steps: ['l48-lesson', 'l48-patterns', 'l48-because', 'l48-listen', 'd48'] },
+    steps: ['l48-lesson', 'l48-patterns', 'l48-because', 'l48-listen', 'l48-read', 'd48'] },
   { id: 'u-k-n4', kicker: 'Kiegészítő · JLPT N4', title: 'Ami a könyvekből kimaradt', sub: 'Idő, kívánság és tanács, bizonyosság, szükség és eset',
-    steps: ['k5-lesson', 'k5-patterns', 'k5-time', 'k5-listen', 'k6-lesson', 'k6-patterns', 'k6-wish', 'k6-listen', 'k7-lesson', 'k7-patterns', 'k7-impression', 'k7-listen', 'k8-lesson', 'k8-patterns', 'k8-formal', 'k8-listen'] },
+    steps: ['k5-lesson', 'k5-patterns', 'k5-time', 'k5-listen', 'k5-read', 'k6-lesson', 'k6-patterns', 'k6-wish', 'k6-listen', 'k6-read', 'k7-lesson', 'k7-patterns', 'k7-impression', 'k7-listen', 'k7-read', 'k8-lesson', 'k8-patterns', 'k8-formal', 'k8-listen', 'k8-read'] },
   { id: 'u-end',  kicker: 'A Dekiru 2 után',      title: 'Záró gyakorlás',       sub: 'Nyelvtani minták kiegészítéssel és mondatszintű hallás',
-    steps: ['final-cloze', 'final-pro'] }
+    steps: ['final-cloze', 'final-pro', 'n4'] }
 ];
 
 /* Dolgozatok (pages/exam.html): kis teszt 4 leckénként (30 perc, 30 kérdés), nagy dolgozat 12 leckénként
    (60 perc, 60 kérdés). A kérdések a `lessons` leckék anyagából állnak össze (kb. 80%), a többi a korábbi
    leckékből jön ismétlésnek. A dolgozat lépése a tanulási úton `optional`: nélküle is tovább lehet menni.
-   Mezők: id (= a lépés azonosítója), kind: quick | big, title, desc, glyph, lessons[], minutes? */
+   Mezők: id (= a lépés azonosítója), kind: quick | big | mock, title, desc, glyph, lessons[], minutes?
+   Próbavizsga (kind: 'mock') a két könyv végén, a JLPT nyelvtani, olvasási és hallás utáni részének mintájára:
+     plan   kérdésszám típusonként (csak választós és mondatépítő feladat, beírós nincs)
+     parts  a külön mért részek: [{ title, minutes, secs: [rész-kódok] }] — a részek ideje külön fut, a következő
+            részből nem lehet visszalépni; hang nélkül a csak hallásból álló rész kimarad */
 const NIHONCORE_EXAMS = [
   { id: 't04', kind: 'quick', glyph: '試', title: '1. teszt: 1–4. lecke',
     desc: 'Kis teszt, 30 perc, 30 kérdés: az 1–4. lecke anyaga vegyesen.',
@@ -2499,7 +2679,21 @@ const NIHONCORE_EXAMS = [
     lessons: ['l41', 'l42', 'l43', 'l44'] },
   { id: 'd48', kind: 'big', glyph: '験', title: 'Nagy dolgozat: 37–48. lecke',
     desc: 'Nagy dolgozat, 60 perc, 60 kérdés: a 37–48. lecke anyaga vegyesen, egy kevés ismétléssel a korábbiakból. A Dekiru 2 második fele: ezzel zárul az N4 szint.',
-    lessons: ['l37', 'l38', 'l39', 'l40', 'l41', 'l42', 'l43', 'l44', 'l45', 'l46', 'l47', 'l48'] }
+    lessons: ['l37', 'l38', 'l39', 'l40', 'l41', 'l42', 'l43', 'l44', 'l45', 'l46', 'l47', 'l48'] },
+
+  // ── Próbavizsgák ──
+  { id: 'n5', kind: 'mock', level: 'N5', glyph: '模', title: 'N5 próbavizsga',
+    desc: 'A Dekiru 1 teljes anyaga a JLPT N5 mintájára: nyelvtan és olvasás 40 percben, hallás 30 percben. Csupa választós és mondatépítő feladat.',
+    lessons: ['l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7', 'l8', 'l9', 'l10', 'l11', 'l12', 'l13', 'l14', 'l15', 'l16', 'l17', 'l18', 'l19', 'l20', 'l21', 'l22', 'l23', 'l24', 'k1', 'k2', 'k3', 'k4'],
+    plan: { quiz: 10, pattern: 4, particle: 6, puzzle: 4, read: 4, passage: 8, listen: 14 },
+    parts: [{ title: 'Nyelvtan és olvasás', minutes: 40, secs: ['gram', 'part', 'read'] },
+            { title: 'Hallás', minutes: 30, secs: ['listen'] }] },
+  { id: 'n4', kind: 'mock', level: 'N4', glyph: '模', title: 'N4 próbavizsga',
+    desc: 'A Dekiru 2 teljes anyaga a JLPT N4 mintájára, ismétléssel a Dekiru 1-ből: nyelvtan és olvasás 55 percben, hallás 35 percben.',
+    lessons: ['l25', 'l26', 'l27', 'l28', 'l29', 'l30', 'l31', 'l32', 'l33', 'l34', 'l35', 'l36', 'l37', 'l38', 'l39', 'l40', 'l41', 'l42', 'l43', 'l44', 'l45', 'l46', 'l47', 'l48', 'k5', 'k6', 'k7', 'k8'],
+    plan: { quiz: 12, pattern: 6, particle: 4, puzzle: 6, read: 4, passage: 12, listen: 16 },
+    parts: [{ title: 'Nyelvtan és olvasás', minutes: 55, secs: ['gram', 'part', 'read'] },
+            { title: 'Hallás', minutes: 35, secs: ['listen'] }] }
 ];
 
 /* ====================================================

@@ -294,16 +294,21 @@ window.NihonCoreRound = (function () {
   // után a kártya teteje különben a képernyő fölött marad.
   // rAF: a hívó a begin() UTÁN váltja láthatóra a runtime-ot. A module.html
   // fázisainak nincs .pr-stats sora → ott no-op (saját scrollIntoView-juk van).
-  function scrollToRound() {
+  // target (nem kötelező): a kártya egy eleme — a kör teteje helyett ahhoz görget (olvasásnál a kérdéshez,
+  // ha a szöveget a tanuló már látta: a szöveg vége a kérdés fölött látszik, a többi egy mozdulattal elérhető)
+  function scrollToRound(target) {
     requestAnimationFrame(function () {
+      var header = document.getElementById('header');
+      var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var go = function (el, lead) {
+        var top = el.getBoundingClientRect().top + window.pageYOffset - (header ? header.offsetHeight : 0) - lead;
+        window.scrollTo({ top: Math.max(0, top), behavior: calm ? 'auto' : 'smooth' });
+      };
+      if (target && target.offsetParent !== null) { go(target, 88); return; }
       var rows = document.querySelectorAll('.pr-stats');
       for (var i = 0; i < rows.length; i++) {
         if (rows[i].offsetParent === null) continue;
-        var header = document.getElementById('header');
-        var top = rows[i].getBoundingClientRect().top + window.pageYOffset
-                - (header ? header.offsetHeight : 0) - 16;
-        var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        window.scrollTo({ top: Math.max(0, top), behavior: calm ? 'auto' : 'smooth' });
+        go(rows[i], 16);
         return;
       }
     });
@@ -3208,7 +3213,7 @@ function initLanding() {
   function reviewCardHtml(v) {
     if (!window.NihonCoreSRS || !NihonCoreSRS.dueInfo) return '';
     const info = NihonCoreSRS.dueInfo('lesson:');
-    const anyLesson = v.rows.some(r => r.done && r.step.module === 'lesson' && r.step.mode !== 'listen');
+    const anyLesson = v.rows.some(r => r.done && r.step.module === 'lesson' && !r.step.mode);
     if (!info.total && !anyLesson) return '';
     const days = info.nextTs ? Math.max(1, Math.ceil((info.nextTs - Date.now()) / 86400000)) : 0;
     const title = info.due ? 'Mai ismétlés' : 'Ismétlés';
@@ -16106,8 +16111,8 @@ function initStatsPage() {
     cloze: 'Kiegészítés', translate: 'Fordítás', pro: 'Pro hallás',
     free: 'Szabad fordítás',
     reverse: 'Fordítva', typing: 'Beírás', match: 'Párosító',
-    check: 'Ellenőrzés', listen: 'Hallás utáni kör', review: 'Ismétlés', retry: 'Hibák újra', quick: 'Gyors kérdések',
-    'exam-quick': 'Kis teszt', 'exam-big': 'Nagy dolgozat', 'exam-retry': 'Dolgozat: hibák újra',
+    check: 'Ellenőrzés', listen: 'Hallás utáni kör', read: 'Olvasás', review: 'Ismétlés', retry: 'Hibák újra', quick: 'Gyors kérdések',
+    'exam-quick': 'Kis teszt', 'exam-big': 'Nagy dolgozat', 'exam-mock': 'Próbavizsga', 'exam-retry': 'Dolgozat: hibák újra',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
@@ -17023,7 +17028,7 @@ function initStatsPage() {
   /* ── Dolgozatok: kitöltések, fejlődés dolgozatonként ───────────── */
   // Az adat a dolgozat-oldal mentése (nihoncore_exams_v1): kitöltésenként dátum, mód, idő, pontszám,
   // részenkénti és leckénkénti bontás. A dolgozatok leírása: NIHONCORE_EXAMS (core.js).
-  const EXAM_SECTIONS = { gram: 'Nyelvtan és olvasás', part: 'Partikulák és mondatépítés', write: 'Ragozás és beírás', listen: 'Hallás' };
+  const EXAM_SECTIONS = { gram: 'Nyelvtan és mondatértés', part: 'Partikulák és mondatépítés', write: 'Ragozás és beírás', read: 'Olvasásértés', listen: 'Hallás' };
   const EXAM_PASS = 60;
   function renderExams() {
     const el = document.getElementById('statsContent');
@@ -17036,7 +17041,7 @@ function initStatsPage() {
     const clock = ms => { const s = Math.max(0, Math.round(ms / 1000)); return Math.floor(s / 60) + ':' + pad(s % 60); };
     if (!atts.length) {
       el.innerHTML = emptyState('試', 'Még nem írtál dolgozatot.',
-        'Négy leckénként egy kis teszt, tizenkét leckénként egy nagy dolgozat vár: itt látod majd, hogyan sikerültek, és mennyit fejlődtél.') +
+        'Négy leckénként egy kis teszt, tizenkét leckénként egy nagy dolgozat, a két könyv végén egy-egy próbavizsga vár: itt látod majd, hogyan sikerültek, és mennyit fejlődtél.') +
         '<p class="st-exam-cta"><a class="btn btn-primary" href="exam.html">A dolgozatokhoz</a></p>';
       return;
     }
@@ -17076,7 +17081,7 @@ function initStatsPage() {
               <strong class="exam-att-score${pc(a) >= EXAM_PASS ? ' is-ok' : ''}">${a.correct} / ${a.total} · ${pc(a)}%</strong>
             </li>`).join('');
       return `
-        <div class="act-card glass-panel st-exam${d.kind === 'big' ? ' is-big' : ''}">
+        <div class="act-card glass-panel st-exam${d.kind === 'big' || d.kind === 'mock' ? ' is-big' : ''}">
           <div class="st-exam-head">
             <span class="st-exam-glyph" lang="ja" aria-hidden="true">${d.glyph || '試'}</span>
             <div class="st-exam-titles">
@@ -17954,6 +17959,8 @@ function initKanaPage() {
      · „Ellenőrizd magad": rövid feleletválasztós kör a közös kör-keretben
    Az ellenőrző kör a statisztikába 'lesson' / 'check' néven kerül, és a
    tanulási út ezzel teljesíti a lecke lépését (legalább 60%).
+     · további körök: hallás utáni ('listen') és olvasás ('read': a lecke
+       rövid szövege kérdésekkel — course.js: reading); saját lépésük van az úton
 
    Japán szöveg: a {漢字|かな} jelölésből furigana lesz a képernyőn, a
    felolvasáshoz pedig a kana-olvasat megy.
@@ -18036,12 +18043,12 @@ function initLessonPage() {
     if (!mine) return [];
     const unit = NIHONCORE_PATH_UNITS.find(u => u.steps.indexOf(mine.step.id) >= 0);
     if (!unit) return [];
-    // csak a gyakorló lépések: más modul köre, vagy ennek a leckének a saját hallás-lépése
-    // (a fejezet többi magyarázó leckéje és azok hallás-lépései nem ide tartoznak)
+    // csak a gyakorló lépések: más modul köre, vagy ennek a leckének a saját hallás- és olvasás-lépése
+    // (a fejezet többi magyarázó leckéje és azok lépései nem ide tartoznak)
     const isMine = st => new RegExp('[?&]id=' + lesson.id + '(&|$)').test(st.href);
     return unit.steps.filter(sid => sid !== mine.step.id)
       .map(sid => v.rows.find(r => r.step.id === sid))
-      .filter(r => r && (r.step.module !== 'lesson' || (r.step.mode === 'listen' && isMine(r.step))));
+      .filter(r => r && (r.step.module !== 'lesson' || ((r.step.mode === 'listen' || r.step.mode === 'read') && isMine(r.step))));
   }
   function practiceHtml() {
     const rows = practiceRows();
@@ -18053,7 +18060,7 @@ function initLessonPage() {
         <ul class="lp-practice-list">
           ${rows.map(r => `
             <li>
-              <a class="path-step-link"${r.step.module === 'lesson' ? ' data-listen="1"' : ''} href="${Path.stepHref(r.step, false)}">
+              <a class="path-step-link"${r.step.module === 'lesson' ? ' data-round="' + esc(r.step.mode) + '"' : ''} href="${Path.stepHref(r.step, false)}">
                 <span class="path-glyph" lang="ja">${esc(r.step.glyph)}</span>
                 <span class="path-step-body">
                   <span class="path-step-title">${esc(r.step.title)}</span>
@@ -18264,10 +18271,12 @@ function initLessonPage() {
         <h2 class="lp-check-title">Ellenőrizd magad</h2>
         <p class="lp-check-sub">${ROUND} kérdés a leckéből: szabályok és a példamondatok fordítása. Minden kör más; a lépéshez 60% kell.</p>
         <div class="lp-check-actions">
-          <button class="btn btn-primary btn-lg" id="lqStart" type="button">${canListen ? 'Ellenőrző kör' : 'Kezdjük'}</button>
+          <button class="btn btn-primary btn-lg" id="lqStart" type="button">${canListen || canRead ? 'Ellenőrző kör' : 'Kezdjük'}</button>
           ${canListen ? '<button class="btn btn-outline btn-lg" id="lqListen" type="button">Hallás utáni kör</button>' : ''}
+          ${canRead ? '<button class="btn btn-outline btn-lg" id="lqRead" type="button">Olvasás</button>' : ''}
         </div>
         ${canListen ? '<p class="lp-check-hint">A hallás utáni körben a lecke példamondatait hallod, és ki kell választanod, mit jelentenek.</p>' : ''}
+        ${canRead ? '<p class="lp-check-hint">Az olvasásban egy rövid szöveget kapsz a lecke nyelvtanával, utána kérdéseket a tartalmáról.</p>' : ''}
       </section>
       ${practiceHtml()}`;
 
@@ -18293,20 +18302,22 @@ function initLessonPage() {
       if (i >= 0) showLap(i);
     }));
     document.getElementById('lqStart').addEventListener('click', () => startQuiz('check'));
-    if (!canListen) return;
-    document.getElementById('lqListen').addEventListener('click', () => startQuiz('listen'));
-    // a „Gyakorlás" lista hallás-sora helyben indítja a kört
-    content.querySelectorAll('.path-step-link[data-listen]').forEach(a => a.addEventListener('click', ev => {
+    const listenBtn = document.getElementById('lqListen'), readBtn = document.getElementById('lqRead');
+    if (listenBtn) listenBtn.addEventListener('click', () => startQuiz('listen'));
+    if (readBtn) readBtn.addEventListener('click', () => startQuiz('read'));
+    // a „Gyakorlás" lista hallás- és olvasás-sora helyben indítja a kört
+    content.querySelectorAll('.path-step-link[data-round]').forEach(a => a.addEventListener('click', ev => {
+      if (!roundAvailable(a.dataset.round)) return;
       ev.preventDefault();
-      startQuiz('listen');
+      startQuiz(a.dataset.round);
     }));
-    // A tanulási út hallás-lépése (…&round=listen): a hallás utáni kör a fő gomb, és odagörgetünk
-    let wantListen = false;
-    try { wantListen = new URLSearchParams(window.location.search).get('round') === 'listen'; } catch (e) {}
-    if (wantListen) {
-      const a = document.getElementById('lqStart'), b = document.getElementById('lqListen');
-      a.classList.replace('btn-primary', 'btn-outline'); b.classList.replace('btn-outline', 'btn-primary');
-      b.parentNode.insertBefore(b, a);
+    // A tanulási út hallás- vagy olvasás-lépése (…&round=listen | read): az a kör a fő gomb
+    const want = wantedRound();
+    const wantBtn = want === 'listen' ? listenBtn : want === 'read' ? readBtn : null;
+    if (wantBtn) {
+      const a = document.getElementById('lqStart');
+      a.classList.replace('btn-primary', 'btn-outline'); wantBtn.classList.replace('btn-outline', 'btn-primary');
+      wantBtn.parentNode.insertBefore(wantBtn, a);
     }
   }
 
@@ -18411,7 +18422,7 @@ function initLessonPage() {
   const steps = { laps: [], cur: 0, mains: 0 };
   const quickDone = {};                                    // pont → megválaszolta-e (erre a megnyitásra)
   const plainText = s => String(s || '').replace(RB, '$1').replace(/<[^>]+>/g, '');
-  let wantListenLap = false;                               // a tanulási út hallás-lépése (…&round=listen)
+  let wantRoundLap = '';                                   // a tanulási út hallás- vagy olvasás-lépése (…&round=listen | read)
 
   // A gyors kérdés: a lecke saját kérdései közül az, amelyik a ponthoz tartozik
   // (a japán szöveg egyezése alapján); ha nincs ilyen, a pont egyik példamondatából készül.
@@ -18567,7 +18578,7 @@ function initLessonPage() {
     document.getElementById('lsName').innerHTML = lap.kind === 'quick' ? 'Gyors kérdés' : lap.nameHtml;
     const back = document.getElementById('lsBack'), next = document.getElementById('lsNext');
     back.classList.toggle('hidden', steps.cur === 0);
-    next.textContent = steps.cur === 0 ? 'Kezdjük' : last ? (wantListenLap ? 'Hallás utáni kör' : 'Ellenőrző kör') : 'Következő';
+    next.textContent = steps.cur === 0 ? 'Kezdjük' : last ? (wantRoundLap === 'listen' ? 'Hallás utáni kör' : wantRoundLap === 'read' ? 'Olvasás' : 'Ellenőrző kör') : 'Következő';
     next.disabled = lap.kind === 'quick' && !quickDone[lap.point];
     document.querySelectorAll('#lsList .ls-item').forEach(b => {
       const i = parseInt(b.dataset.lap, 10);
@@ -18603,12 +18614,12 @@ function initLessonPage() {
   function nextLap() {
     const lap = steps.laps[steps.cur];
     if (lap.kind === 'quick' && !quickDone[lap.point]) return;
-    if (steps.cur >= steps.laps.length - 1) { startQuiz(wantListenLap ? 'listen' : 'check'); return; }
+    if (steps.cur >= steps.laps.length - 1) { startQuiz(wantRoundLap || 'check'); return; }
     showLap(steps.cur + 1);
   }
 
   function initSteps() {
-    try { wantListenLap = canListen && new URLSearchParams(window.location.search).get('round') === 'listen'; } catch (e) {}
+    wantRoundLap = wantedRound();
     const sec = sel => content.querySelector(sel);
     const laps = [];
     let no = 0;
@@ -18701,7 +18712,7 @@ function initLessonPage() {
     let start = 0;
     try { start = parseInt((JSON.parse(localStorage.getItem(POS_KEY) || '{}'))[lesson.id], 10) || 0; } catch (e) {}
     if (start >= laps.length - 1) start = 0;
-    if (wantListenLap) start = laps.length - 1;
+    if (wantRoundLap) start = laps.length - 1;
     showLap(start, true);
   }
 
@@ -18770,14 +18781,58 @@ function initLessonPage() {
     if (el) el.classList.remove('hidden');
   }
 
+  // Olvasás: a lecke rövid szövege (lesson.reading), utána kérdések a tartalmáról, a szöveg sorrendjében.
+  // A szöveg minden kérdés fölött ott van; a fordítása csak az összesítőben látszik.
+  const readingSet = (!lesson.review && lesson.reading && Array.isArray(lesson.reading.text) && lesson.reading.text.length &&
+    Array.isArray(lesson.reading.questions) && lesson.reading.questions.length >= 3) ? lesson.reading : null;
+  const canRead = !!readingSet;
+  function buildReadRound() {
+    if (!readingSet) return [];
+    return readingSet.questions.map((src, i) => {
+      const q = Object.assign({}, src, { read: true, no: i });
+      return { q: q, options: shuffle([q.a].concat(q.wrong)) };
+    });
+  }
+  // a szöveg mondatonként; a `par` jelű mondat új bekezdést kezd. A kanás szöveg tagolt: ott a mondatok közé is szóköz kell.
+  function passageHtml(set) {
+    const paras = [];
+    set.text.forEach(s => { if (s.par || !paras.length) paras.push([]); paras[paras.length - 1].push(s); });
+    const spaced = set.text.some(s => /\s/.test(s.jp));
+    return `
+        <div class="rd-passage">
+          <div class="rd-kicker">Olvasd el a szöveget</div>
+          ${set.title ? '<div class="rd-title" lang="ja">' + ruby(set.title) + '</div>' : ''}
+          <div class="rd-text" lang="ja">${paras.map(p => '<p>' + p.map(s => '<span class="rd-s">' + ruby(s.jp) + '</span>').join(spaced ? ' ' : '') + '</p>').join('')}</div>
+          ${set.words && set.words.length ? '<dl class="rd-words">' + set.words.map(w => '<div class="rd-word"><dt lang="ja">' + ruby(w.jp) + '</dt><dd>' + esc(w.hu) + '</dd></div>').join('') + '</dl>' : ''}
+        </div>`;
+  }
+  // az összesítőben: a szöveg mondatonként, a fordításával
+  function passageTransHtml(set) {
+    return `
+      <div class="rd-trans">
+        <div class="lp-block-title">A szöveg és a fordítása</div>
+        ${set.title ? '<div class="rd-trans-title"><span lang="ja">' + ruby(set.title) + '</span>' + (set.titleHu ? ' <span class="rd-trans-mean">' + esc(set.titleHu) + '</span>' : '') + '</div>' : ''}
+        <ol class="rd-trans-list">
+          ${set.text.map(s => '<li><span class="rd-trans-jp" lang="ja">' + ruby(s.jp) + '</span><span class="rd-trans-mean">' + esc(s.hu) + '</span></li>').join('')}
+        </ol>
+      </div>`;
+  }
+  const roundAvailable = kind => kind === 'listen' ? canListen : kind === 'read' ? canRead : false;
+  // a tanulási út hallás- vagy olvasás-lépése (…&round=listen | read) azt a kört kéri
+  function wantedRound() {
+    let r = '';
+    try { r = new URLSearchParams(window.location.search).get('round') || ''; } catch (e) {}
+    return roundAvailable(r) ? r : '';
+  }
+
   // retryCards: „Hibáim újra" — az előző kör elrontott kártyái jönnek vissza (a kör fajtája marad).
   function startQuiz(kind, retryCards) {
     stopDialogue();
     flushQuick();
     const retry = Array.isArray(retryCards) && retryCards.length > 0;
-    run.kind = kind === 'listen' ? 'listen' : kind === 'review' ? 'review' : 'check';
+    run.kind = kind === 'listen' ? 'listen' : kind === 'read' ? 'read' : kind === 'review' ? 'review' : 'check';
     run.cards = retry ? shuffle(retryCards).map(c => ({ q: c.q, options: shuffle(c.options) }))
-      : run.kind === 'listen' ? buildListenRound() : run.kind === 'review' ? buildReviewRound() : buildRound();
+      : run.kind === 'listen' ? buildListenRound() : run.kind === 'read' ? buildReadRound() : run.kind === 'review' ? buildReviewRound() : buildRound();
     if (!run.cards.length) return;
     run.retry = retry;
     run.idx = 0; run.score = 0; run.streak = 0; run.results = []; run.startTs = Date.now(); run.inLesson = false;
@@ -18818,8 +18873,9 @@ function initLessonPage() {
     document.getElementById('lqCard').innerHTML = `
       <div class="cj-prompt">
         <div class="cj-prompt-eyebrow">
-          <span class="cj-pe-group">${esc(lesson.review && srsOf.get(q) ? (srsOf.get(q).lesson.label || srsOf.get(q).lesson.no + '. lecke') : lessonLabel)}</span><span class="cj-pe-dot">·</span>${q.listen ? 'Hallás' : lesson.review ? 'Ismétlés' : 'Ellenőrzés'}
+          <span class="cj-pe-group">${esc(lesson.review && srsOf.get(q) ? (srsOf.get(q).lesson.label || srsOf.get(q).lesson.no + '. lecke') : lessonLabel)}</span><span class="cj-pe-dot">·</span>${q.listen ? 'Hallás' : q.read ? 'Olvasás' : lesson.review ? 'Ismétlés' : 'Ellenőrzés'}
         </div>
+        ${q.read ? passageHtml(readingSet) : ''}
         <div class="lq-question">${ruby(q.q)}</div>
         ${q.jp ? `<div class="lq-jp" lang="ja">${ruby(q.jp)}</div>` : ''}
         ${q.listen ? `
@@ -18864,9 +18920,9 @@ function initLessonPage() {
   function finalize(card, ok, info) {
     run.submitted = true;
     if (ok) { run.score += 10; run.streak++; } else { run.streak = 0; }
-    if (!card.q.listen && !card.q.gen) srsMark(card.q, ok);
+    if (!card.q.listen && !card.q.gen && !card.q.read) srsMark(card.q, ok);
     run.results.push({ q: lesson.review && srsOf.get(card.q) ? srsOf.get(card.q).id
-                         : lesson.id + ':' + (card.q.listen ? 'listen' : card.q.gen ? 'gen' : lesson.quiz.indexOf(card.q)), correct: ok,
+                         : lesson.id + ':' + (card.q.listen ? 'listen' : card.q.read ? 'read' + card.q.no : card.q.gen ? 'gen' : lesson.quiz.indexOf(card.q)), correct: ok,
                        errorCode: ok ? null : (info.dontKnow ? 'dont_know' : 'wrong_choice') });
     document.getElementById('lqScore').textContent = run.score;
     document.getElementById('lqStreak').textContent = `${run.streak} 🔥`;
@@ -18906,7 +18962,9 @@ function initLessonPage() {
   function advance() {
     run.idx++;
     if (run.idx >= run.cards.length) showSummary(); else renderCard();
-    NihonCoreRound.scrollToRound();
+    // olvasásnál a második kérdéstől a kérdéshez görgetünk (a szöveg fölötte marad)
+    const sameText = run.kind === 'read' && !run.retry && run.idx > 0 && run.idx < run.cards.length;
+    NihonCoreRound.scrollToRound(sameText ? document.querySelector('#lqCard .lq-question') : null);
   }
 
   // Összesítő. „Hibáim újra": az elrontott kérdések rövid körben térnek vissza; ez a kör a
@@ -18917,7 +18975,7 @@ function initLessonPage() {
     NihonCoreStats.recordSession({ module: 'lesson', mode: retry ? 'retry' : run.kind, results: run.results, score: run.score,
       startTs: run.startTs, skipPath: retry });
     if (run.kind === 'review') { showReviewSummary(); return; }
-    const listen = run.kind === 'listen';
+    const listen = run.kind === 'listen', read = run.kind === 'read';
     if (listen && window.NihonCoreAudio) NihonCoreAudio.stop();
     const total = run.results.length;
     const correct = run.results.filter(r => r.correct).length;
@@ -18936,14 +18994,14 @@ function initLessonPage() {
     const main = missed.length ? 'btn-outline' : 'btn-primary';
     const forward = passed
       ? (nextPractice
-          ? (nextPractice.step.module === 'lesson'
-              ? '<button class="btn ' + main + '" id="lqGoListen" type="button">Gyakorlás: ' + esc(nextPractice.step.title) + '</button>'
+          ? (nextPractice.step.module === 'lesson' && roundAvailable(nextPractice.step.mode)
+              ? '<button class="btn ' + main + '" id="lqGoRound" type="button">Gyakorlás: ' + esc(nextPractice.step.title) + '</button>'
               : '<a class="btn ' + main + '" href="' + Path.stepHref(nextPractice.step, false) + '">Gyakorlás: ' + esc(nextPractice.step.title) + '</a>')
           : '<a class="btn ' + main + '" href="../index.html#path">Tovább az úton</a>')
       : '<button class="btn ' + main + '" id="lqAgain" type="button">Új kör</button>';
     const title = retry
       ? (missed.length ? 'Még ' + missed.length + ' kérdés nem megy' : 'Kijavítottad a hibáidat')
-      : !passed ? 'Még egy kör, és megvan' : listen ? 'Megvan a hallás utáni kör' : 'Megvan a lecke';
+      : !passed ? 'Még egy kör, és megvan' : listen ? 'Megvan a hallás utáni kör' : read ? 'Megvan az olvasás' : 'Megvan a lecke';
     const note = missed.length
       ? (passed ? 'Amit elrontottál, most rögtön átveheted újra — vagy mehetsz tovább.'
                 : 'Előbb vedd át újra, amit elrontottál, aztán jöhet egy új kör: a lépéshez 60% kell.')
@@ -18962,14 +19020,16 @@ function initLessonPage() {
         ${forward}
         ${passed && !missed.length && !retry ? '<button class="btn btn-outline" id="lqAgain" type="button">Még egy kör</button>' : ''}
         <button class="btn btn-ghost" id="lqBack" type="button">Vissza a leckéhez</button>
-      </div>`;
+      </div>
+      ${read ? passageTransHtml(readingSet) : ''}`;
+    if (read) glossRomaji(sEl);
     document.getElementById('lqBack').addEventListener('click', backToLesson);
     const retryBtn = document.getElementById('lqRetry');
     if (retryBtn) retryBtn.addEventListener('click', () => startQuiz(run.kind, run.missed));
     const again = document.getElementById('lqAgain');
     if (again) again.addEventListener('click', () => startQuiz(run.kind));
-    const goListen = document.getElementById('lqGoListen');
-    if (goListen) goListen.addEventListener('click', () => startQuiz('listen'));
+    const goRound = document.getElementById('lqGoRound');
+    if (goRound) goRound.addEventListener('click', () => startQuiz(nextPractice.step.mode));
     if (pct === 100 && !retry && window.NihonCoreMotion && NihonCoreMotion.celebrate) {
       try { NihonCoreMotion.celebrate({ title: 'Hibátlan!', sub: `${total} / ${total}` }); } catch (e) {}
     }
@@ -19001,7 +19061,7 @@ function initLessonPage() {
     const due = [], fresh = [];
     const doneLessons = {};
     if (Path) Path.view().rows.forEach(r => {
-      const m = r.done && r.step.module === 'lesson' && r.step.mode !== 'listen' && /[?&]id=(\w+)/.exec(r.step.href || '');
+      const m = r.done && r.step.module === 'lesson' && !r.step.mode && /[?&]id=(\w+)/.exec(r.step.href || '');
       if (m) doneLessons[m[1]] = true;
     });
     srsOf.forEach((src, q) => {
@@ -19076,7 +19136,7 @@ function initLessonPage() {
   }
 
   if (lesson.review) renderReview(); else { renderLesson(); glossRomaji(content); }
-  window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, buildListenRound, practiceRows, steps, showLap,
+  window._lesson = { lesson, ruby, reading, startQuiz, run, buildRound, buildListenRound, buildReadRound, readingSet, practiceRows, steps, showLap,
     playDialogue, stopDialogue, dlgRun, flushQuick,
     quickMatches: () => (quickMap || (quickMap = buildQuickMap())).map(l => l.length) };
 }
@@ -19087,10 +19147,13 @@ function initLessonPage() {
    ----------------------------------------------------
    Kis teszt 4 leckénként (30 perc, 30 kérdés), nagy dolgozat 12 leckénként (60 perc,
    60 kérdés): a leírásuk NIHONCORE_EXAMS (core.js), a lépésük a tanulási úton `optional`.
+   Próbavizsga (kind: 'mock', N5 és N4): saját terv (plan), külön mért részek (parts) — az óra
+   részenként fut, a részek között szünet van, és a következő részből nem lehet visszalépni.
    A kérdések kitöltésenként a leckék meglévő anyagából állnak össze, azonos arányokkal:
    kb. 80% a dolgozat saját leckéiből, 20% a korábbiakból.
-     Részek:   gram (nyelvtan és olvasás) · part (partikulák és mondatépítés) ·
-               write (ragozás és beírás) · listen (hallás)
+     Részek:   gram (nyelvtan és mondatértés) · part (partikulák és mondatépítés) ·
+               write (ragozás és beírás) · read (olvasásértés: a leckék olvasmányai, szövegenként
+               négy kérdés egymás után) · listen (hallás)
      Típusok:  choice (négy válasz) · tokens (mondat összerakása) · typed (beírás, a romaji
                gépelés közben kanává alakul)
    Vizsga-mód: fut az óra, visszajelzés csak a végén. Gyakorló mód: idő nélkül, kérdésenként
@@ -19130,15 +19193,20 @@ function initExamPage() {
   const ATT_KEY = 'nihoncore_exams_v1', SET_KEY = 'nihoncore_exam_settings_v1', PATH_KEY = 'nihoncore_path_v1';
   const RUN_KEY = 'nihoncore_exam_run_v1', RUN_MAX_AGE = 7 * 86400000;
   const PASS = 0.6, MAX_ATTEMPTS = 200;
-  const SECTIONS = { gram: 'Nyelvtan és olvasás', part: 'Partikulák és mondatépítés', write: 'Ragozás és beírás', listen: 'Hallás' };
-  const SEC_SHORT = { gram: 'Nyelvtan', part: 'Partikulák', write: 'Beírás', listen: 'Hallás' };   // a kör-sávba
-  const SEC_ORDER = ['gram', 'part', 'write', 'listen'];
-  // kérdésszám típusonként: kis teszt / nagy dolgozat
+  const SECTIONS = { gram: 'Nyelvtan és mondatértés', part: 'Partikulák és mondatépítés', write: 'Ragozás és beírás', read: 'Olvasásértés', listen: 'Hallás' };
+  const SEC_SHORT = { gram: 'Nyelvtan', part: 'Partikulák', write: 'Beírás', read: 'Olvasás', listen: 'Hallás' };   // a kör-sávba
+  const SEC_ORDER = ['gram', 'part', 'write', 'read', 'listen'];
+  // kérdésszám típusonként: kis teszt / nagy dolgozat (passage: az olvasott szövegek kérdései — egy szöveg négy kérdés)
   const PLAN = {
-    quick: { quiz: 8,  pattern: 4, read: 3, particle: 4, puzzle: 3, conj: 3, cloze: 2, listen: 3 },
-    big:   { quiz: 16, pattern: 8, read: 6, particle: 8, puzzle: 6, conj: 6, cloze: 4, listen: 6 }
+    quick: { quiz: 6,  pattern: 4, read: 1, particle: 4, puzzle: 3, conj: 3, cloze: 2, passage: 4, listen: 3 },
+    big:   { quiz: 12, pattern: 8, read: 2, particle: 8, puzzle: 6, conj: 6, cloze: 4, passage: 8, listen: 6 }
   };
   const REVIEW_SHARE = 0.2;
+  // a próbavizsga (kind: 'mock') saját tervet (plan) és külön mért részeket (parts) hoz a leírásában (core.js)
+  const planOf = ex => ex.plan || PLAN[ex.kind === 'big' ? 'big' : 'quick'];
+  const isMock = ex => !!ex && ex.kind === 'mock';
+  const KIND_NAME = { quick: 'Kis teszt', big: 'Nagy dolgozat', mock: 'Próbavizsga' };
+  const kindName = ex => KIND_NAME[ex.kind] || 'Dolgozat';
 
   let examId = null;
   try { examId = new URLSearchParams(window.location.search).get('id'); } catch (e) {}
@@ -19226,6 +19294,8 @@ function initExamPage() {
     return out;
   });
   const patternsFor = id => memo('pat:' + id, () => PATTERNS.filter(p => p.lesson === id && p.examples && p.examples.length));
+  // a lecke olvasmánya (course.js: reading): szöveg + kérdések a tartalmáról
+  const passageOf = id => { const l = lessonOf(id), r = l && l.reading; return r && Array.isArray(r.text) && r.text.length && Array.isArray(r.questions) && r.questions.length ? r : null; };
   // az addig tanult ragozási alakok: a fejezetek Ragozó-lépéseiből
   function conjSetup(ids) {
     const forms = {}, themes = {}, adj = {};
@@ -19253,10 +19323,11 @@ function initExamPage() {
   function candidates(type, id) {
     return memo(type + ':' + id, () => {
       const out = [];
-      if (type === 'quiz') {
+      if (type === 'quiz' || type === 'quizjp') {
         const l = lessonOf(id);
         (l && l.quiz || []).forEach((q, i) => {
           if (!q || !q.a || !q.wrong || q.wrong.length < 2) return;
+          if (type === 'quizjp' && !(q.jp && /＿/.test(q.jp))) return;          // csak a hiányos japán mondatos kérdések
           out.push({ type: 'choice', sec: 'gram', kind: 'quiz', lesson: id, key: 'lesson:' + id + ':' + i,
             prompt: q.q, jp: q.jp || '', answer: q.a, options: [q.a].concat(q.wrong.slice(0, 3)), why: q.why || '' });
         });
@@ -19394,9 +19465,26 @@ function initExamPage() {
     return out.concat(adj);
   }
 
+  // olvasásértés: egész szövegek a kérdéseikkel (a szöveg sorrendjében), amíg n kérdés össze nem jön;
+  // előbb a dolgozat saját leckéiből, és csak ha ott nincs elég, a korábbiakból
+  function passageItems(n, mainIds, revIds) {
+    const out = [];
+    const take = ids => shuffle(ids.filter(passageOf)).forEach(id => {
+      if (out.length >= n) return;
+      const set = passageOf(id);
+      set.questions.slice(0, n - out.length).forEach((q, i) => {
+        if (!q || !q.a || !q.wrong || q.wrong.length < 2) return;
+        out.push({ type: 'choice', sec: 'read', kind: 'passage', lesson: id, key: 'rd:' + id + ':' + i,
+          prompt: q.q, jp: q.jp || '', answer: q.a, options: [q.a].concat(q.wrong.slice(0, 3)), why: q.why || '' });
+      });
+    });
+    if (n > 0) { take(mainIds); if (out.length < n) take(revIds); }
+    return out;
+  }
+
   // válaszlehetőségek a választós kérdésekhez
   function finishChoice(it, scope) {
-    if (it.kind === 'quiz') { it.options = shuffle(it.options); return it; }
+    if (it.kind === 'quiz' || it.kind === 'passage') { it.options = shuffle(it.options); return it; }
     if (it.kind === 'read' || it.kind === 'listen') {
       const others = shuffle(scope.examples.filter(e => e.hu !== it.answer && e.id !== it.ex.id));
       const opts = [it.answer];
@@ -19434,34 +19522,65 @@ function initExamPage() {
 
   function buildExam(ex) {
     const mainIds = ex.lessons.slice(), revIds = reviewLessons(ex);
-    const plan = Object.assign({}, PLAN[ex.kind === 'big' ? 'big' : 'quick']);
-    if (!settings.audio) { plan.read += plan.listen; plan.listen = 0; }
+    const plan = Object.assign({}, planOf(ex));
+    const mock = isMock(ex);
+    // hang nélkül a hallás helyére olvasós kérdés kerül; a próbavizsgából a hallás rész egyszerűen kimarad
+    if (!settings.audio) { if (!mock) plan.read = (plan.read || 0) + (plan.listen || 0); plan.listen = 0; }
     const target = Object.keys(plan).reduce((s, k) => s + plan[k], 0);
     const used = {};
     const scopeIds = revIds.concat(mainIds);
     const scope = { examples: [], patterns: [] };
     scopeIds.forEach(id => { scope.examples = scope.examples.concat(examplesFor(id)); scope.patterns = scope.patterns.concat(patternsFor(id)); });
 
-    let items = [];
-    ['listen', 'read', 'pattern', 'cloze', 'particle', 'puzzle', 'quiz'].forEach(t => { items = items.concat(draw(t, plan[t], mainIds, revIds, used)); });
-    items = items.concat(conjItems(plan.conj, mainIds, revIds, used));
+    let items = passageItems(plan.passage || 0, mainIds, revIds);
+    ['listen', 'read', 'pattern', 'cloze', 'particle', 'puzzle', 'quiz'].forEach(t => {
+      items = items.concat(draw(mock && t === 'quiz' ? 'quizjp' : t, plan[t] || 0, mainIds, revIds, used));
+    });
+    items = items.concat(conjItems(plan.conj || 0, mainIds, revIds, used));
     // ami egy típusból nem telt ki (pl. még nincs tanult igealak), azt a leckék saját kérdései pótolják
     if (items.length < target) items = items.concat(draw('quiz', target - items.length, mainIds, revIds, used));
     if (items.length < target) items = items.concat(draw('read', target - items.length, mainIds, revIds, used));
     items.forEach(it => { if (it.type === 'choice') finishChoice(it, scope); });
     items = items.filter(it => it.type !== 'choice' || (it.options && it.options.length >= 3));
-    // részenként, a részen belül kevert sorrendben
+    // próbavizsga: a mondatértés is az olvasás részhez tartozik (rövid mondatok, utánuk a szövegek)
+    if (mock) items.forEach(it => { if (it.kind === 'read') it.sec = 'read'; });
+    // részenként, a részen belül kevert sorrendben (az olvasásértés kérdései a szövegük szerint együtt maradnak)
     let ordered = [];
-    SEC_ORDER.forEach(sec => { ordered = ordered.concat(shuffle(items.filter(it => it.sec === sec))); });
+    SEC_ORDER.forEach(sec => {
+      const part = items.filter(it => it.sec === sec);
+      ordered = ordered.concat(sec === 'read' ? shuffle(part.filter(it => it.kind !== 'passage')).concat(part.filter(it => it.kind === 'passage')) : shuffle(part));
+    });
+    assignParts(ordered, ex);
     return ordered;
   }
   // mit ígér a lobbi: a terv szerinti darabszámok részenként
   function planSummary(ex) {
-    const p = PLAN[ex.kind === 'big' ? 'big' : 'quick'];
-    return { gram: p.quiz + p.pattern + p.read + (settings.audio ? 0 : p.listen), part: p.particle + p.puzzle, write: p.conj + p.cloze, listen: settings.audio ? p.listen : 0 };
+    const p = planOf(ex), n = k => p[k] || 0;
+    // olvasásértés csak akkor van, ha a dolgozat leckéihez (vagy a korábbiakhoz) van szöveg; különben a helyére saját kérdés kerül
+    const rd = ex.lessons.concat(reviewLessons(ex)).some(passageOf) ? n('passage') : 0;
+    const listen = settings.audio ? n('listen') : 0;
+    if (isMock(ex)) return { gram: n('quiz') + n('pattern') + (n('passage') - rd), part: n('particle') + n('puzzle'), write: n('conj') + n('cloze'), read: rd + n('read'), listen: listen };
+    return { gram: n('quiz') + n('pattern') + n('read') + (settings.audio ? 0 : n('listen')) + (n('passage') - rd), part: n('particle') + n('puzzle'), write: n('conj') + n('cloze'),
+      read: rd, listen: listen };
   }
-  const examMinutes = ex => ex.minutes || (ex.kind === 'big' ? 60 : 30);
-  const examCount = ex => { const p = PLAN[ex.kind === 'big' ? 'big' : 'quick']; return Object.keys(p).reduce((s, k) => s + p[k], 0); };
+  // külön mért részek (próbavizsga): [{ title, minutes, secs }]; hang nélkül a csak hallásból álló rész kimarad
+  const examParts = ex => (ex.parts || []).filter(pt => settings.audio || pt.secs.join() !== 'listen');
+  const partOf = (ex, i) => (ex.parts || [])[i] || null;
+  // az elemek rész-sorszámot kapnak (részek nélküli dolgozatnál mind a 0. rész)
+  function assignParts(items, ex) {
+    const parts = ex.parts || [];
+    items.forEach(it => { const i = parts.findIndex(pt => pt.secs.indexOf(it.sec) >= 0); it.part = i < 0 ? 0 : i; });
+  }
+  const examMinutes = ex => ex.parts ? examParts(ex).reduce((s, pt) => s + pt.minutes, 0) : (ex.minutes || (ex.kind === 'big' ? 60 : 30));
+  const examCount = ex => { const s = planSummary(ex); return Object.keys(s).reduce((a, k) => a + s[k], 0); };
+  // „Miből áll": részenként a kérdésszám; próbavizsgánál a külön mért részek szerint, percekkel
+  function partsListHtml(ex) {
+    const plan = planSummary(ex);
+    const row = s => `<li class="exam-part"><span class="exam-part-name">${SECTIONS[s]}</span><span class="exam-part-n">${plan[s]} kérdés</span></li>`;
+    if (!ex.parts) return SEC_ORDER.filter(s => plan[s] > 0).map(row).join('');
+    return examParts(ex).map((pt, i) => `<li class="exam-part exam-part-head"><span class="exam-part-name">${i + 1}. rész: ${esc(pt.title)}</span><span class="exam-part-n">${pt.minutes} perc</span></li>` +
+      SEC_ORDER.filter(s => pt.secs.indexOf(s) >= 0 && plan[s] > 0).map(row).join('')).join('');
+  }
 
   /* ── Megjelenítés: közös elemek ───────────────────── */
   const hero = document.getElementById('examHero');
@@ -19483,7 +19602,7 @@ function initExamPage() {
       <div class="module-hero-meta">
         <div class="module-meta-row"><span class="badge-jlpt">JLPT N5 → N4</span><span class="badge-group">Nem kötelező</span></div>
         <h1 class="module-page-title">Dolgozatok</h1>
-        <p class="module-page-desc">Négy leckénként egy kis teszt (30 perc), tizenkét leckénként egy nagy dolgozat (60 perc). Minden kitöltés más kérdésekből áll, és elmentődik: látod, mennyit fejlődtél.</p>
+        <p class="module-page-desc">Négy leckénként egy kis teszt (30 perc), tizenkét leckénként egy nagy dolgozat (60 perc), a két könyv végén egy-egy próbavizsga a JLPT mintájára. Minden kitöltés más kérdésekből áll, és elmentődik: látod, mennyit fejlődtél.</p>
       </div>`;
     runtime.classList.add('hidden');
     lobby.className = 'exam-index';
@@ -19492,10 +19611,10 @@ function initExamPage() {
       const best = mine.reduce((m, a) => Math.max(m, pct(a.correct, a.total)), -1);
       const last = mine[mine.length - 1];
       return `
-        <a class="exam-row glass-panel${ex.kind === 'big' ? ' is-big' : ''}${best >= PASS * 100 ? ' is-passed' : ''}" href="exam.html?id=${esc(ex.id)}">
+        <a class="exam-row glass-panel${ex.kind === 'big' ? ' is-big' : ex.kind === 'mock' ? ' is-big is-mock' : ''}${best >= PASS * 100 ? ' is-passed' : ''}" href="exam.html?id=${esc(ex.id)}">
           <span class="exam-row-glyph" lang="ja" aria-hidden="true">${esc(ex.glyph || '試')}</span>
           <span class="exam-row-text">
-            <span class="exam-row-kicker">${ex.kind === 'big' ? 'Nagy dolgozat' : 'Kis teszt'} · ${examMinutes(ex)} perc · ${examCount(ex)} kérdés</span>
+            <span class="exam-row-kicker">${kindName(ex)} · ${examMinutes(ex)} perc · ${examCount(ex)} kérdés</span>
             <strong class="exam-row-title">${esc(ex.title)}</strong>
             <span class="exam-row-sub">${mine.length ? 'Legjobb: ' + best + '% · ' + mine.length + ' kitöltés · utoljára ' + fmtDate(last.ts) : 'Még nem írtad meg'}</span>
           </span>
@@ -19534,12 +19653,11 @@ function initExamPage() {
       hero.innerHTML = `
         <div class="module-hero-icon icon-glow-gold"><span lang="ja">${esc(ex.glyph || '試')}</span></div>
         <div class="module-hero-meta">
-          <div class="module-meta-row"><span class="badge-jlpt">${ex.kind === 'big' ? 'Nagy dolgozat' : 'Kis teszt'}</span><span class="badge-group">${examMinutes(ex)} perc · ${examCount(ex)} kérdés</span></div>
+          <div class="module-meta-row"><span class="badge-jlpt">${kindName(ex)}</span><span class="badge-group">${examMinutes(ex)} perc · ${examCount(ex)} kérdés</span></div>
           <h1 class="module-page-title">${esc(ex.title)}</h1>
           <p class="module-page-desc">${esc(ex.desc || '')}</p>
         </div>`;
     }
-    const plan = planSummary(ex);
     const sw = (key, title, text) => `
         <label class="cj-adapt-switch exam-switch">
           <input type="checkbox" data-exam-set="${key}"${settings[key] ? ' checked' : ''} />
@@ -19552,7 +19670,7 @@ function initExamPage() {
       <div class="exam-resume" data-lobby-keep>
         <div class="exam-resume-text">
           <strong>Félbehagyott dolgozatod van</strong>
-          <span>${saved.results.length} / ${saved.items.length} kérdés megvan${saved.examMode ? ' · ' + fmtTime(saved.leftMs) + ' van hátra (vizsga-mód)' : ' · gyakorló mód'}</span>
+          <span>${saved.results.length} / ${saved.items.length} kérdés megvan${saved.examMode ? (saved.inBreak ? ' · a következő rész előtt (vizsga-mód)' : ' · ' + fmtTime(saved.leftMs) + ' van hátra' + (ex.parts ? ' a részből' : '') + ' (vizsga-mód)') : ' · gyakorló mód'}</span>
         </div>
         <div class="exam-resume-actions">
           <button class="btn btn-primary" id="examResume" type="button">Folytatom</button>
@@ -19563,21 +19681,21 @@ function initExamPage() {
       ${resumeHtml}
       <div class="lobby-header">
         <h2 class="lobby-title">Mielőtt elkezded</h2>
-        <p class="lobby-sub">${ex.lessons.length} lecke anyaga${rev.length ? ', és egy kevés ismétlés a korábbiakból' : ''}. Minden kitöltés más kérdésekből áll.</p>
+        <p class="lobby-sub">${ex.lessons.length} lecke anyaga${rev.length ? ', és egy kevés ismétlés a korábbiakból' : ''}. Minden kitöltés más kérdésekből áll.${isMock(ex) ? ' A részek ideje külön fut, és a következő részből nem lehet visszalépni — ahogy a valódi vizsgán. A vizsga szókincs- és írásjegy-része itt nincs benne.' : ''}</p>
       </div>
       <div class="lobby-section" data-lobby-keep>
         <div class="lobby-section-label">Miből áll</div>
         <ul class="exam-parts">
-          ${SEC_ORDER.filter(s => plan[s] > 0).map(s => `<li class="exam-part"><span class="exam-part-name">${SECTIONS[s]}</span><span class="exam-part-n">${plan[s]} kérdés</span></li>`).join('')}
+          ${partsListHtml(ex)}
         </ul>
-        <p class="exam-lessons">${ex.lessons.map(id => { const l = lessonOf(id); return l ? '<span class="exam-lesson-chip">' + esc(l.label ? l.title : l.no + '. ' + plain(l.title)) + '</span>' : ''; }).join('')}</p>
+        <p class="exam-lessons${ex.lessons.length > 12 ? ' is-many' : ''}">${ex.lessons.map(id => { const l = lessonOf(id); return l ? '<span class="exam-lesson-chip">' + esc(l.label ? l.title : l.no + '. ' + plain(l.title)) + '</span>' : ''; }).join('')}</p>
       </div>
       <div class="lobby-section" data-lobby-keep>
         <div class="lobby-section-label">Beállítások</div>
-        ${sw('examMode', 'Vizsga-mód: időre', 'Fut az óra (' + examMinutes(ex) + ' perc), és csak a végén látod, mit találtál el: mint a JLPT-n. Kikapcsolva nincs idő, és minden kérdés után jön a magyarázat.')}
+        ${sw('examMode', 'Vizsga-mód: időre', 'Fut az óra (' + (ex.parts ? examParts(ex).map(pt => pt.minutes + ' perc').join(' + ') + ', részenként külön' : examMinutes(ex) + ' perc') + '), és csak a végén látod, mit találtál el: mint a JLPT-n. Kikapcsolva nincs idő, és minden kérdés után jön a magyarázat.')}
         ${sw('romaji', 'Romaji segítség', 'A japán szavak alatt látszik az átírás. Kikapcsolva csak a kana és a kanji marad.')}
         ${sw('hu', 'Magyar segítség', 'A mondatok alatt látszik a fordítás, ahol az nem maga a feladat.')}
-        ${sw('audio', 'Hanggal', 'Van hallás rész: a mondatot meghallgatod. Kikapcsolva a hallás rész kimarad, a helyére olvasós kérdés kerül.')}
+        ${sw('audio', 'Hanggal', 'Van hallás rész: a mondatot meghallgatod. Kikapcsolva a hallás rész kimarad' + (isMock(ex) ? '.' : ', a helyére olvasós kérdés kerül.'))}
       </div>
       ${historyHtml(ex)}
       <button class="btn ${saved ? 'btn-outline' : 'btn-primary glow-effect'} ml-start" id="examStart" type="button">${saved ? 'Új kitöltés' : 'Kezdés'} — ${examCount(ex)} kérdés</button>`;
@@ -19588,19 +19706,26 @@ function initExamPage() {
     lobby.querySelectorAll('[data-exam-set]').forEach(inp => inp.addEventListener('change', () => {
       settings[inp.dataset.examSet] = inp.checked;
       saveSettings();
+      // a részek, a kérdésszám és az idő a beállítástól függ (hang nélkül nincs hallás rész)
       const partsEl = lobby.querySelector('.exam-parts');
-      if (partsEl) { const p2 = planSummary(ex); partsEl.innerHTML = SEC_ORDER.filter(s => p2[s] > 0).map(s => `<li class="exam-part"><span class="exam-part-name">${SECTIONS[s]}</span><span class="exam-part-n">${p2[s]} kérdés</span></li>`).join(''); }
+      if (partsEl) partsEl.innerHTML = partsListHtml(ex);
+      const startBtn = document.getElementById('examStart');
+      if (startBtn) startBtn.textContent = (loadRun() ? 'Új kitöltés' : 'Kezdés') + ' — ' + examCount(ex) + ' kérdés';
+      const badge = hero && hero.querySelector('.badge-group');
+      if (badge) badge.textContent = examMinutes(ex) + ' perc · ' + examCount(ex) + ' kérdés';
     }));
     document.getElementById('examStart').addEventListener('click', startExam);
   }
 
   /* ── A kör ─────────────────────────────────────────── */
-  const run = { items: [], idx: 0, results: [], startTs: 0, endTs: 0, timer: 0, submitted: false, score: 0, done: true, examMode: false, retry: false };
+  const run = { items: [], idx: 0, results: [], startTs: 0, endTs: 0, timer: 0, submitted: false, score: 0, done: true, examMode: false, retry: false, inBreak: false };
   const cardEl = () => document.getElementById('examCard');
   const actionsEl = () => document.getElementById('examActions');
   const fbEl = () => document.getElementById('examFeedback');
 
-  const examModeName = () => exam.kind === 'big' ? 'exam-big' : 'exam-quick';
+  const examModeName = () => exam.kind === 'big' ? 'exam-big' : exam.kind === 'mock' ? 'exam-mock' : 'exam-quick';
+  // az adott rész ideje (részek nélkül az egész dolgozaté)
+  const partMinutes = i => { const pt = exam.parts ? partOf(exam, i) : null; return pt ? pt.minutes : examMinutes(exam); };
 
   // A futó dolgozat mentése (eszköz-helyi): újratöltés, véletlen bezárás vagy kilépés után a lobbiból folytatható.
   // Az óra a távollét alatt áll: a hátralévő idő mentődik, nem a lejárat időpontja. A javító kör nem mentődik.
@@ -19608,8 +19733,8 @@ function initExamPage() {
     if (run.done || run.retry || !run.items.length) return;
     try {
       localStorage.setItem(RUN_KEY, JSON.stringify({
-        exam: exam.id, savedTs: Date.now(), examMode: run.examMode, score: run.score,
-        elapsedMs: Date.now() - run.startTs, leftMs: run.examMode ? Math.max(0, run.endTs - Date.now()) : 0,
+        exam: exam.id, savedTs: Date.now(), examMode: run.examMode, score: run.score, inBreak: !!run.inBreak,
+        elapsedMs: Date.now() - run.startTs, leftMs: run.examMode && !run.inBreak ? Math.max(0, run.endTs - Date.now()) : 0,
         items: run.items.map(it => { const o = {}; Object.keys(it).forEach(k => { if (['pattern', 'picked', 'order', 'tray'].indexOf(k) < 0) o[k] = it[k]; }); return o; }),
         results: run.results.map(r => ({ key: r.key, sec: r.sec, lesson: r.lesson, kind: r.kind, correct: r.correct, errorCode: r.errorCode, given: r.given, answer: r.answer, i: run.items.indexOf(r.item) }))
       }));
@@ -19640,9 +19765,9 @@ function initExamPage() {
     if (!items.length) return;
     discardRun();                              // új kitöltés: a korábbi félbehagyott lezárul
     run.items = items; run.results = []; run.score = 0;
-    run.examMode = !!settings.examMode; run.retry = false;
+    run.examMode = !!settings.examMode; run.retry = false; run.inBreak = false;
     run.startTs = Date.now();
-    run.endTs = run.examMode ? run.startTs + examMinutes(exam) * 60000 : 0;
+    run.endTs = run.examMode ? run.startTs + partMinutes(items[0].part) * 60000 : 0;
     beginRun();
     saveRun();
   }
@@ -19654,7 +19779,10 @@ function initExamPage() {
     run.score = st.score || 0;
     run.examMode = !!st.examMode; run.retry = false;
     run.startTs = Date.now() - (st.elapsedMs || 0);
-    run.endTs = run.examMode ? Date.now() + (st.leftMs || 0) : 0;
+    // két rész között maradt abba (vagy az előző rész utolsó válasza után zárult be a lap): a következő rész a szünetről indul
+    const at = run.results.length;
+    run.inBreak = !!st.inBreak || (at > 0 && at < run.items.length && run.items[at].part !== run.items[at - 1].part);
+    run.endTs = run.examMode && !run.inBreak ? Date.now() + (st.leftMs || 0) : 0;
     beginRun();
   }
   // „Hibáim újra": a hibás kérdések gyakorló módban (idő nélkül, visszajelzéssel); nem számít kitöltésnek
@@ -19662,7 +19790,7 @@ function initExamPage() {
     if (!items.length) return;
     run.items = items.map(it => { const o = Object.assign({}, it); delete o.picked; delete o.order; delete o.tray; if (o.options) o.options = shuffle(o.options); return o; });
     run.results = []; run.score = 0;
-    run.examMode = false; run.retry = true;
+    run.examMode = false; run.retry = true; run.inBreak = false;
     run.startTs = Date.now(); run.endTs = 0;
     beginRun();
   }
@@ -19678,18 +19806,69 @@ function initExamPage() {
     document.getElementById('examSummary').classList.add('hidden');
     document.getElementById('examStat1Label').textContent = run.examMode ? 'Idő' : 'Helyes';
     clearInterval(run.timer);
-    if (run.examMode) run.timer = setInterval(tick, 1000);
+    if (run.examMode && !run.inBreak) run.timer = setInterval(tick, 1000);
     tick();
-    if (run.idx >= run.items.length) finish(false); else renderCard();
+    if (run.idx >= run.items.length) finish(false); else if (run.inBreak) showBreak(false); else renderCard();
   }
   function tick() {
     const v = document.getElementById('examStat1');
     if (!v) return;
     if (!run.examMode) { v.textContent = run.results.filter(r => r.correct).length; return; }
+    if (run.inBreak) { v.textContent = '–'; v.classList.remove('is-low'); return; }      // két rész között az óra áll
     const left = run.endTs - Date.now();
     v.textContent = fmtTime(left);
     v.classList.toggle('is-low', left <= 5 * 60000);
-    if (left <= 0 && !run.done) finish(true);
+    if (left <= 0 && !run.done) timeUp();
+  }
+  const answerOf = it => it.type === 'tokens' ? it.sentence.tokens.map(t => t.jp).join(' ') : it.type === 'typed' ? it.answerShow : it.answer;
+  const pushTimeout = it => run.results.push({ key: it.key, sec: it.sec, lesson: it.lesson, kind: it.kind, correct: false, errorCode: 'timeout', given: '', answer: answerOf(it), item: it });
+  // Lejárt az idő. Részekre bontott vizsgánál csak az a rész zárul le: ami belőle nem került sorra, megválaszolatlan
+  // (hibának számít), és jön a következő rész a saját idejével.
+  function timeUp() {
+    const cur = run.items[run.idx] ? run.items[run.idx].part : 0;
+    let end = run.idx;
+    while (end < run.items.length && run.items[end].part === cur) end++;
+    if (end >= run.items.length) { finish(true); return; }
+    for (let i = run.results.length; i < end; i++) pushTimeout(run.items[i]);
+    run.idx = end;
+    if (window.NihonCoreAudio && NihonCoreAudio.stop) NihonCoreAudio.stop();
+    showBreak(true);
+  }
+  // Két rész között: az óra áll, a következő rész a gombbal indul; az előzőhöz nem lehet visszatérni.
+  function showBreak(wasTimeUp) {
+    run.inBreak = true; run.submitted = true;
+    clearInterval(run.timer);
+    run.endTs = 0;
+    saveRun();
+    const it = run.items[run.idx], prevIt = run.items[run.idx - 1];
+    const pt = partOf(exam, it.part), prev = prevIt ? partOf(exam, prevIt.part) : null;
+    const count = run.items.filter(x => x.part === it.part).length;
+    updateBar();
+    tick();
+    const fb = fbEl();
+    fb.classList.add('hidden'); fb.innerHTML = '';
+    const card = cardEl();
+    card.className = 'conj-card glass-panel-heavy exam-card exam-card-break';
+    card.innerHTML = `
+        <div class="cj-prompt">
+          <div class="cj-prompt-eyebrow"><span class="cj-pe-group">${wasTimeUp ? 'Lejárt az idő' : 'Rész vége'}</span></div>
+          <div class="lq-question">${prev ? 'Vége: ' + esc(prev.title) : 'Vége az előző résznek'}</div>
+          <p class="exam-break-text">${wasTimeUp ? 'Ami nem került sorra, az megválaszolatlan marad. ' : ''}Ehhez a részhez már nem lehet visszatérni. Ha készen állsz, indítsd el a következőt${run.examMode ? ': az óra akkor indul újra.' : '.'}</p>
+          <div class="exam-break-next"><strong>${it.part + 1}. rész: ${esc(pt ? pt.title : '')}</strong><span>${count} kérdés${run.examMode && pt ? ' · ' + pt.minutes + ' perc' : ''}</span></div>
+        </div>`;
+    actionsEl().innerHTML = '<button class="btn btn-primary glow-effect cj-submit" id="examPartStart" type="button">A következő rész indítása</button>';
+    document.getElementById('examPartStart').addEventListener('click', startPart);
+    if (window.NihonCoreRound) NihonCoreRound.scrollToRound();
+  }
+  function startPart() {
+    if (!run.inBreak || run.done) return;
+    run.inBreak = false;
+    run.endTs = run.examMode ? Date.now() + partMinutes(run.items[run.idx].part) * 60000 : 0;
+    clearInterval(run.timer);
+    if (run.examMode) run.timer = setInterval(tick, 1000);
+    tick();
+    saveRun();
+    renderCard();
   }
   function updateBar() {
     const n = run.items.length, it = run.items[run.idx];
@@ -19705,6 +19884,29 @@ function initExamPage() {
       </div>`;
   const huLine = it => it.hu ? `<div class="exam-hint-hu">${esc(it.hu)}</div>` : '';
   const romajiOf = jp => (Kana && /^[ぁ-ゖァ-ヺー]+$/.test(jp)) ? Kana.toRomaji(jp) : '';
+
+  // az olvasott szöveg (mondatonként; a `par` jelű mondat új bekezdést kezd; a kanás szöveg tagolt: ott a mondatok közé is szóköz kell)
+  function passageHtml(set) {
+    const paras = [];
+    set.text.forEach(s => { if (s.par || !paras.length) paras.push([]); paras[paras.length - 1].push(s); });
+    const spaced = set.text.some(s => /\s/.test(s.jp));
+    // kanás szöveg (1–4. lecke: nincs kanji, így furigana sincs): romaji a kana-darabok fölött — a Romaji beállítás rejti el
+    const kanaOnly = !!Kana && !set.text.some(s => /\{/.test(s.jp));
+    const jp = s => !kanaOnly ? ruby(s) : esc(s).replace(/[ぁ-ゖァ-ヺー]+/g, m => /[ぁ-ゖァ-ヺ]/.test(m)
+      ? '<ruby class="lp-rj">' + m + '<rt class="lp-rj-romaji">' + esc(Kana.toRomaji(m)) + '</rt></ruby>' : m);
+    return `
+          <div class="rd-passage">
+            <div class="rd-kicker">Olvasd el a szöveget</div>
+            ${set.title ? '<div class="rd-title" lang="ja">' + jp(set.title) + '</div>' : ''}
+            <div class="rd-text" lang="ja">${paras.map(p => '<p>' + p.map(s => '<span class="rd-s">' + jp(s.jp) + '</span>').join(spaced ? ' ' : '') + '</p>').join('')}</div>
+            ${set.words && set.words.length ? '<dl class="rd-words">' + set.words.map(w => '<div class="rd-word"><dt lang="ja">' + jp(w.jp) + '</dt><dd>' + esc(w.hu) + '</dd></div>').join('') + '</dl>' : ''}
+          </div>`;
+  }
+  const passageTransHtml = set => `
+        <div class="rd-trans">
+          ${set.title ? '<div class="rd-trans-title"><span lang="ja">' + ruby(set.title) + '</span>' + (set.titleHu ? ' <span class="rd-trans-mean">' + esc(set.titleHu) + '</span>' : '') + '</div>' : ''}
+          <ol class="rd-trans-list">${set.text.map(s => '<li><span class="rd-trans-jp" lang="ja">' + ruby(s.jp) + '</span><span class="rd-trans-mean">' + esc(s.hu) + '</span></li>').join('')}</ol>
+        </div>`;
 
   // a mondat tokenjei egy hiánnyal (partikula-kérdés)
   function blankSentence(it) {
@@ -19733,9 +19935,11 @@ function initExamPage() {
             <button class="btn btn-ghost lq-listen-slow" id="examSlow" type="button">Lassabban</button>
           </div>
           <div class="exam-jp exam-listen-text hidden" id="examListenText" lang="ja">${ruby(it.jpAfter)}</div>` : '';
+      const set = it.kind === 'passage' ? passageOf(it.lesson) : null;
       body = `
         <div class="cj-prompt">
           ${eyebrow(it)}
+          ${set ? passageHtml(set) : ''}
           <div class="lq-question">${ruby(it.prompt)}</div>
           ${jpBlock}${listenBlock}
           ${it.kind === 'particle' || it.kind === 'pattern' ? huLine(it) : ''}
@@ -19773,7 +19977,10 @@ function initExamPage() {
     actionsEl().innerHTML = (it.type !== 'choice' || run.examMode)
       ? `<button class="btn btn-primary glow-effect cj-submit" id="examSubmit" type="button" disabled>${run.examMode ? 'Tovább' : 'Ellenőrzés'}</button>` : '';
     wireCard(it);
-    if (window.NihonCoreRound) NihonCoreRound.scrollToRound();
+    // ugyanannak a szövegnek a következő kérdése: a kérdéshez görgetünk (a szöveg fölötte marad)
+    const prev = run.items[run.idx - 1];
+    const sameText = it.kind === 'passage' && prev && prev.kind === 'passage' && prev.lesson === it.lesson;
+    if (window.NihonCoreRound) NihonCoreRound.scrollToRound(sameText ? card.querySelector('.lq-question') : null);
   }
 
   function playItem(it, speed) {
@@ -19919,8 +20126,10 @@ function initExamPage() {
 
   function next() {
     run.idx++;
-    if (run.idx >= run.items.length) finish(false);
-    else renderCard();
+    if (run.idx >= run.items.length) { finish(false); return; }
+    // új, külön mért rész kezdődik: előbb szünet (a javító körben nincsenek részek)
+    if (!run.retry && run.items[run.idx].part !== run.items[run.idx - 1].part) { showBreak(false); return; }
+    renderCard();
   }
 
   /* ── Befejezés, mentés, eredmény ──────────────────── */
@@ -19930,11 +20139,8 @@ function initExamPage() {
     clearInterval(run.timer);
     if (window.NihonCoreAudio && NihonCoreAudio.stop) NihonCoreAudio.stop();
     // ami az idő lejártáig nem került sorra, az megválaszolatlan (hibának számít)
-    for (let i = run.results.length; i < run.items.length; i++) {
-      const it = run.items[i];
-      run.results.push({ key: it.key, sec: it.sec, lesson: it.lesson, kind: it.kind, correct: false, errorCode: 'timeout', given: '',
-        answer: it.type === 'tokens' ? it.sentence.tokens.map(t => t.jp).join(' ') : it.type === 'typed' ? it.answerShow : it.answer, item: it });
-    }
+    for (let i = run.results.length; i < run.items.length; i++) pushTimeout(run.items[i]);
+    run.inBreak = false;
     const total = run.results.length, correct = run.results.filter(r => r.correct).length;
     const sections = {}, lessons = {};
     run.results.forEach(r => {
@@ -19974,6 +20180,7 @@ function initExamPage() {
       : it.kind === 'listen' ? '<span lang="ja">' + ruby(it.ex.jp) + '</span>'
       : it.html ? '<span lang="ja">' + it.html + '</span>'
       : it.jp ? esc(plain(it.prompt)) + ' <span lang="ja">' + ruby(it.jp) + '</span>' : ruby(it.prompt);
+    const set = it.kind === 'passage' ? passageOf(it.lesson) : null;
     return `
       <li class="exam-rev">
         <div class="exam-rev-q">${q}</div>
@@ -19981,7 +20188,7 @@ function initExamPage() {
         ${r.given ? `<div class="exam-rev-g"><span class="exam-rev-label">A te válaszod</span><span${hasJp(r.given) ? ' lang="ja"' : ''}>${esc(r.given)}</span></div>`
                   : `<div class="exam-rev-g"><span class="exam-rev-label">${r.errorCode === 'timeout' ? 'Nem jutott rá idő' : 'Nem válaszoltál'}</span></div>`}
         ${it.why && it.kind !== 'read' && it.kind !== 'listen' ? `<div class="exam-rev-why">${ruby(it.why)}</div>` : ''}
-        <div class="exam-rev-meta">${SECTIONS[r.sec]}${r.lesson ? ' · ' + esc(lessonName(r.lesson)) : ''}</div>
+        <div class="exam-rev-meta">${SECTIONS[r.sec]}${r.lesson ? ' · ' + esc(lessonName(r.lesson)) : ''}${set && set.titleHu ? ' · ' + esc(set.titleHu) : ''}</div>
       </li>`;
   }
   function showSummary(att, timeUp) {
@@ -19993,6 +20200,8 @@ function initExamPage() {
     const weak = Object.keys(att.lessons).filter(l => pct(att.lessons[l][0], att.lessons[l][1]) < PASS * 100 && att.lessons[l][1] >= 2)
       .sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
     const wrong = run.results.filter(r => !r.correct);
+    const readIds = [];
+    run.items.forEach(it => { if (it.kind === 'passage' && readIds.indexOf(it.lesson) < 0 && passageOf(it.lesson)) readIds.push(it.lesson); });
     cardEl().innerHTML = ''; actionsEl().innerHTML = '';
     fbEl().classList.add('hidden');
     runtime.classList.add('exam-done');
@@ -20001,9 +20210,12 @@ function initExamPage() {
     sEl.classList.add('glass-panel-heavy');
     sEl.innerHTML = `
       <div class="summary-icon">${p === 100 ? '🏆' : passed ? '🎯' : '🌱'}</div>
-      <h3>${timeUp ? 'Lejárt az idő' : passed ? 'Megvan a dolgozat' : 'Ez most még nem lett meg'}</h3>
+      <h3>${timeUp ? 'Lejárt az idő' : passed ? (isMock(exam) ? 'Megvan a próbavizsga' : 'Megvan a dolgozat') : 'Ez most még nem lett meg'}</h3>
       <div class="summary-score">${att.correct} / ${att.total}<small> · ${p}%</small></div>
-      <p class="lq-summary-note">${passed ? 'A dolgozathoz 60% kell: megvan.' : 'A dolgozathoz 60% kell. Nézd át a hibáidat, és írd meg újra: más kérdéseket kapsz.'}
+      <p class="lq-summary-note">${isMock(exam)
+          ? (passed ? 'A próbavizsgához itt 60% kell: megvan. A valódi vizsgán a részekben külön is el kell érni egy minimumot — nézd meg lent, melyik részed a leggyengébb.'
+                    : 'A próbavizsgához itt 60% kell. Nézd át a hibáidat és a gyengébb leckéket, aztán írd meg újra: más kérdéseket kapsz.')
+          : (passed ? 'A dolgozathoz 60% kell: megvan.' : 'A dolgozathoz 60% kell. Nézd át a hibáidat, és írd meg újra: más kérdéseket kapsz.')}
         ${prevP !== null ? ' Az előző kitöltésed ' + prevP + '% volt' + (p > prevP ? ': +' + (p - prevP) + ' százalékpont.' : p < prevP ? '.' : ', most is annyi.') : ''}</p>
       <div class="exam-sum-meta">
         <span class="exam-sum-chip">Idő: ${fmtTime(att.durationMs)}${att.limitMs ? ' / ' + fmtTime(att.limitMs) : ''}</span>
@@ -20028,6 +20240,11 @@ function initExamPage() {
         <summary class="exam-review-sum">Hibáid és a helyes válaszok (${wrong.length})</summary>
         <ul class="exam-rev-list">${wrong.map(reviewRow).join('')}</ul>
       </details>` : '<p class="exam-weak">Hibátlan: minden kérdést eltaláltál.</p>'}
+      ${readIds.length ? `
+      <details class="exam-review exam-read-trans">
+        <summary class="exam-review-sum">Az olvasott ${readIds.length > 1 ? 'szövegek' : 'szöveg'} fordítása</summary>
+        ${readIds.map(id => passageTransHtml(passageOf(id))).join('')}
+      </details>` : ''}
       <div class="kana-summary-actions">
         ${wrong.length ? '<button class="btn btn-primary" id="examRetry" type="button">Hibáim újra (' + wrong.length + ')</button>' : ''}
         <button class="btn ${wrong.length ? 'btn-outline' : 'btn-primary'}" id="examAgain" type="button">Megírom újra</button>
@@ -20090,8 +20307,8 @@ function initExamPage() {
   if (exam) renderLobby(); else renderIndex();
   if (window.NihonCoreRound) NihonCoreRound.refresh();
 
-  window._exam = { exam, buildExam, candidates, sentencesFor, conjSetup, reviewLessons, checkTyped, run, settings, startExam, finish, loadAttempts,
-    saveRun, loadRun, resumeExam, startRetry,
+  window._exam = { exam, buildExam, candidates, sentencesFor, conjSetup, reviewLessons, checkTyped, run, settings, startExam, finish, loadAttempts, passageOf, passageItems, planSummary,
+    saveRun, loadRun, resumeExam, startRetry, timeUp, startPart, examParts, examMinutes, examCount,
     show: i => { run.idx = i; renderCard(); } };
 }
 

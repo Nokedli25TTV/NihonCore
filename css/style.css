@@ -7994,7 +7994,7 @@ body.helpers-no-romaji .lp-ex-romaji { display: none; }
 
 /* Kanás leckék (1–4.): romaji a kana-darabok fölött — magyarázat, tábla, minta, gyakori hiba, kérdés.
    (A példáknak és a szavaknak saját romaji-soruk van.) A Romaji kapcsoló ezt is elrejti. */
-.lesson-main rt.lp-rj-romaji {
+.lesson-main rt.lp-rj-romaji, .exam-main rt.lp-rj-romaji {
   font-family: var(--font-body); font-size: var(--fs-2xs); font-weight: 600;
   color: var(--sumi-soft); letter-spacing: 0; line-height: 1.25;
 }
@@ -8416,6 +8416,38 @@ html.theme-sumi .review-card.is-due .path-glyph { color: #171C2E; }
 .lp-ex { transition: border-color var(--t-base), background-color var(--t-base); }
 .lp-ex.is-current { border-color: rgb(var(--brand-rgb) / 0.55); background: var(--brand-soft); }
 
+/* Olvasás: a lecke rövid szövege a kérdés fölött (a lecke olvasás-köre és a dolgozat olvasásértés része);
+   a fordítás csak az összesítőben látszik. A szavak listája magyar segítség: a Magyar kapcsolóval eltűnik. */
+.rd-passage {
+  margin: 6px 0 18px; padding: 14px 16px 12px; border-radius: var(--radius-md); text-align: left;
+  background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+}
+.rd-kicker { font-size: var(--fs-2xs); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--brand-deep); }
+.rd-title { margin-top: 6px; font-family: var(--font-jp); font-size: var(--fs-md); font-weight: 700; line-height: 2; color: var(--sumi); }
+.rd-text { font-family: var(--font-jp); font-size: var(--fs-md); font-weight: 500; line-height: 2.2; letter-spacing: 0.01em; color: var(--sumi); }
+.rd-text p + p { margin-top: 8px; }
+.rd-words {
+  display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 10px 0 0; padding-top: 10px;
+  border-top: 1px solid var(--glass-fill-edge); font-size: var(--fs-sm); line-height: 1.9;
+}
+.rd-word { display: inline-flex; align-items: baseline; gap: 6px; }
+.rd-word dt { font-family: var(--font-jp); font-weight: 600; color: var(--sumi); }
+.rd-word dd { margin: 0; color: var(--sumi-soft); }
+body.helpers-no-hu .rd-words { display: none; }
+.rd-trans { width: 100%; margin-top: 22px; text-align: left; }
+.rd-trans-title { margin: 2px 0 8px; font-size: var(--fs-base); font-weight: 700; line-height: 1.9; color: var(--sumi); }
+.rd-trans-title [lang="ja"] { font-family: var(--font-jp); }
+.rd-trans-title .rd-trans-mean { display: inline; margin-left: 6px; font-weight: 500; color: var(--sumi-soft); }
+.rd-trans-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.rd-trans-list li { padding: 10px 14px; border-radius: var(--radius-sm); background: var(--glass-fill); border: 1px solid var(--glass-fill-edge); }
+.rd-trans-jp { display: block; font-family: var(--font-jp); font-size: var(--fs-md); font-weight: 500; line-height: 1.95; color: var(--sumi); }
+.rd-trans-mean { display: block; font-size: var(--fs-base); font-weight: 500; line-height: 1.45; color: var(--sumi); }
+.exam-read-trans .rd-trans { margin-top: 8px; }
+.exam-read-trans .rd-trans + .rd-trans { margin-top: 18px; }
+@media (max-width: 599px) {
+  .rd-passage { margin-left: -4px; margin-right: -4px; padding: 12px 14px 10px; }
+}
+
 /* ════════════════════════════════════════════════════════
    DOLGOZAT (pages/exam.html) — lista, lobbi, kártyák, eredmény
    ----------------------------------------------------
@@ -8617,6 +8649,22 @@ body.helpers-no-hu .exam-verb-hu { display: none; }
 /* A térképen és a tartalomjegyzékben: a dolgozat nem kötelező lépés (szaggatott arany perem) */
 .path-node.is-exam:not(.is-done) .path-node-disc { border-style: dashed; border-color: rgb(var(--gold-rgb) / 0.70); color: var(--gold-ink); }
 .ptoc-step.is-exam:not(.is-done) .ptoc-glyph { color: var(--gold-ink); }
+
+/* Próbavizsga: külön mért részek a lobbiban, szünet-kártya a részek között */
+.exam-part-head {
+  margin-top: 6px; color: var(--brand-deep); background: var(--brand-soft); border-color: rgb(var(--brand-rgb) / 0.30);
+}
+.exam-part-head:first-child { margin-top: 0; }
+.exam-part-head .exam-part-n { color: var(--brand-deep); font-weight: 700; }
+.exam-lessons.is-many .exam-lesson-chip { padding: 2px 8px; font-size: var(--fs-2xs); }
+.exam-row.is-mock .exam-row-glyph { color: var(--on-accent); background: var(--accent); }
+.exam-break-text { max-width: 44ch; margin: 10px auto 0; font-size: var(--fs-base); line-height: 1.55; text-align: center; color: var(--sumi-soft); }
+.exam-break-next {
+  display: flex; flex-direction: column; align-items: center; gap: 2px; margin: 16px auto 4px; padding: 14px 18px; max-width: 340px;
+  border-radius: var(--radius-md); background: var(--glass-fill); border: 1px solid var(--glass-fill-edge);
+}
+.exam-break-next strong { font-size: var(--fs-md); font-weight: 800; color: var(--sumi); }
+.exam-break-next span { font-size: var(--fs-sm); font-weight: 600; color: var(--sumi-soft); font-variant-numeric: tabular-nums; }
 
 /* ════════════════════════════════════════════════════════
    SZÖVEG-ERŐSÍTÉS (user-visszajelzés: a kérdések és a magyarázatok
