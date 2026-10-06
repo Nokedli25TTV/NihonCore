@@ -429,7 +429,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'あれは<ruby>何<rt>なん</rt></ruby>ですか。',
         kana: 'あれはなんですか。', romaji: 'are wa nan desu ka.', hu: 'Az ott mi?',
         cloze: '___BLANK___は<ruby>何<rt>なん</rt></ruby>ですか。', clozeAnswer: 'あれ',
-        tokens: ['あれは', 'なんですか', '。'] }
+        tokens: ['あれは', 'なんですか', '。'] },
+      { jp: 'これは ほんです。',
+        kana: 'これはほんです。', romaji: 'kore wa hon desu.', hu: 'Ez könyv.',
+        cloze: '___BLANK___は ほんです。', clozeAnswer: 'これ',
+        tokens: ['これは', 'ほんです', '。'], from: 'l2:1:1' },
+      { jp: 'あれは がっこうです。',
+        kana: 'あれはがっこうです。', romaji: 'are wa gakkou desu.', hu: 'Az ott iskola.',
+        cloze: '___BLANK___は がっこうです。', clozeAnswer: 'あれ',
+        tokens: ['あれは', 'がっこうです', '。'], from: 'l2:1:3' }
     ],
     contrasts: ['kono_sono_ano', 'koko_soko_asoko']
   },
@@ -463,7 +471,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'ここは<ruby>図書館<rt>としょかん</rt></ruby>です。',
         kana: 'ここはとしょかんです。', romaji: 'koko wa toshokan desu.', hu: 'Ez itt a könyvtár.',
         cloze: '___BLANK___は<ruby>図書館<rt>としょかん</rt></ruby>です。', clozeAnswer: 'ここ',
-        tokens: ['ここは', 'としょかんです', '。'] }
+        tokens: ['ここは', 'としょかんです', '。'] },
+      { jp: 'ここは だいどころです。',
+        kana: 'ここはだいどころです。', romaji: 'koko wa daidokoro desu.', hu: 'Ez itt a konyha.',
+        cloze: '___BLANK___は だいどころです。', clozeAnswer: 'ここ',
+        tokens: ['ここは', 'だいどころです', '。'], from: 'l2:3:1' },
+      { jp: 'ここは どこですか。',
+        kana: 'ここはどこですか。', romaji: 'koko wa doko desu ka.', hu: 'Hol vagyunk?',
+        cloze: '___BLANK___は どこですか。', clozeAnswer: 'ここ',
+        tokens: ['ここは', 'どこですか', '。'], from: 'l2:3:4' }
     ],
     contrasts: ['kore_sore_are']
   },
@@ -480,7 +496,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>学生<rt>がくせい</rt></ruby>じゃありません。',
         kana: 'たなかさんはがくせいじゃありません。', romaji: 'tanaka-san wa gakusei ja arimasen.', hu: 'Tanaka nem diák.',
         cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>学生<rt>がくせい</rt></ruby>___BLANK___。', clozeAnswer: 'じゃありません',
-        tokens: ['たなかさんは', 'がくせい', 'じゃありません', '。'] }
+        tokens: ['たなかさんは', 'がくせい', 'じゃありません', '。'] },
+      { jp: 'これは わたしの かばんじゃありません。',
+        kana: 'これはわたしのかばんじゃありません。', romaji: 'kore wa watashi no kaban ja arimasen.', hu: 'Ez nem az én táskám.',
+        cloze: 'これは わたしの かばん___BLANK___。', clozeAnswer: 'じゃありません',
+        tokens: ['これは', 'わたしの', 'かばんじゃありません', '。'], from: 'l2:6:1' },
+      { jp: 'いいえ、がくせいじゃありません。',
+        kana: 'いいえ、がくせいじゃありません。', romaji: 'iie, gakusei ja arimasen.', hu: 'Nem, nem vagyok diák.',
+        cloze: 'いいえ、がくせい___BLANK___。', clozeAnswer: 'じゃありません',
+        tokens: ['いいえ', '、', 'がくせいじゃありません', '。'], from: 'l2:6:2' },
+      { jp: 'いいえ、えんぴつじゃ ありません。ペンです。',
+        kana: 'いいえ、えんぴつじゃありません。ペンです。', romaji: 'iie, enpitsu ja arimasen. pen desu.', hu: 'Nem, nem ceruza. Toll.',
+        cloze: 'いいえ、えんぴつ___BLANK___。ペンです。', clozeAnswer: 'じゃありません',
+        tokens: ['いいえ', '、', 'えんぴつじゃありません', '。', 'ペンです', '。'], from: 'l2:6:4' }
     ],
     contrasts: ['wa_desu']
   },
@@ -569,7 +597,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'りんごを<ruby>三<rt>みっ</rt></ruby>つください。',
         kana: 'りんごをみっつください。', romaji: 'ringo o mittsu kudasai.', hu: 'Három almát kérek.',
         cloze: 'りんごを<ruby>三<rt>みっ</rt></ruby>つ___BLANK___。', clozeAnswer: 'ください',
-        tokens: ['りんごを', 'みっつ', 'ください', '。'] }
+        tokens: ['りんごを', 'みっつ', 'ください', '。'] },
+      { jp: 'みずを ください。',
+        kana: 'みずをください。', romaji: 'mizu o kudasai.', hu: 'Vizet kérek.',
+        cloze: 'みずを ___BLANK___。', clozeAnswer: 'ください',
+        tokens: ['みずを', 'ください', '。'], from: 'l4:1:2' },
+      { jp: 'パンと ぎゅうにゅうを ください。',
+        kana: 'パンとぎゅうにゅうをください。', romaji: 'pan to gyuunyuu o kudasai.', hu: 'Kenyeret és tejet kérek.',
+        cloze: 'パンと ぎゅうにゅうを ___BLANK___。', clozeAnswer: 'ください',
+        tokens: ['パンと', 'ぎゅうにゅうを', 'ください', '。'], from: 'l4:1:4' },
+      { jp: 'りんごを みっつと みかんを いつつ ください。',
+        kana: 'りんごをみっつとみかんをいつつください。', romaji: 'ringo o mittsu to mikan o itsutsu kudasai.', hu: 'Három almát és öt mandarint kérek.',
+        cloze: 'りんごを みっつと みかんを いつつ ___BLANK___。', clozeAnswer: 'ください',
+        tokens: ['りんごを', 'みっつと', 'みかんを', 'いつつ', 'ください', '。'], from: 'l4:1:5' }
     ],
     contrasts: ['te_kudasai', 'ni_shimasu']
   },
@@ -586,7 +626,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'コーヒーはいくらですか。',
         kana: 'コーヒーはいくらですか。', romaji: 'koohii wa ikura desu ka.', hu: 'Mennyibe kerül a kávé?',
         cloze: 'コーヒーは___BLANK___ですか。', clozeAnswer: 'いくら',
-        tokens: ['コーヒーは', 'いくらですか', '。'] }
+        tokens: ['コーヒーは', 'いくらですか', '。'] },
+      { jp: 'この かさは いくらですか。',
+        kana: 'このかさはいくらですか。', romaji: 'kono kasa wa ikura desu ka.', hu: 'Mennyibe kerül ez az esernyő?',
+        cloze: 'この かさは ___BLANK___ですか。', clozeAnswer: 'いくら',
+        tokens: ['この', 'かさは', 'いくらですか', '。'], from: 'l4:2:1' }
     ],
     contrasts: ['nan_ji']
   },
@@ -603,7 +647,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>月曜日<rt>げつようび</rt></ruby>から<ruby>金曜日<rt>きんようび</rt></ruby>まで<ruby>働<rt>はたら</rt></ruby>きます。',
         kana: 'げつようびからきんようびまではたらきます。', romaji: 'getsuyoubi kara kinyoubi made hatarakimasu.', hu: 'Hétfőtől péntekig dolgozom.',
         cloze: '<ruby>月曜日<rt>げつようび</rt></ruby>から<ruby>金曜日<rt>きんようび</rt></ruby>___BLANK___<ruby>働<rt>はたら</rt></ruby>きます。', clozeAnswer: 'まで',
-        tokens: ['げつようびから', 'きんようびまで', 'はたらきます', '。'] }
+        tokens: ['げつようびから', 'きんようびまで', 'はたらきます', '。'] },
+      { jp: 'がっこうは げつようびから きんようびまでです。',
+        kana: 'がっこうはげつようびからきんようびまでです。', romaji: 'gakkou wa getsuyoubi kara kin\'youbi made desu.', hu: 'Iskola hétfőtől péntekig van.',
+        cloze: 'がっこうは げつようび___BLANK___ きんようびまでです。', clozeAnswer: 'から',
+        tokens: ['がっこうは', 'げつようびから', 'きんようびまでです', '。'], from: 'l4:7:2' },
+      { jp: 'みせは なんじまでですか。',
+        kana: 'みせはなんじまでですか。', romaji: 'mise wa nanji made desu ka.', hu: 'Meddig van nyitva a bolt?',
+        cloze: 'みせは なんじ___BLANK___ですか。', clozeAnswer: 'まで',
+        tokens: ['みせは', 'なんじまでですか', '。'], from: 'l4:7:3' },
+      { jp: 'えいがは しちじからです。',
+        kana: 'えいがはしちじからです。', romaji: 'eiga wa shichiji kara desu.', hu: 'A film hétkor kezdődik.',
+        cloze: 'えいがは しちじ___BLANK___です。', clozeAnswer: 'から',
+        tokens: ['えいがは', 'しちじからです', '。'], from: 'l4:7:4' }
     ],
     contrasts: ['kara_reason']
   },
@@ -777,7 +833,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>明日<rt>あした</rt></ruby>テニスをしませんか。',
         kana: 'あしたテニスをしませんか。', romaji: 'ashita tenisu o shimasen ka.', hu: 'Nem teniszeznénk holnap?',
         cloze: '<ruby>明日<rt>あした</rt></ruby>テニスをし___BLANK___。', clozeAnswer: 'ませんか',
-        tokens: ['あした', 'テニスを', 'しませんか', '。'] }
+        tokens: ['あした', 'テニスを', 'しませんか', '。'] },
+      { jp: 'コーヒーを<ruby>飲<rt>の</rt></ruby>みませんか。',
+        kana: 'コーヒーをのみませんか。', romaji: 'koohii o nomimasen ka.', hu: 'Nem iszol egy kávét?',
+        cloze: 'コーヒーを<ruby>飲<rt>の</rt></ruby>み___BLANK___。', clozeAnswer: 'ませんか',
+        tokens: ['コーヒーを', 'のみませんか', '。'], from: 'l6:4:2' },
+      { jp: '<ruby>日曜日<rt>にちようび</rt></ruby>にいっしょにテニスをしませんか。',
+        kana: 'にちようびにいっしょにテニスをしませんか。', romaji: 'nichiyoubi ni issho ni tenisu o shimasen ka.', hu: 'Nem teniszeznénk együtt vasárnap?',
+        cloze: '<ruby>日曜日<rt>にちようび</rt></ruby>にいっしょにテニスをし___BLANK___。', clozeAnswer: 'ませんか',
+        tokens: ['にちようびに', 'いっしょに', 'テニスを', 'しませんか', '。'], from: 'l6:4:3' }
     ],
     contrasts: ['mashou', 'mashouka']
   },
@@ -794,7 +858,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'ええ、<ruby>行<rt>い</rt></ruby>きましょう。',
         kana: 'ええ、いきましょう。', romaji: 'ee, ikimashou.', hu: 'Jó, menjünk!',
         cloze: 'ええ、<ruby>行<rt>い</rt></ruby>き___BLANK___。', clozeAnswer: 'ましょう',
-        tokens: ['ええ', '、', 'いきましょう', '。'] }
+        tokens: ['ええ', '、', 'いきましょう', '。'] },
+      { jp: 'ええ、<ruby>見<rt>み</rt></ruby>ましょう。',
+        kana: 'ええ、みましょう。', romaji: 'ee, mimashou.', hu: 'Jó, nézzük meg!',
+        cloze: 'ええ、<ruby>見<rt>み</rt></ruby>___BLANK___。', clozeAnswer: 'ましょう',
+        tokens: ['ええ', '、', 'みましょう', '。'], from: 'l6:5:1' },
+      { jp: '<ruby>駅<rt>えき</rt></ruby>で<ruby>会<rt>あ</rt></ruby>いましょう。',
+        kana: 'えきであいましょう。', romaji: 'eki de aimashou.', hu: 'Találkozzunk az állomáson!',
+        cloze: '<ruby>駅<rt>えき</rt></ruby>で<ruby>会<rt>あ</rt></ruby>い___BLANK___。', clozeAnswer: 'ましょう',
+        tokens: ['えきで', 'あいましょう', '。'], from: 'l6:5:2' },
+      { jp: 'じゃあ、<ruby>三時<rt>さんじ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょう。',
+        kana: 'じゃあ、さんじにいきましょう。', romaji: 'jaa, sanji ni ikimashou.', hu: 'Akkor menjünk háromkor!',
+        cloze: 'じゃあ、<ruby>三時<rt>さんじ</rt></ruby>に<ruby>行<rt>い</rt></ruby>き___BLANK___。', clozeAnswer: 'ましょう',
+        tokens: ['じゃあ', '、', 'さんじに', 'いきましょう', '。'], from: 'l6:5:4' }
     ],
     contrasts: ['masenka', 'mashouka']
   },
@@ -813,7 +889,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>私<rt>わたし</rt></ruby>は<ruby>魚<rt>さかな</rt></ruby>が<ruby>好<rt>す</rt></ruby>きじゃありません。',
         kana: 'わたしはさかながすきじゃありません。', romaji: 'watashi wa sakana ga suki ja arimasen.', hu: 'Nem szeretem a halat.',
         cloze: '<ruby>私<rt>わたし</rt></ruby>は<ruby>魚<rt>さかな</rt></ruby>が___BLANK___じゃありません。', clozeAnswer: 'すき',
-        tokens: ['わたしは', 'さかなが', 'すきじゃありません', '。'] }
+        tokens: ['わたしは', 'さかなが', 'すきじゃありません', '。'] },
+      { jp: '<ruby>魚<rt>さかな</rt></ruby>はあまり<ruby>好<rt>す</rt></ruby>きじゃありません。',
+        kana: 'さかなはあまりすきじゃありません。', romaji: 'sakana wa amari suki ja arimasen.', hu: 'A halat nem nagyon szeretem.',
+        cloze: '<ruby>魚<rt>さかな</rt></ruby>はあまり___BLANK___じゃありません。', clozeAnswer: 'すき',
+        tokens: ['さかなは', 'あまり', 'すきじゃありません', '。'], from: 'l7:1:2' },
+      { jp: 'どんなスポーツが<ruby>好<rt>す</rt></ruby>きですか。',
+        kana: 'どんなスポーツがすきですか。', romaji: 'donna supootsu ga suki desu ka.', hu: 'Milyen sportot szeretsz?',
+        cloze: 'どんなスポーツが___BLANK___ですか。', clozeAnswer: 'すき',
+        tokens: ['どんな', 'スポーツが', 'すきですか', '。'], from: 'l7:1:3' },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>で<ruby>何<rt>なに</rt></ruby>が<ruby>好<rt>す</rt></ruby>きですか。',
+        kana: 'にほんのたべものでなにがすきですか。', romaji: 'nihon no tabemono de nani ga suki desu ka.', hu: 'Mit szeretsz a japán ételek közül?',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>食<rt>た</rt></ruby>べ<ruby>物<rt>もの</rt></ruby>で<ruby>何<rt>なに</rt></ruby>が___BLANK___ですか。', clozeAnswer: 'すき',
+        tokens: ['にほんの', 'たべもので', 'なにが', 'すきですか', '。'], from: 'l7:1:4' }
     ],
     contrasts: ['ga_jouzu', 'wo_object']
   },
@@ -847,7 +935,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>時間<rt>じかん</rt></ruby>がありませんから、タクシーで<ruby>行<rt>い</rt></ruby>きます。',
         kana: 'じかんがありませんから、タクシーでいきます。', romaji: 'jikan ga arimasen kara, takushii de ikimasu.', hu: 'Nincs időm, ezért taxival megyek.',
         cloze: '<ruby>時間<rt>じかん</rt></ruby>がありません___BLANK___、タクシーで<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'から',
-        tokens: ['じかんが', 'ありませんから', '、', 'タクシーで', 'いきます', '。'] }
+        tokens: ['じかんが', 'ありませんから', '、', 'タクシーで', 'いきます', '。'] },
+      { jp: '<ruby>時間<rt>じかん</rt></ruby>がありませんから。',
+        kana: 'じかんがありませんから。', romaji: 'jikan ga arimasen kara.', hu: 'Mert nincs időm.',
+        cloze: '<ruby>時間<rt>じかん</rt></ruby>がありません___BLANK___。', clozeAnswer: 'から',
+        tokens: ['じかんが', 'ありませんから', '。'], from: 'l7:3:2' },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>が<ruby>好<rt>す</rt></ruby>きですから、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。',
+        kana: 'にほんがすきですから、にほんごをべんきょうします。', romaji: 'nihon ga suki desu kara, nihongo o benkyou shimasu.', hu: 'Szeretem Japánt, ezért tanulok japánul.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです___BLANK___、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>します。', clozeAnswer: 'から',
+        tokens: ['にほんが', 'すきですから', '、', 'にほんごを', 'べんきょう', 'します', '。'], from: 'l7:3:3' },
+      { jp: '<ruby>明日<rt>あした</rt></ruby>テストがありますから、<ruby>今晩<rt>こんばん</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>します。',
+        kana: 'あしたテストがありますから、こんばんべんきょうします。', romaji: 'ashita tesuto ga arimasu kara, konban benkyou shimasu.', hu: 'Holnap dolgozatot írunk, ezért ma este tanulok.',
+        cloze: '<ruby>明日<rt>あした</rt></ruby>テストがあります___BLANK___、<ruby>今晩<rt>こんばん</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>します。', clozeAnswer: 'から',
+        tokens: ['あした', 'テストが', 'ありますから', '、', 'こんばん', 'べんきょう', 'します', '。'], from: 'l7:3:4' }
     ],
     contrasts: ['node', 'kara_made', 'n_desu']
   },
@@ -917,7 +1017,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>町<rt>まち</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かじゃありません。',
         kana: 'このまちはしずかじゃありません。', romaji: 'kono machi wa shizuka ja arimasen.', hu: 'Ez a város nem csendes.',
         cloze: 'この<ruby>町<rt>まち</rt></ruby>は<ruby>静<rt>しず</rt></ruby>か___BLANK___。', clozeAnswer: 'じゃありません',
-        tokens: ['この', 'まちは', 'しずかじゃありません', '。'] }
+        tokens: ['この', 'まちは', 'しずかじゃありません', '。'] },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>天気<rt>てんき</rt></ruby>がよくないです。',
+        kana: 'きょうはてんきがよくないです。', romaji: 'kyou wa tenki ga yokunai desu.', hu: 'Ma nem jó az idő.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>天気<rt>てんき</rt></ruby>がよ___BLANK___です。', clozeAnswer: 'くない',
+        tokens: ['きょうは', 'てんきが', 'よくないです', '。'], from: 'l8:3:3' },
+      { jp: 'このレストランはおいしくないです。',
+        kana: 'このレストランはおいしくないです。', romaji: 'kono resutoran wa oishiku nai desu.', hu: 'Ez az étterem nem jó (nem finom).',
+        cloze: 'このレストランはおいし___BLANK___です。', clozeAnswer: 'くない',
+        tokens: ['この', 'レストランは', 'おいしく', 'ないです', '。'], from: 'l8:3:4' },
+      { jp: 'この<ruby>町<rt>まち</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>じゃありません。',
+        kana: 'このまちはゆうめいじゃありません。', romaji: 'kono machi wa yuumei ja arimasen.', hu: 'Ez a város nem híres.',
+        cloze: 'この<ruby>町<rt>まち</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>___BLANK___。', clozeAnswer: 'じゃありません',
+        tokens: ['この', 'まちは', 'ゆうめいじゃありません', '。'], from: 'l8:3:5' }
     ],
     contrasts: ['ja_arimasen', 'adj_noun']
   },
@@ -934,7 +1046,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>はどうですか。',
         kana: 'にほんのせいかつはどうですか。', romaji: 'nihon no seikatsu wa dou desu ka.', hu: 'Milyen az élet Japánban?',
         cloze: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>は___BLANK___ですか。', clozeAnswer: 'どう',
-        tokens: ['にほんのせいかつは', 'どうですか', '。'] }
+        tokens: ['にほんのせいかつは', 'どうですか', '。'] },
+      { jp: 'ブダペストはどんな<ruby>町<rt>まち</rt></ruby>ですか。',
+        kana: 'ブダペストはどんなまちですか。', romaji: 'budapesuto wa donna machi desu ka.', hu: 'Milyen város Budapest?',
+        cloze: 'ブダペストは___BLANK___<ruby>町<rt>まち</rt></ruby>ですか。', clozeAnswer: 'どんな',
+        tokens: ['ブダペストは', 'どんな', 'まちですか', '。'], from: 'l8:2:1' },
+      { jp: '<ruby>日本語<rt>にほんご</rt></ruby>はどうですか。',
+        kana: 'にほんごはどうですか。', romaji: 'nihongo wa dou desu ka.', hu: 'Milyen a japán nyelv?',
+        cloze: '<ruby>日本語<rt>にほんご</rt></ruby>は___BLANK___ですか。', clozeAnswer: 'どう',
+        tokens: ['にほんごは', 'どうですか', '。'], from: 'l8:2:3' },
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんはどんな<ruby>人<rt>ひと</rt></ruby>ですか。',
+        kana: 'たなかさんはどんなひとですか。', romaji: 'tanaka-san wa donna hito desu ka.', hu: 'Milyen ember Tanaka?',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは___BLANK___<ruby>人<rt>ひと</rt></ruby>ですか。', clozeAnswer: 'どんな',
+        tokens: ['たなかさんは', 'どんな', 'ひとですか', '。'], from: 'l8:2:5' }
     ],
     contrasts: ['adj_noun']
   },
@@ -970,7 +1094,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>町<rt>まち</rt></ruby>はとても<ruby>静<rt>しず</rt></ruby>かでした。',
         kana: 'まちはとてもしずかでした。', romaji: 'machi wa totemo shizuka deshita.', hu: 'A város nagyon csendes volt.',
         cloze: '<ruby>町<rt>まち</rt></ruby>はとても<ruby>静<rt>しず</rt></ruby>か___BLANK___。', clozeAnswer: 'でした',
-        tokens: ['まちは', 'とても', 'しずかでした', '。'] }
+        tokens: ['まちは', 'とても', 'しずかでした', '。'] },
+      { jp: '<ruby>先週<rt>せんしゅう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みじゃありませんでした。',
+        kana: 'せんしゅうはやすみじゃありませんでした。', romaji: 'senshuu wa yasumi ja arimasen deshita.', hu: 'Múlt héten nem volt szünet.',
+        cloze: '<ruby>先週<rt>せんしゅう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みじゃありません___BLANK___。', clozeAnswer: 'でした',
+        tokens: ['せんしゅうは', 'やすみじゃありませんでした', '。'], from: 'l9:1:2' },
+      { jp: '<ruby>旅行<rt>りょこう</rt></ruby>はどうでしたか。',
+        kana: 'りょこうはどうでしたか。', romaji: 'ryokou wa dou deshita ka.', hu: 'Milyen volt az utazás?',
+        cloze: '<ruby>旅行<rt>りょこう</rt></ruby>はどう___BLANK___か。', clozeAnswer: 'でした',
+        tokens: ['りょこうは', 'どうでしたか', '。'], from: 'l9:1:3' },
+      { jp: 'きのうは<ruby>日曜日<rt>にちようび</rt></ruby>でした。',
+        kana: 'きのうはにちようびでした。', romaji: 'kinou wa nichiyoubi deshita.', hu: 'Tegnap vasárnap volt.',
+        cloze: 'きのうは<ruby>日曜日<rt>にちようび</rt></ruby>___BLANK___。', clozeAnswer: 'でした',
+        tokens: ['きのうは', 'にちようびでした', '。'], from: 'l9:1:4' }
     ],
     contrasts: ['katta_desu', 'wa_desu']
   },
@@ -987,7 +1123,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>旅行<rt>りょこう</rt></ruby>はとても<ruby>楽<rt>たの</rt></ruby>しかったです。',
         kana: 'りょこうはとてもたのしかったです。', romaji: 'ryokou wa totemo tanoshikatta desu.', hu: 'Az utazás nagyon jó volt.',
         cloze: '<ruby>旅行<rt>りょこう</rt></ruby>はとても<ruby>楽<rt>たの</rt></ruby>し___BLANK___です。', clozeAnswer: 'かった',
-        tokens: ['りょこうは', 'とても', 'たのしかったです', '。'] }
+        tokens: ['りょこうは', 'とても', 'たのしかったです', '。'] },
+      { jp: 'テストは<ruby>難<rt>むずか</rt></ruby>しくなかったです。',
+        kana: 'テストはむずかしくなかったです。', romaji: 'tesuto wa muzukashikunakatta desu.', hu: 'A teszt nem volt nehéz.',
+        cloze: 'テストは<ruby>難<rt>むずか</rt></ruby>しくな___BLANK___です。', clozeAnswer: 'かった',
+        tokens: ['テストは', 'むずかしくなかったです', '。'], from: 'l9:2:2' },
+      { jp: '<ruby>天気<rt>てんき</rt></ruby>がよかったです。',
+        kana: 'てんきがよかったです。', romaji: 'tenki ga yokatta desu.', hu: 'Jó idő volt.',
+        cloze: '<ruby>天気<rt>てんき</rt></ruby>がよ___BLANK___です。', clozeAnswer: 'かった',
+        tokens: ['てんきが', 'よかったです', '。'], from: 'l9:2:3' },
+      { jp: 'きのうは<ruby>寒<rt>さむ</rt></ruby>かったです。',
+        kana: 'きのうはさむかったです。', romaji: 'kinou wa samukatta desu.', hu: 'Tegnap hideg volt.',
+        cloze: 'きのうは<ruby>寒<rt>さむ</rt></ruby>___BLANK___です。', clozeAnswer: 'かった',
+        tokens: ['きのうは', 'さむかったです', '。'], from: 'l9:2:4' }
     ],
     contrasts: ['deshita', 'adj_negative']
   },
@@ -1021,7 +1169,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>町<rt>まち</rt></ruby>は<ruby>静<rt>しず</rt></ruby>かで、きれいです。',
         kana: 'まちはしずかで、きれいです。', romaji: 'machi wa shizuka de, kirei desu.', hu: 'A város csendes és szép.',
         cloze: '<ruby>町<rt>まち</rt></ruby>は<ruby>静<rt>しず</rt></ruby>か___BLANK___、きれいです。', clozeAnswer: 'で',
-        tokens: ['まちは', 'しずかで', '、', 'きれいです', '。'] }
+        tokens: ['まちは', 'しずかで', '、', 'きれいです', '。'] },
+      { jp: 'このレストランは<ruby>安<rt>やす</rt></ruby>くて、おいしいです。',
+        kana: 'このレストランはやすくて、おいしいです。', romaji: 'kono resutoran wa yasukute, oishii desu.', hu: 'Ez az étterem olcsó és finom.',
+        cloze: 'このレストランは<ruby>安<rt>やす</rt></ruby>___BLANK___、おいしいです。', clozeAnswer: 'くて',
+        tokens: ['この', 'レストランは', 'やすくて', '、', 'おいしいです', '。'], from: 'l9:6:3' },
+      { jp: '<ruby>人<rt>ひと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>くて、<ruby>大変<rt>たいへん</rt></ruby>でした。',
+        kana: 'ひとがおおくて、たいへんでした。', romaji: 'hito ga ookute, taihen deshita.', hu: 'Sokan voltak, fárasztó volt.',
+        cloze: '<ruby>人<rt>ひと</rt></ruby>が<ruby>多<rt>おお</rt></ruby>___BLANK___、<ruby>大変<rt>たいへん</rt></ruby>でした。', clozeAnswer: 'くて',
+        tokens: ['ひとが', 'おおくて', '、', 'たいへんでした', '。'], from: 'l9:6:5' }
     ],
     contrasts: ['te_sequence', 'adj_noun']
   },
@@ -1040,7 +1196,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>肉<rt>にく</rt></ruby>より<ruby>魚<rt>さかな</rt></ruby>のほうが<ruby>好<rt>す</rt></ruby>きです。',
         kana: 'にくよりさかなのほうがすきです。', romaji: 'niku yori sakana no hou ga suki desu.', hu: 'A halat jobban szeretem, mint a húst.',
         cloze: '<ruby>肉<rt>にく</rt></ruby>より<ruby>魚<rt>さかな</rt></ruby>___BLANK___<ruby>好<rt>す</rt></ruby>きです。', clozeAnswer: 'のほうが',
-        tokens: ['にくより', 'さかなのほうが', 'すきです', '。'] }
+        tokens: ['にくより', 'さかなのほうが', 'すきです', '。'] },
+      { jp: '<ruby>犬<rt>いぬ</rt></ruby>より<ruby>猫<rt>ねこ</rt></ruby>のほうが<ruby>好<rt>す</rt></ruby>きです。',
+        kana: 'いぬよりねこのほうがすきです。', romaji: 'inu yori neko no hou ga suki desu.', hu: 'A macskát jobban szeretem, mint a kutyát.',
+        cloze: '<ruby>犬<rt>いぬ</rt></ruby>___BLANK___<ruby>猫<rt>ねこ</rt></ruby>のほうが<ruby>好<rt>す</rt></ruby>きです。', clozeAnswer: 'より',
+        tokens: ['いぬより', 'ねこの', 'ほうが', 'すきです', '。'], from: 'l10:1:2' },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>はきのうより<ruby>寒<rt>さむ</rt></ruby>いです。',
+        kana: 'きょうはきのうよりさむいです。', romaji: 'kyou wa kinou yori samui desu.', hu: 'Ma hidegebb van, mint tegnap.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>はきのう___BLANK___<ruby>寒<rt>さむ</rt></ruby>いです。', clozeAnswer: 'より',
+        tokens: ['きょうは', 'きのうより', 'さむいです', '。'], from: 'l10:1:3' },
+      { jp: '<ruby>東京<rt>とうきょう</rt></ruby>は<ruby>大阪<rt>おおさか</rt></ruby>より<ruby>大<rt>おお</rt></ruby>きいです。',
+        kana: 'とうきょうはおおさかよりおおきいです。', romaji: 'toukyou wa oosaka yori ookii desu.', hu: 'Tokió nagyobb, mint Oszaka.',
+        cloze: '<ruby>東京<rt>とうきょう</rt></ruby>は<ruby>大阪<rt>おおさか</rt></ruby>___BLANK___<ruby>大<rt>おお</rt></ruby>きいです。', clozeAnswer: 'より',
+        tokens: ['とうきょうは', 'おおさかより', 'おおきいです', '。'], from: 'l10:1:4' }
     ],
     contrasts: ['dochira', 'ichiban']
   },
@@ -1057,7 +1225,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>春<rt>はる</rt></ruby>と<ruby>秋<rt>あき</rt></ruby>とどちらがいいですか。',
         kana: 'はるとあきとどちらがいいですか。', romaji: 'haru to aki to dochira ga ii desu ka.', hu: 'Melyik jobb: a tavasz vagy az ősz?',
         cloze: '<ruby>春<rt>はる</rt></ruby>と<ruby>秋<rt>あき</rt></ruby>と___BLANK___がいいですか。', clozeAnswer: 'どちら',
-        tokens: ['はると', 'あきと', 'どちらが', 'いいですか', '。'] }
+        tokens: ['はると', 'あきと', 'どちらが', 'いいですか', '。'] },
+      { jp: 'コーヒーと<ruby>紅茶<rt>こうちゃ</rt></ruby>とどちらが<ruby>好<rt>す</rt></ruby>きですか。',
+        kana: 'コーヒーとこうちゃとどちらがすきですか。', romaji: 'koohii to koucha to dochira ga suki desu ka.', hu: 'A kávét vagy a teát szereted jobban?',
+        cloze: 'コーヒーと<ruby>紅茶<rt>こうちゃ</rt></ruby>と___BLANK___が<ruby>好<rt>す</rt></ruby>きですか。', clozeAnswer: 'どちら',
+        tokens: ['コーヒーと', 'こうちゃと', 'どちらが', 'すきですか', '。'], from: 'l10:2:1' },
+      { jp: 'どちらも<ruby>好<rt>す</rt></ruby>きです。',
+        kana: 'どちらもすきです。', romaji: 'dochira mo suki desu.', hu: 'Mindkettőt szeretem.',
+        cloze: '___BLANK___も<ruby>好<rt>す</rt></ruby>きです。', clozeAnswer: 'どちら',
+        tokens: ['どちらも', 'すきです', '。'], from: 'l10:2:3' },
+      { jp: '<ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>とどちらが<ruby>暇<rt>ひま</rt></ruby>ですか。',
+        kana: 'どようびとにちようびとどちらがひまですか。', romaji: 'doyoubi to nichiyoubi to dochira ga hima desu ka.', hu: 'Szombaton vagy vasárnap érsz rá inkább?',
+        cloze: '<ruby>土曜日<rt>どようび</rt></ruby>と<ruby>日曜日<rt>にちようび</rt></ruby>と___BLANK___が<ruby>暇<rt>ひま</rt></ruby>ですか。', clozeAnswer: 'どちら',
+        tokens: ['どようびと', 'にちようびと', 'どちらが', 'ひまですか', '。'], from: 'l10:2:4' }
     ],
     contrasts: ['yori_hou_ga', 'ichiban']
   },
@@ -1074,7 +1254,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>一年<rt>いちねん</rt></ruby>で<ruby>八月<rt>はちがつ</rt></ruby>がいちばん<ruby>暑<rt>あつ</rt></ruby>いです。',
         kana: 'いちねんではちがつがいちばんあついです。', romaji: 'ichinen de hachigatsu ga ichiban atsui desu.', hu: 'Az évben augusztus a legmelegebb.',
         cloze: '<ruby>一年<rt>いちねん</rt></ruby>で<ruby>八月<rt>はちがつ</rt></ruby>が___BLANK___<ruby>暑<rt>あつ</rt></ruby>いです。', clozeAnswer: 'いちばん',
-        tokens: ['いちねんで', 'はちがつが', 'いちばん', 'あついです', '。'] }
+        tokens: ['いちねんで', 'はちがつが', 'いちばん', 'あついです', '。'] },
+      { jp: 'スポーツの<ruby>中<rt>なか</rt></ruby>で<ruby>何<rt>なに</rt></ruby>がいちばん<ruby>好<rt>す</rt></ruby>きですか。',
+        kana: 'スポーツのなかでなにがいちばんすきですか。', romaji: 'supootsu no naka de nani ga ichiban suki desu ka.', hu: 'A sportok közül melyiket szereted a legjobban?',
+        cloze: 'スポーツの<ruby>中<rt>なか</rt></ruby>で<ruby>何<rt>なに</rt></ruby>が___BLANK___<ruby>好<rt>す</rt></ruby>きですか。', clozeAnswer: 'いちばん',
+        tokens: ['スポーツの', 'なかで', 'なにが', 'いちばん', 'すきですか', '。'], from: 'l10:3:1' },
+      { jp: 'サッカーがいちばん<ruby>好<rt>す</rt></ruby>きです。',
+        kana: 'サッカーがいちばんすきです。', romaji: 'sakkaa ga ichiban suki desu.', hu: 'A focit szeretem a legjobban.',
+        cloze: 'サッカーが___BLANK___<ruby>好<rt>す</rt></ruby>きです。', clozeAnswer: 'いちばん',
+        tokens: ['サッカーが', 'いちばん', 'すきです', '。'], from: 'l10:3:2' },
+      { jp: 'クラスでリーさんがいちばん<ruby>背<rt>せ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いです。',
+        kana: 'クラスでリーさんがいちばんせがたかいです。', romaji: 'kurasu de rii-san ga ichiban se ga takai desu.', hu: 'Az osztályban Lí a legmagasabb.',
+        cloze: 'クラスでリーさんが___BLANK___<ruby>背<rt>せ</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いです。', clozeAnswer: 'いちばん',
+        tokens: ['クラスで', 'リーさんが', 'いちばん', 'せが', 'たかいです', '。'], from: 'l10:3:3' }
     ],
     contrasts: ['yori_hou_ga', 'dochira']
   },
@@ -1091,7 +1283,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'プレゼントは<ruby>本<rt>ほん</rt></ruby>にします。',
         kana: 'プレゼントはほんにします。', romaji: 'purezento wa hon ni shimasu.', hu: 'Ajándéknak könyvet választok.',
         cloze: 'プレゼントは<ruby>本<rt>ほん</rt></ruby>___BLANK___。', clozeAnswer: 'にします',
-        tokens: ['プレゼントは', 'ほんにします', '。'] }
+        tokens: ['プレゼントは', 'ほんにします', '。'] },
+      { jp: 'わたしはうどんにします。',
+        kana: 'わたしはうどんにします。', romaji: 'watashi wa udon ni shimasu.', hu: 'Én az udont választom.',
+        cloze: 'わたしはうどん___BLANK___。', clozeAnswer: 'にします',
+        tokens: ['わたしは', 'うどんに', 'します', '。'], from: 'l10:4:1' },
+      { jp: '<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>は<ruby>何<rt>なに</rt></ruby>にしますか。',
+        kana: 'のみものはなににしますか。', romaji: 'nomimono wa nani ni shimasu ka.', hu: 'Innivalónak mit kérsz?',
+        cloze: '<ruby>飲<rt>の</rt></ruby>み<ruby>物<rt>もの</rt></ruby>は<ruby>何<rt>なに</rt></ruby>___BLANK___か。', clozeAnswer: 'にします',
+        tokens: ['のみものは', 'なにに', 'しますか', '。'], from: 'l10:4:2' }
     ],
     contrasts: ['tsumori', 'wo_kudasai']
   },
@@ -1108,7 +1308,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'ちょっと<ruby>待<rt>ま</rt></ruby>ってください。',
         kana: 'ちょっとまってください。', romaji: 'chotto matte kudasai.', hu: 'Kérem, várjon egy kicsit!',
         cloze: 'ちょっと<ruby>待<rt>ま</rt></ruby>っ___BLANK___ください。', clozeAnswer: 'て',
-        tokens: ['ちょっと', 'まってください', '。'] }
+        tokens: ['ちょっと', 'まってください', '。'] },
+      { jp: 'もう<ruby>一度<rt>いちど</rt></ruby><ruby>言<rt>い</rt></ruby>ってください。',
+        kana: 'もういちどいってください。', romaji: 'mou ichido itte kudasai.', hu: 'Kérem, mondja még egyszer.',
+        cloze: 'もう<ruby>一度<rt>いちど</rt></ruby><ruby>言<rt>い</rt></ruby>っ___BLANK___。', clozeAnswer: 'てください',
+        tokens: ['もう', 'いちど', 'いって', 'ください', '。'], from: 'l10:5:3' },
+      { jp: 'どうぞ、<ruby>座<rt>すわ</rt></ruby>ってください。',
+        kana: 'どうぞ、すわってください。', romaji: 'douzo, suwatte kudasai.', hu: 'Tessék, foglaljon helyet.',
+        cloze: 'どうぞ、<ruby>座<rt>すわ</rt></ruby>っ___BLANK___。', clozeAnswer: 'てください',
+        tokens: ['どうぞ', '、', 'すわって', 'ください', '。'], from: 'l10:5:4' },
+      { jp: 'すみませんが、<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ってくださいませんか。',
+        kana: 'すみませんが、しゃしんをとってくださいませんか。', romaji: 'sumimasen ga, shashin o totte kudasaimasen ka.', hu: 'Elnézést, lefényképezne minket?',
+        cloze: 'すみませんが、<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>っ___BLANK___ませんか。', clozeAnswer: 'てください',
+        tokens: ['すみませんが', '、', 'しゃしんを', 'とって', 'くださいませんか', '。'], from: 'l10:5:5' }
     ],
     contrasts: ['wo_kudasai', 'naide_kudasai', 'o_kudasai']
   },
@@ -1125,7 +1337,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>宿題<rt>しゅくだい</rt></ruby>をしてから、<ruby>遊<rt>あそ</rt></ruby>びます。',
         kana: 'しゅくだいをしてから、あそびます。', romaji: 'shukudai o shite kara, asobimasu.', hu: 'Miután megcsináltam a leckét, játszom.',
         cloze: '<ruby>宿題<rt>しゅくだい</rt></ruby>をし___BLANK___、<ruby>遊<rt>あそ</rt></ruby>びます。', clozeAnswer: 'てから',
-        tokens: ['しゅくだいを', 'してから', '、', 'あそびます', '。'] }
+        tokens: ['しゅくだいを', 'してから', '、', 'あそびます', '。'] },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>てから、<ruby>三年<rt>さんねん</rt></ruby>になります。',
+        kana: 'にほんへきてから、さんねんになります。', romaji: 'nihon e kite kara, sannen ni narimasu.', hu: 'Három éve, hogy Japánba jöttem.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>___BLANK___、<ruby>三年<rt>さんねん</rt></ruby>になります。', clozeAnswer: 'てから',
+        tokens: ['にほんへ', 'きてから', '、', 'さんねんに', 'なります', '。'], from: 'l10:6:3' },
+      { jp: 'お<ruby>金<rt>かね</rt></ruby>を<ruby>入<rt>い</rt></ruby>れてから、ボタンを<ruby>押<rt>お</rt></ruby>します。',
+        kana: 'おかねをいれてから、ボタンをおします。', romaji: 'o-kane o irete kara, botan o oshimasu.', hu: 'Miután bedobtad a pénzt, megnyomod a gombot.',
+        cloze: 'お<ruby>金<rt>かね</rt></ruby>を<ruby>入<rt>い</rt></ruby>れ___BLANK___、ボタンを<ruby>押<rt>お</rt></ruby>します。', clozeAnswer: 'てから',
+        tokens: ['おかねを', 'いれてから', '、', 'ボタンを', 'おします', '。'], from: 'l10:6:4' },
+      { jp: 'うちへ<ruby>帰<rt>かえ</rt></ruby>ってから、<ruby>電話<rt>でんわ</rt></ruby>します。',
+        kana: 'うちへかえってから、でんわします。', romaji: 'uchi e kaette kara, denwa shimasu.', hu: 'Miután hazaértem, telefonálok.',
+        cloze: 'うちへ<ruby>帰<rt>かえ</rt></ruby>っ___BLANK___、<ruby>電話<rt>でんわ</rt></ruby>します。', clozeAnswer: 'てから',
+        tokens: ['うちへ', 'かえってから', '、', 'でんわ', 'します', '。'], from: 'l10:6:5' }
     ],
     contrasts: ['te_sequence', 'kara_reason', 'ta_ato_de']
   },
@@ -1142,7 +1366,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>着物<rt>きもの</rt></ruby>を<ruby>着<rt>き</rt></ruby>てみたいです。',
         kana: 'きものをきてみたいです。', romaji: 'kimono o kite mitai desu.', hu: 'Szeretnék felpróbálni egy kimonót.',
         cloze: '<ruby>着物<rt>きもの</rt></ruby>を<ruby>着<rt>き</rt></ruby>___BLANK___たいです。', clozeAnswer: 'てみ',
-        tokens: ['きものを', 'きてみたいです', '。'] }
+        tokens: ['きものを', 'きてみたいです', '。'] },
+      { jp: '<ruby>使<rt>つか</rt></ruby>ってみてください。',
+        kana: 'つかってみてください。', romaji: 'tsukatte mite kudasai.', hu: 'Próbálja ki!',
+        cloze: '<ruby>使<rt>つか</rt></ruby>っ___BLANK___てください。', clozeAnswer: 'てみ',
+        tokens: ['つかって', 'みて', 'ください', '。'], from: 'l10:7:2' },
+      { jp: '<ruby>一度<rt>いちど</rt></ruby><ruby>行<rt>い</rt></ruby>ってみたいです。',
+        kana: 'いちどいってみたいです。', romaji: 'ichido itte mitai desu.', hu: 'Egyszer szeretnék elmenni oda, megnézni, milyen.',
+        cloze: '<ruby>一度<rt>いちど</rt></ruby><ruby>行<rt>い</rt></ruby>っ___BLANK___たいです。', clozeAnswer: 'てみ',
+        tokens: ['いちど', 'いって', 'みたいです', '。'], from: 'l10:7:3' },
+      { jp: 'この<ruby>靴<rt>くつ</rt></ruby>をはいてみます。',
+        kana: 'このくつをはいてみます。', romaji: 'kono kutsu o haite mimasu.', hu: 'Felpróbálom ezt a cipőt.',
+        cloze: 'この<ruby>靴<rt>くつ</rt></ruby>をはい___BLANK___。', clozeAnswer: 'てみます',
+        tokens: ['この', 'くつを', 'はいて', 'みます', '。'], from: 'l10:7:4' }
     ],
     contrasts: ['te_kudasai']
   },
@@ -1161,7 +1397,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>心配<rt>しんぱい</rt></ruby>しないでください。',
         kana: 'しんぱいしないでください。', romaji: 'shinpai shinaide kudasai.', hu: 'Kérem, ne aggódjon!',
         cloze: '<ruby>心配<rt>しんぱい</rt></ruby>し___BLANK___ください。', clozeAnswer: 'ないで',
-        tokens: ['しんぱい', 'しないでください', '。'] }
+        tokens: ['しんぱい', 'しないでください', '。'] },
+      { jp: 'まだ<ruby>帰<rt>かえ</rt></ruby>らないでください。',
+        kana: 'まだかえらないでください。', romaji: 'mada kaeranaide kudasai.', hu: 'Kérem, még ne menjen haza.',
+        cloze: 'まだ<ruby>帰<rt>かえ</rt></ruby>ら___BLANK___。', clozeAnswer: 'ないでください',
+        tokens: ['まだ', 'かえらないで', 'ください', '。'], from: 'l11:4:3' },
+      { jp: '<ruby>保険証<rt>ほけんしょう</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れないでくださいね。',
+        kana: 'ほけんしょうをわすれないでくださいね。', romaji: 'hokenshou o wasurenaide kudasai ne.', hu: 'Ne felejtse otthon a biztosítási kártyát!',
+        cloze: '<ruby>保険証<rt>ほけんしょう</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れ___BLANK___ね。', clozeAnswer: 'ないでください',
+        tokens: ['ほけんしょうを', 'わすれないで', 'くださいね', '。'], from: 'l11:4:4' },
+      { jp: 'ここでたばこを<ruby>吸<rt>す</rt></ruby>わないでください。',
+        kana: 'ここでたばこをすわないでください。', romaji: 'koko de tabako o suwanaide kudasai.', hu: 'Kérem, itt ne dohányozzon.',
+        cloze: 'ここでたばこを<ruby>吸<rt>す</rt></ruby>わ___BLANK___。', clozeAnswer: 'ないでください',
+        tokens: ['ここで', 'たばこを', 'すわないで', 'ください', '。'], from: 'l11:4:5' }
     ],
     contrasts: ['te_kudasai', 'te_wa_ikenai']
   },
@@ -1178,7 +1426,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>たほうがいいです。',
         kana: 'はやくねたほうがいいです。', romaji: 'hayaku neta hou ga ii desu.', hu: 'Jobb lenne korán lefeküdni.',
         cloze: '<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>___BLANK___です。', clozeAnswer: 'たほうがいい',
-        tokens: ['はやく', 'ねたほうがいいです', '。'] }
+        tokens: ['はやく', 'ねたほうがいいです', '。'] },
+      { jp: '<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>たほうがいいですよ。',
+        kana: 'はやくねたほうがいいですよ。', romaji: 'hayaku neta hou ga ii desu yo.', hu: 'Jobb lenne korán lefeküdnöd.',
+        cloze: '<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>___BLANK___ですよ。', clozeAnswer: 'たほうがいい',
+        tokens: ['はやく', 'ねた', 'ほうが', 'いいですよ', '。'], from: 'l11:5:2' },
+      { jp: '<ruby>病院<rt>びょういん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ったほうがいいです。',
+        kana: 'びょういんへいったほうがいいです。', romaji: 'byouin e itta hou ga ii desu.', hu: 'Jobb lenne orvoshoz menned.',
+        cloze: '<ruby>病院<rt>びょういん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>っ___BLANK___です。', clozeAnswer: 'たほうがいい',
+        tokens: ['びょういんへ', 'いった', 'ほうが', 'いいです', '。'], from: 'l11:5:3' },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>んだほうがいいですよ。',
+        kana: 'きょうはやすんだほうがいいですよ。', romaji: 'kyou wa yasunda hou ga ii desu yo.', hu: 'Ma jobb lenne pihenned.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>ん___BLANK___ですよ。', clozeAnswer: 'だほうがいい',
+        tokens: ['きょうは', 'やすんだ', 'ほうが', 'いいですよ', '。'], from: 'l11:5:4' }
     ],
     contrasts: ['nai_hou_ga_ii']
   },
@@ -1195,7 +1455,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'お<ruby>酒<rt>さけ</rt></ruby>は<ruby>飲<rt>の</rt></ruby>まないほうがいいですよ。',
         kana: 'おさけはのまないほうがいいですよ。', romaji: 'osake wa nomanai hou ga ii desu yo.', hu: 'Alkoholt jobb, ha nem iszol.',
         cloze: 'お<ruby>酒<rt>さけ</rt></ruby>は<ruby>飲<rt>の</rt></ruby>ま___BLANK___ですよ。', clozeAnswer: 'ないほうがいい',
-        tokens: ['おさけは', 'のまないほうがいいですよ', '。'] }
+        tokens: ['おさけは', 'のまないほうがいいですよ', '。'] },
+      { jp: '<ruby>冷<rt>つめ</rt></ruby>たいものを<ruby>飲<rt>の</rt></ruby>まないほうがいいです。',
+        kana: 'つめたいものをのまないほうがいいです。', romaji: 'tsumetai mono o nomanai hou ga ii desu.', hu: 'Jobb, ha nem iszol hideget.',
+        cloze: '<ruby>冷<rt>つめ</rt></ruby>たいものを<ruby>飲<rt>の</rt></ruby>ま___BLANK___です。', clozeAnswer: 'ないほうがいい',
+        tokens: ['つめたい', 'ものを', 'のまない', 'ほうが', 'いいです', '。'], from: 'l11:6:2' },
+      { jp: '<ruby>無理<rt>むり</rt></ruby>をしないほうがいいですよ。',
+        kana: 'むりをしないほうがいいですよ。', romaji: 'muri o shinai hou ga ii desu yo.', hu: 'Jobb, ha nem erőlteted meg magad.',
+        cloze: '<ruby>無理<rt>むり</rt></ruby>をし___BLANK___ですよ。', clozeAnswer: 'ないほうがいい',
+        tokens: ['むりを', 'しない', 'ほうが', 'いいですよ', '。'], from: 'l11:6:3' },
+      { jp: 'お<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らないほうがいいです。',
+        kana: 'おふろにはいらないほうがいいです。', romaji: 'o-furo ni hairanai hou ga ii desu.', hu: 'Jobb, ha nem fürdesz.',
+        cloze: 'お<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ら___BLANK___です。', clozeAnswer: 'ないほうがいい',
+        tokens: ['おふろに', 'はいらない', 'ほうが', 'いいです', '。'], from: 'l11:6:4' }
     ],
     contrasts: ['ta_hou_ga_ii', 'naide_kudasai']
   },
@@ -1212,7 +1484,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'どうして<ruby>食<rt>た</rt></ruby>べないんですか。',
         kana: 'どうしてたべないんですか。', romaji: 'doushite tabenai n desu ka.', hu: 'Miért nem eszel?',
         cloze: 'どうして<ruby>食<rt>た</rt></ruby>べない___BLANK___か。', clozeAnswer: 'んです',
-        tokens: ['どうして', 'たべないんですか', '。'] }
+        tokens: ['どうして', 'たべないんですか', '。'] },
+      { jp: 'どうしたんですか。',
+        kana: 'どうしたんですか。', romaji: 'dou shita n desu ka.', hu: 'Mi történt? Mi a baj?',
+        cloze: 'どうした___BLANK___か。', clozeAnswer: 'んです',
+        tokens: ['どう', 'した', 'んですか', '。'], from: 'l11:7:1' },
+      { jp: 'きのう<ruby>寝<rt>ね</rt></ruby>なかったんです。',
+        kana: 'きのうねなかったんです。', romaji: 'kinou nenakatta n desu.', hu: 'Tegnap nem aludtam (ez az oka).',
+        cloze: 'きのう<ruby>寝<rt>ね</rt></ruby>なかった___BLANK___。', clozeAnswer: 'んです',
+        tokens: ['きのう', 'ねなかった', 'んです', '。'], from: 'l11:7:3' },
+      { jp: '<ruby>明日<rt>あした</rt></ruby>テストなんです。',
+        kana: 'あしたテストなんです。', romaji: 'ashita tesuto na n desu.', hu: 'Holnap dolgozatot írok, tudja.',
+        cloze: '<ruby>明日<rt>あした</rt></ruby>テストな___BLANK___。', clozeAnswer: 'んです',
+        tokens: ['あした', 'テストな', 'んです', '。'], from: 'l11:7:4' }
     ],
     contrasts: ['kara_reason', 'node']
   },
@@ -1231,7 +1515,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っています。',
         kana: 'あめがふっています。', romaji: 'ame ga futte imasu.', hu: 'Esik az eső.',
         cloze: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っ___BLANK___。', clozeAnswer: 'ています',
-        tokens: ['あめが', 'ふっています', '。'] }
+        tokens: ['あめが', 'ふっています', '。'] },
+      { jp: '<ruby>何<rt>なに</rt></ruby>をしていますか。',
+        kana: 'なにをしていますか。', romaji: 'nani o shite imasu ka.', hu: 'Mit csinálsz éppen?',
+        cloze: '<ruby>何<rt>なに</rt></ruby>をし___BLANK___か。', clozeAnswer: 'ています',
+        tokens: ['なにを', 'して', 'いますか', '。'], from: 'l12:2:3' },
+      { jp: '<ruby>母<rt>はは</rt></ruby>は<ruby>今<rt>いま</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>をしています。',
+        kana: 'はははいまりょうりをしています。', romaji: 'haha wa ima ryouri o shite imasu.', hu: 'Anyám éppen főz.',
+        cloze: '<ruby>母<rt>はは</rt></ruby>は<ruby>今<rt>いま</rt></ruby><ruby>料理<rt>りょうり</rt></ruby>をし___BLANK___。', clozeAnswer: 'ています',
+        tokens: ['ははは', 'いま', 'りょうりを', 'して', 'います', '。'], from: 'l12:2:4' }
     ],
     contrasts: ['te_iru_state']
   },
@@ -1248,7 +1540,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>兄<rt>あに</rt></ruby>は<ruby>結婚<rt>けっこん</rt></ruby>しています。',
         kana: 'あにはけっこんしています。', romaji: 'ani wa kekkon shite imasu.', hu: 'A bátyám házas.',
         cloze: '<ruby>兄<rt>あに</rt></ruby>は<ruby>結婚<rt>けっこん</rt></ruby>し___BLANK___。', clozeAnswer: 'ています',
-        tokens: ['あには', 'けっこんしています', '。'] }
+        tokens: ['あには', 'けっこんしています', '。'] },
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんはめがねをかけています。',
+        kana: 'たなかさんはめがねをかけています。', romaji: 'tanaka-san wa megane o kakete imasu.', hu: 'Tanaka szemüveget visel.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さんはめがねをかけ___BLANK___。', clozeAnswer: 'ています',
+        tokens: ['たなかさんは', 'めがねを', 'かけて', 'います', '。'], from: 'l12:3:3' },
+      { jp: '<ruby>母<rt>はは</rt></ruby>は<ruby>銀行<rt>ぎんこう</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いています。',
+        kana: 'はははぎんこうではたらいています。', romaji: 'haha wa ginkou de hataraite imasu.', hu: 'Anyám bankban dolgozik.',
+        cloze: '<ruby>母<rt>はは</rt></ruby>は<ruby>銀行<rt>ぎんこう</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>い___BLANK___。', clozeAnswer: 'ています',
+        tokens: ['ははは', 'ぎんこうで', 'はたらいて', 'います', '。'], from: 'l12:3:4' },
+      { jp: '<ruby>車<rt>くるま</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていますか。',
+        kana: 'くるまをもっていますか。', romaji: 'kuruma o motte imasu ka.', hu: 'Van autód?',
+        cloze: '<ruby>車<rt>くるま</rt></ruby>を<ruby>持<rt>も</rt></ruby>っ___BLANK___か。', clozeAnswer: 'ています',
+        tokens: ['くるまを', 'もって', 'いますか', '。'], from: 'l12:3:5' }
     ],
     contrasts: ['te_iru_progress']
   },
@@ -1318,7 +1622,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>雨<rt>あめ</rt></ruby>なので、バスで<ruby>行<rt>い</rt></ruby>きます。',
         kana: 'あめなので、バスでいきます。', romaji: 'ame na node, basu de ikimasu.', hu: 'Mivel esik, busszal megyek.',
         cloze: '<ruby>雨<rt>あめ</rt></ruby>___BLANK___、バスで<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'なので',
-        tokens: ['あめなので', '、', 'バスで', 'いきます', '。'] }
+        tokens: ['あめなので', '、', 'バスで', 'いきます', '。'] },
+      { jp: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っているので、<ruby>出<rt>で</rt></ruby>かけません。',
+        kana: 'あめがふっているので、でかけません。', romaji: 'ame ga futte iru node, dekakemasen.', hu: 'Mivel esik az eső, nem megyek el itthonról.',
+        cloze: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っている___BLANK___、<ruby>出<rt>で</rt></ruby>かけません。', clozeAnswer: 'ので',
+        tokens: ['あめが', 'ふって', 'いる', 'ので', '、', 'でかけません', '。'], from: 'l13:1:1' },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みなので、<ruby>家<rt>うち</rt></ruby>にいます。',
+        kana: 'きょうはやすみなので、うちにいます。', romaji: 'kyou wa yasumi na node, uchi ni imasu.', hu: 'Mivel ma szünnap van, otthon vagyok.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みな___BLANK___、<ruby>家<rt>うち</rt></ruby>にいます。', clozeAnswer: 'ので',
+        tokens: ['きょうは', 'やすみな', 'ので', '、', 'うちに', 'います', '。'], from: 'l13:1:2' },
+      { jp: '<ruby>時間<rt>じかん</rt></ruby>がないので、タクシーで<ruby>行<rt>い</rt></ruby>きます。',
+        kana: 'じかんがないので、タクシーでいきます。', romaji: 'jikan ga nai node, takushii de ikimasu.', hu: 'Mivel nincs időm, taxival megyek.',
+        cloze: '<ruby>時間<rt>じかん</rt></ruby>がない___BLANK___、タクシーで<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'ので',
+        tokens: ['じかんが', 'ない', 'ので', '、', 'タクシーで', 'いきます', '。'], from: 'l13:1:3' }
     ],
     contrasts: ['kara_reason', 'noni', 'n_desu']
   },
@@ -1405,7 +1721,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'いいえ、まだ<ruby>食<rt>た</rt></ruby>べていません。',
         kana: 'いいえ、まだたべていません。', romaji: 'iie, mada tabete imasen.', hu: 'Nem, még nem ettem.',
         cloze: 'いいえ、___BLANK___<ruby>食<rt>た</rt></ruby>べていません。', clozeAnswer: 'まだ',
-        tokens: ['いいえ', '、', 'まだ', 'たべていません', '。'] }
+        tokens: ['いいえ', '、', 'まだ', 'たべていません', '。'] },
+      { jp: 'はい、もう<ruby>食<rt>た</rt></ruby>べました。',
+        kana: 'はい、もうたべました。', romaji: 'hai, mou tabemashita.', hu: 'Igen, már ettem.',
+        cloze: 'はい、___BLANK___<ruby>食<rt>た</rt></ruby>べました。', clozeAnswer: 'もう',
+        tokens: ['はい', '、', 'もう', 'たべました', '。'], from: 'l14:1:2' },
+      { jp: 'もう<ruby>宿題<rt>しゅくだい</rt></ruby>は<ruby>終<rt>お</rt></ruby>わりましたか。',
+        kana: 'もうしゅくだいはおわりましたか。', romaji: 'mou shukudai wa owarimashita ka.', hu: 'Kész van már a házi feladat?',
+        cloze: '___BLANK___<ruby>宿題<rt>しゅくだい</rt></ruby>は<ruby>終<rt>お</rt></ruby>わりましたか。', clozeAnswer: 'もう',
+        tokens: ['もう', 'しゅくだいは', 'おわりましたか', '。'], from: 'l14:1:4' },
+      { jp: 'いいえ、まだです。',
+        kana: 'いいえ、まだです。', romaji: 'iie, mada desu.', hu: 'Nem, még nem.',
+        cloze: 'いいえ、___BLANK___です。', clozeAnswer: 'まだ',
+        tokens: ['いいえ', '、', 'まだです', '。'], from: 'l14:1:5' }
     ],
     contrasts: ['te_iru_state']
   },
@@ -1422,7 +1750,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>授業<rt>じゅぎょう</rt></ruby>のあとで、<ruby>図書館<rt>としょかん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。',
         kana: 'じゅぎょうのあとで、としょかんへいきます。', romaji: 'jugyou no ato de, toshokan e ikimasu.', hu: 'Óra után könyvtárba megyek.',
         cloze: '<ruby>授業<rt>じゅぎょう</rt></ruby>の___BLANK___、<ruby>図書館<rt>としょかん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'あとで',
-        tokens: ['じゅぎょうのあとで', '、', 'としょかんへ', 'いきます', '。'] }
+        tokens: ['じゅぎょうのあとで', '、', 'としょかんへ', 'いきます', '。'] },
+      { jp: '<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったあとで、<ruby>飲<rt>の</rt></ruby>みに<ruby>行<rt>い</rt></ruby>きます。',
+        kana: 'しごとがおわったあとで、のみにいきます。', romaji: 'shigoto ga owatta ato de, nomi ni ikimasu.', hu: 'Munka után elmegyünk inni.',
+        cloze: '<ruby>仕事<rt>しごと</rt></ruby>が<ruby>終<rt>お</rt></ruby>わっ___BLANK___、<ruby>飲<rt>の</rt></ruby>みに<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'たあとで',
+        tokens: ['しごとが', 'おわった', 'あとで', '、', 'のみに', 'いきます', '。'], from: 'l14:2:1' },
+      { jp: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>たあとで、<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>をしました。',
+        kana: 'えいがをみたあとで、かいものをしました。', romaji: 'eiga o mita ato de, kaimono o shimashita.', hu: 'Miután megnéztük a filmet, vásároltunk.',
+        cloze: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>___BLANK___、<ruby>買<rt>か</rt></ruby>い<ruby>物<rt>もの</rt></ruby>をしました。', clozeAnswer: 'たあとで',
+        tokens: ['えいがを', 'みた', 'あとで', '、', 'かいものを', 'しました', '。'], from: 'l14:2:3' },
+      { jp: '<ruby>神社<rt>じんじゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ったあとで、ごはんを<ruby>食<rt>た</rt></ruby>べます。',
+        kana: 'じんじゃへいったあとで、ごはんをたべます。', romaji: 'jinja e itta ato de, gohan o tabemasu.', hu: 'Miután elmentünk a szentélybe, eszünk.',
+        cloze: '<ruby>神社<rt>じんじゃ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>っ___BLANK___、ごはんを<ruby>食<rt>た</rt></ruby>べます。', clozeAnswer: 'たあとで',
+        tokens: ['じんじゃへ', 'いった', 'あとで', '、', 'ごはんを', 'たべます', '。'], from: 'l14:2:4' }
     ],
     contrasts: ['mae_ni', 'te_kara']
   },
@@ -1439,7 +1779,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>く</rt></ruby>るまえに、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しました。',
         kana: 'にほんへくるまえに、にほんごをべんきょうしました。', romaji: 'nihon e kuru mae ni, nihongo o benkyou shimashita.', hu: 'Mielőtt Japánba jöttem, japánul tanultam.',
         cloze: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>く</rt></ruby>る___BLANK___、<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しました。', clozeAnswer: 'まえに',
-        tokens: ['にほんへ', 'くるまえに', '、', 'にほんごを', 'べんきょうしました', '。'] }
+        tokens: ['にほんへ', 'くるまえに', '、', 'にほんごを', 'べんきょうしました', '。'] },
+      { jp: '<ruby>授業<rt>じゅぎょう</rt></ruby>のまえに、コーヒーを<ruby>飲<rt>の</rt></ruby>みます。',
+        kana: 'じゅぎょうのまえに、コーヒーをのみます。', romaji: 'jugyou no mae ni, koohii o nomimasu.', hu: 'Óra előtt kávét iszom.',
+        cloze: '<ruby>授業<rt>じゅぎょう</rt></ruby>の___BLANK___、コーヒーを<ruby>飲<rt>の</rt></ruby>みます。', clozeAnswer: 'まえに',
+        tokens: ['じゅぎょうの', 'まえに', '、', 'コーヒーを', 'のみます', '。'], from: 'l14:3:3' },
+      { jp: 'ハンガリーへ<ruby>帰<rt>かえ</rt></ruby>るまえに、<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けます。',
+        kana: 'ハンガリーへかえるまえに、しけんをうけます。', romaji: 'hangarii e kaeru mae ni, shiken o ukemasu.', hu: 'Mielőtt hazamegyek Magyarországra, vizsgázom.',
+        cloze: 'ハンガリーへ<ruby>帰<rt>かえ</rt></ruby>る___BLANK___、<ruby>試験<rt>しけん</rt></ruby>を<ruby>受<rt>う</rt></ruby>けます。', clozeAnswer: 'まえに',
+        tokens: ['ハンガリーへ', 'かえる', 'まえに', '、', 'しけんを', 'うけます', '。'], from: 'l14:3:4' },
+      { jp: '<ruby>三年<rt>さんねん</rt></ruby>まえに<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ました。',
+        kana: 'さんねんまえににほんへきました。', romaji: 'sannen mae ni nihon e kimashita.', hu: 'Három éve jöttem Japánba.',
+        cloze: '<ruby>三年<rt>さんねん</rt></ruby>___BLANK___<ruby>日本<rt>にほん</rt></ruby>へ<ruby>来<rt>き</rt></ruby>ました。', clozeAnswer: 'まえに',
+        tokens: ['さんねん', 'まえに', 'にほんへ', 'きました', '。'], from: 'l14:3:5' }
     ],
     contrasts: ['ta_ato_de']
   },
@@ -1456,7 +1808,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>今<rt>いま</rt></ruby><ruby>何<rt>なに</rt></ruby>がほしいですか。',
         kana: 'いまなにがほしいですか。', romaji: 'ima nani ga hoshii desu ka.', hu: 'Mit szeretnél most?',
         cloze: '<ruby>今<rt>いま</rt></ruby><ruby>何<rt>なに</rt></ruby>が___BLANK___ですか。', clozeAnswer: 'ほしい',
-        tokens: ['いま', 'なにが', 'ほしいですか', '。'] }
+        tokens: ['いま', 'なにが', 'ほしいですか', '。'] },
+      { jp: '<ruby>誕生日<rt>たんじょうび</rt></ruby>に<ruby>何<rt>なに</rt></ruby>がほしいですか。',
+        kana: 'たんじょうびになにがほしいですか。', romaji: 'tanjoubi ni nani ga hoshii desu ka.', hu: 'Mit szeretnél a születésnapodra?',
+        cloze: '<ruby>誕生日<rt>たんじょうび</rt></ruby>に<ruby>何<rt>なに</rt></ruby>が___BLANK___ですか。', clozeAnswer: 'ほしい',
+        tokens: ['たんじょうびに', 'なにが', 'ほしいですか', '。'], from: 'l14:6:2' },
+      { jp: 'もっと<ruby>時間<rt>じかん</rt></ruby>がほしいです。',
+        kana: 'もっとじかんがほしいです。', romaji: 'motto jikan ga hoshii desu.', hu: 'Több időt szeretnék.',
+        cloze: 'もっと<ruby>時間<rt>じかん</rt></ruby>が___BLANK___です。', clozeAnswer: 'ほしい',
+        tokens: ['もっと', 'じかんが', 'ほしいです', '。'], from: 'l14:6:4' }
     ],
     contrasts: ['tai', 'ga_suki']
   },
@@ -1492,7 +1852,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいでしょう。',
         kana: 'このもんだいはむずかしいでしょう。', romaji: 'kono mondai wa muzukashii deshou.', hu: 'Ez a feladat bizonyára nehéz.',
         cloze: 'この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しい___BLANK___。', clozeAnswer: 'でしょう',
-        tokens: ['この', 'もんだいは', 'むずかしいでしょう', '。'] }
+        tokens: ['この', 'もんだいは', 'むずかしいでしょう', '。'] },
+      { jp: 'あしたは<ruby>晴<rt>は</rt></ruby>れるでしょう。',
+        kana: 'あしたははれるでしょう。', romaji: 'ashita wa hareru deshou.', hu: 'Holnap valószínűleg napos idő lesz.',
+        cloze: 'あしたは<ruby>晴<rt>は</rt></ruby>れる___BLANK___。', clozeAnswer: 'でしょう',
+        tokens: ['あしたは', 'はれるでしょう', '。'], from: 'l15:1:1' },
+      { jp: '<ruby>今晩<rt>こんばん</rt></ruby>は<ruby>寒<rt>さむ</rt></ruby>いでしょう。',
+        kana: 'こんばんはさむいでしょう。', romaji: 'konban wa samui deshou.', hu: 'Ma este valószínűleg hideg lesz.',
+        cloze: '<ruby>今晩<rt>こんばん</rt></ruby>は<ruby>寒<rt>さむ</rt></ruby>い___BLANK___。', clozeAnswer: 'でしょう',
+        tokens: ['こんばんは', 'さむいでしょう', '。'], from: 'l15:1:2' },
+      { jp: '<ruby>山田<rt>やまだ</rt></ruby>さんは<ruby>来<rt>こ</rt></ruby>ないでしょう。',
+        kana: 'やまださんはこないでしょう。', romaji: 'yamada-san wa konai deshou.', hu: 'Jamada valószínűleg nem jön el.',
+        cloze: '<ruby>山田<rt>やまだ</rt></ruby>さんは<ruby>来<rt>こ</rt></ruby>ない___BLANK___。', clozeAnswer: 'でしょう',
+        tokens: ['やまださんは', 'こないでしょう', '。'], from: 'l15:1:3' }
     ],
     contrasts: ['to_omou']
   },
@@ -1509,7 +1881,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>本<rt>ほん</rt></ruby>はもう<ruby>読<rt>よ</rt></ruby>んでしまいました。',
         kana: 'このほんはもうよんでしまいました。', romaji: 'kono hon wa mou yonde shimaimashita.', hu: 'Ezt a könyvet már kiolvastam.',
         cloze: 'この<ruby>本<rt>ほん</rt></ruby>はもう<ruby>読<rt>よ</rt></ruby>ん___BLANK___。', clozeAnswer: 'でしまいました',
-        tokens: ['この', 'ほんは', 'もう', 'よんでしまいました', '。'] }
+        tokens: ['この', 'ほんは', 'もう', 'よんでしまいました', '。'] },
+      { jp: '<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>行<rt>い</rt></ruby>ってしまいました。',
+        kana: 'でんしゃがいってしまいました。', romaji: 'densha ga itte shimaimashita.', hu: 'Elment a vonat, lekéstem.',
+        cloze: '<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>行<rt>い</rt></ruby>っ___BLANK___。', clozeAnswer: 'てしまいました',
+        tokens: ['でんしゃが', 'いって', 'しまいました', '。'], from: 'l15:2:2' },
+      { jp: 'ケーキを<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>食<rt>た</rt></ruby>べてしまいました。',
+        kana: 'ケーキをぜんぶたべてしまいました。', romaji: 'keeki o zenbu tabete shimaimashita.', hu: 'Megettem az egész tortát.',
+        cloze: 'ケーキを<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>食<rt>た</rt></ruby>べ___BLANK___。', clozeAnswer: 'てしまいました',
+        tokens: ['ケーキを', 'ぜんぶ', 'たべて', 'しまいました', '。'], from: 'l15:2:3' },
+      { jp: '<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ってしまいました。',
+        kana: 'みちにまよってしまいました。', romaji: 'michi ni mayotte shimaimashita.', hu: 'Eltévedtem.',
+        cloze: '<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>っ___BLANK___。', clozeAnswer: 'てしまいました',
+        tokens: ['みちに', 'まよって', 'しまいました', '。'], from: 'l15:2:4' }
     ],
     contrasts: ['te_iru_state', 'te_miru']
   },
@@ -1526,7 +1910,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>昨日<rt>きのう</rt></ruby>は<ruby>掃除<rt>そうじ</rt></ruby>をしたり、<ruby>洗濯<rt>せんたく</rt></ruby>をしたりしました。',
         kana: 'きのうはそうじをしたり、せんたくをしたりしました。', romaji: 'kinou wa souji o shitari, sentaku o shitari shimashita.', hu: 'Tegnap takarítottam, mostam, ilyesmiket csináltam.',
         cloze: '<ruby>昨日<rt>きのう</rt></ruby>は<ruby>掃除<rt>そうじ</rt></ruby>をし___BLANK___、<ruby>洗濯<rt>せんたく</rt></ruby>をしたりしました。', clozeAnswer: 'たり',
-        tokens: ['きのうは', 'そうじを', 'したり', '、', 'せんたくを', 'したりしました', '。'] }
+        tokens: ['きのうは', 'そうじを', 'したり', '、', 'せんたくを', 'したりしました', '。'] },
+      { jp: '<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>んだり、<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いたりします。',
+        kana: 'しゅうまつはほんをよんだり、おんがくをきいたりします。', romaji: 'shuumatsu wa hon o yondari, ongaku o kiitari shimasu.', hu: 'Hétvégén olvasok, zenét hallgatok, ilyesmi.',
+        cloze: '<ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>ん___BLANK___、<ruby>音楽<rt>おんがく</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いたりします。', clozeAnswer: 'だり',
+        tokens: ['しゅうまつは', 'ほんを', 'よんだり', '、', 'おんがくを', 'きいたり', 'します', '。'], from: 'l15:3:1' },
+      { jp: '<ruby>夏休<rt>なつやす</rt></ruby>みに<ruby>泳<rt>およ</rt></ruby>いだり、<ruby>山<rt>やま</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>ったりしたいです。',
+        kana: 'なつやすみにおよいだり、やまにのぼったりしたいです。', romaji: 'natsuyasumi ni oyoidari, yama ni nobottari shitai desu.', hu: 'A nyári szünetben úszni, hegyet mászni, ilyesmit szeretnék.',
+        cloze: '<ruby>夏休<rt>なつやす</rt></ruby>みに<ruby>泳<rt>およ</rt></ruby>い___BLANK___、<ruby>山<rt>やま</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>ったりしたいです。', clozeAnswer: 'だり',
+        tokens: ['なつやすみに', 'およいだり', '、', 'やまに', 'のぼったり', 'したいです', '。'], from: 'l15:3:4' }
     ],
     contrasts: ['te_sequence', 'to_ya']
   },
@@ -1579,7 +1971,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>私<rt>わたし</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くことです。',
         kana: 'わたしのゆめはにほんへいくことです。', romaji: 'watashi no yume wa nihon e iku koto desu.', hu: 'Az az álmom, hogy eljussak Japánba.',
         cloze: '<ruby>私<rt>わたし</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く___BLANK___です。', clozeAnswer: 'こと',
-        tokens: ['わたしのゆめは', 'にほんへ', 'いくことです', '。'] }
+        tokens: ['わたしのゆめは', 'にほんへ', 'いくことです', '。'] },
+      { jp: '<ruby>私<rt>わたし</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>くことです。',
+        kana: 'わたしのゆめはにほんではたらくことです。', romaji: 'watashi no yume wa nihon de hataraku koto desu.', hu: 'Az az álmom, hogy Japánban dolgozzak.',
+        cloze: '<ruby>私<rt>わたし</rt></ruby>の<ruby>夢<rt>ゆめ</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>く___BLANK___です。', clozeAnswer: 'こと',
+        tokens: ['わたしの', 'ゆめは', 'にほんで', 'はたらく', 'ことです', '。'], from: 'l16:1:2' },
+      { jp: '<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>むことです。',
+        kana: 'しゅみはほんをよむことです。', romaji: 'shumi wa hon o yomu koto desu.', hu: 'A hobbim az olvasás.',
+        cloze: '<ruby>趣味<rt>しゅみ</rt></ruby>は<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>む___BLANK___です。', clozeAnswer: 'こと',
+        tokens: ['しゅみは', 'ほんを', 'よむ', 'ことです', '。'], from: 'l16:1:4' }
     ],
     contrasts: ['ta_koto_ga_aru']
   },
@@ -1596,7 +1996,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'すしを<ruby>食<rt>た</rt></ruby>べたことがありません。',
         kana: 'すしをたべたことがありません。', romaji: 'sushi o tabeta koto ga arimasen.', hu: 'Még soha nem ettem szusit.',
         cloze: 'すしを<ruby>食<rt>た</rt></ruby>べ___BLANK___。', clozeAnswer: 'たことがありません',
-        tokens: ['すしを', 'たべたことがありません', '。'] }
+        tokens: ['すしを', 'たべたことがありません', '。'] },
+      { jp: 'すしを<ruby>食<rt>た</rt></ruby>べたことがありますか。',
+        kana: 'すしをたべたことがありますか。', romaji: 'sushi o tabeta koto ga arimasu ka.', hu: 'Ettél már szusit?',
+        cloze: 'すしを<ruby>食<rt>た</rt></ruby>べ___BLANK___か。', clozeAnswer: 'たことがあります',
+        tokens: ['すしを', 'たべた', 'ことが', 'ありますか', '。'], from: 'l16:2:2' },
+      { jp: '<ruby>一度<rt>いちど</rt></ruby>も<ruby>馬<rt>うま</rt></ruby>に<ruby>乗<rt>の</rt></ruby>ったことがありません。',
+        kana: 'いちどもうまにのったことがありません。', romaji: 'ichido mo uma ni notta koto ga arimasen.', hu: 'Még soha nem ültem lovon.',
+        cloze: '<ruby>一度<rt>いちど</rt></ruby>も<ruby>馬<rt>うま</rt></ruby>に<ruby>乗<rt>の</rt></ruby>っ___BLANK___。', clozeAnswer: 'たことがありません',
+        tokens: ['いちども', 'うまに', 'のった', 'ことが', 'ありません', '。'], from: 'l16:2:3' },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>たことがありますか。',
+        kana: 'にほんのえいがをみたことがありますか。', romaji: 'nihon no eiga o mita koto ga arimasu ka.', hu: 'Láttál már japán filmet?',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>___BLANK___か。', clozeAnswer: 'たことがあります',
+        tokens: ['にほんの', 'えいがを', 'みた', 'ことが', 'ありますか', '。'], from: 'l16:2:4' }
     ],
     contrasts: ['koto_ga_dekiru', 'koto_desu']
   },
@@ -1613,7 +2025,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'ここで<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ることができます。',
         kana: 'ここでしゃしんをとることができます。', romaji: 'koko de shashin o toru koto ga dekimasu.', hu: 'Itt lehet fényképezni.',
         cloze: 'ここで<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>る___BLANK___。', clozeAnswer: 'ことができます',
-        tokens: ['ここで', 'しゃしんを', 'とることができます', '。'] }
+        tokens: ['ここで', 'しゃしんを', 'とることができます', '。'] },
+      { jp: 'ここでインターネットを<ruby>使<rt>つか</rt></ruby>うことができます。',
+        kana: 'ここでインターネットをつかうことができます。', romaji: 'koko de intaanetto o tsukau koto ga dekimasu.', hu: 'Itt lehet internetet használni.',
+        cloze: 'ここでインターネットを<ruby>使<rt>つか</rt></ruby>う___BLANK___。', clozeAnswer: 'ことができます',
+        tokens: ['ここで', 'インターネットを', 'つかう', 'ことが', 'できます', '。'], from: 'l16:3:2' },
+      { jp: '<ruby>英語<rt>えいご</rt></ruby>を<ruby>話<rt>はな</rt></ruby>すことができますか。',
+        kana: 'えいごをはなすことができますか。', romaji: 'eigo o hanasu koto ga dekimasu ka.', hu: 'Tudsz angolul beszélni?',
+        cloze: '<ruby>英語<rt>えいご</rt></ruby>を<ruby>話<rt>はな</rt></ruby>す___BLANK___か。', clozeAnswer: 'ことができます',
+        tokens: ['えいごを', 'はなす', 'ことが', 'できますか', '。'], from: 'l16:3:5' },
+      { jp: 'この<ruby>図書館<rt>としょかん</rt></ruby>では<ruby>十冊<rt>じゅっさつ</rt></ruby><ruby>借<rt>か</rt></ruby>りることができます。',
+        kana: 'このとしょかんではじゅっさつかりることができます。', romaji: 'kono toshokan de wa jussatsu kariru koto ga dekimasu.', hu: 'Ebben a könyvtárban tíz könyvet lehet kölcsönözni.',
+        cloze: 'この<ruby>図書館<rt>としょかん</rt></ruby>では<ruby>十冊<rt>じゅっさつ</rt></ruby><ruby>借<rt>か</rt></ruby>りる___BLANK___。', clozeAnswer: 'ことができます',
+        tokens: ['この', 'としょかんでは', 'じゅっさつ', 'かりる', 'ことが', 'できます', '。'], from: 'l16:3:6' }
     ],
     contrasts: ['ta_koto_ga_aru']
   },
@@ -1630,7 +2054,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'どうぞお<ruby>入<rt>はい</rt></ruby>りください。',
         kana: 'どうぞおはいりください。', romaji: 'douzo ohairi kudasai.', hu: 'Tessék, fáradjon be!',
         cloze: 'どうぞ___BLANK___<ruby>入<rt>はい</rt></ruby>りください。', clozeAnswer: 'お',
-        tokens: ['どうぞ', 'おはいりください', '。'] }
+        tokens: ['どうぞ', 'おはいりください', '。'] },
+      { jp: 'こちらにお<ruby>名前<rt>なまえ</rt></ruby>をお<ruby>書<rt>か</rt></ruby>きください。',
+        kana: 'こちらにおなまえをおかきください。', romaji: 'kochira ni onamae o okaki kudasai.', hu: 'Kérem, ide írja a nevét.',
+        cloze: 'こちらにお<ruby>名前<rt>なまえ</rt></ruby>をお<ruby>書<rt>か</rt></ruby>き___BLANK___。', clozeAnswer: 'ください',
+        tokens: ['こちらに', 'おなまえを', 'おかき', 'ください', '。'], from: 'l16:5:2' },
+      { jp: 'どうぞ、お<ruby>座<rt>すわ</rt></ruby>りください。',
+        kana: 'どうぞ、おすわりください。', romaji: 'douzo, o-suwari kudasai.', hu: 'Tessék, foglaljon helyet.',
+        cloze: 'どうぞ、お<ruby>座<rt>すわ</rt></ruby>り___BLANK___。', clozeAnswer: 'ください',
+        tokens: ['どうぞ', '、', 'おすわり', 'ください', '。'], from: 'l16:5:4' },
+      { jp: 'こちらでお<ruby>待<rt>ま</rt></ruby>ちください。',
+        kana: 'こちらでおまちください。', romaji: 'kochira de o-machi kudasai.', hu: 'Kérem, itt várjon.',
+        cloze: 'こちらでお<ruby>待<rt>ま</rt></ruby>ち___BLANK___。', clozeAnswer: 'ください',
+        tokens: ['こちらでおまち', 'ください', '。'], from: 'l16:5:5' }
     ],
     contrasts: ['te_kudasai']
   },
@@ -1649,7 +2085,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>暇<rt>ひま</rt></ruby>なとき、<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。',
         kana: 'ひまなとき、ほんをよみます。', romaji: 'hima na toki, hon o yomimasu.', hu: 'Amikor ráérek, olvasok.',
         cloze: '<ruby>暇<rt>ひま</rt></ruby>な___BLANK___、<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。', clozeAnswer: 'とき',
-        tokens: ['ひまなとき', '、', 'ほんを', 'よみます', '。'] }
+        tokens: ['ひまなとき', '、', 'ほんを', 'よみます', '。'] },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>東京<rt>とうきょう</rt></ruby>に<ruby>住<rt>す</rt></ruby>んでいました。',
+        kana: 'こどものとき、とうきょうにすんでいました。', romaji: 'kodomo no toki, toukyou ni sunde imashita.', hu: 'Gyerekkoromban Tokióban laktam.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どもの___BLANK___、<ruby>東京<rt>とうきょう</rt></ruby>に<ruby>住<rt>す</rt></ruby>んでいました。', clozeAnswer: 'とき',
+        tokens: ['こどもの', 'とき', '、', 'とうきょうに', 'すんで', 'いました', '。'], from: 'l17:1:1' },
+      { jp: '<ruby>寒<rt>さむ</rt></ruby>いとき、コートを<ruby>着<rt>き</rt></ruby>ます。',
+        kana: 'さむいとき、コートをきます。', romaji: 'samui toki, kooto o kimasu.', hu: 'Amikor hideg van, kabátot veszek.',
+        cloze: '<ruby>寒<rt>さむ</rt></ruby>い___BLANK___、コートを<ruby>着<rt>き</rt></ruby>ます。', clozeAnswer: 'とき',
+        tokens: ['さむい', 'とき', '、', 'コートを', 'きます', '。'], from: 'l17:1:3' },
+      { jp: '<ruby>学生<rt>がくせい</rt></ruby>のとき、よく<ruby>旅行<rt>りょこう</rt></ruby>しました。',
+        kana: 'がくせいのとき、よくりょこうしました。', romaji: 'gakusei no toki, yoku ryokou shimashita.', hu: 'Diákkoromban sokat utaztam.',
+        cloze: '<ruby>学生<rt>がくせい</rt></ruby>の___BLANK___、よく<ruby>旅行<rt>りょこう</rt></ruby>しました。', clozeAnswer: 'とき',
+        tokens: ['がくせいの', 'とき', '、', 'よく', 'りょこう', 'しました', '。'], from: 'l17:1:4' }
     ],
     contrasts: ['ru_toki_ta_toki']
   },
@@ -1666,7 +2114,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>ったとき、かばんを<ruby>買<rt>か</rt></ruby>いました。',
         kana: 'にほんへいったとき、かばんをかいました。', romaji: 'nihon e itta toki, kaban o kaimashita.', hu: 'Amikor Japánban jártam, vettem egy táskát.',
         cloze: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>っ___BLANK___、かばんを<ruby>買<rt>か</rt></ruby>いました。', clozeAnswer: 'たとき',
-        tokens: ['にほんへ', 'いったとき', '、', 'かばんを', 'かいました', '。'] }
+        tokens: ['にほんへ', 'いったとき', '、', 'かばんを', 'かいました', '。'] },
+      { jp: '<ruby>道<rt>みち</rt></ruby>がわからないとき、<ruby>地図<rt>ちず</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。',
+        kana: 'みちがわからないとき、ちずをみます。', romaji: 'michi ga wakaranai toki, chizu o mimasu.', hu: 'Amikor nem tudom az utat, megnézem a térképet.',
+        cloze: '<ruby>道<rt>みち</rt></ruby>がわからない___BLANK___、<ruby>地図<rt>ちず</rt></ruby>を<ruby>見<rt>み</rt></ruby>ます。', clozeAnswer: 'とき',
+        tokens: ['みちが', 'わからない', 'とき', '、', 'ちずを', 'みます', '。'], from: 'l17:2:3' },
+      { jp: '<ruby>出<rt>で</rt></ruby>かけるとき、<ruby>鍵<rt>かぎ</rt></ruby>をかけます。',
+        kana: 'でかけるとき、かぎをかけます。', romaji: 'dekakeru toki, kagi o kakemasu.', hu: 'Amikor elmegyek otthonról, bezárom az ajtót.',
+        cloze: '<ruby>出<rt>で</rt></ruby>かける___BLANK___、<ruby>鍵<rt>かぎ</rt></ruby>をかけます。', clozeAnswer: 'とき',
+        tokens: ['でかける', 'とき', '、', 'かぎを', 'かけます', '。'], from: 'l17:2:4' },
+      { jp: 'うちへ<ruby>帰<rt>かえ</rt></ruby>ったとき、「ただいま」と<ruby>言<rt>い</rt></ruby>います。',
+        kana: 'うちへかえったとき、「ただいま」といいます。', romaji: 'uchi e kaetta toki, tadaima to iimasu.', hu: 'Amikor hazaérek, azt mondom: „megjöttem".',
+        cloze: 'うちへ<ruby>帰<rt>かえ</rt></ruby>った___BLANK___、「ただいま」と<ruby>言<rt>い</rt></ruby>います。', clozeAnswer: 'とき',
+        tokens: ['うちへ', 'かえった', 'とき', '、', '「', 'ただいま', '」', 'と', 'いいます', '。'], from: 'l17:2:5' }
     ],
     contrasts: ['toki', 'mae_ni', 'ta_ato_de', 'tara']
   },
@@ -1702,7 +2162,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>かもしれません。',
         kana: 'あのひとはせんせいかもしれません。', romaji: 'ano hito wa sensei kamoshiremasen.', hu: 'Lehet, hogy az az ember tanár.',
         cloze: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>先生<rt>せんせい</rt></ruby>___BLANK___。', clozeAnswer: 'かもしれません',
-        tokens: ['あの', 'ひとは', 'せんせいかもしれません', '。'] }
+        tokens: ['あの', 'ひとは', 'せんせいかもしれません', '。'] },
+      { jp: 'あしたは<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るかもしれません。',
+        kana: 'あしたはあめがふるかもしれません。', romaji: 'ashita wa ame ga furu kamo shiremasen.', hu: 'Lehet, hogy holnap esni fog.',
+        cloze: 'あしたは<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>る___BLANK___。', clozeAnswer: 'かもしれません',
+        tokens: ['あしたは', 'あめが', 'ふる', 'かも', 'しれません', '。'], from: 'l18:1:1' },
+      { jp: '<ruby>電車<rt>でんしゃ</rt></ruby>は<ruby>遅<rt>おく</rt></ruby>れるかもしれません。',
+        kana: 'でんしゃはおくれるかもしれません。', romaji: 'densha wa okureru kamo shiremasen.', hu: 'Lehet, hogy késik a vonat.',
+        cloze: '<ruby>電車<rt>でんしゃ</rt></ruby>は<ruby>遅<rt>おく</rt></ruby>れる___BLANK___。', clozeAnswer: 'かもしれません',
+        tokens: ['でんしゃは', 'おくれる', 'かも', 'しれません', '。'], from: 'l18:1:2' },
+      { jp: '<ruby>三月<rt>さんがつ</rt></ruby>はまだ<ruby>寒<rt>さむ</rt></ruby>いかもしれません。',
+        kana: 'さんがつはまださむいかもしれません。', romaji: 'sangatsu wa mada samui kamo shiremasen.', hu: 'Márciusban még hideg lehet.',
+        cloze: '<ruby>三月<rt>さんがつ</rt></ruby>はまだ<ruby>寒<rt>さむ</rt></ruby>い___BLANK___。', clozeAnswer: 'かもしれません',
+        tokens: ['さんがつは', 'まだ', 'さむい', 'かも', 'しれません', '。'], from: 'l18:1:4' }
     ],
     contrasts: ['deshou']
   },
@@ -1719,7 +2191,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>息子<rt>むすこ</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>になりました。',
         kana: 'むすこはいしゃになりました。', romaji: 'musuko wa isha ni narimashita.', hu: 'A fiamból orvos lett.',
         cloze: '<ruby>息子<rt>むすこ</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>___BLANK___。', clozeAnswer: 'になりました',
-        tokens: ['むすこは', 'いしゃになりました', '。'] }
+        tokens: ['むすこは', 'いしゃになりました', '。'] },
+      { jp: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>になりました。',
+        kana: 'にほんごがじょうずになりました。', romaji: 'nihongo ga jouzu ni narimashita.', hu: 'Jobban megy már a japán.',
+        cloze: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>___BLANK___。', clozeAnswer: 'になりました',
+        tokens: ['にほんごが', 'じょうずに', 'なりました', '。'], from: 'l18:2:2' },
+      { jp: '<ruby>弟<rt>おとうと</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>になりました。',
+        kana: 'おとうとはいしゃになりました。', romaji: 'otouto wa isha ni narimashita.', hu: 'Az öcsém orvos lett.',
+        cloze: '<ruby>弟<rt>おとうと</rt></ruby>は<ruby>医者<rt>いしゃ</rt></ruby>___BLANK___。', clozeAnswer: 'になりました',
+        tokens: ['おとうとは', 'いしゃに', 'なりました', '。'], from: 'l18:2:3' },
+      { jp: '<ruby>病気<rt>びょうき</rt></ruby>がよくなりました。',
+        kana: 'びょうきがよくなりました。', romaji: 'byouki ga yoku narimashita.', hu: 'Meggyógyultam (jobban lett a betegségem).',
+        cloze: '<ruby>病気<rt>びょうき</rt></ruby>がよ___BLANK___。', clozeAnswer: 'くなりました',
+        tokens: ['びょうきが', 'よく', 'なりました', '。'], from: 'l18:2:5' }
     ],
     contrasts: ['ku_suru', 'you_ni_naru']
   },
@@ -1753,7 +2237,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>出<rt>で</rt></ruby>かけないことにします。',
         kana: 'きょうはでかけないことにします。', romaji: 'kyou wa dekakenai koto ni shimasu.', hu: 'Úgy döntök, hogy ma nem megyek el itthonról.',
         cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>出<rt>で</rt></ruby>かけない___BLANK___。', clozeAnswer: 'ことにします',
-        tokens: ['きょうは', 'でかけないことにします', '。'] }
+        tokens: ['きょうは', 'でかけないことにします', '。'] },
+      { jp: '<ruby>夏休<rt>なつやす</rt></ruby>みに<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くことにしました。',
+        kana: 'なつやすみににほんへいくことにしました。', romaji: 'natsuyasumi ni nihon e iku koto ni shimashita.', hu: 'Úgy döntöttem, hogy a nyári szünetben Japánba megyek.',
+        cloze: '<ruby>夏休<rt>なつやす</rt></ruby>みに<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く___BLANK___。', clozeAnswer: 'ことにしました',
+        tokens: ['なつやすみに', 'にほんへ', 'いく', 'ことに', 'しました', '。'], from: 'l18:4:1' },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>から<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>ることにします。',
+        kana: 'きょうからまいあさはしることにします。', romaji: 'kyou kara maiasa hashiru koto ni shimasu.', hu: 'Elhatároztam, hogy mától minden reggel futok.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>から<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>走<rt>はし</rt></ruby>る___BLANK___。', clozeAnswer: 'ことにします',
+        tokens: ['きょうから', 'まいあさ', 'はしる', 'ことに', 'します', '。'], from: 'l18:4:2' },
+      { jp: 'お<ruby>酒<rt>さけ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>まないことにしました。',
+        kana: 'おさけをのまないことにしました。', romaji: 'osake o nomanai koto ni shimashita.', hu: 'Úgy döntöttem, hogy nem iszom alkoholt.',
+        cloze: 'お<ruby>酒<rt>さけ</rt></ruby>を<ruby>飲<rt>の</rt></ruby>まない___BLANK___。', clozeAnswer: 'ことにしました',
+        tokens: ['おさけを', 'のまない', 'ことに', 'しました', '。'], from: 'l18:4:3' }
     ],
     contrasts: ['tsumori', 'ni_shimasu']
   },
@@ -1770,7 +2266,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'お<ruby>客<rt>きゃく</rt></ruby>さんにお<ruby>茶<rt>ちゃ</rt></ruby>をさしあげます。',
         kana: 'おきゃくさんにおちゃをさしあげます。', romaji: 'okyaku-san ni ocha o sashiagemasu.', hu: 'Teát adok a vendégnek.',
         cloze: 'お<ruby>客<rt>きゃく</rt></ruby>さんにお<ruby>茶<rt>ちゃ</rt></ruby>を___BLANK___。', clozeAnswer: 'さしあげます',
-        tokens: ['おきゃくさんに', 'おちゃを', 'さしあげます', '。'] }
+        tokens: ['おきゃくさんに', 'おちゃを', 'さしあげます', '。'] },
+      { jp: '<ruby>社長<rt>しゃちょう</rt></ruby>に<ruby>何<rt>なに</rt></ruby>をさしあげますか。',
+        kana: 'しゃちょうになにをさしあげますか。', romaji: 'shachou ni nani o sashiagemasu ka.', hu: 'Mit adsz az igazgatónak?',
+        cloze: '<ruby>社長<rt>しゃちょう</rt></ruby>に<ruby>何<rt>なに</rt></ruby>を___BLANK___か。', clozeAnswer: 'さしあげます',
+        tokens: ['しゃちょうに', 'なにを', 'さしあげますか', '。'], from: 'l18:5:3' },
+      { jp: 'お<ruby>客様<rt>きゃくさま</rt></ruby>にお<ruby>土産<rt>みやげ</rt></ruby>をさしあげました。',
+        kana: 'おきゃくさまにおみやげをさしあげました。', romaji: 'o-kyaku-sama ni o-miyage o sashiagemashita.', hu: 'Ajándékot adtam a vendégnek.',
+        cloze: 'お<ruby>客様<rt>きゃくさま</rt></ruby>にお<ruby>土産<rt>みやげ</rt></ruby>を___BLANK___。', clozeAnswer: 'さしあげました',
+        tokens: ['おきゃくさまにおみやげを', 'さしあげました', '。'], from: 'l18:5:4' }
     ],
     contrasts: ['agemasu', 'itadakimasu']
   },
@@ -1840,7 +2344,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日曜日<rt>にちようび</rt></ruby>だけ<ruby>休<rt>やす</rt></ruby>みます。',
         kana: 'にちようびだけやすみます。', romaji: 'nichiyoubi dake yasumimasu.', hu: 'Csak vasárnap pihenek.',
         cloze: '<ruby>日曜日<rt>にちようび</rt></ruby>___BLANK___<ruby>休<rt>やす</rt></ruby>みます。', clozeAnswer: 'だけ',
-        tokens: ['にちようびだけ', 'やすみます', '。'] }
+        tokens: ['にちようびだけ', 'やすみます', '。'] },
+      { jp: '<ruby>千円<rt>せんえん</rt></ruby>だけあります。',
+        kana: 'せんえんだけあります。', romaji: 'sen-en dake arimasu.', hu: 'Csak ezer jenem van.',
+        cloze: '<ruby>千円<rt>せんえん</rt></ruby>___BLANK___あります。', clozeAnswer: 'だけ',
+        tokens: ['せんえんだけ', 'あります', '。'], from: 'l19:5:1' },
+      { jp: 'そこから<ruby>五分<rt>ごふん</rt></ruby>だけです。',
+        kana: 'そこからごふんだけです。', romaji: 'soko kara gofun dake desu.', hu: 'Onnan már csak öt perc.',
+        cloze: 'そこから<ruby>五分<rt>ごふん</rt></ruby>___BLANK___です。', clozeAnswer: 'だけ',
+        tokens: ['そこから', 'ごふんだけです', '。'], from: 'l19:5:4' }
     ],
     contrasts: ['shika_nai']
   },
@@ -1944,7 +2456,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '「さくら」という<ruby>店<rt>みせ</rt></ruby>を<ruby>知<rt>し</rt></ruby>っていますか。',
         kana: '「さくら」というみせをしっていますか。', romaji: 'sakura to iu mise o shitte imasu ka.', hu: 'Ismered a Szakura nevű boltot?',
         cloze: '「さくら」___BLANK___<ruby>店<rt>みせ</rt></ruby>を<ruby>知<rt>し</rt></ruby>っていますか。', clozeAnswer: 'という',
-        tokens: ['「さくら」という', 'みせを', 'しっていますか', '。'] }
+        tokens: ['「さくら」という', 'みせを', 'しっていますか', '。'] },
+      { jp: '「さくら」というレストランを<ruby>知<rt>し</rt></ruby>っていますか。',
+        kana: '「さくら」というレストランをしっていますか。', romaji: 'sakura to iu resutoran o shitte imasu ka.', hu: 'Ismered a Szakura nevű éttermet?',
+        cloze: '「さくら」___BLANK___レストランを<ruby>知<rt>し</rt></ruby>っていますか。', clozeAnswer: 'という',
+        tokens: ['「', 'さくら', '」', 'と', 'いう', 'レストランを', 'しって', 'いますか', '。'], from: 'l20:7:1' },
+      { jp: 'これは<ruby>何<rt>なん</rt></ruby>という<ruby>花<rt>はな</rt></ruby>ですか。',
+        kana: 'これはなんというはなですか。', romaji: 'kore wa nan to iu hana desu ka.', hu: 'Mi a neve ennek a virágnak?',
+        cloze: 'これは<ruby>何<rt>なん</rt></ruby>___BLANK___<ruby>花<rt>はな</rt></ruby>ですか。', clozeAnswer: 'という',
+        tokens: ['これは', 'なんと', 'いう', 'はなですか', '。'], from: 'l20:7:2' },
+      { jp: 'これはメーゼシュカラーチというクッキーです。',
+        kana: 'これはメーゼシュカラーチというクッキーです。', romaji: 'kore wa meezeshukaraachi to iu kukkii desu.', hu: 'Ez a mézeskalács nevű sütemény.',
+        cloze: 'これはメーゼシュカラーチ___BLANK___クッキーです。', clozeAnswer: 'という',
+        tokens: ['これは', 'メーゼシュカラーチと', 'いう', 'クッキーです', '。'], from: 'l20:7:4' }
     ],
     contrasts: ['to_iimasu']
   },
@@ -1963,7 +2487,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>音<rt>おと</rt></ruby>を<ruby>小<rt>ちい</rt></ruby>さくしてください。',
         kana: 'おとをちいさくしてください。', romaji: 'oto o chiisaku shite kudasai.', hu: 'Kérem, halkítsa le!',
         cloze: '<ruby>音<rt>おと</rt></ruby>を<ruby>小<rt>ちい</rt></ruby>さ___BLANK___ください。', clozeAnswer: 'くして',
-        tokens: ['おとを', 'ちいさくしてください', '。'] }
+        tokens: ['おとを', 'ちいさくしてください', '。'] },
+      { jp: 'テレビの<ruby>音<rt>おと</rt></ruby>を<ruby>小<rt>ちい</rt></ruby>さくしてください。',
+        kana: 'テレビのおとをちいさくしてください。', romaji: 'terebi no oto o chiisaku shite kudasai.', hu: 'Kérem, halkítsa le a tévét.',
+        cloze: 'テレビの<ruby>音<rt>おと</rt></ruby>を<ruby>小<rt>ちい</rt></ruby>さ___BLANK___ください。', clozeAnswer: 'くして',
+        tokens: ['テレビの', 'おとを', 'ちいさく', 'して', 'ください', '。'], from: 'l21:1:2' },
+      { jp: 'もう<ruby>少<rt>すこ</rt></ruby>し<ruby>安<rt>やす</rt></ruby>くしてください。',
+        kana: 'もうすこしやすくしてください。', romaji: 'mou sukoshi yasuku shite kudasai.', hu: 'Kérem, adja egy kicsit olcsóbban.',
+        cloze: 'もう<ruby>少<rt>すこ</rt></ruby>し<ruby>安<rt>やす</rt></ruby>___BLANK___ください。', clozeAnswer: 'くして',
+        tokens: ['もう', 'すこし', 'やすく', 'して', 'ください', '。'], from: 'l21:1:5' },
+      { jp: '<ruby>字<rt>じ</rt></ruby>を<ruby>大<rt>おお</rt></ruby>きくします。',
+        kana: 'じをおおきくします。', romaji: 'ji oo okiku shimasu.', hu: 'Nagyobbra veszem a betűket.',
+        cloze: '<ruby>字<rt>じ</rt></ruby>を<ruby>大<rt>おお</rt></ruby>き___BLANK___。', clozeAnswer: 'くします',
+        tokens: ['じをお', 'おきく', 'します', '。'], from: 'l21:1:6' }
     ],
     contrasts: ['ku_naru', 'ni_shimasu']
   },
@@ -1980,7 +2516,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>窓<rt>まど</rt></ruby>が<ruby>開<rt>あ</rt></ruby>けてあります。',
         kana: 'まどがあけてあります。', romaji: 'mado ga akete arimasu.', hu: 'Az ablak ki van nyitva (valaki kinyitotta).',
         cloze: '<ruby>窓<rt>まど</rt></ruby>が<ruby>開<rt>あ</rt></ruby>け___BLANK___。', clozeAnswer: 'てあります',
-        tokens: ['まどが', 'あけてあります', '。'] }
+        tokens: ['まどが', 'あけてあります', '。'] },
+      { jp: '<ruby>黒板<rt>こくばん</rt></ruby>に<ruby>名前<rt>なまえ</rt></ruby>が<ruby>書<rt>か</rt></ruby>いてあります。',
+        kana: 'こくばんになまえがかいてあります。', romaji: 'kokuban ni namae ga kaite arimasu.', hu: 'A táblára fel van írva a név.',
+        cloze: '<ruby>黒板<rt>こくばん</rt></ruby>に<ruby>名前<rt>なまえ</rt></ruby>が<ruby>書<rt>か</rt></ruby>い___BLANK___。', clozeAnswer: 'てあります',
+        tokens: ['こくばんに', 'なまえが', 'かいて', 'あります', '。'], from: 'l21:3:2' },
+      { jp: '<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>花<rt>はな</rt></ruby>が<ruby>飾<rt>かざ</rt></ruby>ってあります。',
+        kana: 'つくえのうえにはながかざってあります。', romaji: 'tsukue no ue ni hana ga kazatte arimasu.', hu: 'Az asztalt virággal díszítették.',
+        cloze: '<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>花<rt>はな</rt></ruby>が<ruby>飾<rt>かざ</rt></ruby>っ___BLANK___。', clozeAnswer: 'てあります',
+        tokens: ['つくえの', 'うえに', 'はなが', 'かざって', 'あります', '。'], from: 'l21:3:3' },
+      { jp: '<ruby>壁<rt>かべ</rt></ruby>に<ruby>地図<rt>ちず</rt></ruby>がはってあります。',
+        kana: 'かべにちずがはってあります。', romaji: 'kabe ni chizu ga hatte arimasu.', hu: 'A falra ki van téve egy térkép.',
+        cloze: '<ruby>壁<rt>かべ</rt></ruby>に<ruby>地図<rt>ちず</rt></ruby>がはっ___BLANK___。', clozeAnswer: 'てあります',
+        tokens: ['かべに', 'ちずが', 'はって', 'あります', '。'], from: 'l21:3:4' }
     ],
     contrasts: ['te_iru_result', 'te_oku']
   },
@@ -1997,7 +2545,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>私<rt>わたし</rt></ruby>はアンナといいます。',
         kana: 'わたしはアンナといいます。', romaji: 'watashi wa anna to iimasu.', hu: 'Annának hívnak.',
         cloze: '<ruby>私<rt>わたし</rt></ruby>はアンナ___BLANK___。', clozeAnswer: 'といいます',
-        tokens: ['わたしは', 'アンナといいます', '。'] }
+        tokens: ['わたしは', 'アンナといいます', '。'] },
+      { jp: '<ruby>私<rt>わたし</rt></ruby>は<ruby>田中<rt>たなか</rt></ruby>といいます。',
+        kana: 'わたしはたなかといいます。', romaji: 'watashi wa tanaka to iimasu.', hu: 'Tanakának hívnak.',
+        cloze: '<ruby>私<rt>わたし</rt></ruby>は<ruby>田中<rt>たなか</rt></ruby>___BLANK___。', clozeAnswer: 'といいます',
+        tokens: ['わたしは', 'たなかと', 'いいます', '。'], from: 'l21:5:1' },
+      { jp: 'これは<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>何<rt>なん</rt></ruby>といいますか。',
+        kana: 'これはにほんごでなんといいますか。', romaji: 'kore wa nihongo de nan to iimasu ka.', hu: 'Hogy mondják ezt japánul?',
+        cloze: 'これは<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>何<rt>なん</rt></ruby>___BLANK___か。', clozeAnswer: 'といいます',
+        tokens: ['これは', 'にほんごで', 'なんと', 'いいますか', '。'], from: 'l21:5:2' },
+      { jp: '<ruby>食事<rt>しょくじ</rt></ruby>のまえに「いただきます」といいます。',
+        kana: 'しょくじのまえに「いただきます」といいます。', romaji: 'shokuji no mae ni itadakimasu to iimasu.', hu: 'Evés előtt azt mondják: itadakimasu.',
+        cloze: '<ruby>食事<rt>しょくじ</rt></ruby>のまえに「いただきます」___BLANK___。', clozeAnswer: 'といいます',
+        tokens: ['しょくじの', 'まえに', '「', 'いただきます', '」', 'と', 'いいます', '。'], from: 'l21:5:3' }
     ],
     contrasts: ['to_iu', 'to_iimashita']
   },
@@ -2014,7 +2574,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>試験<rt>しけん</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しくないと<ruby>言<rt>い</rt></ruby>いました。',
         kana: 'せんせいはしけんはむずかしくないといいました。', romaji: 'sensei wa shiken wa muzukashikunai to iimashita.', hu: 'A tanár azt mondta, hogy a vizsga nem nehéz.',
         cloze: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>試験<rt>しけん</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しくない___BLANK___。', clozeAnswer: 'といいました',
-        tokens: ['せんせいは', 'しけんは', 'むずかしくない', 'といいました', '。'] }
+        tokens: ['せんせいは', 'しけんは', 'むずかしくない', 'といいました', '。'] },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>試験<rt>しけん</rt></ruby>は<ruby>簡単<rt>かんたん</rt></ruby>だと<ruby>言<rt>い</rt></ruby>いました。',
+        kana: 'せんせいはしけんはかんたんだといいました。', romaji: 'sensei wa shiken wa kantan da to iimashita.', hu: 'A tanár azt mondta, a vizsga könnyű.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>試験<rt>しけん</rt></ruby>は<ruby>簡単<rt>かんたん</rt></ruby>だ___BLANK___。', clozeAnswer: 'といいました',
+        tokens: ['せんせいは', 'しけんは', 'かんたんだと', 'いいました', '。'], from: 'l21:6:2' },
+      { jp: '<ruby>妹<rt>いもうと</rt></ruby>は<ruby>行<rt>い</rt></ruby>きたくないと<ruby>言<rt>い</rt></ruby>いました。',
+        kana: 'いもうとはいきたくないといいました。', romaji: 'imouto wa ikitakunai to iimashita.', hu: 'A húgom azt mondta, nem akar menni.',
+        cloze: '<ruby>妹<rt>いもうと</rt></ruby>は<ruby>行<rt>い</rt></ruby>きたくない___BLANK___。', clozeAnswer: 'といいました',
+        tokens: ['いもうとは', 'いきたくないと', 'いいました', '。'], from: 'l21:6:3' },
+      { jp: '<ruby>医者<rt>いしゃ</rt></ruby>は「<ruby>三日<rt>みっか</rt></ruby><ruby>休<rt>やす</rt></ruby>んでください」と<ruby>言<rt>い</rt></ruby>いました。',
+        kana: 'いしゃは「みっかやすんでください」といいました。', romaji: 'isha wa mikka yasunde kudasai to iimashita.', hu: 'Az orvos azt mondta: „Pihenjen három napot."',
+        cloze: '<ruby>医者<rt>いしゃ</rt></ruby>は「<ruby>三日<rt>みっか</rt></ruby><ruby>休<rt>やす</rt></ruby>んでください」___BLANK___。', clozeAnswer: 'といいました',
+        tokens: ['いしゃは', '「', 'みっか', 'やすんで', 'ください', '」', 'と', 'いいました', '。'], from: 'l21:6:4' }
     ],
     contrasts: ['to_omou', 'to_iimasu', 'sou_da_hearsay']
   },
@@ -2031,7 +2603,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '「おにぎり」って<ruby>何<rt>なに</rt></ruby>？',
         kana: '「おにぎり」ってなに？', romaji: 'onigiri tte nani?', hu: 'Mi az az „onigiri"?',
         cloze: '「おにぎり」___BLANK___<ruby>何<rt>なに</rt></ruby>？', clozeAnswer: 'って',
-        tokens: ['「おにぎり」って', 'なに', '？'] }
+        tokens: ['「おにぎり」って', 'なに', '？'] },
+      { jp: '「ぶんかさい」って<ruby>何<rt>なん</rt></ruby>ですか。',
+        kana: '「ぶんかさい」ってなんですか。', romaji: 'bunkasai tte nan desu ka.', hu: 'Mi az a „bunkaszai"?',
+        cloze: '「ぶんかさい」___BLANK___<ruby>何<rt>なん</rt></ruby>ですか。', clozeAnswer: 'って',
+        tokens: ['「', 'ぶんかさい', '」', 'って', 'なんですか', '。'], from: 'l21:7:1' },
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんって、どんな<ruby>人<rt>ひと</rt></ruby>ですか。',
+        kana: 'たなかさんって、どんなひとですか。', romaji: 'tanaka-san tte, donna hito desu ka.', hu: 'Milyen ember az a Tanaka?',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さん___BLANK___、どんな<ruby>人<rt>ひと</rt></ruby>ですか。', clozeAnswer: 'って',
+        tokens: ['たなかさん', 'って', '、', 'どんな', 'ひとですか', '。'], from: 'l21:7:2' },
+      { jp: '<ruby>日本語<rt>にほんご</rt></ruby>って、おもしろいですね。',
+        kana: 'にほんごって、おもしろいですね。', romaji: 'nihongo tte, omoshiroi desu ne.', hu: 'A japán nyelv, hát az érdekes!',
+        cloze: '<ruby>日本語<rt>にほんご</rt></ruby>___BLANK___、おもしろいですね。', clozeAnswer: 'って',
+        tokens: ['にほんご', 'って', '、', 'おもしろいですね', '。'], from: 'l21:7:4' }
     ],
     contrasts: ['to_iimashita', 'plain_style']
   },
@@ -2067,7 +2651,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>友<rt>とも</rt></ruby>だちが<ruby>駅<rt>えき</rt></ruby>まで<ruby>送<rt>おく</rt></ruby>ってくれました。',
         kana: 'ともだちがえきまでおくってくれました。', romaji: 'tomodachi ga eki made okutte kuremashita.', hu: 'A barátom elkísért az állomásig.',
         cloze: '<ruby>友<rt>とも</rt></ruby>だちが<ruby>駅<rt>えき</rt></ruby>まで<ruby>送<rt>おく</rt></ruby>っ___BLANK___。', clozeAnswer: 'てくれました',
-        tokens: ['ともだちが', 'えきまで', 'おくってくれました', '。'] }
+        tokens: ['ともだちが', 'えきまで', 'おくってくれました', '。'] },
+      { jp: '<ruby>母<rt>はは</rt></ruby>がお<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>作<rt>つく</rt></ruby>ってくれました。',
+        kana: 'ははがおべんとうをつくってくれました。', romaji: 'haha ga obentou o tsukutte kuremashita.', hu: 'Anyám készített nekem uzsonnát.',
+        cloze: '<ruby>母<rt>はは</rt></ruby>がお<ruby>弁当<rt>べんとう</rt></ruby>を<ruby>作<rt>つく</rt></ruby>っ___BLANK___。', clozeAnswer: 'てくれました',
+        tokens: ['ははが', 'おべんとうを', 'つくって', 'くれました', '。'], from: 'l22:2:2' },
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんが<ruby>町<rt>まち</rt></ruby>を<ruby>案内<rt>あんない</rt></ruby>してくれました。',
+        kana: 'たなかさんがまちをあんないしてくれました。', romaji: 'tanaka-san ga machi o annai shite kuremashita.', hu: 'Tanaka körbevezetett a városban.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さんが<ruby>町<rt>まち</rt></ruby>を<ruby>案内<rt>あんない</rt></ruby>し___BLANK___。', clozeAnswer: 'てくれました',
+        tokens: ['たなかさんが', 'まちを', 'あんない', 'して', 'くれました', '。'], from: 'l22:2:4' }
     ],
     contrasts: ['te_ageru', 'te_morau', 'kuremasu']
   },
@@ -2084,7 +2676,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>姉<rt>あね</rt></ruby>に<ruby>宿題<rt>しゅくだい</rt></ruby>を<ruby>手伝<rt>てつだ</rt></ruby>ってもらいます。',
         kana: 'あねにしゅくだいをてつだってもらいます。', romaji: 'ane ni shukudai o tetsudatte moraimasu.', hu: 'A nővérem segít nekem a leckében.',
         cloze: '<ruby>姉<rt>あね</rt></ruby>に<ruby>宿題<rt>しゅくだい</rt></ruby>を<ruby>手伝<rt>てつだ</rt></ruby>っ___BLANK___。', clozeAnswer: 'てもらいます',
-        tokens: ['あねに', 'しゅくだいを', 'てつだってもらいます', '。'] }
+        tokens: ['あねに', 'しゅくだいを', 'てつだってもらいます', '。'] },
+      { jp: '<ruby>姉<rt>あね</rt></ruby>に<ruby>英語<rt>えいご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてもらいました。',
+        kana: 'あねにえいごをおしえてもらいました。', romaji: 'ane ni eigo o oshiete moraimashita.', hu: 'A nővérem tanított angolra.',
+        cloze: '<ruby>姉<rt>あね</rt></ruby>に<ruby>英語<rt>えいご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>え___BLANK___。', clozeAnswer: 'てもらいました',
+        tokens: ['あねに', 'えいごを', 'おしえて', 'もらいました', '。'], from: 'l22:3:2' },
+      { jp: 'だれに<ruby>手伝<rt>てつだ</rt></ruby>ってもらいましたか。',
+        kana: 'だれにてつだってもらいましたか。', romaji: 'dare ni tetsudatte moraimashita ka.', hu: 'Ki segített neked?',
+        cloze: 'だれに<ruby>手伝<rt>てつだ</rt></ruby>っ___BLANK___か。', clozeAnswer: 'てもらいました',
+        tokens: ['だれに', 'てつだって', 'もらいましたか', '。'], from: 'l22:3:3' },
+      { jp: '<ruby>美容院<rt>びよういん</rt></ruby>で<ruby>髪<rt>かみ</rt></ruby>を<ruby>切<rt>き</rt></ruby>ってもらいました。',
+        kana: 'びよういんでかみをきってもらいました。', romaji: 'biyouin de kami o kitte moraimashita.', hu: 'Levágattam a hajam a fodrásznál.',
+        cloze: '<ruby>美容院<rt>びよういん</rt></ruby>で<ruby>髪<rt>かみ</rt></ruby>を<ruby>切<rt>き</rt></ruby>っ___BLANK___。', clozeAnswer: 'てもらいました',
+        tokens: ['びよういんで', 'かみを', 'きって', 'もらいました', '。'], from: 'l22:3:4' }
     ],
     contrasts: ['te_ageru', 'te_kureru', 'moraimasu']
   },
@@ -2101,7 +2705,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>来<rt>き</rt></ruby>てくれて、ありがとう。',
         kana: 'きょうはきてくれて、ありがとう。', romaji: 'kyou wa kite kurete, arigatou.', hu: 'Köszi, hogy ma eljöttél.',
         cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>来<rt>き</rt></ruby>___BLANK___、ありがとう。', clozeAnswer: 'てくれて',
-        tokens: ['きょうは', 'きてくれて', '、', 'ありがとう', '。'] }
+        tokens: ['きょうは', 'きてくれて', '、', 'ありがとう', '。'] },
+      { jp: '<ruby>来<rt>き</rt></ruby>てくれて、ありがとう。',
+        kana: 'きてくれて、ありがとう。', romaji: 'kite kurete, arigatou.', hu: 'Köszi, hogy eljöttél.',
+        cloze: '<ruby>来<rt>き</rt></ruby>___BLANK___、ありがとう。', clozeAnswer: 'てくれて',
+        tokens: ['きて', 'くれて', '、', 'ありがとう', '。'], from: 'l22:4:1' },
+      { jp: '<ruby>駅<rt>えき</rt></ruby>まで<ruby>迎<rt>むか</rt></ruby>えに<ruby>来<rt>き</rt></ruby>てくれて、ありがとうございます。',
+        kana: 'えきまでむかえにきてくれて、ありがとうございます。', romaji: 'eki made mukae ni kite kurete, arigatou gozaimasu.', hu: 'Köszönöm, hogy kijött elém az állomásra.',
+        cloze: '<ruby>駅<rt>えき</rt></ruby>まで<ruby>迎<rt>むか</rt></ruby>えに<ruby>来<rt>き</rt></ruby>___BLANK___、ありがとうございます。', clozeAnswer: 'てくれて',
+        tokens: ['えきまで', 'むかえに', 'きて', 'くれて', '、', 'ありがとう', 'ございます', '。'], from: 'l22:4:2' },
+      { jp: '<ruby>誘<rt>さそ</rt></ruby>ってくれて、ありがとう。',
+        kana: 'さそってくれて、ありがとう。', romaji: 'sasotte kurete, arigatou.', hu: 'Köszi, hogy hívtál.',
+        cloze: '<ruby>誘<rt>さそ</rt></ruby>っ___BLANK___、ありがとう。', clozeAnswer: 'てくれて',
+        tokens: ['さそって', 'くれて', '、', 'ありがとう', '。'], from: 'l22:4:3' }
     ],
     contrasts: ['te_kureru', 'te_reason']
   },
@@ -2118,7 +2734,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>窓<rt>まど</rt></ruby>は<ruby>開<rt>あ</rt></ruby>けておいてください。',
         kana: 'まどはあけておいてください。', romaji: 'mado wa akete oite kudasai.', hu: 'Az ablakot hagyja nyitva, kérem!',
         cloze: '<ruby>窓<rt>まど</rt></ruby>は<ruby>開<rt>あ</rt></ruby>け___BLANK___ください。', clozeAnswer: 'ておいて',
-        tokens: ['まどは', 'あけておいてください', '。'] }
+        tokens: ['まどは', 'あけておいてください', '。'] },
+      { jp: '<ruby>窓<rt>まど</rt></ruby>を<ruby>開<rt>あ</rt></ruby>けておいてください。',
+        kana: 'まどをあけておいてください。', romaji: 'mado o akete oite kudasai.', hu: 'Kérem, hagyja nyitva az ablakot.',
+        cloze: '<ruby>窓<rt>まど</rt></ruby>を<ruby>開<rt>あ</rt></ruby>け___BLANK___ください。', clozeAnswer: 'ておいて',
+        tokens: ['まどを', 'あけて', 'おいて', 'ください', '。'], from: 'l22:5:3' },
+      { jp: '<ruby>行<rt>い</rt></ruby>きかたを<ruby>調<rt>しら</rt></ruby>べておきます。',
+        kana: 'いきかたをしらべておきます。', romaji: 'ikikata o shirabete okimasu.', hu: 'Előre utánanézek, hogyan kell odamenni.',
+        cloze: '<ruby>行<rt>い</rt></ruby>きかたを<ruby>調<rt>しら</rt></ruby>べ___BLANK___。', clozeAnswer: 'ておきます',
+        tokens: ['いきかたを', 'しらべて', 'おきます', '。'], from: 'l22:5:4' },
+      { jp: 'そのままにしておいてください。',
+        kana: 'そのままにしておいてください。', romaji: 'sono mama ni shite oite kudasai.', hu: 'Hagyja úgy, ahogy van.',
+        cloze: 'そのままにし___BLANK___ください。', clozeAnswer: 'ておいて',
+        tokens: ['その', 'ままに', 'して', 'おいて', 'ください', '。'], from: 'l22:5:7' }
     ],
     contrasts: ['te_aru', 'te_shimau']
   },
@@ -2171,7 +2799,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>っていただけませんか。',
         kana: 'しゃしんをとっていただけませんか。', romaji: 'shashin o totte itadakemasen ka.', hu: 'Lefényképezne, kérem?',
         cloze: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>っ___BLANK___。', clozeAnswer: 'ていただけませんか',
-        tokens: ['しゃしんを', 'とっていただけませんか', '。'] }
+        tokens: ['しゃしんを', 'とっていただけませんか', '。'] },
+      { jp: '<ruby>駅<rt>えき</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く<ruby>道<rt>みち</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えていただけませんか。',
+        kana: 'えきへいくみちをおしえていただけませんか。', romaji: 'eki e iku michi o oshiete itadakemasen ka.', hu: 'Megmondaná, merre van az állomás?',
+        cloze: '<ruby>駅<rt>えき</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く<ruby>道<rt>みち</rt></ruby>を<ruby>教<rt>おし</rt></ruby>え___BLANK___。', clozeAnswer: 'ていただけませんか',
+        tokens: ['えきへ', 'いく', 'みちを', 'おしえて', 'いただけませんか', '。'], from: 'l23:3:2' },
+      { jp: 'すみませんが、もう<ruby>少<rt>すこ</rt></ruby>しゆっくり<ruby>話<rt>はな</rt></ruby>していただけませんか。',
+        kana: 'すみませんが、もうすこしゆっくりはなしていただけませんか。', romaji: 'sumimasen ga, mou sukoshi yukkuri hanashite itadakemasen ka.', hu: 'Elnézést, beszélne egy kicsit lassabban?',
+        cloze: 'すみませんが、もう<ruby>少<rt>すこ</rt></ruby>しゆっくり<ruby>話<rt>はな</rt></ruby>し___BLANK___。', clozeAnswer: 'ていただけませんか',
+        tokens: ['すみませんが', '、', 'もう', 'すこし', 'ゆっくり', 'はなして', 'いただけませんか', '。'], from: 'l23:3:4' }
     ],
     contrasts: ['te_kuremasenka', 'o_kudasai']
   },
@@ -2205,7 +2841,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'お<ruby>金<rt>かね</rt></ruby>はもうありません。',
         kana: 'おかねはもうありません。', romaji: 'okane wa mou arimasen.', hu: 'Már nincs pénzem.',
         cloze: 'お<ruby>金<rt>かね</rt></ruby>は___BLANK___ありません。', clozeAnswer: 'もう',
-        tokens: ['おかねは', 'もう', 'ありません', '。'] }
+        tokens: ['おかねは', 'もう', 'ありません', '。'] },
+      { jp: 'まだ<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っています。',
+        kana: 'まだあめがふっています。', romaji: 'mada ame ga futte imasu.', hu: 'Még mindig esik az eső.',
+        cloze: '___BLANK___<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っています。', clozeAnswer: 'まだ',
+        tokens: ['まだ', 'あめが', 'ふって', 'います', '。'], from: 'l23:5:1' },
+      { jp: 'まだ<ruby>時間<rt>じかん</rt></ruby>があります。',
+        kana: 'まだじかんがあります。', romaji: 'mada jikan ga arimasu.', hu: 'Még van idő.',
+        cloze: '___BLANK___<ruby>時間<rt>じかん</rt></ruby>があります。', clozeAnswer: 'まだ',
+        tokens: ['まだ', 'じかんが', 'あります', '。'], from: 'l23:5:2' },
+      { jp: 'もう<ruby>時間<rt>じかん</rt></ruby>がありません。',
+        kana: 'もうじかんがありません。', romaji: 'mou jikan ga arimasen.', hu: 'Már nincs idő.',
+        cloze: '___BLANK___<ruby>時間<rt>じかん</rt></ruby>がありません。', clozeAnswer: 'もう',
+        tokens: ['もう', 'じかんが', 'ありません', '。'], from: 'l23:5:3' }
     ],
     contrasts: ['mou_mada']
   },
@@ -2258,7 +2906,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>しわかってきました。',
         kana: 'にほんごがすこしわかってきました。', romaji: 'nihongo ga sukoshi wakatte kimashita.', hu: 'Kezdem egy kicsit érteni a japánt.',
         cloze: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>しわかっ___BLANK___。', clozeAnswer: 'てきました',
-        tokens: ['にほんごが', 'すこし', 'わかってきました', '。'] }
+        tokens: ['にほんごが', 'すこし', 'わかってきました', '。'] },
+      { jp: '<ruby>日本語<rt>にほんご</rt></ruby>がわかってきました。',
+        kana: 'にほんごがわかってきました。', romaji: 'nihongo ga wakatte kimashita.', hu: 'Kezdem érteni a japánt.',
+        cloze: '<ruby>日本語<rt>にほんご</rt></ruby>がわかっ___BLANK___。', clozeAnswer: 'てきました',
+        tokens: ['にほんごが', 'わかって', 'きました', '。'], from: 'l24:3:2' },
+      { jp: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ってきました。',
+        kana: 'あめがふってきました。', romaji: 'ame ga futte kimashita.', hu: 'Eleredt az eső.',
+        cloze: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っ___BLANK___。', clozeAnswer: 'てきました',
+        tokens: ['あめが', 'ふって', 'きました', '。'], from: 'l24:3:3' },
+      { jp: '<ruby>最近<rt>さいきん</rt></ruby>、<ruby>暖<rt>あたた</rt></ruby>かくなってきましたね。',
+        kana: 'さいきん、あたたかくなってきましたね。', romaji: 'saikin, atatakaku natte kimashita ne.', hu: 'Mostanában kezd melegedni az idő.',
+        cloze: '<ruby>最近<rt>さいきん</rt></ruby>、<ruby>暖<rt>あたた</rt></ruby>かくなっ___BLANK___ね。', clozeAnswer: 'てきました',
+        tokens: ['さいきん', '、', 'あたたかく', 'なって', 'きましたね', '。'], from: 'l24:3:4' }
     ],
     contrasts: ['te_iku_change', 'ku_naru']
   },
@@ -2275,7 +2935,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'これからも<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>していきます。',
         kana: 'これからもにほんごをべんきょうしていきます。', romaji: 'kore kara mo nihongo o benkyou shite ikimasu.', hu: 'Ezután is tovább tanulom a japánt.',
         cloze: 'これからも<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>し___BLANK___。', clozeAnswer: 'ていきます',
-        tokens: ['これからも', 'にほんごを', 'べんきょう', 'していきます', '。'] }
+        tokens: ['これからも', 'にほんごを', 'べんきょう', 'していきます', '。'] },
+      { jp: 'これから<ruby>暖<rt>あたた</rt></ruby>かくなっていきます。',
+        kana: 'これからあたたかくなっていきます。', romaji: 'kore kara atatakaku natte ikimasu.', hu: 'Mostantól egyre melegebb lesz.',
+        cloze: 'これから<ruby>暖<rt>あたた</rt></ruby>かくなっ___BLANK___。', clozeAnswer: 'ていきます',
+        tokens: ['これから', 'あたたかく', 'なって', 'いきます', '。'], from: 'l24:4:2' },
+      { jp: 'これからどんどん<ruby>寒<rt>さむ</rt></ruby>くなっていきます。',
+        kana: 'これからどんどんさむくなっていきます。', romaji: 'kore kara dondon samuku natte ikimasu.', hu: 'Mostantól egyre hidegebb lesz.',
+        cloze: 'これからどんどん<ruby>寒<rt>さむ</rt></ruby>くなっ___BLANK___。', clozeAnswer: 'ていきます',
+        tokens: ['これから', 'どんどん', 'さむく', 'なって', 'いきます', '。'], from: 'l24:4:4' }
     ],
     contrasts: ['te_kita_change', 'te_iku_way']
   },
@@ -2292,7 +2960,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>子<rt>こ</rt></ruby>どもだけでなく、<ruby>大人<rt>おとな</rt></ruby>も<ruby>楽<rt>たの</rt></ruby>しめます。',
         kana: 'こどもだけでなく、おとなもたのしめます。', romaji: 'kodomo dake de naku, otona mo tanoshimemasu.', hu: 'Nemcsak a gyerekek, a felnőttek is élvezhetik.',
         cloze: '<ruby>子<rt>こ</rt></ruby>ども___BLANK___、<ruby>大人<rt>おとな</rt></ruby>も<ruby>楽<rt>たの</rt></ruby>しめます。', clozeAnswer: 'だけでなく',
-        tokens: ['こどもだけでなく', '、', 'おとなも', 'たのしめます', '。'] }
+        tokens: ['こどもだけでなく', '、', 'おとなも', 'たのしめます', '。'] },
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>英語<rt>えいご</rt></ruby>だけでなく、<ruby>中国語<rt>ちゅうごくご</rt></ruby>もできます。',
+        kana: 'たなかさんはえいごだけでなく、ちゅうごくごもできます。', romaji: 'tanaka-san wa eigo dake de naku, chuugokugo mo dekimasu.', hu: 'Tanaka nemcsak angolul, hanem kínaiul is tud.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>英語<rt>えいご</rt></ruby>___BLANK___、<ruby>中国語<rt>ちゅうごくご</rt></ruby>もできます。', clozeAnswer: 'だけでなく',
+        tokens: ['たなかさんは', 'えいごだけで', 'なく', '、', 'ちゅうごくごも', 'できます', '。'], from: 'l24:6:1' },
+      { jp: 'このレストランは<ruby>安<rt>やす</rt></ruby>いだけでなく、おいしいです。',
+        kana: 'このレストランはやすいだけでなく、おいしいです。', romaji: 'kono resutoran wa yasui dake de naku, oishii desu.', hu: 'Ez az étterem nemcsak olcsó, hanem finom is.',
+        cloze: 'このレストランは<ruby>安<rt>やす</rt></ruby>い___BLANK___、おいしいです。', clozeAnswer: 'だけでなく',
+        tokens: ['この', 'レストランは', 'やすいだけで', 'なく', '、', 'おいしいです', '。'], from: 'l24:6:2' },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもだけでなく、<ruby>大人<rt>おとな</rt></ruby>もこのゲームが<ruby>好<rt>す</rt></ruby>きです。',
+        kana: 'こどもだけでなく、おとなもこのゲームがすきです。', romaji: 'kodomo dake de naku, otona mo kono geemu ga suki desu.', hu: 'Nemcsak a gyerekek, a felnőttek is szeretik ezt a játékot.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>ども___BLANK___、<ruby>大人<rt>おとな</rt></ruby>もこのゲームが<ruby>好<rt>す</rt></ruby>きです。', clozeAnswer: 'だけでなく',
+        tokens: ['こどもだけで', 'なく', '、', 'おとなも', 'この', 'ゲームが', 'すきです', '。'], from: 'l24:6:3' }
     ],
     contrasts: ['dake', 'mo_mo']
   },
@@ -2309,7 +2989,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>友<rt>とも</rt></ruby>だちのおかげで、<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れました。',
         kana: 'ともだちのおかげで、にほんのせいかつになれました。', romaji: 'tomodachi no okage de, nihon no seikatsu ni naremashita.', hu: 'A barátaimnak köszönhetően megszoktam a japán életet.',
         cloze: '<ruby>友<rt>とも</rt></ruby>だちの___BLANK___、<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>に<ruby>慣<rt>な</rt></ruby>れました。', clozeAnswer: 'おかげで',
-        tokens: ['ともだちのおかげで', '、', 'にほんのせいかつに', 'なれました', '。'] }
+        tokens: ['ともだちのおかげで', '、', 'にほんのせいかつに', 'なれました', '。'] },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>のおかげで、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>しました。',
+        kana: 'せんせいのおかげで、しけんにごうかくしました。', romaji: 'sensei no okage de, shiken ni goukaku shimashita.', hu: 'A tanáromnak köszönhetően átmentem a vizsgán.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>の___BLANK___、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>しました。', clozeAnswer: 'おかげで',
+        tokens: ['せんせいの', 'おかげで', '、', 'しけんに', 'ごうかく', 'しました', '。'], from: 'l24:7:1' },
+      { jp: 'みなさんのおかげで、<ruby>楽<rt>たの</rt></ruby>しい<ruby>旅行<rt>りょこう</rt></ruby>になりました。',
+        kana: 'みなさんのおかげで、たのしいりょこうになりました。', romaji: 'mina-san no okage de, tanoshii ryokou ni narimashita.', hu: 'Önöknek köszönhetően élvezetes út lett belőle.',
+        cloze: 'みなさんの___BLANK___、<ruby>楽<rt>たの</rt></ruby>しい<ruby>旅行<rt>りょこう</rt></ruby>になりました。', clozeAnswer: 'おかげで',
+        tokens: ['みなさんの', 'おかげで', '、', 'たのしい', 'りょこうに', 'なりました', '。'], from: 'l24:7:3' },
+      { jp: '<ruby>友<rt>とも</rt></ruby>だちが<ruby>手伝<rt>てつだ</rt></ruby>ってくれたおかげで、<ruby>早<rt>はや</rt></ruby>く<ruby>終<rt>お</rt></ruby>わりました。',
+        kana: 'ともだちがてつだってくれたおかげで、はやくおわりました。', romaji: 'tomodachi ga tetsudatte kureta okage de, hayaku owarimashita.', hu: 'A barátom segítségének köszönhetően hamar végeztem.',
+        cloze: '<ruby>友<rt>とも</rt></ruby>だちが<ruby>手伝<rt>てつだ</rt></ruby>ってくれた___BLANK___、<ruby>早<rt>はや</rt></ruby>く<ruby>終<rt>お</rt></ruby>わりました。', clozeAnswer: 'おかげで',
+        tokens: ['ともだちが', 'てつだって', 'くれた', 'おかげで', '、', 'はやく', 'おわりました', '。'], from: 'l24:7:4' }
     ],
     contrasts: ['kara_reason', 'node']
   },
@@ -2345,7 +3037,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>田中<rt>たなか</rt></ruby>さんはもう<ruby>知<rt>し</rt></ruby>っているはずです。',
         kana: 'たなかさんはもうしっているはずです。', romaji: 'tanaka-san wa mou shitte iru hazu desu.', hu: 'Tanakának már tudnia kell róla.',
         cloze: '<ruby>田中<rt>たなか</rt></ruby>さんはもう<ruby>知<rt>し</rt></ruby>っている___BLANK___です。', clozeAnswer: 'はず',
-        tokens: ['たなかさんは', 'もう', 'しっているはずです', '。'] }
+        tokens: ['たなかさんは', 'もう', 'しっているはずです', '。'] },
+      { jp: '<ruby>荷物<rt>にもつ</rt></ruby>はもう<ruby>届<rt>とど</rt></ruby>いているはずです。',
+        kana: 'にもつはもうとどいているはずです。', romaji: 'nimotsu wa mou todoite iru hazu desu.', hu: 'A csomagnak már meg kellett érkeznie.',
+        cloze: '<ruby>荷物<rt>にもつ</rt></ruby>はもう<ruby>届<rt>とど</rt></ruby>いている___BLANK___。', clozeAnswer: 'はずです',
+        tokens: ['にもつはもう', 'とどいて', 'いる', 'はずです', '。'], from: 'l25:2:1' },
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>今日<rt>きょう</rt></ruby><ruby>休<rt>やす</rt></ruby>みのはずです。',
+        kana: 'たなかさんはきょうやすみのはずです。', romaji: 'tanaka-san wa kyou yasumi no hazu desu.', hu: 'Tanakának ma elvileg szabadnapja van.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>今日<rt>きょう</rt></ruby><ruby>休<rt>やす</rt></ruby>みの___BLANK___。', clozeAnswer: 'はずです',
+        tokens: ['たなかさんは', 'きょう', 'やすみの', 'はずです', '。'], from: 'l25:2:2' },
+      { jp: 'この<ruby>道<rt>みち</rt></ruby>で<ruby>合<rt>あ</rt></ruby>っているはずです。',
+        kana: 'このみちであっているはずです。', romaji: 'kono michi de atte iru hazu desu.', hu: 'Elvileg ez a jó út.',
+        cloze: 'この<ruby>道<rt>みち</rt></ruby>で<ruby>合<rt>あ</rt></ruby>っている___BLANK___。', clozeAnswer: 'はずです',
+        tokens: ['この', 'みちで', 'あって', 'いる', 'はずです', '。'], from: 'l25:2:3' }
     ],
     contrasts: ['darou_to_omou', 'kamoshirenai', 'ni_chigai_nai']
   },
@@ -2379,7 +3083,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'おいしいかどうか、<ruby>食<rt>た</rt></ruby>べてみます。',
         kana: 'おいしいかどうか、たべてみます。', romaji: 'oishii ka dou ka, tabete mimasu.', hu: 'Megkóstolom, hogy finom-e.',
         cloze: 'おいしい___BLANK___、<ruby>食<rt>た</rt></ruby>べてみます。', clozeAnswer: 'かどうか',
-        tokens: ['おいしいかどうか', '、', 'たべてみます', '。'] }
+        tokens: ['おいしいかどうか', '、', 'たべてみます', '。'] },
+      { jp: '<ruby>席<rt>せき</rt></ruby>が<ruby>空<rt>あ</rt></ruby>いているかどうか、<ruby>聞<rt>き</rt></ruby>いてみます。',
+        kana: 'せきがあいているかどうか、きいてみます。', romaji: 'seki ga aite iru ka dou ka, kiite mimasu.', hu: 'Megkérdezem, van-e szabad hely.',
+        cloze: '<ruby>席<rt>せき</rt></ruby>が<ruby>空<rt>あ</rt></ruby>いている___BLANK___、<ruby>聞<rt>き</rt></ruby>いてみます。', clozeAnswer: 'かどうか',
+        tokens: ['せきが', 'あいて', 'いるか', 'どうか', '、', 'きいて', 'みます', '。'], from: 'l25:5:2' },
+      { jp: 'おいしいかどうか、<ruby>食<rt>た</rt></ruby>べてみてください。',
+        kana: 'おいしいかどうか、たべてみてください。', romaji: 'oishii ka dou ka, tabete mite kudasai.', hu: 'Kóstolja meg, finom-e.',
+        cloze: 'おいしい___BLANK___、<ruby>食<rt>た</rt></ruby>べてみてください。', clozeAnswer: 'かどうか',
+        tokens: ['おいしいか', 'どうか', '、', 'たべて', 'みて', 'ください', '。'], from: 'l25:5:3' },
+      { jp: '<ruby>予約<rt>よやく</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>かどうか、<ruby>電話<rt>でんわ</rt></ruby>で<ruby>聞<rt>き</rt></ruby>いてみます。',
+        kana: 'よやくがひつようかどうか、でんわできいてみます。', romaji: 'yoyaku ga hitsuyou ka dou ka, denwa de kiite mimasu.', hu: 'Telefonon megkérdezem, kell-e foglalni.',
+        cloze: '<ruby>予約<rt>よやく</rt></ruby>が<ruby>必要<rt>ひつよう</rt></ruby>___BLANK___、<ruby>電話<rt>でんわ</rt></ruby>で<ruby>聞<rt>き</rt></ruby>いてみます。', clozeAnswer: 'かどうか',
+        tokens: ['よやくが', 'ひつようか', 'どうか', '、', 'でんわで', 'きいて', 'みます', '。'], from: 'l25:5:4' }
     ],
     contrasts: ['embedded_ka']
   },
@@ -2413,7 +3129,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'これでいいかな。',
         kana: 'これでいいかな。', romaji: 'kore de ii kana.', hu: 'Vajon így jó lesz?',
         cloze: 'これでいい___BLANK___。', clozeAnswer: 'かな',
-        tokens: ['これで', 'いいかな', '。'] }
+        tokens: ['これで', 'いいかな', '。'] },
+      { jp: 'あしたは<ruby>晴<rt>は</rt></ruby>れるかな。',
+        kana: 'あしたははれるかな。', romaji: 'ashita wa hareru ka na.', hu: 'Vajon holnap kisüt a nap?',
+        cloze: 'あしたは<ruby>晴<rt>は</rt></ruby>れる___BLANK___。', clozeAnswer: 'かな',
+        tokens: ['あしたは', 'はれるかな', '。'], from: 'l25:7:1' },
+      { jp: 'お<ruby>土産<rt>みやげ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>がいいかな。',
+        kana: 'おみやげはなにがいいかな。', romaji: 'o-miyage wa nani ga ii ka na.', hu: 'Vajon mi lenne jó ajándéknak?',
+        cloze: 'お<ruby>土産<rt>みやげ</rt></ruby>は<ruby>何<rt>なに</rt></ruby>がいい___BLANK___。', clozeAnswer: 'かな',
+        tokens: ['おみやげは', 'なにが', 'いいかな', '。'], from: 'l25:7:2' },
+      { jp: '<ruby>一人<rt>ひとり</rt></ruby>で<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>かな。',
+        kana: 'ひとりでだいじょうぶかな。', romaji: 'hitori de daijoubu ka na.', hu: 'Vajon egyedül is menni fog?',
+        cloze: '<ruby>一人<rt>ひとり</rt></ruby>で<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>___BLANK___。', clozeAnswer: 'かな',
+        tokens: ['ひとりで', 'だいじょうぶかな', '。'], from: 'l25:7:3' }
     ],
     contrasts: ['no_question', 'deshou']
   },
@@ -2432,7 +3160,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>二十歳<rt>はたち</rt></ruby>になったら、お<ruby>酒<rt>さけ</rt></ruby>が<ruby>飲<rt>の</rt></ruby>めます。',
         kana: 'はたちになったら、おさけがのめます。', romaji: 'hatachi ni nattara, osake ga nomemasu.', hu: 'Amikor betöltöm a húszat, ihatok alkoholt.',
         cloze: '<ruby>二十歳<rt>はたち</rt></ruby>になっ___BLANK___、お<ruby>酒<rt>さけ</rt></ruby>が<ruby>飲<rt>の</rt></ruby>めます。', clozeAnswer: 'たら',
-        tokens: ['はたちに', 'なったら', '、', 'おさけが', 'のめます', '。'] }
+        tokens: ['はたちに', 'なったら', '、', 'おさけが', 'のめます', '。'] },
+      { jp: '<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>したら、<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>きたいです。',
+        kana: 'だいがくをそつぎょうしたら、にほんではたらきたいです。', romaji: 'daigaku o sotsugyou shitara, nihon de hatarakitai desu.', hu: 'Ha elvégzem az egyetemet, Japánban szeretnék dolgozni.',
+        cloze: '<ruby>大学<rt>だいがく</rt></ruby>を<ruby>卒業<rt>そつぎょう</rt></ruby>し___BLANK___、<ruby>日本<rt>にほん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>きたいです。', clozeAnswer: 'たら',
+        tokens: ['だいがくを', 'そつぎょう', 'したら', '、', 'にほんで', 'はたらきたいです', '。'], from: 'l26:2:2' },
+      { jp: '<ruby>宿題<rt>しゅくだい</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったら、ゲームをしてもいいですよ。',
+        kana: 'しゅくだいがおわったら、ゲームをしてもいいですよ。', romaji: 'shukudai ga owattara, geemu o shite mo ii desu yo.', hu: 'Ha kész a lecke, játszhatsz.',
+        cloze: '<ruby>宿題<rt>しゅくだい</rt></ruby>が<ruby>終<rt>お</rt></ruby>わっ___BLANK___、ゲームをしてもいいですよ。', clozeAnswer: 'たら',
+        tokens: ['しゅくだいが', 'おわったら', '、', 'ゲームを', 'しても', 'いいですよ', '。'], from: 'l26:2:3' },
+      { jp: '<ruby>春<rt>はる</rt></ruby>になったら、<ruby>花見<rt>はなみ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょう。',
+        kana: 'はるになったら、はなみにいきましょう。', romaji: 'haru ni nattara, hanami ni ikimashou.', hu: 'Ha kitavaszodik, menjünk cseresznyevirágot nézni!',
+        cloze: '<ruby>春<rt>はる</rt></ruby>になっ___BLANK___、<ruby>花見<rt>はなみ</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょう。', clozeAnswer: 'たら',
+        tokens: ['はるに', 'なったら', '、', 'はなみに', 'いきましょう', '。'], from: 'l26:2:4' }
     ],
     contrasts: ['tara', 'te_kara', 'ru_toki_ta_toki']
   },
@@ -2483,7 +3223,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>五時<rt>ごじ</rt></ruby>までに<ruby>帰<rt>かえ</rt></ruby>ります。',
         kana: 'ごじまでにかえります。', romaji: 'goji made ni kaerimasu.', hu: 'Legkésőbb ötre hazaérek.',
         cloze: '<ruby>五時<rt>ごじ</rt></ruby>___BLANK___<ruby>帰<rt>かえ</rt></ruby>ります。', clozeAnswer: 'までに',
-        tokens: ['ごじまでに', 'かえります', '。'] }
+        tokens: ['ごじまでに', 'かえります', '。'] },
+      { jp: '<ruby>夏休<rt>なつやす</rt></ruby>みが<ruby>終<rt>お</rt></ruby>わるまでに、この<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。',
+        kana: 'なつやすみがおわるまでに、このほんをよみます。', romaji: 'natsuyasumi ga owaru made ni, kono hon o yomimasu.', hu: 'Mire véget ér a nyári szünet, elolvasom ezt a könyvet.',
+        cloze: '<ruby>夏休<rt>なつやす</rt></ruby>みが<ruby>終<rt>お</rt></ruby>わる___BLANK___、この<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みます。', clozeAnswer: 'までに',
+        tokens: ['なつやすみが', 'おわるまでに', '、', 'この', 'ほんを', 'よみます', '。'], from: 'l26:6:4' },
+      { jp: 'いつまでに<ruby>返<rt>かえ</rt></ruby>さなければなりませんか。',
+        kana: 'いつまでにかえさなければなりませんか。', romaji: 'itsu made ni kaesanakereba narimasen ka.', hu: 'Meddig kell visszaadnom?',
+        cloze: 'いつ___BLANK___<ruby>返<rt>かえ</rt></ruby>さなければなりませんか。', clozeAnswer: 'までに',
+        tokens: ['いつまでに', 'かえさなければ', 'なりませんか', '。'], from: 'l26:6:5' },
+      { jp: '<ruby>卒業<rt>そつぎょう</rt></ruby>するまでに、<ruby>運転免許<rt>うんてんめんきょ</rt></ruby>を<ruby>取<rt>と</rt></ruby>りたいです。',
+        kana: 'そつぎょうするまでに、うんてんめんきょをとりたいです。', romaji: 'sotsugyou suru made ni, unten menkyo o toritai desu.', hu: 'Mire végzek, szeretnék jogosítványt szerezni.',
+        cloze: '<ruby>卒業<rt>そつぎょう</rt></ruby>する___BLANK___、<ruby>運転免許<rt>うんてんめんきょ</rt></ruby>を<ruby>取<rt>と</rt></ruby>りたいです。', clozeAnswer: 'までに',
+        tokens: ['そつぎょう', 'するまでに', '、', 'うんてん', 'めんきょを', 'とりたいです', '。'], from: 'l26:6:6' }
     ],
     contrasts: ['kara_made']
   },
@@ -2500,7 +3252,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'それはあなたらしくないです。',
         kana: 'それはあなたらしくないです。', romaji: 'sore wa anata rashikunai desu.', hu: 'Ez nem vall rád.',
         cloze: 'それはあなた___BLANK___ないです。', clozeAnswer: 'らしく',
-        tokens: ['それは', 'あなたらしくないです', '。'] }
+        tokens: ['それは', 'あなたらしくないです', '。'] },
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんらしい<ruby>考<rt>かんが</rt></ruby>えですね。',
+        kana: 'たなかさんらしいかんがえですね。', romaji: 'tanaka-san rashii kangae desu ne.', hu: 'Ez Tanakára valló ötlet.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さん___BLANK___<ruby>考<rt>かんが</rt></ruby>えですね。', clozeAnswer: 'らしい',
+        tokens: ['たなかさん', 'らしい', 'かんがえですね', '。'], from: 'l26:7:2' },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもらしい<ruby>絵<rt>え</rt></ruby>です。',
+        kana: 'こどもらしいえです。', romaji: 'kodomo rashii e desu.', hu: 'Igazi gyerekrajz.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>ども___BLANK___<ruby>絵<rt>え</rt></ruby>です。', clozeAnswer: 'らしい',
+        tokens: ['こども', 'らしいえです', '。'], from: 'l26:7:3' },
+      { jp: '<ruby>文句<rt>もんく</rt></ruby>を<ruby>言<rt>い</rt></ruby>うのは、あなたらしくないですよ。',
+        kana: 'もんくをいうのは、あなたらしくないですよ。', romaji: 'monku o iu no wa, anata rashiku nai desu yo.', hu: 'Nem vall rád, hogy panaszkodsz.',
+        cloze: '<ruby>文句<rt>もんく</rt></ruby>を<ruby>言<rt>い</rt></ruby>うのは、あなた___BLANK___ないですよ。', clozeAnswer: 'らしく',
+        tokens: ['もんくを', 'いうのは', '、', 'あなた', 'らしく', 'ないですよ', '。'], from: 'l26:7:4' }
     ],
     contrasts: ['you_desu']
   },
@@ -2519,7 +3283,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>水<rt>みず</rt></ruby>は<ruby>飲<rt>の</rt></ruby>めません。',
         kana: 'このみずはのめません。', romaji: 'kono mizu wa nomemasen.', hu: 'Ez a víz nem iható.',
         cloze: 'この<ruby>水<rt>みず</rt></ruby>は<ruby>飲<rt>の</rt></ruby>___BLANK___。', clozeAnswer: 'めません',
-        tokens: ['この', 'みずは', 'のめません', '。'] }
+        tokens: ['この', 'みずは', 'のめません', '。'] },
+      { jp: '<ruby>漢字<rt>かんじ</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し<ruby>読<rt>よ</rt></ruby>めます。',
+        kana: 'かんじがすこしよめます。', romaji: 'kanji ga sukoshi yomemasu.', hu: 'Egy kicsit tudok kanjit olvasni.',
+        cloze: '<ruby>漢字<rt>かんじ</rt></ruby>が<ruby>少<rt>すこ</rt></ruby>し<ruby>読<rt>よ</rt></ruby>___BLANK___。', clozeAnswer: 'めます',
+        tokens: ['かんじが', 'すこし', 'よめます', '。'], from: 'l27:1:2' },
+      { jp: 'この<ruby>水<rt>みず</rt></ruby>は<ruby>飲<rt>の</rt></ruby>めますか。',
+        kana: 'このみずはのめますか。', romaji: 'kono mizu wa nomemasu ka.', hu: 'Iható ez a víz?',
+        cloze: 'この<ruby>水<rt>みず</rt></ruby>は<ruby>飲<rt>の</rt></ruby>___BLANK___か。', clozeAnswer: 'めます',
+        tokens: ['この', 'みずは', 'のめますか', '。'], from: 'l27:3:4' }
     ],
     contrasts: ['koto_ga_dekiru', 'ga_jouzu']
   },
@@ -2536,7 +3308,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'だれに<ruby>聞<rt>き</rt></ruby>いたらいいですか。',
         kana: 'だれにきいたらいいですか。', romaji: 'dare ni kiitara ii desu ka.', hu: 'Kitől kérdezzem meg?',
         cloze: 'だれに<ruby>聞<rt>き</rt></ruby>い___BLANK___。', clozeAnswer: 'たらいいですか',
-        tokens: ['だれに', 'きいたらいいですか', '。'] }
+        tokens: ['だれに', 'きいたらいいですか', '。'] },
+      { jp: '<ruby>私<rt>わたし</rt></ruby>は<ruby>何<rt>なに</rt></ruby>をしたらいいですか。',
+        kana: 'わたしはなにをしたらいいですか。', romaji: 'watashi wa nani o shitara ii desu ka.', hu: 'Én mit csináljak?',
+        cloze: '<ruby>私<rt>わたし</rt></ruby>は<ruby>何<rt>なに</rt></ruby>をし___BLANK___。', clozeAnswer: 'たらいいですか',
+        tokens: ['わたしは', 'なにを', 'したら', 'いいですか', '。'], from: 'l27:4:1' },
+      { jp: 'いつまでに<ruby>返<rt>かえ</rt></ruby>したらいいですか。',
+        kana: 'いつまでにかえしたらいいですか。', romaji: 'itsu made ni kaeshitara ii desu ka.', hu: 'Meddig hozzam vissza?',
+        cloze: 'いつまでに<ruby>返<rt>かえ</rt></ruby>し___BLANK___。', clozeAnswer: 'たらいいですか',
+        tokens: ['いつまでに', 'かえしたら', 'いいですか', '。'], from: 'l27:4:3' }
     ],
     contrasts: ['ta_hou_ga_ii', 'tara']
   },
@@ -2553,7 +3333,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'そんな<ruby>話<rt>はなし</rt></ruby>はうそにきまっています。',
         kana: 'そんなはなしはうそにきまっています。', romaji: 'sonna hanashi wa uso ni kimatte imasu.', hu: 'Az ilyen történet biztosan hazugság.',
         cloze: 'そんな<ruby>話<rt>はなし</rt></ruby>はうそ___BLANK___。', clozeAnswer: 'にきまっています',
-        tokens: ['そんな', 'はなしは', 'うそにきまっています', '。'] }
+        tokens: ['そんな', 'はなしは', 'うそにきまっています', '。'] },
+      { jp: '<ruby>一人<rt>ひとり</rt></ruby>では<ruby>無理<rt>むり</rt></ruby>にきまっています。',
+        kana: 'ひとりではむりにきまっています。', romaji: 'hitori de wa muri ni kimatte imasu.', hu: 'Egyedül ez nyilván lehetetlen.',
+        cloze: '<ruby>一人<rt>ひとり</rt></ruby>では<ruby>無理<rt>むり</rt></ruby>___BLANK___。', clozeAnswer: 'にきまっています',
+        tokens: ['ひとりでは', 'むりに', 'きまって', 'います', '。'], from: 'l27:6:2' },
+      { jp: 'そんなうわさは、うそにきまっています。',
+        kana: 'そんなうわさは、うそにきまっています。', romaji: 'sonna uwasa wa, uso ni kimatte imasu.', hu: 'Az ilyen pletyka nyilván hazugság.',
+        cloze: 'そんなうわさは、うそ___BLANK___。', clozeAnswer: 'にきまっています',
+        tokens: ['そんな', 'うわさは', '、', 'うそに', 'きまって', 'います', '。'], from: 'l27:6:3' },
+      { jp: '<ruby>練習<rt>れんしゅう</rt></ruby>しなかったから、<ruby>負<rt>ま</rt></ruby>けるに<ruby>決<rt>き</rt></ruby>まっています。',
+        kana: 'れんしゅうしなかったから、まけるにきまっています。', romaji: 'renshuu shinakatta kara, makeru ni kimatte imasu.', hu: 'Nem gyakoroltunk, úgyhogy biztosan kikapunk.',
+        cloze: '<ruby>練習<rt>れんしゅう</rt></ruby>しなかったから、<ruby>負<rt>ま</rt></ruby>ける___BLANK___。', clozeAnswer: 'にきまっています',
+        tokens: ['れんしゅう', 'しなかったから', '、', 'まけるに', 'きまって', 'います', '。'], from: 'l27:6:4' }
     ],
     contrasts: ['ni_chigai_nai', 'hazu_desu']
   },
@@ -2570,7 +3362,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は<ruby>映画<rt>えいが</rt></ruby>とかを<ruby>見<rt>み</rt></ruby>ます。',
         kana: 'やすみのひはえいがとかをみます。', romaji: 'yasumi no hi wa eiga toka o mimasu.', hu: 'Szabadnapon például filmet nézek.',
         cloze: '<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は<ruby>映画<rt>えいが</rt></ruby>___BLANK___を<ruby>見<rt>み</rt></ruby>ます。', clozeAnswer: 'とか',
-        tokens: ['やすみのひは', 'えいがとかを', 'みます', '。'] }
+        tokens: ['やすみのひは', 'えいがとかを', 'みます', '。'] },
+      { jp: '<ruby>日曜日<rt>にちようび</rt></ruby>とか、どう？',
+        kana: 'にちようびとか、どう？', romaji: 'nichiyoubi toka, dou?', hu: 'Mondjuk vasárnap?',
+        cloze: '<ruby>日曜日<rt>にちようび</rt></ruby>___BLANK___、どう？', clozeAnswer: 'とか',
+        tokens: ['にちようび', 'とか', '、', 'どう', '？'], from: 'l27:7:4' },
+      { jp: '<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>はゲームとかしています。',
+        kana: 'やすみのひはゲームとかしています。', romaji: 'yasumi no hi wa geemu toka shite imasu.', hu: 'Szabadnapon játszom, meg ilyesmi.',
+        cloze: '<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>はゲーム___BLANK___しています。', clozeAnswer: 'とか',
+        tokens: ['やすみの', 'ひは', 'ゲーム', 'とか', 'して', 'います', '。'], from: 'l27:7:5' }
     ],
     contrasts: ['to_ya', 'tari_tari']
   },
@@ -2606,7 +3406,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'お<ruby>手洗<rt>てあら</rt></ruby>いは<ruby>二階<rt>にかい</rt></ruby>でございます。',
         kana: 'おてあらいはにかいでございます。', romaji: 'otearai wa nikai de gozaimasu.', hu: 'A mosdó a második szinten található.',
         cloze: 'お<ruby>手洗<rt>てあら</rt></ruby>いは<ruby>二階<rt>にかい</rt></ruby>___BLANK___。', clozeAnswer: 'でございます',
-        tokens: ['おてあらいは', 'にかいでございます', '。'] }
+        tokens: ['おてあらいは', 'にかいでございます', '。'] },
+      { jp: 'こちらは<ruby>新<rt>あたら</rt></ruby>しいモデルでございます。',
+        kana: 'こちらはあたらしいモデルでございます。', romaji: 'kochira wa atarashii moderu de gozaimasu.', hu: 'Ez itt az új modell.',
+        cloze: 'こちらは<ruby>新<rt>あたら</rt></ruby>しいモデル___BLANK___。', clozeAnswer: 'でございます',
+        tokens: ['こちらは', 'あたらしい', 'モデルで', 'ございます', '。'], from: 'l28:4:1' },
+      { jp: '<ruby>営業時間<rt>えいぎょうじかん</rt></ruby>は<ruby>十時<rt>じゅうじ</rt></ruby>から<ruby>八時<rt>はちじ</rt></ruby>まででございます。',
+        kana: 'えいぎょうじかんはじゅうじからはちじまででございます。', romaji: 'eigyou jikan wa juuji kara hachiji made de gozaimasu.', hu: 'A nyitvatartás tíztől nyolcig tart.',
+        cloze: '<ruby>営業時間<rt>えいぎょうじかん</rt></ruby>は<ruby>十時<rt>じゅうじ</rt></ruby>から<ruby>八時<rt>はちじ</rt></ruby>まで___BLANK___。', clozeAnswer: 'でございます',
+        tokens: ['えいぎょう', 'じかんは', 'じゅうじから', 'はちじまでで', 'ございます', '。'], from: 'l28:4:6' }
     ],
     contrasts: ['wa_desu', 'o_kudasai']
   },
@@ -2640,7 +3448,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>日本人<rt>にほんじん</rt></ruby>にちがいありません。',
         kana: 'あのひとはにほんじんにちがいありません。', romaji: 'ano hito wa nihonjin ni chigai arimasen.', hu: 'Az az ember kétségtelenül japán.',
         cloze: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>日本人<rt>にほんじん</rt></ruby>___BLANK___。', clozeAnswer: 'にちがいありません',
-        tokens: ['あの', 'ひとは', 'にほんじん', 'にちがいありません', '。'] }
+        tokens: ['あの', 'ひとは', 'にほんじん', 'にちがいありません', '。'] },
+      { jp: '<ruby>彼<rt>かれ</rt></ruby>は<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>ったにちがいありません。',
+        kana: 'かれはみちにまよったにちがいありません。', romaji: 'kare wa michi ni mayotta ni chigai arimasen.', hu: 'Biztosan eltévedt.',
+        cloze: '<ruby>彼<rt>かれ</rt></ruby>は<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>った___BLANK___。', clozeAnswer: 'にちがいありません',
+        tokens: ['かれは', 'みちに', 'まよったに', 'ちがい', 'ありません', '。'], from: 'l28:6:2' },
+      { jp: '<ruby>電気<rt>でんき</rt></ruby>がついていますから、だれかいるにちがいありません。',
+        kana: 'でんきがついていますから、だれかいるにちがいありません。', romaji: 'denki ga tsuite imasu kara, dare ka iru ni chigai arimasen.', hu: 'Ég a villany, biztosan van bent valaki.',
+        cloze: '<ruby>電気<rt>でんき</rt></ruby>がついていますから、だれかいる___BLANK___。', clozeAnswer: 'にちがいありません',
+        tokens: ['でんきが', 'ついて', 'いますから', '、', 'だれか', 'いるに', 'ちがい', 'ありません', '。'], from: 'l28:6:4' },
+      { jp: 'あの<ruby>二人<rt>ふたり</rt></ruby>は<ruby>兄弟<rt>きょうだい</rt></ruby>にちがいありません。',
+        kana: 'あのふたりはきょうだいにちがいありません。', romaji: 'ano futari wa kyoudai ni chigai arimasen.', hu: 'Az a kettő minden bizonnyal testvér.',
+        cloze: 'あの<ruby>二人<rt>ふたり</rt></ruby>は<ruby>兄弟<rt>きょうだい</rt></ruby>___BLANK___。', clozeAnswer: 'にちがいありません',
+        tokens: ['あの', 'ふたりは', 'きょうだいに', 'ちがい', 'ありません', '。'], from: 'l28:6:6' }
     ],
     contrasts: ['ni_kimatte_iru', 'hazu_desu', 'kamoshirenai']
   },
@@ -2659,7 +3479,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>今<rt>いま</rt></ruby>からごはんを<ruby>食<rt>た</rt></ruby>べるところです。',
         kana: 'いまからごはんをたべるところです。', romaji: 'ima kara gohan o taberu tokoro desu.', hu: 'Épp most készülök enni.',
         cloze: '<ruby>今<rt>いま</rt></ruby>からごはんを<ruby>食<rt>た</rt></ruby>べる___BLANK___です。', clozeAnswer: 'ところ',
-        tokens: ['いまから', 'ごはんを', 'たべるところです', '。'] }
+        tokens: ['いまから', 'ごはんを', 'たべるところです', '。'] },
+      { jp: '<ruby>今<rt>いま</rt></ruby>から<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べるところです。',
+        kana: 'いまからひるごはんをたべるところです。', romaji: 'ima kara hirugohan o taberu tokoro desu.', hu: 'Éppen ebédelni készülök.',
+        cloze: '<ruby>今<rt>いま</rt></ruby>から<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べる___BLANK___。', clozeAnswer: 'ところです',
+        tokens: ['いまから', 'ひるごはんを', 'たべる', 'ところです', '。'], from: 'l29:1:2' },
+      { jp: 'ちょうど<ruby>電話<rt>でんわ</rt></ruby>するところでした。',
+        kana: 'ちょうどでんわするところでした。', romaji: 'choudo denwa suru tokoro deshita.', hu: 'Épp telefonálni akartam.',
+        cloze: 'ちょうど<ruby>電話<rt>でんわ</rt></ruby>する___BLANK___でした。', clozeAnswer: 'ところ',
+        tokens: ['ちょうど', 'でんわ', 'する', 'ところでした', '。'], from: 'l29:1:3' },
+      { jp: '<ruby>今<rt>いま</rt></ruby>、<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>るところです。',
+        kana: 'いま、いえをでるところです。', romaji: 'ima, ie o deru tokoro desu.', hu: 'Épp most indulok otthonról.',
+        cloze: '<ruby>今<rt>いま</rt></ruby>、<ruby>家<rt>いえ</rt></ruby>を<ruby>出<rt>で</rt></ruby>る___BLANK___。', clozeAnswer: 'ところです',
+        tokens: ['いま', '、', 'いえを', 'でる', 'ところです', '。'], from: 'l29:1:4' }
     ],
     contrasts: ['te_iru_tokoro', 'ta_tokoro']
   },
@@ -2676,7 +3508,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>今<rt>いま</rt></ruby><ruby>調<rt>しら</rt></ruby>べているところです。',
         kana: 'いましらべているところです。', romaji: 'ima shirabete iru tokoro desu.', hu: 'Éppen most nézek utána.',
         cloze: '<ruby>今<rt>いま</rt></ruby><ruby>調<rt>しら</rt></ruby>べ___BLANK___です。', clozeAnswer: 'ているところ',
-        tokens: ['いま', 'しらべているところです', '。'] }
+        tokens: ['いま', 'しらべているところです', '。'] },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>と<ruby>話<rt>はな</rt></ruby>しているところです。',
+        kana: 'せんせいとはなしているところです。', romaji: 'sensei to hanashite iru tokoro desu.', hu: 'Éppen a tanárral beszélek.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>と<ruby>話<rt>はな</rt></ruby>し___BLANK___。', clozeAnswer: 'ているところです',
+        tokens: ['せんせいと', 'はなして', 'いる', 'ところです', '。'], from: 'l29:2:3' },
+      { jp: '<ruby>今<rt>いま</rt></ruby>、<ruby>考<rt>かんが</rt></ruby>えているところですから、ちょっと<ruby>待<rt>ま</rt></ruby>ってください。',
+        kana: 'いま、かんがえているところですから、ちょっとまってください。', romaji: 'ima, kangaete iru tokoro desu kara, chotto matte kudasai.', hu: 'Épp gondolkodom, várjon egy kicsit.',
+        cloze: '<ruby>今<rt>いま</rt></ruby>、<ruby>考<rt>かんが</rt></ruby>え___BLANK___から、ちょっと<ruby>待<rt>ま</rt></ruby>ってください。', clozeAnswer: 'ているところです',
+        tokens: ['いま', '、', 'かんがえて', 'いる', 'ところですから', '、', 'ちょっと', 'まって', 'ください', '。'], from: 'l29:2:4' },
+      { jp: '<ruby>今<rt>いま</rt></ruby>、そちらに<ruby>向<rt>む</rt></ruby>かっているところです。',
+        kana: 'いま、そちらにむかっているところです。', romaji: 'ima, sochira ni mukatte iru tokoro desu.', hu: 'Éppen úton vagyok önökhöz.',
+        cloze: '<ruby>今<rt>いま</rt></ruby>、そちらに<ruby>向<rt>む</rt></ruby>かっ___BLANK___。', clozeAnswer: 'ているところです',
+        tokens: ['いま', '、', 'そちらに', 'むかって', 'いる', 'ところです', '。'], from: 'l29:2:5' }
     ],
     contrasts: ['ru_tokoro', 'ta_tokoro', 'te_iru_progress']
   },
@@ -2693,7 +3537,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'ちょうど<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>いたところです。',
         kana: 'ちょうどえきについたところです。', romaji: 'choudo eki ni tsuita tokoro desu.', hu: 'Épp most értem az állomásra.',
         cloze: 'ちょうど<ruby>駅<rt>えき</rt></ruby>に<ruby>着<rt>つ</rt></ruby>い___BLANK___です。', clozeAnswer: 'たところ',
-        tokens: ['ちょうど', 'えきに', 'ついたところです', '。'] }
+        tokens: ['ちょうど', 'えきに', 'ついたところです', '。'] },
+      { jp: 'たった<ruby>今<rt>いま</rt></ruby><ruby>着<rt>つ</rt></ruby>いたところです。',
+        kana: 'たったいまついたところです。', romaji: 'tatta ima tsuita tokoro desu.', hu: 'Éppen most érkeztem.',
+        cloze: 'たった<ruby>今<rt>いま</rt></ruby><ruby>着<rt>つ</rt></ruby>い___BLANK___。', clozeAnswer: 'たところです',
+        tokens: ['たった', 'いま', 'ついた', 'ところです', '。'], from: 'l29:3:1' },
+      { jp: '<ruby>授業<rt>じゅぎょう</rt></ruby>が<ruby>終<rt>お</rt></ruby>わったところです。',
+        kana: 'じゅぎょうがおわったところです。', romaji: 'jugyou ga owatta tokoro desu.', hu: 'Éppen most ért véget az óra.',
+        cloze: '<ruby>授業<rt>じゅぎょう</rt></ruby>が<ruby>終<rt>お</rt></ruby>わっ___BLANK___。', clozeAnswer: 'たところです',
+        tokens: ['じゅぎょうが', 'おわった', 'ところです', '。'], from: 'l29:3:2' },
+      { jp: 'ちょうど<ruby>今<rt>いま</rt></ruby>、パンが<ruby>焼<rt>や</rt></ruby>けたところです。',
+        kana: 'ちょうどいま、パンがやけたところです。', romaji: 'choudo ima, pan ga yaketa tokoro desu.', hu: 'Épp most sült meg a kenyér.',
+        cloze: 'ちょうど<ruby>今<rt>いま</rt></ruby>、パンが<ruby>焼<rt>や</rt></ruby>け___BLANK___。', clozeAnswer: 'たところです',
+        tokens: ['ちょうど', 'いま', '、', 'パンが', 'やけた', 'ところです', '。'], from: 'l29:3:4' }
     ],
     contrasts: ['ru_tokoro', 'te_iru_tokoro']
   },
@@ -2727,7 +3583,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>少<rt>すこ</rt></ruby>し<ruby>遅<rt>おく</rt></ruby>れるということです。',
         kana: 'たなかさんはすこしおくれるということです。', romaji: 'tanaka-san wa sukoshi okureru to iu koto desu.', hu: 'Tanaka azt üzeni, hogy késik egy kicsit.',
         cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>少<rt>すこ</rt></ruby>し<ruby>遅<rt>おく</rt></ruby>れる___BLANK___。', clozeAnswer: 'ということです',
-        tokens: ['たなかさんは', 'すこし', 'おくれるということです', '。'] }
+        tokens: ['たなかさんは', 'すこし', 'おくれるということです', '。'] },
+      { jp: 'あしたの<ruby>授業<rt>じゅぎょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みだということです。',
+        kana: 'あしたのじゅぎょうはやすみだということです。', romaji: 'ashita no jugyou wa yasumi da to iu koto desu.', hu: 'Úgy tudom, a holnapi óra elmarad.',
+        cloze: 'あしたの<ruby>授業<rt>じゅぎょう</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みだ___BLANK___。', clozeAnswer: 'ということです',
+        tokens: ['あしたの', 'じゅぎょうは', 'やすみだと', 'いう', 'ことです', '。'], from: 'l29:5:1' },
+      { jp: '<ruby>試験<rt>しけん</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby>だということです。',
+        kana: 'しけんはらいしゅうだということです。', romaji: 'shiken wa raishuu da to iu koto desu.', hu: 'A vizsga állítólag jövő héten lesz.',
+        cloze: '<ruby>試験<rt>しけん</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby>だ___BLANK___。', clozeAnswer: 'ということです',
+        tokens: ['しけんは', 'らいしゅうだと', 'いう', 'ことです', '。'], from: 'l29:5:3' },
+      { jp: 'つまり、<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わないということですね。',
+        kana: 'つまり、まにあわないということですね。', romaji: 'tsumari, ma ni awanai to iu koto desu ne.', hu: 'Vagyis nem készül el időre, ugye?',
+        cloze: 'つまり、<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>わない___BLANK___ね。', clozeAnswer: 'ということです',
+        tokens: ['つまり', '、', 'まに', 'あわないと', 'いう', 'ことですね', '。'], from: 'l29:5:4' }
     ],
     contrasts: ['sou_da_hearsay', 'to_iimashita']
   },
@@ -2744,7 +3612,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>問題<rt>もんだい</rt></ruby>についてどう<ruby>思<rt>おも</rt></ruby>いますか。',
         kana: 'このもんだいについてどうおもいますか。', romaji: 'kono mondai ni tsuite dou omoimasu ka.', hu: 'Mit gondolsz erről a kérdésről?',
         cloze: 'この<ruby>問題<rt>もんだい</rt></ruby>___BLANK___どう<ruby>思<rt>おも</rt></ruby>いますか。', clozeAnswer: 'について',
-        tokens: ['この', 'もんだいについて', 'どう', 'おもいますか', '。'] }
+        tokens: ['この', 'もんだいについて', 'どう', 'おもいますか', '。'] },
+      { jp: '<ruby>留学<rt>りゅうがく</rt></ruby>について<ruby>先生<rt>せんせい</rt></ruby>に<ruby>相談<rt>そうだん</rt></ruby>しました。',
+        kana: 'りゅうがくについてせんせいにそうだんしました。', romaji: 'ryuugaku ni tsuite sensei ni soudan shimashita.', hu: 'A külföldi tanulásról tanácsot kértem a tanártól.',
+        cloze: '<ruby>留学<rt>りゅうがく</rt></ruby>___BLANK___<ruby>先生<rt>せんせい</rt></ruby>に<ruby>相談<rt>そうだん</rt></ruby>しました。', clozeAnswer: 'について',
+        tokens: ['りゅうがくに', 'ついて', 'せんせいに', 'そうだん', 'しました', '。'], from: 'l29:6:3' },
+      { jp: 'この<ruby>町<rt>まち</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>について<ruby>調<rt>しら</rt></ruby>べています。',
+        kana: 'このまちのれきしについてしらべています。', romaji: 'kono machi no rekishi ni tsuite shirabete imasu.', hu: 'Ennek a városnak a történetét kutatom.',
+        cloze: 'この<ruby>町<rt>まち</rt></ruby>の<ruby>歴史<rt>れきし</rt></ruby>___BLANK___<ruby>調<rt>しら</rt></ruby>べています。', clozeAnswer: 'について',
+        tokens: ['この', 'まちの', 'れきしに', 'ついて', 'しらべて', 'います', '。'], from: 'l29:6:4' },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>学校<rt>がっこう</rt></ruby>についての<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みました。',
+        kana: 'にほんのがっこうについてのほんをよみました。', romaji: 'nihon no gakkou ni tsuite no hon o yomimashita.', hu: 'Olvastam egy könyvet a japán iskolákról.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>学校<rt>がっこう</rt></ruby>___BLANK___の<ruby>本<rt>ほん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>みました。', clozeAnswer: 'について',
+        tokens: ['にほんの', 'がっこうに', 'ついての', 'ほんを', 'よみました', '。'], from: 'l29:6:5' }
     ],
     contrasts: ['ni_yotte']
   },
@@ -2763,7 +3643,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>少<rt>すこ</rt></ruby>し<ruby>遅<rt>おく</rt></ruby>れてもかまいません。',
         kana: 'すこしおくれてもかまいません。', romaji: 'sukoshi okurete mo kamaimasen.', hu: 'Nem baj, ha késik egy kicsit.',
         cloze: '<ruby>少<rt>すこ</rt></ruby>し<ruby>遅<rt>おく</rt></ruby>れ___BLANK___。', clozeAnswer: 'てもかまいません',
-        tokens: ['すこし', 'おくれてもかまいません', '。'] }
+        tokens: ['すこし', 'おくれてもかまいません', '。'] },
+      { jp: 'ここに<ruby>座<rt>すわ</rt></ruby>ってもかまいませんか。',
+        kana: 'ここにすわってもかまいませんか。', romaji: 'koko ni suwatte mo kamaimasen ka.', hu: 'Nem baj, ha ideülök?',
+        cloze: 'ここに<ruby>座<rt>すわ</rt></ruby>っ___BLANK___か。', clozeAnswer: 'てもかまいません',
+        tokens: ['ここに', 'すわっても', 'かまいませんか', '。'], from: 'l30:3:1' },
+      { jp: '<ruby>鉛筆<rt>えんぴつ</rt></ruby>で<ruby>書<rt>か</rt></ruby>いてもかまいません。',
+        kana: 'えんぴつでかいてもかまいません。', romaji: 'enpitsu de kaite mo kamaimasen.', hu: 'Ceruzával is írhatja.',
+        cloze: '<ruby>鉛筆<rt>えんぴつ</rt></ruby>で<ruby>書<rt>か</rt></ruby>い___BLANK___。', clozeAnswer: 'てもかまいません',
+        tokens: ['えんぴつで', 'かいても', 'かまいません', '。'], from: 'l30:3:2' },
+      { jp: '<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>ってもかまいません。',
+        kana: 'じしょをつかってもかまいません。', romaji: 'jisho o tsukatte mo kamaimasen.', hu: 'Szótárt is használhat.',
+        cloze: '<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>っ___BLANK___。', clozeAnswer: 'てもかまいません',
+        tokens: ['じしょを', 'つかっても', 'かまいません', '。'], from: 'l30:3:4' }
     ],
     contrasts: ['te_mo_ii', 'nakute_mo_kamaimasen']
   },
@@ -2780,7 +3672,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>今日<rt>きょう</rt></ruby><ruby>来<rt>こ</rt></ruby>なくてもかまいません。',
         kana: 'きょうこなくてもかまいません。', romaji: 'kyou konakute mo kamaimasen.', hu: 'Nem baj, ha ma nem jön el.',
         cloze: '<ruby>今日<rt>きょう</rt></ruby><ruby>来<rt>こ</rt></ruby>___BLANK___。', clozeAnswer: 'なくてもかまいません',
-        tokens: ['きょう', 'こなくてもかまいません', '。'] }
+        tokens: ['きょう', 'こなくてもかまいません', '。'] },
+      { jp: '<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>覚<rt>おぼ</rt></ruby>えなくてもかまいません。',
+        kana: 'ぜんぶおぼえなくてもかまいません。', romaji: 'zenbu oboenakute mo kamaimasen.', hu: 'Nem kell mindet megjegyezni.',
+        cloze: '<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>覚<rt>おぼ</rt></ruby>え___BLANK___。', clozeAnswer: 'なくてもかまいません',
+        tokens: ['ぜんぶ', 'おぼえなくても', 'かまいません', '。'], from: 'l30:2:2' },
+      { jp: '<ruby>無理<rt>むり</rt></ruby>に<ruby>来<rt>こ</rt></ruby>なくてもかまいませんよ。',
+        kana: 'むりにこなくてもかまいませんよ。', romaji: 'muri ni konakute mo kamaimasen yo.', hu: 'Nem kell mindenáron eljönnie.',
+        cloze: '<ruby>無理<rt>むり</rt></ruby>に<ruby>来<rt>こ</rt></ruby>___BLANK___よ。', clozeAnswer: 'なくてもかまいません',
+        tokens: ['むりに', 'こなくても', 'かまいませんよ', '。'], from: 'l30:2:3' },
+      { jp: '<ruby>返事<rt>へんじ</rt></ruby>は<ruby>今日<rt>きょう</rt></ruby>じゃなくてもかまいません。',
+        kana: 'へんじはきょうじゃなくてもかまいません。', romaji: 'henji wa kyou ja nakute mo kamaimasen.', hu: 'Nem baj, ha nem ma válaszol.',
+        cloze: '<ruby>返事<rt>へんじ</rt></ruby>は<ruby>今日<rt>きょう</rt></ruby>じゃ___BLANK___。', clozeAnswer: 'なくてもかまいません',
+        tokens: ['へんじは', 'きょうじゃ', 'なくても', 'かまいません', '。'], from: 'l30:2:4' }
     ],
     contrasts: ['nakute_mo_ii', 'te_mo_kamaimasen']
   },
@@ -2797,7 +3701,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>人<rt>ひと</rt></ruby>によって<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>います。',
         kana: 'ひとによってかんがえかたがちがいます。', romaji: 'hito ni yotte kangaekata ga chigaimasu.', hu: 'Embere válogatja, ki hogyan gondolkodik.',
         cloze: '<ruby>人<rt>ひと</rt></ruby>___BLANK___<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>います。', clozeAnswer: 'によって',
-        tokens: ['ひとによって', 'かんがえかたが', 'ちがいます', '。'] }
+        tokens: ['ひとによって', 'かんがえかたが', 'ちがいます', '。'] },
+      { jp: '<ruby>国<rt>くに</rt></ruby>によって<ruby>習慣<rt>しゅうかん</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>います。',
+        kana: 'くにによってしゅうかんがちがいます。', romaji: 'kuni ni yotte shuukan ga chigaimasu.', hu: 'Országonként mások a szokások.',
+        cloze: '<ruby>国<rt>くに</rt></ruby>___BLANK___<ruby>習慣<rt>しゅうかん</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>います。', clozeAnswer: 'によって',
+        tokens: ['くにに', 'よって', 'しゅうかんが', 'ちがいます', '。'], from: 'l30:4:1' },
+      { jp: '<ruby>日<rt>ひ</rt></ruby>によって<ruby>値段<rt>ねだん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。',
+        kana: 'ひによってねだんがかわります。', romaji: 'hi ni yotte nedan ga kawarimasu.', hu: 'Naptól függően változik az ár.',
+        cloze: '<ruby>日<rt>ひ</rt></ruby>___BLANK___<ruby>値段<rt>ねだん</rt></ruby>が<ruby>変<rt>か</rt></ruby>わります。', clozeAnswer: 'によって',
+        tokens: ['ひに', 'よって', 'ねだんが', 'かわります', '。'], from: 'l30:4:3' },
+      { jp: '<ruby>店<rt>みせ</rt></ruby>によって<ruby>値段<rt>ねだん</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>います。',
+        kana: 'みせによってねだんがちがいます。', romaji: 'mise ni yotte nedan ga chigaimasu.', hu: 'Boltonként más az ár.',
+        cloze: '<ruby>店<rt>みせ</rt></ruby>___BLANK___<ruby>値段<rt>ねだん</rt></ruby>が<ruby>違<rt>ちが</rt></ruby>います。', clozeAnswer: 'によって',
+        tokens: ['みせに', 'よって', 'ねだんが', 'ちがいます', '。'], from: 'l30:4:4' }
     ],
     contrasts: ['ni_tsuite', 'ni_kurabete']
   },
@@ -2814,7 +3730,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'ちょっと<ruby>見<rt>み</rt></ruby>てもらえませんか。',
         kana: 'ちょっとみてもらえませんか。', romaji: 'chotto mite moraemasen ka.', hu: 'Megnézné egy pillanatra?',
         cloze: 'ちょっと<ruby>見<rt>み</rt></ruby>___BLANK___。', clozeAnswer: 'てもらえませんか',
-        tokens: ['ちょっと', 'みてもらえませんか', '。'] }
+        tokens: ['ちょっと', 'みてもらえませんか', '。'] },
+      { jp: 'スピーチをしてもらえませんか。',
+        kana: 'スピーチをしてもらえませんか。', romaji: 'supiichi o shite moraemasen ka.', hu: 'Tartana egy beszédet?',
+        cloze: 'スピーチをし___BLANK___。', clozeAnswer: 'てもらえませんか',
+        tokens: ['スピーチを', 'して', 'もらえませんか', '。'], from: 'l30:6:1' }
     ],
     contrasts: ['te_kuremasenka', 'te_itadakemasenka']
   },
@@ -2850,7 +3770,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>去年<rt>きょねん</rt></ruby>にくらべて、<ruby>今年<rt>ことし</rt></ruby>は<ruby>暑<rt>あつ</rt></ruby>いです。',
         kana: 'きょねんにくらべて、ことしはあついです。', romaji: 'kyonen ni kurabete, kotoshi wa atsui desu.', hu: 'Tavalyhoz képest idén meleg van.',
         cloze: '<ruby>去年<rt>きょねん</rt></ruby>___BLANK___、<ruby>今年<rt>ことし</rt></ruby>は<ruby>暑<rt>あつ</rt></ruby>いです。', clozeAnswer: 'にくらべて',
-        tokens: ['きょねんにくらべて', '、', 'ことしは', 'あついです', '。'] }
+        tokens: ['きょねんにくらべて', '、', 'ことしは', 'あついです', '。'] },
+      { jp: '<ruby>兄<rt>あに</rt></ruby>にくらべて、<ruby>私<rt>わたし</rt></ruby>は<ruby>背<rt>せ</rt></ruby>が<ruby>低<rt>ひく</rt></ruby>いです。',
+        kana: 'あににくらべて、わたしはせがひくいです。', romaji: 'ani ni kurabete, watashi wa se ga hikui desu.', hu: 'A bátyámhoz képest alacsony vagyok.',
+        cloze: '<ruby>兄<rt>あに</rt></ruby>___BLANK___、<ruby>私<rt>わたし</rt></ruby>は<ruby>背<rt>せ</rt></ruby>が<ruby>低<rt>ひく</rt></ruby>いです。', clozeAnswer: 'にくらべて',
+        tokens: ['あにに', 'くらべて', '、', 'わたしは', 'せが', 'ひくいです', '。'], from: 'l31:3:3' },
+      { jp: '<ruby>十年前<rt>じゅうねんまえ</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて、<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くなりました。',
+        kana: 'じゅうねんまえにくらべて、ぶっかがたかくなりました。', romaji: 'juunen mae ni kurabete, bukka ga takaku narimashita.', hu: 'Tíz évvel ezelőtthöz képest drágább lett az élet.',
+        cloze: '<ruby>十年前<rt>じゅうねんまえ</rt></ruby>___BLANK___、<ruby>物価<rt>ぶっか</rt></ruby>が<ruby>高<rt>たか</rt></ruby>くなりました。', clozeAnswer: 'にくらべて',
+        tokens: ['じゅうねん', 'まえに', 'くらべて', '、', 'ぶっかが', 'たかく', 'なりました', '。'], from: 'l31:3:4' },
+      { jp: '<ruby>都会<rt>とかい</rt></ruby>に<ruby>比<rt>くら</rt></ruby>べて、<ruby>田舎<rt>いなか</rt></ruby>は<ruby>空気<rt>くうき</rt></ruby>がきれいです。',
+        kana: 'とかいにくらべて、いなかはくうきがきれいです。', romaji: 'tokai ni kurabete, inaka wa kuuki ga kirei desu.', hu: 'A nagyvároshoz képest vidéken tiszta a levegő.',
+        cloze: '<ruby>都会<rt>とかい</rt></ruby>___BLANK___、<ruby>田舎<rt>いなか</rt></ruby>は<ruby>空気<rt>くうき</rt></ruby>がきれいです。', clozeAnswer: 'にくらべて',
+        tokens: ['とかいに', 'くらべて', '、', 'いなかは', 'くうきが', 'きれいです', '。'], from: 'l31:3:5' }
     ],
     contrasts: ['yori_hou_ga', 'ni_yotte']
   },
@@ -2867,7 +3799,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>隣<rt>となり</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>から<ruby>音楽<rt>おんがく</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえます。',
         kana: 'となりのへやからおんがくがきこえます。', romaji: 'tonari no heya kara ongaku ga kikoemasu.', hu: 'A szomszéd szobából zene hallatszik.',
         cloze: '<ruby>隣<rt>となり</rt></ruby>の<ruby>部屋<rt>へや</rt></ruby>から<ruby>音楽<rt>おんがく</rt></ruby>が___BLANK___。', clozeAnswer: 'きこえます',
-        tokens: ['となりのへやから', 'おんがくが', 'きこえます', '。'] }
+        tokens: ['となりのへやから', 'おんがくが', 'きこえます', '。'] },
+      { jp: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>若<rt>わか</rt></ruby>く<ruby>見<rt>み</rt></ruby>えます。',
+        kana: 'たなかさんはわかくみえます。', romaji: 'tanaka-san wa wakaku miemasu.', hu: 'Tanaka fiatalnak látszik.',
+        cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>若<rt>わか</rt></ruby>く___BLANK___。', clozeAnswer: 'みえます',
+        tokens: ['たなかさんは', 'わかく', 'みえます', '。'], from: 'l31:4:5' }
     ],
     contrasts: ['potential']
   },
@@ -2884,7 +3820,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>留守<rt>るす</rt></ruby>のようです。',
         kana: 'たなかさんはるすのようです。', romaji: 'tanaka-san wa rusu no you desu.', hu: 'Úgy tűnik, Tanaka nincs otthon.',
         cloze: '<ruby>田中<rt>たなか</rt></ruby>さんは<ruby>留守<rt>るす</rt></ruby>の___BLANK___。', clozeAnswer: 'ようです',
-        tokens: ['たなかさんは', 'るすのようです', '。'] }
+        tokens: ['たなかさんは', 'るすのようです', '。'] },
+      { jp: '<ruby>外<rt>そと</rt></ruby>は<ruby>寒<rt>さむ</rt></ruby>いようです。',
+        kana: 'そとはさむいようです。', romaji: 'soto wa samui you desu.', hu: 'Úgy tűnik, kint hideg van.',
+        cloze: '<ruby>外<rt>そと</rt></ruby>は<ruby>寒<rt>さむ</rt></ruby>い___BLANK___。', clozeAnswer: 'ようです',
+        tokens: ['そとは', 'さむいようです', '。'], from: 'l31:5:2' },
+      { jp: '<ruby>電気<rt>でんき</rt></ruby>が<ruby>消<rt>き</rt></ruby>えています。もう<ruby>寝<rt>ね</rt></ruby>たようです。',
+        kana: 'でんきがきえています。もうねたようです。', romaji: 'denki ga kiete imasu. mou neta you desu.', hu: 'Le van kapcsolva a villany. Úgy tűnik, már lefeküdt.',
+        cloze: '<ruby>電気<rt>でんき</rt></ruby>が<ruby>消<rt>き</rt></ruby>えています。もう<ruby>寝<rt>ね</rt></ruby>た___BLANK___。', clozeAnswer: 'ようです',
+        tokens: ['でんきが', 'きえて', 'います', '。', 'もう', 'ねたようです', '。'], from: 'l31:5:4' },
+      { jp: 'どうも<ruby>風邪<rt>かぜ</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>いたようです。',
+        kana: 'どうもかぜをひいたようです。', romaji: 'doumo kaze o hiita you desu.', hu: 'Úgy tűnik, megfáztam.',
+        cloze: 'どうも<ruby>風邪<rt>かぜ</rt></ruby>を<ruby>引<rt>ひ</rt></ruby>いた___BLANK___。', clozeAnswer: 'ようです',
+        tokens: ['どうも', 'かぜを', 'ひいたようです', '。'], from: 'l31:5:5' }
     ],
     contrasts: ['sou_da_hearsay', 'kamoshirenai', 'rashii_typical']
   },
@@ -2903,7 +3851,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>来週<rt>らいしゅう</rt></ruby><ruby>会議<rt>かいぎ</rt></ruby>をすることになりました。',
         kana: 'らいしゅうかいぎをすることになりました。', romaji: 'raishuu kaigi o suru koto ni narimashita.', hu: 'Úgy döntöttek, hogy jövő héten értekezlet lesz.',
         cloze: '<ruby>来週<rt>らいしゅう</rt></ruby><ruby>会議<rt>かいぎ</rt></ruby>をする___BLANK___。', clozeAnswer: 'ことになりました',
-        tokens: ['らいしゅう', 'かいぎを', 'することになりました', '。'] }
+        tokens: ['らいしゅう', 'かいぎを', 'することになりました', '。'] },
+      { jp: '<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby><ruby>行<rt>おこな</rt></ruby>うことになりました。',
+        kana: 'かいぎはらいしゅうおこなうことになりました。', romaji: 'kaigi wa raishuu okonau koto ni narimashita.', hu: 'Úgy döntöttek, hogy a megbeszélést jövő héten tartják.',
+        cloze: '<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>来週<rt>らいしゅう</rt></ruby><ruby>行<rt>おこな</rt></ruby>う___BLANK___。', clozeAnswer: 'ことになりました',
+        tokens: ['かいぎは', 'らいしゅう', 'おこなう', 'ことに', 'なりました', '。'], from: 'l32:2:2' },
+      { jp: '<ruby>私<rt>わたし</rt></ruby>が<ruby>発表<rt>はっぴょう</rt></ruby>することになりました。',
+        kana: 'わたしがはっぴょうすることになりました。', romaji: 'watashi ga happyou suru koto ni narimashita.', hu: 'Úgy alakult, hogy én tartom az előadást.',
+        cloze: '<ruby>私<rt>わたし</rt></ruby>が<ruby>発表<rt>はっぴょう</rt></ruby>する___BLANK___。', clozeAnswer: 'ことになりました',
+        tokens: ['わたしが', 'はっぴょう', 'する', 'ことに', 'なりました', '。'], from: 'l32:2:3' },
+      { jp: '<ruby>四月<rt>しがつ</rt></ruby>から<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>で<ruby>勉強<rt>べんきょう</rt></ruby>することになりました。',
+        kana: 'しがつからとうきょうのだいがくでべんきょうすることになりました。', romaji: 'shigatsu kara toukyou no daigaku de benkyou suru koto ni narimashita.', hu: 'Úgy alakult, hogy áprilistól egy tokiói egyetemen tanulok.',
+        cloze: '<ruby>四月<rt>しがつ</rt></ruby>から<ruby>東京<rt>とうきょう</rt></ruby>の<ruby>大学<rt>だいがく</rt></ruby>で<ruby>勉強<rt>べんきょう</rt></ruby>する___BLANK___。', clozeAnswer: 'ことになりました',
+        tokens: ['しがつから', 'とうきょうの', 'だいがくで', 'べんきょう', 'する', 'ことに', 'なりました', '。'], from: 'l32:2:4' }
     ],
     contrasts: ['koto_ni_suru', 'koto_ni_natte_iru']
   },
@@ -2920,7 +3880,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>授業<rt>じゅぎょう</rt></ruby>は<ruby>九時<rt>くじ</rt></ruby>に<ruby>始<rt>はじ</rt></ruby>まることになっています。',
         kana: 'じゅぎょうはくじにはじまることになっています。', romaji: 'jugyou wa kuji ni hajimaru koto ni natte imasu.', hu: 'Az óra a rend szerint kilenckor kezdődik.',
         cloze: '<ruby>授業<rt>じゅぎょう</rt></ruby>は<ruby>九時<rt>くじ</rt></ruby>に<ruby>始<rt>はじ</rt></ruby>まる___BLANK___。', clozeAnswer: 'ことになっています',
-        tokens: ['じゅぎょうは', 'くじに', 'はじまる', 'ことになっています', '。'] }
+        tokens: ['じゅぎょうは', 'くじに', 'はじまる', 'ことになっています', '。'] },
+      { jp: '<ruby>教室<rt>きょうしつ</rt></ruby>では<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>話<rt>はな</rt></ruby>すことになっています。',
+        kana: 'きょうしつではにほんごではなすことになっています。', romaji: 'kyoushitsu de wa nihongo de hanasu koto ni natte imasu.', hu: 'A teremben japánul kell beszélni: ez a szabály.',
+        cloze: '<ruby>教室<rt>きょうしつ</rt></ruby>では<ruby>日本語<rt>にほんご</rt></ruby>で<ruby>話<rt>はな</rt></ruby>す___BLANK___。', clozeAnswer: 'ことになっています',
+        tokens: ['きょうしつでは', 'にほんごで', 'はなす', 'ことに', 'なって', 'います', '。'], from: 'l32:3:1' },
+      { jp: '<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>月曜日<rt>げつようび</rt></ruby>に<ruby>会議<rt>かいぎ</rt></ruby>をすることになっています。',
+        kana: 'まいしゅうげつようびにかいぎをすることになっています。', romaji: 'maishuu getsuyoubi ni kaigi o suru koto ni natte imasu.', hu: 'Hétfőnként megbeszélést tartunk: így van rögzítve.',
+        cloze: '<ruby>毎週<rt>まいしゅう</rt></ruby><ruby>月曜日<rt>げつようび</rt></ruby>に<ruby>会議<rt>かいぎ</rt></ruby>をする___BLANK___。', clozeAnswer: 'ことになっています',
+        tokens: ['まいしゅう', 'げつようびに', 'かいぎを', 'する', 'ことに', 'なって', 'います', '。'], from: 'l32:3:3' },
+      { jp: '<ruby>図書館<rt>としょかん</rt></ruby>では、<ruby>静<rt>しず</rt></ruby>かにすることになっています。',
+        kana: 'としょかんでは、しずかにすることになっています。', romaji: 'toshokan de wa, shizuka ni suru koto ni natte imasu.', hu: 'A könyvtárban csendben kell lenni.',
+        cloze: '<ruby>図書館<rt>としょかん</rt></ruby>では、<ruby>静<rt>しず</rt></ruby>かにする___BLANK___。', clozeAnswer: 'ことになっています',
+        tokens: ['としょかんでは', '、', 'しずかに', 'する', 'ことに', 'なって', 'います', '。'], from: 'l32:3:4' }
     ],
     contrasts: ['nakereba_naranai', 'koto_ni_naru']
   },
@@ -2937,7 +3909,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>肉<rt>にく</rt></ruby>ばかり<ruby>食<rt>た</rt></ruby>べてはいけません。',
         kana: 'にくばかりたべてはいけません。', romaji: 'niku bakari tabete wa ikemasen.', hu: 'Nem szabad csak húst enni.',
         cloze: '<ruby>肉<rt>にく</rt></ruby>___BLANK___<ruby>食<rt>た</rt></ruby>べてはいけません。', clozeAnswer: 'ばかり',
-        tokens: ['にくばかり', 'たべては', 'いけません', '。'] }
+        tokens: ['にくばかり', 'たべては', 'いけません', '。'] },
+      { jp: '<ruby>毎日<rt>まいにち</rt></ruby><ruby>雨<rt>あめ</rt></ruby>ばかりです。',
+        kana: 'まいにちあめばかりです。', romaji: 'mainichi ame bakari desu.', hu: 'Mindennap csak esik.',
+        cloze: '<ruby>毎日<rt>まいにち</rt></ruby><ruby>雨<rt>あめ</rt></ruby>___BLANK___です。', clozeAnswer: 'ばかり',
+        tokens: ['まいにち', 'あめ', 'ばかりです', '。'], from: 'l32:4:2' },
+      { jp: '<ruby>肉<rt>にく</rt></ruby>ばかり<ruby>食<rt>た</rt></ruby>べないでください。',
+        kana: 'にくばかりたべないでください。', romaji: 'niku bakari tabenaide kudasai.', hu: 'Ne csak húst egyél!',
+        cloze: '<ruby>肉<rt>にく</rt></ruby>___BLANK___<ruby>食<rt>た</rt></ruby>べないでください。', clozeAnswer: 'ばかり',
+        tokens: ['にく', 'ばかり', 'たべないで', 'ください', '。'], from: 'l32:4:3' },
+      { jp: '<ruby>妹<rt>いもうと</rt></ruby>は<ruby>甘<rt>あま</rt></ruby>いものばかり<ruby>食<rt>た</rt></ruby>べています。',
+        kana: 'いもうとはあまいものばかりたべています。', romaji: 'imouto wa amai mono bakari tabete imasu.', hu: 'A húgom folyton csak édességet eszik.',
+        cloze: '<ruby>妹<rt>いもうと</rt></ruby>は<ruby>甘<rt>あま</rt></ruby>いもの___BLANK___<ruby>食<rt>た</rt></ruby>べています。', clozeAnswer: 'ばかり',
+        tokens: ['いもうとは', 'あまい', 'もの', 'ばかり', 'たべて', 'います', '。'], from: 'l32:4:4' }
     ],
     contrasts: ['dake', 'shika_nai']
   },
@@ -2954,7 +3938,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>えることがあります。',
         kana: 'にほんごをまちがえることがあります。', romaji: 'nihongo o machigaeru koto ga arimasu.', hu: 'Előfordul, hogy hibázom a japánban.',
         cloze: '<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>間違<rt>まちが</rt></ruby>える___BLANK___。', clozeAnswer: 'ことがあります',
-        tokens: ['にほんごを', 'まちがえることがあります', '。'] }
+        tokens: ['にほんごを', 'まちがえることがあります', '。'] },
+      { jp: '<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べないことがあります。',
+        kana: 'あさごはんをたべないことがあります。', romaji: 'asagohan o tabenai koto ga arimasu.', hu: 'Előfordul, hogy nem reggelizem.',
+        cloze: '<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べない___BLANK___。', clozeAnswer: 'ことがあります',
+        tokens: ['あさごはんを', 'たべない', 'ことが', 'あります', '。'], from: 'l32:6:1' },
+      { jp: 'ときどき<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>うことがあります。',
+        kana: 'ときどきみちにまようことがあります。', romaji: 'tokidoki michi ni mayou koto ga arimasu.', hu: 'Néha előfordul, hogy eltévedek.',
+        cloze: 'ときどき<ruby>道<rt>みち</rt></ruby>に<ruby>迷<rt>まよ</rt></ruby>う___BLANK___。', clozeAnswer: 'ことがあります',
+        tokens: ['ときどき', 'みちに', 'まよう', 'ことが', 'あります', '。'], from: 'l32:6:2' },
+      { jp: '<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べられないことがあります。',
+        kana: 'いそがしくて、ひるごはんをたべられないことがあります。', romaji: 'isogashikute, hirugohan o taberarenai koto ga arimasu.', hu: 'Előfordul, hogy a sok munka miatt nem tudok ebédelni.',
+        cloze: '<ruby>忙<rt>いそが</rt></ruby>しくて、<ruby>昼<rt>ひる</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べられない___BLANK___。', clozeAnswer: 'ことがあります',
+        tokens: ['いそがしくて', '、', 'ひるごはんを', 'たべられない', 'ことが', 'あります', '。'], from: 'l32:6:3' }
     ],
     contrasts: ['ta_koto_ga_aru']
   },
@@ -2971,7 +3967,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>家族<rt>かぞく</rt></ruby>のために、<ruby>毎日<rt>まいにち</rt></ruby><ruby>働<rt>はたら</rt></ruby>きます。',
         kana: 'かぞくのために、まいにちはたらきます。', romaji: 'kazoku no tame ni, mainichi hatarakimasu.', hu: 'A családomért dolgozom minden nap.',
         cloze: '<ruby>家族<rt>かぞく</rt></ruby>の___BLANK___、<ruby>毎日<rt>まいにち</rt></ruby><ruby>働<rt>はたら</rt></ruby>きます。', clozeAnswer: 'ために',
-        tokens: ['かぞくのために', '、', 'まいにち', 'はたらきます', '。'] }
+        tokens: ['かぞくのために', '、', 'まいにち', 'はたらきます', '。'] },
+      { jp: '<ruby>家族<rt>かぞく</rt></ruby>のために<ruby>働<rt>はたら</rt></ruby>きます。',
+        kana: 'かぞくのためにはたらきます。', romaji: 'kazoku no tame ni hatarakimasu.', hu: 'A családomért dolgozom.',
+        cloze: '<ruby>家族<rt>かぞく</rt></ruby>の___BLANK___<ruby>働<rt>はたら</rt></ruby>きます。', clozeAnswer: 'ために',
+        tokens: ['かぞくの', 'ために', 'はたらきます', '。'], from: 'l32:7:2' },
+      { jp: '<ruby>事故<rt>じこ</rt></ruby>のために、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れています。',
+        kana: 'じこのために、でんしゃがおくれています。', romaji: 'jiko no tame ni, densha ga okurete imasu.', hu: 'Baleset miatt késik a vonat.',
+        cloze: '<ruby>事故<rt>じこ</rt></ruby>の___BLANK___、<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れています。', clozeAnswer: 'ために',
+        tokens: ['じこの', 'ために', '、', 'でんしゃが', 'おくれて', 'います', '。'], from: 'l32:7:3' },
+      { jp: '<ruby>留学<rt>りゅうがく</rt></ruby>するために、<ruby>貯金<rt>ちょきん</rt></ruby>しています。',
+        kana: 'りゅうがくするために、ちょきんしています。', romaji: 'ryuugaku suru tame ni, chokin shite imasu.', hu: 'Azért gyűjtök, hogy külföldön tanulhassak.',
+        cloze: '<ruby>留学<rt>りゅうがく</rt></ruby>する___BLANK___、<ruby>貯金<rt>ちょきん</rt></ruby>しています。', clozeAnswer: 'ために',
+        tokens: ['りゅうがく', 'する', 'ために', '、', 'ちょきん', 'して', 'います', '。'], from: 'l32:7:4' }
     ],
     contrasts: ['ni_iku_purpose', 'okage_de']
   },
@@ -2990,7 +3998,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>そうですね。',
         kana: 'あのひとはげんきそうですね。', romaji: 'ano hito wa genkisou desu ne.', hu: 'Az az ember egészségesnek látszik, ugye?',
         cloze: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>元気<rt>げんき</rt></ruby>___BLANK___ですね。', clozeAnswer: 'そう',
-        tokens: ['あの', 'ひとは', 'げんきそうですね', '。'] }
+        tokens: ['あの', 'ひとは', 'げんきそうですね', '。'] },
+      { jp: 'この<ruby>映画<rt>えいが</rt></ruby>は<ruby>面白<rt>おもしろ</rt></ruby>くなさそうです。',
+        kana: 'このえいがはおもしろくなさそうです。', romaji: 'kono eiga wa omoshirokunasasou desu.', hu: 'Ez a film nem tűnik érdekesnek.',
+        cloze: 'この<ruby>映画<rt>えいが</rt></ruby>は<ruby>面白<rt>おもしろ</rt></ruby>くなさ___BLANK___。', clozeAnswer: 'そうです',
+        tokens: ['この', 'えいがは', 'おもしろくなさそうです', '。'], from: 'l33:1:3' },
+      { jp: 'このカレーは<ruby>辛<rt>から</rt></ruby>そうですね。',
+        kana: 'このカレーはからそうですね。', romaji: 'kono karee wa karasou desu ne.', hu: 'Ez a curry csípősnek látszik.',
+        cloze: 'このカレーは<ruby>辛<rt>から</rt></ruby>___BLANK___ね。', clozeAnswer: 'そうです',
+        tokens: ['この', 'カレーは', 'からそうですね', '。'], from: 'l33:1:4' },
+      { jp: 'そのかばんは<ruby>重<rt>おも</rt></ruby>そうですね。<ruby>持<rt>も</rt></ruby>ちましょうか。',
+        kana: 'そのかばんはおもそうですね。もちましょうか。', romaji: 'sono kaban wa omosou desu ne. mochimashou ka.', hu: 'Az a táska nehéznek látszik. Vigyem?',
+        cloze: 'そのかばんは<ruby>重<rt>おも</rt></ruby>___BLANK___ね。<ruby>持<rt>も</rt></ruby>ちましょうか。', clozeAnswer: 'そうです',
+        tokens: ['その', 'かばんは', 'おもそうですね', '。', 'もちましょうか', '。'], from: 'l33:1:5' }
     ],
     contrasts: ['sou_da_hearsay', 'you_desu', 'sou_desu_verb']
   },
@@ -3007,7 +4027,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちそうですよ。',
         kana: 'にもつがおちそうですよ。', romaji: 'nimotsu ga ochisou desu yo.', hu: 'Mindjárt leesik a csomag!',
         cloze: '<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>落<rt>お</rt></ruby>ち___BLANK___ですよ。', clozeAnswer: 'そう',
-        tokens: ['にもつが', 'おちそうですよ', '。'] }
+        tokens: ['にもつが', 'おちそうですよ', '。'] },
+      { jp: '<ruby>今<rt>いま</rt></ruby>にも<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りそうです。',
+        kana: 'いまにもあめがふりそうです。', romaji: 'ima ni mo ame ga furisou desu.', hu: 'Bármelyik pillanatban eleredhet az eső.',
+        cloze: '<ruby>今<rt>いま</rt></ruby>にも<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>り___BLANK___。', clozeAnswer: 'そうです',
+        tokens: ['いまにも', 'あめが', 'ふりそうです', '。'], from: 'l33:2:1' },
+      { jp: '<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>落<rt>お</rt></ruby>ちそうです。',
+        kana: 'にもつがおちそうです。', romaji: 'nimotsu ga ochisou desu.', hu: 'Mindjárt leesik a csomag.',
+        cloze: '<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>落<rt>お</rt></ruby>ち___BLANK___。', clozeAnswer: 'そうです',
+        tokens: ['にもつが', 'おちそうです', '。'], from: 'l33:2:2' },
+      { jp: 'ボタンが<ruby>取<rt>と</rt></ruby>れそうです。',
+        kana: 'ボタンがとれそうです。', romaji: 'botan ga toresou desu.', hu: 'Mindjárt leszakad a gomb.',
+        cloze: 'ボタンが<ruby>取<rt>と</rt></ruby>れ___BLANK___。', clozeAnswer: 'そうです',
+        tokens: ['ボタンが', 'とれそうです', '。'], from: 'l33:2:3' }
     ],
     contrasts: ['sou_desu_look', 'sou_da_hearsay']
   },
@@ -3024,7 +4056,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>母<rt>はは</rt></ruby>のような<ruby>人<rt>ひと</rt></ruby>になりたいです。',
         kana: 'ははのようなひとになりたいです。', romaji: 'haha no you na hito ni naritai desu.', hu: 'Olyan ember szeretnék lenni, mint anyám.',
         cloze: '<ruby>母<rt>はは</rt></ruby>___BLANK___<ruby>人<rt>ひと</rt></ruby>になりたいです。', clozeAnswer: 'のような',
-        tokens: ['ははのような', 'ひとに', 'なりたいです', '。'] }
+        tokens: ['ははのような', 'ひとに', 'なりたいです', '。'] },
+      { jp: '<ruby>寿司<rt>すし</rt></ruby>や<ruby>天<rt>てん</rt></ruby>ぷらのような<ruby>日本料理<rt>にほんりょうり</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。',
+        kana: 'すしやてんぷらのようなにほんりょうりがすきです。', romaji: 'sushi ya tenpura no you na nihon ryouri ga suki desu.', hu: 'Az olyan japán ételeket szeretem, mint a szusi vagy a tempura.',
+        cloze: '<ruby>寿司<rt>すし</rt></ruby>や<ruby>天<rt>てん</rt></ruby>ぷら___BLANK___<ruby>日本料理<rt>にほんりょうり</rt></ruby>が<ruby>好<rt>す</rt></ruby>きです。', clozeAnswer: 'のような',
+        tokens: ['すし', 'や', 'てんぷらのような', 'にほん', 'りょうりが', 'すきです', '。'], from: 'l33:4:6' },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもみたいなことを<ruby>言<rt>い</rt></ruby>わないでください。',
+        kana: 'こどもみたいなことをいわないでください。', romaji: 'kodomo mitai na koto o iwanaide kudasai.', hu: 'Ne beszélj úgy, mint egy gyerek!',
+        cloze: '<ruby>子<rt>こ</rt></ruby>ども___BLANK___ことを<ruby>言<rt>い</rt></ruby>わないでください。', clozeAnswer: 'みたいな',
+        tokens: ['こども', 'みたいな', 'ことを', 'いわないで', 'ください', '。'], from: 'l33:4:7' }
     ],
     contrasts: ['you_desu', 'rashii_typical']
   },
@@ -3041,7 +4081,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>一時間<rt>いちじかん</rt></ruby>くらい<ruby>待<rt>ま</rt></ruby>ちました。',
         kana: 'いちじかんくらいまちました。', romaji: 'ichijikan kurai machimashita.', hu: 'Körülbelül egy órát vártam.',
         cloze: '<ruby>一時間<rt>いちじかん</rt></ruby>___BLANK___<ruby>待<rt>ま</rt></ruby>ちました。', clozeAnswer: 'くらい',
-        tokens: ['いちじかんくらい', 'まちました', '。'] }
+        tokens: ['いちじかんくらい', 'まちました', '。'] },
+      { jp: '<ruby>泣<rt>な</rt></ruby>きたいくらい<ruby>痛<rt>いた</rt></ruby>かったです。',
+        kana: 'なきたいくらいいたかったです。', romaji: 'nakitai kurai itakatta desu.', hu: 'Annyira fájt, hogy sírni tudtam volna.',
+        cloze: '<ruby>泣<rt>な</rt></ruby>きたい___BLANK___<ruby>痛<rt>いた</rt></ruby>かったです。', clozeAnswer: 'くらい',
+        tokens: ['なきたい', 'くらい', 'いたかったです', '。'], from: 'l33:5:2' },
+      { jp: 'これくらいの<ruby>大<rt>おお</rt></ruby>きさの<ruby>箱<rt>はこ</rt></ruby>がほしいです。',
+        kana: 'これくらいのおおきさのはこがほしいです。', romaji: 'kore kurai noo okisa no hako ga hoshii desu.', hu: 'Körülbelül ekkora dobozt szeretnék.',
+        cloze: 'これ___BLANK___の<ruby>大<rt>おお</rt></ruby>きさの<ruby>箱<rt>はこ</rt></ruby>がほしいです。', clozeAnswer: 'くらい',
+        tokens: ['これ', 'くらいのお', 'おきさの', 'はこが', 'ほしいです', '。'], from: 'l33:5:3' },
+      { jp: '<ruby>立<rt>た</rt></ruby>てないぐらい<ruby>疲<rt>つか</rt></ruby>れました。',
+        kana: 'たてないぐらいつかれました。', romaji: 'tatenai gurai tsukaremashita.', hu: 'Annyira elfáradtam, hogy fel sem bírtam állni.',
+        cloze: '<ruby>立<rt>た</rt></ruby>てない___BLANK___<ruby>疲<rt>つか</rt></ruby>れました。', clozeAnswer: 'ぐらい',
+        tokens: ['たてない', 'ぐらい', 'つかれました', '。'], from: 'l33:5:4' }
     ],
     contrasts: ['dake']
   },
@@ -3058,7 +4110,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>変<rt>へん</rt></ruby>な<ruby>音<rt>おと</rt></ruby>がします。',
         kana: 'へんなおとがします。', romaji: 'hen na oto ga shimasu.', hu: 'Furcsa hangot hallok.',
         cloze: '<ruby>変<rt>へん</rt></ruby>な<ruby>音<rt>おと</rt></ruby>___BLANK___。', clozeAnswer: 'がします',
-        tokens: ['へんな', 'おとがします', '。'] }
+        tokens: ['へんな', 'おとがします', '。'] },
+      { jp: 'このスープは<ruby>魚<rt>さかな</rt></ruby>の<ruby>味<rt>あじ</rt></ruby>がします。',
+        kana: 'このスープはさかなのあじがします。', romaji: 'kono suupu wa sakana no aji ga shimasu.', hu: 'Ennek a levesnek halíze van.',
+        cloze: 'このスープは<ruby>魚<rt>さかな</rt></ruby>の<ruby>味<rt>あじ</rt></ruby>___BLANK___。', clozeAnswer: 'がします',
+        tokens: ['この', 'スープは', 'さかなの', 'あじが', 'します', '。'], from: 'l33:6:3' },
+      { jp: '<ruby>台所<rt>だいどころ</rt></ruby>からカレーのにおいがします。',
+        kana: 'だいどころからカレーのにおいがします。', romaji: 'daidokoro kara karee no nioi ga shimasu.', hu: 'A konyhából curryillat jön.',
+        cloze: '<ruby>台所<rt>だいどころ</rt></ruby>からカレーのにおい___BLANK___。', clozeAnswer: 'がします',
+        tokens: ['だいどころから', 'カレーの', 'においが', 'します', '。'], from: 'l33:6:4' },
+      { jp: '<ruby>外<rt>そと</rt></ruby>で<ruby>子<rt>こ</rt></ruby>どもの<ruby>声<rt>こえ</rt></ruby>がします。',
+        kana: 'そとでこどものこえがします。', romaji: 'soto de kodomo no koe ga shimasu.', hu: 'Kintről gyerekhangok hallatszanak.',
+        cloze: '<ruby>外<rt>そと</rt></ruby>で<ruby>子<rt>こ</rt></ruby>どもの<ruby>声<rt>こえ</rt></ruby>___BLANK___。', clozeAnswer: 'がします',
+        tokens: ['そとで', 'こどもの', 'こえが', 'します', '。'], from: 'l33:6:5' }
     ],
     contrasts: ['miemasu_kikoemasu']
   },
@@ -3077,7 +4141,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'ニュースによると、<ruby>事故<rt>じこ</rt></ruby>があったそうです。',
         kana: 'ニュースによると、じこがあったそうです。', romaji: 'nyuusu ni yoru to, jiko ga atta sou desu.', hu: 'A hírek szerint baleset történt.',
         cloze: 'ニュース___BLANK___、<ruby>事故<rt>じこ</rt></ruby>があったそうです。', clozeAnswer: 'によると',
-        tokens: ['ニュースによると', '、', 'じこが', 'あったそうです', '。'] }
+        tokens: ['ニュースによると', '、', 'じこが', 'あったそうです', '。'] },
+      { jp: '<ruby>天気<rt>てんき</rt></ruby><ruby>予報<rt>よほう</rt></ruby>によると、あしたは<ruby>晴<rt>は</rt></ruby>れるそうです。',
+        kana: 'てんきよほうによると、あしたははれるそうです。', romaji: 'tenki yohou ni yoru to, ashita wa hareru sou desu.', hu: 'Az időjárás-jelentés szerint holnap napos idő lesz.',
+        cloze: '<ruby>天気<rt>てんき</rt></ruby><ruby>予報<rt>よほう</rt></ruby>___BLANK___、あしたは<ruby>晴<rt>は</rt></ruby>れるそうです。', clozeAnswer: 'によると',
+        tokens: ['てんき', 'よほうに', 'よると', '、', 'あしたは', 'はれる', 'そうです', '。'], from: 'l34:3:1' },
+      { jp: '<ruby>友<rt>とも</rt></ruby>だちの<ruby>話<rt>はなし</rt></ruby>によると、その<ruby>店<rt>みせ</rt></ruby>はもう<ruby>閉<rt>し</rt></ruby>まったそうです。',
+        kana: 'ともだちのはなしによると、そのみせはもうしまったそうです。', romaji: 'tomodachi no hanashi ni yoru to, sono mise wa mou shimatta sou desu.', hu: 'A barátom szerint az a bolt már bezárt.',
+        cloze: '<ruby>友<rt>とも</rt></ruby>だちの<ruby>話<rt>はなし</rt></ruby>___BLANK___、その<ruby>店<rt>みせ</rt></ruby>はもう<ruby>閉<rt>し</rt></ruby>まったそうです。', clozeAnswer: 'によると',
+        tokens: ['ともだちの', 'はなしに', 'よると', '、', 'その', 'みせはもう', 'しまった', 'そうです', '。'], from: 'l34:3:3' },
+      { jp: '<ruby>新聞<rt>しんぶん</rt></ruby>によると、<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>料金<rt>りょうきん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるそうです。',
+        kana: 'しんぶんによると、らいげつからでんしゃのりょうきんがあがるそうです。', romaji: 'shinbun ni yoru to, raigetsu kara densha no ryoukin ga agaru sou desu.', hu: 'Az újság szerint jövő hónaptól drágul a vonatjegy.',
+        cloze: '<ruby>新聞<rt>しんぶん</rt></ruby>___BLANK___、<ruby>来月<rt>らいげつ</rt></ruby>から<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>料金<rt>りょうきん</rt></ruby>が<ruby>上<rt>あ</rt></ruby>がるそうです。', clozeAnswer: 'によると',
+        tokens: ['しんぶんに', 'よると', '、', 'らいげつから', 'でんしゃの', 'りょうきんが', 'あがる', 'そうです', '。'], from: 'l34:3:4' }
     ],
     contrasts: ['sou_da_hearsay', 'ni_yotte']
   },
@@ -3094,7 +4170,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'あの<ruby>店<rt>みせ</rt></ruby>はおいしいらしいですよ。',
         kana: 'あのみせはおいしいらしいですよ。', romaji: 'ano mise wa oishii rashii desu yo.', hu: 'Állítólag finom az a hely.',
         cloze: 'あの<ruby>店<rt>みせ</rt></ruby>はおいしい___BLANK___ですよ。', clozeAnswer: 'らしい',
-        tokens: ['あの', 'みせは', 'おいしいらしいですよ', '。'] }
+        tokens: ['あの', 'みせは', 'おいしいらしいですよ', '。'] },
+      { jp: 'この<ruby>辺<rt>へん</rt></ruby>は<ruby>夜<rt>よる</rt></ruby>、<ruby>危<rt>あぶ</rt></ruby>ないらしいです。',
+        kana: 'このへんはよる、あぶないらしいです。', romaji: 'kono hen wa yoru, abunai rashii desu.', hu: 'Állítólag ez a környék éjszaka veszélyes.',
+        cloze: 'この<ruby>辺<rt>へん</rt></ruby>は<ruby>夜<rt>よる</rt></ruby>、<ruby>危<rt>あぶ</rt></ruby>ない___BLANK___。', clozeAnswer: 'らしいです',
+        tokens: ['この', 'へんは', 'よる', '、', 'あぶない', 'らしいです', '。'], from: 'l34:4:2' },
+      { jp: 'あの<ruby>二人<rt>ふたり</rt></ruby>は<ruby>兄弟<rt>きょうだい</rt></ruby>らしいです。',
+        kana: 'あのふたりはきょうだいらしいです。', romaji: 'ano futari wa kyoudai rashii desu.', hu: 'Úgy tűnik, ők ketten testvérek.',
+        cloze: 'あの<ruby>二人<rt>ふたり</rt></ruby>は<ruby>兄弟<rt>きょうだい</rt></ruby>___BLANK___。', clozeAnswer: 'らしいです',
+        tokens: ['あの', 'ふたりは', 'きょうだい', 'らしいです', '。'], from: 'l34:4:3' },
+      { jp: '<ruby>来年<rt>らいねん</rt></ruby>、<ruby>駅前<rt>えきまえ</rt></ruby>に<ruby>新<rt>あたら</rt></ruby>しいデパートができるらしいです。',
+        kana: 'らいねん、えきまえにあたらしいデパートができるらしいです。', romaji: 'rainen, ekimae ni atarashii depaato ga dekiru rashii desu.', hu: 'Úgy hírlik, jövőre új áruház nyílik az állomásnál.',
+        cloze: '<ruby>来年<rt>らいねん</rt></ruby>、<ruby>駅前<rt>えきまえ</rt></ruby>に<ruby>新<rt>あたら</rt></ruby>しいデパートができる___BLANK___。', clozeAnswer: 'らしいです',
+        tokens: ['らいねん', '、', 'えきまえに', 'あたらしい', 'デパートが', 'できる', 'らしいです', '。'], from: 'l34:4:4' }
     ],
     contrasts: ['sou_da_hearsay', 'you_desu', 'rashii_typical']
   },
@@ -3130,7 +4218,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'はしの<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>がわかりません。',
         kana: 'はしのつかいかたがわかりません。', romaji: 'hashi no tsukaikata ga wakarimasen.', hu: 'Nem tudom, hogyan kell a pálcikát használni.',
         cloze: 'はしの<ruby>使<rt>つか</rt></ruby>い___BLANK___がわかりません。', clozeAnswer: 'かた',
-        tokens: ['はしの', 'つかいかたが', 'わかりません', '。'] }
+        tokens: ['はしの', 'つかいかたが', 'わかりません', '。'] },
+      { jp: '<ruby>切符<rt>きっぷ</rt></ruby>の<ruby>買<rt>か</rt></ruby>い<ruby>方<rt>かた</rt></ruby>がわかりません。',
+        kana: 'きっぷのかいかたがわかりません。', romaji: 'kippu no kaikata ga wakarimasen.', hu: 'Nem tudom, hogyan kell jegyet venni.',
+        cloze: '<ruby>切符<rt>きっぷ</rt></ruby>の<ruby>買<rt>か</rt></ruby>い___BLANK___がわかりません。', clozeAnswer: 'かた',
+        tokens: ['きっぷの', 'かいかたが', 'わかりません', '。'], from: 'l35:1:2' },
+      { jp: 'パソコンの<ruby>使<rt>つか</rt></ruby>い<ruby>方<rt>かた</rt></ruby>を<ruby>習<rt>なら</rt></ruby>いました。',
+        kana: 'パソコンのつかいかたをならいました。', romaji: 'pasokon no tsukaikata o naraimashita.', hu: 'Megtanultam használni a számítógépet.',
+        cloze: 'パソコンの<ruby>使<rt>つか</rt></ruby>い___BLANK___を<ruby>習<rt>なら</rt></ruby>いました。', clozeAnswer: 'かた',
+        tokens: ['パソコンの', 'つかいかたを', 'ならいました', '。'], from: 'l35:1:3' },
+      { jp: '<ruby>駅<rt>えき</rt></ruby>への<ruby>行<rt>い</rt></ruby>き<ruby>方<rt>かた</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてください。',
+        kana: 'えきへのいきかたをおしえてください。', romaji: 'eki e no ikikata o oshiete kudasai.', hu: 'Kérem, mondja meg, hogyan jutok el az állomásra!',
+        cloze: '<ruby>駅<rt>えき</rt></ruby>への<ruby>行<rt>い</rt></ruby>き___BLANK___を<ruby>教<rt>おし</rt></ruby>えてください。', clozeAnswer: 'かた',
+        tokens: ['えきへの', 'いきかたを', 'おしえて', 'ください', '。'], from: 'l35:1:4' }
     ],
     contrasts: ['koto_desu', 'sa_noun']
   },
@@ -3147,7 +4247,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>父<rt>ちち</rt></ruby>のかわりに、<ruby>私<rt>わたし</rt></ruby>が<ruby>行<rt>い</rt></ruby>きます。',
         kana: 'ちちのかわりに、わたしがいきます。', romaji: 'chichi no kawari ni, watashi ga ikimasu.', hu: 'Apám helyett én megyek.',
         cloze: '<ruby>父<rt>ちち</rt></ruby>___BLANK___、<ruby>私<rt>わたし</rt></ruby>が<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'のかわりに',
-        tokens: ['ちちのかわりに', '、', 'わたしが', 'いきます', '。'] }
+        tokens: ['ちちのかわりに', '、', 'わたしが', 'いきます', '。'] },
+      { jp: '<ruby>砂糖<rt>さとう</rt></ruby>のかわりに、はちみつを<ruby>使<rt>つか</rt></ruby>います。',
+        kana: 'さとうのかわりに、はちみつをつかいます。', romaji: 'satou no kawari ni, hachimitsu o tsukaimasu.', hu: 'Cukor helyett mézet használok.',
+        cloze: '<ruby>砂糖<rt>さとう</rt></ruby>___BLANK___、はちみつを<ruby>使<rt>つか</rt></ruby>います。', clozeAnswer: 'のかわりに',
+        tokens: ['さとうの', 'かわりに', '、', 'はちみつを', 'つかいます', '。'], from: 'l35:2:1' },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>はごはんのかわりにパンを<ruby>食<rt>た</rt></ruby>べました。',
+        kana: 'きょうはごはんのかわりにパンをたべました。', romaji: 'kyou wa gohan no kawari ni pan o tabemashita.', hu: 'Ma rizs helyett kenyeret ettem.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>はごはん___BLANK___パンを<ruby>食<rt>た</rt></ruby>べました。', clozeAnswer: 'のかわりに',
+        tokens: ['きょうは', 'ごはんの', 'かわりに', 'パンを', 'たべました', '。'], from: 'l35:2:3' },
+      { jp: '<ruby>現金<rt>げんきん</rt></ruby>の<ruby>代<rt>か</rt></ruby>わりに、カードで<ruby>払<rt>はら</rt></ruby>いました。',
+        kana: 'げんきんのかわりに、カードではらいました。', romaji: 'genkin no kawari ni, kaado de haraimashita.', hu: 'Készpénz helyett kártyával fizettem.',
+        cloze: '<ruby>現金<rt>げんきん</rt></ruby>___BLANK___、カードで<ruby>払<rt>はら</rt></ruby>いました。', clozeAnswer: 'のかわりに',
+        tokens: ['げんきんの', 'かわりに', '、', 'カードで', 'はらいました', '。'], from: 'l35:2:4' }
     ],
     contrasts: ['kawari_ni_verb']
   },
@@ -3164,7 +4276,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えるかわりに、<ruby>英語<rt>えいご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてもらいます。',
         kana: 'にほんごをおしえるかわりに、えいごをおしえてもらいます。', romaji: 'nihongo o oshieru kawari ni, eigo o oshiete moraimasu.', hu: 'Japánt tanítok, cserébe engem angolra tanítanak.',
         cloze: '<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>える___BLANK___、<ruby>英語<rt>えいご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてもらいます。', clozeAnswer: 'かわりに',
-        tokens: ['にほんごを', 'おしえるかわりに', '、', 'えいごを', 'おしえてもらいます', '。'] }
+        tokens: ['にほんごを', 'おしえるかわりに', '、', 'えいごを', 'おしえてもらいます', '。'] },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>行<rt>い</rt></ruby>けないので、<ruby>弟<rt>おとうと</rt></ruby>が<ruby>代<rt>か</rt></ruby>わりに<ruby>行<rt>い</rt></ruby>きます。',
+        kana: 'きょうはいけないので、おとうとがかわりにいきます。', romaji: 'kyou wa ikenai node, otouto ga kawari ni ikimasu.', hu: 'Ma nem tudok menni, úgyhogy az öcsém megy helyettem.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>行<rt>い</rt></ruby>けないので、<ruby>弟<rt>おとうと</rt></ruby>が___BLANK___<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'かわりに',
+        tokens: ['きょうは', 'いけない', 'ので', '、', 'おとうとが', 'かわりに', 'いきます', '。'], from: 'l35:2:5' },
+      { jp: '<ruby>電話<rt>でんわ</rt></ruby>するかわりに、メールを<ruby>送<rt>おく</rt></ruby>りました。',
+        kana: 'でんわするかわりに、メールをおくりました。', romaji: 'denwa suru kawari ni, meeru o okurimashita.', hu: 'Telefonálás helyett e-mailt küldtem.',
+        cloze: '<ruby>電話<rt>でんわ</rt></ruby>する___BLANK___、メールを<ruby>送<rt>おく</rt></ruby>りました。', clozeAnswer: 'かわりに',
+        tokens: ['でんわ', 'する', 'かわりに', '、', 'メールを', 'おくりました', '。'], from: 'l35:3:1' },
+      { jp: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>くかわりに、<ruby>家<rt>うち</rt></ruby>でビデオを<ruby>見<rt>み</rt></ruby>ました。',
+        kana: 'えいがをみにいくかわりに、うちでビデオをみました。', romaji: 'eiga o mi ni iku kawari ni, uchi de bideo o mimashita.', hu: 'Ahelyett, hogy moziba mentem volna, otthon néztem filmet.',
+        cloze: '<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>く___BLANK___、<ruby>家<rt>うち</rt></ruby>でビデオを<ruby>見<rt>み</rt></ruby>ました。', clozeAnswer: 'かわりに',
+        tokens: ['えいがを', 'みに', 'いく', 'かわりに', '、', 'うちで', 'ビデオを', 'みました', '。'], from: 'l35:3:2' }
     ],
     contrasts: ['no_kawari_ni']
   },
@@ -3181,7 +4305,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>靴<rt>くつ</rt></ruby>をはいたまま、<ruby>入<rt>はい</rt></ruby>らないでください。',
         kana: 'くつをはいたまま、はいらないでください。', romaji: 'kutsu o haita mama, hairanaide kudasai.', hu: 'Kérem, ne jöjjön be cipőben!',
         cloze: '<ruby>靴<rt>くつ</rt></ruby>をはい___BLANK___、<ruby>入<rt>はい</rt></ruby>らないでください。', clozeAnswer: 'たまま',
-        tokens: ['くつを', 'はいたまま', '、', 'はいらないでください', '。'] }
+        tokens: ['くつを', 'はいたまま', '、', 'はいらないでください', '。'] },
+      { jp: '<ruby>靴<rt>くつ</rt></ruby>をはいたまま、<ruby>部屋<rt>へや</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らないでください。',
+        kana: 'くつをはいたまま、へやにはいらないでください。', romaji: 'kutsu o haita mama, heya ni hairanaide kudasai.', hu: 'Kérem, ne lépjen be cipőben a szobába.',
+        cloze: '<ruby>靴<rt>くつ</rt></ruby>をはい___BLANK___、<ruby>部屋<rt>へや</rt></ruby>に<ruby>入<rt>はい</rt></ruby>らないでください。', clozeAnswer: 'たまま',
+        tokens: ['くつを', 'はいた', 'まま', '、', 'へやに', 'はいらないで', 'ください', '。'], from: 'l35:5:2' },
+      { jp: '<ruby>窓<rt>まど</rt></ruby>を<ruby>開<rt>あ</rt></ruby>けたまま、<ruby>出<rt>で</rt></ruby>かけました。',
+        kana: 'まどをあけたまま、でかけました。', romaji: 'mado o aketa mama, dekakemashita.', hu: 'Nyitva hagyott ablakkal mentem el.',
+        cloze: '<ruby>窓<rt>まど</rt></ruby>を<ruby>開<rt>あ</rt></ruby>け___BLANK___、<ruby>出<rt>で</rt></ruby>かけました。', clozeAnswer: 'たまま',
+        tokens: ['まどを', 'あけた', 'まま', '、', 'でかけました', '。'], from: 'l35:5:3' },
+      { jp: '<ruby>立<rt>た</rt></ruby>ったまま<ruby>食<rt>た</rt></ruby>べないでください。',
+        kana: 'たったままたべないでください。', romaji: 'tatta mama tabenaide kudasai.', hu: 'Ne egyél állva!',
+        cloze: '<ruby>立<rt>た</rt></ruby>っ___BLANK___<ruby>食<rt>た</rt></ruby>べないでください。', clozeAnswer: 'たまま',
+        tokens: ['たった', 'まま', 'たべないで', 'ください', '。'], from: 'l35:5:5' }
     ],
     contrasts: ['te_oku', 'nagara']
   },
@@ -3200,7 +4336,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>来月<rt>らいげつ</rt></ruby>ここで<ruby>祭<rt>まつ</rt></ruby>りが<ruby>行<rt>おこな</rt></ruby>われます。',
         kana: 'らいげつここでまつりがおこなわれます。', romaji: 'raigetsu koko de matsuri ga okonawaremasu.', hu: 'Jövő hónapban itt fesztivált rendeznek.',
         cloze: '<ruby>来月<rt>らいげつ</rt></ruby>ここで<ruby>祭<rt>まつ</rt></ruby>りが<ruby>行<rt>おこな</rt></ruby>わ___BLANK___。', clozeAnswer: 'れます',
-        tokens: ['らいげつ', 'ここで', 'まつりが', 'おこなわれます', '。'] }
+        tokens: ['らいげつ', 'ここで', 'まつりが', 'おこなわれます', '。'] },
+      { jp: '<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>三時<rt>さんじ</rt></ruby>から<ruby>行<rt>おこな</rt></ruby>われます。',
+        kana: 'かいぎはさんじからおこなわれます。', romaji: 'kaigi wa sanji kara okonawaremasu.', hu: 'A megbeszélést háromtól tartják.',
+        cloze: '<ruby>会議<rt>かいぎ</rt></ruby>は<ruby>三時<rt>さんじ</rt></ruby>から<ruby>行<rt>おこな</rt></ruby>わ___BLANK___。', clozeAnswer: 'れます',
+        tokens: ['かいぎは', 'さんじから', 'おこなわれます', '。'], from: 'l36:2:1' },
+      { jp: 'コンサートは<ruby>来月<rt>らいげつ</rt></ruby><ruby>開<rt>ひら</rt></ruby>かれます。',
+        kana: 'コンサートはらいげつひらかれます。', romaji: 'konsaato wa raigetsu hirakaremasu.', hu: 'A koncertet jövő hónapban rendezik.',
+        cloze: 'コンサートは<ruby>来月<rt>らいげつ</rt></ruby><ruby>開<rt>ひら</rt></ruby>か___BLANK___。', clozeAnswer: 'れます',
+        tokens: ['コンサートは', 'らいげつ', 'ひらかれます', '。'], from: 'l36:2:2' },
+      { jp: 'この<ruby>雑誌<rt>ざっし</rt></ruby>は<ruby>毎月<rt>まいつき</rt></ruby><ruby>十五日<rt>じゅうごにち</rt></ruby>に<ruby>発売<rt>はつばい</rt></ruby>されます。',
+        kana: 'このざっしはまいつきじゅうごにちにはつばいされます。', romaji: 'kono zasshi wa maitsuki juugonichi ni hatsubai saremasu.', hu: 'Ez a folyóirat minden hónap tizenötödikén jelenik meg.',
+        cloze: 'この<ruby>雑誌<rt>ざっし</rt></ruby>は<ruby>毎月<rt>まいつき</rt></ruby><ruby>十五日<rt>じゅうごにち</rt></ruby>に<ruby>発売<rt>はつばい</rt></ruby>さ___BLANK___。', clozeAnswer: 'れます',
+        tokens: ['この', 'ざっしは', 'まいつき', 'じゅうごにちに', 'はつばい', 'されます', '。'], from: 'l36:2:4' }
     ],
     contrasts: ['passive_person', 'te_aru']
   },
@@ -3217,7 +4365,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>電話<rt>でんわ</rt></ruby>はベルによって<ruby>発明<rt>はつめい</rt></ruby>されました。',
         kana: 'でんわはベルによってはつめいされました。', romaji: 'denwa wa beru ni yotte hatsumei saremashita.', hu: 'A telefont Bell találta fel.',
         cloze: '<ruby>電話<rt>でんわ</rt></ruby>はベル___BLANK___<ruby>発明<rt>はつめい</rt></ruby>されました。', clozeAnswer: 'によって',
-        tokens: ['でんわは', 'ベルによって', 'はつめいされました', '。'] }
+        tokens: ['でんわは', 'ベルによって', 'はつめいされました', '。'] },
+      { jp: 'この<ruby>建物<rt>たてもの</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>建築家<rt>けんちくか</rt></ruby>によって<ruby>設計<rt>せっけい</rt></ruby>されました。',
+        kana: 'このたてものはゆうめいなけんちくかによってせっけいされました。', romaji: 'kono tatemono wa yuumei na kenchikuka ni yotte sekkei saremashita.', hu: 'Ezt az épületet egy híres építész tervezte.',
+        cloze: 'この<ruby>建物<rt>たてもの</rt></ruby>は<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>建築家<rt>けんちくか</rt></ruby>___BLANK___<ruby>設計<rt>せっけい</rt></ruby>されました。', clozeAnswer: 'によって',
+        tokens: ['この', 'たてものは', 'ゆうめいな', 'けんちくかに', 'よって', 'せっけい', 'されました', '。'], from: 'l36:3:2' },
+      { jp: '「<ruby>源氏物語<rt>げんじものがたり</rt></ruby>」は<ruby>紫式部<rt>むらさきしきぶ</rt></ruby>によって<ruby>書<rt>か</rt></ruby>かれました。',
+        kana: '「げんじものがたり」はむらさきしきぶによってかかれました。', romaji: 'genji monogatari wa murasaki shikibu ni yotte kakaremashita.', hu: 'A Gendzsi regényét Muraszaki Sikibu írta.',
+        cloze: '「<ruby>源氏物語<rt>げんじものがたり</rt></ruby>」は<ruby>紫式部<rt>むらさきしきぶ</rt></ruby>___BLANK___<ruby>書<rt>か</rt></ruby>かれました。', clozeAnswer: 'によって',
+        tokens: ['「', 'げんじ', 'ものがたり', '」', 'は', 'むらさき', 'しきぶに', 'よって', 'かかれました', '。'], from: 'l36:3:4' },
+      { jp: 'アメリカ<ruby>大陸<rt>たいりく</rt></ruby>はコロンブスによって<ruby>発見<rt>はっけん</rt></ruby>されました。',
+        kana: 'アメリカたいりくはコロンブスによってはっけんされました。', romaji: 'amerika tairiku wa koronbusu ni yotte hakken saremashita.', hu: 'Amerikát Kolumbusz fedezte fel.',
+        cloze: 'アメリカ<ruby>大陸<rt>たいりく</rt></ruby>はコロンブス___BLANK___<ruby>発見<rt>はっけん</rt></ruby>されました。', clozeAnswer: 'によって',
+        tokens: ['アメリカ', 'たいりくは', 'コロンブスに', 'よって', 'はっけん', 'されました', '。'], from: 'l36:3:5' }
     ],
     contrasts: ['ni_yotte', 'passive_thing']
   },
@@ -3234,7 +4394,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>今夜<rt>こんや</rt></ruby>から<ruby>明日<rt>あした</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>にかけて、<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ります。',
         kana: 'こんやからあしたのあさにかけて、ゆきがふります。', romaji: 'konya kara ashita no asa ni kakete, yuki ga furimasu.', hu: 'Ma éjjeltől holnap reggelig havazni fog.',
         cloze: '<ruby>今夜<rt>こんや</rt></ruby>から<ruby>明日<rt>あした</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>___BLANK___、<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ります。', clozeAnswer: 'にかけて',
-        tokens: ['こんやから', 'あしたのあさにかけて', '、', 'ゆきが', 'ふります', '。'] }
+        tokens: ['こんやから', 'あしたのあさにかけて', '、', 'ゆきが', 'ふります', '。'] },
+      { jp: '<ruby>東京<rt>とうきょう</rt></ruby>から<ruby>横浜<rt>よこはま</rt></ruby>にかけて、<ruby>道<rt>みち</rt></ruby>が<ruby>込<rt>こ</rt></ruby>んでいます。',
+        kana: 'とうきょうからよこはまにかけて、みちがこんでいます。', romaji: 'toukyou kara yokohama ni kakete, michi ga konde imasu.', hu: 'Tokiótól Jokohamáig zsúfolt az út.',
+        cloze: '<ruby>東京<rt>とうきょう</rt></ruby>から<ruby>横浜<rt>よこはま</rt></ruby>___BLANK___、<ruby>道<rt>みち</rt></ruby>が<ruby>込<rt>こ</rt></ruby>んでいます。', clozeAnswer: 'にかけて',
+        tokens: ['とうきょうから', 'よこはまに', 'かけて', '、', 'みちが', 'こんで', 'います', '。'], from: 'l36:4:2' },
+      { jp: '<ruby>夜<rt>よる</rt></ruby>から<ruby>朝<rt>あさ</rt></ruby>にかけて、<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りました。',
+        kana: 'よるからあさにかけて、ゆきがふりました。', romaji: 'yoru kara asa ni kakete, yuki ga furimashita.', hu: 'Éjszakától reggelig havazott.',
+        cloze: '<ruby>夜<rt>よる</rt></ruby>から<ruby>朝<rt>あさ</rt></ruby>___BLANK___、<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りました。', clozeAnswer: 'にかけて',
+        tokens: ['よるから', 'あさに', 'かけて', '、', 'ゆきが', 'ふりました', '。'], from: 'l36:4:3' },
+      { jp: '<ruby>今夜<rt>こんや</rt></ruby>から<ruby>明日<rt>あした</rt></ruby>にかけて、<ruby>強<rt>つよ</rt></ruby>い<ruby>風<rt>かぜ</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>くでしょう。',
+        kana: 'こんやからあしたにかけて、つよいかぜがふくでしょう。', romaji: 'kon\'ya kara ashita ni kakete, tsuyoi kaze ga fuku deshou.', hu: 'Ma estétől holnapig várhatóan erős szél fúj.',
+        cloze: '<ruby>今夜<rt>こんや</rt></ruby>から<ruby>明日<rt>あした</rt></ruby>___BLANK___、<ruby>強<rt>つよ</rt></ruby>い<ruby>風<rt>かぜ</rt></ruby>が<ruby>吹<rt>ふ</rt></ruby>くでしょう。', clozeAnswer: 'にかけて',
+        tokens: ['こんやから', 'あしたに', 'かけて', '、', 'つよい', 'かぜが', 'ふくでしょう', '。'], from: 'l36:4:4' }
     ],
     contrasts: ['kara_made']
   },
@@ -3251,7 +4423,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'これは<ruby>子<rt>こ</rt></ruby>どもでもできます。',
         kana: 'これはこどもでもできます。', romaji: 'kore wa kodomo demo dekimasu.', hu: 'Ezt még egy gyerek is meg tudja csinálni.',
         cloze: 'これは<ruby>子<rt>こ</rt></ruby>ども___BLANK___できます。', clozeAnswer: 'でも',
-        tokens: ['これは', 'こどもでも', 'できます', '。'] }
+        tokens: ['これは', 'こどもでも', 'できます', '。'] },
+      { jp: '<ruby>映画<rt>えいが</rt></ruby>でも<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょうか。',
+        kana: 'えいがでもみにいきましょうか。', romaji: 'eiga demo mi ni ikimashou ka.', hu: 'Menjünk el például moziba?',
+        cloze: '<ruby>映画<rt>えいが</rt></ruby>___BLANK___<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きましょうか。', clozeAnswer: 'でも',
+        tokens: ['えいが', 'でも', 'みに', 'いきましょうか', '。'], from: 'l36:5:2' },
+      { jp: 'この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>子<rt>こ</rt></ruby>どもでもわかります。',
+        kana: 'このもんだいはこどもでもわかります。', romaji: 'kono mondai wa kodomo demo wakarimasu.', hu: 'Ezt a feladatot még egy gyerek is érti.',
+        cloze: 'この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>子<rt>こ</rt></ruby>ども___BLANK___わかります。', clozeAnswer: 'でも',
+        tokens: ['この', 'もんだいは', 'こども', 'でも', 'わかります', '。'], from: 'l36:5:3' },
+      { jp: 'コーヒーでもいかがですか。',
+        kana: 'コーヒーでもいかがですか。', romaji: 'koohii demo ikaga desu ka.', hu: 'Parancsol egy kávét vagy valamit?',
+        cloze: 'コーヒー___BLANK___いかがですか。', clozeAnswer: 'でも',
+        tokens: ['コーヒー', 'でも', 'いかがですか', '。'], from: 'l36:5:4' }
     ],
     contrasts: ['temo', 'dare_demo']
   },
@@ -3270,7 +4454,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>弟<rt>おとうと</rt></ruby>は<ruby>母<rt>はは</rt></ruby>に<ruby>叱<rt>しか</rt></ruby>られました。',
         kana: 'おとうとはははにしかられました。', romaji: 'otouto wa haha ni shikararemashita.', hu: 'Az öcsémet megszidta anyánk.',
         cloze: '<ruby>弟<rt>おとうと</rt></ruby>は<ruby>母<rt>はは</rt></ruby>に<ruby>叱<rt>しか</rt></ruby>___BLANK___。', clozeAnswer: 'られました',
-        tokens: ['おとうとは', 'ははに', 'しかられました', '。'] }
+        tokens: ['おとうとは', 'ははに', 'しかられました', '。'] },
+      { jp: '<ruby>母<rt>はは</rt></ruby>にほめられました。',
+        kana: 'ははにほめられました。', romaji: 'haha ni homeraremashita.', hu: 'Megdicsért anyám.',
+        cloze: '<ruby>母<rt>はは</rt></ruby>にほめ___BLANK___。', clozeAnswer: 'られました',
+        tokens: ['ははに', 'ほめられました', '。'], from: 'l37:1:1' },
+      { jp: '<ruby>父<rt>ちち</rt></ruby>にしかられました。',
+        kana: 'ちちにしかられました。', romaji: 'chichi ni shikararemashita.', hu: 'Megszidott apám.',
+        cloze: '<ruby>父<rt>ちち</rt></ruby>にしか___BLANK___。', clozeAnswer: 'られました',
+        tokens: ['ちちに', 'しかられました', '。'], from: 'l37:1:2' }
     ],
     contrasts: ['passive_thing', 'te_morau']
   },
@@ -3287,7 +4479,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まれました。',
         kana: 'でんしゃであしをふまれました。', romaji: 'densha de ashi o fumaremashita.', hu: 'A vonaton ráléptek a lábamra.',
         cloze: '<ruby>電車<rt>でんしゃ</rt></ruby>で<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>ま___BLANK___。', clozeAnswer: 'れました',
-        tokens: ['でんしゃで', 'あしを', 'ふまれました', '。'] }
+        tokens: ['でんしゃで', 'あしを', 'ふまれました', '。'] },
+      { jp: '<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で<ruby>財布<rt>さいふ</rt></ruby>を<ruby>盗<rt>ぬす</rt></ruby>まれました。',
+        kana: 'でんしゃのなかでさいふをぬすまれました。', romaji: 'densha no naka de saifu o nusumaremashita.', hu: 'A vonaton ellopták a pénztárcámat.',
+        cloze: '<ruby>電車<rt>でんしゃ</rt></ruby>の<ruby>中<rt>なか</rt></ruby>で<ruby>財布<rt>さいふ</rt></ruby>を<ruby>盗<rt>ぬす</rt></ruby>ま___BLANK___。', clozeAnswer: 'れました',
+        tokens: ['でんしゃの', 'なかで', 'さいふを', 'ぬすまれました', '。'], from: 'l37:2:1' },
+      { jp: '<ruby>弟<rt>おとうと</rt></ruby>にケーキを<ruby>食<rt>た</rt></ruby>べられました。',
+        kana: 'おとうとにケーキをたべられました。', romaji: 'otouto ni keeki o taberaremashita.', hu: 'Az öcsém megette a tortámat.',
+        cloze: '<ruby>弟<rt>おとうと</rt></ruby>にケーキを<ruby>食<rt>た</rt></ruby>べら___BLANK___。', clozeAnswer: 'れました',
+        tokens: ['おとうとに', 'ケーキを', 'たべられました', '。'], from: 'l37:2:2' },
+      { jp: '<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>まれました。',
+        kana: 'となりのひとにあしをふまれました。', romaji: 'tonari no hito ni ashi o fumaremashita.', hu: 'A mellettem álló rálépett a lábamra.',
+        cloze: '<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>足<rt>あし</rt></ruby>を<ruby>踏<rt>ふ</rt></ruby>ま___BLANK___。', clozeAnswer: 'れました',
+        tokens: ['となりの', 'ひとに', 'あしを', 'ふまれました', '。'], from: 'l37:2:3' }
     ],
     contrasts: ['passive_person', 'passive_nuisance']
   },
@@ -3304,7 +4508,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>騒<rt>さわ</rt></ruby>がれて、<ruby>眠<rt>ねむ</rt></ruby>れませんでした。',
         kana: 'となりのひとにさわがれて、ねむれませんでした。', romaji: 'tonari no hito ni sawagarete, nemuremasen deshita.', hu: 'A szomszéd zajongott, ezért nem tudtam aludni.',
         cloze: '<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>騒<rt>さわ</rt></ruby>が___BLANK___、<ruby>眠<rt>ねむ</rt></ruby>れませんでした。', clozeAnswer: 'れて',
-        tokens: ['となりのひとに', 'さわがれて', '、', 'ねむれませんでした', '。'] }
+        tokens: ['となりのひとに', 'さわがれて', '、', 'ねむれませんでした', '。'] },
+      { jp: '<ruby>夜中<rt>よなか</rt></ruby>に<ruby>赤<rt>あか</rt></ruby>ちゃんに<ruby>泣<rt>な</rt></ruby>かれて、<ruby>寝<rt>ね</rt></ruby>られませんでした。',
+        kana: 'よなかにあかちゃんになかれて、ねられませんでした。', romaji: 'yonaka ni akachan ni nakarete, neraremasen deshita.', hu: 'Éjjel sírt a baba, nem tudtam aludni.',
+        cloze: '<ruby>夜中<rt>よなか</rt></ruby>に<ruby>赤<rt>あか</rt></ruby>ちゃんに<ruby>泣<rt>な</rt></ruby>か___BLANK___、<ruby>寝<rt>ね</rt></ruby>られませんでした。', clozeAnswer: 'れて',
+        tokens: ['よなかに', 'あかちゃんに', 'なかれて', '、', 'ねられませんでした', '。'], from: 'l37:3:2' },
+      { jp: '<ruby>急<rt>きゅう</rt></ruby>に<ruby>友<rt>とも</rt></ruby>だちに<ruby>来<rt>こ</rt></ruby>られて、<ruby>困<rt>こま</rt></ruby>りました。',
+        kana: 'きゅうにともだちにこられて、こまりました。', romaji: 'kyuu ni tomodachi ni korarete, komarimashita.', hu: 'Váratlanul beállított a barátom, és bajban voltam.',
+        cloze: '<ruby>急<rt>きゅう</rt></ruby>に<ruby>友<rt>とも</rt></ruby>だちに<ruby>来<rt>こ</rt></ruby>ら___BLANK___、<ruby>困<rt>こま</rt></ruby>りました。', clozeAnswer: 'れて',
+        tokens: ['きゅうに', 'ともだちに', 'こられて', '、', 'こまりました', '。'], from: 'l37:3:3' },
+      { jp: '<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>夜<rt>よる</rt></ruby><ruby>遅<rt>おそ</rt></ruby>くまで<ruby>騒<rt>さわ</rt></ruby>がれて、<ruby>勉強<rt>べんきょう</rt></ruby>できませんでした。',
+        kana: 'となりのひとによるおそくまでさわがれて、べんきょうできませんでした。', romaji: 'tonari no hito ni yoru osoku made sawagarete, benkyou dekimasen deshita.', hu: 'A szomszéd késő estig zajongott, nem tudtam tanulni.',
+        cloze: '<ruby>隣<rt>となり</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>に<ruby>夜<rt>よる</rt></ruby><ruby>遅<rt>おそ</rt></ruby>くまで<ruby>騒<rt>さわ</rt></ruby>が___BLANK___、<ruby>勉強<rt>べんきょう</rt></ruby>できませんでした。', clozeAnswer: 'れて',
+        tokens: ['となりの', 'ひとに', 'よる', 'おそくまで', 'さわがれて', '、', 'べんきょう', 'できませんでした', '。'], from: 'l37:3:4' }
     ],
     contrasts: ['passive_person', 'passive_possession']
   },
@@ -3321,7 +4537,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>交番<rt>こうばん</rt></ruby>で<ruby>聞<rt>き</rt></ruby>いたらどうですか。',
         kana: 'こうばんできいたらどうですか。', romaji: 'kouban de kiitara dou desu ka.', hu: 'Mi lenne, ha a rendőrőrsön kérdeznéd meg?',
         cloze: '<ruby>交番<rt>こうばん</rt></ruby>で<ruby>聞<rt>き</rt></ruby>い___BLANK___。', clozeAnswer: 'たらどうですか',
-        tokens: ['こうばんで', 'きいたらどうですか', '。'] }
+        tokens: ['こうばんで', 'きいたらどうですか', '。'] },
+      { jp: 'カード<ruby>会社<rt>がいしゃ</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>したらどうですか。',
+        kana: 'カードがいしゃにでんわしたらどうですか。', romaji: 'kaado-gaisha ni denwa shitara dou desu ka.', hu: 'Mi lenne, ha felhívná a kártyatársaságot?',
+        cloze: 'カード<ruby>会社<rt>がいしゃ</rt></ruby>に<ruby>電話<rt>でんわ</rt></ruby>し___BLANK___。', clozeAnswer: 'たらどうですか',
+        tokens: ['カードがいしゃに', 'でんわ', 'したら', 'どうですか', '。'], from: 'l37:7:2' }
     ],
     contrasts: ['ta_hou_ga_ii', 'tara_ii_desu_ka']
   },
@@ -3340,7 +4560,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>社長<rt>しゃちょう</rt></ruby>はもう<ruby>出<rt>で</rt></ruby>かけられました。',
         kana: 'しゃちょうはもうでかけられました。', romaji: 'shachou wa mou dekakeraremashita.', hu: 'Az igazgató úr már elment.',
         cloze: '<ruby>社長<rt>しゃちょう</rt></ruby>はもう<ruby>出<rt>で</rt></ruby>かけ___BLANK___。', clozeAnswer: 'られました',
-        tokens: ['しゃちょうは', 'もう', 'でかけられました', '。'] }
+        tokens: ['しゃちょうは', 'もう', 'でかけられました', '。'] },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>何時<rt>なんじ</rt></ruby>に<ruby>来<rt>こ</rt></ruby>られますか。',
+        kana: 'せんせいはなんじにこられますか。', romaji: 'sensei wa nanji ni koraremasu ka.', hu: 'Hánykor érkezik a tanár úr?',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>何時<rt>なんじ</rt></ruby>に<ruby>来<rt>こ</rt></ruby>ら___BLANK___か。', clozeAnswer: 'れます',
+        tokens: ['せんせいは', 'なんじに', 'こられますか', '。'], from: 'l38:1:1' },
+      { jp: '<ruby>部長<rt>ぶちょう</rt></ruby>はもう<ruby>帰<rt>かえ</rt></ruby>られました。',
+        kana: 'ぶちょうはもうかえられました。', romaji: 'buchou wa mou kaeraremashita.', hu: 'Az osztályvezető úr már hazament.',
+        cloze: '<ruby>部長<rt>ぶちょう</rt></ruby>はもう<ruby>帰<rt>かえ</rt></ruby>___BLANK___。', clozeAnswer: 'られました',
+        tokens: ['ぶちょうはもう', 'かえられました', '。'], from: 'l38:1:2' },
+      { jp: '<ruby>社長<rt>しゃちょう</rt></ruby>は<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>まれます。',
+        kana: 'しゃちょうはまいあさしんぶんをよまれます。', romaji: 'shachou wa maiasa shinbun o yomaremasu.', hu: 'Az igazgató úr minden reggel újságot olvas.',
+        cloze: '<ruby>社長<rt>しゃちょう</rt></ruby>は<ruby>毎朝<rt>まいあさ</rt></ruby><ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>ま___BLANK___。', clozeAnswer: 'れます',
+        tokens: ['しゃちょうは', 'まいあさ', 'しんぶんを', 'よまれます', '。'], from: 'l38:1:4' }
     ],
     contrasts: ['o_ni_naru', 'passive_person']
   },
@@ -3357,7 +4589,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>本<rt>ほん</rt></ruby>をお<ruby>読<rt>よ</rt></ruby>みになりますか。',
         kana: 'このほんをおよみになりますか。', romaji: 'kono hon o oyomi ni narimasu ka.', hu: 'Elolvassa ezt a könyvet?',
         cloze: 'この<ruby>本<rt>ほん</rt></ruby>をお<ruby>読<rt>よ</rt></ruby>み___BLANK___か。', clozeAnswer: 'になります',
-        tokens: ['この', 'ほんを', 'およみになりますか', '。'] }
+        tokens: ['この', 'ほんを', 'およみになりますか', '。'] },
+      { jp: '<ruby>社長<rt>しゃちょう</rt></ruby>はもうお<ruby>帰<rt>かえ</rt></ruby>りになりました。',
+        kana: 'しゃちょうはもうおかえりになりました。', romaji: 'shachou wa mou okaeri ni narimashita.', hu: 'Az igazgató úr már hazatért.',
+        cloze: '<ruby>社長<rt>しゃちょう</rt></ruby>はもうお<ruby>帰<rt>かえ</rt></ruby>り___BLANK___。', clozeAnswer: 'になりました',
+        tokens: ['しゃちょうはもう', 'おかえりに', 'なりました', '。'], from: 'l38:2:1' },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>がこの<ruby>本<rt>ほん</rt></ruby>をお<ruby>書<rt>か</rt></ruby>きになりました。',
+        kana: 'せんせいがこのほんをおかきになりました。', romaji: 'sensei ga kono hon o okaki ni narimashita.', hu: 'Ezt a könyvet a tanár úr írta.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>がこの<ruby>本<rt>ほん</rt></ruby>をお<ruby>書<rt>か</rt></ruby>き___BLANK___。', clozeAnswer: 'になりました',
+        tokens: ['せんせいが', 'この', 'ほんを', 'おかきに', 'なりました', '。'], from: 'l38:2:2' },
+      { jp: '<ruby>何<rt>なに</rt></ruby>をお<ruby>飲<rt>の</rt></ruby>みになりますか。',
+        kana: 'なにをおのみになりますか。', romaji: 'nani o onomi ni narimasu ka.', hu: 'Mit parancsol inni?',
+        cloze: '<ruby>何<rt>なに</rt></ruby>をお<ruby>飲<rt>の</rt></ruby>み___BLANK___か。', clozeAnswer: 'になります',
+        tokens: ['なにを', 'おのみに', 'なりますか', '。'], from: 'l38:2:3' }
     ],
     contrasts: ['o_shimasu', 'rareru_honorific']
   },
@@ -3374,7 +4618,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'どうぞ<ruby>召<rt>め</rt></ruby>し<ruby>上<rt>あ</rt></ruby>がってください。',
         kana: 'どうぞめしあがってください。', romaji: 'douzo meshiagatte kudasai.', hu: 'Tessék, fogyassza egészséggel!',
         cloze: 'どうぞ___BLANK___ください。', clozeAnswer: 'めしあがって',
-        tokens: ['どうぞ', 'めしあがってください', '。'] }
+        tokens: ['どうぞ', 'めしあがってください', '。'] },
+      { jp: '<ruby>社長<rt>しゃちょう</rt></ruby>は<ruby>今<rt>いま</rt></ruby>、お<ruby>客様<rt>きゃくさま</rt></ruby>と<ruby>話<rt>はな</rt></ruby>していらっしゃいます。',
+        kana: 'しゃちょうはいま、おきゃくさまとはなしていらっしゃいます。', romaji: 'shachou wa ima, o-kyaku-sama to hanashite irasshaimasu.', hu: 'Az igazgató úr éppen egy vendéggel beszél.',
+        cloze: '<ruby>社長<rt>しゃちょう</rt></ruby>は<ruby>今<rt>いま</rt></ruby>、お<ruby>客様<rt>きゃくさま</rt></ruby>と<ruby>話<rt>はな</rt></ruby>して___BLANK___。', clozeAnswer: 'いらっしゃいます',
+        tokens: ['しゃちょうは', 'いま', '、', 'おきゃくさまと', 'はなして', 'いらっしゃいます', '。'], from: 'l38:3:8' }
     ],
     contrasts: ['kenjou_special', 'o_ni_naru']
   },
@@ -3391,7 +4639,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>若<rt>わか</rt></ruby>いうちに、いろいろな<ruby>国<rt>くに</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。',
         kana: 'わかいうちに、いろいろなくにへいきたいです。', romaji: 'wakai uchi ni, iroiro na kuni e ikitai desu.', hu: 'Amíg fiatal vagyok, sok országba szeretnék eljutni.',
         cloze: '<ruby>若<rt>わか</rt></ruby>い___BLANK___、いろいろな<ruby>国<rt>くに</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。', clozeAnswer: 'うちに',
-        tokens: ['わかいうちに', '、', 'いろいろなくにへ', 'いきたいです', '。'] }
+        tokens: ['わかいうちに', '、', 'いろいろなくにへ', 'いきたいです', '。'] },
+      { jp: '<ruby>熱<rt>あつ</rt></ruby>いうちに、どうぞ。',
+        kana: 'あついうちに、どうぞ。', romaji: 'atsui uchi ni, douzo.', hu: 'Tessék, amíg meleg.',
+        cloze: '<ruby>熱<rt>あつ</rt></ruby>い___BLANK___、どうぞ。', clozeAnswer: 'うちに',
+        tokens: ['あつい', 'うちに', '、', 'どうぞ', '。'], from: 'l38:6:1' },
+      { jp: '<ruby>忘<rt>わす</rt></ruby>れないうちに、メモしておきます。',
+        kana: 'わすれないうちに、メモしておきます。', romaji: 'wasurenai uchi ni, memo shite okimasu.', hu: 'Felírom, mielőtt elfelejtem.',
+        cloze: '<ruby>忘<rt>わす</rt></ruby>れない___BLANK___、メモしておきます。', clozeAnswer: 'うちに',
+        tokens: ['わすれない', 'うちに', '、', 'メモ', 'して', 'おきます', '。'], from: 'l38:6:2' },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>にいるうちに、<ruby>富士山<rt>ふじさん</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>りたいです。',
+        kana: 'にほんにいるうちに、ふじさんにのぼりたいです。', romaji: 'nihon ni iru uchi ni, fujisan ni noboritai desu.', hu: 'Amíg Japánban vagyok, szeretnék felmenni a Fudzsira.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>にいる___BLANK___、<ruby>富士山<rt>ふじさん</rt></ruby>に<ruby>登<rt>のぼ</rt></ruby>りたいです。', clozeAnswer: 'うちに',
+        tokens: ['にほんに', 'いる', 'うちに', '、', 'ふじさんに', 'のぼりたいです', '。'], from: 'l38:6:3' }
     ],
     contrasts: ['mae_ni', 'toki']
   },
@@ -3410,7 +4670,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>駅<rt>えき</rt></ruby>までお<ruby>送<rt>おく</rt></ruby>りします。',
         kana: 'えきまでおおくりします。', romaji: 'eki made ookuri shimasu.', hu: 'Elkísérem az állomásig.',
         cloze: '<ruby>駅<rt>えき</rt></ruby>までお<ruby>送<rt>おく</rt></ruby>り___BLANK___。', clozeAnswer: 'します',
-        tokens: ['えきまで', 'おおくりします', '。'] }
+        tokens: ['えきまで', 'おおくりします', '。'] },
+      { jp: 'お<ruby>荷物<rt>にもつ</rt></ruby>をお<ruby>持<rt>も</rt></ruby>ちします。',
+        kana: 'おにもつをおもちします。', romaji: 'onimotsu o omochi shimasu.', hu: 'Viszem a csomagját.',
+        cloze: 'お<ruby>荷物<rt>にもつ</rt></ruby>をお<ruby>持<rt>も</rt></ruby>ち___BLANK___。', clozeAnswer: 'します',
+        tokens: ['おにもつを', 'おもち', 'します', '。'], from: 'l39:1:1' },
+      { jp: 'あとでご<ruby>連絡<rt>れんらく</rt></ruby>します。',
+        kana: 'あとでごれんらくします。', romaji: 'ato de gorenraku shimasu.', hu: 'Később jelentkezem.',
+        cloze: 'あとでご<ruby>連絡<rt>れんらく</rt></ruby>___BLANK___。', clozeAnswer: 'します',
+        tokens: ['あとで', 'ごれんらく', 'します', '。'], from: 'l39:1:3' },
+      { jp: '<ruby>傘<rt>かさ</rt></ruby>をお<ruby>貸<rt>か</rt></ruby>しします。',
+        kana: 'かさをおかしします。', romaji: 'kasa o o-kashi shimasu.', hu: 'Kölcsönadom az esernyőmet.',
+        cloze: '<ruby>傘<rt>かさ</rt></ruby>をお<ruby>貸<rt>か</rt></ruby>し___BLANK___。', clozeAnswer: 'します',
+        tokens: ['かさをおかし', 'します', '。'], from: 'l39:1:5' }
     ],
     contrasts: ['o_ni_naru', 'mashouka']
   },
@@ -3444,7 +4716,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>字<rt>じ</rt></ruby>は<ruby>読<rt>よ</rt></ruby>みにくいです。',
         kana: 'このじはよみにくいです。', romaji: 'kono ji wa yominikui desu.', hu: 'Ezt a betűt nehéz elolvasni.',
         cloze: 'この<ruby>字<rt>じ</rt></ruby>は<ruby>読<rt>よ</rt></ruby>み___BLANK___です。', clozeAnswer: 'にくい',
-        tokens: ['この', 'じは', 'よみにくいです', '。'] }
+        tokens: ['この', 'じは', 'よみにくいです', '。'] },
+      { jp: 'この<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>覚<rt>おぼ</rt></ruby>えにくいです。',
+        kana: 'このかんじはおぼえにくいです。', romaji: 'kono kanji wa oboenikui desu.', hu: 'Ezt a kanjit nehéz megjegyezni.',
+        cloze: 'この<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>覚<rt>おぼ</rt></ruby>え___BLANK___です。', clozeAnswer: 'にくい',
+        tokens: ['この', 'かんじは', 'おぼえにくいです', '。'], from: 'l39:5:2' },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>の<ruby>説明<rt>せつめい</rt></ruby>はわかりやすいです。',
+        kana: 'せんせいのせつめいはわかりやすいです。', romaji: 'sensei no setsumei wa wakariyasui desu.', hu: 'A tanár magyarázata könnyen érthető.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>の<ruby>説明<rt>せつめい</rt></ruby>はわかり___BLANK___です。', clozeAnswer: 'やすい',
+        tokens: ['せんせいの', 'せつめいは', 'わかりやすいです', '。'], from: 'l39:5:3' },
+      { jp: 'この<ruby>靴<rt>くつ</rt></ruby>は<ruby>歩<rt>ある</rt></ruby>きやすいです。',
+        kana: 'このくつはあるきやすいです。', romaji: 'kono kutsu wa arukiyasui desu.', hu: 'Ebben a cipőben kényelmes járni.',
+        cloze: 'この<ruby>靴<rt>くつ</rt></ruby>は<ruby>歩<rt>ある</rt></ruby>き___BLANK___です。', clozeAnswer: 'やすい',
+        tokens: ['この', 'くつは', 'あるきやすいです', '。'], from: 'l39:5:4' }
     ],
     contrasts: ['sugiru']
   },
@@ -3461,7 +4745,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>靴<rt>くつ</rt></ruby>は<ruby>大<rt>おお</rt></ruby>きすぎます。',
         kana: 'このくつはおおきすぎます。', romaji: 'kono kutsu wa ookisugimasu.', hu: 'Ez a cipő túl nagy.',
         cloze: 'この<ruby>靴<rt>くつ</rt></ruby>は<ruby>大<rt>おお</rt></ruby>き___BLANK___。', clozeAnswer: 'すぎます',
-        tokens: ['この', 'くつは', 'おおきすぎます', '。'] }
+        tokens: ['この', 'くつは', 'おおきすぎます', '。'] },
+      { jp: 'この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>簡単<rt>かんたん</rt></ruby>すぎます。',
+        kana: 'このもんだいはかんたんすぎます。', romaji: 'kono mondai wa kantansugimasu.', hu: 'Ez a feladat túl könnyű.',
+        cloze: 'この<ruby>問題<rt>もんだい</rt></ruby>は<ruby>簡単<rt>かんたん</rt></ruby>___BLANK___。', clozeAnswer: 'すぎます',
+        tokens: ['この', 'もんだいは', 'かんたんすぎます', '。'], from: 'l39:6:3' },
+      { jp: 'この<ruby>部屋<rt>へや</rt></ruby>は<ruby>狭<rt>せま</rt></ruby>すぎます。',
+        kana: 'このへやはせますぎます。', romaji: 'kono heya wa semasugimasu.', hu: 'Ez a szoba túl kicsi.',
+        cloze: 'この<ruby>部屋<rt>へや</rt></ruby>は<ruby>狭<rt>せま</rt></ruby>___BLANK___。', clozeAnswer: 'すぎます',
+        tokens: ['この', 'へやは', 'せますぎます', '。'], from: 'l39:6:4' }
     ],
     contrasts: ['yasui_nikui', 'bakari']
   },
@@ -3480,7 +4772,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'どんなに<ruby>忙<rt>いそが</rt></ruby>しくても、<ruby>毎日<rt>まいにち</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>します。',
         kana: 'どんなにいそがしくても、まいにちべんきょうします。', romaji: 'donna ni isogashikute mo, mainichi benkyou shimasu.', hu: 'Bármennyire elfoglalt vagyok, minden nap tanulok.',
         cloze: '___BLANK___<ruby>忙<rt>いそが</rt></ruby>しくても、<ruby>毎日<rt>まいにち</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>します。', clozeAnswer: 'どんなに',
-        tokens: ['どんなに', 'いそがしくても', '、', 'まいにち', 'べんきょうします', '。'] }
+        tokens: ['どんなに', 'いそがしくても', '、', 'まいにち', 'べんきょうします', '。'] },
+      { jp: 'いくら<ruby>待<rt>ま</rt></ruby>っても、バスが<ruby>来<rt>き</rt></ruby>ません。',
+        kana: 'いくらまっても、バスがきません。', romaji: 'ikura matte mo, basu ga kimasen.', hu: 'Akármeddig várok, nem jön a busz.',
+        cloze: 'いくら<ruby>待<rt>ま</rt></ruby>っ___BLANK___、バスが<ruby>来<rt>き</rt></ruby>ません。', clozeAnswer: 'ても',
+        tokens: ['いくら', 'まっても', '、', 'バスが', 'きません', '。'], from: 'l40:1:1' },
+      { jp: '<ruby>何<rt>なに</rt></ruby>を<ruby>食<rt>た</rt></ruby>べても、おいしいです。',
+        kana: 'なにをたべても、おいしいです。', romaji: 'nani o tabete mo, oishii desu.', hu: 'Bármit eszem, finom.',
+        cloze: '<ruby>何<rt>なに</rt></ruby>を<ruby>食<rt>た</rt></ruby>べ___BLANK___、おいしいです。', clozeAnswer: 'ても',
+        tokens: ['なにを', 'たべても', '、', 'おいしいです', '。'], from: 'l40:1:2' },
+      { jp: 'いつ<ruby>行<rt>い</rt></ruby>っても、あの<ruby>店<rt>みせ</rt></ruby>は<ruby>込<rt>こ</rt></ruby>んでいます。',
+        kana: 'いついっても、あのみせはこんでいます。', romaji: 'itsu itte mo, ano mise wa konde imasu.', hu: 'Akármikor megyek, az a bolt tele van.',
+        cloze: 'いつ<ruby>行<rt>い</rt></ruby>っ___BLANK___、あの<ruby>店<rt>みせ</rt></ruby>は<ruby>込<rt>こ</rt></ruby>んでいます。', clozeAnswer: 'ても',
+        tokens: ['いつ', 'いっても', '、', 'あの', 'みせは', 'こんで', 'います', '。'], from: 'l40:1:3' }
     ],
     contrasts: ['temo', 'dare_demo']
   },
@@ -3497,7 +4801,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'いつでも<ruby>来<rt>き</rt></ruby>てください。',
         kana: 'いつでもきてください。', romaji: 'itsudemo kite kudasai.', hu: 'Bármikor jöjjön nyugodtan!',
         cloze: '___BLANK___<ruby>来<rt>き</rt></ruby>てください。', clozeAnswer: 'いつでも',
-        tokens: ['いつでも', 'きてください', '。'] }
+        tokens: ['いつでも', 'きてください', '。'] },
+      { jp: '<ruby>何<rt>なん</rt></ruby>でも<ruby>聞<rt>き</rt></ruby>いてください。',
+        kana: 'なんでもきいてください。', romaji: 'nan demo kiite kudasai.', hu: 'Bármit kérdezhet.',
+        cloze: '___BLANK___<ruby>聞<rt>き</rt></ruby>いてください。', clozeAnswer: 'なんでも',
+        tokens: ['なん', 'でも', 'きいて', 'ください', '。'], from: 'l40:2:1' }
     ],
     contrasts: ['daremo_imasen', 'demo_example']
   },
@@ -3514,7 +4822,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'やっとレポートを<ruby>書<rt>か</rt></ruby>きおわりました。',
         kana: 'やっとレポートをかきおわりました。', romaji: 'yatto repooto o kakiowarimashita.', hu: 'Végre megírtam a beszámolót.',
         cloze: 'やっとレポートを<ruby>書<rt>か</rt></ruby>き___BLANK___。', clozeAnswer: 'おわりました',
-        tokens: ['やっと', 'レポートを', 'かきおわりました', '。'] }
+        tokens: ['やっと', 'レポートを', 'かきおわりました', '。'] },
+      { jp: '<ruby>桜<rt>さくら</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>き<ruby>始<rt>はじ</rt></ruby>めました。',
+        kana: 'さくらがさきはじめました。', romaji: 'sakura ga sakihajimemashita.', hu: 'Nyílni kezdett a cseresznyevirág.',
+        cloze: '<ruby>桜<rt>さくら</rt></ruby>が<ruby>咲<rt>さ</rt></ruby>き___BLANK___。', clozeAnswer: 'はじめました',
+        tokens: ['さくらが', 'さきはじめました', '。'], from: 'l40:3:2' },
+      { jp: 'この<ruby>本<rt>ほん</rt></ruby>はもう<ruby>読<rt>よ</rt></ruby>み<ruby>終<rt>お</rt></ruby>わりました。',
+        kana: 'このほんはもうよみおわりました。', romaji: 'kono hon wa mou yomiowarimashita.', hu: 'Ezt a könyvet már kiolvastam.',
+        cloze: 'この<ruby>本<rt>ほん</rt></ruby>はもう<ruby>読<rt>よ</rt></ruby>み___BLANK___。', clozeAnswer: 'おわりました',
+        tokens: ['この', 'ほんはもう', 'よみおわりました', '。'], from: 'l40:3:3' },
+      { jp: 'レポートを<ruby>書<rt>か</rt></ruby>き<ruby>終<rt>お</rt></ruby>わりました。',
+        kana: 'レポートをかきおわりました。', romaji: 'repooto o kakiowarimashita.', hu: 'Megírtam a beszámolót.',
+        cloze: 'レポートを<ruby>書<rt>か</rt></ruby>き___BLANK___。', clozeAnswer: 'おわりました',
+        tokens: ['レポートを', 'かきおわりました', '。'], from: 'l40:3:6' }
     ],
     contrasts: ['dasu', 'tsuzukeru']
   },
@@ -3531,7 +4851,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>赤<rt>あか</rt></ruby>ちゃんが<ruby>泣<rt>な</rt></ruby>きだしました。',
         kana: 'あかちゃんがなきだしました。', romaji: 'akachan ga nakidashimashita.', hu: 'A kisbaba sírni kezdett.',
         cloze: '<ruby>赤<rt>あか</rt></ruby>ちゃんが<ruby>泣<rt>な</rt></ruby>き___BLANK___。', clozeAnswer: 'だしました',
-        tokens: ['あかちゃんが', 'なきだしました', '。'] }
+        tokens: ['あかちゃんが', 'なきだしました', '。'] },
+      { jp: '<ruby>赤<rt>あか</rt></ruby>ちゃんが<ruby>急<rt>きゅう</rt></ruby>に<ruby>泣<rt>な</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しました。',
+        kana: 'あかちゃんがきゅうになきだしました。', romaji: 'akachan ga kyuu ni nakidashimashita.', hu: 'A baba hirtelen sírni kezdett.',
+        cloze: '<ruby>赤<rt>あか</rt></ruby>ちゃんが<ruby>急<rt>きゅう</rt></ruby>に<ruby>泣<rt>な</rt></ruby>き___BLANK___。', clozeAnswer: 'だしました',
+        tokens: ['あかちゃんが', 'きゅうに', 'なきだしました', '。'], from: 'l40:4:1' },
+      { jp: 'みんなが<ruby>笑<rt>わら</rt></ruby>い<ruby>出<rt>だ</rt></ruby>しました。',
+        kana: 'みんながわらいだしました。', romaji: 'minna ga waraidashimashita.', hu: 'Mindenki nevetésben tört ki.',
+        cloze: 'みんなが<ruby>笑<rt>わら</rt></ruby>い___BLANK___。', clozeAnswer: 'だしました',
+        tokens: ['みんなが', 'わらいだしました', '。'], from: 'l40:4:3' },
+      { jp: '<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>急<rt>きゅう</rt></ruby>に<ruby>動<rt>うご</rt></ruby>き<ruby>出<rt>だ</rt></ruby>しました。',
+        kana: 'でんしゃがきゅうにうごきだしました。', romaji: 'densha ga kyuu ni ugokidashimashita.', hu: 'A vonat hirtelen elindult.',
+        cloze: '<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>急<rt>きゅう</rt></ruby>に<ruby>動<rt>うご</rt></ruby>き___BLANK___。', clozeAnswer: 'だしました',
+        tokens: ['でんしゃが', 'きゅうに', 'うごきだしました', '。'], from: 'l40:4:4' }
     ],
     contrasts: ['hajimeru_owaru']
   },
@@ -3548,7 +4880,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'これからも<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しつづけます。',
         kana: 'これからもにほんごをべんきょうしつづけます。', romaji: 'kore kara mo nihongo o benkyou shitsuzukemasu.', hu: 'Ezután is tovább tanulok japánul.',
         cloze: 'これからも<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>し___BLANK___。', clozeAnswer: 'つづけます',
-        tokens: ['これからも', 'にほんごを', 'べんきょう', 'しつづけます', '。'] }
+        tokens: ['これからも', 'にほんごを', 'べんきょう', 'しつづけます', '。'] },
+      { jp: '<ruby>三時間<rt>さんじかん</rt></ruby>も<ruby>歩<rt>ある</rt></ruby>き<ruby>続<rt>つづ</rt></ruby>けました。',
+        kana: 'さんじかんもあるきつづけました。', romaji: 'sanjikan mo arukitsuzukemashita.', hu: 'Három órán át gyalogoltam megállás nélkül.',
+        cloze: '<ruby>三時間<rt>さんじかん</rt></ruby>も<ruby>歩<rt>ある</rt></ruby>き___BLANK___。', clozeAnswer: 'つづけました',
+        tokens: ['さんじかんも', 'あるきつづけました', '。'], from: 'l40:5:1' },
+      { jp: 'あきらめないで、<ruby>最後<rt>さいご</rt></ruby>まで<ruby>走<rt>はし</rt></ruby>り<ruby>続<rt>つづ</rt></ruby>けました。',
+        kana: 'あきらめないで、さいごまではしりつづけました。', romaji: 'akiramenaide, saigo made hashiritsuzukemashita.', hu: 'Nem adtam fel: végigfutottam.',
+        cloze: 'あきらめないで、<ruby>最後<rt>さいご</rt></ruby>まで<ruby>走<rt>はし</rt></ruby>り___BLANK___。', clozeAnswer: 'つづけました',
+        tokens: ['あきらめないで', '、', 'さいごまで', 'はしりつづけました', '。'], from: 'l40:5:6' }
     ],
     contrasts: ['hajimeru_owaru', 'te_iku_change']
   },
@@ -3567,7 +4907,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'あの<ruby>二人<rt>ふたり</rt></ruby>はまるで<ruby>兄弟<rt>きょうだい</rt></ruby>のようです。',
         kana: 'あのふたりはまるできょうだいのようです。', romaji: 'ano futari wa marude kyoudai no you desu.', hu: 'Az a kettő olyan, mintha testvérek volnának.',
         cloze: 'あの<ruby>二人<rt>ふたり</rt></ruby>は___BLANK___<ruby>兄弟<rt>きょうだい</rt></ruby>のようです。', clozeAnswer: 'まるで',
-        tokens: ['あの', 'ふたりは', 'まるで', 'きょうだいの', 'ようです', '。'] }
+        tokens: ['あの', 'ふたりは', 'まるで', 'きょうだいの', 'ようです', '。'] },
+      { jp: '<ruby>彼<rt>かれ</rt></ruby>はまるで<ruby>日本人<rt>にほんじん</rt></ruby>のように<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>話<rt>はな</rt></ruby>します。',
+        kana: 'かれはまるでにほんじんのようににほんごをはなします。', romaji: 'kare wa marude nihonjin no you ni nihongo o hanashimasu.', hu: 'Úgy beszél japánul, mintha japán volna.',
+        cloze: '<ruby>彼<rt>かれ</rt></ruby>は___BLANK___<ruby>日本人<rt>にほんじん</rt></ruby>のように<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>話<rt>はな</rt></ruby>します。', clozeAnswer: 'まるで',
+        tokens: ['かれは', 'まるで', 'にほんじんのように', 'にほんごを', 'はなします', '。'], from: 'l41:1:2' },
+      { jp: 'この<ruby>人形<rt>にんぎょう</rt></ruby>はまるで<ruby>生<rt>い</rt></ruby>きているようです。',
+        kana: 'このにんぎょうはまるでいきているようです。', romaji: 'kono ningyou wa marude ikite iru you desu.', hu: 'Ez a baba olyan, mintha élne.',
+        cloze: 'この<ruby>人形<rt>にんぎょう</rt></ruby>は___BLANK___<ruby>生<rt>い</rt></ruby>きているようです。', clozeAnswer: 'まるで',
+        tokens: ['この', 'にんぎょうは', 'まるで', 'いきて', 'いるようです', '。'], from: 'l41:1:3' },
+      { jp: '<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>って、まるで<ruby>絵<rt>え</rt></ruby>のような<ruby>景色<rt>けしき</rt></ruby>です。',
+        kana: 'ゆきがふって、まるでえのようなけしきです。', romaji: 'yuki ga futte, marude e no you na keshiki desu.', hu: 'Esik a hó: a táj olyan, mint egy festmény.',
+        cloze: '<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>って、___BLANK___<ruby>絵<rt>え</rt></ruby>のような<ruby>景色<rt>けしき</rt></ruby>です。', clozeAnswer: 'まるで',
+        tokens: ['ゆきが', 'ふって', '、', 'まるでえのような', 'けしきです', '。'], from: 'l41:1:4' }
     ],
     contrasts: ['mitai_na', 'you_desu']
   },
@@ -3601,7 +4953,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'もう<ruby>待<rt>ま</rt></ruby>つしかありません。',
         kana: 'もうまつしかありません。', romaji: 'mou matsu shika arimasen.', hu: 'Már csak várni lehet.',
         cloze: 'もう<ruby>待<rt>ま</rt></ruby>つ___BLANK___。', clozeAnswer: 'しかありません',
-        tokens: ['もう', 'まつしかありません', '。'] }
+        tokens: ['もう', 'まつしかありません', '。'] },
+      { jp: '<ruby>時間<rt>じかん</rt></ruby>が<ruby>十分<rt>じゅっぷん</rt></ruby>しかありません。',
+        kana: 'じかんがじゅっぷんしかありません。', romaji: 'jikan ga juppun shika arimasen.', hu: 'Csak tíz percünk van.',
+        cloze: '<ruby>時間<rt>じかん</rt></ruby>が<ruby>十分<rt>じゅっぷん</rt></ruby>___BLANK___。', clozeAnswer: 'しかありません',
+        tokens: ['じかんが', 'じゅっぷんしか', 'ありません', '。'], from: 'l41:3:1' },
+      { jp: 'もう<ruby>歩<rt>ある</rt></ruby>くしかありません。',
+        kana: 'もうあるくしかありません。', romaji: 'mou aruku shika arimasen.', hu: 'Nincs más hátra, gyalogolni kell.',
+        cloze: 'もう<ruby>歩<rt>ある</rt></ruby>く___BLANK___。', clozeAnswer: 'しかありません',
+        tokens: ['もう', 'あるくしか', 'ありません', '。'], from: 'l41:3:2' },
+      { jp: '<ruby>自分<rt>じぶん</rt></ruby>でやるしかありません。',
+        kana: 'じぶんでやるしかありません。', romaji: 'jibun de yaru shika arimasen.', hu: 'Nincs más választásom, magamnak kell megcsinálnom.',
+        cloze: '<ruby>自分<rt>じぶん</rt></ruby>でやる___BLANK___。', clozeAnswer: 'しかありません',
+        tokens: ['じぶんで', 'やるしか', 'ありません', '。'], from: 'l41:3:3' }
     ],
     contrasts: ['shika_nai', 'nakereba_naranai']
   },
@@ -3618,7 +4982,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>十年<rt>じゅうねん</rt></ruby><ruby>住<rt>す</rt></ruby>んでいただけあって、<ruby>日本語<rt>にほんご</rt></ruby>がぺらぺらです。',
         kana: 'じゅうねんすんでいただけあって、にほんごがぺらぺらです。', romaji: 'juunen sunde ita dake atte, nihongo ga perapera desu.', hu: 'Nem hiába élt ott tíz évet, folyékonyan beszél japánul.',
         cloze: '<ruby>十年<rt>じゅうねん</rt></ruby><ruby>住<rt>す</rt></ruby>んでいた___BLANK___、<ruby>日本語<rt>にほんご</rt></ruby>がぺらぺらです。', clozeAnswer: 'だけあって',
-        tokens: ['じゅうねん', 'すんでいただけあって', '、', 'にほんごが', 'ぺらぺらです', '。'] }
+        tokens: ['じゅうねん', 'すんでいただけあって', '、', 'にほんごが', 'ぺらぺらです', '。'] },
+      { jp: '<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>店<rt>みせ</rt></ruby>だけあって、とてもおいしいです。',
+        kana: 'ゆうめいなみせだけあって、とてもおいしいです。', romaji: 'yuumei na mise dake atte, totemo oishii desu.', hu: 'Nem hiába híres ez az étterem: nagyon finom.',
+        cloze: '<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>店<rt>みせ</rt></ruby>___BLANK___、とてもおいしいです。', clozeAnswer: 'だけあって',
+        tokens: ['ゆうめいな', 'みせだけ', 'あって', '、', 'とても', 'おいしいです', '。'], from: 'l41:4:1' },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>十年<rt>じゅうねん</rt></ruby><ruby>住<rt>す</rt></ruby>んでいただけあって、<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>です。',
+        kana: 'にほんにじゅうねんすんでいただけあって、にほんごがじょうずです。', romaji: 'nihon ni juunen sunde ita dake atte, nihongo ga jouzu desu.', hu: 'Nem hiába élt tíz évet Japánban: jól beszél japánul.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>十年<rt>じゅうねん</rt></ruby><ruby>住<rt>す</rt></ruby>んでいた___BLANK___、<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>です。', clozeAnswer: 'だけあって',
+        tokens: ['にほんに', 'じゅうねん', 'すんで', 'いただけ', 'あって', '、', 'にほんごが', 'じょうずです', '。'], from: 'l41:4:2' },
+      { jp: '<ruby>高<rt>たか</rt></ruby>いだけあって、このカメラはきれいに<ruby>撮<rt>と</rt></ruby>れます。',
+        kana: 'たかいだけあって、このカメラはきれいにとれます。', romaji: 'takai dake atte, kono kamera wa kirei ni toremasu.', hu: 'Nem hiába drága: ez a gép szép képeket csinál.',
+        cloze: '<ruby>高<rt>たか</rt></ruby>い___BLANK___、このカメラはきれいに<ruby>撮<rt>と</rt></ruby>れます。', clozeAnswer: 'だけあって',
+        tokens: ['たかいだけ', 'あって', '、', 'この', 'カメラは', 'きれいに', 'とれます', '。'], from: 'l41:4:3' }
     ],
     contrasts: ['okage_de', 'dake']
   },
@@ -3635,7 +5011,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '「<ruby>禁煙<rt>きんえん</rt></ruby>」というのはたばこを<ruby>吸<rt>す</rt></ruby>ってはいけないという<ruby>意味<rt>いみ</rt></ruby>です。',
         kana: '「きんえん」というのはたばこをすってはいけないといういみです。', romaji: 'kinen to iu no wa tabako o sutte wa ikenai to iu imi desu.', hu: 'A „kinen" felirat azt jelenti, hogy tilos dohányozni.',
         cloze: '「<ruby>禁煙<rt>きんえん</rt></ruby>」___BLANK___たばこを<ruby>吸<rt>す</rt></ruby>ってはいけないという<ruby>意味<rt>いみ</rt></ruby>です。', clozeAnswer: 'というのは',
-        tokens: ['「きんえん」というのは', 'たばこを', 'すってはいけない', 'といういみです', '。'] }
+        tokens: ['「きんえん」というのは', 'たばこを', 'すってはいけない', 'といういみです', '。'] },
+      { jp: '「<ruby>祭<rt>まつ</rt></ruby>り」というのは<ruby>何<rt>なん</rt></ruby>ですか。',
+        kana: '「まつり」というのはなんですか。', romaji: 'matsuri to iu no wa nan desu ka.', hu: 'Mi az a macuri?',
+        cloze: '「<ruby>祭<rt>まつ</rt></ruby>り」___BLANK___<ruby>何<rt>なん</rt></ruby>ですか。', clozeAnswer: 'というのは',
+        tokens: ['「', 'まつり', '」', 'と', 'いうのは', 'なんですか', '。'], from: 'l41:5:1' },
+      { jp: '「<ruby>花見<rt>はなみ</rt></ruby>」というのは、<ruby>桜<rt>さくら</rt></ruby>を<ruby>見<rt>み</rt></ruby>ながら<ruby>楽<rt>たの</rt></ruby>しむことです。',
+        kana: '「はなみ」というのは、さくらをみながらたのしむことです。', romaji: 'hanami to iu no wa, sakura o minagara tanoshimu koto desu.', hu: 'A hanami azt jelenti: cseresznyevirág-nézés közben szórakozni.',
+        cloze: '「<ruby>花見<rt>はなみ</rt></ruby>」___BLANK___、<ruby>桜<rt>さくら</rt></ruby>を<ruby>見<rt>み</rt></ruby>ながら<ruby>楽<rt>たの</rt></ruby>しむことです。', clozeAnswer: 'というのは',
+        tokens: ['「', 'はなみ', '」', 'と', 'いうのは', '、', 'さくらを', 'みながら', 'たのしむ', 'ことです', '。'], from: 'l41:5:2' },
+      { jp: '「<ruby>食<rt>た</rt></ruby>べ<ruby>放題<rt>ほうだい</rt></ruby>」というのは、<ruby>好<rt>す</rt></ruby>きなだけ<ruby>食<rt>た</rt></ruby>べられるということです。',
+        kana: '「たべほうだい」というのは、すきなだけたべられるということです。', romaji: 'tabehoudai to iu no wa, suki na dake taberareru to iu koto desu.', hu: 'A „tabehódai" azt jelenti: annyit ehetsz, amennyit akarsz.',
+        cloze: '「<ruby>食<rt>た</rt></ruby>べ<ruby>放題<rt>ほうだい</rt></ruby>」___BLANK___、<ruby>好<rt>す</rt></ruby>きなだけ<ruby>食<rt>た</rt></ruby>べられるということです。', clozeAnswer: 'というのは',
+        tokens: ['「', 'たべほうだい', '」', 'と', 'いうのは', '、', 'すきなだけ', 'たべられると', 'いう', 'ことです', '。'], from: 'l41:5:4' }
     ],
     contrasts: ['to_iu', 'tte']
   },
@@ -3654,7 +5042,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>外国人<rt>がいこくじん</rt></ruby>にとって、<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいです。',
         kana: 'がいこくじんにとって、かんじはむずかしいです。', romaji: 'gaikokujin ni totte, kanji wa muzukashii desu.', hu: 'A külföldiek számára nehéz a kanji.',
         cloze: '<ruby>外国人<rt>がいこくじん</rt></ruby>___BLANK___、<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいです。', clozeAnswer: 'にとって',
-        tokens: ['がいこくじんにとって', '、', 'かんじは', 'むずかしいです', '。'] }
+        tokens: ['がいこくじんにとって', '、', 'かんじは', 'むずかしいです', '。'] },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもにとって、<ruby>遊<rt>あそ</rt></ruby>ぶことは<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>勉強<rt>べんきょう</rt></ruby>です。',
+        kana: 'こどもにとって、あそぶことはたいせつなべんきょうです。', romaji: 'kodomo ni totte, asobu koto wa taisetsu na benkyou desu.', hu: 'A gyereknek a játék fontos tanulás.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>ども___BLANK___、<ruby>遊<rt>あそ</rt></ruby>ぶことは<ruby>大切<rt>たいせつ</rt></ruby>な<ruby>勉強<rt>べんきょう</rt></ruby>です。', clozeAnswer: 'にとって',
+        tokens: ['こどもに', 'とって', '、', 'あそぶ', 'ことは', 'たいせつな', 'べんきょうです', '。'], from: 'l42:1:3' },
+      { jp: 'これは<ruby>私<rt>わたし</rt></ruby>にとっても、いい<ruby>経験<rt>けいけん</rt></ruby>になりました。',
+        kana: 'これはわたしにとっても、いいけいけんになりました。', romaji: 'kore wa watashi ni totte mo, ii keiken ni narimashita.', hu: 'Ez nekem is jó tapasztalat volt.',
+        cloze: 'これは<ruby>私<rt>わたし</rt></ruby>___BLANK___も、いい<ruby>経験<rt>けいけん</rt></ruby>になりました。', clozeAnswer: 'にとって',
+        tokens: ['これは', 'わたしに', 'とっても', '、', 'いい', 'けいけんに', 'なりました', '。'], from: 'l42:1:5' },
+      { jp: '<ruby>小<rt>ちい</rt></ruby>さい<ruby>会社<rt>かいしゃ</rt></ruby>にとって、これは<ruby>大<rt>おお</rt></ruby>きい<ruby>問題<rt>もんだい</rt></ruby>です。',
+        kana: 'ちいさいかいしゃにとって、これはおおきいもんだいです。', romaji: 'chiisai kaisha ni totte, kore wa ookii mondai desu.', hu: 'Egy kis cégnek ez nagy gond.',
+        cloze: '<ruby>小<rt>ちい</rt></ruby>さい<ruby>会社<rt>かいしゃ</rt></ruby>___BLANK___、これは<ruby>大<rt>おお</rt></ruby>きい<ruby>問題<rt>もんだい</rt></ruby>です。', clozeAnswer: 'にとって',
+        tokens: ['ちいさい', 'かいしゃに', 'とって', '、', 'これは', 'おおきい', 'もんだいです', '。'], from: 'l42:1:6' }
     ],
     contrasts: ['ni_tsuite', 'kara_miru_to']
   },
@@ -3671,7 +5071,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>外国人<rt>がいこくじん</rt></ruby>からみると、<ruby>不思議<rt>ふしぎ</rt></ruby>な<ruby>習慣<rt>しゅうかん</rt></ruby>です。',
         kana: 'がいこくじんからみると、ふしぎなしゅうかんです。', romaji: 'gaikokujin kara miru to, fushigi na shuukan desu.', hu: 'Külföldi szemmel nézve furcsa szokás.',
         cloze: '<ruby>外国人<rt>がいこくじん</rt></ruby>___BLANK___、<ruby>不思議<rt>ふしぎ</rt></ruby>な<ruby>習慣<rt>しゅうかん</rt></ruby>です。', clozeAnswer: 'からみると',
-        tokens: ['がいこくじんからみると', '、', 'ふしぎな', 'しゅうかんです', '。'] }
+        tokens: ['がいこくじんからみると', '、', 'ふしぎな', 'しゅうかんです', '。'] },
+      { jp: '<ruby>親<rt>おや</rt></ruby>から<ruby>見<rt>み</rt></ruby>ると、<ruby>子<rt>こ</rt></ruby>どもはいつまでも<ruby>子<rt>こ</rt></ruby>どもです。',
+        kana: 'おやからみると、こどもはいつまでもこどもです。', romaji: 'oya kara miru to, kodomo wa itsu made mo kodomo desu.', hu: 'A szülő szemében a gyerek mindig gyerek marad.',
+        cloze: '<ruby>親<rt>おや</rt></ruby>___BLANK___、<ruby>子<rt>こ</rt></ruby>どもはいつまでも<ruby>子<rt>こ</rt></ruby>どもです。', clozeAnswer: 'からみると',
+        tokens: ['おやから', 'みると', '、', 'こどもは', 'いつまでも', 'こどもです', '。'], from: 'l42:2:1' },
+      { jp: '<ruby>外国人<rt>がいこくじん</rt></ruby>から<ruby>見<rt>み</rt></ruby>ると、この<ruby>習慣<rt>しゅうかん</rt></ruby>は<ruby>不思議<rt>ふしぎ</rt></ruby>です。',
+        kana: 'がいこくじんからみると、このしゅうかんはふしぎです。', romaji: 'gaikokujin kara miru to, kono shuukan wa fushigi desu.', hu: 'Egy külföldi szemével ez a szokás furcsa.',
+        cloze: '<ruby>外国人<rt>がいこくじん</rt></ruby>___BLANK___、この<ruby>習慣<rt>しゅうかん</rt></ruby>は<ruby>不思議<rt>ふしぎ</rt></ruby>です。', clozeAnswer: 'からみると',
+        tokens: ['がいこくじんから', 'みると', '、', 'この', 'しゅうかんは', 'ふしぎです', '。'], from: 'l42:2:2' },
+      { jp: '<ruby>私<rt>わたし</rt></ruby>から<ruby>見<rt>み</rt></ruby>ると、どちらも<ruby>同<rt>おな</rt></ruby>じです。',
+        kana: 'わたしからみると、どちらもおなじです。', romaji: 'watashi kara miru to, dochira mo onaji desu.', hu: 'Az én szememben mindkettő ugyanaz.',
+        cloze: '<ruby>私<rt>わたし</rt></ruby>___BLANK___、どちらも<ruby>同<rt>おな</rt></ruby>じです。', clozeAnswer: 'からみると',
+        tokens: ['わたしから', 'みると', '、', 'どちらも', 'おなじです', '。'], from: 'l42:2:3' }
     ],
     contrasts: ['ni_totte']
   },
@@ -3688,7 +5100,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>今年<rt>ことし</rt></ruby>こそ、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>したいです。',
         kana: 'ことしこそ、しけんにごうかくしたいです。', romaji: 'kotoshi koso, shiken ni goukaku shitai desu.', hu: 'Idén aztán tényleg szeretnék átmenni a vizsgán.',
         cloze: '<ruby>今年<rt>ことし</rt></ruby>___BLANK___、<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>したいです。', clozeAnswer: 'こそ',
-        tokens: ['ことしこそ', '、', 'しけんに', 'ごうかくしたいです', '。'] }
+        tokens: ['ことしこそ', '、', 'しけんに', 'ごうかくしたいです', '。'] },
+      { jp: '<ruby>今年<rt>ことし</rt></ruby>こそ、<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。',
+        kana: 'ことしこそ、にほんへいきたいです。', romaji: 'kotoshi koso, nihon e ikitai desu.', hu: 'Idén aztán tényleg el akarok menni Japánba.',
+        cloze: '<ruby>今年<rt>ことし</rt></ruby>___BLANK___、<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。', clozeAnswer: 'こそ',
+        tokens: ['ことし', 'こそ', '、', 'にほんへ', 'いきたいです', '。'], from: 'l42:3:1' },
+      { jp: 'これこそ<ruby>私<rt>わたし</rt></ruby>が<ruby>探<rt>さが</rt></ruby>していた<ruby>本<rt>ほん</rt></ruby>です。',
+        kana: 'これこそわたしがさがしていたほんです。', romaji: 'kore koso watashi ga sagashite ita hon desu.', hu: 'Éppen ezt a könyvet kerestem.',
+        cloze: 'これ___BLANK___<ruby>私<rt>わたし</rt></ruby>が<ruby>探<rt>さが</rt></ruby>していた<ruby>本<rt>ほん</rt></ruby>です。', clozeAnswer: 'こそ',
+        tokens: ['これ', 'こそ', 'わたしが', 'さがして', 'いた', 'ほんです', '。'], from: 'l42:3:3' },
+      { jp: '<ruby>今度<rt>こんど</rt></ruby>こそ<ruby>合格<rt>ごうかく</rt></ruby>したいです。',
+        kana: 'こんどこそごうかくしたいです。', romaji: 'kondo koso goukaku shitai desu.', hu: 'Most aztán tényleg át akarok menni.',
+        cloze: '<ruby>今度<rt>こんど</rt></ruby>___BLANK___<ruby>合格<rt>ごうかく</rt></ruby>したいです。', clozeAnswer: 'こそ',
+        tokens: ['こんど', 'こそ', 'ごうかく', 'したいです', '。'], from: 'l42:3:4' }
     ],
     contrasts: ['dake', 'mo_also']
   },
@@ -3722,7 +5146,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'あの<ruby>人<rt>ひと</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>は<ruby>何<rt>なん</rt></ruby>だったっけ。',
         kana: 'あのひとのなまえはなんだったっけ。', romaji: 'ano hito no namae wa nan dattakke.', hu: 'Hogy is hívják azt az embert?',
         cloze: 'あの<ruby>人<rt>ひと</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>は<ruby>何<rt>なん</rt></ruby>だった___BLANK___。', clozeAnswer: 'っけ',
-        tokens: ['あの', 'ひとのなまえは', 'なんだったっけ', '。'] }
+        tokens: ['あの', 'ひとのなまえは', 'なんだったっけ', '。'] },
+      { jp: 'あの<ruby>店<rt>みせ</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>、<ruby>何<rt>なん</rt></ruby>でしたっけ。',
+        kana: 'あのみせのなまえ、なんでしたっけ。', romaji: 'ano mise no namae, nan deshita kke.', hu: 'Hogy is hívják azt a boltot?',
+        cloze: 'あの<ruby>店<rt>みせ</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>、<ruby>何<rt>なん</rt></ruby>でした___BLANK___。', clozeAnswer: 'っけ',
+        tokens: ['あの', 'みせの', 'なまえ', '、', 'なんでした', 'っけ', '。'], from: 'l42:6:3' }
     ],
     contrasts: ['kana', 'no_question']
   },
@@ -3741,7 +5169,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'もっと<ruby>頑張<rt>がんば</rt></ruby>れ！',
         kana: 'もっとがんばれ！', romaji: 'motto ganbare!', hu: 'Hajrá, még jobban!',
         cloze: 'もっと<ruby>頑張<rt>がんば</rt></ruby>___BLANK___！', clozeAnswer: 'れ',
-        tokens: ['もっと', 'がんばれ', '！'] }
+        tokens: ['もっと', 'がんばれ', '！'] },
+      { jp: '<ruby>危<rt>あぶ</rt></ruby>ない！<ruby>逃<rt>に</rt></ruby>げろ！',
+        kana: 'あぶない！にげろ！', romaji: 'abunai! nigero!', hu: 'Vigyázz! Menekülj!',
+        cloze: '<ruby>危<rt>あぶ</rt></ruby>ない！___BLANK___！', clozeAnswer: 'にげろ',
+        tokens: ['あぶない', '！', 'にげろ', '！'], from: 'l43:1:5' }
     ],
     contrasts: ['te_kudasai', 'nasai', 'na_prohibition']
   },
@@ -3775,7 +5207,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'よく<ruby>見<rt>み</rt></ruby>えるように、<ruby>前<rt>まえ</rt></ruby>に<ruby>座<rt>すわ</rt></ruby>ります。',
         kana: 'よくみえるように、まえにすわります。', romaji: 'yoku mieru you ni, mae ni suwarimasu.', hu: 'Előre ülök, hogy jól lássak.',
         cloze: 'よく<ruby>見<rt>み</rt></ruby>える___BLANK___、<ruby>前<rt>まえ</rt></ruby>に<ruby>座<rt>すわ</rt></ruby>ります。', clozeAnswer: 'ように',
-        tokens: ['よく', 'みえるように', '、', 'まえに', 'すわります', '。'] }
+        tokens: ['よく', 'みえるように', '、', 'まえに', 'すわります', '。'] },
+      { jp: 'よく<ruby>見<rt>み</rt></ruby>えるように、<ruby>前<rt>まえ</rt></ruby>に<ruby>座<rt>すわ</rt></ruby>りました。',
+        kana: 'よくみえるように、まえにすわりました。', romaji: 'yoku mieru you ni, mae ni suwarimashita.', hu: 'Előre ültem, hogy jól lássak.',
+        cloze: 'よく<ruby>見<rt>み</rt></ruby>える___BLANK___、<ruby>前<rt>まえ</rt></ruby>に<ruby>座<rt>すわ</rt></ruby>りました。', clozeAnswer: 'ように',
+        tokens: ['よく', 'みえるように', '、', 'まえに', 'すわりました', '。'], from: 'l43:4:2' },
+      { jp: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>せるように、<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>します。',
+        kana: 'にほんごがはなせるように、まいにちれんしゅうします。', romaji: 'nihongo ga hanaseru you ni, mainichi renshuu shimasu.', hu: 'Minden nap gyakorolok, hogy tudjak japánul beszélni.',
+        cloze: '<ruby>日本語<rt>にほんご</rt></ruby>が<ruby>話<rt>はな</rt></ruby>せる___BLANK___、<ruby>毎日<rt>まいにち</rt></ruby><ruby>練習<rt>れんしゅう</rt></ruby>します。', clozeAnswer: 'ように',
+        tokens: ['にほんごが', 'はなせるように', '、', 'まいにち', 'れんしゅう', 'します', '。'], from: 'l43:4:3' },
+      { jp: '<ruby>風邪<rt>かぜ</rt></ruby>をひかないように、<ruby>暖<rt>あたた</rt></ruby>かくしてください。',
+        kana: 'かぜをひかないように、あたたかくしてください。', romaji: 'kaze o hikanai you ni, atatakaku shite kudasai.', hu: 'Öltözzön melegen, nehogy megfázzon!',
+        cloze: '<ruby>風邪<rt>かぜ</rt></ruby>をひかない___BLANK___、<ruby>暖<rt>あたた</rt></ruby>かくしてください。', clozeAnswer: 'ように',
+        tokens: ['かぜを', 'ひかないように', '、', 'あたたかく', 'して', 'ください', '。'], from: 'l43:4:4' }
     ],
     contrasts: ['tame_ni', 'you_ni_suru', 'you_ni_naru']
   },
@@ -3792,7 +5236,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'これからは<ruby>遅<rt>おく</rt></ruby>れないようにします。',
         kana: 'これからはおくれないようにします。', romaji: 'kore kara wa okurenai you ni shimasu.', hu: 'Ezután ügyelek rá, hogy ne késsek.',
         cloze: 'これからは<ruby>遅<rt>おく</rt></ruby>れない___BLANK___。', clozeAnswer: 'ようにします',
-        tokens: ['これからは', 'おくれないようにします', '。'] }
+        tokens: ['これからは', 'おくれないようにします', '。'] },
+      { jp: '<ruby>遅<rt>おく</rt></ruby>れないようにします。',
+        kana: 'おくれないようにします。', romaji: 'okurenai you ni shimasu.', hu: 'Ügyelni fogok rá, hogy ne késsek.',
+        cloze: '<ruby>遅<rt>おく</rt></ruby>れない___BLANK___。', clozeAnswer: 'ようにします',
+        tokens: ['おくれないように', 'します', '。'], from: 'l43:6:2' },
+      { jp: '<ruby>甘<rt>あま</rt></ruby>いものを<ruby>食<rt>た</rt></ruby>べすぎないようにしています。',
+        kana: 'あまいものをたべすぎないようにしています。', romaji: 'amai mono o tabesuginai you ni shite imasu.', hu: 'Ügyelek rá, hogy ne egyek túl sok édességet.',
+        cloze: '<ruby>甘<rt>あま</rt></ruby>いものを<ruby>食<rt>た</rt></ruby>べすぎない___BLANK___。', clozeAnswer: 'ようにしています',
+        tokens: ['あまい', 'ものを', 'たべすぎないように', 'して', 'います', '。'], from: 'l43:6:4' },
+      { jp: 'これからは、<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>るようにします。',
+        kana: 'これからは、はやくねるようにします。', romaji: 'kore kara wa, hayaku neru you ni shimasu.', hu: 'Mostantól igyekszem korán lefeküdni.',
+        cloze: 'これからは、<ruby>早<rt>はや</rt></ruby>く<ruby>寝<rt>ね</rt></ruby>る___BLANK___。', clozeAnswer: 'ようにします',
+        tokens: ['これからは', '、', 'はやく', 'ねるように', 'します', '。'], from: 'l43:6:5' }
     ],
     contrasts: ['you_ni_naru', 'koto_ni_suru', 'you_ni_purpose']
   },
@@ -3809,7 +5265,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>説明書<rt>せつめいしょ</rt></ruby>のとおりに、<ruby>作<rt>つく</rt></ruby>りました。',
         kana: 'せつめいしょのとおりに、つくりました。', romaji: 'setsumeisho no toori ni, tsukurimashita.', hu: 'A leírás szerint készítettem el.',
         cloze: '<ruby>説明書<rt>せつめいしょ</rt></ruby>の___BLANK___、<ruby>作<rt>つく</rt></ruby>りました。', clozeAnswer: 'とおりに',
-        tokens: ['せつめいしょのとおりに', '、', 'つくりました', '。'] }
+        tokens: ['せつめいしょのとおりに', '、', 'つくりました', '。'] },
+      { jp: '<ruby>思<rt>おも</rt></ruby>ったとおりに、うまくいきました。',
+        kana: 'おもったとおりに、うまくいきました。', romaji: 'omotta toori ni, umaku ikimashita.', hu: 'Úgy sikerült, ahogy gondoltam.',
+        cloze: '<ruby>思<rt>おも</rt></ruby>った___BLANK___、うまくいきました。', clozeAnswer: 'とおりに',
+        tokens: ['おもった', 'とおりに', '、', 'うまく', 'いきました', '。'], from: 'l43:7:3' },
+      { jp: 'レシピに<ruby>書<rt>か</rt></ruby>いてあるとおりに、ケーキを<ruby>焼<rt>や</rt></ruby>きました。',
+        kana: 'レシピにかいてあるとおりに、ケーキをやきました。', romaji: 'reshipi ni kaite aru toori ni, keeki o yakimashita.', hu: 'A recept szerint sütöttem meg a tortát.',
+        cloze: 'レシピに<ruby>書<rt>か</rt></ruby>いてある___BLANK___、ケーキを<ruby>焼<rt>や</rt></ruby>きました。', clozeAnswer: 'とおりに',
+        tokens: ['レシピに', 'かいて', 'ある', 'とおりに', '、', 'ケーキを', 'やきました', '。'], from: 'l43:7:4' }
     ],
     contrasts: ['mama', 'mitai_na']
   },
@@ -3828,7 +5292,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'もっと<ruby>早<rt>はや</rt></ruby>く<ruby>言<rt>い</rt></ruby>うべきでした。',
         kana: 'もっとはやくいうべきでした。', romaji: 'motto hayaku iu beki deshita.', hu: 'Előbb kellett volna szólnom.',
         cloze: 'もっと<ruby>早<rt>はや</rt></ruby>く<ruby>言<rt>い</rt></ruby>う___BLANK___。', clozeAnswer: 'べきでした',
-        tokens: ['もっと', 'はやく', 'いうべきでした', '。'] }
+        tokens: ['もっと', 'はやく', 'いうべきでした', '。'] },
+      { jp: '<ruby>若<rt>わか</rt></ruby>いうちに、いろいろな<ruby>経験<rt>けいけん</rt></ruby>をするべきです。',
+        kana: 'わかいうちに、いろいろなけいけんをするべきです。', romaji: 'wakai uchi ni, iroiro na keiken o suru beki desu.', hu: 'Amíg fiatal az ember, sokféle tapasztalatot kell szereznie.',
+        cloze: '<ruby>若<rt>わか</rt></ruby>いうちに、いろいろな<ruby>経験<rt>けいけん</rt></ruby>をする___BLANK___。', clozeAnswer: 'べきです',
+        tokens: ['わかい', 'うちに', '、', 'いろいろな', 'けいけんを', 'する', 'べきです', '。'], from: 'l44:1:2' },
+      { jp: 'もっと<ruby>早<rt>はや</rt></ruby>く<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>めるべきでした。',
+        kana: 'もっとはやくじゅんびをはじめるべきでした。', romaji: 'motto hayaku junbi o hajimeru beki deshita.', hu: 'Korábban kellett volna elkezdenem a készülést.',
+        cloze: 'もっと<ruby>早<rt>はや</rt></ruby>く<ruby>準備<rt>じゅんび</rt></ruby>を<ruby>始<rt>はじ</rt></ruby>める___BLANK___。', clozeAnswer: 'べきでした',
+        tokens: ['もっと', 'はやく', 'じゅんびを', 'はじめる', 'べきでした', '。'], from: 'l44:1:4' },
+      { jp: '<ruby>自分<rt>じぶん</rt></ruby>の<ruby>意見<rt>いけん</rt></ruby>は、はっきり<ruby>言<rt>い</rt></ruby>うべきです。',
+        kana: 'じぶんのいけんは、はっきりいうべきです。', romaji: 'jibun no iken wa, hakkiri iu beki desu.', hu: 'A véleményedet világosan ki kell mondani.',
+        cloze: '<ruby>自分<rt>じぶん</rt></ruby>の<ruby>意見<rt>いけん</rt></ruby>は、はっきり<ruby>言<rt>い</rt></ruby>う___BLANK___。', clozeAnswer: 'べきです',
+        tokens: ['じぶんの', 'いけんは', '、', 'はっきり', 'いう', 'べきです', '。'], from: 'l44:1:7' }
     ],
     contrasts: ['nakereba_naranai', 'ta_hou_ga_ii', 'beki_dewa_nai']
   },
@@ -3845,7 +5321,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'そんな<ruby>所<rt>ところ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>くべきではありません。',
         kana: 'そんなところへいくべきではありません。', romaji: 'sonna tokoro e iku beki dewa arimasen.', hu: 'Nem volna szabad olyan helyre menni.',
         cloze: 'そんな<ruby>所<rt>ところ</rt></ruby>へ<ruby>行<rt>い</rt></ruby>く___BLANK___。', clozeAnswer: 'べきではありません',
-        tokens: ['そんな', 'ところへ', 'いく', 'べきではありません', '。'] }
+        tokens: ['そんな', 'ところへ', 'いく', 'べきではありません', '。'] },
+      { jp: 'そんなことで<ruby>怒<rt>おこ</rt></ruby>るべきではありません。',
+        kana: 'そんなことでおこるべきではありません。', romaji: 'sonna koto de okoru beki de wa arimasen.', hu: 'Ilyesmi miatt nem kell megharagudni.',
+        cloze: 'そんなことで<ruby>怒<rt>おこ</rt></ruby>る___BLANK___。', clozeAnswer: 'べきではありません',
+        tokens: ['そんな', 'ことで', 'おこる', 'べきでは', 'ありません', '。'], from: 'l44:2:2' },
+      { jp: '<ruby>簡単<rt>かんたん</rt></ruby>にあきらめるべきではありません。',
+        kana: 'かんたんにあきらめるべきではありません。', romaji: 'kantan ni akirameru beki de wa arimasen.', hu: 'Nem szabad könnyen feladni.',
+        cloze: '<ruby>簡単<rt>かんたん</rt></ruby>にあきらめる___BLANK___。', clozeAnswer: 'べきではありません',
+        tokens: ['かんたんに', 'あきらめる', 'べきでは', 'ありません', '。'], from: 'l44:2:3' },
+      { jp: 'あんなことを<ruby>言<rt>い</rt></ruby>うべきではありませんでした。',
+        kana: 'あんなことをいうべきではありませんでした。', romaji: 'anna koto o iu beki dewa arimasen deshita.', hu: 'Nem kellett volna olyat mondanom.',
+        cloze: 'あんなことを<ruby>言<rt>い</rt></ruby>う___BLANK___でした。', clozeAnswer: 'べきではありません',
+        tokens: ['あんな', 'ことを', 'いう', 'べきではありませんでした', '。'], from: 'l44:2:4' }
     ],
     contrasts: ['te_wa_ikenai', 'beki_desu']
   },
@@ -3862,7 +5350,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わずに、<ruby>読<rt>よ</rt></ruby>みました。',
         kana: 'じしょをつかわずに、よみました。', romaji: 'jisho o tsukawazu ni, yomimashita.', hu: 'Szótár használata nélkül olvastam el.',
         cloze: '<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わ___BLANK___、<ruby>読<rt>よ</rt></ruby>みました。', clozeAnswer: 'ずに',
-        tokens: ['じしょを', 'つかわずに', '、', 'よみました', '。'] }
+        tokens: ['じしょを', 'つかわずに', '、', 'よみました', '。'] },
+      { jp: '<ruby>何<rt>なに</rt></ruby>も<ruby>言<rt>い</rt></ruby>わずに、<ruby>帰<rt>かえ</rt></ruby>ってしまいました。',
+        kana: 'なにもいわずに、かえってしまいました。', romaji: 'nani mo iwazu ni, kaette shimaimashita.', hu: 'Egy szó nélkül hazament.',
+        cloze: '<ruby>何<rt>なに</rt></ruby>も<ruby>言<rt>い</rt></ruby>わ___BLANK___、<ruby>帰<rt>かえ</rt></ruby>ってしまいました。', clozeAnswer: 'ずに',
+        tokens: ['なにも', 'いわずに', '、', 'かえって', 'しまいました', '。'], from: 'l44:3:2' },
+      { jp: '<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わずに、<ruby>読<rt>よ</rt></ruby>んでみてください。',
+        kana: 'じしょをつかわずに、よんでみてください。', romaji: 'jisho o tsukawazu ni, yonde mite kudasai.', hu: 'Próbálja meg szótár nélkül elolvasni.',
+        cloze: '<ruby>辞書<rt>じしょ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わ___BLANK___、<ruby>読<rt>よ</rt></ruby>んでみてください。', clozeAnswer: 'ずに',
+        tokens: ['じしょを', 'つかわずに', '、', 'よんで', 'みて', 'ください', '。'], from: 'l44:3:3' },
+      { jp: '<ruby>原稿<rt>げんこう</rt></ruby>を<ruby>見<rt>み</rt></ruby>ずに<ruby>話<rt>はな</rt></ruby>せるようになりました。',
+        kana: 'げんこうをみずにはなせるようになりました。', romaji: 'genkou o mizu ni hanaseru you ni narimashita.', hu: 'Már papír nélkül is el tudom mondani.',
+        cloze: '<ruby>原稿<rt>げんこう</rt></ruby>を<ruby>見<rt>み</rt></ruby>___BLANK___<ruby>話<rt>はな</rt></ruby>せるようになりました。', clozeAnswer: 'ずに',
+        tokens: ['げんこうを', 'みずに', 'はなせるように', 'なりました', '。'], from: 'l44:3:4' }
     ],
     contrasts: ['naide_kudasai', 'mama']
   },
@@ -3932,7 +5432,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>に<ruby>作文<rt>さくぶん</rt></ruby>を<ruby>書<rt>か</rt></ruby>かせました。',
         kana: 'せんせいはがくせいにさくぶんをかかせました。', romaji: 'sensei wa gakusei ni sakubun o kakasemashita.', hu: 'A tanár fogalmazást íratott a diákokkal.',
         cloze: '<ruby>先生<rt>せんせい</rt></ruby>は<ruby>学生<rt>がくせい</rt></ruby>に<ruby>作文<rt>さくぶん</rt></ruby>を<ruby>書<rt>か</rt></ruby>か___BLANK___。', clozeAnswer: 'せました',
-        tokens: ['せんせいは', 'がくせいに', 'さくぶんを', 'かかせました', '。'] }
+        tokens: ['せんせいは', 'がくせいに', 'さくぶんを', 'かかせました', '。'] },
+      { jp: '<ruby>母<rt>はは</rt></ruby>は<ruby>妹<rt>いもうと</rt></ruby>に<ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>させます。',
+        kana: 'はははいもうとにへやをそうじさせます。', romaji: 'haha wa imouto ni heya o souji sasemasu.', hu: 'Anyám kitakaríttatja a húgommal a szobát.',
+        cloze: '<ruby>母<rt>はは</rt></ruby>は<ruby>妹<rt>いもうと</rt></ruby>に<ruby>部屋<rt>へや</rt></ruby>を<ruby>掃除<rt>そうじ</rt></ruby>___BLANK___。', clozeAnswer: 'させます',
+        tokens: ['ははは', 'いもうとに', 'へやを', 'そうじ', 'させます', '。'], from: 'l45:2:2' },
+      { jp: '<ruby>父<rt>ちち</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>ませました。',
+        kana: 'ちちはわたしにしんぶんをよませました。', romaji: 'chichi wa watashi ni shinbun o yomasemashita.', hu: 'Apám újságot olvastatott velem.',
+        cloze: '<ruby>父<rt>ちち</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>新聞<rt>しんぶん</rt></ruby>を<ruby>読<rt>よ</rt></ruby>ま___BLANK___。', clozeAnswer: 'せました',
+        tokens: ['ちちは', 'わたしに', 'しんぶんを', 'よませました', '。'], from: 'l45:2:3' },
+      { jp: '<ruby>母<rt>はは</rt></ruby>は<ruby>子<rt>こ</rt></ruby>どもに<ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べさせます。',
+        kana: 'はははこどもにやさいをたべさせます。', romaji: 'haha wa kodomo ni yasai o tabesasemasu.', hu: 'Az anya zöldséget etet a gyerekkel.',
+        cloze: '<ruby>母<rt>はは</rt></ruby>は<ruby>子<rt>こ</rt></ruby>どもに<ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べ___BLANK___。', clozeAnswer: 'させます',
+        tokens: ['ははは', 'こどもに', 'やさいを', 'たべさせます', '。'], from: 'l45:2:4' }
     ],
     contrasts: ['causative_let', 'passive_person', 'te_morau']
   },
@@ -3949,7 +5461,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>妹<rt>いもうと</rt></ruby>は<ruby>新<rt>あたら</rt></ruby>しい<ruby>靴<rt>くつ</rt></ruby>をほしがっています。',
         kana: 'いもうとはあたらしいくつをほしがっています。', romaji: 'imouto wa atarashii kutsu o hoshigatte imasu.', hu: 'A húgom új cipőt szeretne.',
         cloze: '<ruby>妹<rt>いもうと</rt></ruby>は<ruby>新<rt>あたら</rt></ruby>しい<ruby>靴<rt>くつ</rt></ruby>をほし___BLANK___。', clozeAnswer: 'がっています',
-        tokens: ['いもうとは', 'あたらしい', 'くつを', 'ほしがっています', '。'] }
+        tokens: ['いもうとは', 'あたらしい', 'くつを', 'ほしがっています', '。'] },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもが<ruby>新<rt>あたら</rt></ruby>しいおもちゃをほしがっています。',
+        kana: 'こどもがあたらしいおもちゃをほしがっています。', romaji: 'kodomo ga atarashii omocha o hoshigatte imasu.', hu: 'A gyerek új játékot szeretne.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どもが<ruby>新<rt>あたら</rt></ruby>しいおもちゃをほし___BLANK___。', clozeAnswer: 'がっています',
+        tokens: ['こどもが', 'あたらしい', 'おもちゃを', 'ほしがって', 'います', '。'], from: 'l45:4:2' },
+      { jp: '<ruby>弟<rt>おとうと</rt></ruby>は<ruby>寒<rt>さむ</rt></ruby>がっています。',
+        kana: 'おとうとはさむがっています。', romaji: 'otouto wa samugatte imasu.', hu: 'Az öcsém fázik, látszik rajta.',
+        cloze: '<ruby>弟<rt>おとうと</rt></ruby>は<ruby>寒<rt>さむ</rt></ruby>___BLANK___。', clozeAnswer: 'がっています',
+        tokens: ['おとうとは', 'さむがって', 'います', '。'], from: 'l45:4:3' }
     ],
     contrasts: ['ga_hoshii', 'tagaru']
   },
@@ -3966,7 +5486,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>子<rt>こ</rt></ruby>どもはなんでも<ruby>知<rt>し</rt></ruby>りたがります。',
         kana: 'こどもはなんでもしりたがります。', romaji: 'kodomo wa nandemo shiritagarimasu.', hu: 'A gyerekek mindent tudni akarnak.',
         cloze: '<ruby>子<rt>こ</rt></ruby>どもはなんでも<ruby>知<rt>し</rt></ruby>り___BLANK___。', clozeAnswer: 'たがります',
-        tokens: ['こどもは', 'なんでも', 'しりたがります', '。'] }
+        tokens: ['こどもは', 'なんでも', 'しりたがります', '。'] },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもはすぐ<ruby>外<rt>そと</rt></ruby>で<ruby>遊<rt>あそ</rt></ruby>びたがります。',
+        kana: 'こどもはすぐそとであそびたがります。', romaji: 'kodomo wa sugu soto de asobitagarimasu.', hu: 'A gyerek mindjárt kint akar játszani.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どもはすぐ<ruby>外<rt>そと</rt></ruby>で<ruby>遊<rt>あそ</rt></ruby>び___BLANK___。', clozeAnswer: 'たがります',
+        tokens: ['こどもは', 'すぐ', 'そとで', 'あそびたがります', '。'], from: 'l45:5:1' },
+      { jp: '<ruby>弟<rt>おとうと</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたがっています。',
+        kana: 'おとうとはにほんへいきたがっています。', romaji: 'otouto wa nihon e ikitagatte imasu.', hu: 'Az öcsém Japánba szeretne menni.',
+        cloze: '<ruby>弟<rt>おとうと</rt></ruby>は<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>き___BLANK___。', clozeAnswer: 'たがっています',
+        tokens: ['おとうとは', 'にほんへ', 'いきたがって', 'います', '。'], from: 'l45:5:2' },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもは<ruby>何<rt>なん</rt></ruby>でも<ruby>自分<rt>じぶん</rt></ruby>でやりたがります。',
+        kana: 'こどもはなんでもじぶんでやりたがります。', romaji: 'kodomo wa nan demo jibun de yaritagarimasu.', hu: 'A gyerek mindent maga akar csinálni.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どもは<ruby>何<rt>なん</rt></ruby>でも<ruby>自分<rt>じぶん</rt></ruby>でやり___BLANK___。', clozeAnswer: 'たがります',
+        tokens: ['こどもは', 'なん', 'でも', 'じぶんで', 'やりたがります', '。'], from: 'l45:5:4' }
     ],
     contrasts: ['tai', 'garu']
   },
@@ -3985,7 +5517,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>宿題<rt>しゅくだい</rt></ruby>をしなさい。',
         kana: 'しゅくだいをしなさい。', romaji: 'shukudai o shinasai.', hu: 'Csináld meg a leckét!',
         cloze: '<ruby>宿題<rt>しゅくだい</rt></ruby>をし___BLANK___。', clozeAnswer: 'なさい',
-        tokens: ['しゅくだいを', 'しなさい', '。'] }
+        tokens: ['しゅくだいを', 'しなさい', '。'] },
+      { jp: 'よく<ruby>聞<rt>き</rt></ruby>きなさい。',
+        kana: 'よくききなさい。', romaji: 'yoku kikinasai.', hu: 'Figyelj jól!',
+        cloze: 'よく<ruby>聞<rt>き</rt></ruby>き___BLANK___。', clozeAnswer: 'なさい',
+        tokens: ['よく', 'ききなさい', '。'], from: 'l46:1:3' },
+      { jp: '<ruby>正<rt>ただ</rt></ruby>しい<ruby>答<rt>こた</rt></ruby>えを<ruby>一<rt>ひと</rt></ruby>つ<ruby>選<rt>えら</rt></ruby>びなさい。',
+        kana: 'ただしいこたえをひとつえらびなさい。', romaji: 'tadashii kotae o hitotsu erabinasai.', hu: 'Válaszd ki az egyetlen helyes választ!',
+        cloze: '<ruby>正<rt>ただ</rt></ruby>しい<ruby>答<rt>こた</rt></ruby>えを<ruby>一<rt>ひと</rt></ruby>つ<ruby>選<rt>えら</rt></ruby>び___BLANK___。', clozeAnswer: 'なさい',
+        tokens: ['ただしい', 'こたえを', 'ひとつ', 'えらびなさい', '。'], from: 'l46:1:4' },
+      { jp: '<ruby>野菜<rt>やさい</rt></ruby>も<ruby>食<rt>た</rt></ruby>べなさい。',
+        kana: 'やさいもたべなさい。', romaji: 'yasai mo tabenasai.', hu: 'A zöldséget is edd meg!',
+        cloze: '<ruby>野菜<rt>やさい</rt></ruby>も<ruby>食<rt>た</rt></ruby>べ___BLANK___。', clozeAnswer: 'なさい',
+        tokens: ['やさいも', 'たべなさい', '。'], from: 'l46:1:5' }
     ],
     contrasts: ['imperative', 'te_kudasai']
   },
@@ -4019,7 +5563,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>私<rt>わたし</rt></ruby>に<ruby>説明<rt>せつめい</rt></ruby>させてください。',
         kana: 'わたしにせつめいさせてください。', romaji: 'watashi ni setsumei sasete kudasai.', hu: 'Hadd magyarázzam el én!',
         cloze: '<ruby>私<rt>わたし</rt></ruby>に<ruby>説明<rt>せつめい</rt></ruby>___BLANK___。', clozeAnswer: 'させてください',
-        tokens: ['わたしに', 'せつめい', 'させてください', '。'] }
+        tokens: ['わたしに', 'せつめい', 'させてください', '。'] },
+      { jp: '<ruby>少<rt>すこ</rt></ruby>し<ruby>考<rt>かんが</rt></ruby>えさせてください。',
+        kana: 'すこしかんがえさせてください。', romaji: 'sukoshi kangaesasete kudasai.', hu: 'Hadd gondolkodjam egy kicsit.',
+        cloze: '<ruby>少<rt>すこ</rt></ruby>し<ruby>考<rt>かんが</rt></ruby>え___BLANK___。', clozeAnswer: 'させてください',
+        tokens: ['すこし', 'かんがえさせて', 'ください', '。'], from: 'l46:4:2' }
     ],
     contrasts: ['te_kudasai', 'sasete_itadakemasenka']
   },
@@ -4036,7 +5584,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わせていただけませんか。',
         kana: 'このしゃしんをつかわせていただけませんか。', romaji: 'kono shashin o tsukawasete itadakemasen ka.', hu: 'Megengedné, hogy felhasználjam ezt a fényképet?',
         cloze: 'この<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わ___BLANK___。', clozeAnswer: 'せていただけませんか',
-        tokens: ['この', 'しゃしんを', 'つかわせていただけませんか', '。'] }
+        tokens: ['この', 'しゃしんを', 'つかわせていただけませんか', '。'] },
+      { jp: 'この<ruby>部屋<rt>へや</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わせていただけませんか。',
+        kana: 'このへやをつかわせていただけませんか。', romaji: 'kono heya o tsukawasete itadakemasen ka.', hu: 'Megengedné, hogy használjam ezt a termet?',
+        cloze: 'この<ruby>部屋<rt>へや</rt></ruby>を<ruby>使<rt>つか</rt></ruby>わ___BLANK___。', clozeAnswer: 'せていただけませんか',
+        tokens: ['この', 'へやを', 'つかわせて', 'いただけませんか', '。'], from: 'l46:5:1' },
+      { jp: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>らせていただけませんか。',
+        kana: 'しゃしんをとらせていただけませんか。', romaji: 'shashin o torasete itadakemasen ka.', hu: 'Megengedné, hogy lefényképezzem?',
+        cloze: '<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>ら___BLANK___。', clozeAnswer: 'せていただけませんか',
+        tokens: ['しゃしんを', 'とらせて', 'いただけませんか', '。'], from: 'l46:5:2' }
     ],
     contrasts: ['te_itadakemasenka', 'sasete_kudasai']
   },
@@ -4053,7 +5609,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>部長<rt>ぶちょう</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>らせてくれました。',
         kana: 'ぶちょうがはやくかえらせてくれました。', romaji: 'buchou ga hayaku kaerasete kuremashita.', hu: 'Az osztályvezető megengedte, hogy korán hazamenjek.',
         cloze: '<ruby>部長<rt>ぶちょう</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>ら___BLANK___。', clozeAnswer: 'せてくれました',
-        tokens: ['ぶちょうが', 'はやく', 'かえらせてくれました', '。'] }
+        tokens: ['ぶちょうが', 'はやく', 'かえらせてくれました', '。'] },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>らせてくれました。',
+        kana: 'せんせいがはやくかえらせてくれました。', romaji: 'sensei ga hayaku kaerasete kuremashita.', hu: 'A tanár megengedte, hogy korábban hazamenjek.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>が<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>ら___BLANK___。', clozeAnswer: 'せてくれました',
+        tokens: ['せんせいが', 'はやく', 'かえらせて', 'くれました', '。'], from: 'l46:7:2' },
+      { jp: '<ruby>友<rt>とも</rt></ruby>だちが<ruby>新<rt>あたら</rt></ruby>しいゲームを<ruby>使<rt>つか</rt></ruby>わせてくれました。',
+        kana: 'ともだちがあたらしいゲームをつかわせてくれました。', romaji: 'tomodachi ga atarashii geemu o tsukawasete kuremashita.', hu: 'A barátom megengedte, hogy kipróbáljam az új játékát.',
+        cloze: '<ruby>友<rt>とも</rt></ruby>だちが<ruby>新<rt>あたら</rt></ruby>しいゲームを<ruby>使<rt>つか</rt></ruby>わ___BLANK___。', clozeAnswer: 'せてくれました',
+        tokens: ['ともだちが', 'あたらしい', 'ゲームを', 'つかわせて', 'くれました', '。'], from: 'l46:7:3' },
+      { jp: '<ruby>祖母<rt>そぼ</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>着物<rt>きもの</rt></ruby>を<ruby>着<rt>き</rt></ruby>させてくれました。',
+        kana: 'そぼはわたしにきものをきさせてくれました。', romaji: 'sobo wa watashi ni kimono o kisasete kuremashita.', hu: 'A nagymamám megengedte, hogy felvegyem a kimonóját.',
+        cloze: '<ruby>祖母<rt>そぼ</rt></ruby>は<ruby>私<rt>わたし</rt></ruby>に<ruby>着物<rt>きもの</rt></ruby>を<ruby>着<rt>き</rt></ruby>___BLANK___。', clozeAnswer: 'させてくれました',
+        tokens: ['そぼは', 'わたしに', 'きものを', 'きさせて', 'くれました', '。'], from: 'l46:7:7' }
     ],
     contrasts: ['te_kureru', 'causative_let']
   },
@@ -4072,7 +5640,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>毎日<rt>まいにち</rt></ruby><ruby>漢字<rt>かんじ</rt></ruby>を<ruby>練習<rt>れんしゅう</rt></ruby>させられます。',
         kana: 'まいにちかんじをれんしゅうさせられます。', romaji: 'mainichi kanji o renshuu saseraremasu.', hu: 'Minden nap kanjit gyakoroltatnak velem.',
         cloze: '<ruby>毎日<rt>まいにち</rt></ruby><ruby>漢字<rt>かんじ</rt></ruby>を<ruby>練習<rt>れんしゅう</rt></ruby>___BLANK___。', clozeAnswer: 'させられます',
-        tokens: ['まいにち', 'かんじを', 'れんしゅう', 'させられます', '。'] }
+        tokens: ['まいにち', 'かんじを', 'れんしゅう', 'させられます', '。'] },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>毎日<rt>まいにち</rt></ruby><ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べさせられました。',
+        kana: 'こどものとき、まいにちやさいをたべさせられました。', romaji: 'kodomo no toki, mainichi yasai o tabesaseraremashita.', hu: 'Gyerekkoromban minden nap megetették velem a zöldséget.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>毎日<rt>まいにち</rt></ruby><ruby>野菜<rt>やさい</rt></ruby>を<ruby>食<rt>た</rt></ruby>べ___BLANK___。', clozeAnswer: 'させられました',
+        tokens: ['こどもの', 'とき', '、', 'まいにち', 'やさいを', 'たべさせられました', '。'], from: 'l47:1:1' },
+      { jp: '<ruby>学校<rt>がっこう</rt></ruby>で<ruby>制服<rt>せいふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>させられます。',
+        kana: 'がっこうでせいふくをきさせられます。', romaji: 'gakkou de seifuku o kisaseraremasu.', hu: 'Az iskolában egyenruhát hordatnak velünk.',
+        cloze: '<ruby>学校<rt>がっこう</rt></ruby>で<ruby>制服<rt>せいふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>___BLANK___。', clozeAnswer: 'させられます',
+        tokens: ['がっこうで', 'せいふくを', 'きさせられます', '。'], from: 'l47:1:4' },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>毎晩<rt>まいばん</rt></ruby><ruby>九時<rt>くじ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>させられました。',
+        kana: 'こどものとき、まいばんくじにねさせられました。', romaji: 'kodomo no toki, maiban kuji ni nesaseraremashita.', hu: 'Gyerekkoromban minden este kilenckor ágyba dugtak.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どものとき、<ruby>毎晩<rt>まいばん</rt></ruby><ruby>九時<rt>くじ</rt></ruby>に<ruby>寝<rt>ね</rt></ruby>___BLANK___。', clozeAnswer: 'させられました',
+        tokens: ['こどもの', 'とき', '、', 'まいばん', 'くじに', 'ねさせられました', '。'], from: 'l47:1:5' }
     ],
     contrasts: ['causative', 'passive_person', 'causative_passive_short']
   },
@@ -4125,7 +5705,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>病気<rt>びょうき</rt></ruby>をきっかけに、たばこをやめました。',
         kana: 'びょうきをきっかけに、たばこをやめました。', romaji: 'byouki o kikkake ni, tabako o yamemashita.', hu: 'A betegségem hatására leszoktam a dohányzásról.',
         cloze: '<ruby>病気<rt>びょうき</rt></ruby>___BLANK___、たばこをやめました。', clozeAnswer: 'をきっかけに',
-        tokens: ['びょうきをきっかけに', '、', 'たばこを', 'やめました', '。'] }
+        tokens: ['びょうきをきっかけに', '、', 'たばこを', 'やめました', '。'] },
+      { jp: 'アニメを<ruby>見<rt>み</rt></ruby>たことをきっかけに、<ruby>日本<rt>にほん</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>が<ruby>好<rt>す</rt></ruby>きになりました。',
+        kana: 'アニメをみたことをきっかけに、にほんのぶんかがすきになりました。', romaji: 'anime o mita koto o kikkake ni, nihon no bunka ga suki ni narimashita.', hu: 'Egy anime hatására szerettem meg a japán kultúrát.',
+        cloze: 'アニメを<ruby>見<rt>み</rt></ruby>たこと___BLANK___、<ruby>日本<rt>にほん</rt></ruby>の<ruby>文化<rt>ぶんか</rt></ruby>が<ruby>好<rt>す</rt></ruby>きになりました。', clozeAnswer: 'をきっかけに',
+        tokens: ['アニメを', 'みた', 'ことを', 'きっかけに', '、', 'にほんの', 'ぶんかが', 'すきに', 'なりました', '。'], from: 'l48:1:3' },
+      { jp: '<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>しをきっかけに、<ruby>自転車<rt>じてんしゃ</rt></ruby>で<ruby>通<rt>かよ</rt></ruby>うようになりました。',
+        kana: 'ひっこしをきっかけに、じてんしゃでかようようになりました。', romaji: 'hikkoshi o kikkake ni, jitensha de kayou you ni narimashita.', hu: 'A költözés óta biciklivel járok.',
+        cloze: '<ruby>引<rt>ひ</rt></ruby>っ<ruby>越<rt>こ</rt></ruby>し___BLANK___、<ruby>自転車<rt>じてんしゃ</rt></ruby>で<ruby>通<rt>かよ</rt></ruby>うようになりました。', clozeAnswer: 'をきっかけに',
+        tokens: ['ひっこしを', 'きっかけに', '、', 'じてんしゃで', 'かようように', 'なりました', '。'], from: 'l48:1:5' },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもが<ruby>生<rt>う</rt></ruby>まれたのをきっかけに、<ruby>料理<rt>りょうり</rt></ruby>を<ruby>習<rt>なら</rt></ruby>い<ruby>始<rt>はじ</rt></ruby>めました。',
+        kana: 'こどもがうまれたのをきっかけに、りょうりをならいはじめました。', romaji: 'kodomo ga umareta no o kikkake ni, ryouri o naraihajimemashita.', hu: 'A gyerekem születése indított arra, hogy megtanuljak főzni.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どもが<ruby>生<rt>う</rt></ruby>まれたの___BLANK___、<ruby>料理<rt>りょうり</rt></ruby>を<ruby>習<rt>なら</rt></ruby>い<ruby>始<rt>はじ</rt></ruby>めました。', clozeAnswer: 'をきっかけに',
+        tokens: ['こどもが', 'うまれたのを', 'きっかけに', '、', 'りょうりを', 'ならいはじめました', '。'], from: 'l48:1:6' }
     ],
     contrasts: ['okage_de']
   },
@@ -4142,7 +5734,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>寝坊<rt>ねぼう</rt></ruby>したせいで、<ruby>遅刻<rt>ちこく</rt></ruby>しました。',
         kana: 'ねぼうしたせいで、ちこくしました。', romaji: 'nebou shita sei de, chikoku shimashita.', hu: 'Elaludtam, ezért elkéstem.',
         cloze: '<ruby>寝坊<rt>ねぼう</rt></ruby>した___BLANK___、<ruby>遅刻<rt>ちこく</rt></ruby>しました。', clozeAnswer: 'せいで',
-        tokens: ['ねぼうしたせいで', '、', 'ちこくしました', '。'] }
+        tokens: ['ねぼうしたせいで', '、', 'ちこくしました', '。'] },
+      { jp: '<ruby>寝坊<rt>ねぼう</rt></ruby>したせいで、<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>遅<rt>おく</rt></ruby>れました。',
+        kana: 'ねぼうしたせいで、でんしゃにのりおくれました。', romaji: 'nebou shita sei de, densha ni noriokuremashita.', hu: 'Mivel elaludtam, lekéstem a vonatot.',
+        cloze: '<ruby>寝坊<rt>ねぼう</rt></ruby>した___BLANK___、<ruby>電車<rt>でんしゃ</rt></ruby>に<ruby>乗<rt>の</rt></ruby>り<ruby>遅<rt>おく</rt></ruby>れました。', clozeAnswer: 'せいで',
+        tokens: ['ねぼう', 'した', 'せいで', '、', 'でんしゃに', 'のりおくれました', '。'], from: 'l48:2:2' },
+      { jp: '<ruby>私<rt>わたし</rt></ruby>のせいで、みんなに<ruby>迷惑<rt>めいわく</rt></ruby>をかけました。',
+        kana: 'わたしのせいで、みんなにめいわくをかけました。', romaji: 'watashi no sei de, minna ni meiwaku o kakemashita.', hu: 'Miattam került mindenki kellemetlen helyzetbe.',
+        cloze: '<ruby>私<rt>わたし</rt></ruby>の___BLANK___、みんなに<ruby>迷惑<rt>めいわく</rt></ruby>をかけました。', clozeAnswer: 'せいで',
+        tokens: ['わたしの', 'せいで', '、', 'みんなに', 'めいわくを', 'かけました', '。'], from: 'l48:2:3' },
+      { jp: '<ruby>台風<rt>たいふう</rt></ruby>のせいで、<ruby>飛行機<rt>ひこうき</rt></ruby>が<ruby>飛<rt>と</rt></ruby>びませんでした。',
+        kana: 'たいふうのせいで、ひこうきがとびませんでした。', romaji: 'taifuu no sei de, hikouki ga tobimasen deshita.', hu: 'A tájfun miatt nem szállt fel a gép.',
+        cloze: '<ruby>台風<rt>たいふう</rt></ruby>の___BLANK___、<ruby>飛行機<rt>ひこうき</rt></ruby>が<ruby>飛<rt>と</rt></ruby>びませんでした。', clozeAnswer: 'せいで',
+        tokens: ['たいふうの', 'せいで', '、', 'ひこうきが', 'とびませんでした', '。'], from: 'l48:2:4' }
     ],
     contrasts: ['okage_de', 'kara_reason']
   },
@@ -4159,7 +5763,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>早<rt>はや</rt></ruby>ければ<ruby>早<rt>はや</rt></ruby>いほど、いいです。',
         kana: 'はやければはやいほど、いいです。', romaji: 'hayakereba hayai hodo, ii desu.', hu: 'Minél előbb, annál jobb.',
         cloze: '<ruby>早<rt>はや</rt></ruby>ければ<ruby>早<rt>はや</rt></ruby>い___BLANK___、いいです。', clozeAnswer: 'ほど',
-        tokens: ['はやければ', 'はやいほど', '、', 'いいです', '。'] }
+        tokens: ['はやければ', 'はやいほど', '、', 'いいです', '。'] },
+      { jp: '<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>勉強<rt>べんきょう</rt></ruby>すればするほど、<ruby>面白<rt>おもしろ</rt></ruby>くなります。',
+        kana: 'にほんごはべんきょうすればするほど、おもしろくなります。', romaji: 'nihongo wa benkyou sureba suru hodo, omoshiroku narimasu.', hu: 'Minél többet tanulja az ember a japánt, annál érdekesebb.',
+        cloze: '<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>勉強<rt>べんきょう</rt></ruby>すればする___BLANK___、<ruby>面白<rt>おもしろ</rt></ruby>くなります。', clozeAnswer: 'ほど',
+        tokens: ['にほんごは', 'べんきょう', 'すれば', 'する', 'ほど', '、', 'おもしろく', 'なります', '。'], from: 'l48:3:1' },
+      { jp: '<ruby>考<rt>かんが</rt></ruby>えれば<ruby>考<rt>かんが</rt></ruby>えるほど、わからなくなります。',
+        kana: 'かんがえればかんがえるほど、わからなくなります。', romaji: 'kangaereba kangaeru hodo, wakaranaku narimasu.', hu: 'Minél többet gondolkodom rajta, annál kevésbé értem.',
+        cloze: '<ruby>考<rt>かんが</rt></ruby>えれば<ruby>考<rt>かんが</rt></ruby>える___BLANK___、わからなくなります。', clozeAnswer: 'ほど',
+        tokens: ['かんがえれば', 'かんがえる', 'ほど', '、', 'わからなく', 'なります', '。'], from: 'l48:3:3' },
+      { jp: 'この<ruby>町<rt>まち</rt></ruby>は、<ruby>歩<rt>ある</rt></ruby>けば<ruby>歩<rt>ある</rt></ruby>くほど<ruby>新<rt>あたら</rt></ruby>しい<ruby>発見<rt>はっけん</rt></ruby>があります。',
+        kana: 'このまちは、あるけばあるくほどあたらしいはっけんがあります。', romaji: 'kono machi wa, arukeba aruku hodo atarashii hakken ga arimasu.', hu: 'Ebben a városban minél többet sétálsz, annál több újat fedezel fel.',
+        cloze: 'この<ruby>町<rt>まち</rt></ruby>は、<ruby>歩<rt>ある</rt></ruby>けば<ruby>歩<rt>ある</rt></ruby>く___BLANK___<ruby>新<rt>あたら</rt></ruby>しい<ruby>発見<rt>はっけん</rt></ruby>があります。', clozeAnswer: 'ほど',
+        tokens: ['この', 'まちは', '、', 'あるけば', 'あるく', 'ほど', 'あたらしい', 'はっけんが', 'あります', '。'], from: 'l48:3:4' }
     ],
     contrasts: ['eba', 'yori_hou_ga']
   },
@@ -4176,7 +5792,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>医者<rt>いしゃ</rt></ruby>として、<ruby>病院<rt>びょういん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いています。',
         kana: 'いしゃとして、びょういんではたらいています。', romaji: 'isha to shite, byouin de hataraite imasu.', hu: 'Orvosként dolgozom egy kórházban.',
         cloze: '<ruby>医者<rt>いしゃ</rt></ruby>___BLANK___、<ruby>病院<rt>びょういん</rt></ruby>で<ruby>働<rt>はたら</rt></ruby>いています。', clozeAnswer: 'として',
-        tokens: ['いしゃとして', '、', 'びょういんで', 'はたらいています', '。'] }
+        tokens: ['いしゃとして', '、', 'びょういんで', 'はたらいています', '。'] },
+      { jp: '<ruby>友<rt>とも</rt></ruby>だちとして、アドバイスします。',
+        kana: 'ともだちとして、アドバイスします。', romaji: 'tomodachi to shite, adobaisu shimasu.', hu: 'Barátként adok tanácsot.',
+        cloze: '<ruby>友<rt>とも</rt></ruby>だち___BLANK___、アドバイスします。', clozeAnswer: 'として',
+        tokens: ['ともだちと', 'して', '、', 'アドバイス', 'します', '。'], from: 'l48:4:2' },
+      { jp: '<ruby>京都<rt>きょうと</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>い<ruby>町<rt>まち</rt></ruby>として<ruby>有名<rt>ゆうめい</rt></ruby>です。',
+        kana: 'きょうとはふるいまちとしてゆうめいです。', romaji: 'kyouto wa furui machi to shite yuumei desu.', hu: 'Kiotó régi városként híres.',
+        cloze: '<ruby>京都<rt>きょうと</rt></ruby>は<ruby>古<rt>ふる</rt></ruby>い<ruby>町<rt>まち</rt></ruby>___BLANK___<ruby>有名<rt>ゆうめい</rt></ruby>です。', clozeAnswer: 'として',
+        tokens: ['きょうとは', 'ふるい', 'まちと', 'して', 'ゆうめいです', '。'], from: 'l48:4:3' },
+      { jp: '<ruby>趣味<rt>しゅみ</rt></ruby>として<ruby>絵<rt>え</rt></ruby>をかいています。',
+        kana: 'しゅみとしてえをかいています。', romaji: 'shumi to shite e o kaite imasu.', hu: 'Hobbiból festek.',
+        cloze: '<ruby>趣味<rt>しゅみ</rt></ruby>___BLANK___<ruby>絵<rt>え</rt></ruby>をかいています。', clozeAnswer: 'として',
+        tokens: ['しゅみと', 'してえを', 'かいて', 'います', '。'], from: 'l48:4:4' }
     ],
     contrasts: ['ni_totte']
   },
@@ -4212,7 +5840,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいけれども、おもしろいです。',
         kana: 'にほんごはむずかしいけれども、おもしろいです。', romaji: 'nihongo wa muzukashii keredomo, omoshiroi desu.', hu: 'A japán nehéz, de érdekes.',
         cloze: '<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しい___BLANK___、おもしろいです。', clozeAnswer: 'けれども',
-        tokens: ['にほんごは', 'むずかしいけれども', '、', 'おもしろいです', '。'] }
+        tokens: ['にほんごは', 'むずかしいけれども', '、', 'おもしろいです', '。'] },
+      { jp: 'すみませんけど、<ruby>今<rt>いま</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>ですか。',
+        kana: 'すみませんけど、いまなんじですか。', romaji: 'sumimasen kedo, ima nanji desu ka.', hu: 'Elnézést, hány óra van?',
+        cloze: 'すみません___BLANK___、<ruby>今<rt>いま</rt></ruby><ruby>何時<rt>なんじ</rt></ruby>ですか。', clozeAnswer: 'けど',
+        tokens: ['すみません', 'けど', '、', 'いま', 'なんじですか', '。'], from: 'k1:1:3' },
+      { jp: '<ruby>日曜日<rt>にちようび</rt></ruby>だけど、<ruby>仕事<rt>しごと</rt></ruby>があります。',
+        kana: 'にちようびだけど、しごとがあります。', romaji: 'nichiyoubi da kedo, shigoto ga arimasu.', hu: 'Vasárnap van, de dolgoznom kell.',
+        cloze: '<ruby>日曜日<rt>にちようび</rt></ruby>だ___BLANK___、<ruby>仕事<rt>しごと</rt></ruby>があります。', clozeAnswer: 'けど',
+        tokens: ['にちようびだ', 'けど', '、', 'しごとが', 'あります', '。'], from: 'k1:1:4' },
+      { jp: '<ruby>行<rt>い</rt></ruby>きたいけど、お<ruby>金<rt>かね</rt></ruby>がない。',
+        kana: 'いきたいけど、おかねがない。', romaji: 'ikitai kedo, o-kane ga nai.', hu: 'Mennék, de nincs pénzem.',
+        cloze: '<ruby>行<rt>い</rt></ruby>きたい___BLANK___、お<ruby>金<rt>かね</rt></ruby>がない。', clozeAnswer: 'けど',
+        tokens: ['いきたい', 'けど', '、', 'おかねが', 'ない', '。'], from: 'k1:1:5' }
     ],
     contrasts: ['demo_sentence', 'wa_ga_contrast', 'noni']
   },
@@ -4229,7 +5869,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>行<rt>い</rt></ruby>きたいです。でも、<ruby>時間<rt>じかん</rt></ruby>がありません。',
         kana: 'いきたいです。でも、じかんがありません。', romaji: 'ikitai desu. demo, jikan ga arimasen.', hu: 'Szeretnék menni. De nincs időm.',
         cloze: '<ruby>行<rt>い</rt></ruby>きたいです。___BLANK___、<ruby>時間<rt>じかん</rt></ruby>がありません。', clozeAnswer: 'でも',
-        tokens: ['いきたいです', '。', 'でも', '、', 'じかんが', 'ありません', '。'] }
+        tokens: ['いきたいです', '。', 'でも', '、', 'じかんが', 'ありません', '。'] },
+      { jp: '<ruby>昨日<rt>きのう</rt></ruby>は<ruby>雨<rt>あめ</rt></ruby>でした。でも、<ruby>出<rt>で</rt></ruby>かけました。',
+        kana: 'きのうはあめでした。でも、でかけました。', romaji: 'kinou wa ame deshita. demo, dekakemashita.', hu: 'Tegnap esett. Mégis elmentem itthonról.',
+        cloze: '<ruby>昨日<rt>きのう</rt></ruby>は<ruby>雨<rt>あめ</rt></ruby>でした。___BLANK___、<ruby>出<rt>で</rt></ruby>かけました。', clozeAnswer: 'でも',
+        tokens: ['きのうは', 'あめでした', '。', 'でも', '、', 'でかけました', '。'], from: 'k1:2:2' },
+      { jp: 'おいしいです。でも、ちょっと<ruby>高<rt>たか</rt></ruby>いです。',
+        kana: 'おいしいです。でも、ちょっとたかいです。', romaji: 'oishii desu. demo, chotto takai desu.', hu: 'Finom. De egy kicsit drága.',
+        cloze: 'おいしいです。___BLANK___、ちょっと<ruby>高<rt>たか</rt></ruby>いです。', clozeAnswer: 'でも',
+        tokens: ['おいしいです', '。', 'でも', '、', 'ちょっと', 'たかいです', '。'], from: 'k1:2:3' },
+      { jp: '<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しい。でも、<ruby>毎日<rt>まいにち</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>している。',
+        kana: 'にほんごはむずかしい。でも、まいにちべんきょうしている。', romaji: 'nihongo wa muzukashii. demo, mainichi benkyou shite iru.', hu: 'A japán nehéz. De mindennap tanulok.',
+        cloze: '<ruby>日本語<rt>にほんご</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しい。___BLANK___、<ruby>毎日<rt>まいにち</rt></ruby><ruby>勉強<rt>べんきょう</rt></ruby>している。', clozeAnswer: 'でも',
+        tokens: ['にほんごは', 'むずかしい', '。', 'でも', '、', 'まいにち', 'べんきょう', 'して', 'いる', '。'], from: 'k1:2:4' }
     ],
     contrasts: ['kedo', 'shikashi', 'demo_example']
   },
@@ -4246,7 +5898,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>値段<rt>ねだん</rt></ruby>は<ruby>高<rt>たか</rt></ruby>いです。しかし、<ruby>品質<rt>ひんしつ</rt></ruby>はいいです。',
         kana: 'ねだんはたかいです。しかし、ひんしつはいいです。', romaji: 'nedan wa takai desu. shikashi, hinshitsu wa ii desu.', hu: 'Az ára magas. A minősége azonban jó.',
         cloze: '<ruby>値段<rt>ねだん</rt></ruby>は<ruby>高<rt>たか</rt></ruby>いです。___BLANK___、<ruby>品質<rt>ひんしつ</rt></ruby>はいいです。', clozeAnswer: 'しかし',
-        tokens: ['ねだんは', 'たかいです', '。', 'しかし', '、', 'ひんしつは', 'いいです', '。'] }
+        tokens: ['ねだんは', 'たかいです', '。', 'しかし', '、', 'ひんしつは', 'いいです', '。'] },
+      { jp: '<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みました。しかし、まだ<ruby>熱<rt>ねつ</rt></ruby>があります。',
+        kana: 'くすりをのみました。しかし、まだねつがあります。', romaji: 'kusuri o nomimashita. shikashi, mada netsu ga arimasu.', hu: 'Bevettem a gyógyszert. Azonban még mindig lázas vagyok.',
+        cloze: '<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>みました。___BLANK___、まだ<ruby>熱<rt>ねつ</rt></ruby>があります。', clozeAnswer: 'しかし',
+        tokens: ['くすりを', 'のみました', '。', 'しかし', '、', 'まだ', 'ねつが', 'あります', '。'], from: 'k1:3:1' },
+      { jp: '<ruby>試験<rt>しけん</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しかったです。しかし、<ruby>合格<rt>ごうかく</rt></ruby>しました。',
+        kana: 'しけんはむずかしかったです。しかし、ごうかくしました。', romaji: 'shiken wa muzukashikatta desu. shikashi, goukaku shimashita.', hu: 'A vizsga nehéz volt. Mégis átmentem.',
+        cloze: '<ruby>試験<rt>しけん</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しかったです。___BLANK___、<ruby>合格<rt>ごうかく</rt></ruby>しました。', clozeAnswer: 'しかし',
+        tokens: ['しけんは', 'むずかしかったです', '。', 'しかし', '、', 'ごうかく', 'しました', '。'], from: 'k1:3:2' },
+      { jp: '<ruby>便利<rt>べんり</rt></ruby>です。しかし、<ruby>値段<rt>ねだん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いです。',
+        kana: 'べんりです。しかし、ねだんがたかいです。', romaji: 'benri desu. shikashi, nedan ga takai desu.', hu: 'Praktikus. Az ára azonban magas.',
+        cloze: '<ruby>便利<rt>べんり</rt></ruby>です。___BLANK___、<ruby>値段<rt>ねだん</rt></ruby>が<ruby>高<rt>たか</rt></ruby>いです。', clozeAnswer: 'しかし',
+        tokens: ['べんりです', '。', 'しかし', '、', 'ねだんが', 'たかいです', '。'], from: 'k1:3:3' }
     ],
     contrasts: ['demo_sentence', 'kedo']
   },
@@ -4263,7 +5927,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>部屋<rt>へや</rt></ruby>は<ruby>広<rt>ひろ</rt></ruby>いです。そして、<ruby>明<rt>あか</rt></ruby>るいです。',
         kana: 'このへやはひろいです。そして、あかるいです。', romaji: 'kono heya wa hiroi desu. soshite, akarui desu.', hu: 'Ez a szoba tágas. És világos.',
         cloze: 'この<ruby>部屋<rt>へや</rt></ruby>は<ruby>広<rt>ひろ</rt></ruby>いです。___BLANK___、<ruby>明<rt>あか</rt></ruby>るいです。', clozeAnswer: 'そして',
-        tokens: ['この', 'へやは', 'ひろいです', '。', 'そして', '、', 'あかるいです', '。'] }
+        tokens: ['この', 'へやは', 'ひろいです', '。', 'そして', '、', 'あかるいです', '。'] },
+      { jp: '<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べました。それから、<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。',
+        kana: 'あさごはんをたべました。それから、がっこうへいきました。', romaji: 'asagohan o tabemashita. sore kara, gakkou e ikimashita.', hu: 'Megreggeliztem. Aztán iskolába mentem.',
+        cloze: '<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べました。___BLANK___、<ruby>学校<rt>がっこう</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。', clozeAnswer: 'それから',
+        tokens: ['あさごはんを', 'たべました', '。', 'それから', '、', 'がっこうへ', 'いきました', '。'], from: 'k1:4:2' },
+      { jp: '<ruby>本<rt>ほん</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。それから、ノートも<ruby>買<rt>か</rt></ruby>いました。',
+        kana: 'ほんをかいました。それから、ノートもかいました。', romaji: 'hon o kaimashita. sore kara, nooto mo kaimashita.', hu: 'Vettem egy könyvet. Aztán még egy füzetet is.',
+        cloze: '<ruby>本<rt>ほん</rt></ruby>を<ruby>買<rt>か</rt></ruby>いました。___BLANK___、ノートも<ruby>買<rt>か</rt></ruby>いました。', clozeAnswer: 'それから',
+        tokens: ['ほんを', 'かいました', '。', 'それから', '、', 'ノートも', 'かいました', '。'], from: 'k1:4:3' },
+      { jp: '<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。そして、たくさん<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>りました。',
+        kana: 'きょうとへいきました。そして、たくさんしゃしんをとりました。', romaji: 'kyouto e ikimashita. soshite, takusan shashin o torimashita.', hu: 'Kiotóba mentem. És sok fényképet készítettem.',
+        cloze: '<ruby>京都<rt>きょうと</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きました。___BLANK___、たくさん<ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>りました。', clozeAnswer: 'そして',
+        tokens: ['きょうとへ', 'いきました', '。', 'そして', '、', 'たくさん', 'しゃしんを', 'とりました', '。'], from: 'k1:4:4' }
     ],
     contrasts: ['te_sequence', 'soreni']
   },
@@ -4280,7 +5956,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れました。それで、<ruby>遅刻<rt>ちこく</rt></ruby>しました。',
         kana: 'でんしゃがおくれました。それで、ちこくしました。', romaji: 'densha ga okuremashita. sorede, chikoku shimashita.', hu: 'Késett a vonat. Így aztán elkéstem.',
         cloze: '<ruby>電車<rt>でんしゃ</rt></ruby>が<ruby>遅<rt>おく</rt></ruby>れました。___BLANK___、<ruby>遅刻<rt>ちこく</rt></ruby>しました。', clozeAnswer: 'それで',
-        tokens: ['でんしゃが', 'おくれました', '。', 'それで', '、', 'ちこくしました', '。'] }
+        tokens: ['でんしゃが', 'おくれました', '。', 'それで', '、', 'ちこくしました', '。'] },
+      { jp: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っています。だから、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていきます。',
+        kana: 'あめがふっています。だから、かさをもっていきます。', romaji: 'ame ga futte imasu. dakara, kasa o motte ikimasu.', hu: 'Esik az eső. Ezért viszek esernyőt.',
+        cloze: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っています。___BLANK___、<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>っていきます。', clozeAnswer: 'だから',
+        tokens: ['あめが', 'ふって', 'います', '。', 'だから', '、', 'かさを', 'もって', 'いきます', '。'], from: 'k1:5:1' },
+      { jp: '<ruby>昨日<rt>きのう</rt></ruby>は<ruby>寝<rt>ね</rt></ruby>ませんでした。それで、<ruby>今日<rt>きょう</rt></ruby>はとても<ruby>眠<rt>ねむ</rt></ruby>いです。',
+        kana: 'きのうはねませんでした。それで、きょうはとてもねむいです。', romaji: 'kinou wa nemasen deshita. sore de, kyou wa totemo nemui desu.', hu: 'Tegnap nem aludtam. Ezért ma nagyon álmos vagyok.',
+        cloze: '<ruby>昨日<rt>きのう</rt></ruby>は<ruby>寝<rt>ね</rt></ruby>ませんでした。___BLANK___、<ruby>今日<rt>きょう</rt></ruby>はとても<ruby>眠<rt>ねむ</rt></ruby>いです。', clozeAnswer: 'それで',
+        tokens: ['きのうは', 'ねませんでした', '。', 'それで', '、', 'きょうは', 'とても', 'ねむいです', '。'], from: 'k1:5:2' },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>母<rt>はは</rt></ruby>の<ruby>誕生日<rt>たんじょうび</rt></ruby>です。だから、<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>りましょう。',
+        kana: 'きょうはははのたんじょうびです。だから、はやくかえりましょう。', romaji: 'kyou wa haha no tanjoubi desu. dakara, hayaku kaerimashou.', hu: 'Ma van anyám születésnapja. Menjünk hát haza korán!',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>は<ruby>母<rt>はは</rt></ruby>の<ruby>誕生日<rt>たんじょうび</rt></ruby>です。___BLANK___、<ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>りましょう。', clozeAnswer: 'だから',
+        tokens: ['きょうは', 'ははの', 'たんじょうびです', '。', 'だから', '、', 'はやく', 'かえりましょう', '。'], from: 'k1:5:4' }
     ],
     contrasts: ['kara_reason', 'soko_de', 'soredemo']
   },
@@ -4297,7 +5985,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>何度<rt>なんど</rt></ruby>も<ruby>失敗<rt>しっぱい</rt></ruby>しました。それでも、あきらめません。',
         kana: 'なんどもしっぱいしました。それでも、あきらめません。', romaji: 'nando mo shippai shimashita. soredemo, akiramemasen.', hu: 'Sokszor kudarcot vallottam. Mégsem adom fel.',
         cloze: '<ruby>何度<rt>なんど</rt></ruby>も<ruby>失敗<rt>しっぱい</rt></ruby>しました。___BLANK___、あきらめません。', clozeAnswer: 'それでも',
-        tokens: ['なんども', 'しっぱいしました', '。', 'それでも', '、', 'あきらめません', '。'] }
+        tokens: ['なんども', 'しっぱいしました', '。', 'それでも', '、', 'あきらめません', '。'] },
+      { jp: '<ruby>何度<rt>なんど</rt></ruby>も<ruby>説明<rt>せつめい</rt></ruby>しました。それでも、わかってくれません。',
+        kana: 'なんどもせつめいしました。それでも、わかってくれません。', romaji: 'nando mo setsumei shimashita. sore demo, wakatte kuremasen.', hu: 'Sokszor elmagyaráztam. Mégsem érti meg.',
+        cloze: '<ruby>何度<rt>なんど</rt></ruby>も<ruby>説明<rt>せつめい</rt></ruby>しました。___BLANK___、わかってくれません。', clozeAnswer: 'それでも',
+        tokens: ['なんども', 'せつめい', 'しました', '。', 'それ', 'でも', '、', 'わかって', 'くれません', '。'], from: 'k1:6:1' },
+      { jp: '<ruby>疲<rt>つか</rt></ruby>れています。それでも、<ruby>走<rt>はし</rt></ruby>ります。',
+        kana: 'つかれています。それでも、はしります。', romaji: 'tsukarete imasu. sore demo, hashirimasu.', hu: 'Fáradt vagyok. Mégis futok.',
+        cloze: '<ruby>疲<rt>つか</rt></ruby>れています。___BLANK___、<ruby>走<rt>はし</rt></ruby>ります。', clozeAnswer: 'それでも',
+        tokens: ['つかれて', 'います', '。', 'それ', 'でも', '、', 'はしります', '。'], from: 'k1:6:2' },
+      { jp: '<ruby>高<rt>たか</rt></ruby>いです。それでも、ほしいです。',
+        kana: 'たかいです。それでも、ほしいです。', romaji: 'takai desu. sore demo, hoshii desu.', hu: 'Drága. Mégis szeretném.',
+        cloze: '<ruby>高<rt>たか</rt></ruby>いです。___BLANK___、ほしいです。', clozeAnswer: 'それでも',
+        tokens: ['たかいです', '。', 'それ', 'でも', '、', 'ほしいです', '。'], from: 'k1:6:3' }
     ],
     contrasts: ['temo', 'dakara', 'demo_sentence']
   },
@@ -4367,7 +6067,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>明日<rt>あした</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みだよね。',
         kana: 'あしたはやすみだよね。', romaji: 'ashita wa yasumi da yo ne.', hu: 'Holnap szünet van, ugye?',
         cloze: '<ruby>明日<rt>あした</rt></ruby>は<ruby>休<rt>やす</rt></ruby>みだ___BLANK___。', clozeAnswer: 'よね',
-        tokens: ['あしたは', 'やすみだよね', '。'] }
+        tokens: ['あしたは', 'やすみだよね', '。'] },
+      { jp: 'この<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいよね。',
+        kana: 'このかんじはむずかしいよね。', romaji: 'kono kanji wa muzukashii yo ne.', hu: 'Ez a kanji nehéz, nem igaz?',
+        cloze: 'この<ruby>漢字<rt>かんじ</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しい___BLANK___。', clozeAnswer: 'よね',
+        tokens: ['この', 'かんじは', 'むずかしいよね', '。'], from: 'k2:3:3' },
+      { jp: 'アンナさんはハンガリー<ruby>人<rt>じん</rt></ruby>ですよね。',
+        kana: 'アンナさんはハンガリーじんですよね。', romaji: 'anna-san wa hangarii-jin desu yo ne.', hu: 'Anna magyar, ugye?',
+        cloze: 'アンナさんはハンガリー<ruby>人<rt>じん</rt></ruby>です___BLANK___。', clozeAnswer: 'よね',
+        tokens: ['アンナさんは', 'ハンガリーじんですよね', '。'], from: 'k2:3:4' }
     ],
     contrasts: ['ne_final', 'yo_final']
   },
@@ -4384,7 +6092,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいなあ。',
         kana: 'にほんへいきたいなあ。', romaji: 'nihon e ikitai naa.', hu: 'Bárcsak eljuthatnék Japánba!',
         cloze: '<ruby>日本<rt>にほん</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたい___BLANK___。', clozeAnswer: 'なあ',
-        tokens: ['にほんへ', 'いきたいなあ', '。'] }
+        tokens: ['にほんへ', 'いきたいなあ', '。'] },
+      { jp: 'おなかがすいたなあ。',
+        kana: 'おなかがすいたなあ。', romaji: 'onaka ga suita naa.', hu: 'De megéheztem!',
+        cloze: 'おなかがすいた___BLANK___。', clozeAnswer: 'なあ',
+        tokens: ['おなかが', 'すいたなあ', '。'], from: 'k2:4:4' },
+      { jp: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>歌<rt>うた</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>だなあ。',
+        kana: 'あのひとはうたがじょうずだなあ。', romaji: 'ano hito wa uta ga jouzu da naa.', hu: 'De jól énekel!',
+        cloze: 'あの<ruby>人<rt>ひと</rt></ruby>は<ruby>歌<rt>うた</rt></ruby>が<ruby>上手<rt>じょうず</rt></ruby>だ___BLANK___。', clozeAnswer: 'なあ',
+        tokens: ['あの', 'ひとは', 'うたが', 'じょうずだなあ', '。'], from: 'k2:4:7' }
     ],
     contrasts: ['kana', 'ne_final']
   },
@@ -4401,7 +6117,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>約束<rt>やくそく</rt></ruby>したじゃないですか。',
         kana: 'やくそくしたじゃないですか。', romaji: 'yakusoku shita ja nai desu ka.', hu: 'Hiszen megígérted!',
         cloze: '<ruby>約束<rt>やくそく</rt></ruby>した___BLANK___。', clozeAnswer: 'じゃないですか',
-        tokens: ['やくそく', 'したじゃないですか', '。'] }
+        tokens: ['やくそく', 'したじゃないですか', '。'] },
+      { jp: 'いいじゃないか。',
+        kana: 'いいじゃないか。', romaji: 'ii ja nai ka.', hu: 'Hát nem jó? Jó az!',
+        cloze: 'いい___BLANK___。', clozeAnswer: 'じゃないか',
+        tokens: ['いいじゃ', 'ないか', '。'], from: 'k2:7:1' },
+      { jp: 'もう<ruby>十二時<rt>じゅうにじ</rt></ruby>じゃないですか。',
+        kana: 'もうじゅうにじじゃないですか。', romaji: 'mou juuniji ja nai desu ka.', hu: 'Hiszen már tizenkét óra van!',
+        cloze: 'もう<ruby>十二時<rt>じゅうにじ</rt></ruby>___BLANK___。', clozeAnswer: 'じゃないですか',
+        tokens: ['もう', 'じゅうにじじゃ', 'ないですか', '。'], from: 'k2:7:3' },
+      { jp: 'あ、アンナさんじゃないですか。',
+        kana: 'あ、アンナさんじゃないですか。', romaji: 'a, anna-san ja nai desu ka.', hu: 'Nahát, hiszen ez Anna!',
+        cloze: 'あ、アンナさん___BLANK___。', clozeAnswer: 'じゃないですか',
+        tokens: ['あ', '、', 'アンナさんじゃ', 'ないですか', '。'], from: 'k2:7:4' }
     ],
     contrasts: ['yone', 'no_question']
   },
@@ -4437,7 +6165,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>宿題<rt>しゅくだい</rt></ruby>をしなきゃ。',
         kana: 'しゅくだいをしなきゃ。', romaji: 'shukudai o shinakya.', hu: 'Meg kell csinálnom a leckét.',
         cloze: '<ruby>宿題<rt>しゅくだい</rt></ruby>をし___BLANK___。', clozeAnswer: 'なきゃ',
-        tokens: ['しゅくだいを', 'しなきゃ', '。'] }
+        tokens: ['しゅくだいを', 'しなきゃ', '。'] },
+      { jp: '<ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>きなきゃ。',
+        kana: 'はやくおきなきゃ。', romaji: 'hayaku okinakya.', hu: 'Korán kell kelnem.',
+        cloze: '<ruby>早<rt>はや</rt></ruby>く<ruby>起<rt>お</rt></ruby>き___BLANK___。', clozeAnswer: 'なきゃ',
+        tokens: ['はやく', 'おきなきゃ', '。'], from: 'k3:2:2' },
+      { jp: '<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>まなきゃ。',
+        kana: 'くすりをのまなきゃ。', romaji: 'kusuri o nomanakya.', hu: 'Be kell vennem a gyógyszert.',
+        cloze: '<ruby>薬<rt>くすり</rt></ruby>を<ruby>飲<rt>の</rt></ruby>ま___BLANK___。', clozeAnswer: 'なきゃ',
+        tokens: ['くすりを', 'のまなきゃ', '。'], from: 'k3:2:5' },
+      { jp: '<ruby>明日<rt>あした</rt></ruby>は<ruby>早<rt>はや</rt></ruby>いから、<ruby>帰<rt>かえ</rt></ruby>らなくちゃ。',
+        kana: 'あしたははやいから、かえらなくちゃ。', romaji: 'ashita wa hayai kara, kaeranakucha.', hu: 'Holnap korán kelek, haza kell mennem.',
+        cloze: '<ruby>明日<rt>あした</rt></ruby>は<ruby>早<rt>はや</rt></ruby>いから、<ruby>帰<rt>かえ</rt></ruby>ら___BLANK___。', clozeAnswer: 'なくちゃ',
+        tokens: ['あしたは', 'はやいから', '、', 'かえらなくちゃ', '。'], from: 'k3:2:6' }
     ],
     contrasts: ['nakute_wa_ikemasen', 'nakereba_naranai']
   },
@@ -4454,7 +6194,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'それ、<ruby>触<rt>さわ</rt></ruby>っちゃだめ。',
         kana: 'それ、さわっちゃだめ。', romaji: 'sore, sawatcha dame.', hu: 'Ahhoz ne nyúlj!',
         cloze: 'それ、<ruby>触<rt>さわ</rt></ruby>っ___BLANK___。', clozeAnswer: 'ちゃだめ',
-        tokens: ['それ', '、', 'さわっちゃだめ', '。'] }
+        tokens: ['それ', '、', 'さわっちゃだめ', '。'] },
+      { jp: 'ここに<ruby>入<rt>はい</rt></ruby>っちゃだめ。',
+        kana: 'ここにはいっちゃだめ。', romaji: 'koko ni haitcha dame.', hu: 'Ide nem szabad bemenni!',
+        cloze: 'ここに<ruby>入<rt>はい</rt></ruby>っ___BLANK___。', clozeAnswer: 'ちゃだめ',
+        tokens: ['ここに', 'はいっちゃ', 'だめ', '。'], from: 'k3:3:4' },
+      { jp: 'まだ<ruby>見<rt>み</rt></ruby>ちゃだめだよ。',
+        kana: 'まだみちゃだめだよ。', romaji: 'mada micha dame da yo.', hu: 'Még nem szabad megnézni!',
+        cloze: 'まだ<ruby>見<rt>み</rt></ruby>___BLANK___だよ。', clozeAnswer: 'ちゃだめ',
+        tokens: ['まだ', 'みちゃ', 'だめだよ', '。'], from: 'k3:3:5' }
     ],
     contrasts: ['te_wa_ikenai', 'chau']
   },
@@ -4471,7 +6219,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>財布<rt>さいふ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れちゃいました。',
         kana: 'さいふをわすれちゃいました。', romaji: 'saifu o wasurechaimashita.', hu: 'Jaj, otthon felejtettem a pénztárcámat.',
         cloze: '<ruby>財布<rt>さいふ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れ___BLANK___。', clozeAnswer: 'ちゃいました',
-        tokens: ['さいふを', 'わすれちゃいました', '。'] }
+        tokens: ['さいふを', 'わすれちゃいました', '。'] },
+      { jp: '<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>食<rt>た</rt></ruby>べちゃった。',
+        kana: 'ぜんぶたべちゃった。', romaji: 'zenbu tabechatta.', hu: 'Megettem az egészet.',
+        cloze: '<ruby>全部<rt>ぜんぶ</rt></ruby><ruby>食<rt>た</rt></ruby>べ___BLANK___。', clozeAnswer: 'ちゃった',
+        tokens: ['ぜんぶ', 'たべちゃった', '。'], from: 'k3:4:1' },
+      { jp: '<ruby>財布<rt>さいふ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れちゃった。',
+        kana: 'さいふをわすれちゃった。', romaji: 'saifu o wasurechatta.', hu: 'Otthon felejtettem a pénztárcám.',
+        cloze: '<ruby>財布<rt>さいふ</rt></ruby>を<ruby>忘<rt>わす</rt></ruby>れ___BLANK___。', clozeAnswer: 'ちゃった',
+        tokens: ['さいふを', 'わすれちゃった', '。'], from: 'k3:4:2' },
+      { jp: 'バスが<ruby>行<rt>い</rt></ruby>っちゃった。',
+        kana: 'バスがいっちゃった。', romaji: 'basu ga itchatta.', hu: 'Elment a busz!',
+        cloze: 'バスが<ruby>行<rt>い</rt></ruby>っ___BLANK___。', clozeAnswer: 'ちゃった',
+        tokens: ['バスが', 'いっちゃった', '。'], from: 'k3:4:5' }
     ],
     contrasts: ['te_shimau', 'cha_ikenai']
   },
@@ -4488,7 +6248,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>駅<rt>えき</rt></ruby>で<ruby>待<rt>ま</rt></ruby>ってます。',
         kana: 'えきでまってます。', romaji: 'eki de mattemasu.', hu: 'Az állomáson várlak.',
         cloze: '<ruby>駅<rt>えき</rt></ruby>で<ruby>待<rt>ま</rt></ruby>っ___BLANK___。', clozeAnswer: 'てます',
-        tokens: ['えきで', 'まってます', '。'] }
+        tokens: ['えきで', 'まってます', '。'] },
+      { jp: '<ruby>何<rt>なに</rt></ruby>してるの？',
+        kana: 'なにしてるの？', romaji: 'nani shiteru no?', hu: 'Mit csinálsz?',
+        cloze: '<ruby>何<rt>なに</rt></ruby>し___BLANK___の？', clozeAnswer: 'てる',
+        tokens: ['なに', 'してるの', '？'], from: 'k3:5:1' },
+      { jp: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ってるよ。',
+        kana: 'あめがふってるよ。', romaji: 'ame ga futteru yo.', hu: 'Esik az eső.',
+        cloze: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>っ___BLANK___よ。', clozeAnswer: 'てる',
+        tokens: ['あめが', 'ふってるよ', '。'], from: 'k3:5:4' },
+      { jp: '<ruby>今<rt>いま</rt></ruby>、<ruby>駅<rt>えき</rt></ruby>で<ruby>待<rt>ま</rt></ruby>ってます。',
+        kana: 'いま、えきでまってます。', romaji: 'ima, eki de mattemasu.', hu: 'Most az állomáson várok.',
+        cloze: '<ruby>今<rt>いま</rt></ruby>、<ruby>駅<rt>えき</rt></ruby>で<ruby>待<rt>ま</rt></ruby>っ___BLANK___。', clozeAnswer: 'てます',
+        tokens: ['いま', '、', 'えきで', 'まってます', '。'], from: 'k3:5:7' }
     ],
     contrasts: ['te_iru_progress', 'toku']
   },
@@ -4505,7 +6277,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'ここに<ruby>置<rt>お</rt></ruby>いといて。',
         kana: 'ここにおいといて。', romaji: 'koko ni oitoite.', hu: 'Tedd le ide!',
         cloze: 'ここに<ruby>置<rt>お</rt></ruby>い___BLANK___。', clozeAnswer: 'といて',
-        tokens: ['ここに', 'おいといて', '。'] }
+        tokens: ['ここに', 'おいといて', '。'] },
+      { jp: 'そこに<ruby>置<rt>お</rt></ruby>いといて。',
+        kana: 'そこにおいといて。', romaji: 'soko ni oitoite.', hu: 'Hagyd csak ott!',
+        cloze: 'そこに<ruby>置<rt>お</rt></ruby>い___BLANK___。', clozeAnswer: 'といて',
+        tokens: ['そこに', 'おいといて', '。'], from: 'k3:6:4' }
     ],
     contrasts: ['te_oku', 'teru']
   },
@@ -4524,7 +6300,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>昨日<rt>きのう</rt></ruby>は<ruby>寝<rt>ね</rt></ruby>ないで、<ruby>勉強<rt>べんきょう</rt></ruby>しました。',
         kana: 'きのうはねないで、べんきょうしました。', romaji: 'kinou wa nenaide, benkyou shimashita.', hu: 'Tegnap alvás helyett tanultam.',
         cloze: '<ruby>昨日<rt>きのう</rt></ruby>は<ruby>寝<rt>ね</rt></ruby>___BLANK___、<ruby>勉強<rt>べんきょう</rt></ruby>しました。', clozeAnswer: 'ないで',
-        tokens: ['きのうは', 'ねないで', '、', 'べんきょうしました', '。'] }
+        tokens: ['きのうは', 'ねないで', '、', 'べんきょうしました', '。'] },
+      { jp: '<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べないで、<ruby>出<rt>で</rt></ruby>かけました。',
+        kana: 'あさごはんをたべないで、でかけました。', romaji: 'asagohan o tabenaide, dekakemashita.', hu: 'Reggeli nélkül mentem el.',
+        cloze: '<ruby>朝<rt>あさ</rt></ruby>ごはんを<ruby>食<rt>た</rt></ruby>べ___BLANK___、<ruby>出<rt>で</rt></ruby>かけました。', clozeAnswer: 'ないで',
+        tokens: ['あさごはんを', 'たべないで', '、', 'でかけました', '。'], from: 'k4:1:1' },
+      { jp: '<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>たないで、<ruby>出<rt>で</rt></ruby>かけました。',
+        kana: 'かさをもたないで、でかけました。', romaji: 'kasa o motanaide, dekakemashita.', hu: 'Esernyő nélkül indultam el.',
+        cloze: '<ruby>傘<rt>かさ</rt></ruby>を<ruby>持<rt>も</rt></ruby>た___BLANK___、<ruby>出<rt>で</rt></ruby>かけました。', clozeAnswer: 'ないで',
+        tokens: ['かさを', 'もたないで', '、', 'でかけました', '。'], from: 'k4:1:2' },
+      { jp: 'バスに<ruby>乗<rt>の</rt></ruby>らないで、<ruby>歩<rt>ある</rt></ruby>いて<ruby>行<rt>い</rt></ruby>きます。',
+        kana: 'バスにのらないで、あるいていきます。', romaji: 'basu ni noranaide, aruite ikimasu.', hu: 'Nem busszal megyek, hanem gyalog.',
+        cloze: 'バスに<ruby>乗<rt>の</rt></ruby>ら___BLANK___、<ruby>歩<rt>ある</rt></ruby>いて<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'ないで',
+        tokens: ['バスに', 'のらないで', '、', 'あるいて', 'いきます', '。'], from: 'k4:1:3' }
     ],
     contrasts: ['zu_ni', 'naide_kudasai']
   },
@@ -4541,7 +6329,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'これはどうやって<ruby>食<rt>た</rt></ruby>べますか。',
         kana: 'これはどうやってたべますか。', romaji: 'kore wa douyatte tabemasu ka.', hu: 'Ezt hogyan kell enni?',
         cloze: 'これは___BLANK___<ruby>食<rt>た</rt></ruby>べますか。', clozeAnswer: 'どうやって',
-        tokens: ['これは', 'どうやって', 'たべますか', '。'] }
+        tokens: ['これは', 'どうやって', 'たべますか', '。'] },
+      { jp: 'この<ruby>料理<rt>りょうり</rt></ruby>はどうやって<ruby>作<rt>つく</rt></ruby>りますか。',
+        kana: 'このりょうりはどうやってつくりますか。', romaji: 'kono ryouri wa dou yatte tsukurimasu ka.', hu: 'Hogyan készül ez az étel?',
+        cloze: 'この<ruby>料理<rt>りょうり</rt></ruby>は___BLANK___<ruby>作<rt>つく</rt></ruby>りますか。', clozeAnswer: 'どうやって',
+        tokens: ['この', 'りょうりは', 'どう', 'やって', 'つくりますか', '。'], from: 'k4:2:2' },
+      { jp: 'どうやって<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しましたか。',
+        kana: 'どうやってにほんごをべんきょうしましたか。', romaji: 'dou yatte nihongo o benkyou shimashita ka.', hu: 'Hogyan tanultál japánul?',
+        cloze: '___BLANK___<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>勉強<rt>べんきょう</rt></ruby>しましたか。', clozeAnswer: 'どうやって',
+        tokens: ['どう', 'やって', 'にほんごを', 'べんきょう', 'しましたか', '。'], from: 'k4:2:3' },
+      { jp: 'この<ruby>漢字<rt>かんじ</rt></ruby>はどうやって<ruby>読<rt>よ</rt></ruby>みますか。',
+        kana: 'このかんじはどうやってよみますか。', romaji: 'kono kanji wa dou yatte yomimasu ka.', hu: 'Hogyan kell olvasni ezt a kanjit?',
+        cloze: 'この<ruby>漢字<rt>かんじ</rt></ruby>は___BLANK___<ruby>読<rt>よ</rt></ruby>みますか。', clozeAnswer: 'どうやって',
+        tokens: ['この', 'かんじは', 'どう', 'やって', 'よみますか', '。'], from: 'k4:2:4' }
     ],
     contrasts: ['donna', 'kata']
   },
@@ -4575,7 +6375,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'たまに<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。',
         kana: 'たまにえいがをみにいきます。', romaji: 'tama ni eiga o mi ni ikimasu.', hu: 'Néha-néha elmegyek moziba.',
         cloze: '___BLANK___<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>に<ruby>行<rt>い</rt></ruby>きます。', clozeAnswer: 'たまに',
-        tokens: ['たまに', 'えいがを', 'みにいきます', '。'] }
+        tokens: ['たまに', 'えいがを', 'みにいきます', '。'] },
+      { jp: '<ruby>週末<rt>しゅうまつ</rt></ruby>はたいてい<ruby>家<rt>うち</rt></ruby>にいます。',
+        kana: 'しゅうまつはたいていうちにいます。', romaji: 'shuumatsu wa taitei uchi ni imasu.', hu: 'Hétvégén többnyire otthon vagyok.',
+        cloze: '<ruby>週末<rt>しゅうまつ</rt></ruby>は___BLANK___<ruby>家<rt>うち</rt></ruby>にいます。', clozeAnswer: 'たいてい',
+        tokens: ['しゅうまつは', 'たいてい', 'うちに', 'います', '。'], from: 'k4:6:2' }
     ],
     contrasts: ['amari_masen', 'shuu_ni_kai']
   },
@@ -4609,7 +6413,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>土曜日<rt>どようび</rt></ruby>はどうですか。',
         kana: 'どようびはどうですか。', romaji: 'doyoubi wa dou desu ka.', hu: 'Mit szólnál a szombathoz?',
         cloze: '<ruby>土曜日<rt>どようび</rt></ruby>は___BLANK___。', clozeAnswer: 'どうですか',
-        tokens: ['どようびは', 'どうですか', '。'] }
+        tokens: ['どようびは', 'どうですか', '。'] },
+      { jp: '<ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>土曜日<rt>どようび</rt></ruby>はどうですか。',
+        kana: 'らいしゅうのどようびはどうですか。', romaji: 'raishuu no doyoubi wa dou desu ka.', hu: 'A jövő szombat megfelel?',
+        cloze: '<ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>土曜日<rt>どようび</rt></ruby>は___BLANK___。', clozeAnswer: 'どうですか',
+        tokens: ['らいしゅうの', 'どようびは', 'どうですか', '。'], from: 'k4:8:2' },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>はどうですか。',
+        kana: 'にほんのせいかつはどうですか。', romaji: 'nihon no seikatsu wa dou desu ka.', hu: 'Milyen az élet Japánban?',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>の<ruby>生活<rt>せいかつ</rt></ruby>は___BLANK___。', clozeAnswer: 'どうですか',
+        tokens: ['にほんの', 'せいかつは', 'どうですか', '。'], from: 'k4:8:3' }
     ],
     contrasts: ['masenka', 'donna']
   },
@@ -4628,7 +6440,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>子<rt>こ</rt></ruby>どもが<ruby>寝<rt>ね</rt></ruby>ている<ruby>間<rt>あいだ</rt></ruby>、<ruby>静<rt>しず</rt></ruby>かにしていました。',
         kana: 'こどもがねているあいだ、しずかにしていました。', romaji: 'kodomo ga nete iru aida, shizuka ni shite imashita.', hu: 'Amíg a gyerek aludt, csendben voltam.',
         cloze: '<ruby>子<rt>こ</rt></ruby>どもが<ruby>寝<rt>ね</rt></ruby>ている___BLANK___、<ruby>静<rt>しず</rt></ruby>かにしていました。', clozeAnswer: 'あいだ',
-        tokens: ['こどもが', 'ねているあいだ', '、', 'しずかに', 'していました', '。'] }
+        tokens: ['こどもが', 'ねているあいだ', '、', 'しずかに', 'していました', '。'] },
+      { jp: '<ruby>授業<rt>じゅぎょう</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>、ずっと<ruby>眠<rt>ねむ</rt></ruby>かったです。',
+        kana: 'じゅぎょうのあいだ、ずっとねむかったです。', romaji: 'jugyou no aida, zutto nemukatta desu.', hu: 'Az óra alatt végig álmos voltam.',
+        cloze: '<ruby>授業<rt>じゅぎょう</rt></ruby>の___BLANK___、ずっと<ruby>眠<rt>ねむ</rt></ruby>かったです。', clozeAnswer: 'あいだ',
+        tokens: ['じゅぎょうの', 'あいだ', '、', 'ずっと', 'ねむかったです', '。'], from: 'k5:1:1' },
+      { jp: '<ruby>夏休<rt>なつやす</rt></ruby>みの<ruby>間<rt>あいだ</rt></ruby>、<ruby>祖母<rt>そぼ</rt></ruby>の<ruby>家<rt>うち</rt></ruby>にいました。',
+        kana: 'なつやすみのあいだ、そぼのうちにいました。', romaji: 'natsuyasumi no aida, sobo no uchi ni imashita.', hu: 'A nyári szünet alatt a nagymamámnál voltam.',
+        cloze: '<ruby>夏休<rt>なつやす</rt></ruby>みの___BLANK___、<ruby>祖母<rt>そぼ</rt></ruby>の<ruby>家<rt>うち</rt></ruby>にいました。', clozeAnswer: 'あいだ',
+        tokens: ['なつやすみの', 'あいだ', '、', 'そぼの', 'うちに', 'いました', '。'], from: 'k5:1:2' },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>にいる<ruby>間<rt>あいだ</rt></ruby>、<ruby>毎日<rt>まいにち</rt></ruby><ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>りました。',
+        kana: 'にほんにいるあいだ、まいにちしゃしんをとりました。', romaji: 'nihon ni iru aida, mainichi shashin o torimashita.', hu: 'Amíg Japánban voltam, minden nap fényképeztem.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>にいる___BLANK___、<ruby>毎日<rt>まいにち</rt></ruby><ruby>写真<rt>しゃしん</rt></ruby>を<ruby>撮<rt>と</rt></ruby>りました。', clozeAnswer: 'あいだ',
+        tokens: ['にほんに', 'いる', 'あいだ', '、', 'まいにち', 'しゃしんを', 'とりました', '。'], from: 'k5:1:3' }
     ],
     contrasts: ['aida_ni', 'uchi_ni']
   },
@@ -4645,7 +6469,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>留守<rt>るす</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>に、<ruby>友<rt>とも</rt></ruby>だちが<ruby>来<rt>き</rt></ruby>ました。',
         kana: 'るすのあいだに、ともだちがきました。', romaji: 'rusu no aida ni, tomodachi ga kimashita.', hu: 'Amíg nem voltam otthon, jött egy barátom.',
         cloze: '<ruby>留守<rt>るす</rt></ruby>の___BLANK___、<ruby>友<rt>とも</rt></ruby>だちが<ruby>来<rt>き</rt></ruby>ました。', clozeAnswer: 'あいだに',
-        tokens: ['るすのあいだに', '、', 'ともだちが', 'きました', '。'] }
+        tokens: ['るすのあいだに', '、', 'ともだちが', 'きました', '。'] },
+      { jp: '<ruby>留守<rt>るす</rt></ruby>の<ruby>間<rt>あいだ</rt></ruby>に、<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>届<rt>とど</rt></ruby>きました。',
+        kana: 'るすのあいだに、にもつがとどきました。', romaji: 'rusu no aida ni, nimotsu ga todokimashita.', hu: 'Amíg nem voltam otthon, megjött a csomag.',
+        cloze: '<ruby>留守<rt>るす</rt></ruby>の___BLANK___、<ruby>荷物<rt>にもつ</rt></ruby>が<ruby>届<rt>とど</rt></ruby>きました。', clozeAnswer: 'あいだに',
+        tokens: ['るすの', 'あいだに', '、', 'にもつが', 'とどきました', '。'], from: 'k5:2:1' },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもが<ruby>寝<rt>ね</rt></ruby>ている<ruby>間<rt>あいだ</rt></ruby>に、<ruby>掃除<rt>そうじ</rt></ruby>をします。',
+        kana: 'こどもがねているあいだに、そうじをします。', romaji: 'kodomo ga nete iru aida ni, souji o shimasu.', hu: 'Amíg a gyerek alszik, kitakarítok.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どもが<ruby>寝<rt>ね</rt></ruby>ている___BLANK___、<ruby>掃除<rt>そうじ</rt></ruby>をします。', clozeAnswer: 'あいだに',
+        tokens: ['こどもが', 'ねて', 'いる', 'あいだに', '、', 'そうじを', 'します', '。'], from: 'k5:2:2' },
+      { jp: '<ruby>若<rt>わか</rt></ruby>い<ruby>間<rt>あいだ</rt></ruby>に、いろいろな<ruby>国<rt>くに</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。',
+        kana: 'わかいあいだに、いろいろなくにへいきたいです。', romaji: 'wakai aida ni, iroiro na kuni e ikitai desu.', hu: 'Amíg fiatal vagyok, sok országba szeretnék eljutni.',
+        cloze: '<ruby>若<rt>わか</rt></ruby>い___BLANK___、いろいろな<ruby>国<rt>くに</rt></ruby>へ<ruby>行<rt>い</rt></ruby>きたいです。', clozeAnswer: 'あいだに',
+        tokens: ['わかい', 'あいだに', '、', 'いろいろな', 'くにへ', 'いきたいです', '。'], from: 'k5:2:3' }
     ],
     contrasts: ['aida', 'uchi_ni']
   },
@@ -4662,7 +6498,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'さっき<ruby>食<rt>た</rt></ruby>べたばかりなので、おなかがいっぱいです。',
         kana: 'さっきたべたばかりなので、おなかがいっぱいです。', romaji: 'sakki tabeta bakari na node, onaka ga ippai desu.', hu: 'Az imént ettem, ezért tele vagyok.',
         cloze: 'さっき<ruby>食<rt>た</rt></ruby>べ___BLANK___なので、おなかがいっぱいです。', clozeAnswer: 'たばかり',
-        tokens: ['さっき', 'たべたばかりなので', '、', 'おなかが', 'いっぱいです', '。'] }
+        tokens: ['さっき', 'たべたばかりなので', '、', 'おなかが', 'いっぱいです', '。'] },
+      { jp: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>たばかりです。',
+        kana: 'にほんにきたばかりです。', romaji: 'nihon ni kita bakari desu.', hu: 'Nemrég jöttem Japánba.',
+        cloze: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>___BLANK___。', clozeAnswer: 'たばかりです',
+        tokens: ['にほんに', 'きた', 'ばかりです', '。'], from: 'k5:4:1' },
+      { jp: 'さっき<ruby>食<rt>た</rt></ruby>べたばかりです。',
+        kana: 'さっきたべたばかりです。', romaji: 'sakki tabeta bakari desu.', hu: 'Épp az imént ettem.',
+        cloze: 'さっき<ruby>食<rt>た</rt></ruby>べ___BLANK___。', clozeAnswer: 'たばかりです',
+        tokens: ['さっき', 'たべた', 'ばかりです', '。'], from: 'k5:4:2' },
+      { jp: 'この<ruby>靴<rt>くつ</rt></ruby>は<ruby>先週<rt>せんしゅう</rt></ruby><ruby>買<rt>か</rt></ruby>ったばかりです。',
+        kana: 'このくつはせんしゅうかったばかりです。', romaji: 'kono kutsu wa senshuu katta bakari desu.', hu: 'Ezt a cipőt csak múlt héten vettem.',
+        cloze: 'この<ruby>靴<rt>くつ</rt></ruby>は<ruby>先週<rt>せんしゅう</rt></ruby><ruby>買<rt>か</rt></ruby>っ___BLANK___。', clozeAnswer: 'たばかりです',
+        tokens: ['この', 'くつは', 'せんしゅう', 'かった', 'ばかりです', '。'], from: 'k5:4:3' }
     ],
     contrasts: ['ta_tokoro', 'bakari']
   },
@@ -4679,7 +6527,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>去年<rt>きょねん</rt></ruby>は<ruby>大阪<rt>おおさか</rt></ruby>に<ruby>住<rt>す</rt></ruby>んでいました。',
         kana: 'きょねんはおおさかにすんでいました。', romaji: 'kyonen wa oosaka ni sunde imashita.', hu: 'Tavaly Oszakában laktam.',
         cloze: '<ruby>去年<rt>きょねん</rt></ruby>は<ruby>大阪<rt>おおさか</rt></ruby>に<ruby>住<rt>す</rt></ruby>ん___BLANK___。', clozeAnswer: 'でいました',
-        tokens: ['きょねんは', 'おおさかに', 'すんでいました', '。'] }
+        tokens: ['きょねんは', 'おおさかに', 'すんでいました', '。'] },
+      { jp: '<ruby>電話<rt>でんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>ったとき、シャワーを<ruby>浴<rt>あ</rt></ruby>びていました。',
+        kana: 'でんわがなったとき、シャワーをあびていました。', romaji: 'denwa ga natta toki, shawaa o abite imashita.', hu: 'Amikor megszólalt a telefon, éppen zuhanyoztam.',
+        cloze: '<ruby>電話<rt>でんわ</rt></ruby>が<ruby>鳴<rt>な</rt></ruby>ったとき、シャワーを<ruby>浴<rt>あ</rt></ruby>び___BLANK___。', clozeAnswer: 'ていました',
+        tokens: ['でんわが', 'なった', 'とき', '、', 'シャワーを', 'あびて', 'いました', '。'], from: 'k5:5:1' },
+      { jp: '<ruby>昨日<rt>きのう</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>、<ruby>何<rt>なに</rt></ruby>をしていましたか。',
+        kana: 'きのうのよる、なにをしていましたか。', romaji: 'kinou no yoru, nani o shite imashita ka.', hu: 'Mit csináltál tegnap este?',
+        cloze: '<ruby>昨日<rt>きのう</rt></ruby>の<ruby>夜<rt>よる</rt></ruby>、<ruby>何<rt>なに</rt></ruby>をし___BLANK___か。', clozeAnswer: 'ていました',
+        tokens: ['きのうの', 'よる', '、', 'なにを', 'して', 'いましたか', '。'], from: 'k5:5:3' },
+      { jp: '<ruby>先生<rt>せんせい</rt></ruby>が<ruby>来<rt>き</rt></ruby>たとき、みんな<ruby>話<rt>はな</rt></ruby>していました。',
+        kana: 'せんせいがきたとき、みんなはなしていました。', romaji: 'sensei ga kita toki, minna hanashite imashita.', hu: 'Amikor a tanár bejött, mindenki beszélgetett.',
+        cloze: '<ruby>先生<rt>せんせい</rt></ruby>が<ruby>来<rt>き</rt></ruby>たとき、みんな<ruby>話<rt>はな</rt></ruby>し___BLANK___。', clozeAnswer: 'ていました',
+        tokens: ['せんせいが', 'きた', 'とき', '、', 'みんな', 'はなして', 'いました', '。'], from: 'k5:5:4' }
     ],
     contrasts: ['te_iru_progress', 'te_iru_state']
   },
@@ -4696,7 +6556,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'バスは<ruby>十分<rt>じゅっぷん</rt></ruby>おきに<ruby>来<rt>き</rt></ruby>ます。',
         kana: 'バスはじゅっぷんおきにきます。', romaji: 'basu wa juppun oki ni kimasu.', hu: 'A busz tízpercenként jön.',
         cloze: 'バスは<ruby>十分<rt>じゅっぷん</rt></ruby>___BLANK___<ruby>来<rt>き</rt></ruby>ます。', clozeAnswer: 'おきに',
-        tokens: ['バスは', 'じゅっぷんおきに', 'きます', '。'] }
+        tokens: ['バスは', 'じゅっぷんおきに', 'きます', '。'] },
+      { jp: 'この<ruby>薬<rt>くすり</rt></ruby>は<ruby>六時間<rt>ろくじかん</rt></ruby>おきに<ruby>飲<rt>の</rt></ruby>んでください。',
+        kana: 'このくすりはろくじかんおきにのんでください。', romaji: 'kono kusuri wa rokujikan oki ni nonde kudasai.', hu: 'Ezt a gyógyszert hatóránként vegye be.',
+        cloze: 'この<ruby>薬<rt>くすり</rt></ruby>は<ruby>六時間<rt>ろくじかん</rt></ruby>___BLANK___<ruby>飲<rt>の</rt></ruby>んでください。', clozeAnswer: 'おきに',
+        tokens: ['この', 'くすりは', 'ろくじかん', 'おきに', 'のんで', 'ください', '。'], from: 'k5:6:3' },
+      { jp: '<ruby>一日<rt>いちにち</rt></ruby>おきに<ruby>走<rt>はし</rt></ruby>っています。',
+        kana: 'いちにちおきにはしっています。', romaji: 'ichinichi oki ni hashitte imasu.', hu: 'Minden második nap futok.',
+        cloze: '<ruby>一日<rt>いちにち</rt></ruby>___BLANK___<ruby>走<rt>はし</rt></ruby>っています。', clozeAnswer: 'おきに',
+        tokens: ['いちにち', 'おきに', 'はしって', 'います', '。'], from: 'k5:6:5' },
+      { jp: '<ruby>五<rt>ご</rt></ruby>メートルおきに<ruby>木<rt>き</rt></ruby>があります。',
+        kana: 'ごメートルおきにきがあります。', romaji: 'go-meetoru oki ni ki ga arimasu.', hu: 'Ötméterenként áll egy fa.',
+        cloze: '<ruby>五<rt>ご</rt></ruby>メートル___BLANK___<ruby>木<rt>き</rt></ruby>があります。', clozeAnswer: 'おきに',
+        tokens: ['ごメートル', 'おきに', 'きが', 'あります', '。'], from: 'k5:6:6' }
     ],
     contrasts: ['kurai', 'ni_time']
   },
@@ -4715,7 +6587,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'もっとゆっくり<ruby>話<rt>はな</rt></ruby>してほしいです。',
         kana: 'もっとゆっくりはなしてほしいです。', romaji: 'motto yukkuri hanashite hoshii desu.', hu: 'Szeretném, ha lassabban beszélne.',
         cloze: 'もっとゆっくり<ruby>話<rt>はな</rt></ruby>し___BLANK___。', clozeAnswer: 'てほしいです',
-        tokens: ['もっと', 'ゆっくり', 'はなしてほしいです', '。'] }
+        tokens: ['もっと', 'ゆっくり', 'はなしてほしいです', '。'] },
+      { jp: 'もう<ruby>少<rt>すこ</rt></ruby>し<ruby>静<rt>しず</rt></ruby>かにしてほしいです。',
+        kana: 'もうすこししずかにしてほしいです。', romaji: 'mou sukoshi shizuka ni shite hoshii desu.', hu: 'Szeretném, ha egy kicsit csendesebben lennél.',
+        cloze: 'もう<ruby>少<rt>すこ</rt></ruby>し<ruby>静<rt>しず</rt></ruby>かにし___BLANK___。', clozeAnswer: 'てほしいです',
+        tokens: ['もう', 'すこし', 'しずかに', 'して', 'ほしいです', '。'], from: 'k6:1:2' },
+      { jp: '<ruby>子<rt>こ</rt></ruby>どもには<ruby>自由<rt>じゆう</rt></ruby>に<ruby>生<rt>い</rt></ruby>きてほしいです。',
+        kana: 'こどもにはじゆうにいきてほしいです。', romaji: 'kodomo ni wa jiyuu ni ikite hoshii desu.', hu: 'Azt szeretném, hogy a gyerekem szabadon éljen.',
+        cloze: '<ruby>子<rt>こ</rt></ruby>どもには<ruby>自由<rt>じゆう</rt></ruby>に<ruby>生<rt>い</rt></ruby>き___BLANK___。', clozeAnswer: 'てほしいです',
+        tokens: ['こどもには', 'じゆうに', 'いきて', 'ほしいです', '。'], from: 'k6:1:4' },
+      { jp: '<ruby>早<rt>はや</rt></ruby>く<ruby>春<rt>はる</rt></ruby>が<ruby>来<rt>き</rt></ruby>てほしいです。',
+        kana: 'はやくはるがきてほしいです。', romaji: 'hayaku haru ga kite hoshii desu.', hu: 'Bárcsak jönne már a tavasz!',
+        cloze: '<ruby>早<rt>はや</rt></ruby>く<ruby>春<rt>はる</rt></ruby>が<ruby>来<rt>き</rt></ruby>___BLANK___。', clozeAnswer: 'てほしいです',
+        tokens: ['はやく', 'はるが', 'きて', 'ほしいです', '。'], from: 'k6:1:5' }
     ],
     contrasts: ['tai', 'ga_hoshii', 'te_kudasai']
   },
@@ -4732,7 +6616,15 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>てよかったです。',
         kana: 'にほんにきてよかったです。', romaji: 'nihon ni kite yokatta desu.', hu: 'De jó, hogy eljöttem Japánba!',
         cloze: '<ruby>日本<rt>にほん</rt></ruby>に<ruby>来<rt>き</rt></ruby>___BLANK___です。', clozeAnswer: 'てよかった',
-        tokens: ['にほんに', 'きてよかったです', '。'] }
+        tokens: ['にほんに', 'きてよかったです', '。'] },
+      { jp: '<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>ってよかったです。',
+        kana: 'まにあってよかったです。', romaji: 'ma ni atte yokatta desu.', hu: 'De jó, hogy odaértem!',
+        cloze: '<ruby>間<rt>ま</rt></ruby>に<ruby>合<rt>あ</rt></ruby>っ___BLANK___。', clozeAnswer: 'てよかったです',
+        tokens: ['まに', 'あって', 'よかったです', '。'], from: 'k6:4:1' },
+      { jp: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>らなくてよかったですね。',
+        kana: 'あめがふらなくてよかったですね。', romaji: 'ame ga furanakute yokatta desu ne.', hu: 'De jó, hogy nem esett!',
+        cloze: '<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>らなく___BLANK___ね。', clozeAnswer: 'てよかったです',
+        tokens: ['あめが', 'ふらなくて', 'よかったですね', '。'], from: 'k6:4:3' }
     ],
     contrasts: ['te_reason', 'to_ii_desu_ne']
   },
@@ -4749,7 +6641,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>するといいですね。',
         kana: 'しけんにごうかくするといいですね。', romaji: 'shiken ni goukaku suru to ii desu ne.', hu: 'Remélem, sikerül a vizsgád.',
         cloze: '<ruby>試験<rt>しけん</rt></ruby>に<ruby>合格<rt>ごうかく</rt></ruby>する___BLANK___。', clozeAnswer: 'といいですね',
-        tokens: ['しけんに', 'ごうかくするといいですね', '。'] }
+        tokens: ['しけんに', 'ごうかくするといいですね', '。'] },
+      { jp: '<ruby>早<rt>はや</rt></ruby>く<ruby>元気<rt>げんき</rt></ruby>になるといいですね。',
+        kana: 'はやくげんきになるといいですね。', romaji: 'hayaku genki ni naru to ii desu ne.', hu: 'Remélem, hamar meggyógyul.',
+        cloze: '<ruby>早<rt>はや</rt></ruby>く<ruby>元気<rt>げんき</rt></ruby>になる___BLANK___。', clozeAnswer: 'といいですね',
+        tokens: ['はやく', 'げんきに', 'なると', 'いいですね', '。'], from: 'k6:5:2' }
     ],
     contrasts: ['to_conditional', 'te_hoshii']
   },
@@ -4783,7 +6679,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'きっと<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですよ。',
         kana: 'きっとだいじょうぶですよ。', romaji: 'kitto daijoubu desu yo.', hu: 'Biztosan minden rendben lesz.',
         cloze: '___BLANK___<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>ですよ。', clozeAnswer: 'きっと',
-        tokens: ['きっと', 'だいじょうぶですよ', '。'] }
+        tokens: ['きっと', 'だいじょうぶですよ', '。'] },
+      { jp: 'ぜひ<ruby>食<rt>た</rt></ruby>べてみたいです。',
+        kana: 'ぜひたべてみたいです。', romaji: 'zehi tabete mitai desu.', hu: 'Nagyon szeretném megkóstolni.',
+        cloze: '___BLANK___<ruby>食<rt>た</rt></ruby>べてみたいです。', clozeAnswer: 'ぜひ',
+        tokens: ['ぜひ', 'たべて', 'みたいです', '。'], from: 'k6:7:2' },
+      { jp: '「<ruby>今度<rt>こんど</rt></ruby>、いっしょに<ruby>食事<rt>しょくじ</rt></ruby>でもどうですか。」「ぜひ！」',
+        kana: '「こんど、いっしょにしょくじでもどうですか。」「ぜひ！」', romaji: 'kondo, issho ni shokuji demo dou desu ka. zehi!', hu: '„Legközelebb együnk együtt valamit?" „Nagyon szívesen!"',
+        cloze: '「<ruby>今度<rt>こんど</rt></ruby>、いっしょに<ruby>食事<rt>しょくじ</rt></ruby>でもどうですか。」「___BLANK___！」', clozeAnswer: 'ぜひ',
+        tokens: ['「', 'こんど', '、', 'いっしょに', 'しょくじ', 'でも', 'どうですか', '。', '」', '「', 'ぜひ', '！', '」'], from: 'k6:7:4' },
+      { jp: 'きっと<ruby>合格<rt>ごうかく</rt></ruby>すると<ruby>思<rt>おも</rt></ruby>います。',
+        kana: 'きっとごうかくするとおもいます。', romaji: 'kitto goukaku suru to omoimasu.', hu: 'Biztos vagyok benne, hogy átmész.',
+        cloze: '___BLANK___<ruby>合格<rt>ごうかく</rt></ruby>すると<ruby>思<rt>おも</rt></ruby>います。', clozeAnswer: 'きっと',
+        tokens: ['きっと', 'ごうかく', 'すると', 'おもいます', '。'], from: 'k6:7:5' }
     ],
     contrasts: ['ni_kimatte_iru', 'koso']
   },
@@ -4802,7 +6710,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>彼<rt>かれ</rt></ruby>が<ruby>知<rt>し</rt></ruby>らないはずがありません。',
         kana: 'かれがしらないはずがありません。', romaji: 'kare ga shiranai hazu ga arimasen.', hu: 'Lehetetlen, hogy ő ne tudna róla.',
         cloze: '<ruby>彼<rt>かれ</rt></ruby>が<ruby>知<rt>し</rt></ruby>らない___BLANK___。', clozeAnswer: 'はずがありません',
-        tokens: ['かれが', 'しらないはずがありません', '。'] }
+        tokens: ['かれが', 'しらないはずがありません', '。'] },
+      { jp: '<ruby>彼<rt>かれ</rt></ruby>がそんなことを<ruby>言<rt>い</rt></ruby>うはずがありません。',
+        kana: 'かれがそんなことをいうはずがありません。', romaji: 'kare ga sonna koto o iu hazu ga arimasen.', hu: 'Kizárt, hogy ő ilyet mondjon.',
+        cloze: '<ruby>彼<rt>かれ</rt></ruby>がそんなことを<ruby>言<rt>い</rt></ruby>う___BLANK___。', clozeAnswer: 'はずがありません',
+        tokens: ['かれが', 'そんな', 'ことを', 'いう', 'はずが', 'ありません', '。'], from: 'k7:1:1' },
+      { jp: 'こんなに<ruby>安<rt>やす</rt></ruby>いはずがありません。',
+        kana: 'こんなにやすいはずがありません。', romaji: 'konna ni yasui hazu ga arimasen.', hu: 'Lehetetlen, hogy ilyen olcsó legyen.',
+        cloze: 'こんなに<ruby>安<rt>やす</rt></ruby>い___BLANK___。', clozeAnswer: 'はずがありません',
+        tokens: ['こんなに', 'やすい', 'はずが', 'ありません', '。'], from: 'k7:1:2' },
+      { jp: 'まじめな<ruby>山田<rt>やまだ</rt></ruby>さんが<ruby>遅刻<rt>ちこく</rt></ruby>するはずがありません。',
+        kana: 'まじめなやまださんがちこくするはずがありません。', romaji: 'majime na yamada-san ga chikoku suru hazu ga arimasen.', hu: 'Kizárt, hogy a lelkiismeretes Jamada elkéssen.',
+        cloze: 'まじめな<ruby>山田<rt>やまだ</rt></ruby>さんが<ruby>遅刻<rt>ちこく</rt></ruby>する___BLANK___。', clozeAnswer: 'はずがありません',
+        tokens: ['まじめな', 'やまださんが', 'ちこく', 'する', 'はずが', 'ありません', '。'], from: 'k7:1:7' }
     ],
     contrasts: ['hazu_desu', 'ni_chigai_nai']
   },
@@ -4853,7 +6773,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>漢字<rt>かんじ</rt></ruby>がなかなか<ruby>覚<rt>おぼ</rt></ruby>えられません。',
         kana: 'かんじがなかなかおぼえられません。', romaji: 'kanji ga nakanaka oboeraremasen.', hu: 'Sehogy sem tudom megjegyezni a kanjikat.',
         cloze: '<ruby>漢字<rt>かんじ</rt></ruby>が___BLANK___<ruby>覚<rt>おぼ</rt></ruby>えられません。', clozeAnswer: 'なかなか',
-        tokens: ['かんじが', 'なかなか', 'おぼえられません', '。'] }
+        tokens: ['かんじが', 'なかなか', 'おぼえられません', '。'] },
+      { jp: '<ruby>仕事<rt>しごと</rt></ruby>がなかなか<ruby>終<rt>お</rt></ruby>わりません。',
+        kana: 'しごとがなかなかおわりません。', romaji: 'shigoto ga nakanaka owarimasen.', hu: 'Sehogy sem akar véget érni a munka.',
+        cloze: '<ruby>仕事<rt>しごと</rt></ruby>が___BLANK___<ruby>終<rt>お</rt></ruby>わりません。', clozeAnswer: 'なかなか',
+        tokens: ['しごとが', 'なかなか', 'おわりません', '。'], from: 'k7:5:3' },
+      { jp: 'この<ruby>店<rt>みせ</rt></ruby>のラーメンはなかなかおいしいです。',
+        kana: 'このみせのラーメンはなかなかおいしいです。', romaji: 'kono mise no raamen wa nakanaka oishii desu.', hu: 'Ennek a helynek a rámenje egész finom.',
+        cloze: 'この<ruby>店<rt>みせ</rt></ruby>のラーメンは___BLANK___おいしいです。', clozeAnswer: 'なかなか',
+        tokens: ['この', 'みせの', 'ラーメンは', 'なかなか', 'おいしいです', '。'], from: 'k7:5:4' },
+      { jp: '<ruby>夜<rt>よる</rt></ruby>、なかなか<ruby>眠<rt>ねむ</rt></ruby>れません。',
+        kana: 'よる、なかなかねむれません。', romaji: 'yoru, nakanaka nemuremasen.', hu: 'Este sehogy sem tudok elaludni.',
+        cloze: '<ruby>夜<rt>よる</rt></ruby>、___BLANK___<ruby>眠<rt>ねむ</rt></ruby>れません。', clozeAnswer: 'なかなか',
+        tokens: ['よる', '、', 'なかなか', 'ねむれません', '。'], from: 'k7:5:5' }
     ],
     contrasts: ['amari_masen', 'sonna_ni_nai']
   },
@@ -4870,7 +6802,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'そんなに<ruby>高<rt>たか</rt></ruby>くありません。',
         kana: 'そんなにたかくありません。', romaji: 'sonna ni takaku arimasen.', hu: 'Nem annyira drága.',
         cloze: '___BLANK___<ruby>高<rt>たか</rt></ruby>くありません。', clozeAnswer: 'そんなに',
-        tokens: ['そんなに', 'たかくありません', '。'] }
+        tokens: ['そんなに', 'たかくありません', '。'] },
+      { jp: 'そんなに<ruby>高<rt>たか</rt></ruby>くないです。',
+        kana: 'そんなにたかくないです。', romaji: 'sonna ni takakunai desu.', hu: 'Nem olyan drága.',
+        cloze: '___BLANK___<ruby>高<rt>たか</rt></ruby>くないです。', clozeAnswer: 'そんなに',
+        tokens: ['そんなに', 'たかくないです', '。'], from: 'k7:6:1' },
+      { jp: 'そんなに<ruby>心配<rt>しんぱい</rt></ruby>しないでください。',
+        kana: 'そんなにしんぱいしないでください。', romaji: 'sonna ni shinpai shinaide kudasai.', hu: 'Ne aggódj annyira!',
+        cloze: '___BLANK___<ruby>心配<rt>しんぱい</rt></ruby>しないでください。', clozeAnswer: 'そんなに',
+        tokens: ['そんなに', 'しんぱい', 'しないで', 'ください', '。'], from: 'k7:6:2' },
+      { jp: '<ruby>今日<rt>きょう</rt></ruby>はそんなに<ruby>寒<rt>さむ</rt></ruby>くありません。',
+        kana: 'きょうはそんなにさむくありません。', romaji: 'kyou wa sonna ni samuku arimasen.', hu: 'Ma nincs olyan hideg.',
+        cloze: '<ruby>今日<rt>きょう</rt></ruby>は___BLANK___<ruby>寒<rt>さむ</rt></ruby>くありません。', clozeAnswer: 'そんなに',
+        tokens: ['きょうは', 'そんなに', 'さむく', 'ありません', '。'], from: 'k7:6:3' }
     ],
     contrasts: ['amari_masen', 'nakanaka_nai']
   },
@@ -4887,7 +6831,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'さすがに<ruby>今日<rt>きょう</rt></ruby>は<ruby>疲<rt>つか</rt></ruby>れました。',
         kana: 'さすがにきょうはつかれました。', romaji: 'sasuga ni kyou wa tsukaremashita.', hu: 'Ma azért már én is elfáradtam.',
         cloze: '___BLANK___<ruby>今日<rt>きょう</rt></ruby>は<ruby>疲<rt>つか</rt></ruby>れました。', clozeAnswer: 'さすがに',
-        tokens: ['さすがに', 'きょうは', 'つかれました', '。'] }
+        tokens: ['さすがに', 'きょうは', 'つかれました', '。'] },
+      { jp: 'さすがプロですね。<ruby>上手<rt>じょうず</rt></ruby>です。',
+        kana: 'さすがプロですね。じょうずです。', romaji: 'sasuga puro desu ne. jouzu desu.', hu: 'Látszik, hogy profi: nagyon ügyes.',
+        cloze: '___BLANK___プロですね。<ruby>上手<rt>じょうず</rt></ruby>です。', clozeAnswer: 'さすが',
+        tokens: ['さすが', 'プロですね', '。', 'じょうずです', '。'], from: 'k7:7:2' },
+      { jp: 'さすがに<ruby>三日<rt>みっか</rt></ruby>も<ruby>寝<rt>ね</rt></ruby>ていないと、<ruby>頭<rt>あたま</rt></ruby>が<ruby>働<rt>はたら</rt></ruby>きません。',
+        kana: 'さすがにみっかもねていないと、あたまがはたらきません。', romaji: 'sasuga ni mikka mo nete inai to, atama ga hatarakimasen.', hu: 'Három nap alvás nélkül azért már tényleg nem fog az agyam.',
+        cloze: '___BLANK___に<ruby>三日<rt>みっか</rt></ruby>も<ruby>寝<rt>ね</rt></ruby>ていないと、<ruby>頭<rt>あたま</rt></ruby>が<ruby>働<rt>はたら</rt></ruby>きません。', clozeAnswer: 'さすが',
+        tokens: ['さすがに', 'みっかも', 'ねて', 'いないと', '、', 'あたまが', 'はたらきません', '。'], from: 'k7:7:5' },
+      { jp: 'さすがの<ruby>先生<rt>せんせい</rt></ruby>も、この<ruby>問題<rt>もんだい</rt></ruby>はわかりませんでした。',
+        kana: 'さすがのせんせいも、このもんだいはわかりませんでした。', romaji: 'sasuga no sensei mo, kono mondai wa wakarimasen deshita.', hu: 'Ezt a feladatot még a tanár sem tudta megoldani.',
+        cloze: '___BLANK___の<ruby>先生<rt>せんせい</rt></ruby>も、この<ruby>問題<rt>もんだい</rt></ruby>はわかりませんでした。', clozeAnswer: 'さすが',
+        tokens: ['さすがの', 'せんせいも', '、', 'この', 'もんだいは', 'わかりませんでした', '。'], from: 'k7:7:6' }
     ],
     contrasts: ['dake_atte']
   },
@@ -4904,7 +6860,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'やっぱり<ruby>彼<rt>かれ</rt></ruby>は<ruby>来<rt>き</rt></ruby>ませんでした。',
         kana: 'やっぱりかれはきませんでした。', romaji: 'yappari kare wa kimasen deshita.', hu: 'Ahogy gondoltam, nem jött el.',
         cloze: '___BLANK___<ruby>彼<rt>かれ</rt></ruby>は<ruby>来<rt>き</rt></ruby>ませんでした。', clozeAnswer: 'やっぱり',
-        tokens: ['やっぱり', 'かれは', 'きませんでした', '。'] }
+        tokens: ['やっぱり', 'かれは', 'きませんでした', '。'] },
+      { jp: 'まさか<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るとは<ruby>思<rt>おも</rt></ruby>いませんでした。',
+        kana: 'まさかゆきがふるとはおもいませんでした。', romaji: 'masaka yuki ga furu to wa omoimasen deshita.', hu: 'Álmomban sem gondoltam volna, hogy havazni fog.',
+        cloze: '___BLANK___<ruby>雪<rt>ゆき</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>るとは<ruby>思<rt>おも</rt></ruby>いませんでした。', clozeAnswer: 'まさか',
+        tokens: ['まさか', 'ゆきが', 'ふるとは', 'おもいませんでした', '。'], from: 'k7:8:2' },
+      { jp: 'まさか<ruby>忘<rt>わす</rt></ruby>れていないでしょうね。',
+        kana: 'まさかわすれていないでしょうね。', romaji: 'masaka wasurete inai deshou ne.', hu: 'Csak nem felejtette el?',
+        cloze: '___BLANK___<ruby>忘<rt>わす</rt></ruby>れていないでしょうね。', clozeAnswer: 'まさか',
+        tokens: ['まさか', 'わすれて', 'いないでしょうね', '。'], from: 'k7:8:3' },
+      { jp: 'やっぱり<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ってきました。',
+        kana: 'やっぱりあめがふってきました。', romaji: 'yappari ame ga futte kimashita.', hu: 'Ahogy gondoltam, eleredt az eső.',
+        cloze: '___BLANK___<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>ってきました。', clozeAnswer: 'やっぱり',
+        tokens: ['やっぱり', 'あめが', 'ふって', 'きました', '。'], from: 'k7:8:4' }
     ],
     contrasts: ['hazu_ga_nai', 'kamoshirenai']
   },
@@ -4957,7 +6925,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>電話<rt>でんわ</rt></ruby>またはメールで<ruby>連絡<rt>れんらく</rt></ruby>してください。',
         kana: 'でんわまたはメールでれんらくしてください。', romaji: 'denwa matawa meeru de renraku shite kudasai.', hu: 'Telefonon vagy e-mailben értesítsen!',
         cloze: '<ruby>電話<rt>でんわ</rt></ruby>___BLANK___メールで<ruby>連絡<rt>れんらく</rt></ruby>してください。', clozeAnswer: 'または',
-        tokens: ['でんわ', 'または', 'メールで', 'れんらくしてください', '。'] }
+        tokens: ['でんわ', 'または', 'メールで', 'れんらくしてください', '。'] },
+      { jp: '<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>やノートなどがあります。',
+        kana: 'つくえのうえにほんやノートなどがあります。', romaji: 'tsukue no ue ni hon ya nooto nado ga arimasu.', hu: 'Az asztalon könyvek, füzetek és hasonlók vannak.',
+        cloze: '<ruby>机<rt>つくえ</rt></ruby>の<ruby>上<rt>うえ</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>やノート___BLANK___があります。', clozeAnswer: 'など',
+        tokens: ['つくえの', 'うえに', 'ほん', 'や', 'ノート', 'などが', 'あります', '。'], from: 'k8:3:1' },
+      { jp: '<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は<ruby>映画<rt>えいが</rt></ruby>や<ruby>音楽<rt>おんがく</rt></ruby>などを<ruby>楽<rt>たの</rt></ruby>しみます。',
+        kana: 'やすみのひはえいがやおんがくなどをたのしみます。', romaji: 'yasumi no hi wa eiga ya ongaku nado o tanoshimimasu.', hu: 'Szabadnapon filmet nézek, zenét hallgatok, ilyesmi.',
+        cloze: '<ruby>休<rt>やす</rt></ruby>みの<ruby>日<rt>ひ</rt></ruby>は<ruby>映画<rt>えいが</rt></ruby>や<ruby>音楽<rt>おんがく</rt></ruby>___BLANK___を<ruby>楽<rt>たの</rt></ruby>しみます。', clozeAnswer: 'など',
+        tokens: ['やすみの', 'ひは', 'えいが', 'や', 'おんがく', 'などを', 'たのしみます', '。'], from: 'k8:3:2' },
+      { jp: '<ruby>黒<rt>くろ</rt></ruby>または<ruby>青<rt>あお</rt></ruby>のペンで<ruby>書<rt>か</rt></ruby>いてください。',
+        kana: 'くろまたはあおのペンでかいてください。', romaji: 'kuro mata wa ao no pen de kaite kudasai.', hu: 'Fekete vagy kék tollal írjon.',
+        cloze: '<ruby>黒<rt>くろ</rt></ruby>___BLANK___<ruby>青<rt>あお</rt></ruby>のペンで<ruby>書<rt>か</rt></ruby>いてください。', clozeAnswer: 'または',
+        tokens: ['くろ', 'または', 'あおの', 'ペンで', 'かいて', 'ください', '。'], from: 'k8:3:3' }
     ],
     contrasts: ['to_ya', 'ka_ka', 'toka']
   },
@@ -4974,7 +6954,19 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: '<ruby>見<rt>み</rt></ruby>るだけで、<ruby>楽<rt>たの</rt></ruby>しいです。',
         kana: 'みるだけで、たのしいです。', romaji: 'miru dake de, tanoshii desu.', hu: 'Már nézni is jó.',
         cloze: '<ruby>見<rt>み</rt></ruby>る___BLANK___、<ruby>楽<rt>たの</rt></ruby>しいです。', clozeAnswer: 'だけで',
-        tokens: ['みるだけで', '、', 'たのしいです', '。'] }
+        tokens: ['みるだけで', '、', 'たのしいです', '。'] },
+      { jp: '<ruby>名前<rt>なまえ</rt></ruby>を<ruby>書<rt>か</rt></ruby>くだけでいいです。',
+        kana: 'なまえをかくだけでいいです。', romaji: 'namae o kaku dake dei i desu.', hu: 'Elég csak a nevet odaírni.',
+        cloze: '<ruby>名前<rt>なまえ</rt></ruby>を<ruby>書<rt>か</rt></ruby>く___BLANK___いいです。', clozeAnswer: 'だけで',
+        tokens: ['なまえを', 'かくだけでい', 'いです', '。'], from: 'k8:5:2' },
+      { jp: '<ruby>少<rt>すこ</rt></ruby>し<ruby>練習<rt>れんしゅう</rt></ruby>するだけで<ruby>上手<rt>じょうず</rt></ruby>になります。',
+        kana: 'すこしれんしゅうするだけでじょうずになります。', romaji: 'sukoshi renshuu suru dake de jouzu ni narimasu.', hu: 'Egy kis gyakorlással is ügyesebb leszel.',
+        cloze: '<ruby>少<rt>すこ</rt></ruby>し<ruby>練習<rt>れんしゅう</rt></ruby>する___BLANK___<ruby>上手<rt>じょうず</rt></ruby>になります。', clozeAnswer: 'だけで',
+        tokens: ['すこし', 'れんしゅう', 'するだけで', 'じょうずに', 'なります', '。'], from: 'k8:5:3' },
+      { jp: '<ruby>水<rt>みず</rt></ruby>だけで<ruby>三日<rt>みっか</rt></ruby><ruby>過<rt>す</rt></ruby>ごしました。',
+        kana: 'みずだけでみっかすごしました。', romaji: 'mizu dake de mikka sugoshimashita.', hu: 'Csak vízen éltem három napig.',
+        cloze: '<ruby>水<rt>みず</rt></ruby>___BLANK___<ruby>三日<rt>みっか</rt></ruby><ruby>過<rt>す</rt></ruby>ごしました。', clozeAnswer: 'だけで',
+        tokens: ['みずだけで', 'みっか', 'すごしました', '。'], from: 'k8:5:4' }
     ],
     contrasts: ['dake', 'dake_de_naku']
   },
@@ -4991,7 +6983,11 @@ const NIHONCORE_GRAMMAR_PATTERNS = [
       { jp: 'この<ruby>靴<rt>くつ</rt></ruby>は<ruby>歩<rt>ある</rt></ruby>きづらいです。',
         kana: 'このくつはあるきづらいです。', romaji: 'kono kutsu wa arukizurai desu.', hu: 'Ebben a cipőben nehéz járni.',
         cloze: 'この<ruby>靴<rt>くつ</rt></ruby>は<ruby>歩<rt>ある</rt></ruby>き___BLANK___です。', clozeAnswer: 'づらい',
-        tokens: ['この', 'くつは', 'あるきづらいです', '。'] }
+        tokens: ['この', 'くつは', 'あるきづらいです', '。'] },
+      { jp: '<ruby>言<rt>い</rt></ruby>いづらいことですが、お<ruby>金<rt>かね</rt></ruby>を<ruby>貸<rt>か</rt></ruby>してくれませんか。',
+        kana: 'いいづらいことですが、おかねをかしてくれませんか。', romaji: 'iizurai koto desu ga, o-kane o kashite kuremasen ka.', hu: 'Nehéz kimondanom, de kölcsönadnál pénzt?',
+        cloze: '<ruby>言<rt>い</rt></ruby>い___BLANK___ことですが、お<ruby>金<rt>かね</rt></ruby>を<ruby>貸<rt>か</rt></ruby>してくれませんか。', clozeAnswer: 'づらい',
+        tokens: ['いいづらい', 'ことですが', '、', 'おかねを', 'かして', 'くれませんか', '。'], from: 'k8:6:4' }
     ],
     contrasts: ['yasui_nikui']
   },

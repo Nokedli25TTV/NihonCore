@@ -786,6 +786,13 @@ A blokk tömör forrásból generált: kézzel is javítható, de új adag beír
   a szintje szerint mindig.
 - Lépés a tanulási úton: a lecke `-patterns` lépése után, `preset: { level, mode: 'puzzle', ids: [...] }`.
 
+**A minták `from` mezős példái** a leckék példamondataiból készültek (a lecke azon pontjából, amelynek a címe a minta
+címkéjével egyezik; a kiemelt rész, a romaji és a tokenek gépi úton). Ha a lecke példája változik, a minta példáját is
+javítani kell.
+
+**Dátum & Idő — számlálós alakok** (`NIHONCORE_DT_AGES`, `NIHONCORE_DT_DURATIONS`): a közös séma, plusz `unit` (a számláló
+kanája), `naive` (a hibás „szabályos" alak), `alt: { kana, romaji }` (második helyes olvasat).
+
 **Ellenőrzés adagonként:** szintaxis (`node --check`), a lépések végigjátszása fej nélküli böngészőben, és
 hogy minden mondat elfogadja-e a saját romajiját a Szabad fordításban és a Pro hallásban.
 

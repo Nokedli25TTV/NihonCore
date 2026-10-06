@@ -1,7 +1,7 @@
 # NihonCore — Claude project context
 
 > Ezt a fájlt **minden új munkamenet** beolvassa: mi a projekt, hol mi van, milyen szabályok
-> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-05, v97).
+> szerint dolgozunk, mi van nyitva. A mostani állapotot írja le (utoljára rendbe téve: 2026-10-06, v98).
 > A teljes verzió-történet, a modulok motorjainak részletes leírása és a lezárt backlog a
 > **`HISTORY.md`**-ben van — oda akkor nézz be, ha egy régi döntés vagy javítás hátterét keresed.
 
@@ -42,14 +42,14 @@ a terv a munkamenet-memóriában van (`content-load-plan.md`), a már kész adag
 | Rész | Tartalom |
 |---|---|
 | **Leckék** | **57 lecke** (előkészítő + Dekiru 1: 24 + Dekiru 2: 24 + 8 kiegészítő N5 / N4): 402 nyelvtani pont, 2390 példamondat, 1142 saját kérdés, 699 párbeszéd-sor, 547 kifejezés, 1484 szó-kártya, 321 tábla, 344 „gyakori hiba", 197 kulturális tudnivaló |
-| **Tanulási út** | 236 lépés 53 fejezetben: 224 kötelező (75 lecke-lépés: magyarázat és hallás utáni kör; 149 gyakorló lépés a modulokból, ebből 56 „a lecke mintái" és 37 leckéhez kötött mondatkészlet) + 12 nem kötelező dolgozat |
+| **Tanulási út** | 238 lépés 53 fejezetben: 226 kötelező (75 lecke-lépés: magyarázat és hallás utáni kör; 151 gyakorló lépés a modulokból, ebből 56 „a lecke mintái" és 37 leckéhez kötött mondatkészlet) + 12 nem kötelező dolgozat |
 | Ragozó | 168 ige (111 godan + 55 ichidan + 2 rendhagyó), 12 alak |
 | Mondat-Mester | 627 mondat (224 N5 + 301 N4 + 102 N3), ebből 301 leckéhez kötött (37 készlet); 16 partikula a tálcán |
 | Melléknév | 109 い + 40 な melléknév, 9 alak |
 | Számlálók | 12 számláló, 102 tárgy |
-| Dátum & Idő | 227 elem 8 kategóriában |
-| Hallás & Kiejtés | 134 hang-lecke + 566 mondat (Pro hallás: a nyelvtani minták példái) |
-| Nyelvtani minták | 283 minta (92 N5 + 138 N4 + 53 N3) 32 kategóriában, mintánként 2 példa; 268 leckéhez kötött (56 lecke) |
+| Dátum & Idő | 289 elem 10 kategóriában (a nyolc dátum- és idő-kategória + életkor: 〜歳, időtartam: 〜時間・〜週間・〜か月・〜年間) |
+| Hallás & Kiejtés | 134 hang-lecke + 1065 mondat (Pro hallás: a nyelvtani minták példái) |
+| Nyelvtani minták | 283 minta (92 N5 + 138 N4 + 53 N3) 32 kategóriában, 1065 példa (mintánként 2–5: 566 saját + 499 a leckék példamondataiból); 268 leckéhez kötött (56 lecke) |
 | Kana | 104 jel írásonként (hiragana + katakana) — teljes készlet |
 | Mini-leckék | 7 (modulonként egy minta) — félretéve |
 | **Dolgozatok** | 12: nyolc kis teszt (4 leckénként, 30 perc, 30 kérdés) és négy nagy dolgozat (12 leckénként, 60 perc, 60 kérdés); a kérdések kitöltésenként a leckék anyagából állnak össze |
@@ -151,7 +151,7 @@ Gyors térkép: `grep -n "^function init\|^window.NihonCore\|^const NihonCore\|^
 | `initHelpersToggle` | Romaji / Magyar / Hang kapcsolók (`body.helpers-no-romaji`, `helpers-no-hu`) |
 | `NihonCoreAudio` | hang: `play(szöveg, { speed, onEnd, onError })`, `stop()`, `speakAnswer()`. Google TTS, hibánál a böngésző japán felolvasója. |
 | `NihonCoreKana` | kana ⇄ romaji: `fromRomaji(szöveg)` · `toRomaji(kana-darab)` (kiejtés szerint: a darab végi は = wa) · `repairSpoken(beírt, helyes)` — a kiejtés szerint írt partikula (wa, o, e), a kettőzött magánhangzó a ー helyén, a „zu" a づ helyén nem hiba · `liveKana(érték)` / `bindInput(mező)`: gépelés közben a romaji kanává alakul. A Pro hallás, a Szabad fordítás, a minták kiegészítő módja, a kanás leckék és a dolgozatok használják. |
-| `NihonCoreConj` | **ragozó motor** (állapot nélkül): `conjugate(ige, alak)` → `{ kana, romaji, irregular, morphemes }`, `StemEngine`, `VerbDetector`. A Ragozó oldal és a dolgozatok közösen használják. |
+| `NihonCoreConj` | **ragozó motor** (állapot nélkül): `conjugate(ige, alak)` → `{ kana, romaji, irregular, morphemes }`, `composeAdj(melléknév, alak)`, `StemEngine`, `VerbDetector`. A Ragozó és a Melléknév oldal meg a dolgozatok közösen használják. |
 | `NihonCorePuzzle` | **mondat-ellenőrző**: `validate(sorrend, mondat)` — a Mondat-Mester puzzle-módja és a dolgozatok közösen használják. |
 | `initGlobalAnswerAudio` · `initGlobalFeedbackMotion` | a visszajelzés helyes japán válaszának felolvasása (`.pfe-jp-ok`) és animálása |
 | `initFocusBanner` | a statisztika „célzott gyakorlás" ajánlata a modul-oldalon |
@@ -185,7 +185,7 @@ Minden fájl globális `const`-okat ad, egymástól függetlenek, `defer`-rel t�
 | `sentences.js` | `NIHONCORE_SENTENCES` — tokenizált mondatok (`type`: `word` / `particle` / `verb`) |
 | `verbs.js` · `adjectives.js` | `NIHONCORE_VERBS` · `NIHONCORE_I_ADJECTIVES`, `NIHONCORE_NA_ADJECTIVES` |
 | `counters.js` | `NIHONCORE_COUNTERS`, `_COUNTER_CATEGORIES`, `_COUNTER_ITEMS` |
-| `datetime.js` | `NIHONCORE_DT_MONTHS / DAYS / WEEKDAYS / TIMES / HOURS24 / MINUTES / YEARS / RELATIVE` |
+| `datetime.js` | `NIHONCORE_DT_MONTHS / DAYS / WEEKDAYS / TIMES / HOURS24 / MINUTES / YEARS / RELATIVE / AGES / DURATIONS` |
 | `audio.js` · `grammar.js` · `kana.js` | `NIHONCORE_AUDIO_LESSONS` · `NIHONCORE_GRAMMAR_PATTERNS` · `NIHONCORE_KANA_ROWS / _GROUPS / _CONFUSABLE` |
 
 **Szabályok**
@@ -201,6 +201,11 @@ Minden fájl globális `const`-okat ad, egymástól függetlenek, `defer`-rel t�
   `sentences.js` végén, `/* @feltöltés:kezdet … */` és `/* @feltöltés:vég */` között állnak, leckénként
   rendezve. Tömör forrásból generált blokkok: kézzel is szerkeszthetők, de új adagnál a blokk egésze újraíródik.
   Út-lépésben a `lesson` mezős mondat csak a saját (`ids`-szel felsorolt) lépésében jön elő.
+- **Dátum & Idő — számlálós alakok** (életkor, időtartam): a bejegyzés `unit` mezője a számláló kanája (a rossz válaszok
+  azonos egységűek, és az Építkezés mód ebből bont), `naive` a hibás „szabályos" alak (csapda-válasz és magyarázat),
+  `alt` a második, szintén helyes olvasat (しちじかん / ななじかん).
+- **A minták `from: 'lecke:pont:példa'` mezős példái** a lecke adott példamondatából készültek (a kiemelt rész, a romaji
+  és a tokenek gépi úton): ha a lecke példája változik, ezt is javítani kell.
 - **Nyelvtani minta `summary` mezője** a felismerő mód válasz-szövege: rövid és **egyedi** legyen. A példa
   `cloze` / `clozeAnswer` része a minta legjellemzőbb eleme (a felismerő kártya ezt emeli ki).
 - **Leckék japán szövege:** 1–4. lecke kana szóközökkel; 5-től kanji `{漢字|かな}` jelöléssel (ebből lesz a
@@ -229,7 +234,7 @@ production) és a statisztika mind a 8 modul-adatfájlt tölti (`core`, `sentenc
 | `nihoncore_exams_v1` | dolgozatok: a kitöltések listája (dátum, mód, idő, pontszám, részenként és leckénként, hibák) | ✓ hozzáfűzés |
 | `nihoncore_<modul>_profile_v1` / `_settings_v1` | modul-profilok és lobbi-beállítások (conj, adj, dt, listening, grm, prod, kana) | ✓ (a kana_settings nem) |
 | `nc_fc_state_*` | szókártyák állapota | ✓ |
-| `nihoncore_exam_settings_v1` (a dolgozat indítás előtti beállításai), `nihoncore_theme`, `helpers_*`, `audio_on`, `timer`, `lobby_custom_open`, `toc_v1`, `lesson_pos_v1`, `lessons_seen`, `path_seen_v1`, `dlg_jponly`, `focus_hint`, `last_readiness_tier` | eszköz-helyi beállítások és nézet-állapot | ✗ |
+| `nihoncore_exam_settings_v1` (a dolgozat indítás előtti beállításai), `nihoncore_exam_run_v1` (a futó dolgozat: folytatható), `nihoncore_theme`, `helpers_*`, `audio_on`, `timer`, `lobby_custom_open`, `toc_v1`, `lesson_pos_v1`, `lessons_seen`, `path_seen_v1`, `dlg_jponly`, `focus_hint`, `last_readiness_tier` | eszköz-helyi beállítások és nézet-állapot | ✗ |
 | `sessionStorage: nihoncore_map_open` | a térképen kézzel nyitott / csukott fejezetek | ✗ |
 
 Szinkron (`js/sync.js`): `users/{uid}` dokumentum; belépéskor letöltés + összefésülés, utána feltöltés
@@ -283,8 +288,13 @@ Szinkron (`js/sync.js`): `users/{uid}` dokumentum; belépéskor letöltés + ös
   „Tovább"-ig módosítható) vagy gyakorló mód (idő nélkül, kérdésenként visszajelzés) · romaji · magyar segítség · hanggal
   (nélküle a hallás rész helyére olvasós kérdés kerül).
 - **Befejezés:** a kitöltés mentése (`nihoncore_exams_v1`), `recordSession({ module: 'exam', mode: 'exam-quick' | 'exam-big', skipPath })`,
-  a lépés 60%-tól kész (az oldal maga írja az út állapotát), a hibás saját kérdések az ismétlés-ütemezőbe kerülnek.
-  A félbehagyott dolgozat nem kitöltés (a válaszok részmentésként a statisztikába mennek).
+  a lépés 60%-tól kész (az oldal maga írja az út állapotát).
+  A hibás saját kérdések az ismétlés-ütemezőbe kerülnek.
+- **Folytatás:** a futó dolgozat minden válasz után (és a lap háttérbe kerülésekor) elmentődik (`nihoncore_exam_run_v1`): újratöltés
+  vagy kilépés után a lobbiból folytatható, az óra a távollét alatt áll. Kilépéskor ezért nem megy részmentés a statisztikába;
+  eldobáskor (vagy új kitöltés indításakor) az addigi válaszok részmentésként kerülnek oda.
+- **„Hibáim újra"** a dolgozat végén: a hibás kérdések gyakorló módban (`exam-retry` néven mentve, kitöltésnek nem számít).
+- **Ragozós kérdések:** igék (`conjugate`) és — ahol a fejezetekben már volt Melléknév-lépés — melléknevek (`composeAdj`, a kérdések harmada).
 - **Statisztika → „Dolgozatok" fül** (`renderExams`): összesítő számok, a gyenge leckék (dolgozatonként a legutóbbi kitöltésből),
   dolgozatonként kártya (a kitöltések vonala, a legutóbbi részenként, a kitöltések listája), a még meg nem írtak.
 
@@ -435,15 +445,14 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 - [x] Mondat-Mester-készlet 37 leckéhez (301 mondat): minden leckének van saját vagy tematikus
       mondat-lépése (az l1–l3, l6, l7 és az l12–l33 egy részénél a régi mondatokból válogatva).
 - [x] Ragozó: a leckék gyakori igéi (108 → 168 ige).
-- [ ] Ami a tervből hátravan (kisebb tételek, a user még nem kérte külön): számlálók, mini-leckék
-      (most modulonként egy), több példa mintánként.
+- [x] A leckékben szereplő, de addig nem gyakorolható számlálós alakok: életkor és időtartam (a Dátum & Idő két új kategóriája).
+- [x] A minták több példát kaptak a leckék példamondataiból (566 → 1065).
 - [ ] A leckék és az új készletek japán mondatait anyanyelvi lektor nem látta.
 - [ ] Az N4-es listából kimaradt apróságok: 〜てやる, 〜と言ってもいい, a 〜ということ főnevesítő.
 
-**Dolgozatok — a user 2026-10-05-i döntései; kész a motor (v96) és a statisztika-fül (v97), hátravan:**
-- [ ] Félbehagyott dolgozat folytatása (újratöltés túlélése); „Hibáim újra" a dolgozat végén.
-- [ ] Számlálók pótlása (a user kérte); a minták több példát kapnak a leckék meglévő példamondataiból (a user jóváhagyta).
-- [ ] Melléknév-ragozás a dolgozatokban (most csak igék); a k1–k8 kiegészítő leckék csak ismétlésként szerepelnek.
+**Dolgozatok — a user 2026-10-05-i döntései; minden megbeszélt rész kész (v96–v98). Ami szóba jöhet még:**
+- [ ] A k1–k8 kiegészítő leckék csak ismétlésként szerepelnek a dolgozatokban (saját tesztjük nincs).
+- [ ] A pénzösszegek (〜円) és a nagy számok gyakorlása (a 4. lecke anyaga) egyik modulban sincs benne.
 
 *A megbeszélt terv (megvalósítva, kivéve a fentieket):*
 - Kis teszt (30 perc, kb. 30 kérdés) a 4., 8., 16., 20., 28., 32., 40., 44. lecke után: az utolsó 4 lecke + kb. 20%
@@ -471,6 +480,7 @@ végigjátszása jelzi-e a sor végét), az érintés, a sima görgetés; több 
 
 | Verzió | Mi történt |
 |---|---|
+| v98 | Életkor és időtartam a Dátum & Idő modulban (62 elem, 2 új lépés) · a minták 499 új példát kaptak a leckék mondataiból · dolgozat: félbehagyott folytatása, „Hibáim újra", melléknév-ragozás (`composeAdj` a közös ragozóban) |
 | v97 | A statisztika új „Dolgozatok" füle: kitöltések, fejlődés dolgozatonként, gyenge leckék; telefonon a fül-sáv görgethető |
 | v96 | **Dolgozatok**: új oldal (`exam.html`), 12 dolgozat a tanulási úton nem kötelező lépésként; vizsga- és gyakorló mód, beállítások, mentés és szinkron; közös `NihonCoreConj`, `NihonCorePuzzle`, élő kana-beírás |
 | v95 | Romaji a kanás leckék (1–4.) magyarázataiban, tábláiban, mintáiban és kérdéseiben (`NihonCoreKana.toRomaji`, `glossRomaji`) |

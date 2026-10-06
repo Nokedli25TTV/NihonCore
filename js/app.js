@@ -2391,8 +2391,9 @@ window.NihonCoreKana = (function () {
 /* ====================================================
    RAGOZÓ MOTOR — közös (a Ragozó oldal és a dolgozatok használják)
    ----------------------------------------------------
-   conjugate(ige, alak) → { kana, romaji, irregular, morphemes }. Csak a core.js
-   szabálytábláira (NIHONCORE_FORM_RULES, _GODAN_MAP, _TE_RULES, …) és az igék
+   conjugate(ige, alak) → { kana, romaji, irregular, morphemes } · composeAdj(melléknév, alak)
+   → { kana, romaji, variants?, morphemes }. Csak a core.js szabálytábláira
+   (NIHONCORE_FORM_RULES, _GODAN_MAP, _TE_RULES, _ADJ_FORM_RULES, …) és a szavak
    adataira támaszkodik; állapota nincs.
    ==================================================== */
 window.NihonCoreConj = (function () {
@@ -2568,7 +2569,54 @@ window.NihonCoreConj = (function () {
     return composeStemSuffix(verb, formCode);
   }
 
-  return { VerbDetector, StemEngine, composeStemSuffix, composeTeTa, composeCausativePassive, conjugate };
+  // ── Melléknevek (い és な): alap + alak → forma ──
+  // Egyetlen forma kompozíciója.
+  // Visszaad: { kana, romaji, variants?, morphemes }
+  function composeAdj(adj, formCode) {
+    const rule = NIHONCORE_ADJ_FORM_RULES[formCode];
+    if (!rule) return null;
+    if (rule.type !== adj.type) return null;
+
+    if (adj.type === 'i-adj') {
+      // present_affirmative-nál ii is OK (nem szabad yoi-ra cserélni)
+      const useCanonical = adj.exception && formCode !== 'i_present_affirmative';
+      const stemKana   = useCanonical ? adj.canonicalStemKana   : adj.stemKana;
+      const stemRomaji = useCanonical ? adj.canonicalStemRomaji : adj.stemRomaji;
+      return {
+        kana:   stemKana   + rule.suffix.kana,
+        romaji: stemRomaji + rule.suffix.romaji,   // suffix.romaji-ban már benne van a szóköz ahol kell
+        variants: rule.variants || null,
+        morphemes: {
+          stem:   { kana: stemKana, romaji: stemRomaji },
+          suffix: rule.suffix,
+          column: 'i-adj',
+          canonical: useCanonical
+        }
+      };
+    }
+
+    if (adj.type === 'na-adj') {
+      // na-adj-nál a stem = teljes lemma; a romaji-suffix elé kell egy space
+      // (kivéve a 'na' noun-modifier-nél, ahol akár szóközzel akár anélkül elterjedt)
+      return {
+        kana:   adj.stemKana   + rule.suffix.kana,
+        romaji: adj.stemRomaji + ' ' + rule.suffix.romaji,
+        variants: rule.variants ? rule.variants.map(v => ({
+          kana:   adj.stemKana   + v.kana,
+          romaji: adj.stemRomaji + ' ' + v.romaji
+        })) : null,
+        morphemes: {
+          stem:   { kana: adj.stemKana, romaji: adj.stemRomaji },
+          suffix: rule.suffix,
+          column: 'na-adj',
+          canonical: false
+        }
+      };
+    }
+    return null;
+  }
+
+  return { VerbDetector, StemEngine, composeStemSuffix, composeTeTa, composeCausativePassive, conjugate, composeAdj };
 })();
 
 
@@ -9529,51 +9577,8 @@ function initAdjectivesPage() {
     return { type: adj.type, exception: !!adj.exception };
   }
 
-  // Egyetlen forma kompozíciója.
-  // Visszaad: { kana, romaji, variants?, morphemes }
-  function composeAdj(adj, formCode) {
-    const rule = NIHONCORE_ADJ_FORM_RULES[formCode];
-    if (!rule) return null;
-    if (rule.type !== adj.type) return null;
-
-    if (adj.type === 'i-adj') {
-      // present_affirmative-nál ii is OK (nem szabad yoi-ra cserélni)
-      const useCanonical = adj.exception && formCode !== 'i_present_affirmative';
-      const stemKana   = useCanonical ? adj.canonicalStemKana   : adj.stemKana;
-      const stemRomaji = useCanonical ? adj.canonicalStemRomaji : adj.stemRomaji;
-      return {
-        kana:   stemKana   + rule.suffix.kana,
-        romaji: stemRomaji + rule.suffix.romaji,   // suffix.romaji-ban már benne van a szóköz ahol kell
-        variants: rule.variants || null,
-        morphemes: {
-          stem:   { kana: stemKana, romaji: stemRomaji },
-          suffix: rule.suffix,
-          column: 'i-adj',
-          canonical: useCanonical
-        }
-      };
-    }
-
-    if (adj.type === 'na-adj') {
-      // na-adj-nál a stem = teljes lemma; a romaji-suffix elé kell egy space
-      // (kivéve a 'na' noun-modifier-nél, ahol akár szóközzel akár anélkül elterjedt)
-      return {
-        kana:   adj.stemKana   + rule.suffix.kana,
-        romaji: adj.stemRomaji + ' ' + rule.suffix.romaji,
-        variants: rule.variants ? rule.variants.map(v => ({
-          kana:   adj.stemKana   + v.kana,
-          romaji: adj.stemRomaji + ' ' + v.romaji
-        })) : null,
-        morphemes: {
-          stem:   { kana: adj.stemKana, romaji: adj.stemRomaji },
-          suffix: rule.suffix,
-          column: 'na-adj',
-          canonical: false
-        }
-      };
-    }
-    return null;
-  }
+  // Egyetlen forma kompozíciója: a közös NihonCoreConj modulban él (a dolgozatok is azt használják).
+  const composeAdj = window.NihonCoreConj.composeAdj;
 
   /* ── C) EXERCISE GENERATOR ──────────────────────── */
 
@@ -11069,7 +11074,9 @@ function initDateTimePage() {
     categories: {
       months: true, days: true, weekdays: true, times: true,
       // V2.3 P2 — haladó kategóriák (alapból kikapcsolva)
-      hours24: false, minutes: false, years: false, relative: false
+      hours24: false, minutes: false, years: false, relative: false,
+      // számlálós alakok a leckékből: életkor (1. lecke), időtartam (5. lecke)
+      ages: false, durations: false
     },
     mode: 'recognition',    // 'recognition' | 'build' | 'mastery'
     adaptive: false,        // V2.3 P2 — opt-in súlyozott pickelés
@@ -11109,6 +11116,8 @@ function initDateTimePage() {
     if (catId === 'minutes')  return NIHONCORE_DT_MINUTES;
     if (catId === 'years')    return NIHONCORE_DT_YEARS;
     if (catId === 'relative') return NIHONCORE_DT_RELATIVE;
+    if (catId === 'ages')      return (typeof NIHONCORE_DT_AGES !== 'undefined') ? NIHONCORE_DT_AGES : [];
+    if (catId === 'durations') return (typeof NIHONCORE_DT_DURATIONS !== 'undefined') ? NIHONCORE_DT_DURATIONS : [];
     return [];
   }
 
@@ -11147,6 +11156,9 @@ function initDateTimePage() {
       return { a: k.slice(0, -1), b: 'じ' };
     if (catId === 'minutes' && (k.endsWith('ふん') || k.endsWith('ぷん')))
       return { a: k.slice(0, -2), b: k.slice(-2) };
+    // életkor, időtartam: a bejegyzés unit mezője a számláló (はたち nem bontható)
+    if (entry.unit && k.endsWith(entry.unit) && k.length > entry.unit.length)
+      return { a: k.slice(0, -entry.unit.length), b: entry.unit };
     return null;
   }
   function isDtBuildable(entry, catId) {
@@ -11207,7 +11219,10 @@ function initDateTimePage() {
     }
 
     // B-opciók: counter-választék (cross-category)
-    const allB = ['がつ', 'にち', 'じ', 'ふん', 'ぷん', 'ようび'];
+    // (ahol a kategóriának saját egységei vannak — időtartam —, azok az első rossz válaszok)
+    const catUnits = [];
+    categoryDataset(catId).forEach(e => { if (e.unit && catUnits.indexOf(e.unit) < 0) catUnits.push(e.unit); });
+    const allB = catUnits.concat(['がつ', 'にち', 'じ', 'ふん', 'ぷん', 'ようび']);
     const bSeen = new Set([parts.b]);
     const bOptions = [{ text: parts.b, isCorrect: true }];
     for (const b of allB) {
@@ -11233,30 +11248,45 @@ function initDateTimePage() {
     };
   }
 
+  // a csapda-válasz romajija (a kanából): enélkül a hiánya elárulná, melyik a csapda
+  const naiveRomaji = kana => (window.NihonCoreKana && NihonCoreKana.toRomaji) ? NihonCoreKana.toRomaji(kana) : '';
+
   // 4 opció: helyes + 3 distraktor (azonos kategóriából, pedagógiai csapdákkal)
   function generateDtDistractors(entry, catId) {
     const seen = new Set([entry.kana]);
+    if (entry.alt) seen.add(entry.alt.kana);            // a második helyes olvasat nem lehet rossz válasz
     const distractors = [];
 
     // Napoknál: rendhagyó esetén a "naív szabályos" alak nagyon hasznos csapda
     if (catId === 'days' && entry.irregular) {
       const naive = naiveDayReading(entry.num);
       if (naive && !seen.has(naive)) {
-        distractors.push({ kana: naive, romaji: '', isCorrect: false, wrongReason: 'naive-regular' });
+        distractors.push({ kana: naive, romaji: naiveRomaji(naive), isCorrect: false, wrongReason: 'naive-regular' });
         seen.add(naive);
       }
     }
 
-    // Töltsük fel azonos kategória más olvasataival
-    const sameCat = categoryDataset(catId).filter(e => e.id !== entry.id);
-    while (distractors.length < 3 && sameCat.length > 0) {
-      const idx = Math.floor(Math.random() * sameCat.length);
-      const e = sameCat.splice(idx, 1)[0];
-      if (!seen.has(e.kana)) {
-        distractors.push({ kana: e.kana, romaji: e.romaji, isCorrect: false, wrongReason: 'wrong-reading' });
-        seen.add(e.kana);
-      }
+    // Számlálós alakoknál (életkor, időtartam): a hibás „szabályos" alak a legjobb csapda (よんじかん, いちさい)
+    if (entry.naive && !seen.has(entry.naive)) {
+      distractors.push({ kana: entry.naive, romaji: naiveRomaji(entry.naive), isCorrect: false, wrongReason: 'naive-regular' });
+      seen.add(entry.naive);
     }
+
+    // Töltsük fel azonos kategória más olvasataival — ha a bejegyzésnek egysége van (〜じかん), előbb az
+    // azonos egységűekkel, különben az egység maga elárulná a választ
+    const fill = list => {
+      while (distractors.length < 3 && list.length > 0) {
+        const idx = Math.floor(Math.random() * list.length);
+        const e = list.splice(idx, 1)[0];
+        if (!seen.has(e.kana)) {
+          distractors.push({ kana: e.kana, romaji: e.romaji, isCorrect: false, wrongReason: 'wrong-reading' });
+          seen.add(e.kana);
+        }
+      }
+    };
+    const sameCat = categoryDataset(catId).filter(e => e.id !== entry.id);
+    if (entry.unit) fill(sameCat.filter(e => e.unit === entry.unit));
+    fill(sameCat.filter(e => !entry.unit || e.unit !== entry.unit));
 
     const all = [
       { kana: entry.kana, romaji: entry.romaji, isCorrect: true },
@@ -11281,8 +11311,8 @@ function initDateTimePage() {
     const u = normDt(userInput);
     if (!u) return { match: false, errorCode: 'wrong_reading', userNorm: u };
 
-    const matchKana   = u === normDt(e.kana);
-    const matchRomaji = u === normDt(e.romaji);
+    const matchKana   = u === normDt(e.kana) || (!!e.alt && u === normDt(e.alt.kana));          // alt: második helyes olvasat
+    const matchRomaji = u === normDt(e.romaji) || (!!e.alt && u === normDt(e.alt.romaji));
     if (matchKana || matchRomaji) {
       return { match: true, errorCode: null, mode: matchKana ? 'kana' : 'romaji' };
     }
@@ -11317,6 +11347,7 @@ function initDateTimePage() {
       else if (card.catId === 'months')  errorCode = 'irregular_month';
       else if (card.catId === 'minutes') errorCode = 'irregular_minute';
       else if (card.catId === 'years')   errorCode = 'irregular_year';
+      else if (e.naive)                  errorCode = 'irregular_counter';
     }
 
     return { match: false, errorCode, diff, distance,
@@ -11331,6 +11362,7 @@ function initDateTimePage() {
     if (card.catId === 'months')                                return 'irregular_month';
     if (card.catId === 'minutes')                               return 'irregular_minute';
     if (card.catId === 'years')                                 return 'irregular_year';
+    if (card.entry.naive)                                       return 'irregular_counter';
     return 'wrong_reading';
   }
 
@@ -11342,7 +11374,7 @@ function initDateTimePage() {
       kanji:   e.kanji,
       correct: `${e.kana} (${e.romaji})`,
       regular: (card.catId === 'days' && naiveDayReading(e.num))
-        ? `<em>${naiveDayReading(e.num)}</em>` : '—'
+        ? `<em>${naiveDayReading(e.num)}</em>` : (e.naive ? `<em>${e.naive}</em>` : '—')
     };
     let msg = tpl.template;
     Object.keys(params).forEach(k => { msg = msg.split('{' + k + '}').join(params[k]); });
@@ -12239,7 +12271,7 @@ function initDateTimePage() {
   }
 
   // Dev hook
-  window._dt = { diagnoseDt, getActivePool, generateDtQueue };
+  window._dt = { diagnoseDt, getActivePool, generateDtQueue, generateDtDistractors, computeBuildParts };
 }
 
 
@@ -16075,7 +16107,7 @@ function initStatsPage() {
     free: 'Szabad fordítás',
     reverse: 'Fordítva', typing: 'Beírás', match: 'Párosító',
     check: 'Ellenőrzés', listen: 'Hallás utáni kör', review: 'Ismétlés', retry: 'Hibák újra', quick: 'Gyors kérdések',
-    'exam-quick': 'Kis teszt', 'exam-big': 'Nagy dolgozat',
+    'exam-quick': 'Kis teszt', 'exam-big': 'Nagy dolgozat', 'exam-retry': 'Dolgozat: hibák újra',
     'counter-recognition': 'Felismerés', 'counter-hybrid': 'Hibrid',
     'counter-mastery': 'Mester',
     'matrix-selector': 'Ragozás-összerakó', 'speed-drill': 'Gyorskör',
@@ -19063,7 +19095,9 @@ function initLessonPage() {
                gépelés közben kanává alakul)
    Vizsga-mód: fut az óra, visszajelzés csak a végén. Gyakorló mód: idő nélkül, kérdésenként
    visszajelzéssel. Mentés: nihoncore_exams_v1 (kitöltések, szinkronizál),
-   nihoncore_exam_settings_v1 (az indítás előtti beállítások, eszköz-helyi).
+   nihoncore_exam_settings_v1 (az indítás előtti beállítások, eszköz-helyi),
+   nihoncore_exam_run_v1 (a futó dolgozat: újratöltés vagy kilépés után folytatható; eszköz-helyi).
+   A dolgozat végén „Hibáim újra": a hibás kérdések gyakorló módban, kitöltésként nem mentve.
    ==================================================== */
 function initExamPage() {
   const main = document.getElementById('examMain');
@@ -19088,9 +19122,13 @@ function initExamPage() {
   const PATTERNS = (typeof NIHONCORE_GRAMMAR_PATTERNS !== 'undefined') ? NIHONCORE_GRAMMAR_PATTERNS : [];
   const PARTICLES = (typeof NIHONCORE_PARTICLES !== 'undefined') ? NIHONCORE_PARTICLES : [];
   const FORMS = (typeof NIHONCORE_FORM_RULES !== 'undefined') ? NIHONCORE_FORM_RULES : {};
+  const ADJ_FORMS = (typeof NIHONCORE_ADJ_FORM_RULES !== 'undefined') ? NIHONCORE_ADJ_FORM_RULES : {};
+  const ADJS = ((typeof NIHONCORE_I_ADJECTIVES !== 'undefined') ? NIHONCORE_I_ADJECTIVES : [])
+    .concat((typeof NIHONCORE_NA_ADJECTIVES !== 'undefined') ? NIHONCORE_NA_ADJECTIVES : []);
   const Kana = window.NihonCoreKana, Conj = window.NihonCoreConj, Puzzle = window.NihonCorePuzzle;
 
   const ATT_KEY = 'nihoncore_exams_v1', SET_KEY = 'nihoncore_exam_settings_v1', PATH_KEY = 'nihoncore_path_v1';
+  const RUN_KEY = 'nihoncore_exam_run_v1', RUN_MAX_AGE = 7 * 86400000;
   const PASS = 0.6, MAX_ATTEMPTS = 200;
   const SECTIONS = { gram: 'Nyelvtan és olvasás', part: 'Partikulák és mondatépítés', write: 'Ragozás és beírás', listen: 'Hallás' };
   const SEC_SHORT = { gram: 'Nyelvtan', part: 'Partikulák', write: 'Beírás', listen: 'Hallás' };   // a kör-sávba
@@ -19190,13 +19228,15 @@ function initExamPage() {
   const patternsFor = id => memo('pat:' + id, () => PATTERNS.filter(p => p.lesson === id && p.examples && p.examples.length));
   // az addig tanult ragozási alakok: a fejezetek Ragozó-lépéseiből
   function conjSetup(ids) {
-    const forms = {}, themes = {};
+    const forms = {}, themes = {}, adj = {};
     ids.forEach(id => stepsOf(id).forEach(st => {
-      if (st.module !== 'conjugation' || !st.preset || !st.preset.only) return;
+      if (!st.preset || !st.preset.only) return;
+      if (st.module === 'adjectives') { (st.preset.only.forms || []).forEach(f => { adj[f] = true; }); return; }
+      if (st.module !== 'conjugation') return;
       (st.preset.only.forms || []).forEach(f => { forms[f] = true; });
       (st.preset.only.themes || []).forEach(t => { themes[t] = true; });
     }));
-    return { forms: Object.keys(forms), themes: Object.keys(themes) };
+    return { forms: Object.keys(forms), themes: Object.keys(themes), adjForms: Object.keys(adj) };
   }
 
   // kiemelt rész a mintamondatban: a kiegészítendő rész helyére a válasz kerül, jelölve
@@ -19285,12 +19325,46 @@ function initExamPage() {
     if (out.length < n) out = out.concat(pickSpread(revPool, n - out.length, used));   // ha a saját leckékből nem telik ki
     return out;
   }
+  // melléknév-ragozás: az addig tanult melléknév-alakok (a fejezetek Melléknév-lépéseiből)
+  function adjItems(n, mainIds, revIds, used) {
+    if (n <= 0 || !Conj || !Conj.composeAdj || !ADJS.length) return [];
+    const setup = conjSetup(mainIds), all = conjSetup(revIds.concat(mainIds));
+    const forms = (setup.adjForms.length ? setup.adjForms : all.adjForms).filter(f => ADJ_FORMS[f]);
+    if (!forms.length) return [];
+    const older = all.adjForms.filter(f => forms.indexOf(f) < 0 && ADJ_FORMS[f]);
+    const out = [];
+    let guard = 0;
+    while (out.length < n && guard++ < 300) {
+      const useOld = older.length && Math.random() < REVIEW_SHARE;
+      const list = useOld ? older : forms;
+      const form = list[Math.floor(Math.random() * list.length)], rule = ADJ_FORMS[form];
+      const pool = ADJS.filter(a => a.type === rule.type);
+      const a = pool[Math.floor(Math.random() * pool.length)];
+      const key = 'adj:' + (a && a.id) + ':' + form;
+      if (!a || used[key] || used['adj:' + a.id]) continue;
+      const res = Conj.composeAdj(a, form);
+      if (!res || !res.kana) continue;
+      used[key] = true; used['adj:' + a.id] = true;
+      // kanjival beírva is jó (a rendhagyó いい kivételével: annak a töve よ)
+      const alt = a.exception ? '' : (a.type === 'i-adj' && /い$/.test(a.kanji)) ? a.kanji.slice(0, -1) + rule.suffix.kana : (a.type === 'na-adj' ? a.kanji + rule.suffix.kana : '');
+      out.push({ type: 'typed', sec: 'write', kind: 'conj', lesson: '', key: key, verb: a, form: form, formName: rule.nameHu,
+        prompt: 'Ragozd a melléknevet!', answerKana: res.kana, answerRomaji: res.romaji, answerAlt: alt,
+        answerAlts: (res.variants || []).map(v => v.kana).filter(Boolean), answerShow: res.kana,
+        why: rule.nameHu + (rule.example ? ' (' + rule.example + ')' : '') });
+    }
+    return out;
+  }
   function conjItems(n, mainIds, revIds, used) {
     if (n <= 0 || !Conj) return [];
     let setup = conjSetup(mainIds);
     const all = conjSetup(revIds.concat(mainIds));
     const forms = setup.forms.length ? setup.forms : all.forms;
-    if (!forms.length) return [];
+    // ha már melléknév-alak is volt, a ragozós kérdések harmada melléknév (ige-alak nélkül mind az)
+    const hasAdj = (setup.adjForms.length || all.adjForms.length) && ADJS.length;
+    const adjN = !hasAdj ? 0 : !forms.length ? n : Math.max(1, Math.round(n / 3));
+    const adj = adjItems(adjN, mainIds, revIds, used);
+    n -= adj.length;
+    if (!forms.length || n <= 0) return adj;
     const themes = (setup.themes.length ? setup.themes : all.themes);
     let verbs = VERBS.filter(v => !themes.length || themes.indexOf(v.theme || 'daily') >= 0);
     if (verbs.length < 6) verbs = VERBS.slice();
@@ -19313,11 +19387,11 @@ function initExamPage() {
       const okuri = (/[ぁ-ん]+$/.exec(v.kanji) || [''])[0];
       const stemKana = okuri && v.kana.slice(-okuri.length) === okuri ? v.kana.slice(0, v.kana.length - okuri.length) : '';
       const alt = stemKana && res.kana.indexOf(stemKana) === 0 ? v.kanji.slice(0, v.kanji.length - okuri.length) + res.kana.slice(stemKana.length) : '';
-      out.push({ type: 'typed', sec: 'write', kind: 'conj', lesson: '', key: key, verb: v, form: form,
+      out.push({ type: 'typed', sec: 'write', kind: 'conj', lesson: '', key: key, verb: v, form: form, formName: rule.nameHu,
         prompt: 'Ragozd az igét!', answerKana: res.kana, answerRomaji: res.romaji, answerAlt: alt, answerShow: res.kana,
         why: rule.nameHu + (rule.example ? ' (' + rule.example + ')' : '') });
     }
-    return out;
+    return out.concat(adj);
   }
 
   // válaszlehetőségek a választós kérdésekhez
@@ -19473,7 +19547,20 @@ function initExamPage() {
         </label>`;
     runtime.classList.add('hidden');
     lobby.classList.remove('hidden');
+    const saved = loadRun();
+    const resumeHtml = !saved ? '' : `
+      <div class="exam-resume" data-lobby-keep>
+        <div class="exam-resume-text">
+          <strong>Félbehagyott dolgozatod van</strong>
+          <span>${saved.results.length} / ${saved.items.length} kérdés megvan${saved.examMode ? ' · ' + fmtTime(saved.leftMs) + ' van hátra (vizsga-mód)' : ' · gyakorló mód'}</span>
+        </div>
+        <div class="exam-resume-actions">
+          <button class="btn btn-primary" id="examResume" type="button">Folytatom</button>
+          <button class="btn btn-ghost" id="examDiscard" type="button">Eldobom</button>
+        </div>
+      </div>`;
     lobby.innerHTML = `
+      ${resumeHtml}
       <div class="lobby-header">
         <h2 class="lobby-title">Mielőtt elkezded</h2>
         <p class="lobby-sub">${ex.lessons.length} lecke anyaga${rev.length ? ', és egy kevés ismétlés a korábbiakból' : ''}. Minden kitöltés más kérdésekből áll.</p>
@@ -19493,7 +19580,11 @@ function initExamPage() {
         ${sw('audio', 'Hanggal', 'Van hallás rész: a mondatot meghallgatod. Kikapcsolva a hallás rész kimarad, a helyére olvasós kérdés kerül.')}
       </div>
       ${historyHtml(ex)}
-      <button class="btn btn-primary glow-effect ml-start" id="examStart" type="button">Kezdés — ${examCount(ex)} kérdés</button>`;
+      <button class="btn ${saved ? 'btn-outline' : 'btn-primary glow-effect'} ml-start" id="examStart" type="button">${saved ? 'Új kitöltés' : 'Kezdés'} — ${examCount(ex)} kérdés</button>`;
+    if (saved) {
+      document.getElementById('examResume').addEventListener('click', resumeExam);
+      document.getElementById('examDiscard').addEventListener('click', () => { discardRun(); renderLobby(); });
+    }
     lobby.querySelectorAll('[data-exam-set]').forEach(inp => inp.addEventListener('change', () => {
       settings[inp.dataset.examSet] = inp.checked;
       saveSettings();
@@ -19504,33 +19595,97 @@ function initExamPage() {
   }
 
   /* ── A kör ─────────────────────────────────────────── */
-  const run = { items: [], idx: 0, results: [], startTs: 0, endTs: 0, timer: 0, submitted: false, score: 0, done: false };
+  const run = { items: [], idx: 0, results: [], startTs: 0, endTs: 0, timer: 0, submitted: false, score: 0, done: true, examMode: false, retry: false };
   const cardEl = () => document.getElementById('examCard');
   const actionsEl = () => document.getElementById('examActions');
   const fbEl = () => document.getElementById('examFeedback');
 
+  const examModeName = () => exam.kind === 'big' ? 'exam-big' : 'exam-quick';
+
+  // A futó dolgozat mentése (eszköz-helyi): újratöltés, véletlen bezárás vagy kilépés után a lobbiból folytatható.
+  // Az óra a távollét alatt áll: a hátralévő idő mentődik, nem a lejárat időpontja. A javító kör nem mentődik.
+  function saveRun() {
+    if (run.done || run.retry || !run.items.length) return;
+    try {
+      localStorage.setItem(RUN_KEY, JSON.stringify({
+        exam: exam.id, savedTs: Date.now(), examMode: run.examMode, score: run.score,
+        elapsedMs: Date.now() - run.startTs, leftMs: run.examMode ? Math.max(0, run.endTs - Date.now()) : 0,
+        items: run.items.map(it => { const o = {}; Object.keys(it).forEach(k => { if (['pattern', 'picked', 'order', 'tray'].indexOf(k) < 0) o[k] = it[k]; }); return o; }),
+        results: run.results.map(r => ({ key: r.key, sec: r.sec, lesson: r.lesson, kind: r.kind, correct: r.correct, errorCode: r.errorCode, given: r.given, answer: r.answer, i: run.items.indexOf(r.item) }))
+      }));
+    } catch (e) {}
+  }
+  function loadRun() {
+    try {
+      const st = JSON.parse(localStorage.getItem(RUN_KEY) || 'null');
+      if (!st || !exam || st.exam !== exam.id || !Array.isArray(st.items) || !st.items.length) return null;
+      if (Date.now() - st.savedTs > RUN_MAX_AGE || (st.results || []).length >= st.items.length) return null;
+      return st;
+    } catch (e) { return null; }
+  }
+  // az eldobott (vagy újrakezdéssel felülírt) félbehagyott dolgozat válaszai részmentésként a statisztikába kerülnek
+  function discardRun() {
+    let st = null;
+    try { st = JSON.parse(localStorage.getItem(RUN_KEY) || 'null'); } catch (e) {}
+    try { localStorage.removeItem(RUN_KEY); } catch (e) {}
+    if (st && st.exam === (exam && exam.id) && st.results && st.results.length && window.NihonCoreStats) {
+      NihonCoreStats.recordSession({ module: 'exam', mode: examModeName(), partial: true, skipPath: true, score: st.score || 0, startTs: Date.now() - (st.elapsedMs || 0),
+        results: st.results.map(r => ({ correct: r.correct, errorCode: r.errorCode })) });
+    }
+  }
+  const clearRun = () => { try { localStorage.removeItem(RUN_KEY); } catch (e) {} };
+
   function startExam() {
-    run.items = buildExam(exam);
-    if (!run.items.length) return;
-    run.idx = 0; run.results = []; run.score = 0; run.done = false;
+    const items = buildExam(exam);
+    if (!items.length) return;
+    discardRun();                              // új kitöltés: a korábbi félbehagyott lezárul
+    run.items = items; run.results = []; run.score = 0;
+    run.examMode = !!settings.examMode; run.retry = false;
     run.startTs = Date.now();
-    run.endTs = settings.examMode ? run.startTs + examMinutes(exam) * 60000 : 0;
+    run.endTs = run.examMode ? run.startTs + examMinutes(exam) * 60000 : 0;
+    beginRun();
+    saveRun();
+  }
+  function resumeExam() {
+    const st = loadRun();
+    if (!st) { renderLobby(); return; }
+    run.items = st.items;
+    run.results = st.results.map(r => Object.assign({}, r, { item: run.items[r.i] }));
+    run.score = st.score || 0;
+    run.examMode = !!st.examMode; run.retry = false;
+    run.startTs = Date.now() - (st.elapsedMs || 0);
+    run.endTs = run.examMode ? Date.now() + (st.leftMs || 0) : 0;
+    beginRun();
+  }
+  // „Hibáim újra": a hibás kérdések gyakorló módban (idő nélkül, visszajelzéssel); nem számít kitöltésnek
+  function startRetry(items) {
+    if (!items.length) return;
+    run.items = items.map(it => { const o = Object.assign({}, it); delete o.picked; delete o.order; delete o.tray; if (o.options) o.options = shuffle(o.options); return o; });
+    run.results = []; run.score = 0;
+    run.examMode = false; run.retry = true;
+    run.startTs = Date.now(); run.endTs = 0;
+    beginRun();
+  }
+  function beginRun() {
+    run.idx = run.results.length; run.done = false;
     applyHelpers(true);
-    if (window.NihonCoreRound) NihonCoreRound.begin(() => ({ module: 'exam', mode: exam.kind === 'big' ? 'exam-big' : 'exam-quick', results: run.results, score: run.score, startTs: run.startTs, skipPath: true }));
+    // a félbehagyott dolgozat folytatható, ezért kilépéskor nem megy részmentés a statisztikába (csak a javító körnél)
+    if (window.NihonCoreRound) NihonCoreRound.begin(() => ({ module: 'exam', mode: run.retry ? 'exam-retry' : examModeName(),
+      results: run.retry ? run.results : [], score: run.score, startTs: run.startTs, skipPath: true }));
     lobby.classList.add('hidden');
     if (hero) hero.classList.add('hidden');
     runtime.classList.remove('hidden', 'exam-done');
     document.getElementById('examSummary').classList.add('hidden');
-    document.getElementById('examStat1Label').textContent = settings.examMode ? 'Idő' : 'Helyes';
+    document.getElementById('examStat1Label').textContent = run.examMode ? 'Idő' : 'Helyes';
     clearInterval(run.timer);
-    if (settings.examMode) run.timer = setInterval(tick, 1000);
+    if (run.examMode) run.timer = setInterval(tick, 1000);
     tick();
-    renderCard();
+    if (run.idx >= run.items.length) finish(false); else renderCard();
   }
   function tick() {
     const v = document.getElementById('examStat1');
     if (!v) return;
-    if (!settings.examMode) { v.textContent = run.results.filter(r => r.correct).length; return; }
+    if (!run.examMode) { v.textContent = run.results.filter(r => r.correct).length; return; }
     const left = run.endTs - Date.now();
     v.textContent = fmtTime(left);
     v.classList.toggle('is-low', left <= 5 * 60000);
@@ -19541,7 +19696,7 @@ function initExamPage() {
     document.getElementById('examStat2').textContent = Math.min(run.idx + 1, n) + ' / ' + n;
     document.getElementById('examCount').textContent = it ? SEC_SHORT[it.sec] : '';
     document.getElementById('examFill').style.width = (run.idx / n * 100) + '%';
-    if (!settings.examMode) tick();
+    if (!run.examMode) tick();
   }
 
   const eyebrow = it => `
@@ -19602,7 +19757,7 @@ function initExamPage() {
     } else {
       const target = it.kind === 'conj' ? `
           <div class="exam-verb"><span class="exam-verb-jp" lang="ja">${esc(it.verb.kanji)}</span><span class="exam-verb-kana" lang="ja">${esc(it.verb.kana)}</span><span class="exam-verb-romaji">${esc(it.verb.romaji)}</span><span class="exam-verb-hu">${esc(it.verb.meaningHu)}</span></div>
-          <div class="cj-target"><span class="cj-target-label">Alak:</span><span class="cj-target-name">${esc(FORMS[it.form].nameHu)}</span></div>`
+          <div class="cj-target"><span class="cj-target-label">Alak:</span><span class="cj-target-name">${esc(it.formName)}</span></div>`
         : `<div class="exam-jp" lang="ja">${it.html}</div>${huLine(it)}`;
       body = `
         <div class="cj-prompt">
@@ -19615,8 +19770,8 @@ function initExamPage() {
         </div>`;
     }
     card.innerHTML = body + '<button class="dont-know-btn" type="button">Nem tudom</button>';
-    actionsEl().innerHTML = (it.type !== 'choice' || settings.examMode)
-      ? `<button class="btn btn-primary glow-effect cj-submit" id="examSubmit" type="button" disabled>${settings.examMode ? 'Tovább' : 'Ellenőrzés'}</button>` : '';
+    actionsEl().innerHTML = (it.type !== 'choice' || run.examMode)
+      ? `<button class="btn btn-primary glow-effect cj-submit" id="examSubmit" type="button" disabled>${run.examMode ? 'Tovább' : 'Ellenőrzés'}</button>` : '';
     wireCard(it);
     if (window.NihonCoreRound) NihonCoreRound.scrollToRound();
   }
@@ -19643,7 +19798,7 @@ function initExamPage() {
       buttons.forEach(btn => btn.addEventListener('click', () => {
         if (run.submitted) return;
         const i = parseInt(btn.dataset.idx, 10);
-        if (!settings.examMode) { answer(it, it.options[i], false, btn); return; }
+        if (!run.examMode) { answer(it, it.options[i], false, btn); return; }
         // vizsga-módban a választás a „Tovább"-ig módosítható
         buttons.forEach(b => b.classList.toggle('is-picked', b === btn));
         it.picked = i;
@@ -19692,6 +19847,7 @@ function initExamPage() {
     if (Kana) u = Kana.liveKana(u, true);
     const un = normKana(u);
     if (it.answerAlt && un === normKana(it.answerAlt)) return { ok: true, shown: u };
+    if (it.answerAlts && it.answerAlts.some(a => normKana(a) === un)) return { ok: true, shown: u };     // másik helyes alak (ではありません)
     const fixed = Kana ? Kana.repairSpoken(un, target) : un;
     return { ok: fixed === target, shown: u };
   }
@@ -19710,7 +19866,8 @@ function initExamPage() {
     if (ok) run.score += 10;
     if (!ok && it.kind === 'quiz' && window.NihonCoreSRS) { try { NihonCoreSRS.recordReview(it.key, 0); } catch (e) {} }
     if (window.NihonCoreAudio && NihonCoreAudio.stop) NihonCoreAudio.stop();
-    if (settings.examMode) { next(); return; }
+    saveRun();
+    if (run.examMode) { next(); return; }
     showFeedback(it, ok, dontKnow, shown, correctText, btn);
   }
 
@@ -19785,16 +19942,23 @@ function initExamPage() {
       if (r.lesson) { (lessons[r.lesson] = lessons[r.lesson] || [0, 0])[1]++; if (r.correct) lessons[r.lesson][0]++; }
     });
     const durationMs = Math.max(0, Date.now() - run.startTs);
+    if (run.retry) {
+      if (window.NihonCoreStats) NihonCoreStats.recordSession({ module: 'exam', mode: 'exam-retry', skipPath: true, score: run.score, startTs: run.startTs,
+        results: run.results.map(r => ({ correct: r.correct, errorCode: r.errorCode })) });
+      showRetrySummary();
+      return;
+    }
+    clearRun();
     const att = {
       id: 'e' + Date.now() + Math.random().toString(36).slice(2, 7), ts: Date.now(), exam: exam.id, kind: exam.kind,
-      examMode: !!settings.examMode, timeUp: !!timeUp, durationMs: durationMs, limitMs: settings.examMode ? examMinutes(exam) * 60000 : 0,
+      examMode: !!run.examMode, timeUp: !!timeUp, durationMs: durationMs, limitMs: run.examMode ? examMinutes(exam) * 60000 : 0,
       total: total, correct: correct, sections: sections, lessons: lessons,
       opts: { romaji: !!settings.romaji, hu: !!settings.hu, audio: !!settings.audio },
       wrong: run.results.filter(r => !r.correct).slice(0, 60).map(r => ({ k: r.key, s: r.sec, l: r.lesson, c: r.errorCode }))
     };
     saveAttempt(att);
     if (window.NihonCoreStats) {
-      NihonCoreStats.recordSession({ module: 'exam', mode: exam.kind === 'big' ? 'exam-big' : 'exam-quick',
+      NihonCoreStats.recordSession({ module: 'exam', mode: examModeName(),
         results: run.results.map(r => ({ correct: r.correct, errorCode: r.errorCode })), score: run.score, startTs: run.startTs, skipPath: true });
     }
     markPathStep(exam.id, total ? correct / total : 0);
@@ -19804,7 +19968,7 @@ function initExamPage() {
 
   function reviewRow(r) {
     const it = r.item;
-    const q = it.kind === 'conj' ? esc(it.verb.kanji) + ' → ' + esc(FORMS[it.form].nameHu)
+    const q = it.kind === 'conj' ? esc(it.verb.kanji) + ' → ' + esc(it.formName)
       : it.kind === 'particle' ? '<span lang="ja">' + it.sentence.tokens.map((t, i) => i === it.blank ? '＿' : esc(t.jp)).join(' ') + '</span>'
       : it.kind === 'puzzle' ? esc(it.hu)
       : it.kind === 'listen' ? '<span lang="ja">' + ruby(it.ex.jp) + '</span>'
@@ -19865,11 +20029,39 @@ function initExamPage() {
         <ul class="exam-rev-list">${wrong.map(reviewRow).join('')}</ul>
       </details>` : '<p class="exam-weak">Hibátlan: minden kérdést eltaláltál.</p>'}
       <div class="kana-summary-actions">
-        <button class="btn btn-primary" id="examAgain" type="button">Megírom újra</button>
+        ${wrong.length ? '<button class="btn btn-primary" id="examRetry" type="button">Hibáim újra (' + wrong.length + ')</button>' : ''}
+        <button class="btn ${wrong.length ? 'btn-outline' : 'btn-primary'}" id="examAgain" type="button">Megírom újra</button>
         <a class="btn btn-outline" href="../index.html#path" data-no-guard>Vissza az útra</a>
         <a class="btn btn-ghost" href="exam.html" data-no-guard>Minden dolgozat</a>
       </div>`;
     document.getElementById('examAgain').addEventListener('click', backToLobby);
+    const rb = document.getElementById('examRetry');
+    if (rb) rb.addEventListener('click', () => startRetry(wrong.map(r => r.item)));
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  function showRetrySummary() {
+    applyHelpers(false);
+    const total = run.results.length, correct = run.results.filter(r => r.correct).length;
+    const still = run.results.filter(r => !r.correct);
+    cardEl().innerHTML = ''; actionsEl().innerHTML = '';
+    fbEl().classList.add('hidden');
+    runtime.classList.add('exam-done');
+    const sEl = document.getElementById('examSummary');
+    sEl.classList.remove('hidden');
+    sEl.classList.add('glass-panel-heavy');
+    sEl.innerHTML = `
+      <div class="summary-icon">${still.length ? '🌱' : '🎯'}</div>
+      <h3>Hibáid újra</h3>
+      <div class="summary-score">${correct} / ${total}</div>
+      <p class="lq-summary-note">${still.length ? 'Még ' + still.length + ' kérdés nem ment: ezeket újra megnézheted.' : 'Most mindegyik megvan. A dolgozat eredménye ettől nem változik: ha javítanál rajta, írd meg újra.'}</p>
+      <div class="kana-summary-actions">
+        ${still.length ? '<button class="btn btn-primary" id="examRetry" type="button">A maradék újra (' + still.length + ')</button>' : ''}
+        <button class="btn ${still.length ? 'btn-outline' : 'btn-primary'}" id="examAgain" type="button">Vissza a dolgozathoz</button>
+        <a class="btn btn-ghost" href="../index.html#path" data-no-guard>Vissza az útra</a>
+      </div>`;
+    document.getElementById('examAgain').addEventListener('click', backToLobby);
+    const rb = document.getElementById('examRetry');
+    if (rb) rb.addEventListener('click', () => startRetry(still.map(r => r.item)));
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
   function backToLobby() {
@@ -19882,19 +20074,24 @@ function initExamPage() {
     if (window.NihonCoreRound) NihonCoreRound.refresh();
   }
 
-  // Kilépés kör közben: a kör-őr megerősítést kér, az eddigi válaszok a statisztikába kerülnek;
-  // a félbehagyott dolgozat nem számít kitöltésnek.
+  // Kilépés kör közben: a kör-őr megerősítést kér. A dolgozat állása elmentve marad: a lobbiból folytatható
+  // (vagy eldobható — akkor az addigi válaszok részmentésként a statisztikába kerülnek).
   const exitBtn = document.getElementById('examExit');
   if (exitBtn) exitBtn.addEventListener('click', () => {
+    saveRun();
     if (window.NihonCoreRound) NihonCoreRound.flush();
     if (window.NihonCoreAudio && NihonCoreAudio.stop) NihonCoreAudio.stop();
     backToLobby();
   });
+  // az óra állása akkor is mentődjön, ha a lap háttérbe kerül vagy bezárul
+  window.addEventListener('pagehide', saveRun);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) saveRun(); });
 
   if (exam) renderLobby(); else renderIndex();
   if (window.NihonCoreRound) NihonCoreRound.refresh();
 
   window._exam = { exam, buildExam, candidates, sentencesFor, conjSetup, reviewLessons, checkTyped, run, settings, startExam, finish, loadAttempts,
+    saveRun, loadRun, resumeExam, startRetry,
     show: i => { run.idx = i; renderCard(); } };
 }
 

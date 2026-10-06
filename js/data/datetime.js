@@ -366,4 +366,76 @@ const NIHONCORE_DT_RELATIVE = [
 ];
 
 
+/* ── Életkor (〜歳) — az 1. lecke anyaga. unit: a számláló kanája (az Építkezés módhoz);
+   naive: a hibás „szabályos" alak (rossz válasznak és a magyarázatba); alt: második, szintén helyes olvasat. ── */
+const NIHONCORE_DT_AGES = [
+  { id: 'age1', num: 1, kanji: '1歳', kana: 'いっさい', romaji: 'issai', meaningHu: '1 éves', unit: 'さい', irregular: true, changeType: 'sokuon-s', naive: 'いちさい' },
+  { id: 'age2', num: 2, kanji: '2歳', kana: 'にさい', romaji: 'nisai', meaningHu: '2 éves', unit: 'さい' },
+  { id: 'age3', num: 3, kanji: '3歳', kana: 'さんさい', romaji: 'sansai', meaningHu: '3 éves', unit: 'さい' },
+  { id: 'age4', num: 4, kanji: '4歳', kana: 'よんさい', romaji: 'yonsai', meaningHu: '4 éves', unit: 'さい' },
+  { id: 'age5', num: 5, kanji: '5歳', kana: 'ごさい', romaji: 'gosai', meaningHu: '5 éves', unit: 'さい' },
+  { id: 'age6', num: 6, kanji: '6歳', kana: 'ろくさい', romaji: 'rokusai', meaningHu: '6 éves', unit: 'さい' },
+  { id: 'age7', num: 7, kanji: '7歳', kana: 'ななさい', romaji: 'nanasai', meaningHu: '7 éves', unit: 'さい' },
+  { id: 'age8', num: 8, kanji: '8歳', kana: 'はっさい', romaji: 'hassai', meaningHu: '8 éves', unit: 'さい', irregular: true, changeType: 'sokuon-s', naive: 'はちさい' },
+  { id: 'age9', num: 9, kanji: '9歳', kana: 'きゅうさい', romaji: 'kyuusai', meaningHu: '9 éves', unit: 'さい' },
+  { id: 'age10', num: 10, kanji: '10歳', kana: 'じゅっさい', romaji: 'jussai', meaningHu: '10 éves', unit: 'さい', irregular: true, changeType: 'sokuon-s', naive: 'じゅうさい' },
+  { id: 'age18', num: 18, kanji: '18歳', kana: 'じゅうはっさい', romaji: 'juuhassai', meaningHu: '18 éves', unit: 'さい', irregular: true, changeType: 'sokuon-s', naive: 'じゅうはちさい' },
+  { id: 'age21', num: 21, kanji: '21歳', kana: 'にじゅういっさい', romaji: 'nijuuissai', meaningHu: '21 éves', unit: 'さい', irregular: true, changeType: 'sokuon-s', naive: 'にじゅういちさい' },
+  { id: 'age20', num: 20, kanji: '20歳', kana: 'はたち', romaji: 'hatachi', meaningHu: '20 éves', irregular: true, changeType: 'native', naive: 'にじゅっさい' },
+  { id: 'ageq', num: 0, kanji: '何歳', kana: 'なんさい', romaji: 'nansai', meaningHu: 'hány éves?', unit: 'さい' }
+];
+
+/* ── Időtartam (〜時間・〜週間・〜か月・〜年間) — az 5. lecke anyaga (どのくらい). ── */
+const NIHONCORE_DT_DURATIONS = [
+  { id: 'durh1', num: 1, kanji: '1時間', kana: 'いちじかん', romaji: 'ichijikan', meaningHu: '1 óra (időtartam)', unit: 'じかん' },
+  { id: 'durh2', num: 2, kanji: '2時間', kana: 'にじかん', romaji: 'nijikan', meaningHu: '2 óra (időtartam)', unit: 'じかん' },
+  { id: 'durh3', num: 3, kanji: '3時間', kana: 'さんじかん', romaji: 'sanjikan', meaningHu: '3 óra (időtartam)', unit: 'じかん' },
+  { id: 'durh4', num: 4, kanji: '4時間', kana: 'よじかん', romaji: 'yojikan', meaningHu: '4 óra (időtartam)', unit: 'じかん', irregular: true, changeType: 'yo-form', naive: 'よんじかん' },
+  { id: 'durh5', num: 5, kanji: '5時間', kana: 'ごじかん', romaji: 'gojikan', meaningHu: '5 óra (időtartam)', unit: 'じかん' },
+  { id: 'durh6', num: 6, kanji: '6時間', kana: 'ろくじかん', romaji: 'rokujikan', meaningHu: '6 óra (időtartam)', unit: 'じかん' },
+  { id: 'durh7', num: 7, kanji: '7時間', kana: 'しちじかん', romaji: 'shichijikan', meaningHu: '7 óra (időtartam)', unit: 'じかん', irregular: true, changeType: 'shichi-form', alt: { kana: 'ななじかん', romaji: 'nanajikan' } },
+  { id: 'durh8', num: 8, kanji: '8時間', kana: 'はちじかん', romaji: 'hachijikan', meaningHu: '8 óra (időtartam)', unit: 'じかん' },
+  { id: 'durh9', num: 9, kanji: '9時間', kana: 'くじかん', romaji: 'kujikan', meaningHu: '9 óra (időtartam)', unit: 'じかん', irregular: true, changeType: 'ku-form', naive: 'きゅうじかん' },
+  { id: 'durh10', num: 10, kanji: '10時間', kana: 'じゅうじかん', romaji: 'juujikan', meaningHu: '10 óra (időtartam)', unit: 'じかん' },
+  { id: 'durh11', num: 11, kanji: '11時間', kana: 'じゅういちじかん', romaji: 'juuichijikan', meaningHu: '11 óra (időtartam)', unit: 'じかん' },
+  { id: 'durh12', num: 12, kanji: '12時間', kana: 'じゅうにじかん', romaji: 'juunijikan', meaningHu: '12 óra (időtartam)', unit: 'じかん' },
+  { id: 'durhq', num: 0, kanji: '何時間', kana: 'なんじかん', romaji: 'nanjikan', meaningHu: 'hány óra (mennyi ideig)?', unit: 'じかん' },
+  { id: 'durw1', num: 1, kanji: '1週間', kana: 'いっしゅうかん', romaji: 'isshuukan', meaningHu: '1 hét', unit: 'しゅうかん', irregular: true, changeType: 'sokuon-s', naive: 'いちしゅうかん' },
+  { id: 'durw2', num: 2, kanji: '2週間', kana: 'にしゅうかん', romaji: 'nishuukan', meaningHu: '2 hét', unit: 'しゅうかん' },
+  { id: 'durw3', num: 3, kanji: '3週間', kana: 'さんしゅうかん', romaji: 'sanshuukan', meaningHu: '3 hét', unit: 'しゅうかん' },
+  { id: 'durw4', num: 4, kanji: '4週間', kana: 'よんしゅうかん', romaji: 'yonshuukan', meaningHu: '4 hét', unit: 'しゅうかん' },
+  { id: 'durw5', num: 5, kanji: '5週間', kana: 'ごしゅうかん', romaji: 'goshuukan', meaningHu: '5 hét', unit: 'しゅうかん' },
+  { id: 'durw6', num: 6, kanji: '6週間', kana: 'ろくしゅうかん', romaji: 'rokushuukan', meaningHu: '6 hét', unit: 'しゅうかん' },
+  { id: 'durw7', num: 7, kanji: '7週間', kana: 'ななしゅうかん', romaji: 'nanashuukan', meaningHu: '7 hét', unit: 'しゅうかん' },
+  { id: 'durw8', num: 8, kanji: '8週間', kana: 'はっしゅうかん', romaji: 'hasshuukan', meaningHu: '8 hét', unit: 'しゅうかん', irregular: true, changeType: 'sokuon-s', naive: 'はちしゅうかん' },
+  { id: 'durw9', num: 9, kanji: '9週間', kana: 'きゅうしゅうかん', romaji: 'kyuushuukan', meaningHu: '9 hét', unit: 'しゅうかん' },
+  { id: 'durw10', num: 10, kanji: '10週間', kana: 'じゅっしゅうかん', romaji: 'jusshuukan', meaningHu: '10 hét', unit: 'しゅうかん', irregular: true, changeType: 'sokuon-s', naive: 'じゅうしゅうかん' },
+  { id: 'durwq', num: 0, kanji: '何週間', kana: 'なんしゅうかん', romaji: 'nanshuukan', meaningHu: 'hány hét?', unit: 'しゅうかん' },
+  { id: 'durm1', num: 1, kanji: '1か月', kana: 'いっかげつ', romaji: 'ikkagetsu', meaningHu: '1 hónap', unit: 'かげつ', irregular: true, changeType: 'sokuon-k', naive: 'いちかげつ' },
+  { id: 'durm2', num: 2, kanji: '2か月', kana: 'にかげつ', romaji: 'nikagetsu', meaningHu: '2 hónap', unit: 'かげつ' },
+  { id: 'durm3', num: 3, kanji: '3か月', kana: 'さんかげつ', romaji: 'sankagetsu', meaningHu: '3 hónap', unit: 'かげつ' },
+  { id: 'durm4', num: 4, kanji: '4か月', kana: 'よんかげつ', romaji: 'yonkagetsu', meaningHu: '4 hónap', unit: 'かげつ' },
+  { id: 'durm5', num: 5, kanji: '5か月', kana: 'ごかげつ', romaji: 'gokagetsu', meaningHu: '5 hónap', unit: 'かげつ' },
+  { id: 'durm6', num: 6, kanji: '6か月', kana: 'ろっかげつ', romaji: 'rokkagetsu', meaningHu: '6 hónap', unit: 'かげつ', irregular: true, changeType: 'sokuon-k', naive: 'ろくかげつ' },
+  { id: 'durm7', num: 7, kanji: '7か月', kana: 'ななかげつ', romaji: 'nanakagetsu', meaningHu: '7 hónap', unit: 'かげつ' },
+  { id: 'durm8', num: 8, kanji: '8か月', kana: 'はちかげつ', romaji: 'hachikagetsu', meaningHu: '8 hónap', unit: 'かげつ', alt: { kana: 'はっかげつ', romaji: 'hakkagetsu' } },
+  { id: 'durm9', num: 9, kanji: '9か月', kana: 'きゅうかげつ', romaji: 'kyuukagetsu', meaningHu: '9 hónap', unit: 'かげつ' },
+  { id: 'durm10', num: 10, kanji: '10か月', kana: 'じゅっかげつ', romaji: 'jukkagetsu', meaningHu: '10 hónap', unit: 'かげつ', irregular: true, changeType: 'sokuon-k', naive: 'じゅうかげつ' },
+  { id: 'durm11', num: 11, kanji: '11か月', kana: 'じゅういっかげつ', romaji: 'juuikkagetsu', meaningHu: '11 hónap', unit: 'かげつ', irregular: true, changeType: 'sokuon-k', naive: 'じゅういちかげつ' },
+  { id: 'durm12', num: 12, kanji: '12か月', kana: 'じゅうにかげつ', romaji: 'juunikagetsu', meaningHu: '12 hónap', unit: 'かげつ' },
+  { id: 'durmq', num: 0, kanji: '何か月', kana: 'なんかげつ', romaji: 'nankagetsu', meaningHu: 'hány hónap?', unit: 'かげつ' },
+  { id: 'dury1', num: 1, kanji: '1年間', kana: 'いちねんかん', romaji: 'ichinenkan', meaningHu: '1 év (időtartam)', unit: 'ねんかん' },
+  { id: 'dury2', num: 2, kanji: '2年間', kana: 'にねんかん', romaji: 'ninenkan', meaningHu: '2 év (időtartam)', unit: 'ねんかん' },
+  { id: 'dury3', num: 3, kanji: '3年間', kana: 'さんねんかん', romaji: 'sannenkan', meaningHu: '3 év (időtartam)', unit: 'ねんかん' },
+  { id: 'dury4', num: 4, kanji: '4年間', kana: 'よねんかん', romaji: 'yonenkan', meaningHu: '4 év (időtartam)', unit: 'ねんかん', irregular: true, changeType: 'yo-form', naive: 'よんねんかん' },
+  { id: 'dury5', num: 5, kanji: '5年間', kana: 'ごねんかん', romaji: 'gonenkan', meaningHu: '5 év (időtartam)', unit: 'ねんかん' },
+  { id: 'dury6', num: 6, kanji: '6年間', kana: 'ろくねんかん', romaji: 'rokunenkan', meaningHu: '6 év (időtartam)', unit: 'ねんかん' },
+  { id: 'dury7', num: 7, kanji: '7年間', kana: 'ななねんかん', romaji: 'nananenkan', meaningHu: '7 év (időtartam)', unit: 'ねんかん', alt: { kana: 'しちねんかん', romaji: 'shichinenkan' } },
+  { id: 'dury8', num: 8, kanji: '8年間', kana: 'はちねんかん', romaji: 'hachinenkan', meaningHu: '8 év (időtartam)', unit: 'ねんかん' },
+  { id: 'dury9', num: 9, kanji: '9年間', kana: 'きゅうねんかん', romaji: 'kyuunenkan', meaningHu: '9 év (időtartam)', unit: 'ねんかん' },
+  { id: 'dury10', num: 10, kanji: '10年間', kana: 'じゅうねんかん', romaji: 'juunenkan', meaningHu: '10 év (időtartam)', unit: 'ねんかん' },
+  { id: 'duryq', num: 0, kanji: '何年間', kana: 'なんねんかん', romaji: 'nannenkan', meaningHu: 'hány év (mennyi ideig)?', unit: 'ねんかん' }
+];
+
+
 /* A DT_CATEGORIES és DT_ERROR_TYPES a core.js-ben van — itt szándékosan nincs duplikálva. */

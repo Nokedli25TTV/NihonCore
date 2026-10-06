@@ -35,7 +35,7 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 <br />
 
 <div align="center">
-<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 236 lépés · 10 gyakorló modul" width="100%" />
+<img src="img/readme/stats.svg" alt="57 lecke · 402 nyelvtani pont · 2390 példamondat · 1142 kérdés · 238 lépés · 10 gyakorló modul" width="100%" />
 </div>
 
 <br />
@@ -54,7 +54,7 @@ Telefonra készült, de tableten és gépen is otthon van; telepíthető, és be
 
 ### 🗺️ Tanulási út
 
-- **236 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
+- **238 lépés 53 fejezetben**, kanyargó térképen: mindig látod, hol tartasz, és mi jön.
 - Minden lecke után **a lecke saját mintái és mondatai** jönnek gyakorlásnak.
 - Négy leckénként **kis teszt** (30 perc), tizenkét leckénként **nagy dolgozat** (60 perc): nem kötelező, időre is megírható, és minden kitöltés elmentődik.
 - Első indításkor megkérdezi, **honnan indulsz**: nulláról, vagy már olvasod a kanát.
@@ -120,9 +120,9 @@ A kezdőlapon a **„Mai ismétlés"** kártya szól, ha van esedékes kérdés.
 | 活 | **Ragozó** | 12 igealak a ます-tól a műveltető-szenvedőig: felismerés, építés, beírás | 168 ige |
 | 形 | **Melléknév** | い és な melléknevek 9 alakja | 149 melléknév |
 | 数 | **Számláló szavak** | つ・本・枚・冊… a hangváltozásokkal együtt | 12 számláló, 102 tárgy |
-| 時 | **Dátum & Idő** | hónapok, napok, órák, percek, évek, relatív idő | 227 elem |
-| 聞 | **Hallás & Kiejtés** | felismerés, diktálás, mondatok; hosszú hang és kis っ csapdák | 134 hang-lecke, 566 mondat |
-| 型 | **Nyelvtani minták** | felismerés, kiegészítés, fordítás: leckénként a lecke mintái | 283 minta, 566 példa |
+| 時 | **Dátum & Idő** | hónapok, napok, órák, percek, évek, relatív idő, életkor, időtartam | 289 elem |
+| 聞 | **Hallás & Kiejtés** | felismerés, diktálás, mondatok; hosszú hang és kis っ csapdák | 134 hang-lecke, 1065 mondat |
+| 型 | **Nyelvtani minták** | felismerés, kiegészítés, fordítás: leckénként a lecke mintái | 283 minta, 1065 példa |
 | 訳 | **Szabad fordítás** | magyarról japánra, szabadon beírva, ötfokú értékeléssel | a mondatkészletből |
 | 有 | **Alap igék** | a ます-alak négy formája: létezés, mozgás, fogyasztás | — |
 
@@ -152,13 +152,13 @@ A modulok okosan javítanak: nem csak annyit mondanak, hogy „rossz", hanem **m
 
 | Leckék | | Gyakorlás | |
 |---|---:|---|---:|
-| Lecke | **57** | Lépés a tanulási úton | **236** |
+| Lecke | **57** | Lépés a tanulási úton | **238** |
 | Nyelvtani pont | **402** | Fejezet | **53** |
 | Példamondat (hanggal) | **2390** | Gyakorló modul | **10** |
 | Saját kérdés | **1142** | Mondat a Mondat-Mesterben | **627** |
 | Párbeszéd-sor | **699** | Ige a Ragozóban | **168** |
 | Kész kifejezés | **547** | Melléknév | **149** |
-| Szó-kártya | **1484** | Dátum- és idő-elem | **227** |
+| Szó-kártya | **1484** | Dátum- és idő-elem | **289** |
 | Táblázat | **321** | Hang-lecke | **134** |
 | „Gyakori hiba" | **344** | Kana-jel | **208** |
 | Kulturális tudnivaló | **197** | Nyelvtani minta | **283** |

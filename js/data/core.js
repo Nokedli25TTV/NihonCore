@@ -1060,7 +1060,9 @@ const NIHONCORE_DT_CATEGORIES = [
   { id: 'hours24',  nameHu: '24 órás idő',    emoji: '🕓', hint: '13時..24時 · 午前/午後',          dataset: 'NIHONCORE_DT_HOURS24'  },
   { id: 'minutes',  nameHu: 'Percek',         emoji: '⏱️', hint: '1分..55分 (rendaku/sokuon!)',    dataset: 'NIHONCORE_DT_MINUTES'  },
   { id: 'years',    nameHu: 'Évek',           emoji: '📰', hint: '年 · 令和/平成/昭和',             dataset: 'NIHONCORE_DT_YEARS'    },
-  { id: 'relative', nameHu: 'Relatív idő',    emoji: '⏳', hint: '前/後/過ぎ/頃/今日/来週...',      dataset: 'NIHONCORE_DT_RELATIVE' }
+  { id: 'relative', nameHu: 'Relatív idő',    emoji: '⏳', hint: '前/後/過ぎ/頃/今日/来週...',      dataset: 'NIHONCORE_DT_RELATIVE' },
+  { id: 'ages',      nameHu: 'Életkor',       emoji: '🎂', hint: '1歳..10歳 · はたち · 何歳',         dataset: 'NIHONCORE_DT_AGES' },
+  { id: 'durations', nameHu: 'Időtartam',     emoji: '⌛', hint: '〜時間・〜週間・〜か月・〜年間',     dataset: 'NIHONCORE_DT_DURATIONS' }
 ];
 
 
@@ -1090,6 +1092,11 @@ const NIHONCORE_DT_ERROR_TYPES = {
     type: 'irregular',
     title: 'Rendhagyó év-olvasat',
     template: 'A <strong>{kanji}</strong> rendhagyó (よ/ん vagy がんねん): <strong class="pfe-jp-ok">{correct}</strong>.'
+  },
+  irregular_counter: {
+    type: 'irregular',
+    title: 'Hangváltozás a számláló előtt',
+    template: 'A <strong>{kanji}</strong> olvasata rendhagyó: <strong class="pfe-jp-ok">{correct}</strong>, nem a szabályosnak tűnő {regular}.'
   },
   wrong_category: {
     type: 'category',
@@ -1310,6 +1317,10 @@ const NIHONCORE_PATH = [
     desc: 'は, の, か, も: töltsd ki a hiányzó partikulát.',
     module: 'practice', href: 'pages/practice.html',
     preset: { level: 'N5', mode: 'particles', particlesOnly: ['は', 'の', 'か', 'も'] } },
+  { id: 'l1-age', glyph: '歳', title: 'Hány éves?',
+    desc: '〜さい: いっさい, はっさい, じゅっさい, はたち — melyik olvasat a helyes?',
+    module: 'datetime', href: 'pages/datetime.html',
+    preset: { only: { categories: ['ages'] }, set: { mode: 'recognition' } } },
 
   // ── 2. lecke ──
   { id: 'l2-lesson', glyph: '読', title: 'Magyarázat: これ, この, ここ',
@@ -1396,6 +1407,10 @@ const NIHONCORE_PATH = [
     desc: '〜月〜日: ついたち, ふつか, みっか…',
     module: 'datetime', href: 'pages/datetime.html',
     preset: { only: { categories: ['months', 'days'] }, set: { mode: 'recognition' } } },
+  { id: 'l5-durations', glyph: '間', title: 'Mennyi ideig?',
+    desc: '〜時間, 〜週間, 〜か月, 〜年間: よじかん, いっしゅうかん, ろっかげつ…',
+    module: 'datetime', href: 'pages/datetime.html',
+    preset: { only: { categories: ['durations'] }, set: { mode: 'recognition' } } },
 
   // ── 6. lecke ──
   { id: 'l6-lesson', glyph: '読', title: 'Magyarázat: を, で, 〜ませんか',
@@ -2339,7 +2354,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-kana', kicker: 'Előkészítő',          title: 'Az írás',             sub: 'Kiejtés, hiragana és katakana',
     steps: ['l0-lesson', 'kana-hira', 'kana-kata'] },
   { id: 'u-l1',   kicker: 'Dekiru 1 · 1. lecke', title: 'Bemutatkozás',        sub: 'Ki vagyok, mivel foglalkozom: です, は, の, も, か',
-    steps: ['l1-lesson', 'l1-patterns', 'first-sentences'] },
+    steps: ['l1-lesson', 'l1-patterns', 'first-sentences', 'l1-age'] },
   { id: 'u-l2',   kicker: 'Dekiru 1 · 2. lecke', title: 'Ez, az, amaz',        sub: 'これ, この, ここ; kié; tagadás',
     steps: ['l2-lesson', 'l2-patterns', 'l2-things', 'l2-places'] },
   { id: 'u-l3',   kicker: 'Dekiru 1 · 3. lecke', title: 'Mi hol van?',         sub: 'あります és います, helyviszonyok, család',
@@ -2347,7 +2362,7 @@ const NIHONCORE_PATH_UNITS = [
   { id: 'u-l4',   kicker: 'Dekiru 1 · 4. lecke', title: 'Vásárlás és idő',     sub: '〜をください, számlálók, óra, a hét napjai',
     steps: ['l4-lesson', 'l4-patterns', 'l4-shopping', 'counters', 'datetime', 't04'] },
   { id: 'u-l5',   kicker: 'Dekiru 1 · 5. lecke', title: 'Hová, mikor, mivel?', sub: 'A ます-alak; へ, で, と; dátum',
-    steps: ['l5-lesson', 'l5-patterns', 'l5-going', 'l5-masu', 'l5-move', 'l5-dates'] },
+    steps: ['l5-lesson', 'l5-patterns', 'l5-going', 'l5-masu', 'l5-move', 'l5-dates', 'l5-durations'] },
   { id: 'u-l6',   kicker: 'Dekiru 1 · 6. lecke', title: 'Mindennapok',         sub: 'を és で; 〜ませんか, 〜ましょう',
     steps: ['l6-lesson', 'l6-patterns', 'l6-daily', 'particles', 'word-order'] },
   { id: 'u-l7',   kicker: 'Dekiru 1 · 7. lecke', title: 'Mit szeretsz?',       sub: '〜が好きです, から, よく és あまり',
